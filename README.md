@@ -1,0 +1,4 @@
+Elise
+=====
+
+Elise Library Core
