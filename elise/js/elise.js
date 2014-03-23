@@ -220,18 +220,18 @@ Elise.popup = function(config){
 	return window.open(config.url, config.name, props);
 };
 
-Elise.eModal = function(data){
+Elise.modal = function(data){
 
 		// Configuration
 		var WIN = window.top;
-		var EMODAL = {};
+		var MODAL = {};
 
-		EMODAL.config = $.extend({
+		MODAL.config = $.extend({
 			container: null,
 			url: '',
-			title: 'EModal Title',
-			emodalWidth: 600,
-			emodalContentHeight: 300,
+			title: 'Modal Title',
+			modalWidth: 600,
+			modalContentHeight: 300,
 			delay: 100,
 			fadeIn: 500,
 			fadeOut: 500,
@@ -241,7 +241,7 @@ Elise.eModal = function(data){
 			buttons: [
 			{
 				btnId: 'emodal_hide',
-		            btnClass: 'emodal_hide',  // emodal_hide, clase que se utiliza para cerrar
+		            btnClass: 'emodal_hide',  // modal_hide, clase que se utiliza para cerrar
 		            btnText: 'Cerrar',
 		            btnColor: 'rojo',  // verde | rojo | azul | azuloscuro | naranja | celeste | negro 
 		            btnPosition: 'right',  // right | left | center
@@ -249,26 +249,26 @@ Elise.eModal = function(data){
 		        }
 		        ]
 		    }, data);
-		EMODAL.container = typeof(EMODAL.config.container) == 'string' ? $('#'+ EMODAL.config.container) : EMODAL.config.container;
-		EMODAL.url = EMODAL.config.url == '' ? false : true;
+		MODAL.container = typeof(MODAL.config.container) == 'string' ? $('#'+ MODAL.config.container) : MODAL.config.container;
+		MODAL.url = MODAL.config.url == '' ? false : true;
 
-		// Create or Recreate the emodal structure
-		EMODAL.structure = function(){
-			var config = EMODAL.config;
+		// Create or Recreate the modal structure
+		MODAL.structure = function(){
+			var config = MODAL.config;
 
 			// Initialization
-			if(WIN.eModalElement)
-				WIN.eModalElement.remove();
+			if(WIN.ModalElement)
+				WIN.ModalElement.remove();
 
-			var emodal_hold = $('<div/>', {
+			var modal_hold = $('<div/>', {
 				id: 'emodal_hold',
 				'class': 'emodal_hold hide'
 			});
-			var emodal = $('<div/>', {
+			var modal = $('<div/>', {
 				id: 'emodal',
 				'class': 'emodal hide'
 			});
-			var emodal_header_elements = $('<button/>', {
+			var modal_header_elements = $('<button/>', {
 				id: 'emodal_close',
 				'class': 'emodal_close emodal_hide',
 				type: 'button',
@@ -281,44 +281,44 @@ Elise.eModal = function(data){
 				id: 'emodal_title',
 				'class': 'emodal_title'
 			});
-			var emodal_header = $('<div/>', {
+			var modal_header = $('<div/>', {
 				id: 'emodal_header',
 				'class': 'emodal_header',
-				html: emodal_header_elements
+				html: modal_header_elements
 			});
-			var emodal_footer = $('<div/>', {
+			var modal_footer = $('<div/>', {
 				id: 'emodal_footer',
 				'class': 'emodal_footer'
 			});
-			if(EMODAL.url){
-				var emodal_content = $('<iframe/>', {
+			if(MODAL.url){
+				var modal_content = $('<iframe/>', {
 					id: 'emodal_content',
 					'class': 'emodal_content emodal_content_url'
 				});
 			}else{
-				var emodal_content = $('<div/>', {
+				var modal_content = $('<div/>', {
 					id: 'emodal_content',
 					'class': 'emodal_content'
 				});
 			}
 
-			emodal.html(emodal_header).append(emodal_content).append(emodal_footer);
-			WIN.$("body").after(emodal_hold.html(emodal));
+			modal.html(modal_header).append(modal_content).append(modal_footer);
+			WIN.$("body").after(modal_hold.html(modal));
 
 			// Save cache
-			EMODAL.emodal = WIN.eModalElement = emodal_hold;
+			MODAL.modal = WIN.ModalElement = modal_hold;
 
 
 			// Apply configuration and chache variables
-			emodal_header.find("#emodal_title").html(config.title);
-			emodal.css('width', config.emodalWidth);
-			emodal_content.css('height', config.emodalContentHeight);
-			if(EMODAL.url){
-				emodal_content.attr('src', config.url);
+			modal_header.find("#emodal_title").html(config.title);
+			modal.css('width', config.modalWidth);
+			modal_content.css('height', config.modalContentHeight);
+			if(MODAL.url){
+				modal_content.attr('src', config.url);
 			}else{
-				emodal_content.html(EMODAL.container.html());
+				modal_content.html(MODAL.container.html());
 			}
-			emodal_footer.empty();
+			modal_footer.empty();
 			$.each(config.buttons, function(i, item) {
 				item.btnPosition = item.btnPosition == 'center' ? 'none' : item.btnPosition;
 				var boton = $('<button/>', {
@@ -330,74 +330,74 @@ Elise.eModal = function(data){
 					},
 					'click': item.btnClick
 				});
-				emodal_footer.append(boton);
+				modal_footer.append(boton);
 			});
 
 
 	        // Others functionalities
-	        emodal.find('.emodal_hide').on('click', EMODAL.hide);
+	        modal.find('.emodal_hide').on('click', MODAL.hide);
 	        if(config.onEscKeyClose){
 	        	$(document).on('keydown', function(e){
 	        		if(e.which == 27)
-	        			EMODAL.hide();
+	        			MODAL.hide();
 	        	});
 	        }
 	    };
 
-		// Fit the eModal centered on window
-		EMODAL.autoPosition = function(){
-			var emodal = EMODAL.emodal.find('#emodal');
+		// Fit the MODAL centered on window
+		MODAL.autoPosition = function(){
+			var modal = MODAL.modal.find('#emodal');
 			var dim = Elise.win.dims();
-			var _width = emodal.outerWidth()/2;
+			var _width = modal.outerWidth()/2;
 			_width = _width > (dim.width/2) ? -(dim.width/2)+20 : -_width;
-			var _height = dim.height/2 - emodal.outerHeight()/2;
+			var _height = dim.height/2 - modal.outerHeight()/2;
 			_height = _height < 10 ? 10 : _height;
-			emodal.css({
+			modal.css({
 				'margin-left': _width,
 				'margin-top': _height
 			});
 		};
 
-        // Structure and show the eModal
-        EMODAL.show = function(){
-        	if(!EMODAL.showed){
-        		EMODAL.overflow = WIN.$('body').css('overflow');
+        // Structure and show the MODAL
+        MODAL.show = function(){
+        	if(!MODAL.showed){
+        		MODAL.overflow = WIN.$('body').css('overflow');
         		WIN.$('body').css('overflow', 'hidden');
         		setTimeout(function(){
-        			EMODAL.structure();
-        			EMODAL.emodal.fadeIn(EMODAL.config.fadeIn);
-        			EMODAL.autoPosition();
-        			EMODAL.config.onOpen();
-        			EMODAL.showed = true;
-        		}, EMODAL.config.delay);
+        			MODAL.structure();
+        			MODAL.modal.fadeIn(MODAL.config.fadeIn);
+        			MODAL.autoPosition();
+        			MODAL.config.onOpen();
+        			MODAL.showed = true;
+        		}, MODAL.config.delay);
         	}
         };
 
         // Hide the eModal
-        EMODAL.hide = function(){
-        	if(EMODAL.showed){
+        MODAL.hide = function(){
+        	if(MODAL.showed){
         		setTimeout(function(){
-        			EMODAL.emodal.fadeOut(EMODAL.config.fadeOut);
-        			EMODAL.config.onClose();
-        			EMODAL.showed = false;
-        			WIN.$('body').css('overflow', EMODAL.overflow);
-        		}, EMODAL.config.delay);
+        			MODAL.modal.fadeOut(MODAL.config.fadeOut);
+        			MODAL.config.onClose();
+        			MODAL.showed = false;
+        			WIN.$('body').css('overflow', MODAL.overflow);
+        		}, MODAL.config.delay);
         	}
         };
 
         // Start
         $(WIN).on('resize', function(){
-        	if(!EMODAL.emodal.is(":visible"))
+        	if(!MODAL.modal.is(":visible"))
         		return;
-        	EMODAL.autoPosition();
+        	MODAL.autoPosition();
         });
-        EMODAL.showed = false;
-        EMODAL.show();
+        MODAL.showed = false;
+        MODAL.show();
         
-        return EMODAL;
+        return MODAL;
 
     };
-    Elise.eHope = function(data) {
+    Elise.hope = function(data) {
 
         // Configuration
         var WIN = window.top;
@@ -422,7 +422,7 @@ Elise.eModal = function(data){
         }, data);
 
 
-        // Create or Recreate the HOPE structure
+        // Create or Recreate the hope structure
         HOPE.structure = function() {
         	var config = HOPE.config;
             // Initialization
@@ -450,7 +450,7 @@ Elise.eModal = function(data){
 
         };
 
-        // Fit the eHope centered on window
+        // Fit the hope centered on window
         HOPE.autoPosition = function() {
         	var hope = HOPE.hope.find('#hope');
         	var dim = Elise.win.dims();
@@ -464,7 +464,7 @@ Elise.eModal = function(data){
         	});
         };
 
-        // Structure and show the eHope
+        // Structure and show the hope
         HOPE.show = function() {
         	if (!HOPE.showed) {
         		HOPE.overflow = WIN.$('body').css('overflow');
@@ -489,7 +489,7 @@ Elise.eModal = function(data){
         	}
         };
 
-        // Hide the eHope
+        // Hide the hope
         HOPE.hide = function() {
         	if (HOPE.showed) {
         		setTimeout(function() {

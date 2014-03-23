@@ -76,28 +76,28 @@ table{max-width:100%;  background-color:transparent;  border-collapse:collapse; 
 }
 /*flechas*/
 ::-webkit-scrollbar-button:vertical:decrement{
-    background-image: url('../../../images/Estandar/Elise/scrollbar/arrow-up.png'), -webkit-linear-gradient(left,  #f9f9f9 50%,#e2e2e2 100%) ;
+    background-image: url('../images/scrollbar/arrow-up.png'), -webkit-linear-gradient(left,  #f9f9f9 50%,#e2e2e2 100%) ;
     background-repeat: no-repeat;
     background-position: 3px 4px, 0 0;
 }
 ::-webkit-scrollbar-button:vertical:increment{
-    background-image: url('../../../images/Estandar/Elise/scrollbar/arrow-down.png'), -webkit-linear-gradient(left,  #f9f9f9 50%,#e2e2e2 100%) ;
+    background-image: url('../images/scrollbar/arrow-down.png'), -webkit-linear-gradient(left,  #f9f9f9 50%,#e2e2e2 100%) ;
     background-repeat: no-repeat;
     background-position: 3px 5px, 0 0;
 }
 ::-webkit-scrollbar-button:horizontal:decrement{
-    background-image: url('../../../images/Estandar/Elise/scrollbar/arrow-left.png'), -webkit-linear-gradient(top,  #f9f9f9 50%,#e2e2e2 100%) ;
+    background-image: url('../images/scrollbar/arrow-left.png'), -webkit-linear-gradient(top,  #f9f9f9 50%,#e2e2e2 100%) ;
     background-repeat: no-repeat;
     background-position: 4px 3px, 0 0;
 }
 ::-webkit-scrollbar-button:horizontal:increment{
-    background-image: url('../../../images/Estandar/Elise/scrollbar/arrow-right.png'), -webkit-linear-gradient(top,  #f9f9f9 50%,#e2e2e2 100%) ;
+    background-image: url('../images/scrollbar/arrow-right.png'), -webkit-linear-gradient(top,  #f9f9f9 50%,#e2e2e2 100%) ;
     background-repeat: no-repeat;
     background-position: 5px 3px, 0 0;
 }
 /*corner y resizer*/
 ::-webkit-resizer { 
-    background: #F2F2F2 url('../../../images/Estandar/Elise/scrollbar/resizer.png')no-repeat 2px 4px;
+    background: #F2F2F2 url('../images/scrollbar/resizer.png')no-repeat 2px 4px;
     border-top:1px solid #D9D9D9;
     border-left:1px solid #D9D9D9;
 }
@@ -424,13 +424,13 @@ button.ebutton[disabled]:active,button.ebutton[disabled].active  {
     border-color: #d58512;
 }
 .sky-blue,.sky-blue.disabled,.sky-blue[disabled]{
-   color: white !important;
-   background-color: #5bc0de;
-   border: 1px solid  #46b8da;
-   text-shadow: 0 -1px 0 #197D9B;
-   -webkit-box-shadow: none;
-   -moz-box-shadow: none;
-   box-shadow: none;
+ color: white !important;
+ background-color: #5bc0de;
+ border: 1px solid  #46b8da;
+ text-shadow: 0 -1px 0 #197D9B;
+ -webkit-box-shadow: none;
+ -moz-box-shadow: none;
+ box-shadow: none;
 }
 .sky-blue:hover{
     color: white;
@@ -447,9 +447,9 @@ button.ebutton[disabled]:active,button.ebutton[disabled].active  {
     box-shadow: none;
 }
 .black:hover{
-   color: white;
-   background-color: #303030;
-   border-color: #222;
+ color: white;
+ background-color: #303030;
+ border-color: #222;
 }
 .dark-blue,.dark-blue.disabled,.dark-blue[disabled]{
     color: white !important;
@@ -559,16 +559,16 @@ fieldset{
     border-radius: 3px;
 }
 legend{
-   border: 1px solid #DDD;
-   padding: 3px 10px;
-   font-size: 14px;
-   color: #444;
-   margin-left: 20px;
-   background: #FFF;
-   -webkit-border-radius: 3px;
-   -moz-border-radius: 3px;
-   border-radius: 3px;
-   border-radius: 3px;
+ border: 1px solid #DDD;
+ padding: 3px 10px;
+ font-size: 14px;
+ color: #444;
+ margin-left: 20px;
+ background: #FFF;
+ -webkit-border-radius: 3px;
+ -moz-border-radius: 3px;
+ border-radius: 3px;
+ border-radius: 3px;
 }
 fieldset:hover>legend:first-child{
     -webkit-box-shadow: 0 0 5px #ddd;
@@ -720,7 +720,6 @@ input[type="checkbox"], input[type="radio"] {
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     margin: 5px;
     cursor: pointer;
-    vertical-align: bottom;
     background: white;
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
@@ -730,7 +729,6 @@ input[type="checkbox"], input[type="radio"] {
     box-sizing: border-box;
     position: relative;
     display: inline-block;
-    vertical-align: middle;
 }
 .input-mini {
     width: 60px;
@@ -755,6 +753,124 @@ input[type="checkbox"], input[type="radio"] {
 /* Validators */
 input[type='text'].valid:focus{ background-color: #BBFFBB; }
 input[type='text'].invalid{ background-color: #FFBBBB; }
+
+
+/* __________________/-----------\_________________ */
+/* __________________ON/OFF SWITCH_________________ */
+/* _________________/-------------\_________________ */
+.onoffswitch {
+    position: relative ;
+    max-width: 84px ;
+    min-width: 50px;
+    -webkit-user-select:none !important; 
+    -moz-user-select:none !important;
+    -ms-user-select: none !important;
+    vertical-align: middle;
+    display: inline-block;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px; 
+}
+.onoffswitch-checkbox {
+    display: none !important;
+}
+.onoffswitch-label {
+    display: block !important; 
+    overflow: hidden !important;
+    cursor: pointer !important;
+    border-radius: 50px !important;
+    float: none; 
+    width: auto;
+    margin-top: 0; 
+    padding: 0;
+    -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1), inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1);;
+    -moz-box-shadow:  0px 0px 4px rgba(0, 0, 0, 0.1), inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1);;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1), inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1);;
+    -moz-transition: all 0.3s ease-in 0s;
+    -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s; 
+    transition: all 0.3s ease-in 0s;
+    border-style: solid;
+    border-width: 1px;
+}
+.onoffswitch-inner {
+    width: 200%;
+    margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s;
+    -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; 
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    float: left;
+    width: 50%;
+    height: 21px;
+    padding: 0;
+    line-height: 21px;
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+}
+.onoffswitch-inner:before {
+    content: "ON" !important;
+    padding-left: 11px !important;
+    color: #FFFFFF ;
+}
+.onoffswitch-inner:after {
+    content: "OFF" !important;
+    padding-right: 11px !important;
+    background: #F0F0F0;
+    -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1), inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1), inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1), inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    color: #777;
+    text-align: right !important;
+    text-shadow: none;
+}
+.onoffswitch-switch {
+    width: 13px !important;
+    margin: 4px !important;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #FFF;
+    background: -moz-linear-gradient(top, #ececec 0%, #ffffff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ECECEC), color-stop(100%, #FFF));
+    background: -webkit-linear-gradient(top, #ECECEC 0%, #FFF 100%);
+    background: -o-linear-gradient(top, #ececec 0%, #ffffff 100%);
+    background: -ms-linear-gradient(top, #ececec 0%, #ffffff 100%);
+    background: linear-gradient(top, #ececec 0%, #ffffff 100%);
+    -webkit-box-shadow: inset 0px 1px 0px 0px rgba(255,255,255,0.5);
+    -moz-box-shadow: inset 0px 1px 0px 0px rgba(255,255,255,0.5);
+    box-shadow: inset 0px 1px 0px 0px rgba(255,255,255,0.5);
+    border-radius: 50px;
+    position: absolute !important;
+    top: 0 !important; 
+    bottom: 0 !important; 
+    left: 0;
+    -moz-transition: all 0.3s ease-in 0s;
+    -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s;
+    transition: all 0.3s ease-in 0s;
+
+}
+.onoffswitch-checkbox:not(:checked) + .onoffswitch-label {
+    background-color: #F0F0F0;
+    border-color: #bbb !important;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner:before {
+} 
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0 !important;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    left: 100% !important; 
+    margin-left: -19px !important;
+}
 
 
 /* ___________________/---------\_________________ */
@@ -3054,51 +3170,51 @@ div.msgInput text
         height:auto;
     }
     .loader-cont-text{
-       margin: 10px 0 5px 0;
-       height:auto;
-       text-align:center;
-       color:#444;
-       font-size:1em;
-       font-weight:normal;
-   }
-   /* -------------------------------*/
-   /* ------  eHope ----------------*/
-   /* -------------------------------*/
-   .hope_hold{
-       width: 100%;
-       height: 100%;
-       background-color: rgba(0,0,0,0.3);
-       position: fixed;
-       top: 0;
-       left: 0;
-       z-index: 1055;
-   }
-   .hope{
-       width: 300px;
-       position: fixed;
-       overflow: hidden;
-       top: 0%;
-       left: 50%;
-       padding: 20px;
-       margin-left: -150px;
-       background-color: #f5f5f5;
-       border: 1px solid rgba(0, 0, 0, 0.3);
-       -webkit-border-radius: 4px;
-       -moz-border-radius: 4px;
-       border-radius: 4px;
-       outline: none;
-       -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3),inset 0 0 17px rgba(255, 255, 255, 1);
-       -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3),inset 0 0 17px rgba(255, 255, 255, 1);
-       box-shadow: 0 3px 7px rgba(0, 0, 0, 0.56),inset 0 0 17px rgba(255, 255, 255, 1);
-       -webkit-background-clip: padding-box;
-       -moz-background-clip: padding-box;
-       background-clip: padding-box;
-       background-image: url('../../../images/Estandar/Elise/ehope/borde.jpg'), url('../../../images/Estandar/Elise/ehope/borde.jpg');
-       background-position: 0px 0px, 0px 100%;
-       background-repeat: repeat-x,repeat-x;
-   }
+     margin: 10px 0 5px 0;
+     height:auto;
+     text-align:center;
+     color:#444;
+     font-size:1em;
+     font-weight:normal;
+ }
+ /* -------------------------------*/
+ /* ------  eHope ----------------*/
+ /* -------------------------------*/
+ .hope_hold{
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0,0,0,0.3);
+     position: fixed;
+     top: 0;
+     left: 0;
+     z-index: 1055;
+ }
+ .hope{
+     width: 300px;
+     position: fixed;
+     overflow: hidden;
+     top: 0%;
+     left: 50%;
+     padding: 20px;
+     margin-left: -150px;
+     background-color: #f5f5f5;
+     border: 1px solid rgba(0, 0, 0, 0.3);
+     -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+     border-radius: 4px;
+     outline: none;
+     -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3),inset 0 0 17px rgba(255, 255, 255, 1);
+     -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3),inset 0 0 17px rgba(255, 255, 255, 1);
+     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.56),inset 0 0 17px rgba(255, 255, 255, 1);
+     -webkit-background-clip: padding-box;
+     -moz-background-clip: padding-box;
+     background-clip: padding-box;
+     background-image: url('../../../images/Estandar/Elise/ehope/borde.jpg'), url('../../../images/Estandar/Elise/ehope/borde.jpg');
+     background-position: 0px 0px, 0px 100%;
+     background-repeat: repeat-x,repeat-x;
+ }
 
-   blockquote {
+ blockquote {
     font: 13px/20px normal helvetica, sans-serif;
     margin-top: 10px;
     margin-bottom: 10px;

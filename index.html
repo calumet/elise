@@ -17,12 +17,17 @@
 		display: inline-block;
 	}
 	.content{
-		width: 1000px;margin: 0 auto;
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 0 20px 20px;
 	}
 	.row-fluid-example div[class*='span']{
 		background-color: #f9f9f9;
 		border: 1px dashed  #ccc;
 		padding: 5px;
+	}
+	body{
+		background-color: #f5f5f5;
 	}
 </style>
 <body>
@@ -281,6 +286,43 @@
 							<option value="">opcion 4</option>
 						</select>
 					</label>
+					<label class="block">Notifications
+						<div class="onoffswitch">
+							<input type="checkbox" checked name="switch1" class="onoffswitch-checkbox" id="switch1">
+							<label class="onoffswitch-label sky-blue" for="switch1">
+								<div class="onoffswitch-inner"></div>
+								<div class="onoffswitch-switch"></div>
+							</label>
+						</div>
+					</label>
+					<label class="block">Notifications
+						<div class="onoffswitch">
+							<input type="checkbox" checked name="switch2" class="onoffswitch-checkbox" id="switch2">
+							<label class="onoffswitch-label blue" for="switch2">
+								<div class="onoffswitch-inner"></div>
+								<div class="onoffswitch-switch"></div>
+							</label>
+						</div>
+					</label>
+					<label class="block">Notifications
+						<div class="onoffswitch">
+							<input type="checkbox" checked name="switch3" class="onoffswitch-checkbox" id="switch3">
+							<label class="onoffswitch-label orange" for="switch3">
+								<div class="onoffswitch-inner"></div>
+								<div class="onoffswitch-switch"></div>
+							</label>
+						</div>
+					</label>
+					<label class="block">Notifications
+						<div class="onoffswitch">
+							<input type="checkbox" checked name="switch4" class="onoffswitch-checkbox" id="switch4">
+							<label class="onoffswitch-label green" for="switch4">
+								<div class="onoffswitch-inner"></div>
+								<div class="onoffswitch-switch"></div>
+							</label>
+						</div>
+					</label>
+					
 					<div class="block" style="text-align: right">
 						<button class="ebutton ">Cancel</button>
 						<button class="ebutton blue">Save</button>
@@ -337,7 +379,7 @@
 	<!-- Javascript -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 
-	<script src="elsie/js/elise.js" type="text/javascript"></script>
+	<script type="text/javascript" src="elise/js/elise.js" ></script>
 
 	<script type="text/javascript" src="syntaxhighlighter/scripts/shCore.js"></script>
 	<script type="text/javascript" src="syntaxhighlighter/scripts/shAutoloader.js"></script>
