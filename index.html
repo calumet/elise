@@ -64,10 +64,10 @@
 							</div>
 							<div class="row-fluid">
 								<div class="span7 offset5">span7 offset5</div>
-								<div class="span5">span5</div>
 							</div>
 							<div class="row-fluid">
-								<div class="span6 offset6">span6 offset6</div>
+								<div class="span6 ">span6</div>
+								<div class="span6 ">span6</div>
 							</div>
 						</div>
 					</div>
@@ -92,10 +92,10 @@
 							&lt;/div&gt;
 							&lt;div class="row-fluid"&gt;
 							&lt;div class="span7 offset5"&gt;span7 offset5&lt;/div&gt;
-							&lt;div class="span5"&gt;span5&lt;/div&gt;
 							&lt;/div&gt;
 							&lt;div class="row-fluid"&gt;
-							&lt;div class="span6 offset6"&gt;span6 offset6&lt;/div&gt;	
+							&lt;div class="span6"&gt;span6&lt;/div&gt;	
+							&lt;div class="span6"&gt;span6&lt;/div&gt;	
 							&lt;/div&gt;
 
 						</pre>
@@ -272,6 +272,22 @@
 			</div>
 		</div>
 		<div class="row-fluid">
+			<div class="span12">
+				<h3>Inline Form</h3>
+				<form class="span10">
+				<fieldset class="light">
+					<legend>Login form</legend>
+				
+					<div class="block">
+						<label for="name">Userame:<input type="text" name="name"></label>
+						<label for="name">Password:<input type="text" name="name"></label>
+						<button class="ebutton blue ebutton-small">Login</button>
+					</div>
+				</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="row-fluid">
 			<div class="span6">
 				<h3> Fomrs 2</h3>
 				<fieldset>
@@ -331,7 +347,10 @@
 			</div>
 			<div class="span5">
 				<h3> Fomrs 2</h3>
-				<fieldset>
+				<fieldset class=light>
+					<form class="inline-form">
+						
+					</form>
 					<legend>legend</legend>
 					<label for="input" >input
 						<input name="input" type="text" >
