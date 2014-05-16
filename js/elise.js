@@ -1,34 +1,29 @@
+/*!
+ * Elise Library
+ * Version 0.6
+ * Updated 2014-05-16
+ * Duvan Jamid @DuvanJamid
+ * Romel Perez @prhonedev
+ * Licence http://www.opensource.org/licenses/mit-license.php
+ * Repository http://github.com/calumet/elise
+ **/
 
-/*! Core Object */
+// Elise Core Object
 Elise = $e = {
-    // COnfiguraciones de funcionalidad
-    _fn: {
-        
-        messages: 0,  // Numero de mensajes
-        message: function (m, w) {  // Controlador de mensajes
-            var win = w ? w : window.top;
-            if (m === 'add') {
-                if (this.messages === 0) {
-                    this.overflow = win.$('body').css('overflow');
-                    win.$('body').css('overflow', 'hidden');
-                }
-                this.messages += 1;
-            } else {
-                this.messages -= 1;
-                if (this.messages === 0) {
-                    win.$('body').css('overflow', this.overflow);
-                }
-            }
-        },
-        overflow: ''  // La propiedad overflow del body en estado normal
 
-    }
+    // Interal Functionality
+    _fn: {}
+
 };
 
-/*! Validaciones */
+
+
+// String Validations
 Elise.val = {
 
-    // $input es el input a observar, validator es la función a ejecutarse
+    // input validator while use is typing
+    // @$input is the jquery input object to observe
+    // @validator is the function to validate
     _keyup: function ($input, validator) {
         var kuval = function (e) {
             if (validator($input.val())) {
@@ -54,7 +49,7 @@ Elise.val = {
     _textSecure: "., áéíóúabcdefghijklmnñopqrstuvwxyz0123456789",
     _wordsSecure: "., áéíóúabcdefghijklmnñopqrstuvwxyz",
 
-    // Limites por defecto de nombre y contrasena de cuenta
+    // Account validator limits
     _accountInit: 6,
     _accountEnds: 15,
 
@@ -112,7 +107,9 @@ Elise.val = {
 
 };
 
-/*! Window */
+
+
+// Window functionalities
 Elise.win = {
 
     // Reset the height of the iframe by its content height
@@ -181,7 +178,7 @@ Elise.win = {
         return dim;
     },
 
-    // Conseguir altura del contenido de una página
+    // Get the content height of a page
     height: function (win) {
         win = win ? win.document : window.document;
         return Math.max(
@@ -193,8 +190,10 @@ Elise.win = {
 
 };
 
-/*! Popup */
-Elise.popup = function(config){
+
+
+// Popup utility
+Elise.popup = function (config) {
     var props = '';
 
     // Name
@@ -205,25 +204,25 @@ Elise.popup = function(config){
     config.height = config.height ? config.height : 500;
 
     // Position
-    if(config.position === 'normal'){
+    if (config.position === 'normal') {
         config.left = config.top = 0;
-    }else if(config.position === 'top'){
+    } else if (config.position === 'top') {
         config.left = screen.availWidth / 2 - config.width / 2;
         config.top = 0;
-    }else if(config.position === 'full'){
+    } else if (config.position === 'full') {
         config.left = config.top = 0;
         config.width = screen.availWidth;
         config.height = screen.availHeight;
-    }else{
+    } else {
         config.left = screen.availWidth / 2 - config.width / 2;
         config.top = screen.availHeight / 2 - config.height / 2;
     }
 
     // Parse data
-    props += 'width='+ config.width;
-    props += ',height='+ config.height;
-    props += ',left='+ config.left;
-    props += ',top='+ config.top;
+    props += 'width=' + config.width;
+    props += ',height=' + config.height;
+    props += ',left=' + config.left;
+    props += ',top=' + config.top;
     props += ',scrollbars=yes';
 
     // Return the new window object
@@ -231,20 +230,20 @@ Elise.popup = function(config){
 };
 
 
-/*! Modal 0.5
- * Created by Duvan Jamid Vargas, @DuvanJamid; Romel Perez, @prhonedev
- * http://www.opensource.org/licenses/mit-license.php
-**/
+
+// Modal
 Elise.modal = eModal = function (data) {
 
-    // Configuracion
+    // Configuration
+    var tmp, index;
     var win = window.top;
+    var pathName = window.location.pathname.replace(/\//gi,'');
     var handler = {};
-    handler.id = 'emodal_' + (new Date().getTime());
+    handler.id = 'emodal-' + (new Date().getTime());
     handler.config = $.extend({
         container: null,  // id like string, HTMLObject, jQueryObject
         url: '',
-        title: 'T&iacute;tulo del modal',
+        title: 'Modal title',
         emodalWidth: 600,
         emodalContentHeight: 300,
         delay: 100,
@@ -257,10 +256,10 @@ Elise.modal = eModal = function (data) {
         onCreate: function () {},
         buttons: [
             {
-                //btnId: 'emodal_button_hide',
-                btnClass: 'emodal_hide',  // emodal_hide, clase que se utiliza para cerrar
+                //btnId: 'id',
+                btnClass: 'emodal-hide',  // .emodal-hide is to close the modal when it is pressed
                 btnText: 'Cerrar',
-                btnColor: 'rojo',  // verde | rojo | azul | azuloscuro | naranja | celeste | negro 
+                btnColor: 'red',
                 btnPosition: 'right',  // right | left | center
                 btnClick: function () {}
             }
@@ -269,73 +268,77 @@ Elise.modal = eModal = function (data) {
     handler.url = handler.config.url === '' ? false : true;
     handler.config.container = typeof handler.config.container === 'string'
                                ? handler.config.container
-                               : $(handler.config.container).attr('id');  // id like string
+                               : $(handler.config.container).attr('id');  // Si es objeto, obtener el id string
     handler.container = $('#' + handler.config.container);
 
 
-    // Verificar si ya existe y lo busca
-    // Actualiza los nuevos datos, lo muestra si config.show es true y lo devuelve
-    // Si esta en window
+    // If the modal was created in window.window
+    // Then update and show if config.show was defined
     if (handler.container.length && handler.container.data('emodal')) {
         handler = handler.container.data('emodal-handler').update(handler.config);
         return handler.config.show ? handler.show() : handler;
     }
-    // Si esta en un window.top
-    if (handler.container.length === 0 && win.$('#' + handler.config.container).data('emodal')) {
-        handler = win.$('#' + handler.config.container).data('emodal-handler').update(handler.config);
-        return handler.config.show ? handler.show() : handler;
+    // If the modal was created in window.top from the same iframe
+    // Then update and show if config.show was defined
+    tmp = win.$('*[id=' + handler.config.container + ']');
+    for (index = 0; index < tmp.length; index += 1) {
+        if (tmp.eq(index).data('emodal') && tmp.eq(index).data('emodal-pathname') === pathName) {
+            handler = tmp.eq(index).data('emodal-handler').update(handler.config);
+            return handler.config.show ? handler.show() : handler;
+        }
     }
 
 
-    // Crear estructura e insertarla
-    var emodal_hold = $('<div id="' + handler.id + '" class="emodal_hold" style="display:none">');
+    // Create objects
+    var emodal_hold = $('<div id="' + handler.id + '" class="emodal-hold" style="display:none">');
     var emodal = $('<div class="emodal">');
-    var emodal_header = $('<div class="emodal_header">').html($('<button>', {
-        'class': 'emodal_close emodal_hide',
+    var emodal_header = $('<div class="emodal-header">').html($('<button>', {
+        'class': 'emodal-close emodal-hide',
         'type': 'button',
         'html': '&times;'
-    }).add('<h3 class="emodal_title">'));
-    var emodal_content = handler.url ? $('<iframe class="emodal_content emodal_content_url">') : $('<div class="emodal_content">');;
+    }).add('<h3 class="emodal-title">'));
+    var emodal_content = handler.url
+                         ? $('<iframe class="emodal-content emodal-content-url">')
+                         : $('<div class="emodal-content">');;
 
 
-    // Colocar contenido
+    // Apply content
     if (handler.url) {
-        emodal_content.attr('src', handler.config.url);  // Asignar la URL al <iframe> dentro
+        emodal_content.attr('src', handler.config.url);
     } else {
-        // Mover 'container' dentro del contenedor
         emodal_content.attr('id', handler.container.attr('id')).html(handler.container.html());
         handler.container.remove();
     }
 
 
-    // Renderizar modal
+    // Render modal
     emodal.html(emodal_header).append(emodal_content);
-    win.$("body").append(emodal_hold.html(emodal));
+    win.$('body').append(emodal_hold.html(emodal));
 
 
-    // Guardar referencia
+    // Save references
     handler.emodal = win.$('#' + handler.id);
-    handler.container = win.$('#' + handler.config.container);
+    handler.container = handler.emodal.find('#' + handler.config.container);
 
 
-    // Setear o Actualizar configuraciones
+    // (Re)Configurate
     handler.update = function (config) {
         handler.config = config;
 
-        emodal.css('width', handler.config.emodalWidth);  // Ancho
-        emodal_content.css('height', handler.config.emodalContentHeight);  // Alto
-        emodal_header.find('.emodal_title').html(handler.config.title);  // Titulo
+        emodal.css('width', handler.config.emodalWidth);  // Width
+        emodal_content.css('height', handler.config.emodalContentHeight);  // Height
+        emodal_header.find('.emodal-title').html(handler.config.title);  // Title
 
-        // Crear botones e insertarlos
-        var emodal_footer = handler.config.buttons.length === 0 ? '' : $('<div class="emodal_footer">');
-        handler.emodal.find('.emodal_footer').remove();
-        // Si hay botones para agregar
+        // Create buttons
+        var emodal_footer = handler.config.buttons.length === 0 ? '' : $('<div class="emodal-footer">');
+        handler.emodal.find('.emodal-footer').remove();
+        // If there are, add them
         if (emodal_footer !== '') {
             $.each(handler.config.buttons, function (i, item) {
                 item.btnPosition = item.btnPosition === 'center' ? 'none' : item.btnPosition;
                 emodal_footer.append($('<button>', {
                     'id': item.btnId ? item.btnId : '',
-                    'class': 'boton ' + (item.btnClass ? item.btnClass : '') + ' ' + (item.btnColor ? item.btnColor : ''),
+                    'class': 'ebutton ebutton-small ' + (item.btnClass ? item.btnClass : '') + ' ' + (item.btnColor ? item.btnColor : ''),
                     'text': item.btnText,
                     'css': {'float': item.btnPosition ? item.btnPosition : 'right'},
                     'click': item.btnClick ? function () {item.btnClick.call(handler);} : function () {}
@@ -343,21 +346,23 @@ Elise.modal = eModal = function (data) {
             });
             emodal.append(emodal_footer);
             if (handler.config.onEscKeyClose) {
-                handler.emodal.find('button.emodal_close').first().attr('title', 'Presione ESC para cerrar').toolTip({defaultPosition: 'bottom'});
+                handler.emodal.find('button.emodal-close')
+                              .first()
+                              .attr('title', 'Press ESC to close')
+                              .tip({defaultPosition: 'bottom'});
             } else {
-                handler.emodal.find('button.emodal_close').first().off('mouseenter');
+                handler.emodal.find('button.emodal-close').first().off('mouseenter');
             }
         }
 
-        // Permitir cerrar cuando se cliqueen objetos con la clase .emodal_hide
-        emodal.find('.emodal_hide').off('click', handler.hide).on('click', handler.hide);
+        // Close modal when objects with .emodal-hide are clicked
+        emodal.find('.emodal-hide').off('click', handler.hide).on('click', handler.hide);
 
         return handler;
     };
 
 
-
-    // Reposicionar el modal
+    // Posicionate
     handler.autoPosition = function () {
         var emodal = handler.emodal.find('.emodal');
         var dim = Elise.win.dims();
@@ -373,25 +378,25 @@ Elise.modal = eModal = function (data) {
     };
 
 
-    // Mostrar el modal
+    // Show
     handler.show = function () {
         if (!handler.shown) {
             setTimeout(function () {
                 handler.emodal.css('opacity', 0);
                 handler.emodal.css('display', 'block');
                 handler.autoPosition();
-                handler.emodal.animate({'opacity': 1}, handler.config.fadeIn);
-                handler.config.onOpen.call(handler);
-                Elise._fn.message('add');
-                emodal.trigger('focus');
-                handler.shown = true;
+                handler.emodal.animate({'opacity': 1}, handler.config.fadeIn, function () {
+                    handler.shown = true;
+                    emodal.trigger('focus');
+                    handler.config.onOpen.call(handler);
+                });
             }, handler.config.delay);
         }
         return handler;
     };
 
 
-    // Esconder el modal
+    // Hide
     handler.hide = function () {
         if (handler.shown) {
             setTimeout(function () {
@@ -399,17 +404,16 @@ Elise.modal = eModal = function (data) {
                     'opacity': 0
                 }, handler.config.fadeOut, function () {
                     handler.emodal.css('display', 'none');
+                    handler.shown = false;
+                    handler.config.onClose.call(handler);
                 });
-                handler.config.onClose.call(handler);
-                Elise._fn.message('remove');
-                handler.shown = false;
             }, handler.config.delay);
         }
         return handler;
     };
 
 
-    // Iniciar
+    // Initialization
     handler.update(handler.config);
     handler.shown = false;
     $(win).on('resize', function () {
@@ -420,13 +424,14 @@ Elise.modal = eModal = function (data) {
     });
     handler.container.data({
         'emodal': true,
-        'emodal-handler': handler
+        'emodal-handler': handler,
+        'emodal-pathname': pathName
     });
     if (handler.config.show) {
         handler.show();
     }
     setTimeout(function () {
-        // Esperar que retorne y luego si utilizar el cacheado por fuera
+        // Wait for return to use it out of here
         handler.config.onCreate.call(handler);
     }, 1);
     return handler;
@@ -434,20 +439,19 @@ Elise.modal = eModal = function (data) {
 };
 
 
-/*! Alert
- * Copyright 2011, Halil Ä°brahim Kalyoncu
- * License: BSD
- * Modified by Oliver Kopp, 2012
- * Modified by Romel Perez, 2013
- **/
+
+// Alert Extended
+// Copyright 2011, Halil Ä°brahim Kalyoncu
+// License: BSD
+// Modified by Oliver Kopp, 2012
 Elise.alert = function (data) {
 
     var background, holder, container, image, buttons;
     var dim, top, left;
 
-    // Configuracion
+    // Configuration
     var win = window.top;
-    var msgBoxImagePath = '/eisi/images/Estandar/Mensajes/';
+    var imagePath = 'img/alert/';
     var isShown = false;
     var eleFocus = $('*:focus');
     var id = 'alert_' + (new Date().getTime());
@@ -459,7 +463,7 @@ Elise.alert = function (data) {
         timeOut: 0,
         showButtons: true,
         buttons: [{
-            value: "Aceptar",
+            value: "Okay",
             click: function () {}
         }],
         success: function () {},
@@ -467,67 +471,67 @@ Elise.alert = function (data) {
         afterShow: function () {},
         beforeClose: function () {},
         afterClose: function () {},
-        btype: 'naranja'
+        btype: 'orange'
     }, data);
 
 
-    // Tipo de mensaje
+    // Message type
     switch (options.type) {
         case "alert":
-            options.title = options.title ? options.title : "Alerta";
+            options.title = options.title ? options.title : "Alert";
             image = "alert.png";
-            options.btype = "naranja";
+            options.btype = "orange";
             break;
         case "info":
-            options.title = options.title ? options.title : "Informaci&oacute;n";
+            options.title = options.title ? options.title : "Information";
             image = "info.png";
-            options.btype = "celeste";
+            options.btype = "sky-blue";
             break;
         case "error":
             options.title = options.title ? options.title : "Error";
             image = "error.png";
-            options.btype = "rojo";
+            options.btype = "red";
             break;
         case "confirm":
-            options.title = options.title ? options.title : "Mensaje de Confirmaci&oacute;n";
+            options.title = options.title ? options.title : "Confirm";
             image = "confirm.png";
-            options.btype = "verde";
+            options.btype = "green";
             options.buttons = data.buttons ? options.buttons : [
-                {value: "Aceptar",type:"verde", click: function () {}},
-                {value: "Cancelar",type:" ",  click: function () {}}
+                {value: "Okay", type: 'green', click: function () {}},
+                {value: "Cancel", type: ' ',  click: function () {}}
             ];
             break;
     }
 
 
-    // Creando estructura:
-    // Contenedor
-    container = $('<div class="msgBoxContainer"></div>').html(
-        $('<div class="msgBoxImage"><img src="' + msgBoxImagePath + image + '"></div>')
-        .add( $('<div class="msgBoxContent"></div>').html( $('<p>').html($('<span>').html(options.content))) )
+    // Create structure
+    // Container
+    container = $('<div>').html(
+        $('<div class="ealert-image"><img src="' + imagePath + image + '"></div>')
+        .add( $('<div class="ealert-content"></div>').html( $('<p>').html($('<span>').html(options.content))) )
     );
-    // Barra de botones
-    buttons = $('<div class="msgBoxButtons"></div>');
+    // Buttons bar
+    buttons = $('<div class="ealert-buttons"></div>');
     $.map(options.buttons, function(v, i) {
         buttons.append($("<button>", {
-        'class': 'msgButton boton ' + (v.type ? v.type: options.btype),
+        'class': 'ealert-button ebutton ebutton-small ' + (v.type ? v.type: options.btype),
         'html': v.value,
         'click': v.click
     }));
     });
-    // Estructura
-    background = $('<div id="' + id + '" class="msgBoxBackGround"></div>');
+    // Structure
+    background = $('<div id="' + id + '" class="ealert-holder"></div>');
     holder = $('<div>', {
-        'class': 'msgBox',
-        'html': $('<div class="msgBoxTitle"></div>').html(options.title)
+        'class': 'ealert',
+        'html': $('<div class="ealert-title"></div>').html(options.title)
                 .add(container)
                 .add(options.showButtons ? buttons : '')
     });
-    // Renderizar
+    // Render
     win.$("body").append(background.append(holder));
 
 
-    // Posicionamiento del mensaje
+    // Positioning
     var autoPosition = function () {
         var width = holder.width();
         var height = holder.height();
@@ -545,7 +549,7 @@ Elise.alert = function (data) {
     };
 
 
-    // Mostrar mensaje
+    // Show
     var show = function () {
         if (isShown) {
             return;
@@ -566,7 +570,6 @@ Elise.alert = function (data) {
             left: left
         }, 200, function () {
             holder.find('button').focus();
-            Elise._fn.message('add');
             options.afterShow();
         });
         options.beforeShow();
@@ -575,7 +578,7 @@ Elise.alert = function (data) {
     };
 
 
-    // Ocultar mensajes
+    // Hide
     var hide = function () {
         if (!isShown) {
             return;
@@ -586,16 +589,15 @@ Elise.alert = function (data) {
             left: left
         }, 200, function () {
             background.remove();
-            Elise._fn.message('remove');
             options.afterClose();
-            eleFocus.focus();
+            eleFocus.trigger('focus');
             isShown = false;
         });
         options.beforeClose();
     };
 
 
-    // Configurar e iniciar
+    // Initialization
     autoPosition();
 
     $(win).on('resize', function () {
@@ -603,9 +605,9 @@ Elise.alert = function (data) {
             autoPosition();
         }
     });
-    holder.find('button.msgButton').on('click', function (e) {
+    holder.find('button.ealert-button').on('click', function (e) {
         e.preventDefault();
-        options.success($(this).text()==='Aceptar'?true:false);
+        options.success($(this).text() === 'Okay' ? true : false);
         hide();
     });
     if (options.autoClose) {
@@ -621,15 +623,18 @@ Elise.alert = function (data) {
     });
     show();
     return background;
+
 };
 
 
-/*! Tooltip 1.4
- * Copyright 2010 Drew Wilson
- * code.drewwilson.com/entry/tiptip-jquery-plugin
- * Modified by Romel Perez 2013
- **/
-jQuery.fn.toolTip = jQuery.fn.tip = function (c) {
+
+// Tip Extended
+// Copyright 2010 Drew Wilson
+// code.drewwilson.com/entry/tiptip-jquery-plugin
+// Modified by Romel Perez 2013
+jQuery.fn.tip = function (c) {
+
+    // Configuration
     var defaults = {
         activation: "hover",
         keepAlive: false,
@@ -640,13 +645,14 @@ jQuery.fn.toolTip = jQuery.fn.tip = function (c) {
         fadeIn: 200,
         fadeOut: 200,
         attribute: "title",
-        content: false,  // Contenido del tooltip, sino hay, false
+        content: false,
         enter: function () {},
         exit: function () {}
     };
     var opts = $.extend(defaults, c);
 
-    // Crear o reseleccionar elementos del tooltip
+
+    // Create o select tip
     var tooltip_holder, tooltip_content, tooltip_arrow;
     if ($("#tiptip_holder").length <= 0) {
         tooltip_holder = $('<div id="tiptip_holder"></div>');
@@ -678,7 +684,7 @@ jQuery.fn.toolTip = jQuery.fn.tip = function (c) {
             }
         }
 
-        // Si hay contenido para el tooltip
+        // If there is content to render
         if (content !== "") {
             if (!opts.content) {
                 org_elem.removeAttr(opts.attribute)
@@ -735,7 +741,7 @@ jQuery.fn.toolTip = jQuery.fn.tip = function (c) {
                 }
             }
 
-            // Aparecer el tooltip
+            // Show tip
             function activate () {
                 opts.enter.call(this);
                 tooltip_content.html(content);
@@ -842,7 +848,7 @@ jQuery.fn.toolTip = jQuery.fn.tip = function (c) {
                 }, opts.delay)
             }
 
-            // Desaparecer el tooltip
+            // Hide tip
             function disable () {
                 opts.exit.call(this);
                 if (timeout) {
@@ -851,14 +857,13 @@ jQuery.fn.toolTip = jQuery.fn.tip = function (c) {
                 tooltip_holder.fadeOut(opts.fadeOut)
             }
         }
-    })
+    });
+
 };
 
 
-/*! Elise Loader 0.5
- * Copyright 2014, Romel Perez, @prhonedev; Duvan Vargas, @DuvanJamid
- * License: www.opensource.org/licenses/mit-license.php
- **/
+
+// Loader
 Elise.loader = function (data) {
 
     var $animation, $texto;
@@ -867,25 +872,24 @@ Elise.loader = function (data) {
 
     // Configuration
     handler.config = $.extend({
-        selector: '',  // En que elemento se incluira
+        selector: '',  // Where to append it
         type: 'spin',  // spin | bar
-        text: 'Cargando, por favor espere...',  // false | '' para desactivar
-        textPosition: 'bottom',  // 'bottom' | 'top' Posicion del texto respecto a la animacion
-        determinate: false,  // Si se conoce un proceso dividido
-        percentage: 0,  // Si determinate es true, el estado
-        show: true,  // Mostrar inicialmente
-        width: '100%',  // Ancho respecto a su contenedor
-        fadeTime: 250,  // show/hide time
-        updateTime: 200,  // Tiempo de actualiacion de estados
+        text: 'Loading, please wait...',  // false | '' to not add text
+        textPosition: 'bottom',  // 'bottom' | 'top'
+        determinate: false,  // If you know the percentages
+        percentage: 0,  // The process if there is determinate
+        show: true,  // Show at start
+        width: '100%',  // Its width
+        fadeTime: 250,  // show/hide animation time
+        updateTime: 200,  // animation time at text change
 
         // Loader Styles
-        size: 'normal',  // spin: tamano del loader
-        border: true  // bar: mostrar borde
+        size: 'normal',  // spin: size
+        border: true  // bar: border
     }, data);
-    handler.config.type = handler.config.type === 'spinner' ? 'spin' : handler.config.type;
 
 
-    // Crear estructura
+    // Create structure
     handler.loader = $('<div class="eloader" style="display:none"></div>').css('width', handler.config.width);
     $animation = $('<div>');
     handler.loader.append($animation);
@@ -893,11 +897,11 @@ Elise.loader = function (data) {
     if (handler.config.type === 'spin') {
         $animation.addClass('spin');
         if (handler.config.determinate) {
-            $animation.append('<svg>\
-                               <circle class="progress" transform="translate(30,30) rotate(-90)" r="25" cy="0" cx="0"></circle>\
-                               <circle transform="translate(30,30)" r="25" cy="0" cx="0"></circle>\
-                               </svg>\
-                               <div class="progress-count">0%</div>');
+            $animation.append('<svg>'
+                            + '<circle class="progress" transform="translate(30,30) rotate(-90)" r="25" cy="0" cx="0"></circle>'
+                            + '<circle transform="translate(30,30)" r="25" cy="0" cx="0"></circle>'
+                            + '</svg>'
+                            + '<div class="progress-count">0%</div>');
         } else {
             $animation.addClass('undeterminate').html('<div class="spin-ball1"></div><div class="spin-ball2"></div>');
             if (handler.config.size === 'mini') {
@@ -915,13 +919,13 @@ Elise.loader = function (data) {
             $animation.append($('<div class="progress" style="width: 0%">').html('0%'));
         } else {
             $animation.addClass('undeterminate')
-            .append('<div class="bar-ball bar-ball1"></div>\
-                     <div class="bar-ball bar-ball2"></div>\
-                     <div class="bar-ball bar-ball3"></div>\
-                     <div class="bar-ball bar-ball4"></div>');
+            .append('<div class="bar-ball bar-ball1"></div>'
+                  + '<div class="bar-ball bar-ball2"></div>'
+                  + '<div class="bar-ball bar-ball3"></div>'
+                  + '<div class="bar-ball bar-ball4"></div>');
         }
     }
-    // Crear texto
+    // If create text
     if (handler.config.text) {
         $texto = $('<div class="state">').html(handler.config.text);
         if (handler.config.textPosition === 'bottom') {
@@ -932,13 +936,13 @@ Elise.loader = function (data) {
     }
 
 
-    // Actualizar el estado
+    // Update loader state
     // @config = {text, percentage, width}
     handler.update = function (config) {
         var $state, width, rotated;
 
         if (config) {
-            // Actualizar texto si esta disponible
+            // Update text if it exists
             if (config.text && handler.config.text) {
                 $state = handler.loader.find('.state');
                 width = $state.outerWidth();
@@ -954,15 +958,17 @@ Elise.loader = function (data) {
                     .html(config.text).stop().animate({
                         'margin-left': 0,
                         'opacity': 1
-                    }, handler.config.updateTime / 2);
+                    }, handler.config.updateTime / 2, function () {
+                        $state.removeAttr('style');
+                    });
                 });
             }
 
-            // Actualizar porcentaje del proceso completado
+            // Update percentage
             if (config.percentage && handler.config.determinate) {
                 // SPIN
                 if (handler.config.type === 'spin') {
-                    rotated = 157 * (config.percentage / 100);  // El 157 es de la propiedad stroke-dasharray del .progress
+                    rotated = 157 * (config.percentage / 100);  // 157 is stroke-dasharray value of .progress
                     $animation.find('.progress').animate({'stroke-dashoffset': 157 - rotated}, handler.config.updateTime);
                     handler.loader.find('.progress-count').html(config.percentage + '%');
                 }
@@ -974,7 +980,7 @@ Elise.loader = function (data) {
                 }
             }
 
-            // Actualizar ancho del loader
+            // Update loader width
             config.width ? handler.loader.animate({width: config.width}, handler.config.updateTime) : undefined;
         }
 
@@ -982,7 +988,7 @@ Elise.loader = function (data) {
     };
 
 
-    // Finalizar la animacion
+    // Finish animation
     handler.destroy = function (time, fn) {
         handler.hide(time ? time : handler.config.fadeTime, function () {
             handler.loader.remove();
@@ -992,27 +998,21 @@ Elise.loader = function (data) {
     };
 
 
-    // Mostrar el loader
+    // Show
     handler.show = function (time, fn) {
         handler.loader.show(time ? time : handler.config.fadeTime, fn);
         return handler;
     };
 
 
-    // Ocultar el loader
+    // Hide
     handler.hide = function (time, fn) {
         handler.loader.hide(time ? time : handler.config.fadeTime, fn);
         return handler;
     };
 
 
-    // Remover instantaneamente
-    handler.remove = function () {
-        handler.destroy(0);
-    };
-
-
-    // Iniciar
+    // Initialization
     $(handler.config.selector).append(handler.loader);
     if (handler.config.show) {
         handler.loader.fadeIn(handler.config.fadeTime);
@@ -1021,16 +1021,16 @@ Elise.loader = function (data) {
     return handler;
 
 };
+
+// jQuery plugin loader
 jQuery.fn.loader = function (data) {
     $.extend(data, {selector: this});
     return Elise.loader(data);
 };
 
 
-/*! Hope 0.5
- * Copyright 2014, Duvan Vargas, @DuvanJamid; Romel Perez, @prhonedev
- * License: www.opensource.org/licenses/mit-license.php
-**/
+
+// Hope
 Elise.hope = function (data) {
 
     var handler, hope_hold, hope;
@@ -1039,26 +1039,25 @@ Elise.hope = function (data) {
         reset: false,
         width: 300,
         background: 'rgba(0,0,0,0.3)',
-        animation: 'slideDown',  // Animacion de mostrar/ocultar: slideDown, fadeIn
+        animation: 'slideDown',  // Animation show/hide: slideDown, fadeIn
         animationIn: 250,
         animationOut: 250,
-        onOpen: function () {},  // Cuando se muestra el hope
-        onClose: function () {},  // Cuando se cierra el hope
-        loader: {text: 'Procesando, por favor espere...'}
+        onOpen: function () {},
+        onClose: function () {},
+        loader: {text: 'Processing, please wait...'}
     };
 
 
-    // Actualizar: si esta siendo utilizado en este momento
-    // Y sino se ha enviado el parametro resetear
+    // Update if it is being shown AND there is not a reset parameter
     if (win.Elise._fn.hope && win.Elise._fn.hope._shown) {
         if (data && !data.reset) {
-            win.Elise._fn.hope.update(data);  // Actualizar
-            return win.Elise._fn.hope;  // Retornar
+            win.Elise._fn.hope.update(data);  // Update
+            return win.Elise._fn.hope;  // Return it
         }
     }
 
 
-    // Reinstanciar
+    // Reinstantiate
     if (win.Elise._fn.hope) {
         
         handler = win.Elise._fn.hope;
@@ -1067,63 +1066,61 @@ Elise.hope = function (data) {
         hope = hope_hold.find('.ehope').html('');
 
     }
-    // Crear puesto que no ha sido creado
+    // Create it
     else {
 
-        // Guardar referencia global
+        // Save reference
         handler = win.Elise._fn.hope = {};
 
 
-        // Configuracion
+        // Configuration
         handler.config = $.extend(defaultConfig, data);
 
 
-        // Crear
+        // Create
         hope_hold = $('<div id="ehope" class="ehope-hold" style="display: none;"></div>');
         hope = $('<div class="ehope"></div>');
         handler.hope = hope_hold;  // Referenciar
 
 
-        // Configurar
+        // Configurate
         win.$('body').append(hope_hold.html(hope));
         $(win).on('resize', function () {
-            handler.position('fadein');
+            handler._shown ? handler.position('fadein') : undefined;
         });
 
     }
 
 
-    // Otros
+    // Others
     handler.config.animation = handler.config.animation.toLowerCase();
 
 
-    // Instanciar Loader
+    // Instantiate loader
     handler.config.loader.selector = hope;
     handler.loader = Elise.loader(handler.config.loader);
 
 
-    // Actualizar datos del ehope
-    // Si llega @config quiere decir que se va a actualizar el que esta mostrandose
+    // Update
     handler.update = function (config) {
-        // Actualizar si esta siendo mostrado y hay configuracion
-        // @loader
+        // If there is @config, update the showing modal
         if (handler._shown && config) {
             handler.loader.update(config);
         }
-        // Actualizar datos si la primera vez
+        // Update modal if it is not shown
         // @width, @background
         else {
             hope.css('width', handler.config.width);
             hope_hold.css('background-color', handler.config.background);
         }
-        // Resetear focus
+        // Reset focus
         hope.trigger('focus');
     };
 
 
-    // Posicionar el contenedor del ehope
+    // Positioning
     handler.position = function (type) {
-        // Solo si esta siendo mostrado
+        // Only if it is shown
         if (handler._shown) {
             var width = hope.outerWidth();
             var height = hope.outerHeight();
@@ -1149,12 +1146,11 @@ Elise.hope = function (data) {
     };
 
 
-    // Ocultar
-    handler.destroy = function () {
+    // Hide
+    handler.destroy = handler.hide = function () {
         if (handler._shown) {
             hope_hold.fadeOut(handler.config.animationOut, function () {
                 handler._shown = false;
-                Elise._fn.message('remove');
                 handler.config.onClose();
             });
             if (handler.config.animation === 'slidedown') {
@@ -1164,14 +1160,23 @@ Elise.hope = function (data) {
     };
 
 
-    // Configurar e Iniciar
-    handler.update();  // Aplicar caracteristicas iniciales
-    hope_hold.stop().show(handler.config.animationIn);  // Mostrar contenedor
+    // Initialization
+    handler.update();
+    hope_hold.stop().show(handler.config.animationIn);
     handler._shown = true;
-    handler.config.animation === 'slidedown' ? handler.position() : handler.position("fadein");  // Mostrar ehope
-    Elise._fn.message('add');
+    handler.config.animation === 'slidedown' ? handler.position() : handler.position("fadein");
     handler.config.onOpen();
     return handler;
 
 };
+
+
+
+// DOM Loaded Events
+$(document).ready(function () {
+
+    // Nothing so far...
+
+});
+
 
