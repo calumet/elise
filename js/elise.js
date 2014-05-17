@@ -232,7 +232,7 @@ Elise.popup = function (config) {
 
 
 // Modal
-Elise.modal = eModal = function (data) {
+Elise.modal = function (data) {
 
     // Configuration
     var tmp, index;
@@ -572,9 +572,9 @@ Elise.alert = function (data) {
             holder.find('button').focus();
             options.afterShow();
         });
-        options.beforeShow();
-        holder.trigger('focus');
         isShown = true;
+        holder.trigger('focus');
+        options.beforeShow();
     };
 
 
@@ -588,10 +588,10 @@ Elise.alert = function (data) {
             top: top - 50,
             left: left
         }, 200, function () {
-            background.remove();
-            options.afterClose();
-            eleFocus.trigger('focus');
             isShown = false;
+            background.remove();
+            eleFocus.trigger('focus');
+            options.afterClose();
         });
         options.beforeClose();
     };
@@ -624,6 +624,15 @@ Elise.alert = function (data) {
     show();
     return background;
 
+};
+
+// Override window.alert
+window._alert = window.alert;
+window.alert = function (content, config) {
+    config = $.extend(config, {
+        content: content
+    });
+    return Elise.alert(config);
 };
 
 

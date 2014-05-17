@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Elise Tests</title>
+        <link href="img/elise.png" rel="shortcut icon">
+        <link href="css/elise.css" rel="stylesheet">
+        <style>
+            body { margin: 20px; }
+            img.logo { display: inline-block; float: left; line-height: 50px; height: 50px; }
+            h1.title { display: inline-block; float: left; line-height: 50px; margin: 0 10px; }
+            .block { margin: 20px 0; }
+        </style>
+    </head>
+    <body>
+        <header class="block">
+            <img class="logo" src="img/elise.png">
+            <h1 class="title">Elise Tests</h1>
+        </header>
+        <hr>
+        <div class="block">
+            <button id="a" class="ebutton red">Great modal</button>
+            <button id="b" class="ebutton blue">Great hope</button>
+            <button id="c" class="ebutton green">Great loader</button>
+            <button id="d" class="ebutton orange">Great alert</button>
+        </div>
+
+        <div id="test" class="block">
+            <p>Here we have tests elise tests...</p>
+        </div>
+
+        <div id="content" class="hidden">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <h5>Making some things...</h5>
+            <p>
+                <input id="emodal1Input1" type="text" placeholder="Type something...">
+                <input id="emodal1Input2" type="text" placeholder="Other input...">
+            </p>
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="js/elise.js"></script>
+        <script>
+            // Modal
+            $('#a').on('click', function () {
+                modal1 = Elise.modal({
+                    container: 'content',
+                    title: 'Amazing modal example',
+                    buttons: [
+                        {
+                            btnText: 'Process Data',
+                            btnPosition: 'left',
+                            btnColor: 'sky-blue',
+                            btnClick: function () {
+                                var text1 = this.emodal.find('#emodal1Input1').val();
+                                if (text1) {
+                                    modal1.hide();
+                                    setTimeout(function () {
+                                        alert(text1, {type: 'alert'});
+                                    }, 1000);
+                                } else {
+                                    alert('You have to type something in first input!', {
+                                        type: 'error',
+                                        afterClose: function () {
+                                            modal1.emodal.find('#emodal1Input1').trigger('focus');
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    ],
+                    onOpen: function () {
+                        this.emodal.find('#emodal1Input1').val('').trigger('focus');
+                    }
+                });
+            });
+
+
+            // Hope
+            $('#b').on('click', function () {
+                hope1 = Elise.hope({
+                    loader: {
+                        determinate: true,
+                        percentage: 0,
+                        type: 'spin',
+                        text: 'Downloading components...'
+                    }
+                });
+                setTimeout(function () {hope1.update({text: 'Installing application...', percentage: 25});}, 1500);
+                setTimeout(function () {hope1.update({text: 'Applying changes...', percentage: 63});}, 3000);
+                setTimeout(function () {hope1.update({text: 'Initializating...', percentage: 100});}, 5000);
+                setTimeout(function () {hope1.destroy();}, 6000);
+            });
+
+
+            // Loader
+            $('#c').on('click', function () {
+                loader1 = $('#test').loader({
+                    type: 'spin',
+                    determinate: false,
+                    text: 'We are working on this right now...'
+                });
+                loader2 = $('#test').loader({
+                    type: 'spin',
+                    determinate: true,
+                    text: 'We are working on this right now...'
+                });
+                loader3 = $('#test').loader({
+                    type: 'bar',
+                    determinate: false,
+                    text: 'We are working on this right now...'
+                });
+                loader4 = $('#test').loader({
+                    type: 'bar',
+                    determinate: true,
+                    text: 'We are working on this right now...'
+                });
+                setTimeout(function () {
+                    var msg = 'Installing components...', perc = 27;
+                    loader1.update({text: msg, percentage: perc});
+                    loader2.update({text: msg, percentage: perc});
+                    loader3.update({text: msg, percentage: perc});
+                    loader4.update({text: msg, percentage: perc});
+                }, 2000);
+                setTimeout(function () {
+                    var msg = 'Applying changes...', perc = 63;
+                    loader1.update({text: msg, percentage: perc});
+                    loader2.update({text: msg, percentage: perc});
+                    loader3.update({text: msg, percentage: perc});
+                    loader4.update({text: msg, percentage: perc});
+                }, 4000);
+                setTimeout(function () {
+                    var msg = 'Initializating application...', perc = 100;
+                    loader1.update({text: msg, percentage: perc});
+                    loader2.update({text: msg, percentage: perc});
+                    loader3.update({text: msg, percentage: perc});
+                    loader4.update({text: msg, percentage: perc});
+                }, 6000);
+                setTimeout(function () {
+                    loader1.destroy();
+                    loader2.destroy();
+                    loader3.destroy();
+                    loader4.destroy();
+                }, 7000);
+            });
+
+            // Alert
+            $('#d').on('click', function () {
+                alert1 = Elise.alert({
+                    content: 'This is an awesome example about how we can create amazing alert messages!',
+                    type: 'info'
+                });
+            });
+        </script>
+    </body>
+</html>
