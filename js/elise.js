@@ -258,7 +258,7 @@ Elise.modal = function (data) {
             {
                 //btnId: 'id',
                 btnClass: 'emodal-hide',  // .emodal-hide is to close the modal when it is pressed
-                btnText: 'Cerrar',
+                btnText: 'Close',
                 btnColor: 'red',
                 btnPosition: 'right',  // right | left | center
                 btnClick: function () {}
