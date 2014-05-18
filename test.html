@@ -1,163 +1,444 @@
 <!DOCTYPE HTML>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Elise Tests</title>
-        <link href="img/elise.png" rel="shortcut icon">
-        <link href="css/elise.css" rel="stylesheet">
-        <style>
-            body { margin: 20px; }
-            img.logo { display: inline-block; float: left; line-height: 50px; height: 50px; }
-            h1.title { display: inline-block; float: left; line-height: 50px; margin: 0 10px; }
-            .block { margin: 20px 0; }
-        </style>
-    </head>
-    <body>
-        <header class="block">
-            <img class="logo" src="img/elise.png">
-            <h1 class="title">Elise Tests</h1>
-        </header>
-        <hr>
-        <div class="block">
-            <button id="a" class="ebutton red">Great modal</button>
-            <button id="b" class="ebutton blue">Great hope</button>
-            <button id="c" class="ebutton green">Great loader</button>
-            <button id="d" class="ebutton orange">Great alert</button>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <title>Elise Tests</title>
+    <link href="img/elise.png" rel="shortcut icon">
+    <link href="css/elise.css" rel="stylesheet">
+    <style>
+        body { margin: 20px; }
+        img.logo { display: inline-block;  line-height: 50px; height: 120px; }
+        h1.title { color: #fff;font-size: 100px; }
+        .block { margin: 20px 0; }
+        body{
+            background-image: url('test/img/blurred.jpg');
+            background-color: #f5f5f5;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .wraper{
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        ul{   margin: 0;
+            padding: 0;
+        }
+        li{
+            padding: 5px;
+            display: inline-block;
+        }
+        #ebuttons .ebox4 .panel{
+            min-height: 270px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wraper">
+        <header>
+         <div class="erow">
+            <div class="ebox12">
+              <h1 class="title"> 
+                  <img class="logo" src="img/elise2.png"  style="width: 250px;height: auto"/>Elise Tests
+              </h1>
+          </div>
+      </div>
+  </header>
+  <!-- star content -->
+  <!-- buttons -->
+  <div class="erow" id="ebuttons">
+    <div class="ebox4">
 
-        <div id="test" class="block">
-            <p>Here we have elise tests...</p>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Buttons</span>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li><button class="ebutton">Button one</button></li>
+                    <li><button class="ebutton blue">example 2</button></li>
+                    <li><button class="ebutton red">example 3</button></li>
+                    <li><button class="ebutton green">example 4</button></li>
+                    <li><button class="ebutton orange">example 5</button></li>
+                    <li><button class="ebutton sky-blue">example 5</button></li>
+                    <li><button class="ebutton dark-blue">example 5</button></li>
+                    <li><button class="ebutton black">example 5</button></li>
+                </ul>
+            </div>
         </div>
+    </div>
+    <div class="ebox4">
 
-        <div id="content" class="hidden">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <h5>Making some things...</h5>
-            <p>
-                <input id="emodal1Input1" type="text" placeholder="Type something...">
-                <input id="emodal1Input2" type="text" placeholder="Other input...">
-            </p>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Disabled Buttons</span>
+            </div>
+            <div class="panel-body">
+             <ul>
+                <li><button class="ebutton disabled">Button one</button></li>
+                <li><button class="ebutton blue disabled">example 2</button></li>
+                <li><button class="ebutton red disabled">example 3</button></li>
+                <li><button class="ebutton green disabled">example 4</button></li>
+                <li><button class="ebutton orange disabled">example 5</button></li>
+                <li><button class="ebutton sky-blue disabled">example 5</button></li>
+                <li><button class="ebutton dark-blue disabled">example 5</button></li>
+                <li><button class="ebutton black disabled">example 5</button></li>
+            </ul>
         </div>
+    </div>
+</div>  
+<div class="ebox4">
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="js/elise.js"></script>
-        <script>
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">Buttons Sizes</span>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li><button class="ebutton ebutton-large">Large Button</button></li>
+                <li><button class="ebutton blue">Default Button</button></li>
+                <li><button class="ebutton red ebutton-small">Small Button</button></li>
+                <li><button class="ebutton green ebutton-mini">Mini Button</button></li>
+            </ul>
+            <hr>
+            <span class="panel-title">Buttons combos</span>
+            <ul>
+                <li>
+                    <button class="ebutton ebutton-small left">Left Button</button>
+                    <button class="ebutton ebutton-small center">Center Button</button>
+                    <button class="ebutton ebutton-small right">Right Button</button>
+                </li>
+            </ul>
+        </div>
+    </div>  
+</div><!-- buttons -->
+<div class="erow" id="ebuttons">
+    <div class="ebox4">
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Buttons Circle</span>
+            </div>
+            <div class="panel-body">
+               <ul>
+                <li><button class="ebutton ebutton-circle blue">Default Button</button></li>
+                <li><button class="ebutton ebutton-circle red ebutton-small">Small Button</button></li>
+                <li><button class="ebutton ebutton-circle green ebutton-mini">Mini Button</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="ebox4">
+
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">Great checkBox Switch On/Off</span>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li>
+                  <label class="">Default checkbox
+                    <input type="checkbox" checked name="switch1"  id="">
+                </label>
+            </li> 
+            <br> 
+            <li>
+              <label class="">Colors 
+                <div class="onoffswitch">
+                    <input type="checkbox" checked name="switch1" class="onoffswitch-checkbox" id="switch1">
+                    <label class="onoffswitch-label sky-blue" for="switch1">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </label>
+        </li>
+        <li>
+            <label class="">Animated 
+                <div class="onoffswitch">
+                    <input type="checkbox" checked name="switch2" class="onoffswitch-checkbox" id="switch2">
+                    <label class="onoffswitch-label blue" for="switch2">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </label>
+        </li>
+        <li>
+            <label class="">Simple 
+                <div class="onoffswitch">
+                    <input type="checkbox" checked name="switch3" class="onoffswitch-checkbox" id="switch3">
+                    <label class="onoffswitch-label orange" for="switch3">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </label>
+        </li>
+        <li>
+            <label class="">Great 
+                <div class="onoffswitch">
+                    <input type="checkbox" checked name="switch4" class="onoffswitch-checkbox" id="switch4">
+                    <label class="onoffswitch-label green" for="switch4">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </label>
+        </li>
+    </div>
+</div>
+</div>  
+<div class="ebox4">
+
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">Great loader</span>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li>
+                    <button class="ebutton ebutton-small left spin1">Spin</button>
+                    <button class="ebutton ebutton-small center spin2">Spin 2</button>
+                    <button class="ebutton ebutton-small center bar1">Bar</button>
+                    <button class="ebutton ebutton-small right bar2">Bar 2</button>
+                </li>
+            </ul>
+            <div id="loader">
+
+            </div>
+        </div>
+    </div>  
+</div>
+<!-- modal hoe -->
+<div class="errow">
+    <div class="ebox6">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Great modals box and Alert message</span>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>
+                        <button class="ebutton ebutton-small blue js-modal">Launch Modal</button>
+                    </li>
+                    <li>
+                        <button class="ebutton ebutton-small orange js-alert">Alert</button>
+                    </li> 
+                    <li>
+                        <button class="ebutton ebutton-small sky-blue js-alert-info">Info</button>
+                    </li> 
+                    <li>
+                        <button class="ebutton ebutton-small red js-alert-error">Error</button>
+                    </li> 
+                    <li>
+                        <button class="ebutton ebutton-small green js-alert-confirm">Confirm</button>
+                    </li>
+                </ul>
+                <div id="loader">
+
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="ebox6">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Great hope</span>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>
+                        <button class="ebutton ebutton-small blue js-hope">Launch hope</button>
+                    </li>
+                    <li>
+                        <button class="ebutton ebutton-small sky-blue js-hope-det">Launch determinate hope </button>
+                    </li>
+                </ul>
+                <div id="loader">
+
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+</div>
+<!-- wraper end -->  
+</div>
+
+<div id="js-modal-content" class="hidden">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <h5>Making some things...</h5>
+    <p>
+        <input id="emodal1Input1" type="text" placeholder="Type something...">
+        <input id="emodal1Input2" type="text" placeholder="Other input...">
+    </p>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="js/elise.js"></script>
+<script>
+
+    $(document).on('ready',function(){
+      loader1 = $('#loader').html('').loader({
+        type: 'spin',
+        determinate: false,
+        text: 'We are working on this right now...'
+    });
+  });
+    $('.spin1').on('click', function () {
+      loader1 = $('#loader').html('').loader({
+        type: 'spin',
+        determinate: false,
+        text: 'We are working on this right now...'
+    });
+  });
+    $('.spin2').on('click', function () {
+     loader2 = $('#loader').html('').loader({
+        type: 'spin',
+        determinate: true,
+        text: 'We are working on this right now...',
+        percentage:10
+    });
+     setTimeout(function () {
+        var msg = 'Installing components...', perc = 27;
+        loader2.update({text: msg, percentage: perc});
+    }, 1000);
+     setTimeout(function () {
+        var msg = 'Applying changes...', perc = 63;
+        loader2.update({text: msg, percentage: perc});
+    }, 3000);
+     setTimeout(function () {
+        var msg = 'Initializating application...', perc = 100;
+        loader2.update({text: msg, percentage: perc});
+    }, 5000);
+ });
+    $('.bar1').on('click', function () {
+     loader1 = $('#loader').html('').loader({
+        type: 'bar',
+        determinate: false,
+        text: 'We are working on this right now...'
+    });
+ });
+    $('.bar2').on('click', function () {
+     loader4= $('#loader').html('').loader({
+        type: 'bar',
+        determinate: true,
+        text: 'We are working on this right now...',
+        percentage:10
+    });
+     setTimeout(function () {
+        var msg = 'Installing components...', perc = 27;
+        loader4.update({text: msg, percentage: perc});
+    }, 1000);
+     setTimeout(function () {
+        var msg = 'Applying changes...', perc = 63;
+        loader4.update({text: msg, percentage: perc});
+    }, 3000);
+     setTimeout(function () {
+        var msg = 'Initializating application...', perc = 100;
+        loader4.update({text: msg, percentage: perc});
+    }, 5000);
+ });
+
             // Modal
-            $('#a').on('click', function () {
+            $('.js-modal').on('click', function () {
                 modal1 = Elise.modal({
-                    container: 'content',
+                    container: 'js-modal-content',
                     title: 'Amazing modal example',
                     buttons: [
-                        {
-                            btnText: 'Process Data',
-                            btnPosition: 'left',
-                            btnColor: 'sky-blue',
-                            btnClick: function () {
-                                var text1 = this.emodal.find('#emodal1Input1').val();
-                                if (text1) {
-                                    modal1.hide();
-                                    setTimeout(function () {
-                                        alert(text1, {type: 'alert'});
-                                    }, 1000);
-                                } else {
-                                    alert('You have to type something in first input!', {
-                                        type: 'error',
-                                        afterClose: function () {
-                                            modal1.emodal.find('#emodal1Input1').trigger('focus');
-                                        }
-                                    });
-                                }
+                    {
+                        btnText: 'Process Data',
+                        btnPosition: 'left',
+                        btnColor: 'sky-blue',
+                        btnClick: function () {
+                            var text1 = this.emodal.find('#emodal1Input1').val();
+                            if (text1) {
+                                modal1.hide();
+                                setTimeout(function () {
+                                    alert(text1, {type: 'alert'});
+                                }, 1000);
+                            } else {
+                                alert('You have to type something in first input!', {
+                                    type: 'error',
+                                    afterClose: function () {
+                                        modal1.emodal.find('#emodal1Input1').trigger('focus');
+                                    }
+                                });
                             }
                         }
+                    }
                     ],
                     onOpen: function () {
                         this.emodal.find('#emodal1Input1').val('').trigger('focus');
                     }
                 });
-            });
+});
 
+ //! Alert
+ $('.js-alert').on('click', function () {
+    alert1 = Elise.alert({
+        content: 'This is an awesome example about how we can create amazing alert messages!'
+    });
+});
+ $('.js-alert-info').on('click', function () {
+    alert1 = Elise.alert({
+        content: 'This is an awesome example about how we can create amazing alert messages!',
+        type: 'info'
+    });
+});
+ $('.js-alert-error').on('click', function () {
+    alert1 = Elise.alert({
+        content: 'This is an awesome example about how we can create amazing alert messages!',
+        type: 'error'
+    });
+});
+ $('.js-alert-confirm').on('click', function () {
+    alert1 = Elise.alert({
+        content: 'This is an awesome example about how we can create amazing alert messages!',
+        type: 'confirm'
+    });
+});
 
             // Hope
-            $('#b').on('click', function () {
+            $('.js-hope').on('click', function () {
                 hope1 = Elise.hope({
                     loader: {
-                        determinate: true,
+                        determinate: false,
                         percentage: 0,
                         type: 'spin',
-                        text: 'Downloading components...'
+                        text: 'Loading...'
                     }
                 });
-                setTimeout(function () {hope1.update({text: 'Installing application...', percentage: 25});}, 1500);
-                setTimeout(function () {hope1.update({text: 'Applying changes...', percentage: 63});}, 3000);
-                setTimeout(function () {hope1.update({text: 'Initializating...', percentage: 100});}, 5000);
-                setTimeout(function () {hope1.destroy();}, 6000);
+                setTimeout(function () {hope1.destroy();}, 1500);
             });
-
-
+   // Hope determinate
+   $('.js-hope-det').on('click', function () {
+    hope2 = Elise.hope({
+        loader: {
+            determinate: true,
+            percentage: 0,
+            type: 'spin',
+            text: 'Downloading components...'
+        }
+    });
+    setTimeout(function () {hope2.update({text: 'Installing application...', percentage: 25});}, 1500);
+    setTimeout(function () {hope2.update({text: 'Applying changes...', percentage: 63});}, 3000);
+    setTimeout(function () {hope2.update({text: 'Initializating...', percentage: 100});}, 5000);
+    setTimeout(function () {hope2.destroy();}, 6000);
+});
             // Loader
-            $('#c').on('click', function () {
-                loader1 = $('#test').loader({
-                    type: 'spin',
-                    determinate: false,
-                    text: 'We are working on this right now...'
-                });
-                loader2 = $('#test').loader({
-                    type: 'spin',
-                    determinate: true,
-                    text: 'We are working on this right now...'
-                });
-                loader3 = $('#test').loader({
-                    type: 'bar',
-                    determinate: false,
-                    text: 'We are working on this right now...'
-                });
-                loader4 = $('#test').loader({
-                    type: 'bar',
-                    determinate: true,
-                    text: 'We are working on this right now...'
-                });
-                setTimeout(function () {
-                    var msg = 'Installing components...', perc = 27;
-                    loader1.update({text: msg, percentage: perc});
-                    loader2.update({text: msg, percentage: perc});
-                    loader3.update({text: msg, percentage: perc});
-                    loader4.update({text: msg, percentage: perc});
-                }, 2000);
-                setTimeout(function () {
-                    var msg = 'Applying changes...', perc = 63;
-                    loader1.update({text: msg, percentage: perc});
-                    loader2.update({text: msg, percentage: perc});
-                    loader3.update({text: msg, percentage: perc});
-                    loader4.update({text: msg, percentage: perc});
-                }, 4000);
-                setTimeout(function () {
-                    var msg = 'Initializating application...', perc = 100;
-                    loader1.update({text: msg, percentage: perc});
-                    loader2.update({text: msg, percentage: perc});
-                    loader3.update({text: msg, percentage: perc});
-                    loader4.update({text: msg, percentage: perc});
-                }, 6000);
-                setTimeout(function () {
-                    loader1.destroy();
-                    loader2.destroy();
-                    loader3.destroy();
-                    loader4.destroy();
-                }, 7000);
-            });
 
-            // Alert
-            $('#d').on('click', function () {
-                alert1 = Elise.alert({
-                    content: 'This is an awesome example about how we can create amazing alert messages!',
-                    type: 'info'
-                });
-            });
+            
+            
+
+
         </script>
     </body>
-</html>
+    </html>
