@@ -1801,11 +1801,12 @@ table.table.options{
         height:80px;
         width:80px;
         vertical-align: middle;
+        background-size: cover;
     }
-    .ealert-image img {
-        height:80px;
-        width:80px;
-    }
+    .ealert.ealert-alert .ealert-image {background-image: url('../img/alert/alert.png');}
+    .ealert.ealert-info .ealert-image {background-image: url('../img/alert/info.png');}
+    .ealert.ealert-error .ealert-image {background-image: url('../img/alert/error.png');}
+    .ealert.ealert-confirm .ealert-image {background-image: url('../img/alert/confirm.png');}
     .ealert-content {
         margin:0;
         padding: 15px 10px;

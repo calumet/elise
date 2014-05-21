@@ -446,12 +446,11 @@ Elise.modal = function (data) {
 // Modified by Oliver Kopp, 2012
 Elise.alert = function (data) {
 
-    var background, holder, container, image, buttons;
+    var background, holder, container, alertType, buttons;
     var dim, top, left;
 
     // Configuration
     var win = window.top;
-    var imagePath = 'img/alert/';
     var isShown = false;
     var eleFocus = $('*:focus');
     var id = 'alert_' + (new Date().getTime());
@@ -478,23 +477,23 @@ Elise.alert = function (data) {
     // Message type
     switch (options.type) {
         case "alert":
+            alertType = "ealert-alert";
             options.title = options.title ? options.title : "Alert";
-            image = "alert.png";
             options.btype = "orange";
             break;
         case "info":
+            alertType = "ealert-info";
             options.title = options.title ? options.title : "Information";
-            image = "info.png";
             options.btype = "sky-blue";
             break;
         case "error":
+            alertType = "ealert-error";
             options.title = options.title ? options.title : "Error";
-            image = "error.png";
             options.btype = "red";
             break;
         case "confirm":
+            alertType = "ealert-confirm";
             options.title = options.title ? options.title : "Confirm";
-            image = "confirm.png";
             options.btype = "green";
             options.buttons = data.buttons ? options.buttons : [
                 {value: "Okay", type: 'green', click: function () {}},
@@ -507,7 +506,7 @@ Elise.alert = function (data) {
     // Create structure
     // Container
     container = $('<div>').html(
-        $('<div class="ealert-image"><img src="' + imagePath + image + '"></div>')
+        $('<div class="ealert-image"></div>')
         .add( $('<div class="ealert-content"></div>').html( $('<p>').html($('<span>').html(options.content))) )
     );
     // Buttons bar
@@ -522,7 +521,7 @@ Elise.alert = function (data) {
     // Structure
     background = $('<div id="' + id + '" class="ealert-holder"></div>');
     holder = $('<div>', {
-        'class': 'ealert',
+        'class': 'ealert ' + alertType,
         'html': $('<div class="ealert-title"></div>').html(options.title)
                 .add(container)
                 .add(options.showButtons ? buttons : '')
