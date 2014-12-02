@@ -3,13 +3,13 @@
  * Version 0.6
  * Updated 2014-05-16
  * Duvan Jamid @DuvanJamid
- * Romel Perez @prhonedev
+ * Romel Perez prhone.blogspot.com
  * Licence http://www.opensource.org/licenses/mit-license.php
  * Repository http://github.com/calumet/elise
  **/
 
 // Elise Core Object
-Elise = $e = {
+window.Elise = window.$e = {
 
     // Interal Functionality
     _fn: {}
