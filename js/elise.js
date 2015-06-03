@@ -1,6 +1,6 @@
 /*!
  * Elise Library
- * Version 0.6
+ * Version 0.6.1
  * Updated 2014-05-16
  * Duvan Jamid @DuvanJamid
  * Romel Perez prhone.blogspot.com
@@ -8,14 +8,23 @@
  * Repository http://github.com/calumet/elise
  **/
 
-// Elise Core Object
 window.Elise = window.$e = {
+    /**
+     * Version of Elise.
+     */
+    VERSION: '0.6.1',
 
-    // Interal Functionality
-    _fn: {}
-
+    /**
+     * Private variables.
+     */
+    _fn: {
+        /**
+         * Instance of script.
+         * @type {Number}
+         */
+        instance: Date.now()
+    }
 };
-
 
 
 // String Validations
@@ -230,214 +239,441 @@ Elise.popup = function (config) {
 };
 
 
+/**
+ * Elise Modal.
+ */
+(function (window, $) {
 
-// Modal
-Elise.modal = function (data) {
-
-    // Configuration
-    var tmp, index;
-    var win = window.top;
-    var pathName = window.location.pathname.replace(/\//gi,'');
-    var handler = {};
-    handler.id = 'emodal-' + (new Date().getTime());
-    handler.config = $.extend({
-        container: null,  // id like string, HTMLObject, jQueryObject
-        url: '',
-        title: 'Modal title',
-        emodalWidth: 600,
-        emodalContentHeight: 300,
-        delay: 100,
-        fadeIn: 500,
-        fadeOut: 500,
-        onEscKeyClose: true,
-        show: true,
-        onOpen: function () {},
-        onClose: function () {},
-        onCreate: function () {},
-        buttons: [
-            {
-                //btnId: 'id',
-                btnClass: 'emodal-hide',  // .emodal-hide is to close the modal when it is pressed
-                btnText: 'Close',
-                btnColor: 'red',
-                btnPosition: 'right',  // right | left | center
-                btnClick: function () {}
-            }
-        ]
-    }, data);
-    handler.url = handler.config.url === '' ? false : true;
-    handler.config.container = typeof handler.config.container === 'string'
-                               ? handler.config.container
-                               : $(handler.config.container).attr('id');  // Si es objeto, obtener el id string
-    handler.container = $('#' + handler.config.container);
-
-
-    // If the modal was created in window.window
-    // Then update and show if config.show was defined
-    if (handler.container.length && handler.container.data('emodal')) {
-        handler = handler.container.data('emodal-handler').update(handler.config);
-        return handler.config.show ? handler.show() : handler;
-    }
-    // If the modal was created in window.top from the same iframe
-    // Then update and show if config.show was defined
-    tmp = win.$('*[id=' + handler.config.container + ']');
-    for (index = 0; index < tmp.length; index += 1) {
-        if (tmp.eq(index).data('emodal') && tmp.eq(index).data('emodal-pathname') === pathName) {
-            handler = tmp.eq(index).data('emodal-handler').update(handler.config);
-            return handler.config.show ? handler.show() : handler;
+    // Botones preconstruidos.
+    var buttons = {
+        cancel: {
+            btnText: 'Cancel',
+            btnClass: 'emodal_hide', // emodal_hide, clase que se utiliza para cerrar.
+            btnPosition: 'right' // right | left | center
+            //btnId: 'emodal_button_hide',
+            //btnColor: 'rojo', // red | green | blue | dark-blue | orange | sky-blue | black | ...
+            //btnClick: function () {}
+        },
+        close: {
+            btnText: 'Close',
+            btnClass: 'emodal_hide',
+            btnPosition: 'right'
         }
-    }
+    };
 
 
-    // Create objects
-    var emodal_hold = $('<div id="' + handler.id + '" class="emodal-hold" style="display:none">');
-    var emodal = $('<div class="emodal">');
-    var emodal_header = $('<div class="emodal-header">').html($('<button>', {
-        'class': 'emodal-close emodal-hide',
-        'type': 'button',
-        'html': '&times;'
-    }).add('<h3 class="emodal-title">'));
-    var emodal_content = handler.url
-                         ? $('<iframe class="emodal-content emodal-content-url">')
-                         : $('<div class="emodal-content">');;
+    /**
+     * Elise modal handler constructor.
+     * @api private
+     * @param {Object} data Configuración de instancia.
+     */
+    var Handler = function (data) {
+        this._elise = Elise._fn.instance;  // Con cuál instancia de Elise se ha creado.
+        this._shown = false;  // Si está mostrado/mostrándose o no.
+        this._reInstance = false;  // Si ya se había creado y se está reinstanciando en el mismo window.
+        this._reOutInstance = false;  // Si ya se había creado y se está reinstanciando por fuera del mismo window.
+        this._reOutDeref = false;  // _reOutInstance es true y es instancia de un window recargado.
 
+        this.id = null;  // Identificador del modal.
+        this.emodal = null;  // El elemento completo del modal.
+        this.url = false;  // Si es tipo URL, sino, entonces es contenedor.
 
-    // Apply content
-    if (handler.url) {
-        emodal_content.attr('src', handler.config.url);
-    } else {
-        emodal_content.attr('id', handler.container.attr('id')).html(handler.container.html());
-        handler.container.remove();
-    }
+        // El elemento que tiene el contenido a mostrar en el modal. Cuando se
+        // mueve dentro del contenedor this.emodal, éste sigue referenciando a él
+        // mismo. Adentro tendrá la clase .emodal_content.
+        this.container = null;
 
+        // El contenido HTML inicial que tiene el this.container. Se hace así
+        // en caso de reiniciar el contenido en perdidas de referencia entre páginas.
+        this.htmlBase = '';
 
-    // Render modal
-    emodal.html(emodal_header).append(emodal_content);
-    win.$('body').append(emodal_hold.html(emodal));
+        // Configuración.
+        this.config = $.extend({
+            url: false,  // String URL.
+            container: false,  // String ID, HTML node, jQuery.
+            onEscKeyClose: true,  // Cerrar con la tecla ESC.
+            show: true,  // Mostrar al instanciarlo.
+            win: window.top,  // Ventana en la trabajará el modal. Útil en iframes.
+            title: '',
+            emodalWidth: 600,
+            emodalContentHeight: 300,
+            buttons: ['cancel'],  // Colección de botones por defecto vacía.
+            background: true,  // Si se muestra con background.
+            delay: 100,
+            fadeIn: 500,
+            fadeOut: 500,
+            onCreate: null,
+            onBeforeOpen: null,
+            onOpen: null,
+            onBeforeClose: null,
+            onClose: null
+        }, data);
 
+        // Modal tipo URL o contenedor.
+        var handler;
+        if (this.config.url) {
+            this.url = true;
+        } else {
 
-    // Save references
-    handler.emodal = win.$('#' + handler.id);
-    handler.container = handler.emodal.find('#' + handler.config.container);
+            // Sólo guardar el string identificador.
+            if (typeof this.config.container === 'string' && this.config.container.charAt(0) === '#') {
+                this.config.container = this.config.container.substring(1);
+            } else if (typeof this.config.container !== 'string') {
+                this.config.container = $(this.config.container).attr('id');
+            }
 
+            // Conseguir contenedor si está renderizado en otro window.
+            this.container = this.config.win.$('#'+ this.config.container);
+            if (this.config.win !== window && !!this.container.length) {
+                handler = this.container.data('emodal');
 
-    // (Re)Configurate
-    handler.update = function (config) {
-        handler.config = config;
+                // El container es instanciado.
+                if (handler) {
+                    this._reOutInstance = true;
+                    this.htmlBase = handler.htmlBase;
 
-        emodal.css('width', handler.config.emodalWidth);  // Width
-        emodal_content.css('height', handler.config.emodalContentHeight);  // Height
-        emodal_header.find('.emodal-title').html(handler.config.title);  // Title
+                    // El container ha perdido referencia de la página instanciadora.
+                    if (handler._elise !== Elise._fn.instance) {
+                        this._reOutDeref = true;
+                    }
 
-        // Create buttons
-        var emodal_footer = handler.config.buttons.length === 0 ? '' : $('<div class="emodal-footer">');
-        handler.emodal.find('.emodal-footer').remove();
-        // If there are, add them
-        if (emodal_footer !== '') {
-            $.each(handler.config.buttons, function (i, item) {
-                item.btnPosition = item.btnPosition === 'center' ? 'none' : item.btnPosition;
-                emodal_footer.append($('<button>', {
-                    'id': item.btnId ? item.btnId : '',
-                    'class': 'ebutton ebutton-small ' + (item.btnClass ? item.btnClass : '') + ' ' + (item.btnColor ? item.btnColor : ''),
-                    'text': item.btnText,
-                    'css': {'float': item.btnPosition ? item.btnPosition : 'right'},
-                    'click': item.btnClick ? function () {item.btnClick.call(handler);} : function () {}
-                }));
-            });
-            emodal.append(emodal_footer);
-            if (handler.config.onEscKeyClose) {
-                handler.emodal.find('button.emodal-close')
-                              .first()
-                              .attr('title', 'Press ESC to close')
-                              .tip({defaultPosition: 'bottom'});
+                    return this;
+                }
+
+                // Error, hay un mismo elemento (contenedor) con el mismo ID en
+                // una página distinta a window y no es porque se haya movido desde
+                // éste window, sino porque está duplicado.
+                else {
+                    return console.error('Hay colision de IDs en el window %o en el id "%s".',
+                      this.config.win, this.config.container);
+                }
+            }
+
+            // Conseguir contenedor si está en el mismo window.
+            this.container = $('#'+ this.config.container);
+            if (!!this.container.length) {
+                handler = this.container.data('emodal');
+
+                // Reinstanciando.
+                if (handler) {
+                    this._reInstance = true;
+                    this.htmlBase = handler.htmlBase;
+                }
+
+                // Creando por primera vez.
+                else {
+                    this.htmlBase = this.container.html().trim();
+                }
             } else {
-                handler.emodal.find('button.emodal-close').first().off('mouseenter');
+                return console.error('El contenedor "%s" no se encuentra.', this.config.container);
+            }
+        }
+    };
+
+    /**
+     * Construir modal. Propiedades y referencias.
+     * @api private
+     * @return {Object} Controlador.
+     */
+    Handler.prototype._build = function () {
+        var _this = this;
+
+        // Definir id.
+        this.id = 'emodal_'+ Date.now();
+
+        // Crear estructura del modal: wrapper, modal, header, contenedor y footer.
+        var emodal_hold = $('<div id="'+ this.id +'" class="emodal_hold" style="display:none">');
+        var emodal = $('<div class="emodal">');
+        var emodal_header = $('<div class="emodal_header">');
+        emodal_header.html(
+            $('<button>', {
+                'class': 'emodal_close emodal_hide',
+                'type': 'button',
+                'html': '&times;'
+            }).add('<h3 class="emodal_title">')
+        );
+        var emodal_content = this.url
+          ? $('<iframe class="emodal_content emodal_content_url">')
+          : $('<div class="emodal_content">');
+        emodal_content.attr('id', this.config.container);
+        var emodal_footer = '<div class="emodal_footer">';
+
+        // Agregar/mover al DOM del window donde se renderizará.
+        emodal_hold.html(emodal);
+        emodal.append(emodal_header).append(emodal_content).append(emodal_footer);
+        this.config.win.$('body').append(emodal_hold);
+        
+        // Referencia del DOM al controlador.
+        this.emodal = this.config.win.$('#'+ this.id);
+
+        // Tipo contenedor.
+        if (this.container) {
+
+            // Reemplazar contenedor.
+            this.container.remove();
+            this.container = null;
+            this.container = this.emodal.find('#'+ this.config.container);
+
+            // Referencia del controlador en el DOM.
+            this.container.data('emodal', this);
+        }
+
+        // Re/Configurar modal.
+        this._configure();
+
+        // Redimensionando la ventana.
+        $(this.config.win).on('resize', function (e) {
+            if (_this._shown) _this.autoPosition(e);
+        });
+
+        // Al presionar la tecla ESC.
+        $(this.config.win.document).on('keydown', function (e) {
+            if (_this._shown && _this.config.onEscKeyClose && e.which === 27) {
+                _this.hide();
+            }
+        });
+
+        // Mostrar inicialmente.
+        if (this.config.show) this.show();
+
+        // Esperar que retorne y luego si utilizar el cacheado por fuera con .onCreate().
+        setTimeout(function () {
+            if (_this.config.onCreate) _this.config.onCreate.call(_this);
+        }, 1);
+
+        return this;
+    };
+
+    /**
+     * Re/Aplicar configuraciones a estructura. Dimensiones, fondo, título,
+     * contenido y botones.
+     * @api private
+     * @return {Object} Controlador.
+     */
+    Handler.prototype._configure = function () {
+        var _this = this;
+
+        // Dimensiones.
+        this.emodal.find('.emodal').css('width', this.config.emodalWidth);
+        this.emodal.find('.emodal_content').css('height', this.config.emodalContentHeight);
+
+        // Fondo.
+        this.emodal.css('background', this.config.background ? '' : 'none');
+
+        // Título y contenido.
+        this.emodal.find('.emodal_header').find('.emodal_title').html(this.config.title);
+        if (this.url) {
+            this.emodal.find('.emodal_content').attr('src', this.config.url);
+        } else {
+            this.emodal.find('.emodal_content').html(this.htmlBase);
+        }
+
+        // Vaciar contenedor de botones. Crear botones si los hay y mostrarlos.
+        var emodal_footer = this.emodal.find('.emodal_footer');
+        emodal_footer.addClass('hidden').empty();
+        if (!!this.config.buttons.length) {
+
+            // Por cada botón.
+            $.each(this.config.buttons, function (i, item) {
+
+                // Botones preestablecidos.
+                if (typeof item === 'string') {
+                    switch (item.toLowerCase()) {
+                        case 'cancel': item = buttons.cancel; break;
+                        case 'close': item = buttons.close; break;
+                    }
+                }
+
+                // Insertar botón.
+                item.btnPosition = item.btnPosition === 'center' ? 'none' : item.btnPosition;
+                emodal_footer.append(
+                    $('<button>', {
+                        'id': item.btnId,
+                        'class': 'ebutton '+ (item.btnClass ? item.btnClass : '')
+                            +' '+ (item.btnColor ? item.btnColor : ''),
+                        'html': item.btnText,
+                        'css': {
+                            'float': item.btnPosition ? item.btnPosition : 'right'
+                        },
+                        'click': item.btnClick ? item.btnClick.bind(_this) : null
+                    })
+                );
+            });
+
+            // Mostrar.
+            emodal_footer.removeClass('hidden');
+        }
+
+        // Permitir cerrar cuando se cliqueen objetos con la clase .emodal_hide.
+        this.emodal.find('.emodal_hide').on('click', function (e) {
+            _this.hide.call(_this, e);
+        });
+
+        return this;
+    };
+
+    /**
+     * Destruir el modal.
+     * @api public
+     * @param  {Function} callback
+     * @return {Object} Controlador.
+     */
+    Handler.prototype.destroy = function (callback) {
+        var _this = this;
+        this.hide(function () {
+            this.emodal.remove();
+            callback && typeof callback === 'function' && callback.call(_this);
+        });
+        return this;
+    };
+
+    /**
+     * Actualizar configuración.
+     * @api public
+     * @param  {Object} config Configuración a actualizar.
+     * @return {Object} Controlador.
+     */
+    Handler.prototype.update = function (config) {
+        this.config = config;
+        this._configure();
+        return this;
+    };
+
+    /**
+     * Re/posicionar el modal en la ventana designada.
+     * @api public
+     * @return {Object} Controlador.
+     */
+    Handler.prototype.autoPosition = function () {
+        var emodal = this.emodal.find('.emodal');
+        var dim = Elise.win.dims();
+
+        // Calcular dimensiones.
+        var width = emodal.outerWidth() / 2;
+        width = width > (dim.width / 2) ? -(dim.width / 2) + 20 : -width;
+        var height = dim.height / 2 - emodal.outerHeight() / 2;
+        height = height < 10 ? 10 : height;
+
+        // Dimensionar.
+        emodal.css({
+            'margin-left': width,
+            'margin-top': height
+        });
+        return this;
+    };
+
+    /**
+     * Mostrar el modal.
+     * @api public
+     * @param  {Function} callback
+     * @return {Object} Controlador.
+     */
+    Handler.prototype.show = function (callback) {
+        var _this = this;
+        if (!this._shown) {
+            setTimeout(function () {
+
+                // Antes de mostrarse.
+                if (_this.config.onBeforeOpen) _this.config.onBeforeOpen.call(_this);
+                
+                // Animación de mostrado y posicionamiento.
+                _this.emodal.css('opacity', 0);
+                _this.emodal.css('display', 'block');
+                _this.autoPosition();
+                _this.emodal.animate({
+                    'opacity': 1
+                }, _this.config.fadeIn, function () {
+                    _this._shown = true;
+                    _this.emodal.trigger('focus');
+
+                    // Después de mostrarse.
+                    _this.config.onOpen && _this.config.onOpen.call(_this);
+                    callback && typeof callback === 'function' && callback.call(_this);
+                });
+
+            }, this.config.delay);
+        }
+        return this;
+    };
+
+    /**
+     * Esconder el modal.
+     * @api public
+     * @param  {Function} callback
+     * @return {Object} Controlador.
+     */
+    Handler.prototype.hide = function (callback) {
+        var _this = this;
+        if (this._shown) {
+            setTimeout(function () {
+
+                // Antes de ocultarse.
+                if (_this.config.onBeforeClose) _this.config.onBeforeClose.call(_this);
+
+                // Animar para ocultar.
+                _this.emodal.animate({
+                    'opacity': 0
+                }, _this.config.fadeOut, function () {
+                    _this.emodal.css('display', 'none');
+                    _this._shown = false;
+                    
+                    // Después de ocultarse.
+                    _this.config.onClose && _this.config.onClose.call(_this);
+                    callback && typeof callback === 'function' && callback.call(_this);
+                });
+            }, this.config.delay);
+        }
+        return this;
+    };
+
+
+    /**
+     * Interfaz del modal.
+     * @param {Object} data Configuración.
+     * @api public
+     * @return {Object} Controlador.
+     */
+    Elise.modal = window.eModal = function (data) {
+
+        // Instanciar controlador del modal.
+        var hl = new Handler(data);
+
+        // Modal tipo container siendo reinstanciado.
+        var hlTemp;
+        if (!hl.url) {
+            hlTemp = hl.container.data('emodal');
+
+            // NOTE: algunas configuraciones son necesarias al crear el modal.
+            // Si se reinstancia con .update(config) tales configuraciones no
+            // generarán ningún efecto. onEscKeyClose no es modifcable.
+
+            // Desde el mismo window.
+            if (hl._reInstance) {
+                hlTemp.update(hl.config);
+                return hlTemp.config.show ? hlTemp.show() : hlTemp;
+            }
+
+            // Desde otro window.
+            else if (hl._reOutInstance) {
+
+                // Referencias NO perdidas.
+                if (!hl._reOutDeref) {
+                    hlTemp.update(hl.config);
+                    return hlTemp.config.show ? hlTemp.show() : hlTemp;
+                } else {
+
+                    // Eliminar previo y crearlo.
+                    hlTemp.emodal.remove();
+                    var hl = new Handler(data);
+                }
             }
         }
 
-        // Close modal when objects with .emodal-hide are clicked
-        emodal.find('.emodal-hide').off('click', handler.hide).on('click', handler.hide);
-
-        return handler;
+        // Construir el modal.
+        return hl._build();
     };
 
-
-    // Posicionate
-    handler.autoPosition = function () {
-        var emodal = handler.emodal.find('.emodal');
-        var dim = Elise.win.dims();
-        var _width = emodal.outerWidth() / 2;
-        _width = _width > (dim.width / 2) ? -(dim.width / 2) + 20 : -_width;
-        var _height = dim.height / 2 - emodal.outerHeight() / 2;
-        _height = _height < 10 ? 10 : _height;
-        emodal.css({
-            'margin-left': _width,
-            'margin-top': _height
-        });
-        return handler;
-    };
-
-
-    // Show
-    handler.show = function () {
-        if (!handler.shown) {
-            setTimeout(function () {
-                handler.emodal.css('opacity', 0);
-                handler.emodal.css('display', 'block');
-                handler.autoPosition();
-                handler.emodal.animate({'opacity': 1}, handler.config.fadeIn, function () {
-                    handler.shown = true;
-                    emodal.trigger('focus');
-                    handler.config.onOpen.call(handler);
-                });
-            }, handler.config.delay);
-        }
-        return handler;
-    };
-
-
-    // Hide
-    handler.hide = function () {
-        if (handler.shown) {
-            setTimeout(function () {
-                handler.emodal.animate({
-                    'opacity': 0
-                }, handler.config.fadeOut, function () {
-                    handler.emodal.css('display', 'none');
-                    handler.shown = false;
-                    handler.config.onClose.call(handler);
-                });
-            }, handler.config.delay);
-        }
-        return handler;
-    };
-
-
-    // Initialization
-    handler.update(handler.config);
-    handler.shown = false;
-    $(win).on('resize', function () {
-        handler.shown ? handler.autoPosition() : undefined;
-    });
-    $(win.document).on('keydown', function (e) {
-        handler.shown && handler.config.onEscKeyClose && e.which === 27 ? handler.hide() : undefined;
-    });
-    handler.container.data({
-        'emodal': true,
-        'emodal-handler': handler,
-        'emodal-pathname': pathName
-    });
-    if (handler.config.show) {
-        handler.show();
-    }
-    setTimeout(function () {
-        // Wait for return to use it out of here
-        handler.config.onCreate.call(handler);
-    }, 1);
-    return handler;
-
-};
-
+})(window, jQuery);
 
 
 // Alert Extended
