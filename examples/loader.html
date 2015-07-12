@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Elise Library | Loader</title>
+        <link rel="stylesheet" href="../css/elise.core.css">
+        <link rel="stylesheet" href="../css/elise.loader.css">
+        <link rel="stylesheet" href="assets/base.css">
+        <style>
+            #contenedor {
+                margin-top: 20px;
+                padding: 20px;
+                border: 1px solid gray
+            }
+        </style>
+    </head>
+    <body>
+
+        <button id="l1" class="ebutton sky-blue">Loader Spin</button>
+        <button id="l2" class="ebutton dark-blue">Loader Bar</button>
+
+        <div id="contenedor">
+            <p>Un objeto con contenido para simular cómo se inserta el loader.</p>
+        </div>
+
+        <script src="../js/vendor/jquery-2.1.4.min.js"></script>
+        <script src="../js/elise.core.js"></script>
+        <script src="../js/elise.loader.js"></script>
+        <script>
+            $('#l1').on('click', function (e) {
+                var loader1 = $('#contenedor').loader();
+
+                // Primera actualización en 2s.
+                setTimeout(function () {
+                    loader1.update({
+                        text: 'Descargando datos...'
+                    });
+                }, 2000);
+
+                // Segunda actualización en 4s.
+                setTimeout(function () {
+                    loader1.update({
+                        text: 'Configurando aplicaciones...'
+                    });
+                }, 4000);
+
+                // Destrucción del loader en 6s.
+                setTimeout(function () {
+                    loader1.destroy();
+                }, 6000);
+            });
+
+            $('#l2').on('click', function (e) {
+                var loader2 = Elise.loader({
+                    selector: '#contenedor',
+                    type: 'bar',
+                    determinate: true    
+                });
+
+                // Primera actualización en 2s.
+                setTimeout(function () {
+                    loader2.update({
+                        text: 'Descargando datos...',
+                        percentage: 45
+                    });
+                }, 2000);
+
+                // Segunda actualización en 4s.
+                setTimeout(function () {
+                    loader2.update({
+                        text: 'Configurando aplicaciones...',
+                        percentage: 85
+                    });
+                }, 4000);
+
+                // Destrucción del loader en 6s.
+                setTimeout(function () {
+                    loader2.destroy();
+                }, 6000);
+            });
+        </script>
+    </body>
+</html>
