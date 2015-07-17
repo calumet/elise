@@ -24,15 +24,22 @@
         <script src="../js/elise.core.js"></script>
         <script src="../js/elise.modal.js"></script>
         <script>
+            var app = {
+                m1: null,
+                m2: null
+            };
+
             $('#m1').on('click', function (e) {
-                Elise.modal({
+                if (app.m1) return app.m1.show();
+                app.m1 = Elise.modal({
                     url: 'http://nodejs.org',
                     title: 'Node.js platform'
                 });
             });
 
             $('#m2').on('click', function (e) {
-                Elise.modal({
+                if (app.m2) return app.m2.show();
+                app.m2 = Elise.modal({
                     container: 'm2-content',
                     title: 'JavaScript Language'
                 });
