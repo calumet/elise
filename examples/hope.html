@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Elise Library | Hope</title>
+        <link rel="stylesheet" href="../css/elise.core.css">
+        <link rel="stylesheet" href="../css/elise.loader.css">
+        <link rel="stylesheet" href="../css/elise.hope.css">
+        <link rel="stylesheet" href="assets/base.css">
+    </head>
+    <body>
+
+        <button id="hope1" class="ebutton sky-blue">Elise Hope</button>
+
+        <script src="../js/vendor/jquery-2.1.4.min.js"></script>
+        <script src="../js/elise.core.js"></script>
+        <script src="../js/elise.loader.js"></script>
+        <script src="../js/elise.hope.js"></script>
+        <script>
+            var app = {
+                hope1: null
+            };
+            $('#hope1').on('click', function (e) {
+                app.hope1 = Elise.hope();
+
+                // Cerrar Hope en 3s.
+                setTimeout(function () {
+                    app.hope1.destroy();
+                }, 3000);
+            });
+        </script>
+    </body>
+</html>
