@@ -1,10 +1,13 @@
 Elise Library
 =============
 
-> **This is not a working project yet**.
+Elise es una biblioteca con un conjunto de herramientas que ayudan al desarrollo de aplicaciones web en el lado del cliente.
 
-Elise is a frontend library with a bunch of tools and componentes to create elegant web applications easily.
+La documentación se encuentra en desarrollo. Sin embargo, está listo para producción.
 
-You can find the documentation at [http://elise.github.io/](http://elise.github.io/).
+Licencia
+--------
 
-We hope to release an stable version soon.
+[The MIT License](http://opensource.org/licenses/MIT) (MIT)
+
+Copyright (c) 2014-2015 [Grupo Calumet](http://cormoran.uis.edu.co/calumet)
