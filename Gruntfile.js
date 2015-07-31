@@ -7,9 +7,12 @@ module.exports = exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.initConfig({
+
         pkg: grunt.file.readJSON('package.json'),
+
         concat: {
             options: {
                 separator: '\n\n',
@@ -28,7 +31,7 @@ module.exports = exports = function (grunt) {
                     'js/elise.loader.js',
                     'js/elise.hope.js'
                 ],
-                dest: 'dist/elise.js',
+                dest: 'dist/js/elise.js',
             },
             css: {
                 src: [
@@ -39,7 +42,7 @@ module.exports = exports = function (grunt) {
                     'css/elise.loader.css',
                     'css/elise.hope.css'
                 ],
-                dest: 'dist/elise.css',
+                dest: 'dist/css/elise.css',
             }
         },
 
@@ -48,18 +51,27 @@ module.exports = exports = function (grunt) {
                 preserveComments: 'some'
             },
             javascript: {
-                src: 'dist/elise.js',
-                dest: 'dist/elise.min.js'
+                src: 'dist/js/elise.js',
+                dest: 'dist/js/elise.min.js'
             }
         },
 
         cssmin: {
             css: {
-                src: 'dist/elise.css',
-                dest: 'dist/elise.min.css'
+                src: 'dist/css/elise.css',
+                dest: 'dist/css/elise.min.css'
+            }
+        },
+
+        copy: {
+            images: {
+                expand: true,
+                cwd: 'img/elise/',
+                src: '**/*',
+                dest: 'dist/img/elise/'
             }
         }
     });
 
-    grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['concat', 'uglify', 'cssmin', 'copy']);
 };
