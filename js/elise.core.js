@@ -438,8 +438,28 @@
                 Math.max(win.body.offsetHeight, win.documentElement.offsetHeight),
                 Math.max(win.body.clientHeight, win.documentElement.clientHeight)
             );
-        }
+        },
 
+        /**
+         * Llevar el scroll de la página en donde un elemento se encuentre en el medio.
+         * Se hace una animación ara ello. El elemento debe ser visible.
+         * @param  {jQuery} $el - El elemento a animar.
+         * @param  {Number} time - El tiempo de animación. 500 es por defecto.
+         * @return {jQuery} - El elemento animado.
+         */
+        scrollTo: function ($el, time) {
+            $el = $($el).first();
+
+            var y = $el.offset().top;
+            var h2 = Elise.win.dims().height / 2;
+            y = y - h2 < 0 ? 0 : y - h2;
+
+            $('html, body').stop().animate({
+                scrollTop: y
+            }, time || 500);
+
+            return $el;
+        }
     };
 
     /**
