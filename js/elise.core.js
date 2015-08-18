@@ -4,7 +4,7 @@
         /**
          * Version of Elise.
          */
-        VERSION: '0.7.0-beta',
+        VERSION: '0.8.0-beta',
 
         /**
          * Private variables.
@@ -56,42 +56,62 @@
     Elise.val = {
 
         /**
-         * Validar un <input> con una función, cada vez que se teclee un símbolo.
-         * @param  {jQueryObject} $inputs - Elementos tipo campo de texto a observar.
+         * Validar <input>s con una función cada vez que se teclee un símbolo.
+         * @param  {jQuery} $inputs - Elementos tipo campo de texto a observar.
          * @param  {Function} validator - Función a ejecutar por cada validación. Recibe
          * en primer parámetro el contenido del input y debe retornar un booleano de si
          * es válida la entrada o no.
          */
-        keyup: function ($inputs, validator) {
+        onInput: function ($inputs, validator) {
             $inputs = $($inputs);
 
             // Validar entradas.
-            if ($inputs.length === 0) {
+            if (!$inputs.length) {
                 return console.error('Se requiere de elementos <input> para validar.');
             }
             if (typeof validator !== 'function') {
-                return console.error('Se requiere de una funcion para validar.');
+                return console.error('Se requiere de una función para validar.');
             }
 
             $inputs.each(function () {
                 var $input = $(this);
-                var kuval = function () {
-                    if (validator($input.val())) {
-                        $input.removeClass('invalid').addClass('valid');
-                    } else {
+
+                var valPer = function () {
+                    var isValid = validator($input.val());
+                    $input.removeClass('invalid valid').addClass(isValid ? 'valid' : 'invalid');
+                };
+                var valErr = function () {
+                    var isValid = validator($input.val());
+
+                    if (!isValid) {
                         $input.removeClass('valid').addClass('invalid');
+                        $input.off('input', valPer).on('input', valPer);
                     }
                 };
-                $input.on('focus', function () {
+                var valFocus = function () {
                     var focused = $input.data('valFirstFocused');
+
                     if (focused === undefined) {
                         $input.data('valFirstFocused', 1);
-                    } else if (focused === 1) {
-                        $input.on('keyup', kuval);
-                        $input.data('valFirstFocused', 2);
+                        $input.on('input', valErr);
                     }
-                }).on('blur', kuval);
+                    else if (focused === 1) {
+                        $input.data('valFirstFocused', 2);
+                        $input.off('input', valErr);
+                        $input.off('input', valPer).on('input', valPer);
+                    }
+                };
+
+                $input.on('focus', valFocus).on('change', valPer);
+                valErr();
             });
+        },
+
+        /**
+         * @alias Elise.val.onInput
+         */
+        keyup: function () {
+            return this.onInput.apply(this, arguments);
         },
 
         /**
