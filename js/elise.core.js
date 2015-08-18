@@ -258,6 +258,28 @@
         },
 
         /**
+         * Valida si el string sólo contiene carácteres ASCII escribibles
+         * (http://www.ascii-code.com/) y letras con tíldes del alfabeto español y la ñ.
+         * @param  {String} text String a evaluar.
+         * @return {Boolean}     Si el string es válido.
+         */
+        content: function (text) {
+            var textSecure = 'áéíóúñ';
+
+            // Remover los carácteres ASCII (los cuales son válidos).
+            text = String(text).replace(/[\x20-\x7E]/g, '').toLowerCase();
+
+            // Verificar que los carácteres restantes se encuentren entre los del español.
+            for (var i = 0; i < text.length; i += 1) {
+                if (textSecure.indexOf(text.charAt(i)) === -1) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        /**
          * Convierte un string a un string válido como nombre de archivo.
          * Esto es usualmente utilizado con nombres de archivos. Para realmente convertir
          * un nombre de archivo para guardar en el servidor, se debe realizar este
