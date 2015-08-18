@@ -37,7 +37,10 @@
         }
     };
 
-    // Dispositivo móvil.
+    /**
+     * Dispositivo móvil.
+     * @return {Boolean}
+     */
     Elise.isMobile = function () {
         var check = false;
         (function (a, b) {
@@ -47,7 +50,10 @@
         return check;
     }();
 
-    // Navegador obsoleto.
+    /**
+     * Navegador obsoleto.
+     * @type {Boolean}
+     */
     Elise.isObsolete = !('querySelector' in document && 'localStorage' in window && 'addEventListener' in window);
 
     /**
@@ -120,7 +126,8 @@
          * @return {Boolean} Si es válido número o no.
          */
         number: function (text) {
-            return $.isNumeric(text);
+            if (String(text).indexOf('e') > -1) return false;
+            return !jQuery.isArray(text) && (text - parseFloat(text) + 1) >= 0;
         },
 
         /**
@@ -129,7 +136,7 @@
          * @return {Boolean}     Si el string es un número entero.
          */
         integer: function (text) {
-            if (!$.isNumeric(text)) return false;
+            if (!Elise.val.number(text)) return false;
             text = Number(text);
             return Math.floor(text) === text;
         },
@@ -140,7 +147,7 @@
          * @return {Boolean}     Si el string es un número natural.
          */
         natural: function (text) {
-            if (!$.isNumeric(text)) return false;
+            if (!Elise.val.number(text)) return false;
             text = Number(text);
             return Math.floor(text) === text && text >= 0;
         },
@@ -180,7 +187,7 @@
             // Es una contraseña.
             if (config.pass) {
                 config.starts = config.starts ? config.starts : 8;
-                re = new RegExp("^[a-zA-Z0-9#@?$%&*-_]{"+ config.starts +","+ config.ends +"}$");
+                re = new RegExp("^[a-zA-Z0-9#@$%&*-_]{"+ config.starts +","+ config.ends +"}$");
             }
 
             // Es un nombre de cuenta.
@@ -210,9 +217,6 @@
         text: function (text) {
             text = String(text).toLowerCase();
             var textSecure = '-_:;., áéíóúabcdefghijklmnñopqrstuvwxyz0123456789';
-            if (Elise._ISO88591) {
-                textSecure = utf8_decode(textSecure);
-            }
             for (var i = 0; i < text.length; i += 1) {
                 if (textSecure.indexOf(text.charAt(i)) === -1) {
                     return false;
@@ -229,9 +233,6 @@
         word: function (text) {
             text = String(text).toLowerCase();
             var textSecure = 'áéíóúabcdefghijklmnñopqrstuvwxyz';
-            if (Elise._ISO88591) {
-                textSecure = utf8_decode(textSecure);
-            }
             for (var i = 0; i < text.length; i += 1) {
                 if (textSecure.indexOf(text.charAt(i)) === -1) {
                     return false;
@@ -248,11 +249,8 @@
         words: function (text) {
             text = String(text).toLowerCase();
             var textSecure = ':;., áéíóúabcdefghijklmnñopqrstuvwxyz';
-            if (Elise._ISO88591) {
-                textSecure = utf8_decode(textSecure);
-            }
             for (var i = 0; i < text.length; i += 1) {
-                if (textSecure.indexOf(text.charAt(i).toLowerCase()) == -1) {
+                if (textSecure.indexOf(text.charAt(i).toLowerCase()) === -1) {
                     return false;
                 }
             }
@@ -267,24 +265,29 @@
          * @param  {String} text Nombre del archivo a parsear.
          * @return {String}      String convertido y validado.
          */
-        filename: function (text) {
-            var ct = Elise._ISO88591 ? utf8_decode : function (t) {return t};
+        toFileName: function (text) {
             var text = String(text).toLowerCase();
 
             // Convertir carácteres especiales del español.
-            text = text.replace(new RegExp(ct('á'), 'g'), 'a');
-            text = text.replace(new RegExp(ct('é'), 'g'), 'e');
-            text = text.replace(new RegExp(ct('í'), 'g'), 'i');
-            text = text.replace(new RegExp(ct('ó'), 'g'), 'o');
-            text = text.replace(new RegExp(ct('ú'), 'g'), 'u');
-            text = text.replace(new RegExp(ct('ñ'), 'g'), 'n');
+            text = text.replace(new RegExp('á', 'g'), 'a');
+            text = text.replace(new RegExp('é', 'g'), 'e');
+            text = text.replace(new RegExp('í', 'g'), 'i');
+            text = text.replace(new RegExp('ó', 'g'), 'o');
+            text = text.replace(new RegExp('ú', 'g'), 'u');
+            text = text.replace(new RegExp('ñ', 'g'), 'n');
 
             // Convertir espacios en dashes y remover carácteres especiales.
             text = text.replace(/\s/gi, '-');
             text = text.replace(/[^a-z0-9_-]/gi, '');
 
-            // Retornar resultado.
             return text;
+        },
+
+        /**
+         * @alias Elise.val.toFileName
+         */
+        filename: function () {
+            return this.toFileName.apply(this, arguments);
         }
     };
 
