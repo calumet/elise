@@ -363,9 +363,6 @@
                 $(iframe).add($(iframe).parent('.centro')).height(win.res + plus);
                 $(window.top).scrollTop(win.scroll);
 
-                // TODO:
-                // Repintar el iframe al cargarse correctamente.
-
                 return win.res + plus;
             } else {
                 return -1;
