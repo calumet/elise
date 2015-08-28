@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Elise Library | Tip</title>
+    <link rel="stylesheet" href="../dist/css/elise.css">
+    <link rel="stylesheet" href="assets/base.css">
+    <style>
+      body {
+        text-align: center;
+      }
+      .al {
+        float: left;
+      }
+      .ac {
+        float: none;
+      }
+      .ar {
+        float: right;
+      }
+      .ab {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        margin-left: -25px;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="ebutton al" title="Botón a la izquierda">Left</button>
+    <button class="ebutton ac" title="Botón en el centro">Center</button>
+    <button class="ebutton ar" title="Botón a la derecha">Right</button>
+    <button class="ebutton ab" title="Botón en la parte baja">Bottom</button>
+
+    <script src="https://cdn.rawgit.com/jquery/jquery/2.1.4/dist/jquery.min.js"></script>
+    <script src="../dist/js/elise.js"></script>
+    <script>
+      $('button').tip();
+    </script>
+  </body>
+</html>

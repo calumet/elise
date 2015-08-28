@@ -1,0 +1,77 @@
+/*------------------------------------*\
+   $MENSAJES
+\*------------------------------------*/
+
+.eAlert-BackGround {
+  z-index: 4000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.75)
+}
+.eAlert {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  padding: 10px;
+  width: 430px;
+  min-height: 155px;
+  background-color: #ffffff;
+  outline: none;
+  border: 1px solid #acacac;
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+}
+.eAlert-Title {
+  padding:20px 15px 15px 20px;
+  margin: -10px -10px 0;
+  font-size:14pt;
+  border-radius: 2px 2px 0 0;
+}
+.eAlert-Image {
+  margin:20px 5px 0 5px;
+  display:table-cell;
+  height:80px;
+  width:80px;
+  vertical-align: middle;
+}
+.eAlert-Image img {
+  height:80px;
+  width:80px;
+}
+.eAlert-Content {
+  margin:0;
+  padding: 15px 10px;
+  display:table-cell;
+  min-height:58px;
+  width:319px;
+  vertical-align: middle;
+}
+.eAlert-Content > div {
+  padding:0;
+  margin:0;
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+.eAlert-Content > div > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+.eAlert-Content > div > div:first-letter {
+  text-transform: capitalize;
+}
+
+.eAlert-Buttons {
+  margin: 0;
+  padding: 10px 10px;
+  border-radius: 0 0 2px 2px;
+  overflow: hidden;
+}
+.eAlert-Buttons button {
+  display: inline-block;
+  float: right;
+  margin-left: 10px;
+}

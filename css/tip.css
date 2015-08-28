@@ -1,0 +1,123 @@
+/*------------------------------------*\
+  $TIP
+\*------------------------------------*/
+
+.tip_holder {
+  z-index: 3000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-transform-origin: left top 0px;
+     -moz-transform-origin: left top 0px;
+      		transform-origin: left top 0px;
+  -webkit-animation: appearTip 0.2s;
+     -moz-animation: appearTip 0.2s;
+      		animation: appearTip 0.2s;
+}
+.tip_holder.tip_bottom {
+  padding-top: 5px;
+}
+.tip_holder.tip_right {
+  padding-left: 5px;
+}
+
+.tip_content {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  padding: 8px;
+  background-color: #FFF;
+  border-radius: 2px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.25em;
+  font-size: 0.9em;
+  color: #666;
+}
+.tip_content p {
+  margin: 0;
+}
+.tip_content p + p {
+  margin: 10px 0 0 0;
+}
+
+.tip_arrow,
+.tip_arrow_inner {
+  position: absolute;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 6px;
+  height: 0;
+  width: 0;
+}
+.tip_holder.tip_top .tip_arrow {
+  border-top-color: rgba(0, 0, 0, 0.6);
+  border-bottom: none;
+}
+.tip_holder.tip_bottom .tip_arrow {
+  border-bottom-color: rgba(0, 0, 0, 0.6);
+  border-top: none;
+}
+.tip_holder.tip_right .tip_arrow {
+  border-right-color: rgba(0, 0, 0, 0.6);
+  border-left: none;
+}
+.tip_holder.tip_left .tip_arrow {
+  border-left-color: rgba(0, 0, 0, 0.6);
+  border-right: none;
+}
+.tip_holder.tip_top .tip_arrow_inner {
+  margin-top: -7px;
+  margin-left: -6px;
+  border-top-color: #FFF;
+  border-bottom: none;
+}
+.tip_holder.tip_bottom .tip_arrow_inner {
+  margin-top: 1px;
+  margin-left: -6px;
+  border-bottom-color: #FFF;
+  border-top: none;
+}
+.tip_holder.tip_right .tip_arrow_inner {
+  margin-top: -6px;
+  margin-left: 1px;
+  border-right-color: #FFF;
+  border-left: none;
+}
+.tip_holder.tip_left .tip_arrow_inner {
+  margin-top: -6px;
+  margin-left: -7px;
+  border-left-color: #FFF;
+  border-right: none;
+}
+
+@-webkit-keyframes appearTip {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(.3,.3,.3);
+       -moz-transform: scale3d(.3,.3,.3);
+        		transform: scale3d(.3,.3,.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes appearTip {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(.3,.3,.3);
+       -moz-transform: scale3d(.3,.3,.3);
+        		transform: scale3d(.3,.3,.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes appearTip {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(.3,.3,.3);
+       -moz-transform: scale3d(.3,.3,.3);
+        		transform: scale3d(.3,.3,.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}

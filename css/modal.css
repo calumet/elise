@@ -1,0 +1,73 @@
+/*------------------------------------*\
+    $EMODAL
+\*------------------------------------*/
+
+.emodal_hold{
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.75);
+}
+.emodal{
+  width: 500px;
+  position: fixed;
+  top: 0%;;
+  left: 50%;
+  margin-left: -250px;
+  background-color: #FFF;
+  border-radius: 2px;
+  outline: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  border: 1px solid #acacac;
+  background-clip: padding-box;
+}
+.emodal_header {
+  padding: 20px 20px 10px;
+  border-radius: 2px 2px 0 0;
+}
+.emodal_header h3 {
+  margin: 0;
+  line-height: 30px;
+  font-size: 18px;
+}
+.emodal_close {
+  float: right;
+  font-size: 22px;
+  font-weight: bolder;
+  color: #888;
+  text-shadow: 0 1px 0 #FFF;
+  background: none;
+  margin: 0;
+  padding: 0 7px 0 7px;
+  margin-right: -5px;
+  border: none;
+}
+.emodal_close:hover {
+  color:#C0392B;
+}
+.emodal_close:active {
+  border: 1px solid transparent;
+  box-shadow: inset 0 0px 12px  0px #FFB3B3,0 0 0 1px #FFB3B3;
+}
+.emodal_content {
+  position: relative;
+  max-height: 400px;
+  min-height: 100px;
+  padding: 0 20px;
+  overflow-y:auto;
+}
+.emodal_content_url{
+  width: 100%;
+  padding: 0;
+  border: 0;
+}
+.emodal_footer {
+  padding: 14px 15px 15px;
+  margin-bottom: 0;
+  text-align: center;
+  border-radius: 0 0 2px 2px;
+  overflow: hidden;
+}
