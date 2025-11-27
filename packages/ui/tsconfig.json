@@ -4,7 +4,9 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@elise/ui": ["src"]
+      "@elise/ui": ["src"],
+      "@/*": ["src/*"],
+      "@/lib/*": ["src/lib/*"]
     }
   },
   "include": ["src"],

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import clsx from 'clsx';
-import { twMerge } from 'tailwind-merge';
+
+import { cn } from '@/lib/cn';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'solid' | 'outline' | 'ghost';
@@ -29,13 +29,8 @@ const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'solid', size = 'md', asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
-
     return (
-      <Comp
-        ref={ref}
-        className={twMerge(clsx(baseClasses, variantClasses[variant], sizeClasses[size]), className)}
-        {...props}
-      />
+      <Comp ref={ref} className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)} {...props} />
     );
   }
 );
