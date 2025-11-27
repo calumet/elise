@@ -1,0 +1,13 @@
+{
+  "name": "elise",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Monorepo para un design system basado en Radix primitives.",
+  "scripts": {
+    "dev": "pnpm --filter @elise/ui dev",
+    "build": "pnpm --filter @elise/ui build",
+    "lint": "pnpm --filter @elise/ui lint",
+    "clean": "pnpm --filter @elise/ui clean"
+  },
+  "packageManager": "pnpm@10.14.0"
+}
