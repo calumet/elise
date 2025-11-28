@@ -1,86 +1,102 @@
-import React, { useState } from 'react';
-import { Button, Checkbox, Form, FormControl, FormField, FormLabel, Input, Textarea } from '@elise/ui';
+import React, { useMemo, useState } from 'react';
+import { z } from 'zod';
+import { useZodForm } from '@elise/utils';
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  FormField,
+  FormLabel,
+  FormMessage,
+  FormSubmit,
+  Input,
+  Textarea
+} from '@elise/ui';
 
-type FormState = {
-  name: string;
-  email: string;
-  message: string;
-  agree: boolean;
-  error?: string;
-  success?: string;
-};
+const schema = z.object({
+  name: z.string().min(2, 'Nombre es requerido (mínimo 2 caracteres)'),
+  email: z.string().email('Email inválido'),
+  message: z.string().min(4, 'Mensaje es requerido'),
+  agree: z
+    .boolean()
+    .refine((val) => val === true, { message: 'Debes aceptar los términos.' })
+})
 
 const ContactForm = () => {
-  const [state, setState] = useState<FormState>({
-    name: '',
-    email: '',
-    message: '',
-    agree: false
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const { handleSubmit, formState, register, setValue, watch } = useZodForm(schema, {
+    defaultValues: {
+      name: '',
+      email: '',
+      message: '',
+      agree: false
+    }
   });
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!state.name || !state.email || !state.message) {
-      setState((prev) => ({ ...prev, success: undefined, error: 'Completa todos los campos.' }));
-      return;
-    }
-    if (!state.agree) {
-      setState((prev) => ({ ...prev, success: undefined, error: 'Acepta los términos para continuar.' }));
-      return;
-    }
-    setState((prev) => ({ ...prev, error: undefined, success: 'Enviado. Gracias por contactarnos.' }));
-  };
+  const onSubmit = handleSubmit(() => {
+    setSuccess('Enviado. Gracias por contactarnos.');
+  });
 
   return (
     <Form onSubmit={onSubmit} noValidate className="w-full max-w-lg space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <FormField name="name">
-          <FormLabel>Nombre</FormLabel>
-          <FormControl asChild>
-            <Input
-              value={state.name}
-              onChange={(e) => setState((prev) => ({ ...prev, name: e.target.value }))}
-              placeholder="Ada Lovelace"
-            />
-          </FormControl>
+          <div className="space-y-1">
+            <FormLabel className="text-sm font-medium text-foreground">Nombre</FormLabel>
+            <FormControl asChild>
+              <Input placeholder="Ada Lovelace" {...register('name')} />
+            </FormControl>
+            {formState.errors.name && (
+              <FormMessage className="text-xs text-danger">{formState.errors.name.message}</FormMessage>
+            )}
+          </div>
         </FormField>
         <FormField name="email">
-          <FormLabel>Email</FormLabel>
-          <FormControl asChild>
-            <Input
-              type="email"
-              value={state.email}
-              onChange={(e) => setState((prev) => ({ ...prev, email: e.target.value }))}
-              placeholder="ada@elise.dev"
-            />
-          </FormControl>
+          <div className="space-y-1">
+            <FormLabel className="text-sm font-medium text-foreground">Email</FormLabel>
+            <FormControl asChild>
+              <Input type="email" placeholder="ada@elise.dev" {...register('email')} />
+            </FormControl>
+            {formState.errors.email && (
+              <FormMessage className="text-xs text-danger">{formState.errors.email.message}</FormMessage>
+            )}
+          </div>
         </FormField>
       </div>
       <FormField name="message">
-        <FormLabel>Mensaje</FormLabel>
-        <FormControl asChild>
-          <Textarea
-            value={state.message}
-            onChange={(e) => setState((prev) => ({ ...prev, message: e.target.value }))}
-            placeholder="Cuéntanos tu idea..."
-          />
-        </FormControl>
+        <div className="space-y-1">
+          <FormLabel className="text-sm font-medium text-foreground">Mensaje</FormLabel>
+          <FormControl asChild>
+            <Textarea placeholder="Cuéntanos tu idea..." {...register('message')} />
+          </FormControl>
+          {formState.errors.message && (
+            <FormMessage className="text-xs text-danger">{formState.errors.message.message}</FormMessage>
+          )}
+        </div>
       </FormField>
-      <div className="flex items-center gap-2">
-        <Checkbox
-          id="agree"
-          checked={state.agree}
-          onCheckedChange={(v) => setState((prev) => ({ ...prev, agree: v === true }))}
-        />
-        <label htmlFor="agree" className="text-sm text-mutedForeground">
-          Acepto los términos y políticas.
-        </label>
-      </div>
-      {state.error && <p className="text-sm text-danger">{state.error}</p>}
-      {state.success && <p className="text-sm text-success">{state.success}</p>}
-      <Button type="submit" className="w-full sm:w-auto">
-        Enviar
-      </Button>
+      <FormField name="agree">
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="agree"
+            checked={watch('agree')}
+            onCheckedChange={(v) => setValue('agree', v === true, { shouldValidate: true })}
+          />
+          <FormLabel htmlFor="agree" className="text-sm text-mutedForeground">
+            Acepto los términos y políticas.
+          </FormLabel>
+        </div>
+        {formState.errors.agree && (
+          <FormMessage className="text-xs text-danger">{formState.errors.agree.message}</FormMessage>
+        )}
+      </FormField>
+      {success && <p className="text-sm text-success">{success}</p>}
+      <FormSubmit asChild>
+        <Button type="submit" className="w-full sm:w-auto" disabled={formState.isSubmitting}>
+          Enviar
+        </Button>
+      </FormSubmit>
     </Form>
   );
 };

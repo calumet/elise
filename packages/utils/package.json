@@ -1,0 +1,39 @@
+{
+  "name": "@elise/utils",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Utilidades compartidas para Elise (validación, helpers).",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --dts",
+    "dev": "tsup --watch --dts",
+    "lint": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
+    "react-hook-form": "^7.53.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.4",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+  "license": "MIT"
+}

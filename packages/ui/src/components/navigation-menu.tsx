@@ -9,7 +9,7 @@ export const NavigationMenu = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <NavigationMenuPrimitive.Root
     ref={ref}
-    className={cn('relative z-[var(--elise-z-overlay,40)] flex max-w-max items-center justify-center', className)}
+    className={cn('relative z-10 flex max-w-max items-center justify-center', className)}
     {...props}
   />
 ));

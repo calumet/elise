@@ -5,9 +5,10 @@
   "description": "Monorepo para un design system basado en Radix primitives.",
   "scripts": {
     "dev": "pnpm --filter @elise/ui dev",
-    "build": "pnpm --filter @elise/ui build",
+    "build": "pnpm --filter @elise/ui build && pnpm --filter @elise/utils build",
     "lint": "pnpm --filter @elise/ui lint",
-    "clean": "pnpm --filter @elise/ui clean"
+    "clean": "pnpm --filter @elise/ui clean",
+    "showcase:dev": "pnpm --filter showcase dev"
   },
   "devDependencies": {
     "@types/node": "^22.9.4"
