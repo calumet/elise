@@ -1,10 +1,13 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/tailwind/preset.ts', 'src/tailwind/index.ts'],
   format: ['esm', 'cjs'],
   sourcemap: true,
   dts: true,
+  outExtension: ({ format }) => ({
+    js: format === 'esm' ? '.mjs' : '.cjs'
+  }),
   splitting: false,
   clean: true,
   treeshake: true,

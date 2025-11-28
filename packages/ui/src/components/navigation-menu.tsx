@@ -9,7 +9,7 @@ export const NavigationMenu = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <NavigationMenuPrimitive.Root
     ref={ref}
-    className={cn('relative flex max-w-max items-center justify-center', className)}
+    className={cn('relative z-[var(--elise-z-overlay,40)] flex max-w-max items-center justify-center', className)}
     {...props}
   />
 ));
@@ -51,7 +51,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      'left-0 top-full w-full sm:absolute sm:w-auto sm:min-w-[320px] data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out',
+      'left-0 top-full z-[var(--elise-z-dialog,45)] w-full rounded-lg border border-border bg-surface p-3 shadow-floating sm:absolute sm:w-auto sm:min-w-[320px] data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out',
       className
     )}
     {...props}

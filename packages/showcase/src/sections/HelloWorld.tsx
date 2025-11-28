@@ -1,0 +1,23 @@
+import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@elise/ui';
+
+const HelloWorld = () => (
+  <div className="flex flex-col items-center gap-4 text-center">
+    <p className="text-lg font-semibold">Hola, Elise UI 👋</p>
+    <p className="text-sm text-mutedForeground max-w-sm">
+      Radix + Tailwind con tokens de color y tipografía listos para usar.
+    </p>
+    <div className="flex items-center gap-3">
+      <Button>Acción primaria</Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline">Hover</Button>
+          </TooltipTrigger>
+          <TooltipContent>Tooltip con Radix</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  </div>
+);
+
+export default HelloWorld;

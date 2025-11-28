@@ -9,5 +9,8 @@
     "lint": "pnpm --filter @elise/ui lint",
     "clean": "pnpm --filter @elise/ui clean"
   },
+  "devDependencies": {
+    "@types/node": "^22.9.4"
+  },
   "packageManager": "pnpm@10.14.0"
 }

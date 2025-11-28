@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: var(--elise-font-sans, 'Inter'), system-ui, -apple-system, sans-serif;
+}

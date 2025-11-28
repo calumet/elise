@@ -1,3 +1,5 @@
+import path from 'path';
+import { createRequire } from 'module';
 import plugin from 'tailwindcss/plugin';
 import type { Config } from 'tailwindcss';
 
@@ -6,8 +8,13 @@ import { buildCssVariables, darkThemeTokens, lightThemeTokens } from '../tokens'
 const lightVars = buildCssVariables(lightThemeTokens);
 const darkVars = buildCssVariables(darkThemeTokens);
 
+// Glob absoluto del propio paquete para que Tailwind capture las clases sin configuraciones extra.
+const require = createRequire(import.meta.url);
+const pkgDir = path.dirname(require.resolve('@elise/ui/package.json'));
+const distGlob = path.join(pkgDir, 'dist/**/*.{js,mjs,cjs}');
+
 export const elisePreset: Config = {
-  content: [],
+  content: [distGlob],
   darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {
@@ -75,5 +82,7 @@ export const elisePreset: Config = {
     })
   ]
 };
+
+export const elise = elisePreset;
 
 export default elisePreset;
