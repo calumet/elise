@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
+import { ChevronDownIcon } from '@elise/icons';
 
 import { cn } from '@/lib/cn';
 
@@ -9,7 +10,7 @@ export const NavigationMenu = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <NavigationMenuPrimitive.Root
     ref={ref}
-    className={cn('relative z-10 flex max-w-max items-center justify-center', className)}
+    className={cn('relative z-10 flex w-full items-center justify-center', className)}
     {...props}
   />
 ));
@@ -21,7 +22,10 @@ export const NavigationMenuList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <NavigationMenuPrimitive.List
     ref={ref}
-    className={cn('group flex flex-1 list-none items-center justify-center gap-1 rounded-lg bg-muted p-1', className)}
+    className={cn(
+      'flex flex-1 list-none items-center justify-center gap-1 rounded-sm border border-border p-1',
+      className
+    )}
     {...props}
   />
 ));
@@ -36,7 +40,7 @@ export const NavigationMenuTrigger = React.forwardRef<
   <NavigationMenuPrimitive.Trigger
     ref={ref}
     className={cn(
-      'group inline-flex select-none items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-mutedForeground transition hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-background data-[state=open]:text-foreground',
+      'relative inline-flex h-8 items-center justify-center gap-2 rounded-[4px] px-3 py-2 text-sm font-semibold text-foreground shadow-soft transition-all duration-200 ease-in-out outline-offset-4 hover:bg-surface hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background active:translate-y-[1px] active:shadow-none data-[state=open]:bg-muted data-[state=open]:text-foreground',
       className
     )}
     {...props}
@@ -51,7 +55,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      'left-0 top-full z-[var(--elise-z-dialog,45)] w-full rounded-lg border border-border bg-surface p-3 shadow-floating sm:absolute sm:w-auto sm:min-w-[320px] data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out',
+      'absolute left-0 top-full z-[var(--elise-z-dialog,45)] w-full rounded-sm border border-border bg-surface p-3 shadow-floating data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:w-auto sm:min-w-[320px]',
       className
     )}
     {...props}
@@ -59,7 +63,20 @@ export const NavigationMenuContent = React.forwardRef<
 ));
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
-export const NavigationMenuLink = NavigationMenuPrimitive.Link;
+export const NavigationMenuLink = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Link>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>
+>(({ className, ...props }, ref) => (
+  <NavigationMenuPrimitive.Link
+    ref={ref}
+    className={cn(
+      'select-none items-center justify-center gap-2 rounded-sm px-3 py-2 text-sm font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+      className
+    )}
+    {...props}
+  />
+));
+NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 
 export const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
@@ -68,7 +85,7 @@ export const NavigationMenuViewport = React.forwardRef<
   <NavigationMenuPrimitive.Viewport
     ref={ref}
     className={cn(
-      'relative mt-2 h-[var(--radix-navigation-menu-viewport-height)] w-full origin-top-left overflow-hidden rounded-xl border border-border bg-surface shadow-floating transition-all duration-200 sm:w-[var(--radix-navigation-menu-viewport-width)]',
+      'relative mt-2 h-[var(--radix-navigation-menu-viewport-height)] w-full origin-top-left overflow-hidden rounded-sm border border-border bg-surface shadow-floating transition-all duration-200 sm:w-[var(--radix-navigation-menu-viewport-width)]',
       className
     )}
     {...props}
@@ -83,12 +100,12 @@ export const NavigationMenuIndicator = React.forwardRef<
   <NavigationMenuPrimitive.Indicator
     ref={ref}
     className={cn(
-      'top-full z-[var(--elise-z-overlay,30)] flex h-1.5 items-end justify-center overflow-hidden data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in',
+      'top-full z-[var(--elise-z-overlay,30)] flex h-2 items-end justify-center overflow-hidden transition-[width,transform] duration-200 data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in',
       className
     )}
     {...props}
   >
-    <div className="relative top-[1px] h-2 w-2 rotate-45 rounded-tl-sm bg-surface border-l border-t border-border" />
+    <div className="relative top-[1px] h-2 w-2 rotate-45 rounded-sm bg-surface border-l border-t border-border" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName = NavigationMenuPrimitive.Indicator.displayName;

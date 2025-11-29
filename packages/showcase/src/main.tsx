@@ -82,25 +82,25 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <NavigationMenuContent className="p-3">
                 <div className="grid gap-3 sm:w-[300px]">
                   <NavigationMenuLink asChild>
-                    <a className="block rounded-lg border border-border bg-surface p-3 hover:bg-muted transition" href="#hello">
+                    <a href="#hello">
                       <h3 className="text-sm font-semibold">Hello World</h3>
                       <p className="text-xs text-mutedForeground">Primer componente de ejemplo.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <a className="block rounded-lg border border-border bg-surface p-3 hover:bg-muted transition" href="#contact">
+                    <a href="#contact">
                       <h3 className="text-sm font-semibold">Contacto</h3>
                       <p className="text-xs text-mutedForeground">Formulario con inputs y text area.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <a className="block rounded-lg border border-border bg-surface p-3 hover:bg-muted transition" href="#components">
+                    <a href="#components">
                       <h3 className="text-sm font-semibold">Sampler</h3>
                       <p className="text-xs text-mutedForeground">Tabs, popover, progress y más.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <a className="block rounded-lg border border-border bg-surface p-3 hover:bg-muted transition" href="#login">
+                    <a href="#login">
                       <h3 className="text-sm font-semibold">Login Card</h3>
                       <p className="text-xs text-mutedForeground">Ejemplo de tarjeta simple.</p>
                     </a>
@@ -113,7 +113,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </NavigationMenu>
 
         <main className="flex flex-col flex-1 gap-8 pb-12">
-          <section id="hello" className="flex flex-col gap-4 border rounded-lg p-4 min-h-[320px] relative">
+          <section id="hello" className="flex flex-col gap-4 border rounded-sm p-4 min-h-[320px] relative">
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-mutedForeground sm:pl-3">Hello world rápido con botones y tooltip.</h2>
               <TooltipProvider>
@@ -132,7 +132,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </div>
           </section>
 
-          <section id="contact" className="flex flex-col gap-4 border rounded-lg p-4 min-h-[380px] relative">
+          <section id="contact" className="flex flex-col gap-4 border rounded-sm p-4 min-h-[380px] relative">
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-mutedForeground sm:pl-3">
                 Formulario de contacto con validación mínima.
@@ -153,7 +153,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </div>
           </section>
 
-          <section id="components" className="flex flex-col gap-4 border rounded-lg p-4 min-h-[380px] relative">
+          <section id="components" className="flex flex-col gap-4 border rounded-sm p-4 min-h-[380px] relative">
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-mutedForeground sm:pl-3">
                 Component sampler: Tabs, Progress, Dialog, Toast-like.
@@ -179,7 +179,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </div>
           </section>
 
-          <section id="login" className="flex flex-col gap-4 border rounded-lg p-4 min-h-[320px] relative">
+          <section id="login" className="flex flex-col gap-4 border rounded-sm p-4 min-h-[320px] relative">
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-mutedForeground sm:pl-3">Tarjeta de login simple.</h2>
             </div>

@@ -99,10 +99,10 @@ const colorsFromScale = (
 export const lightThemeTokens: EliseThemeTokens = {
   colors: colorsFromScale(slate, grass, grass, amber, tomato),
   radii: {
-    xs: '6px',
-    sm: '10px',
-    md: '14px',
-    lg: '18px',
+    xs: '2px',
+    sm: '4px',
+    md: '8px',
+    lg: '12px',
     pill: '999px'
   },
   shadows: {

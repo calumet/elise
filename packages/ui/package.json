@@ -71,6 +71,7 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-toolbar": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.4",
+    "@elise/icons": "workspace:*",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.5"
   },
