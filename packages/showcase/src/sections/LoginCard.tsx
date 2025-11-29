@@ -21,7 +21,7 @@ const LoginCard = () => {
   };
 
   return (
-    <div className="w-full max-w-sm rounded-xl border border-border bg-surface shadow-soft p-5 space-y-4">
+    <div className="w-full max-w-sm rounded-sm border border-border bg-surface shadow-soft p-5 space-y-4">
       <div>
         <h3 className="text-lg font-semibold tracking-tight">Iniciar sesión</h3>
         <p className="text-sm text-mutedForeground">Demo de inputs con borde y PasswordField.</p>

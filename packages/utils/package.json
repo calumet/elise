@@ -11,6 +11,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./forms": {
+      "types": "./dist/forms/index.d.ts",
+      "import": "./dist/forms/index.mjs",
+      "require": "./dist/forms/index.cjs"
+    },
+    "./toasts": {
+      "types": "./dist/toasts/index.d.ts",
+      "import": "./dist/toasts/index.mjs",
+      "require": "./dist/toasts/index.cjs"
     }
   },
   "files": [
@@ -28,11 +38,19 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@elise/ui": "workspace:*",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
     "rimraf": "^6.0.1",
     "tsup": "^8.3.4",
     "typescript": "^5.6.3"
   },
   "peerDependencies": {
+    "@elise/ui": "workspace:*",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "typescript": ">=5.0.0"
   },
   "license": "MIT"

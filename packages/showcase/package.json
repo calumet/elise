@@ -9,6 +9,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@elise/icons": "workspace:*",
     "@elise/ui": "workspace:*",
     "@elise/utils": "workspace:*",
     "react": "^18.3.1",

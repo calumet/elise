@@ -1,12 +1,26 @@
 import * as React from 'react';
 import * as MenubarPrimitive from '@radix-ui/react-menubar';
+import { DotFilledIcon } from '@elise/icons';
 
 import { cn } from '@/lib/cn';
 
 const baseItem =
-  'flex cursor-default select-none items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground outline-none transition data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted data-[highlighted]:text-foreground';
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-foreground outline-none transition data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted data-[highlighted]:text-foreground';
 
-export const Menubar: typeof MenubarPrimitive.Root = MenubarPrimitive.Root;
+export const Menubar = React.forwardRef<
+  React.ElementRef<typeof MenubarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <MenubarPrimitive.Root
+    ref={ref}
+    className={cn(
+      'flex items-center gap-1 rounded-sm border border-border bg-background px-1 py-1 shadow-[0_2px_10px_rgba(0,0,0,0.08)]',
+      className
+    )}
+    {...props}
+  />
+));
+Menubar.displayName = MenubarPrimitive.Root.displayName;
 export const MenubarMenu: typeof MenubarPrimitive.Menu = MenubarPrimitive.Menu;
 export const MenubarGroup: typeof MenubarPrimitive.Group = MenubarPrimitive.Group;
 export const MenubarPortal: typeof MenubarPrimitive.Portal = MenubarPrimitive.Portal;
@@ -17,7 +31,7 @@ export const MenubarTrigger = React.forwardRef<
   <MenubarPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex select-none items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
+      'flex select-none items-center gap-2 rounded-xs px-3 py-2 text-sm font-semibold text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
       className
     )}
     {...props}
@@ -35,7 +49,7 @@ export const MenubarContent = React.forwardRef<
     alignOffset={alignOffset}
     sideOffset={sideOffset}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] min-w-[220px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-[var(--elise-z-dialog,40)] min-w-[220px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
       className
     )}
     {...props}
@@ -55,7 +69,12 @@ export const MenubarCheckboxItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
-  <MenubarPrimitive.CheckboxItem ref={ref} className={cn(baseItem, className)} checked={checked} {...props}>
+  <MenubarPrimitive.CheckboxItem
+    ref={ref}
+    className={cn(baseItem, 'pl-6', className)}
+    checked={checked}
+    {...props}
+  >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
@@ -81,10 +100,10 @@ export const MenubarRadioItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
-  <MenubarPrimitive.RadioItem ref={ref} className={cn(baseItem, className)} {...props}>
+  <MenubarPrimitive.RadioItem ref={ref} className={cn(baseItem, 'pl-6', className)} {...props}>
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
-        <span className="h-2 w-2 rounded-full bg-foreground" />
+        <DotFilledIcon className="h-3 w-3" />
       </MenubarPrimitive.ItemIndicator>
     </span>
     {children}
@@ -134,7 +153,7 @@ export const MenubarSubContent = React.forwardRef<
   <MenubarPrimitive.SubContent
     ref={ref}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] min-w-[180px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-[var(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
       className
     )}
     {...props}

@@ -13,7 +13,7 @@ import {
 const ComponentsSampler = () => {
   const [progress, setProgress] = useState(35);
   return (
-    <div className="w-full max-w-2xl space-y-6">
+    <div className="w-full max-w-2xl">
       <Tabs defaultValue="overview">
         <TabsList className="w-full justify-start">
           <TabsTrigger value="overview">Overview</TabsTrigger>

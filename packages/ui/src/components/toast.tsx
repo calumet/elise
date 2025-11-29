@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
+import { Cross2Icon } from '@elise/icons';
 
 import { cn } from '@/lib/cn';
 
@@ -7,6 +8,7 @@ export type ToastProps = React.ComponentPropsWithoutRef<typeof ToastPrimitive.Ro
 export type ToastActionElement = React.ReactElement<typeof ToastPrimitive.Action>;
 
 export const ToastProvider = ToastPrimitive.Provider;
+
 export const ToastViewport = React.forwardRef<
   React.ElementRef<typeof ToastPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>
@@ -27,7 +29,7 @@ export const Toast = React.forwardRef<React.ElementRef<typeof ToastPrimitive.Roo
     <ToastPrimitive.Root
       ref={ref}
       className={cn(
-        'group relative flex w-full flex-col gap-1 rounded-lg border border-border bg-surface p-4 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out',
+        'group relative flex w-full flex-col gap-2 rounded-sm border border-border bg-surface p-4 pr-12 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out',
         className
       )}
       {...props}
@@ -59,12 +61,13 @@ export const ToastClose = React.forwardRef<
   <ToastPrimitive.Close
     ref={ref}
     className={cn(
-      'absolute right-2 top-2 rounded-md p-1 text-mutedForeground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+      'absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-sm text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
       className
     )}
     {...props}
   >
-    <span aria-hidden>×</span>
+    <Cross2Icon aria-hidden />
+    <span className="sr-only">Cerrar</span>
   </ToastPrimitive.Close>
 ));
 ToastClose.displayName = ToastPrimitive.Close.displayName;
@@ -76,7 +79,7 @@ export const ToastAction = React.forwardRef<
   <ToastPrimitive.Action
     ref={ref}
     className={cn(
-      'mt-2 inline-flex items-center justify-center rounded-md border border-border px-3 py-1.5 text-sm font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+      'mt-2 inline-flex items-center justify-center rounded-sm border border-border px-3 py-1.5 text-sm font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
       className
     )}
     {...props}

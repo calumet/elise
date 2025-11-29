@@ -1,7 +1,5 @@
 import * as React from 'react';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
-import { ChevronDownIcon } from '@elise/icons';
-
 import { cn } from '@/lib/cn';
 
 export const NavigationMenu = React.forwardRef<
@@ -23,7 +21,7 @@ export const NavigationMenuList = React.forwardRef<
   <NavigationMenuPrimitive.List
     ref={ref}
     className={cn(
-      'flex flex-1 list-none items-center justify-center gap-1 rounded-sm border border-border p-1',
+      'flex flex-1 list-none items-center justify-start gap-1 rounded-sm bg-background p-1 border border-boder',
       className
     )}
     {...props}
@@ -40,7 +38,7 @@ export const NavigationMenuTrigger = React.forwardRef<
   <NavigationMenuPrimitive.Trigger
     ref={ref}
     className={cn(
-      'relative inline-flex h-8 items-center justify-center gap-2 rounded-[4px] px-3 py-2 text-sm font-semibold text-foreground shadow-soft transition-all duration-200 ease-in-out outline-offset-4 hover:bg-surface hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background active:translate-y-[1px] active:shadow-none data-[state=open]:bg-muted data-[state=open]:text-foreground',
+      'flex select-none items-center gap-2 rounded-sm px-3 py-2 text-sm font-semibold text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
       className
     )}
     {...props}
@@ -55,7 +53,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      'absolute left-0 top-full z-[var(--elise-z-dialog,45)] w-full rounded-sm border border-border bg-surface p-3 shadow-floating data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:w-auto sm:min-w-[320px]',
+      'absolute left-0 top-full z-[var(--elise-z-dialog,45)] w-full rounded-sm border border-border bg-surface p-3 shadow-floating data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:w-auto sm:min-w-[300px]',
       className
     )}
     {...props}

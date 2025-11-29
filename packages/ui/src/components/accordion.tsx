@@ -3,13 +3,31 @@ import * as AccordionPrimitive from '@radix-ui/react-accordion';
 
 import { cn } from '@/lib/cn';
 
-export const Accordion = AccordionPrimitive.Root;
+type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>;
+
+export const Accordion = React.forwardRef<React.ElementRef<typeof AccordionPrimitive.Root>, AccordionProps>(
+  ({ className, ...props }, ref) => (
+    <AccordionPrimitive.Root
+      ref={ref}
+      className={cn('rounded-sm border border-border bg-surface', className)}
+      {...props}
+    />
+  )
+);
+Accordion.displayName = AccordionPrimitive.Root.displayName;
 
 export const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item ref={ref} className={cn('border-b border-border', className)} {...props} />
+  <AccordionPrimitive.Item
+    ref={ref}
+    className={cn(
+      'border-t border-border bg-surface first:border-t-0',
+      className
+    )}
+    {...props}
+  />
 ));
 AccordionItem.displayName = 'AccordionItem';
 
@@ -21,7 +39,7 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between py-4 text-left text-sm font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+        'flex flex-1 items-center justify-between px-3 py-3 text-left text-sm font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         className
       )}
       {...props}
@@ -52,7 +70,7 @@ export const AccordionContent = React.forwardRef<
     )}
     {...props}
   >
-    <div className="pb-4 pt-0">{children}</div>
+    <div className="px-3 pb-4 pt-0">{children}</div>
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
