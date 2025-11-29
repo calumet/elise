@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
   Button,
@@ -36,6 +36,7 @@ import AccordionCollapsibleDemo from './sections/AccordionCollapsibleDemo';
 import ProgressSkeletonDemo from './sections/ProgressSkeletonDemo';
 import ToastDemo from './sections/ToastDemo';
 import MenusSelectDemo from './sections/MenusSelectDemo';
+import TableDemo from './sections/TableDemo';
 import { SectionCard } from './components/SectionCard';
 
 const ThemeToggle = () => {
@@ -185,6 +186,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
           <SectionCard title="Menubar, Context Menu y Select">
             <MenusSelectDemo />
+          </SectionCard>
+
+          <SectionCard title="Table">
+            <TableDemo />
           </SectionCard>
 
           <SectionCard title="Toast">

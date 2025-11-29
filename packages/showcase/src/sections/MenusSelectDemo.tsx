@@ -33,7 +33,7 @@ const MenusSelectDemo = () => {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-      <div className="space-y-2 rounded-sm border border-border bg-surface p-3 shadow-sm">
+      <div className="space-y-2 rounded-sm">
         <p className="text-sm font-semibold text-foreground">Menubar con submenus</p>
         <Menubar>
           <MenubarMenu>
@@ -100,7 +100,7 @@ const MenusSelectDemo = () => {
         </Menubar>
       </div>
 
-      <div className="space-y-2 rounded-sm border border-border bg-surface p-3 shadow-sm">
+      <div className="space-y-2 rounded-sm">
         <p className="text-sm font-semibold text-foreground">Select</p>
         <Select defaultValue="op1">
           <SelectTrigger className="w-full">
@@ -114,7 +114,7 @@ const MenusSelectDemo = () => {
         </Select>
       </div>
 
-      <div className="space-y-2 rounded-sm border border-border bg-surface p-3 shadow-sm lg:col-span-2">
+      <div className="space-y-2 rounded-sm lg:col-span-2">
         <p className="text-sm font-semibold text-foreground">Context Menu</p>
         <ContextMenu>
           <ContextMenuTrigger asChild>
