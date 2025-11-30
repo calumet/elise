@@ -73,7 +73,9 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
         {Array.from({ length }).map((_, index) => (
           <input
             key={index}
-            ref={(node) => (inputsRef.current[index] = node)}
+            ref={(node) => {
+              inputsRef.current[index] = node;
+            }}
             inputMode="numeric"
             pattern="[0-9]*"
             maxLength={1}

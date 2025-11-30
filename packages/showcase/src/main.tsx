@@ -59,7 +59,7 @@ const ThemeToggle = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider attribute="class" defaultTheme="light" debug>
+    <ThemeProvider attribute="class" defaultTheme="light">
       <div className="max-w-4xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
         <header className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">

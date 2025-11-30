@@ -23,7 +23,7 @@ export const FormMessage = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
     ref={ref}
-    className={cn('text-sm text-danger data-[state=delayed-open]:animate-in', className)}
+    className={cn('text-xs text-danger data-[state=delayed-open]:animate-in', className)}
     {...props}
   />
 ));

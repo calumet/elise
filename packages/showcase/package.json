@@ -12,19 +12,19 @@
     "@elise/icons": "workspace:*",
     "@elise/ui": "workspace:*",
     "@elise/utils": "workspace:*",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zod": "^3.25.76"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^22.9.4",
-    "@types/react": "^18.3.8",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.6.3",
-    "vite": "^5.4.9"
+    "vite": "^7.2.4"
   }
 }
