@@ -11,7 +11,7 @@ export const FormLabel = React.forwardRef<
   React.ElementRef<typeof FormPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Label ref={ref} className={cn('text-sm font-medium text-foreground', className)} {...props} />
+  <FormPrimitive.Label ref={ref} className={cn('text-base font-medium text-foreground mb-5', className)} {...props} />
 ));
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
@@ -23,7 +23,7 @@ export const FormMessage = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
     ref={ref}
-    className={cn('text-xs text-danger data-[state=delayed-open]:animate-in', className)}
+    className={cn('text-sm text-danger data-[state=delayed-open]:animate-in', className)}
     {...props}
   />
 ));

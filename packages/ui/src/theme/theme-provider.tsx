@@ -15,6 +15,8 @@ type ThemeProviderProps = {
   defaultTheme?: Theme;
   /** Tema forzado/controlado desde fuera. */
   forcedTheme?: Theme;
+  /** Si es true, loguea en consola los valores de los tokens cuando cambia el tema (solo en cliente). */
+  debug?: boolean;
 };
 
 type ThemeContextValue = {
@@ -31,7 +33,11 @@ const applyThemeToDocument = (theme: Theme, attribute: 'class' | 'data-theme') =
   const root = document.documentElement;
 
   if (attribute === 'class') {
-    root.classList.toggle('elise-dark', theme === 'dark');
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
     root.removeAttribute('data-theme');
   } else {
     if (theme === 'dark') {
@@ -39,7 +45,7 @@ const applyThemeToDocument = (theme: Theme, attribute: 'class' | 'data-theme') =
     } else {
       root.removeAttribute('data-theme');
     }
-    root.classList.remove('elise-dark');
+    root.classList.remove('dark');
   }
 };
 
@@ -54,11 +60,15 @@ export const ThemeProvider = ({
   attribute = 'class',
   storageKey = 'elise-theme',
   defaultTheme = 'light',
-  forcedTheme
+  forcedTheme,
+  debug = false
 }: ThemeProviderProps) => {
   const [theme, setThemeState] = React.useState<Theme>(() => {
-    if (forcedTheme) return forcedTheme;
-    return readStoredTheme(storageKey) ?? defaultTheme;
+    const initial = forcedTheme ?? readStoredTheme(storageKey) ?? defaultTheme;
+    if (isBrowser) {
+      applyThemeToDocument(initial, attribute);
+    }
+    return initial;
   });
 
   const setTheme = React.useCallback(
@@ -71,11 +81,37 @@ export const ThemeProvider = ({
     [storageKey]
   );
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const currentTheme = forcedTheme ?? theme;
     applyThemeToDocument(currentTheme, attribute);
     if (!forcedTheme && isBrowser && storageKey) {
       window.localStorage.setItem(storageKey, currentTheme);
+    }
+
+    if (debug && isBrowser) {
+      const styles = getComputedStyle(document.documentElement);
+      const tokens = [
+        'elise-background',
+        'elise-foreground',
+        'elise-primary',
+        'elise-primary-contrast',
+        'elise-secondary',
+        'elise-secondary-contrast',
+        'elise-accent',
+        'elise-accent-contrast',
+        'elise-muted',
+        'elise-muted-foreground',
+        'elise-border',
+        'elise-border-strong'
+      ];
+      const snapshot: Record<string, string> = {};
+      tokens.forEach((t) => {
+        snapshot[t] = styles.getPropertyValue(`--${t}`).trim();
+      });
+      console.table({
+        theme: currentTheme,
+        tokens: snapshot
+      });
     }
   }, [theme, forcedTheme, attribute, storageKey]);
 

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as MenubarPrimitive from '@radix-ui/react-menubar';
-import { DotFilledIcon } from '@elise/icons';
+import { DotFilledIcon, ChevronDownIcon } from '@elise/icons';
 
 import { cn } from '@/lib/cn';
 
 const baseItem =
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground';
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-foreground';
 
 export const Menubar = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Root>,
@@ -27,15 +27,28 @@ export const MenubarPortal: typeof MenubarPrimitive.Portal = MenubarPrimitive.Po
 export const MenubarTrigger = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+>(({ className, onPointerMove, ...props }, ref) => (
   <MenubarPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex select-none items-center gap-2 rounded-xs px-3 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
+      'flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
       className
     )}
+    onPointerMove={(event) => {
+      if (event.pointerType === 'touch') return;
+      if (event.currentTarget.getAttribute('data-state') !== 'open') {
+        event.currentTarget.click();
+      }
+      onPointerMove?.(event);
+    }}
     {...props}
-  />
+  >
+    {props.children}
+    <ChevronDownIcon
+      className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 data-[state=open]:rotate-180 -mr-1"
+      aria-hidden
+    />
+  </MenubarPrimitive.Trigger>
 ));
 MenubarTrigger.displayName = MenubarPrimitive.Trigger.displayName;
 
@@ -49,7 +62,7 @@ export const MenubarContent = React.forwardRef<
     alignOffset={alignOffset}
     sideOffset={sideOffset}
     className={cn(
-      'z-(--elise-z-dialog,40)] min-w-[220px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
+      'z-60 min-w-[220px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}
@@ -71,7 +84,7 @@ export const MenubarCheckboxItem = React.forwardRef<
 >(({ className, children, checked, ...props }, ref) => (
   <MenubarPrimitive.CheckboxItem
     ref={ref}
-    className={cn(baseItem, 'pl-6', className)}
+    className={cn(baseItem, 'pl-7 data-[state=checked]:bg-transparent data-[state=checked]:text-foreground', className)}
     checked={checked}
     {...props}
   >

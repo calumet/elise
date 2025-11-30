@@ -15,7 +15,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
           ref={ref}
           type={visible ? 'text' : 'password'}
           className={cn(
-            'flex h-10 w-full rounded-sm border border-border bg-background px-3 py-2 pr-10 text-sm text-foreground transition placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
+            'flex h-10 w-full rounded-sm border border-border bg-background px-3 py-2 pr-10 text-base text-foreground transition placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...props}

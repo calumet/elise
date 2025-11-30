@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { ChevronDownIcon } from '@elise/icons';
 
 import { cn } from '@/lib/cn';
 
@@ -23,7 +24,7 @@ export const AccordionItem = React.forwardRef<
   <AccordionPrimitive.Item
     ref={ref}
     className={cn(
-      'border-t border-border bg-surface first:border-t-0',
+      'border-t border-border rounded-sm bg-surface first:border-t-0',
       className
     )}
     {...props}
@@ -39,20 +40,13 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between px-3 py-3 text-left text-sm font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+        'flex flex-1 items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         className
       )}
       {...props}
     >
       {children}
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        className="ml-2 h-4 w-4 shrink-0 transition-transform data-[state=open]:rotate-180"
-        viewBox="0 0 16 16"
-      >
-        <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      </svg>
+      <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 transition-transform data-[state=open]:rotate-180" aria-hidden />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -65,7 +59,7 @@ export const AccordionContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className={cn(
-      'overflow-hidden text-sm text-muted-foreground data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
+      'overflow-hidden text-base text-muted-foreground data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
       className
     )}
     {...props}

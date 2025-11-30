@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { ChevronDownIcon } from '@elise/icons';
 
 import { cn } from '@/lib/cn';
 
@@ -14,16 +15,14 @@ export const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-10 w-full items-center justify-between rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
+      'flex h-10 w-full items-center justify-between rounded-sm border border-border bg-background px-3 py-2 text-base text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
       className
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <svg viewBox="0 0 16 16" className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" focusable="false">
-        <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      </svg>
+      <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -65,7 +64,7 @@ export const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 pl-6 text-sm outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground',
+      'relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-foreground',
       className
     )}
     {...props}

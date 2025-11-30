@@ -6,7 +6,7 @@ export const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTM
   ({ className, ...props }, ref) => (
     <table
       ref={ref}
-      className={cn('w-full border-collapse text-sm text-foreground', className)}
+      className={cn('w-full border-collapse text-base text-foreground', className)}
       {...props}
     />
   )
@@ -44,7 +44,7 @@ export const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttr
     <th
       ref={ref}
       className={cn(
-        'h-10 px-3 text-left align-middle text-sm font-semibold tracking-wide bg-muted',
+        'h-10 px-3 text-left align-middle text-base font-semibold tracking-wide bg-muted',
         className
       )}
       {...props}
@@ -55,7 +55,7 @@ TableHead.displayName = 'TableHead';
 
 export const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
   ({ className, ...props }, ref) => (
-    <td ref={ref} className={cn('h-10 px-3 align-middle text-sm text-foreground', className)} {...props} />
+    <td ref={ref} className={cn('h-10 px-3 align-middle text-base text-foreground', className)} {...props} />
   )
 );
 TableCell.displayName = 'TableCell';

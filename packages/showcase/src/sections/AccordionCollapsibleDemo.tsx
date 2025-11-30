@@ -17,7 +17,7 @@ const AccordionCollapsibleDemo = () => {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-muted-foreground">Accordion</h3>
+        <h3 className="text-base font-semibold text-muted-foreground">Accordion</h3>
         <Accordion type="single" collapsible className="w-full rounded-sm border border-border bg-surface">
           <AccordionItem value="item-1">
             <AccordionTrigger>¿Qué incluye Elise UI?</AccordionTrigger>
@@ -33,12 +33,12 @@ const AccordionCollapsibleDemo = () => {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-muted-foreground">Collapsible</h3>
+        <h3 className="text-base font-semibold text-muted-foreground">Collapsible</h3>
         <Collapsible open={open} onOpenChange={setOpen} className="rounded-sm border border-border bg-surface p-3">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="text-sm font-semibold">Notas rápidas</p>
-              <p className="text-xs text-muted-foreground">Expandible con texto auxiliar.</p>
+              <p className="text-md font-semibold">Notas rápidas</p>
+              <p className="text-md text-muted-foreground">Expandible con texto auxiliar.</p>
             </div>
             <CollapsibleTrigger asChild>
               <Button size="sm" variant="outline">
@@ -46,7 +46,7 @@ const AccordionCollapsibleDemo = () => {
               </Button>
             </CollapsibleTrigger>
           </div>
-          <CollapsibleContent className="pt-3 text-sm text-muted-foreground">
+          <CollapsibleContent className="pt-3 text-base text-muted-foreground">
             <Separator className="mb-3" />
             Este bloque muestra cómo el Collapsible guarda el espacio y añade contenido dinámico.
           </CollapsibleContent>
