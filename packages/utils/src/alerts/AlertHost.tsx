@@ -67,9 +67,9 @@ export const AlertHost: React.FC = () => {
     <AlertDialog open onOpenChange={(open) => !open && handleClose(current.id)}>
       <AlertDialogContent>
         <AlertDialogHeader className="flex flex-row items-start gap-3">
-          <div className="mt-0.5 flex h-9 w-9 aspect-square items-center justify-center rounded-full bg-muted">
+          <div className="mt-0.5 flex h-9 w-9 aspect-square items-center justify-center">
             {React.createElement(variantIcon[current.variant], {
-              className: 'h-5 w-5',
+              className: 'h-6 w-6',
               style: { color: iconColor[current.variant] },
               'aria-hidden': true
             })}
