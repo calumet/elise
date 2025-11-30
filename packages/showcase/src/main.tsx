@@ -25,6 +25,7 @@ import {
   useTheme,
 } from '@elise/ui';
 import { Toaster } from '@elise/utils/toasts';
+import { AlertHost } from '@elise/utils/alerts';
 
 import './index.css';
 import HelloWorld from './sections/HelloWorld';
@@ -210,6 +211,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </main>
       </div>
       <Toaster />
+      <AlertHost />
     </ThemeProvider>
   </React.StrictMode>
 );

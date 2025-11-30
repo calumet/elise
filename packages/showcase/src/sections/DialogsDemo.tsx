@@ -1,14 +1,5 @@
 import { useState } from 'react';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
   Button,
   Dialog,
   DialogContent,
@@ -17,10 +8,10 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@elise/ui';
+import { openAlert } from '@elise/utils/alerts';
 
 const DialogsDemo = () => {
   const [open, setOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -38,27 +29,71 @@ const DialogsDemo = () => {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
-        <AlertDialogTrigger asChild>
-          <Button variant="outline">Alert Dialog</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta acción no se puede deshacer. Confirma para continuar.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel asChild>
-              <Button variant="ghost">Cancelar</Button>
-            </AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button>Confirmar</Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <Button
+        tone="success"
+        onClick={() =>
+          openAlert({
+            variant: 'confirm',
+            title: '¿Seguro?',
+            description: 'Esta acción no se puede deshacer. Confirma para continuar.',
+            confirmLabel: 'Confirmar',
+            cancelLabel: 'Cancelar'
+          })
+        }
+      >
+        Confirmar
+      </Button>
+
+      <Button
+        onClick={() =>
+          openAlert({
+            variant: 'info',
+            title: 'Información',
+            description: 'Esto es un ejemplo de alerta informativa.'
+          })
+        }
+      >
+        Info
+      </Button>
+
+      <Button
+        tone="warning"
+        onClick={() =>
+          openAlert({
+            variant: 'alert',
+            title: 'Alerta',
+            description: 'Revisa este cambio antes de continuar.'
+          })
+        }
+      >
+        Alerta
+      </Button>
+
+      <Button
+        tone="danger"
+        onClick={() =>
+          openAlert({
+            variant: 'error',
+            title: 'Error',
+            description: 'Ocurrió un problema al guardar.'
+          })
+        }
+      >
+        Error
+      </Button>
+
+      <Button
+        tone="success"
+        onClick={() =>
+          openAlert({
+            variant: 'success',
+            title: 'Listo',
+            description: 'La operación se completó correctamente.'
+          })
+        }
+      >
+        Success
+      </Button>
     </div>
   );
 };

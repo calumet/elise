@@ -8,23 +8,52 @@ const ToastDemo = () => {
         onClick={() =>
           toast({
             title: 'Guardado',
-            description: 'Cambios sincronizados.'
+            description: 'Cambios sincronizados.',
+            variant: 'info'
           })
         }
       >
-        Mostrar toast
+        Toast info
       </Button>
+
       <Button
-        variant="outline"
+        tone="warning"
+        onClick={() =>
+          toast({
+            title: 'Advertencia',
+            description: 'Revisa los campos antes de continuar.',
+            variant: 'alert'
+          })
+        }
+      >
+        Toast alerta
+      </Button>
+
+      <Button
+        tone="danger"
         onClick={() =>
           toast({
             title: 'Error',
             description: 'Algo salió mal, intenta de nuevo.',
-            duration: 6000
+            duration: 6000,
+            variant: 'error'
           })
         }
       >
-        Mostrar error
+        Toast error
+      </Button>
+
+      <Button
+        tone="success"
+        onClick={() =>
+          toast({
+            title: 'Éxito',
+            description: 'La operación finalizó correctamente.',
+            variant: 'success'
+          })
+        }
+      >
+        Toast éxito
       </Button>
     </div>
   );

@@ -22,6 +22,11 @@
       "import": "./dist/toasts/index.mjs",
       "require": "./dist/toasts/index.cjs"
     },
+    "./alerts": {
+      "types": "./dist/alerts/index.d.ts",
+      "import": "./dist/alerts/index.mjs",
+      "require": "./dist/alerts/index.cjs"
+    },
     "./dates": {
       "types": "./dist/dates/index.d.ts",
       "import": "./dist/dates/index.mjs",
@@ -38,12 +43,13 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@elise/icons": "workspace:*",
+    "@elise/ui": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "react-hook-form": "^7.66.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@elise/ui": "workspace:*",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "react": "^19.2.0",

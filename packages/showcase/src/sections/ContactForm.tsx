@@ -18,7 +18,7 @@ import {
 
 const schema = z.object({
   name: z.string().min(2, 'Nombre es requerido (mínimo 2 caracteres)'),
-  email: z.string().email('Email inválido'),
+  email: z.email('Email inválido'),
   message: z.string().min(4, 'Mensaje es requerido'),
   agree: z
     .boolean()

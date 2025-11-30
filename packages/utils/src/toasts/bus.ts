@@ -1,3 +1,5 @@
+export type ToastVariant = 'info' | 'alert' | 'error' | 'success';
+
 export type ToastOptions = {
   id?: string;
   title?: string;
@@ -5,9 +7,10 @@ export type ToastOptions = {
   actionLabel?: string;
   action?: () => void;
   duration?: number;
+  variant?: ToastVariant;
 };
 
-export type ToastEvent = ToastOptions & { id: string };
+export type ToastEvent = ToastOptions & { id: string; variant: ToastVariant };
 
 type ToastListener = (toast: ToastEvent) => void;
 type DismissListener = (id?: string) => void;
@@ -20,7 +23,7 @@ const genId = () =>
 
 export const toast = (options: ToastOptions) => {
   const id = options.id ?? genId();
-  const payload: ToastEvent = { duration: 4000, ...options, id };
+  const payload: ToastEvent = { duration: 4000, variant: 'info', ...options, id };
   toastListeners.forEach((listener) => listener(payload));
   return id;
 };

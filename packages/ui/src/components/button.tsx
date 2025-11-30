@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'solid' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg' | 'icon';
+  tone?: 'success' | 'warning' | 'danger';
 
   asChild?: boolean;
 };
@@ -21,6 +22,21 @@ const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
   ghost: 'text-foreground hover:bg-muted active:bg-muted'
 };
 
+const toneOverrides: Record<
+  NonNullable<ButtonProps['tone']>,
+  { solid: string; outline?: string; ghost?: string; contrast?: string }
+> = {
+  success: {
+    solid: 'bg-success text-primary-contrast hover:bg-success/90 active:bg-success/90'
+  },
+  warning: {
+    solid: 'bg-warning text-primary-contrast hover:bg-warning/90 active:bg-warning/90'
+  },
+  danger: {
+    solid: 'bg-danger text-primary-contrast hover:bg-danger/90 active:bg-danger/90'
+  }
+};
+
 export const buttonVariants = ({ variant }: { variant: ButtonProps['variant'] }) => {
   if (!variant) return baseClasses;
   return cn(baseClasses, variantClasses[variant]);
@@ -34,10 +50,15 @@ const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'solid', size = 'md', asChild = false, ...props }, ref) => {
+  ({ className, variant = 'solid', size = 'md', tone, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
+    const toneClass = tone ? toneOverrides[tone][variant] : undefined;
     return (
-      <Comp ref={ref} className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)} {...props} />
+      <Comp
+        ref={ref}
+        className={cn(baseClasses, variantClasses[variant], toneClass, sizeClasses[size], className)}
+        {...props}
+      />
     );
   }
 );
