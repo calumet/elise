@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 
 export type CheckboxProps = React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>;
 
-export const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
+export const Checkbox = React.forwardRef<React.ComponentRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
   ({ className, children, ...props }, ref) => (
     <CheckboxPrimitive.Root
       ref={ref}

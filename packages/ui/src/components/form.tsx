@@ -8,17 +8,17 @@ export const Form = FormPrimitive.Root;
 export const FormField = FormPrimitive.Field;
 
 export const FormLabel = React.forwardRef<
-  React.ElementRef<typeof FormPrimitive.Label>,
+  React.ComponentRef<typeof FormPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Label ref={ref} className={cn('text-base font-medium text-foreground mb-5', className)} {...props} />
+  <FormPrimitive.Label ref={ref} className={cn('text-base font-medium text-foreground', className)} {...props} />
 ));
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
 export const FormControl = FormPrimitive.Control;
 
 export const FormMessage = React.forwardRef<
-  React.ElementRef<typeof FormPrimitive.Message>,
+  React.ComponentRef<typeof FormPrimitive.Message>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
@@ -30,7 +30,7 @@ export const FormMessage = React.forwardRef<
 FormMessage.displayName = FormPrimitive.Message.displayName;
 
 export const FormSubmit = React.forwardRef<
-  React.ElementRef<typeof FormPrimitive.Submit>,
+  React.ComponentRef<typeof FormPrimitive.Submit>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Submit ref={ref} className={cn('inline-flex', className)} {...props} />

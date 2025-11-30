@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 
 export type SliderProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>;
 
-export const Slider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, SliderProps>(
+export const Slider = React.forwardRef<React.ComponentRef<typeof SliderPrimitive.Root>, SliderProps>(
   ({ className, ...props }, ref) => (
     <SliderPrimitive.Root
       ref={ref}

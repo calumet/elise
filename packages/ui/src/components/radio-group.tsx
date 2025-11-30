@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 export type RadioGroupProps = React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>;
 export type RadioGroupItemProps = React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>;
 
-export const RadioGroup = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Root>, RadioGroupProps>(
+export const RadioGroup = React.forwardRef<React.ComponentRef<typeof RadioGroupPrimitive.Root>, RadioGroupProps>(
   ({ className, ...props }, ref) => (
     <RadioGroupPrimitive.Root ref={ref} className={cn('grid gap-3', className)} {...props} />
   )
@@ -14,7 +14,7 @@ export const RadioGroup = React.forwardRef<React.ElementRef<typeof RadioGroupPri
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 export const RadioGroupItem = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Item>,
+  React.ComponentRef<typeof RadioGroupPrimitive.Item>,
   RadioGroupItemProps
 >(({ className, ...props }, ref) => (
   <RadioGroupPrimitive.Item

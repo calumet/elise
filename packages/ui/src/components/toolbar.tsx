@@ -3,7 +3,7 @@ import * as ToolbarPrimitive from '@radix-ui/react-toolbar';
 
 import { cn } from '@/lib/cn';
 
-export const Toolbar = React.forwardRef<React.ElementRef<typeof ToolbarPrimitive.Root>, React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>>(
+export const Toolbar = React.forwardRef<React.ComponentRef<typeof ToolbarPrimitive.Root>, React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>>(
   ({ className, ...props }, ref) => (
     <ToolbarPrimitive.Root
       ref={ref}
@@ -15,7 +15,7 @@ export const Toolbar = React.forwardRef<React.ElementRef<typeof ToolbarPrimitive
 Toolbar.displayName = ToolbarPrimitive.Root.displayName;
 
 export const ToolbarButton = React.forwardRef<
-  React.ElementRef<typeof ToolbarPrimitive.Button>,
+  React.ComponentRef<typeof ToolbarPrimitive.Button>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>
 >(({ className, ...props }, ref) => (
   <ToolbarPrimitive.Button
@@ -32,7 +32,7 @@ ToolbarButton.displayName = ToolbarPrimitive.Button.displayName;
 export const ToolbarToggleGroup = ToolbarPrimitive.ToggleGroup;
 export const ToolbarToggleItem = ToolbarPrimitive.ToggleItem;
 export const ToolbarSeparator = React.forwardRef<
-  React.ElementRef<typeof ToolbarPrimitive.Separator>,
+  React.ComponentRef<typeof ToolbarPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <ToolbarPrimitive.Separator ref={ref} className={cn('mx-1 h-6 w-px bg-border', className)} {...props} />

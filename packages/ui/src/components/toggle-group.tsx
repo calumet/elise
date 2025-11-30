@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 export const ToggleGroup = ToggleGroupPrimitive.Root;
 
 export const ToggleGroupItem = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Item>,
+  React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>
 >(({ className, ...props }, ref) => (
   <ToggleGroupPrimitive.Item

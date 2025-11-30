@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 
 export type ScrollAreaProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>;
 
-export const ScrollArea = React.forwardRef<React.ElementRef<typeof ScrollAreaPrimitive.Root>, ScrollAreaProps>(
+export const ScrollArea = React.forwardRef<React.ComponentRef<typeof ScrollAreaPrimitive.Root>, ScrollAreaProps>(
   ({ className, children, ...props }, ref) => (
     <ScrollAreaPrimitive.Root ref={ref} className={cn('relative overflow-hidden', className)} {...props}>
       <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">

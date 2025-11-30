@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 
 type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>;
 
-export const Accordion = React.forwardRef<React.ElementRef<typeof AccordionPrimitive.Root>, AccordionProps>(
+export const Accordion = React.forwardRef<React.ComponentRef<typeof AccordionPrimitive.Root>, AccordionProps>(
   ({ className, ...props }, ref) => (
     <AccordionPrimitive.Root
       ref={ref}
@@ -18,7 +18,7 @@ export const Accordion = React.forwardRef<React.ElementRef<typeof AccordionPrimi
 Accordion.displayName = AccordionPrimitive.Root.displayName;
 
 export const AccordionItem = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Item>,
+  React.ComponentRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
@@ -33,7 +33,7 @@ export const AccordionItem = React.forwardRef<
 AccordionItem.displayName = 'AccordionItem';
 
 export const AccordionTrigger = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Trigger>,
+  React.ComponentRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex">
@@ -53,7 +53,7 @@ export const AccordionTrigger = React.forwardRef<
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
 export const AccordionContent = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Content>,
+  React.ComponentRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content

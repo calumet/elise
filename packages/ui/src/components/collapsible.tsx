@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 export const Collapsible = CollapsiblePrimitive.Root;
 
 export const CollapsibleTrigger = React.forwardRef<
-  React.ElementRef<typeof CollapsiblePrimitive.Trigger>,
+  React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>
 >(({ className, ...props }, ref) => (
   <CollapsiblePrimitive.Trigger ref={ref} className={cn('text-base', className)} {...props} />
@@ -14,7 +14,7 @@ export const CollapsibleTrigger = React.forwardRef<
 CollapsibleTrigger.displayName = CollapsiblePrimitive.Trigger.displayName;
 
 export const CollapsibleContent = React.forwardRef<
-  React.ElementRef<typeof CollapsiblePrimitive.Content>,
+  React.ComponentRef<typeof CollapsiblePrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>
 >(({ className, ...props }, ref) => (
   <CollapsiblePrimitive.Content
