@@ -7,6 +7,8 @@ import {
   Form,
   FormControl,
   FormField,
+  FormDescription,
+  FormRow,
   FormLabel,
   FormMessage,
   FormSubmit,
@@ -41,43 +43,39 @@ const ContactForm = () => {
 
   return (
     <Form onSubmit={onSubmit} noValidate className="w-full max-w-lg space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <FormRow>
         <FormField name="name">
-          <div className="space-y-1">
-            <FormLabel>Nombre</FormLabel>
-            <FormControl asChild>
-              <Input placeholder="Ada Lovelace" {...register('name')} />
-            </FormControl>
-            {formState.errors.name && (
-              <FormMessage>{formState.errors.name.message}</FormMessage>
-            )}
-          </div>
+          <FormLabel>Nombre</FormLabel>
+          <FormControl asChild>
+            <Input placeholder="Ada Lovelace" {...register('name')} />
+          </FormControl>
+          <FormDescription>Tu nombre completo.</FormDescription>
+          {formState.errors.name && (
+            <FormMessage>{formState.errors.name.message}</FormMessage>
+          )}
         </FormField>
         <FormField name="email">
-          <div className="space-y-1">
-            <FormLabel>Email</FormLabel>
-            <FormControl asChild>
-              <Input type="email" placeholder="ada@elise.dev" {...register('email')} />
-            </FormControl>
-            {formState.errors.email && (
-              <FormMessage>{formState.errors.email.message}</FormMessage>
-            )}
-          </div>
+          <FormLabel>Email</FormLabel>
+          <FormControl asChild>
+            <Input type="email" placeholder="ada@elise.dev" {...register('email')} />
+          </FormControl>
+          {formState.errors.email && (
+            <FormMessage>{formState.errors.email.message}</FormMessage>
+          )}
         </FormField>
-      </div>
-      <FormField name="message">
-        <div className="space-y-1">
+      </FormRow>
+        <FormField name="message">
           <FormLabel>Mensaje</FormLabel>
           <FormControl asChild>
             <Textarea placeholder="Cuéntanos tu idea..." {...register('message')} />
           </FormControl>
+          <FormDescription>Detalla tu solicitud para que podamos ayudarte.</FormDescription>
           {formState.errors.message && (
             <FormMessage>{formState.errors.message.message}</FormMessage>
           )}
-        </div>
-      </FormField>
+        </FormField>
       <FormField name="agree">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 space-y-0">
           <Checkbox
             id="agree"
             checked={watch('agree')}
