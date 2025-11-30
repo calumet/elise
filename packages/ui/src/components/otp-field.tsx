@@ -82,7 +82,7 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
             onChange={handleChange(index)}
             onKeyDown={handleKeyDown(index)}
             className={cn(
-              'flex h-11 w-11 items-center justify-center rounded-md border border-border bg-background text-center text-lg font-semibold text-foreground shadow-sm outline-none transition focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
+              'flex h-11 w-11 items-center justify-center rounded-md border border-border bg-background text-center text-lg font-semibold text-foreground outline-none transition focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
               inputClassName
             )}
           />

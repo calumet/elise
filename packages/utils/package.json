@@ -21,6 +21,11 @@
       "types": "./dist/toasts/index.d.ts",
       "import": "./dist/toasts/index.mjs",
       "require": "./dist/toasts/index.cjs"
+    },
+    "./dates": {
+      "types": "./dist/dates/index.d.ts",
+      "import": "./dist/dates/index.mjs",
+      "require": "./dist/dates/index.cjs"
     }
   },
   "files": [

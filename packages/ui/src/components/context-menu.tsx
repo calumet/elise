@@ -4,7 +4,7 @@ import * as ContextMenuPrimitive from '@radix-ui/react-context-menu';
 import { cn } from '@/lib/cn';
 
 const baseItem =
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-foreground outline-none transition data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted data-[highlighted]:text-foreground';
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground';
 
 export const ContextMenu = ContextMenuPrimitive.Root;
 export const ContextMenuTrigger = ContextMenuPrimitive.Trigger;
@@ -21,7 +21,7 @@ export const ContextMenuContent = React.forwardRef<
     <ContextMenuPrimitive.Content
       ref={ref}
       className={cn(
-        'z-[var(--elise-z-dialog,40)] min-w-[200px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+        'z-(--elise-z-dialog,40)] min-w-[200px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
         className
       )}
       {...props}
@@ -87,7 +87,7 @@ export const ContextMenuLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ContextMenuPrimitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-xs font-semibold text-mutedForeground', className)}
+    className={cn('px-2 py-1.5 text-xs font-semibold text-muted-foreground', className)}
     {...props}
   />
 ));
@@ -121,7 +121,7 @@ export const ContextMenuSubContent = React.forwardRef<
   <ContextMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}

@@ -16,7 +16,7 @@ export const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-[var(--elise-z-overlay,30)] bg-[rgb(var(--elise-overlay)/0.5)] backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'fixed inset-0 z-(--elise-z-overlay,30) bg-[rgb(var(--elise-overlay))] backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}
@@ -33,12 +33,12 @@ export const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-[var(--elise-z-dialog,40)] w-[min(90vw,480px)] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-border bg-surface p-6 shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'fixed left-1/2 top-1/2 z-(--elise-z-dialog,40) w-[min(90vw,480px)] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-border bg-background p-6 shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open:zoom-in-95',
         className
       )}
       {...props}
     >
-      <DialogClose className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-sm text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface">
+      <DialogClose className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface">
         <Cross2Icon aria-hidden />
         <span className="sr-only">Close</span>
       </DialogClose>
@@ -67,7 +67,7 @@ export const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-mutedForeground leading-relaxed', className)}
+    className={cn('text-sm text-muted-foreground leading-relaxed', className)}
     {...props}
   />
 ));

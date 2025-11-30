@@ -15,7 +15,7 @@ export const HoverCardContent = React.forwardRef<
     align={align}
     sideOffset={sideOffset}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] w-80 rounded-lg border border-border bg-surface p-4 text-foreground shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-(--elise-z-dialog,40)] w-80 rounded-lg border border-border bg-surface p-4 text-foreground shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}

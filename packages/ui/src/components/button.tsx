@@ -5,7 +5,8 @@ import { cn } from '@/lib/cn';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'solid' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'icon';
+
   asChild?: boolean;
 };
 
@@ -14,16 +15,22 @@ const baseClasses =
 
 const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
   solid:
-    'bg-accent text-[rgb(var(--elise-accent-contrast))] hover:bg-accentHover active:bg-accentActive',
+    'bg-accent text-accent-contrast hover:bg-accent-hover active:bg-accent-active',
   outline:
-    'border border-border text-foreground hover:bg-muted active:border-borderStrong active:bg-muted',
+    'border border-border text-foreground hover:bg-muted active:border-border-strong active:bg-muted',
   ghost: 'text-foreground hover:bg-muted active:bg-muted'
 };
+
+export const buttonVariants = ({ variant }: { variant: ButtonProps['variant'] }) => {
+  if (!variant) return baseClasses;
+  return cn(baseClasses, variantClasses[variant]);
+}
 
 const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
   sm: 'h-8 px-3 text-sm',
   md: 'h-9 px-4 text-sm',
-  lg: 'h-10 px-5 text-base'
+  lg: 'h-10 px-5 text-base',
+  icon: 'size-9',
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

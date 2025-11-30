@@ -45,9 +45,9 @@ const ProgressSkeletonDemo = () => {
           </>
         ) : (
           <>
-            <p className="text-sm text-mutedForeground">Estado listo.</p>
-            <p className="text-sm text-mutedForeground">Valores cargados.</p>
-            <p className="text-sm text-mutedForeground">UI estable.</p>
+            <p className="text-sm text-muted-foreground">Estado listo.</p>
+            <p className="text-sm text-muted-foreground">Valores cargados.</p>
+            <p className="text-sm text-muted-foreground">UI estable.</p>
           </>
         )}
       </div>

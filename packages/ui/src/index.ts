@@ -1,4 +1,3 @@
 export * from './components';
 export { ThemeProvider, useTheme } from './theme/theme-provider';
-
-export { lightThemeTokens, darkThemeTokens, buildCssVariables } from './tokens';
+export { defaultLightTheme, defaultDarkTheme, applyTheme, type EliseTheme } from './themes';

@@ -5,7 +5,7 @@ import { DotFilledIcon } from '@elise/icons';
 import { cn } from '@/lib/cn';
 
 const baseItem =
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-foreground outline-none transition data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted data-[highlighted]:text-foreground';
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground';
 
 export const Menubar = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Root>,
@@ -14,7 +14,7 @@ export const Menubar = React.forwardRef<
   <MenubarPrimitive.Root
     ref={ref}
     className={cn(
-      'flex items-center gap-1 rounded-sm border border-border bg-background px-1 py-1 shadow-[0_2px_10px_rgba(0,0,0,0.08)]',
+      'flex items-center gap-1 rounded-sm border border-border bg-background px-1 py-1',
       className
     )}
     {...props}
@@ -31,7 +31,7 @@ export const MenubarTrigger = React.forwardRef<
   <MenubarPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex select-none items-center gap-2 rounded-xs px-3 py-2 text-sm font-semibold text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
+      'flex select-none items-center gap-2 rounded-xs px-3 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
       className
     )}
     {...props}
@@ -49,7 +49,7 @@ export const MenubarContent = React.forwardRef<
     alignOffset={alignOffset}
     sideOffset={sideOffset}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] min-w-[220px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-(--elise-z-dialog,40)] min-w-[220px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}
@@ -117,7 +117,7 @@ export const MenubarLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-xs font-semibold text-mutedForeground', className)}
+    className={cn('px-2 py-1.5 text-xs font-semibold text-muted-foreground', className)}
     {...props}
   />
 ));
@@ -153,7 +153,7 @@ export const MenubarSubContent = React.forwardRef<
   <MenubarPrimitive.SubContent
     ref={ref}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}

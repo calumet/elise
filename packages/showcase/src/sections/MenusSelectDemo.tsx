@@ -40,10 +40,10 @@ const MenusSelectDemo = () => {
             <MenubarTrigger>Archivo</MenubarTrigger>
             <MenubarContent>
               <MenubarItem>
-                Nuevo <span className="ml-auto text-xs text-mutedForeground">Ctrl+N</span>
+                Nuevo <span className="ml-auto text-xs text-muted-foreground">Ctrl+N</span>
               </MenubarItem>
               <MenubarItem>
-                Guardar <span className="ml-auto text-xs text-mutedForeground">Ctrl+S</span>
+                Guardar <span className="ml-auto text-xs text-muted-foreground">Ctrl+S</span>
               </MenubarItem>
               <MenubarSeparator />
               <MenubarSub>
@@ -119,7 +119,7 @@ const MenusSelectDemo = () => {
         <ContextMenu>
           <ContextMenuTrigger asChild>
             <div className="w-full h-24 border border-dashed border-border flex items-center justify-center">
-              <p className="text-sm text-mutedForeground">Clic derecho aqui</p>
+              <p className="text-sm text-muted-foreground">Clic derecho aqui</p>
             </div>
           </ContextMenuTrigger>
           <ContextMenuContent>

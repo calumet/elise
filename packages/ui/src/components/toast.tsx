@@ -16,7 +16,7 @@ export const ToastViewport = React.forwardRef<
   <ToastPrimitive.Viewport
     ref={ref}
     className={cn(
-      'fixed top-4 right-4 z-[var(--elise-z-toast,50)] flex max-h-[100vh] w-[380px] flex-col gap-2 outline-none',
+      'fixed top-4 right-4 z-(--elise-z-toast,50)] flex max-h-screen w-[380px flex-col gap-2 outline-none',
       className
     )}
     {...props}
@@ -29,7 +29,7 @@ export const Toast = React.forwardRef<React.ElementRef<typeof ToastPrimitive.Roo
     <ToastPrimitive.Root
       ref={ref}
       className={cn(
-        'group relative flex w-full flex-col gap-2 rounded-sm border border-border bg-surface p-4 pr-12 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out',
+        'group relative flex w-full flex-col gap-2 rounded-sm border border-border bg-surface p-4 pr-12 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end:animate-swipe-out',
         className
       )}
       {...props}
@@ -50,7 +50,7 @@ export const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitive.Description ref={ref} className={cn('text-sm text-mutedForeground', className)} {...props} />
+  <ToastPrimitive.Description ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
 ));
 ToastDescription.displayName = ToastPrimitive.Description.displayName;
 
@@ -61,7 +61,7 @@ export const ToastClose = React.forwardRef<
   <ToastPrimitive.Close
     ref={ref}
     className={cn(
-      'absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-sm text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+      'absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
       className
     )}
     {...props}

@@ -1,0 +1,79 @@
+@import 'tailwindcss';
+
+@theme inline {
+  --color-background: #fcfcfd;
+  --color-surface: #f0f0f3;
+  --color-muted: #e8e8ec;
+  --color-border: #d9d9e0;
+  --color-border-strong: #b9bbc6;
+  --color-foreground: #1e1f24;
+  --color-muted-foreground: #62636c;
+  --color-accent: #46a758;
+  --color-accent-hover: #3d9a50;
+  --color-accent-active: #297c3b;
+  --color-accent-contrast: #fcfcfd;
+  --color-focus: #7ca7ff;
+  --color-success: #3d9a50;
+  --color-warning: #f5a623;
+  --color-danger: #e5484d;
+  --color-overlay: #0f172a;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 10px 30px -18px rgba(15, 23, 42, 0.45);
+  --shadow-floating: 0 18px 60px -22px rgba(15, 23, 42, 0.55);
+
+  --font-family-sans: 'Space Grotesk', 'Satoshi', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+}
+
+@layer theme {
+  .dark,
+  [data-theme='dark'] {
+    --color-background: #111113;
+    --color-surface: #212225;
+    --color-muted: #272a2d;
+    --color-border: #363a3f;
+    --color-border-strong: #5a6169;
+    --color-foreground: #edeef0;
+    --color-muted-foreground: #b0b4ba;
+    --color-accent: #46a758;
+    --color-accent-hover: #53b365;
+    --color-accent-active: #71c083;
+    --color-accent-contrast: #edeef0;
+    --color-success: #53b365;
+    --color-warning: #f5a623;
+    --color-danger: #f2555a;
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+}
+
+@layer utilities {
+  .bg-elise-noise {
+    background-image: radial-gradient(circle at 20% 20%, rgba(124, 167, 255, 0.08), transparent 32%),
+      radial-gradient(circle at 80% 0%, rgba(90, 210, 169, 0.12), transparent 26%);
+  }
+}

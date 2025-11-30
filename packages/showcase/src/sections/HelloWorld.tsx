@@ -3,7 +3,7 @@ import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from
 const HelloWorld = () => (
   <div className="flex flex-col items-center gap-4 text-center">
     <p className="text-lg font-semibold">Hola, Elise UI 👋</p>
-    <p className="text-sm text-mutedForeground max-w-sm">
+    <p className="text-sm text-muted-foreground max-w-sm">
       Radix + Tailwind con tokens de color y tipografía listos para usar.
     </p>
     <div className="flex items-center gap-3">

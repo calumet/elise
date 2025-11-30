@@ -12,19 +12,11 @@
       "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json",
-    "./tailwind/preset": {
-      "types": "./dist/tailwind/preset.d.ts",
-      "import": "./dist/tailwind/preset.mjs",
-      "require": "./dist/tailwind/preset.cjs"
-    },
-    "./tailwind": {
-      "types": "./dist/tailwind/index.d.ts",
-      "import": "./dist/tailwind/index.mjs",
-      "require": "./dist/tailwind/index.cjs"
-    }
+    "./tailwind/elise.css": "./src/tailwind/elise.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/tailwind/*.css"
   ],
   "scripts": {
     "dev": "tsup --watch --dts",
@@ -41,7 +33,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@radix-ui/colors": "^3.0.0",
+    "@elise/icons": "workspace:*",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -71,8 +63,8 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-toolbar": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.4",
-    "@elise/icons": "workspace:*",
     "clsx": "^2.1.1",
+    "react-day-picker": "^9.1.8",
     "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {
@@ -82,13 +74,12 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "rimraf": "^6.0.1",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^4.1.17",
     "tsup": "^8.3.4",
     "typescript": "^5.6.3"
   },
   "peerDependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "tailwindcss": "^3.4.0"
+    "react-dom": "^18.0.0"
   }
 }

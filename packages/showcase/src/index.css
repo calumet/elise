@@ -1,7 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import '@elise/ui/tailwind/elise.css';
 
-:root {
-  font-family: var(--elise-font-sans, 'Inter'), system-ui, -apple-system, sans-serif;
-}
+@source '../node_modules/@elise/ui/dist';
+@source '../node_modules/@elise/ui/src';

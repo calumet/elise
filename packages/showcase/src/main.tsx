@@ -37,13 +37,14 @@ import ProgressSkeletonDemo from './sections/ProgressSkeletonDemo';
 import ToastDemo from './sections/ToastDemo';
 import MenusSelectDemo from './sections/MenusSelectDemo';
 import TableDemo from './sections/TableDemo';
+import DatePickersDemo from './sections/DatePickersDemo';
 import { SectionCard } from './components/SectionCard';
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-mutedForeground">Tema</span>
+      <span className="text-sm text-muted-foreground">Tema</span>
       <Button
         variant="outline"
         size="sm"
@@ -63,7 +64,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <header className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">Elise UI Showcase</h1>
-            <p className="text-mutedForeground">Ejemplos rapidos usando Radix + Tailwind con el design system.</p>
+            <p className="text-muted-foreground">Ejemplos rapidos usando Radix + Tailwind con el design system.</p>
           </div>
           <ThemeToggle />
         </header>
@@ -77,25 +78,25 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <NavigationMenuLink asChild>
                     <a href="#hello">
                       <h3 className="text-sm font-semibold">Hello World</h3>
-                      <p className="text-xs text-mutedForeground">Primer componente de ejemplo.</p>
+                      <p className="text-xs text-muted-foreground">Primer componente de ejemplo.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <a href="#contact">
                       <h3 className="text-sm font-semibold">Contacto</h3>
-                      <p className="text-xs text-mutedForeground">Formulario con inputs y text area.</p>
+                      <p className="text-xs text-muted-foreground">Formulario con inputs y text area.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <a href="#components">
                       <h3 className="text-sm font-semibold">Sampler</h3>
-                      <p className="text-xs text-mutedForeground">Tabs, popover, progress y mas.</p>
+                      <p className="text-xs text-muted-foreground">Tabs, popover, progress y mas.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <a href="#login">
                       <h3 className="text-sm font-semibold">Login Card</h3>
-                      <p className="text-xs text-mutedForeground">Ejemplo de tarjeta simple.</p>
+                      <p className="text-xs text-muted-foreground">Ejemplo de tarjeta simple.</p>
                     </a>
                   </NavigationMenuLink>
                 </div>
@@ -106,6 +107,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </NavigationMenu>
 
         <main className="flex flex-col flex-1 gap-8 pb-12">
+          
+
+          <SectionCard title="Date Picker & Range">
+            <DatePickersDemo />
+          </SectionCard>
           <SectionCard
             id="hello"
             title="Hello world rapido con botones y tooltip."
@@ -143,7 +149,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               </Popover>
             }
           >
-            <div className="flex items-center justify-center min-h-[320px] relative">
+            <div className="flex items-center justify-center min-h-80 relative">
               <ContactForm />
             </div>
           </SectionCard>
@@ -162,12 +168,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <DialogHeader>
                     <DialogTitle>Dialog ligero</DialogTitle>
                   </DialogHeader>
-                  <p className="text-sm text-mutedForeground">Usa Radix Dialog con estilos base del preset.</p>
+                  <p className="text-sm text-muted-foreground">Usa Radix Dialog con estilos base del preset.</p>
                 </DialogContent>
               </Dialog>
             }
           >
-            <div className="flex justify-center min-h-[320px] relative">
+            <div className="flex justify-center min-h-80 relative">
               <ComponentsSampler />
             </div>
           </SectionCard>

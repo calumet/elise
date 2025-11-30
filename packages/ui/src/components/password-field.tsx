@@ -15,7 +15,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
           ref={ref}
           type={visible ? 'text' : 'password'}
           className={cn(
-            'flex h-10 w-full rounded-sm border border-border bg-background px-3 py-2 pr-10 text-sm text-foreground shadow-sm transition placeholder:text-mutedForeground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
+            'flex h-10 w-full rounded-sm border border-border bg-background px-3 py-2 pr-10 text-sm text-foreground transition placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...props}
@@ -24,7 +24,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
           type="button"
           aria-label={toggleAriaLabel}
           onClick={() => setVisible((v) => !v)}
-          className="absolute inset-y-0 right-2 my-auto inline-flex h-7 w-7 items-center justify-center rounded-full text-mutedForeground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="absolute inset-y-0 right-2 my-auto inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {visible ? (
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">

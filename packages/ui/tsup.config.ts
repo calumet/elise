@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/tailwind/preset.ts', 'src/tailwind/index.ts'],
+  entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
   sourcemap: true,
   dts: true,

@@ -46,13 +46,13 @@ export const Toaster = ({ position = 'top-right' }: ToasterProps) => {
           onOpenChange={(open) => {
             if (!open) dismiss(toastItem.id);
           }}
-          className="group relative flex w-full max-w-sm flex-col gap-2 rounded-sm border border-border bg-surface p-4 pr-12 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
+          className="group relative flex w-full max-w-sm flex-col gap-2 rounded-sm border border-border bg-surface p-4 pr-12 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
         >
           <div className="flex items-start gap-2 pr-2">
             <div className="flex-1 space-y-1">
               {toastItem.title ? <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle> : null}
               {toastItem.description ? (
-                <ToastDescription className="text-sm text-mutedForeground">{toastItem.description}</ToastDescription>
+                <ToastDescription className="text-sm text-muted-foreground">{toastItem.description}</ToastDescription>
               ) : null}
               {toastItem.actionLabel && toastItem.action ? (
                 <button
@@ -69,7 +69,7 @@ export const Toaster = ({ position = 'top-right' }: ToasterProps) => {
         </Toast>
       ))}
       <ToastViewport
-        className={`fixed z-[var(--elise-z-toast,50)] flex max-h-[100vh] flex-col gap-2 outline-none ${viewportPosition(position)}`}
+        className={`fixed z-(--elise-z-toast,50)] flex max-h-screen flex-col gap-2 outline-none ${viewportPosition(position)}`}
       />
     </ToastProvider>
   );

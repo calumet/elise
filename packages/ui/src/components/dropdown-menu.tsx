@@ -4,7 +4,7 @@ import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { cn } from '@/lib/cn';
 
 const baseItem =
-  'relative flex cursor-default select-none items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground outline-none transition data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted data-[highlighted]:text-foreground';
+  'relative flex cursor-default select-none items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground';
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -23,7 +23,7 @@ export const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       align={align}
       className={cn(
-        'z-[var(--elise-z-dialog,40)] min-w-[200px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+        'z-(--elise-z-dialog,40)] min-w-[200px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
         className
       )}
       {...props}
@@ -85,7 +85,7 @@ export const DropdownMenuLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-xs font-semibold text-mutedForeground', className)}
+    className={cn('px-2 py-1.5 text-xs font-semibold text-muted-foreground', className)}
     {...props}
   />
 ));
@@ -119,7 +119,7 @@ export const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      'z-[var(--elise-z-dialog,40)] min-w-[180px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'z-(--elise-z-dialog,40)] min-w-[180px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}

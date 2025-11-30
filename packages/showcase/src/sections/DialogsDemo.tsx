@@ -32,7 +32,7 @@ const DialogsDemo = () => {
           <DialogHeader>
             <DialogTitle>Dialog ligero</DialogTitle>
           </DialogHeader>
-          <DialogDescription className="text-sm text-mutedForeground">
+          <DialogDescription className="text-sm text-muted-foreground">
             Usa Radix Dialog con estilos base del preset.
           </DialogDescription>
         </DialogContent>

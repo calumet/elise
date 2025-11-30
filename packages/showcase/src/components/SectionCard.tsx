@@ -12,11 +12,11 @@ export const SectionCard = ({ id, title, action, children, className }: SectionC
   return (
     <section
       id={id}
-      className={`flex flex-col gap-4 rounded-sm border border-border p-4 shadow-sm ${className ?? ''}`}
+      className={`flex flex-col gap-4 rounded-sm border border-border p-4 shadow-xs ${className ?? ''}`}
     >
       {title ? (
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm text-mutedForeground font-semibold sm:pl-1">{title}</h2>
+          <h2 className="text-sm text-muted-foreground font-semibold sm:pl-1">{title}</h2>
           <div className="w-max">
             {action}
           </div>

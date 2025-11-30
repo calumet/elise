@@ -16,7 +16,7 @@ export const AlertDialogOverlay = React.forwardRef<
   <AlertDialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-[var(--elise-z-overlay,30)] bg-[rgb(var(--elise-overlay)/0.5)] backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+      'fixed inset-0 z-(--elise-z-overlay,30)] bg-[rgb(var(--elise-overlay)/0.5)] backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
       className
     )}
     {...props}
@@ -33,7 +33,7 @@ export const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-[var(--elise-z-dialog,40)] w-[min(90vw,480px)] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-border bg-surface p-6 shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'fixed left-1/2 top-1/2 z-(--elise-z-dialog,40)] w-[min(90vw,480px)] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-border bg-surface p-6 shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open:zoom-in-95',
         className
       )}
       {...props}
@@ -61,7 +61,7 @@ export const AlertDialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-mutedForeground leading-relaxed', className)}
+    className={cn('text-sm text-muted-foreground leading-relaxed', className)}
     {...props}
   />
 ));

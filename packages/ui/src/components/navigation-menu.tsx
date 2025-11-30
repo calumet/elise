@@ -21,7 +21,7 @@ export const NavigationMenuList = React.forwardRef<
   <NavigationMenuPrimitive.List
     ref={ref}
     className={cn(
-      'flex flex-1 list-none items-center justify-start gap-1 rounded-sm bg-background p-1 border border-boder',
+      'flex flex-1 list-none items-center justify-start gap-1 rounded-sm bg-background p-1 border border-border',
       className
     )}
     {...props}
@@ -38,7 +38,7 @@ export const NavigationMenuTrigger = React.forwardRef<
   <NavigationMenuPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex select-none items-center gap-2 rounded-sm px-3 py-2 text-sm font-semibold text-mutedForeground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
+      'flex select-none items-center gap-2 rounded-sm px-3 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground',
       className
     )}
     {...props}
@@ -53,7 +53,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      'absolute left-0 top-full z-[var(--elise-z-dialog,45)] w-full rounded-sm border border-border bg-surface p-3 shadow-floating data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:w-auto sm:min-w-[300px]',
+      'absolute left-0 top-full z-(--elise-z-dialog,45)] w-full rounded-sm border border-border bg-surface p-3 shadow-floating data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:w-auto sm:min-w-[300px',
       className
     )}
     {...props}
@@ -83,7 +83,7 @@ export const NavigationMenuViewport = React.forwardRef<
   <NavigationMenuPrimitive.Viewport
     ref={ref}
     className={cn(
-      'relative mt-2 h-[var(--radix-navigation-menu-viewport-height)] w-full origin-top-left overflow-hidden rounded-sm border border-border bg-surface shadow-floating transition-all duration-200 sm:w-[var(--radix-navigation-menu-viewport-width)]',
+      'relative mt-2 h-(--radix-navigation-menu-viewport-height)] w-full origin-top-left overflow-hidden rounded-sm border border-border bg-surface shadow-floating transition-all duration-200 sm:w-[var(--radix-navigation-menu-viewport-width)',
       className
     )}
     {...props}
@@ -98,12 +98,12 @@ export const NavigationMenuIndicator = React.forwardRef<
   <NavigationMenuPrimitive.Indicator
     ref={ref}
     className={cn(
-      'top-full z-[var(--elise-z-overlay,30)] flex h-2 items-end justify-center overflow-hidden transition-[width,transform] duration-200 data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in',
+      'top-full z-(--elise-z-overlay,30)] flex h-2 items-end justify-center overflow-hidden transition-[width,transform] duration-200 data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible:fade-in',
       className
     )}
     {...props}
   >
-    <div className="relative top-[1px] h-2 w-2 rotate-45 rounded-sm bg-surface border-l border-t border-border" />
+    <div className="relative top-px h-2 w-2 rotate-45 rounded-sm bg-surface border-l border-t border-border" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName = NavigationMenuPrimitive.Indicator.displayName;
