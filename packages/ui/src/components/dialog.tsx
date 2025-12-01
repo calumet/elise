@@ -38,7 +38,7 @@ export const DialogContent = React.forwardRef<
       )}
       {...props}
     >
-      <DialogClose className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface">
+      <DialogClose className="absolute right-3 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface">
         <Cross2Icon aria-hidden />
         <span className="sr-only">Close</span>
       </DialogClose>

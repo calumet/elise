@@ -35,3 +35,5 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './skeleton';
 export * from './date-picker';
+export * from './pagination';
+export * from './command';

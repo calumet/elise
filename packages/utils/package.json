@@ -31,6 +31,11 @@
       "types": "./dist/dates/index.d.ts",
       "import": "./dist/dates/index.mjs",
       "require": "./dist/dates/index.cjs"
+    },
+    "./tables": {
+      "types": "./dist/tables/index.d.ts",
+      "import": "./dist/tables/index.mjs",
+      "require": "./dist/tables/index.cjs"
     }
   },
   "files": [
@@ -46,7 +51,10 @@
     "@elise/icons": "workspace:*",
     "@elise/ui": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-table": "^8.21.3",
+    "clsx": "^2.1.1",
     "react-hook-form": "^7.66.0",
+    "tailwind-merge": "^3.4.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {

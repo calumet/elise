@@ -37,9 +37,10 @@ const toneOverrides: Record<
   }
 };
 
-export const buttonVariants = ({ variant }: { variant: ButtonProps['variant'] }) => {
+export const buttonVariants = ({ variant, size }: { variant: ButtonProps['variant'], size?: ButtonProps['size'] }) => {
   if (!variant) return baseClasses;
-  return cn(baseClasses, variantClasses[variant]);
+  if (!size) return cn(baseClasses, variantClasses[variant]);
+  return cn(baseClasses, variantClasses[variant], sizeClasses[size]);
 }
 
 const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {

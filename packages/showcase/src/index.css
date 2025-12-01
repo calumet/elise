@@ -2,3 +2,4 @@
 @import '@elise/ui/tailwind/elise.css';
 
 @source '../node_modules/@elise/ui/dist';
+@source '../node_modules/@elise/utils/dist';

@@ -38,6 +38,8 @@ import ProgressSkeletonDemo from './sections/ProgressSkeletonDemo';
 import ToastDemo from './sections/ToastDemo';
 import MenusSelectDemo from './sections/MenusSelectDemo';
 import TableDemo from './sections/TableDemo';
+import DataTableDemo from './sections/DataTableDemo';
+import CommandDemo from './sections/CommandDemo';
 import DatePickersDemo from './sections/DatePickersDemo';
 import { SectionCard } from './components/SectionCard';
 
@@ -61,7 +63,7 @@ const ThemeToggle = () => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light">
-      <div className="max-w-4xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
+      <div className="max-w-6xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
         <header className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">Elise UI Showcase</h1>
@@ -195,8 +197,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <MenusSelectDemo />
           </SectionCard>
 
+          <SectionCard title="Command Palette">
+            <CommandDemo />
+          </SectionCard>
+
           <SectionCard title="Table">
             <TableDemo />
+          </SectionCard>
+
+          <SectionCard title="Data Table (filtros y exportación)">
+            <DataTableDemo />
           </SectionCard>
 
           <SectionCard title="Toast">
