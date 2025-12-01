@@ -42,13 +42,13 @@
   --font-family-sans: var(--elise-font-family-sans);
   --font-family-mono: var(--elise-font-family-mono);
 
-  --font-size-xs: var(--elise-font-size-xs);
-  --font-size-sm: var(--elise-font-size-sm);
-  --font-size-base: var(--elise-font-size-base);
-  --font-size-lg: var(--elise-font-size-lg);
-  --font-size-xl: var(--elise-font-size-xl);
-  --font-size-2xl: var(--elise-font-size-2xl);
-  --font-size-3xl: var(--elise-font-size-3xl);
+  --text-xs: var(--elise-font-size-xs);
+  --text-sm: var(--elise-font-size-sm);
+  --text-base: var(--elise-font-size-base);
+  --text-lg: var(--elise-font-size-lg);
+  --text-xl: var(--elise-font-size-xl);
+  --text-2xl: var(--elise-font-size-2xl);
+  --text-3xl: var(--elise-font-size-3xl);
 }
 
 :root {
