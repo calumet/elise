@@ -10,7 +10,7 @@ export const Toolbar = React.forwardRef<
   <ToolbarPrimitive.Root
     ref={ref}
     className={cn(
-      "flex flex-wrap items-center gap-2 rounded-lg border border-border bg-surface p-2",
+      "flex flex-wrap items-center gap-2 rounded-sm border border-border bg-surface p-2",
       className,
     )}
     {...props}
@@ -25,7 +25,7 @@ export const ToolbarButton = React.forwardRef<
   <ToolbarPrimitive.Button
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-[rgb(var(--elise-primary-contrast))]",
+      "inline-flex items-center justify-center rounded-sm bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-[rgb(var(--elise-primary-contrast))]",
       className,
     )}
     {...props}

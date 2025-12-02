@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-md px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground";
+  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground";
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -23,7 +23,7 @@ export const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       align={align}
       className={cn(
-        "z-(--elise-z-dialog,40)] min-w-[200px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
+        "z-(--elise-z-dialog,40)] min-w-[200px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
         className,
       )}
       {...props}
@@ -134,7 +134,7 @@ export const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-(--elise-z-dialog,40)] min-w-[180px] rounded-lg border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
+      "z-(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
       className,
     )}
     {...props}

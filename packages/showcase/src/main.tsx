@@ -20,16 +20,21 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { SectionCard } from "./components/SectionCard";
 import AccordionCollapsibleDemo from "./sections/AccordionCollapsibleDemo";
+import AlertDialogStandalone from "./sections/AlertDialogStandalone";
 import CommandDemo from "./sections/CommandDemo";
 import ComponentsSampler from "./sections/ComponentsSampler";
 import ContactForm from "./sections/ContactForm";
 import DataTableDemo from "./sections/DataTableDemo";
 import DatePickersDemo from "./sections/DatePickersDemo";
 import DialogsDemo from "./sections/DialogsDemo";
+import FormControlsDemo from "./sections/FormControlsDemo";
 import HelloWorld from "./sections/HelloWorld";
 import LoginCard from "./sections/LoginCard";
+import MediaCardDemo from "./sections/MediaCardDemo";
+import MenusHoverDemo from "./sections/MenusHoverDemo";
 import MenusSelectDemo from "./sections/MenusSelectDemo";
 import ProgressSkeletonDemo from "./sections/ProgressSkeletonDemo";
+import ScrollToolbarDemo from "./sections/ScrollToolbarDemo";
 import TableDemo from "./sections/TableDemo";
 import ToastDemo from "./sections/ToastDemo";
 
@@ -109,6 +114,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <SectionCard title="Date Picker & Range">
             <DatePickersDemo />
           </SectionCard>
+
           <SectionCard
             id="hello"
             title="Hello world rapido con botones y tooltip."
@@ -181,6 +187,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <DialogsDemo />
           </SectionCard>
 
+          <SectionCard title="Alert Dialog (standalone)">
+            <AlertDialogStandalone />
+          </SectionCard>
+
           <SectionCard title="Accordion & Collapsible">
             <AccordionCollapsibleDemo />
           </SectionCard>
@@ -193,6 +203,18 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <MenusSelectDemo />
           </SectionCard>
 
+          <SectionCard title="Dropdown & Hover Card">
+            <MenusHoverDemo />
+          </SectionCard>
+
+          <SectionCard title="Form controls (Radio, Switch, Slider)">
+            <FormControlsDemo />
+          </SectionCard>
+
+          <SectionCard title="Media Card, Avatar y Aspect Ratio">
+            <MediaCardDemo />
+          </SectionCard>
+
           <SectionCard title="Command Palette">
             <CommandDemo />
           </SectionCard>
@@ -203,6 +225,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
           <SectionCard title="Data Table (filtros y exportación)">
             <DataTableDemo />
+          </SectionCard>
+
+          <SectionCard title="Scroll & Toolbar">
+            <ScrollToolbarDemo />
           </SectionCard>
 
           <SectionCard title="Toast">

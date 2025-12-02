@@ -3,6 +3,7 @@ export * from "./alert-dialog";
 export * from "./aspect-ratio";
 export * from "./avatar";
 export * from "./button";
+export * from "./card";
 export * from "./calendar";
 export * from "./checkbox";
 export * from "./collapsible";
