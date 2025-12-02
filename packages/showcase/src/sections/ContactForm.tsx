@@ -1,35 +1,42 @@
-import { useState } from 'react';
-import { z } from 'zod';
-import { useZodForm } from '@elise/utils/forms';
-import { Button } from '@elise/ui/button';
-import { Checkbox } from '@elise/ui/checkbox';
-import { Form, FormControl, FormField, FormDescription, FormRow, FormLabel, FormMessage, FormSubmit } from '@elise/ui/form';
-import { Input } from '@elise/ui/input';
-import { Textarea } from '@elise/ui/textarea';
+import { Button } from "@elise/ui/button";
+import { Checkbox } from "@elise/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormDescription,
+  FormRow,
+  FormLabel,
+  FormMessage,
+  FormSubmit,
+} from "@elise/ui/form";
+import { Input } from "@elise/ui/input";
+import { Textarea } from "@elise/ui/textarea";
+import { useZodForm } from "@elise/utils/forms";
+import { useState } from "react";
+import { z } from "zod";
 
 const schema = z.object({
-  name: z.string().min(2, 'Nombre es requerido (mínimo 2 caracteres)'),
-  email: z.email('Email inválido'),
-  message: z.string().min(4, 'Mensaje es requerido'),
-  agree: z
-    .boolean()
-    .refine((val) => val === true, { message: 'Debes aceptar los términos.' })
-})
+  name: z.string().min(2, "Nombre es requerido (mínimo 2 caracteres)"),
+  email: z.email("Email inválido"),
+  message: z.string().min(4, "Mensaje es requerido"),
+  agree: z.boolean().refine((val) => val === true, { message: "Debes aceptar los términos." }),
+});
 
 const ContactForm = () => {
   const [success, setSuccess] = useState<string | null>(null);
 
   const { handleSubmit, formState, register, setValue, watch } = useZodForm(schema, {
     defaultValues: {
-      name: '',
-      email: '',
-      message: '',
-      agree: false
-    }
+      name: "",
+      email: "",
+      message: "",
+      agree: false,
+    },
   });
 
   const onSubmit = handleSubmit(() => {
-    setSuccess('Enviado. Gracias por contactarnos.');
+    setSuccess("Enviado. Gracias por contactarnos.");
   });
 
   return (
@@ -38,47 +45,37 @@ const ContactForm = () => {
         <FormField name="name">
           <FormLabel>Nombre</FormLabel>
           <FormControl asChild>
-            <Input placeholder="Ada Lovelace" {...register('name')} />
+            <Input placeholder="Ada Lovelace" {...register("name")} />
           </FormControl>
           <FormDescription>Tu nombre completo.</FormDescription>
-          {formState.errors.name && (
-            <FormMessage>{formState.errors.name.message}</FormMessage>
-          )}
+          {formState.errors.name && <FormMessage>{formState.errors.name.message}</FormMessage>}
         </FormField>
         <FormField name="email">
           <FormLabel>Email</FormLabel>
           <FormControl asChild>
-            <Input type="email" placeholder="ada@elise.dev" {...register('email')} />
+            <Input type="email" placeholder="ada@elise.dev" {...register("email")} />
           </FormControl>
-          {formState.errors.email && (
-            <FormMessage>{formState.errors.email.message}</FormMessage>
-          )}
+          {formState.errors.email && <FormMessage>{formState.errors.email.message}</FormMessage>}
         </FormField>
       </FormRow>
-        <FormField name="message">
-          <FormLabel>Mensaje</FormLabel>
-          <FormControl asChild>
-            <Textarea placeholder="Cuéntanos tu idea..." {...register('message')} />
-          </FormControl>
-          <FormDescription>Detalla tu solicitud para que podamos ayudarte.</FormDescription>
-          {formState.errors.message && (
-            <FormMessage>{formState.errors.message.message}</FormMessage>
-          )}
-        </FormField>
+      <FormField name="message">
+        <FormLabel>Mensaje</FormLabel>
+        <FormControl asChild>
+          <Textarea placeholder="Cuéntanos tu idea..." {...register("message")} />
+        </FormControl>
+        <FormDescription>Detalla tu solicitud para que podamos ayudarte.</FormDescription>
+        {formState.errors.message && <FormMessage>{formState.errors.message.message}</FormMessage>}
+      </FormField>
       <FormField name="agree">
         <div className="flex items-center gap-2 space-y-0">
           <Checkbox
             id="agree"
-            checked={watch('agree')}
-            onCheckedChange={(v) => setValue('agree', v === true, { shouldValidate: true })}
+            checked={watch("agree")}
+            onCheckedChange={(v) => setValue("agree", v === true, { shouldValidate: true })}
           />
-          <FormLabel htmlFor="agree">
-            Acepto los términos y políticas.
-          </FormLabel>
+          <FormLabel htmlFor="agree">Acepto los términos y políticas.</FormLabel>
         </div>
-        {formState.errors.agree && (
-          <FormMessage>{formState.errors.agree.message}</FormMessage>
-        )}
+        {formState.errors.agree && <FormMessage>{formState.errors.agree.message}</FormMessage>}
       </FormField>
       {success && <p className="text-sm text-success">{success}</p>}
       <FormSubmit asChild>

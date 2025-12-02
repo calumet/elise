@@ -1,9 +1,17 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@elise/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@elise/ui/table";
 
 const rows = [
-  { name: 'Elise UI', status: 'Stable', version: '0.1.0' },
-  { name: 'Showcase', status: 'Draft', version: '0.0.1' },
-  { name: 'Utils', status: 'Alpha', version: '0.1.0' }
+  { name: "Elise UI", status: "Stable", version: "0.1.0" },
+  { name: "Showcase", status: "Draft", version: "0.0.1" },
+  { name: "Utils", status: "Alpha", version: "0.1.0" },
 ];
 
 const TableDemo = () => {

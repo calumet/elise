@@ -1,7 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Button } from '@elise/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@elise/ui/dialog';
+import { Button } from "@elise/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@elise/ui/dialog";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,29 +7,31 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger
-} from '@elise/ui/navigation-menu';
-import { Popover, PopoverContent, PopoverTrigger } from '@elise/ui/popover';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@elise/ui/tooltip';
-import { ThemeProvider, useTheme } from '@elise/ui/theme';
-import { Toaster } from '@elise/utils/toasts';
-import { AlertHost } from '@elise/utils/alerts';
+  NavigationMenuTrigger,
+} from "@elise/ui/navigation-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@elise/ui/popover";
+import { ThemeProvider, useTheme } from "@elise/ui/theme";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@elise/ui/tooltip";
+import { AlertHost } from "@elise/utils/alerts";
+import { Toaster } from "@elise/utils/toasts";
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import './index.css';
-import HelloWorld from './sections/HelloWorld';
-import ContactForm from './sections/ContactForm';
-import ComponentsSampler from './sections/ComponentsSampler';
-import LoginCard from './sections/LoginCard';
-import DialogsDemo from './sections/DialogsDemo';
-import AccordionCollapsibleDemo from './sections/AccordionCollapsibleDemo';
-import ProgressSkeletonDemo from './sections/ProgressSkeletonDemo';
-import ToastDemo from './sections/ToastDemo';
-import MenusSelectDemo from './sections/MenusSelectDemo';
-import TableDemo from './sections/TableDemo';
-import DataTableDemo from './sections/DataTableDemo';
-import CommandDemo from './sections/CommandDemo';
-import DatePickersDemo from './sections/DatePickersDemo';
-import { SectionCard } from './components/SectionCard';
+import "./index.css";
+import { SectionCard } from "./components/SectionCard";
+import AccordionCollapsibleDemo from "./sections/AccordionCollapsibleDemo";
+import CommandDemo from "./sections/CommandDemo";
+import ComponentsSampler from "./sections/ComponentsSampler";
+import ContactForm from "./sections/ContactForm";
+import DataTableDemo from "./sections/DataTableDemo";
+import DatePickersDemo from "./sections/DatePickersDemo";
+import DialogsDemo from "./sections/DialogsDemo";
+import HelloWorld from "./sections/HelloWorld";
+import LoginCard from "./sections/LoginCard";
+import MenusSelectDemo from "./sections/MenusSelectDemo";
+import ProgressSkeletonDemo from "./sections/ProgressSkeletonDemo";
+import TableDemo from "./sections/TableDemo";
+import ToastDemo from "./sections/ToastDemo";
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -41,23 +41,25 @@ const ThemeToggle = () => {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="px-3"
       >
-        {theme === 'dark' ? 'Light' : 'Dark'}
+        {theme === "dark" ? "Light" : "Dark"}
       </Button>
     </div>
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light">
       <div className="max-w-6xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
         <header className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-bold tracking-tight">Elise UI Showcase</h1>
-            <p className="text-muted-foreground">Ejemplos rapidos usando Radix + Tailwind con el design system.</p>
+            <p className="text-muted-foreground">
+              Ejemplos rapidos usando Radix + Tailwind con el design system.
+            </p>
           </div>
           <ThemeToggle />
         </header>
@@ -77,13 +79,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <NavigationMenuLink asChild>
                     <a href="#contact">
                       <h3 className="text-sm font-semibold">Contacto</h3>
-                      <p className="text-xs text-muted-foreground">Formulario con inputs y text area.</p>
+                      <p className="text-xs text-muted-foreground">
+                        Formulario con inputs y text area.
+                      </p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <a href="#components">
                       <h3 className="text-sm font-semibold">Sampler</h3>
-                      <p className="text-xs text-muted-foreground">Tabs, popover, progress y mas.</p>
+                      <p className="text-xs text-muted-foreground">
+                        Tabs, popover, progress y mas.
+                      </p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
@@ -100,8 +106,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </NavigationMenu>
 
         <main className="flex flex-col flex-1 gap-8 pb-12">
-          
-
           <SectionCard title="Date Picker & Range">
             <DatePickersDemo />
           </SectionCard>
@@ -161,7 +165,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <DialogHeader>
                     <DialogTitle>Dialog ligero</DialogTitle>
                   </DialogHeader>
-                  <p className="text-sm text-muted-foreground">Usa Radix Dialog con estilos base del preset.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Usa Radix Dialog con estilos base del preset.
+                  </p>
                 </DialogContent>
               </Dialog>
             }
@@ -213,6 +219,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Toaster />
       <AlertHost />
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
-

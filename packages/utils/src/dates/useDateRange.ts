@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { DateRange } from './format';
+import { useState } from "react";
+
+import { DateRange } from "./format";
 
 type UseDateRangeOptions = {
   initial?: DateRange;
@@ -18,6 +19,6 @@ export const useDateRange = ({ initial }: UseDateRangeOptions = {}) => {
     setRange,
     setFrom,
     setTo,
-    reset
+    reset,
   };
 };

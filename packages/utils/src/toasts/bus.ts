@@ -1,4 +1,4 @@
-export type ToastVariant = 'info' | 'alert' | 'error' | 'success';
+export type ToastVariant = "info" | "alert" | "error" | "success";
 
 export type ToastOptions = {
   id?: string;
@@ -19,11 +19,13 @@ const toastListeners = new Set<ToastListener>();
 const dismissListeners = new Set<DismissListener>();
 
 const genId = () =>
-  typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : Math.random().toString(36);
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : Math.random().toString(36);
 
 export const toast = (options: ToastOptions) => {
   const id = options.id ?? genId();
-  const payload: ToastEvent = { duration: 4000, variant: 'info', ...options, id };
+  const payload: ToastEvent = { duration: 4000, variant: "info", ...options, id };
   toastListeners.forEach((listener) => listener(payload));
   return id;
 };

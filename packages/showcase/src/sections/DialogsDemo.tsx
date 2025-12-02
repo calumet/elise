@@ -1,7 +1,14 @@
-import { useState } from 'react';
-import { Button } from '@elise/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@elise/ui/dialog';
-import { openAlert } from '@elise/utils/alerts';
+import { Button } from "@elise/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@elise/ui/dialog";
+import { openAlert } from "@elise/utils/alerts";
+import { useState } from "react";
 
 const DialogsDemo = () => {
   const [open, setOpen] = useState(false);
@@ -26,11 +33,11 @@ const DialogsDemo = () => {
         tone="success"
         onClick={() =>
           openAlert({
-            variant: 'confirm',
-            title: '¿Seguro?',
-            description: 'Esta acción no se puede deshacer. Confirma para continuar.',
-            confirmLabel: 'Confirmar',
-            cancelLabel: 'Cancelar'
+            variant: "confirm",
+            title: "¿Seguro?",
+            description: "Esta acción no se puede deshacer. Confirma para continuar.",
+            confirmLabel: "Confirmar",
+            cancelLabel: "Cancelar",
           })
         }
       >
@@ -40,9 +47,9 @@ const DialogsDemo = () => {
       <Button
         onClick={() =>
           openAlert({
-            variant: 'info',
-            title: 'Información',
-            description: 'Esto es un ejemplo de alerta informativa.'
+            variant: "info",
+            title: "Información",
+            description: "Esto es un ejemplo de alerta informativa.",
           })
         }
       >
@@ -53,9 +60,9 @@ const DialogsDemo = () => {
         tone="warning"
         onClick={() =>
           openAlert({
-            variant: 'alert',
-            title: 'Alerta',
-            description: 'Revisa este cambio antes de continuar.'
+            variant: "alert",
+            title: "Alerta",
+            description: "Revisa este cambio antes de continuar.",
           })
         }
       >
@@ -66,9 +73,9 @@ const DialogsDemo = () => {
         tone="danger"
         onClick={() =>
           openAlert({
-            variant: 'error',
-            title: 'Error',
-            description: 'Ocurrió un problema al guardar.'
+            variant: "error",
+            title: "Error",
+            description: "Ocurrió un problema al guardar.",
           })
         }
       >
@@ -79,9 +86,9 @@ const DialogsDemo = () => {
         tone="success"
         onClick={() =>
           openAlert({
-            variant: 'success',
-            title: 'Listo',
-            description: 'La operación se completó correctamente.'
+            variant: "success",
+            title: "Listo",
+            description: "La operación se completó correctamente.",
           })
         }
       >

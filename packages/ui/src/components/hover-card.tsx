@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
+import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
+import * as React from "react";
 
-import { cn } from '@/lib/cn';
+import { cn } from "@/lib/cn";
 
 export const HoverCard = HoverCardPrimitive.Root;
 export const HoverCardTrigger = HoverCardPrimitive.Trigger;
@@ -9,14 +9,14 @@ export const HoverCardTrigger = HoverCardPrimitive.Trigger;
 export const HoverCardContent = React.forwardRef<
   React.ComponentRef<typeof HoverCardPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
->(({ className, align = 'center', sideOffset = 8, ...props }, ref) => (
+>(({ className, align = "center", sideOffset = 8, ...props }, ref) => (
   <HoverCardPrimitive.Content
     ref={ref}
     align={align}
     sideOffset={sideOffset}
     className={cn(
-      'z-(--elise-z-dialog,40)] w-80 rounded-sm border border-border bg-surface p-4 text-foreground shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in',
-      className
+      "z-(--elise-z-dialog,40)] w-80 rounded-sm border border-border bg-surface p-4 text-foreground shadow-floating outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
+      className,
     )}
     {...props}
   />

@@ -1,4 +1,4 @@
-export type AlertVariant = 'alert' | 'info' | 'error' | 'confirm' | 'success';
+export type AlertVariant = "alert" | "info" | "error" | "confirm" | "success";
 
 export type AlertOptions = {
   id?: string;
@@ -20,16 +20,18 @@ const alertListeners = new Set<AlertListener>();
 const closeListeners = new Set<CloseListener>();
 
 const genId = () =>
-  typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : Math.random().toString(36);
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : Math.random().toString(36);
 
 export const openAlert = (options: AlertOptions) => {
   const id = options.id ?? genId();
   const payload: AlertEvent = {
-    variant: 'alert',
-    confirmLabel: 'Aceptar',
-    cancelLabel: 'Cancelar',
+    variant: "alert",
+    confirmLabel: "Aceptar",
+    cancelLabel: "Cancelar",
     ...options,
-    id
+    id,
   };
   alertListeners.forEach((listener) => listener(payload));
   return id;

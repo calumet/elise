@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Usa clase .dark o data-theme="dark" para el modo oscuro */
 @custom-variant dark (&:is(.dark *), &:is([data-theme="dark"] *));
@@ -90,8 +90,9 @@
   --elise-shadow-soft: 0 10px 30px -18px rgba(15, 23, 42, 0.45);
   --elise-shadow-floating: 0 18px 60px -22px rgba(15, 23, 42, 0.55);
 
-  --elise-font-family-sans: 'Space Grotesk', 'Satoshi', 'Inter', system-ui, -apple-system, sans-serif;
-  --elise-font-family-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  --elise-font-family-sans:
+    "Space Grotesk", "Satoshi", "Inter", system-ui, -apple-system, sans-serif;
+  --elise-font-family-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
   --elise-font-size-xs: 0.75rem;
   --elise-font-size-sm: 0.875rem;
@@ -103,7 +104,7 @@
 }
 
 .dark,
-[data-theme='dark'] {
+[data-theme="dark"] {
   --elise-background: #111113;
   --elise-surface: #212225;
   --elise-muted: #272a2d;
@@ -156,7 +157,8 @@
 
 @layer utilities {
   .bg-elise-noise {
-    background-image: radial-gradient(circle at 20% 20%, rgba(124, 167, 255, 0.08), transparent 32%),
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(124, 167, 255, 0.08), transparent 32%),
       radial-gradient(circle at 80% 0%, rgba(90, 210, 169, 0.12), transparent 26%);
   }
 }

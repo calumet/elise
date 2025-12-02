@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Button } from '@elise/ui/button';
-import { Form, FormControl, FormField, FormLabel } from '@elise/ui/form';
-import { Input } from '@elise/ui/input';
-import { PasswordField } from '@elise/ui/password-field';
-import { Separator } from '@elise/ui/separator';
+import { Button } from "@elise/ui/button";
+import { Form, FormControl, FormField, FormLabel } from "@elise/ui/form";
+import { Input } from "@elise/ui/input";
+import { PasswordField } from "@elise/ui/password-field";
+import { Separator } from "@elise/ui/separator";
+import React, { useState } from "react";
 
 const LoginCard = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('Login simulado completado.');
+    setStatus("Login simulado completado.");
   };
 
   return (
@@ -25,7 +25,11 @@ const LoginCard = () => {
         <FormField name="email">
           <FormLabel>Email</FormLabel>
           <FormControl asChild>
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="demo@elise.dev" />
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="demo@elise.dev"
+            />
           </FormControl>
         </FormField>
         <FormField name="password">

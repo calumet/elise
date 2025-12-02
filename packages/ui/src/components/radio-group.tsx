@@ -1,16 +1,17 @@
-import * as React from 'react';
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import * as React from "react";
 
-import { cn } from '@/lib/cn';
+import { cn } from "@/lib/cn";
 
 export type RadioGroupProps = React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>;
 export type RadioGroupItemProps = React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>;
 
-export const RadioGroup = React.forwardRef<React.ComponentRef<typeof RadioGroupPrimitive.Root>, RadioGroupProps>(
-  ({ className, ...props }, ref) => (
-    <RadioGroupPrimitive.Root ref={ref} className={cn('grid gap-3', className)} {...props} />
-  )
-);
+export const RadioGroup = React.forwardRef<
+  React.ComponentRef<typeof RadioGroupPrimitive.Root>,
+  RadioGroupProps
+>(({ className, ...props }, ref) => (
+  <RadioGroupPrimitive.Root ref={ref} className={cn("grid gap-3", className)} {...props} />
+));
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 export const RadioGroupItem = React.forwardRef<
@@ -20,8 +21,8 @@ export const RadioGroupItem = React.forwardRef<
   <RadioGroupPrimitive.Item
     ref={ref}
     className={cn(
-      'h-5 w-5 rounded-full border border-border bg-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=checked]:border-primary data-[state=checked]:bg-primary',
-      className
+      "h-5 w-5 rounded-full border border-border bg-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=checked]:border-primary data-[state=checked]:bg-primary",
+      className,
     )}
     {...props}
   >

@@ -1,43 +1,57 @@
-import * as React from 'react';
-import { dismiss, onDismiss, onToast, type ToastEvent } from './bus';
-import { Button } from '@elise/ui/button';
-import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@elise/ui/toast';
-import { ExclamationTriangleIcon, InfoCircledIcon, CrossCircledIcon, Cross2Icon, CheckCircledIcon } from '@elise/icons';
+import {
+  ExclamationTriangleIcon,
+  InfoCircledIcon,
+  CrossCircledIcon,
+  Cross2Icon,
+  CheckCircledIcon,
+} from "@elise/icons";
+import { Button } from "@elise/ui/button";
+import {
+  Toast,
+  ToastClose,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from "@elise/ui/toast";
+import * as React from "react";
 
-type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+import { dismiss, onDismiss, onToast, type ToastEvent } from "./bus";
+
+type Position = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 export type ToasterProps = {
   position?: Position;
 };
 
 const iconColor = {
-  info: 'var(--elise-primary)',
-  alert: 'var(--elise-warning)',
-  error: 'var(--elise-danger)',
-  success: 'var(--elise-success)'
+  info: "var(--elise-primary)",
+  alert: "var(--elise-warning)",
+  error: "var(--elise-danger)",
+  success: "var(--elise-success)",
 };
 
 const viewportPosition = (position: Position) => {
   switch (position) {
-    case 'top-left':
-      return 'left-4 top-4';
-    case 'bottom-left':
-      return 'left-4 bottom-4';
-    case 'bottom-right':
-      return 'right-4 bottom-4';
-    case 'top-right':
+    case "top-left":
+      return "left-4 top-4";
+    case "bottom-left":
+      return "left-4 bottom-4";
+    case "bottom-right":
+      return "right-4 bottom-4";
+    case "top-right":
     default:
-      return 'right-4 top-4';
+      return "right-4 top-4";
   }
 };
 
-export const Toaster = ({ position = 'top-right' }: ToasterProps) => {
+export const Toaster = ({ position = "top-right" }: ToasterProps) => {
   const [toasts, setToasts] = React.useState<ToastEvent[]>([]);
 
   React.useEffect(() => {
     const unsubscribeToast = onToast((toast) => setToasts((current) => [...current, toast]));
     const unsubscribeDismiss = onDismiss((id) =>
-      setToasts((current) => (id ? current.filter((t) => t.id !== id) : current.slice(1)))
+      setToasts((current) => (id ? current.filter((t) => t.id !== id) : current.slice(1))),
     );
     return () => {
       unsubscribeToast();
@@ -60,9 +74,13 @@ export const Toaster = ({ position = 'top-right' }: ToasterProps) => {
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />
             <div className="flex-1 space-y-1">
-              {toastItem.title ? <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle> : null}
+              {toastItem.title ? (
+                <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle>
+              ) : null}
               {toastItem.description ? (
-                <ToastDescription className="text-sm text-muted-foreground">{toastItem.description}</ToastDescription>
+                <ToastDescription className="text-sm text-muted-foreground">
+                  {toastItem.description}
+                </ToastDescription>
               ) : null}
               {toastItem.actionLabel && toastItem.action ? (
                 <Button
@@ -92,18 +110,21 @@ export const Toaster = ({ position = 'top-right' }: ToasterProps) => {
   );
 };
 
-function ToastIcon({ variant }: { variant: ToastEvent['variant'] }) {
+function ToastIcon({ variant }: { variant: ToastEvent["variant"] }) {
   const color = iconColor[variant] ?? iconColor.info;
   const Icon =
-    variant === 'error'
+    variant === "error"
       ? CrossCircledIcon
-      : variant === 'alert'
+      : variant === "alert"
         ? ExclamationTriangleIcon
-        : variant === 'success'
+        : variant === "success"
           ? CheckCircledIcon
           : InfoCircledIcon;
   return (
-    <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-muted-foreground" aria-hidden>
+    <div
+      className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-muted-foreground"
+      aria-hidden
+    >
       <Icon className="h-5 w-5" style={{ color }} />
     </div>
   );

@@ -5,9 +5,9 @@ export type DateFormatOptions = Intl.DateTimeFormatOptions & { locale?: Locale }
 export type DateRange = { from?: Date; to?: Date };
 
 const defaultOptions: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric'
+  year: "numeric",
+  month: "short",
+  day: "numeric",
 };
 
 export const formatDate = (date: Date, options?: DateFormatOptions) => {
@@ -20,5 +20,5 @@ export const formatDateRange = (range: DateRange, options?: DateFormatOptions) =
     return `${formatDate(range.from, options)} – ${formatDate(range.to, options)}`;
   }
   if (range.from) return formatDate(range.from, options);
-  return '';
+  return "";
 };

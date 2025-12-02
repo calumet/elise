@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@elise/ui/accordion';
-import { Button } from '@elise/ui/button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@elise/ui/collapsible';
-import { Separator } from '@elise/ui/separator';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@elise/ui/accordion";
+import { Button } from "@elise/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@elise/ui/collapsible";
+import { Separator } from "@elise/ui/separator";
+import { useState } from "react";
 
 const AccordionCollapsibleDemo = () => {
   const [open, setOpen] = useState(false);
@@ -11,7 +11,11 @@ const AccordionCollapsibleDemo = () => {
     <div className="grid gap-6 md:grid-cols-2">
       <div className="space-y-3">
         <h3 className="text-base font-semibold text-muted-foreground">Accordion</h3>
-        <Accordion type="single" collapsible className="w-full rounded-sm border border-border bg-surface">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full rounded-sm border border-border bg-surface"
+        >
           <AccordionItem value="item-1">
             <AccordionTrigger>¿Qué incluye Elise UI?</AccordionTrigger>
             <AccordionContent>
@@ -27,7 +31,11 @@ const AccordionCollapsibleDemo = () => {
 
       <div className="space-y-3">
         <h3 className="text-base font-semibold text-muted-foreground">Collapsible</h3>
-        <Collapsible open={open} onOpenChange={setOpen} className="rounded-sm border border-border bg-surface p-3">
+        <Collapsible
+          open={open}
+          onOpenChange={setOpen}
+          className="rounded-sm border border-border bg-surface p-3"
+        >
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="text-md font-semibold">Notas rápidas</p>
@@ -35,7 +43,7 @@ const AccordionCollapsibleDemo = () => {
             </div>
             <CollapsibleTrigger asChild>
               <Button size="sm" variant="outline">
-                {open ? 'Ocultar' : 'Mostrar'}
+                {open ? "Ocultar" : "Mostrar"}
               </Button>
             </CollapsibleTrigger>
           </div>

@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as FormPrimitive from '@radix-ui/react-form';
+import * as FormPrimitive from "@radix-ui/react-form";
+import * as React from "react";
 
-import { cn } from '@/lib/cn';
+import { cn } from "@/lib/cn";
 
 export const Form = FormPrimitive.Root;
 
@@ -13,7 +13,7 @@ type FormRowProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 const gridCols = (prefix: string, value?: number) => {
-  if (!value) return '';
+  if (!value) return "";
   return `${prefix}grid-cols-${value}`;
 };
 
@@ -22,24 +22,24 @@ export const FormRow = React.forwardRef<HTMLDivElement, FormRowProps>(
     <div
       ref={ref}
       className={cn(
-        'grid gap-3',
-        gridCols('', cols),
-        gridCols('sm:', smCols),
-        gridCols('md:', mdCols),
-        gridCols('lg:', lgCols),
-        className
+        "grid gap-3",
+        gridCols("", cols),
+        gridCols("sm:", smCols),
+        gridCols("md:", mdCols),
+        gridCols("lg:", lgCols),
+        className,
       )}
       {...props}
     />
-  )
+  ),
 );
-FormRow.displayName = 'FormRow';
+FormRow.displayName = "FormRow";
 
 export const FormField = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Field>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Field ref={ref} className={cn('flex flex-col gap-1', className)} {...props} />
+  <FormPrimitive.Field ref={ref} className={cn("flex flex-col gap-1", className)} {...props} />
 ));
 FormField.displayName = FormPrimitive.Field.displayName;
 
@@ -47,7 +47,11 @@ export const FormLabel = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Label ref={ref} className={cn('text-base font-medium text-foreground', className)} {...props} />
+  <FormPrimitive.Label
+    ref={ref}
+    className={cn("text-base font-medium text-foreground", className)}
+    {...props}
+  />
 ));
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
@@ -59,7 +63,7 @@ export const FormMessage = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
     ref={ref}
-    className={cn('text-xs text-danger data-[state=delayed-open]:animate-in', className)}
+    className={cn("text-xs text-danger data-[state=delayed-open]:animate-in", className)}
     {...props}
   />
 ));
@@ -71,16 +75,16 @@ export const FormDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
     ref={ref}
-    className={cn('text-sm text-muted-foreground', className)}
+    className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
 ));
-FormDescription.displayName = 'FormDescription';
+FormDescription.displayName = "FormDescription";
 
 export const FormSubmit = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Submit>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Submit ref={ref} className={cn('inline-flex', className)} {...props} />
+  <FormPrimitive.Submit ref={ref} className={cn("inline-flex", className)} {...props} />
 ));
 FormSubmit.displayName = FormPrimitive.Submit.displayName;

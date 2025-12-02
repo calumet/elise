@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Button } from '@elise/ui/button';
-import { Progress } from '@elise/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@elise/ui/tabs';
-import { Toggle, ToggleGroup } from '@elise/ui/toggle-group';
+import { Button } from "@elise/ui/button";
+import { Progress } from "@elise/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@elise/ui/tabs";
+import { Toggle, ToggleGroup } from "@elise/ui/toggle-group";
+import { useState } from "react";
 
 const ComponentsSampler = () => {
   const [progress, setProgress] = useState(35);
@@ -23,7 +23,11 @@ const ComponentsSampler = () => {
             <div className="flex items-center gap-3">
               <span className="text-base text-muted-foreground w-24">Progreso</span>
               <Progress value={progress} className="flex-1" />
-              <Button size="sm" variant="outline" onClick={() => setProgress((p) => Math.min(100, p + 15))}>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setProgress((p) => Math.min(100, p + 15))}
+              >
                 +15%
               </Button>
             </div>

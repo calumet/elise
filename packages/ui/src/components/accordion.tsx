@@ -1,20 +1,21 @@
-import * as React from 'react';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from '@elise/icons';
+import { ChevronDownIcon } from "@elise/icons";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import * as React from "react";
 
-import { cn } from '@/lib/cn';
+import { cn } from "@/lib/cn";
 
 type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>;
 
-export const Accordion = React.forwardRef<React.ComponentRef<typeof AccordionPrimitive.Root>, AccordionProps>(
-  ({ className, ...props }, ref) => (
-    <AccordionPrimitive.Root
-      ref={ref}
-      className={cn('rounded-sm border border-border bg-surface', className)}
-      {...props}
-    />
-  )
-);
+export const Accordion = React.forwardRef<
+  React.ComponentRef<typeof AccordionPrimitive.Root>,
+  AccordionProps
+>(({ className, ...props }, ref) => (
+  <AccordionPrimitive.Root
+    ref={ref}
+    className={cn("rounded-sm border border-border bg-surface", className)}
+    {...props}
+  />
+));
 Accordion.displayName = AccordionPrimitive.Root.displayName;
 
 export const AccordionItem = React.forwardRef<
@@ -23,14 +24,11 @@ export const AccordionItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={cn(
-      'border-t border-border rounded-sm bg-surface first:border-t-0',
-      className
-    )}
+    className={cn("border-t border-border rounded-sm bg-surface first:border-t-0", className)}
     {...props}
   />
 ));
-AccordionItem.displayName = 'AccordionItem';
+AccordionItem.displayName = "AccordionItem";
 
 export const AccordionTrigger = React.forwardRef<
   React.ComponentRef<typeof AccordionPrimitive.Trigger>,
@@ -40,13 +38,16 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-        className
+        "flex flex-1 items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        className,
       )}
       {...props}
     >
       {children}
-      <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 transition-transform data-[state=open]:rotate-180" aria-hidden />
+      <ChevronDownIcon
+        className="ml-2 h-4 w-4 shrink-0 transition-transform data-[state=open]:rotate-180"
+        aria-hidden
+      />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -59,8 +60,8 @@ export const AccordionContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className={cn(
-      'overflow-hidden text-base text-muted-foreground data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
-      className
+      "overflow-hidden text-base text-muted-foreground data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+      className,
     )}
     {...props}
   >

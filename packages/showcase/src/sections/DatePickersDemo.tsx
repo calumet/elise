@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { DatePicker, DateRangePicker } from '@elise/ui/date-picker';
-import { formatDate, formatDateRange } from '@elise/utils/dates';
+import { DatePicker, DateRangePicker } from "@elise/ui/date-picker";
+import { formatDate, formatDateRange } from "@elise/utils/dates";
+import { useState } from "react";
 
 const DatePickersDemo = () => {
   const [single, setSingle] = useState<Date | undefined>(new Date());
   const [range, setRange] = useState<{ from: Date | undefined; to?: Date }>({
     from: new Date(),
-    to: new Date()
+    to: new Date(),
   });
 
   return (
@@ -16,7 +16,7 @@ const DatePickersDemo = () => {
         <DatePicker
           value={single}
           onChange={setSingle}
-          formatLabel={(d?: Date) => (d ? formatDate(d) : 'Selecciona una fecha')}
+          formatLabel={(d?: Date) => (d ? formatDate(d) : "Selecciona una fecha")}
         />
       </div>
       <div className="space-y-2">
@@ -25,7 +25,7 @@ const DatePickersDemo = () => {
           value={range}
           onChange={setRange}
           formatLabel={(r) =>
-            r?.from && r?.to ? formatDateRange({ from: r.from, to: r.to }) : 'Selecciona un rango'
+            r?.from && r?.to ? formatDateRange({ from: r.from, to: r.to }) : "Selecciona un rango"
           }
         />
       </div>

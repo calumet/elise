@@ -2,8 +2,8 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuTrigger
-} from '@elise/ui/context-menu';
+  ContextMenuTrigger,
+} from "@elise/ui/context-menu";
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -16,13 +16,13 @@ import {
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
-  MenubarTrigger
-} from '@elise/ui/menubar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@elise/ui/select';
-import { useState } from 'react';
+  MenubarTrigger,
+} from "@elise/ui/menubar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@elise/ui/select";
+import { useState } from "react";
 
-const radioItems = ['Andy', 'Benoit', 'Luis'];
-const checkItems = ['Mostrar bookmarks', 'Mostrar URLs completas'];
+const radioItems = ["Andy", "Benoit", "Luis"];
+const checkItems = ["Mostrar bookmarks", "Mostrar URLs completas"];
 
 const MenusSelectDemo = () => {
   const [checks, setChecks] = useState<string[]>([checkItems[1]]);
@@ -65,7 +65,9 @@ const MenusSelectDemo = () => {
                   checked={checks.includes(item)}
                   onCheckedChange={() =>
                     setChecks((current) =>
-                      current.includes(item) ? current.filter((i) => i !== item) : current.concat(item)
+                      current.includes(item)
+                        ? current.filter((i) => i !== item)
+                        : current.concat(item),
                     )
                   }
                 >
@@ -79,17 +81,14 @@ const MenusSelectDemo = () => {
 
           <MenubarMenu>
             <MenubarTrigger>Perfiles</MenubarTrigger>
-              <MenubarContent>
-                <MenubarRadioGroup value={radio} onValueChange={setRadio}>
-                  {radioItems.map((item) => (
-                    <MenubarRadioItem
-                      key={item}
-                      value={item}
-                    >
-                      {item}
-                    </MenubarRadioItem>
-                  ))}
-                </MenubarRadioGroup>
+            <MenubarContent>
+              <MenubarRadioGroup value={radio} onValueChange={setRadio}>
+                {radioItems.map((item) => (
+                  <MenubarRadioItem key={item} value={item}>
+                    {item}
+                  </MenubarRadioItem>
+                ))}
+              </MenubarRadioGroup>
               <MenubarSeparator />
               <MenubarItem>Agregar perfil</MenubarItem>
             </MenubarContent>

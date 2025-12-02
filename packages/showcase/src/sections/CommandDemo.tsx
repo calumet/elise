@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Button } from '@elise/ui/button';
+import { Button } from "@elise/ui/button";
 import {
   Command,
   CommandDialog,
@@ -9,8 +8,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut
-} from '@elise/ui/command';
+  CommandShortcut,
+} from "@elise/ui/command";
+import { useState } from "react";
 
 const CommandDemo = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +20,12 @@ const CommandDemo = () => {
       <p className="text-sm text-muted-foreground">Palette ligera para acciones rápidas.</p>
       <Button onClick={() => setOpen(true)}>Abrir palette</Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen} title="Acciones rápidas" description="Buscar o ejecutar comandos.">
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Acciones rápidas"
+        description="Buscar o ejecutar comandos."
+      >
         <Command>
           <CommandInput placeholder="Buscar comando..." />
           <CommandList>

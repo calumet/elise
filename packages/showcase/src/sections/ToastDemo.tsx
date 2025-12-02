@@ -1,5 +1,5 @@
-import { Button } from '@elise/ui/button';
-import { toast } from '@elise/utils/toasts';
+import { Button } from "@elise/ui/button";
+import { toast } from "@elise/utils/toasts";
 
 const ToastDemo = () => {
   return (
@@ -7,9 +7,9 @@ const ToastDemo = () => {
       <Button
         onClick={() =>
           toast({
-            title: 'Guardado',
-            description: 'Cambios sincronizados.',
-            variant: 'info'
+            title: "Guardado",
+            description: "Cambios sincronizados.",
+            variant: "info",
           })
         }
       >
@@ -20,9 +20,9 @@ const ToastDemo = () => {
         tone="warning"
         onClick={() =>
           toast({
-            title: 'Advertencia',
-            description: 'Revisa los campos antes de continuar.',
-            variant: 'alert'
+            title: "Advertencia",
+            description: "Revisa los campos antes de continuar.",
+            variant: "alert",
           })
         }
       >
@@ -33,10 +33,10 @@ const ToastDemo = () => {
         tone="danger"
         onClick={() =>
           toast({
-            title: 'Error',
-            description: 'Algo salió mal, intenta de nuevo.',
+            title: "Error",
+            description: "Algo salió mal, intenta de nuevo.",
             duration: 6000,
-            variant: 'error'
+            variant: "error",
           })
         }
       >
@@ -47,9 +47,9 @@ const ToastDemo = () => {
         tone="success"
         onClick={() =>
           toast({
-            title: 'Éxito',
-            description: 'La operación finalizó correctamente.',
-            variant: 'success'
+            title: "Éxito",
+            description: "La operación finalizó correctamente.",
+            variant: "success",
           })
         }
       >

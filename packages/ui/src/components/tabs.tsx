@@ -1,19 +1,23 @@
-import * as React from 'react';
-import * as TabsPrimitive from '@radix-ui/react-tabs';
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+import * as React from "react";
 
-import { cn } from '@/lib/cn';
+import { cn } from "@/lib/cn";
 
 export const Tabs = TabsPrimitive.Root;
 
-export const TabsList = React.forwardRef<React.ComponentRef<typeof TabsPrimitive.List>, React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>>(
-  ({ className, ...props }, ref) => (
-    <TabsPrimitive.List
-      ref={ref}
-      className={cn('inline-flex items-center gap-1 border-b border-border text-base font-semibold', className)}
-      {...props}
-    />
-  )
-);
+export const TabsList = React.forwardRef<
+  React.ComponentRef<typeof TabsPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex items-center gap-1 border-b border-border text-base font-semibold",
+      className,
+    )}
+    {...props}
+  />
+));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
 export const TabsTrigger = React.forwardRef<
@@ -23,8 +27,8 @@ export const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'inline-flex h-10 items-center justify-center rounded-t-sm px-4 text-base font-semibold text-muted-foreground transition-colors border-b-2 border-transparent hover:text-foreground data-[state=active]:text-foreground data-[state=active]:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-      className
+      "inline-flex h-10 items-center justify-center rounded-t-sm px-4 text-base font-semibold text-muted-foreground transition-colors border-b-2 border-transparent hover:text-foreground data-[state=active]:text-foreground data-[state=active]:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      className,
     )}
     {...props}
   />
@@ -38,8 +42,8 @@ export const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      'mt-2 rounded-sm p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-      className
+      "mt-2 rounded-sm p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      className,
     )}
     {...props}
   />
