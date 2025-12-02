@@ -1,15 +1,8 @@
 import { useState } from 'react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  Button,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-  Separator
-} from '@elise/ui';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@elise/ui/accordion';
+import { Button } from '@elise/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@elise/ui/collapsible';
+import { Separator } from '@elise/ui/separator';
 
 const AccordionCollapsibleDemo = () => {
   const [open, setOpen] = useState(false);

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { dismiss, onDismiss, onToast, type ToastEvent } from './bus';
-import { Button, Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@elise/ui/toast';
 import { ExclamationTriangleIcon, InfoCircledIcon, CrossCircledIcon, Cross2Icon, CheckCircledIcon } from '@elise/icons';
 
 type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';

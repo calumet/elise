@@ -1,13 +1,6 @@
 import { useState } from 'react';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@elise/ui/dialog';
 import { openAlert } from '@elise/utils/alerts';
 
 const DialogsDemo = () => {

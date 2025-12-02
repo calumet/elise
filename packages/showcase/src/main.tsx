@@ -1,29 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Button } from '@elise/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@elise/ui/dialog';
 import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-  ThemeProvider,
-  useTheme,
-} from '@elise/ui';
+  NavigationMenuTrigger
+} from '@elise/ui/navigation-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@elise/ui/popover';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@elise/ui/tooltip';
+import { ThemeProvider, useTheme } from '@elise/ui/theme';
 import { Toaster } from '@elise/utils/toasts';
 import { AlertHost } from '@elise/utils/alerts';
 

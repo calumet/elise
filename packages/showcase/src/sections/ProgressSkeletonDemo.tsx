@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Button, Progress, Skeleton } from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Progress } from '@elise/ui/progress';
+import { Skeleton } from '@elise/ui/skeleton';
 
 const ProgressSkeletonDemo = () => {
   const [value, setValue] = useState(15);

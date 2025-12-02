@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@elise/ui';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@elise/ui/table';
 
 const rows = [
   { name: 'Elise UI', status: 'Stable', version: '0.1.0' },

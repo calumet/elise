@@ -1,14 +1,8 @@
 import { useState } from 'react';
-import {
-  Button,
-  Progress,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Toggle,
-  ToggleGroup
-} from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Progress } from '@elise/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@elise/ui/tabs';
+import { Toggle, ToggleGroup } from '@elise/ui/toggle-group';
 
 const ComponentsSampler = () => {
   const [progress, setProgress] = useState(35);

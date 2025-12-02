@@ -1,4 +1,5 @@
-import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@elise/ui/tooltip';
 
 const HelloWorld = () => (
   <div className="flex flex-col items-center gap-4 text-center">

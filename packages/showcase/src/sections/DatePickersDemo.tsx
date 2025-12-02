@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DatePicker, DateRangePicker } from '@elise/ui';
+import { DatePicker, DateRangePicker } from '@elise/ui/date-picker';
 import { formatDate, formatDateRange } from '@elise/utils/dates';
 
 const DatePickersDemo = () => {

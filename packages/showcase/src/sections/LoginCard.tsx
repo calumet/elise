@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Form,
-  FormControl,
-  FormField,
-  FormLabel,
-  Input,
-  PasswordField,
-  Separator
-} from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Form, FormControl, FormField, FormLabel } from '@elise/ui/form';
+import { Input } from '@elise/ui/input';
+import { PasswordField } from '@elise/ui/password-field';
+import { Separator } from '@elise/ui/separator';
 
 const LoginCard = () => {
   const [email, setEmail] = useState('');

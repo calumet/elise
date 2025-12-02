@@ -23,20 +23,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@elise/ui"
-import { Button } from "@elise/ui"
-import { Input } from "@elise/ui"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@elise/ui"
-import { Pagination, PaginationContent, PaginationItem } from "@elise/ui"
-import { Label } from "@elise/ui"
+} from "@elise/ui/table"
+import { Button } from "@elise/ui/button"
+import { Input } from "@elise/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@elise/ui/select"
+import { Pagination, PaginationContent, PaginationItem } from "@elise/ui/pagination"
+import { Label } from "@elise/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@elise/ui"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@elise/ui"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@elise/ui"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@elise/ui/command"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@elise/ui/dropdown-menu"
 
 import { cn, dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters"
-import { DatePicker, DateRangePicker } from "@elise/ui"
+import { DatePicker, DateRangePicker } from "@elise/ui/date-picker"
 import { Suspense } from "react"
-import { Skeleton } from "@elise/ui"
+import { Skeleton } from "@elise/ui/skeleton"
 
 declare module '@tanstack/react-table' {
   // @ts-expect-error this is for override the column metadata

@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { Button } from '@elise/ui/button';
 import {
-  Button,
   Command,
   CommandDialog,
   CommandEmpty,
@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut
-} from '@elise/ui';
+} from '@elise/ui/command';
 
 const CommandDemo = () => {
   const [open, setOpen] = useState(false);

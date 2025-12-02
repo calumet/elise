@@ -2,7 +2,9 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuTrigger,
+  ContextMenuTrigger
+} from '@elise/ui/context-menu';
+import {
   Menubar,
   MenubarCheckboxItem,
   MenubarContent,
@@ -14,13 +16,9 @@ import {
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
-  MenubarTrigger,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@elise/ui';
+  MenubarTrigger
+} from '@elise/ui/menubar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@elise/ui/select';
 import { useState } from 'react';
 
 const radioItems = ['Andy', 'Benoit', 'Luis'];

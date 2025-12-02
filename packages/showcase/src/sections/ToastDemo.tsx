@@ -1,4 +1,4 @@
-import { Button } from '@elise/ui';
+import { Button } from '@elise/ui/button';
 import { toast } from '@elise/utils/toasts';
 
 const ToastDemo = () => {

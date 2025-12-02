@@ -1,20 +1,11 @@
 import { useState } from 'react';
 import { z } from 'zod';
 import { useZodForm } from '@elise/utils/forms';
-import {
-  Button,
-  Checkbox,
-  Form,
-  FormControl,
-  FormField,
-  FormDescription,
-  FormRow,
-  FormLabel,
-  FormMessage,
-  FormSubmit,
-  Input,
-  Textarea
-} from '@elise/ui';
+import { Button } from '@elise/ui/button';
+import { Checkbox } from '@elise/ui/checkbox';
+import { Form, FormControl, FormField, FormDescription, FormRow, FormLabel, FormMessage, FormSubmit } from '@elise/ui/form';
+import { Input } from '@elise/ui/input';
+import { Textarea } from '@elise/ui/textarea';
 
 const schema = z.object({
   name: z.string().min(2, 'Nombre es requerido (mínimo 2 caracteres)'),

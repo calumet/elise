@@ -8,8 +8,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle
-} from '@elise/ui';
-import { Button } from '@elise/ui';
+} from '@elise/ui/alert-dialog';
+import { Button } from '@elise/ui/button';
 import {
   ExclamationTriangleIcon,
   InfoCircledIcon,
