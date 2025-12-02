@@ -2,16 +2,24 @@
   "name": "elise",
   "version": "2.0.0",
   "private": true,
+  "type": "module",
   "description": "Monorepo para un design system basado en Radix primitives.",
   "scripts": {
     "dev": "pnpm --filter @elise/ui dev",
     "dev:showcase": "pnpm -r --parallel --filter \"@elise/icons\" --filter \"@elise/ui\" --filter \"@elise/utils\" --filter \"showcase\" dev",
     "build": "pnpm --filter @elise/icons build && pnpm --filter @elise/ui build && pnpm --filter @elise/utils build && pnpm --filter @elise/showcase build",
-    "lint": "pnpm --filter @elise/ui lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "clean": "pnpm --filter @elise/ui clean"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1"
+    "@elise/linter": "workspace:*",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "prettier": "^3.7.3",
+    "typescript": "^5.6.3"
   },
   "packageManager": "pnpm@10.14.0"
 }
