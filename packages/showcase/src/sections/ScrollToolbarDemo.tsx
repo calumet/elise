@@ -1,5 +1,5 @@
-import { ScrollArea } from '@elise/ui/scroll-area';
-import { Toolbar, ToolbarButton, ToolbarSeparator } from '@elise/ui/toolbar';
+import { ScrollArea } from "@elise/ui/scroll-area";
+import { Toolbar, ToolbarButton, ToolbarSeparator } from "@elise/ui/toolbar";
 
 const items = Array.from({ length: 20 }).map((_, i) => `Elemento ${i + 1}`);
 

@@ -1,6 +1,11 @@
-import { Button } from '@elise/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@elise/ui/dropdown-menu';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@elise/ui/hover-card';
+import { Button } from "@elise/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@elise/ui/dropdown-menu";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@elise/ui/hover-card";
 
 const MenusHoverDemo = () => {
   return (

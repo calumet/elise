@@ -1,7 +1,7 @@
-import { AspectRatio, AvatarImage } from '@elise/ui/aspect-ratio';
-import { Avatar } from '@elise/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@elise/ui/card';
-import { Label } from '@elise/ui/label';
+import { AspectRatio, AvatarImage } from "@elise/ui/aspect-ratio";
+import { Avatar } from "@elise/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@elise/ui/card";
+import { Label } from "@elise/ui/label";
 
 const MediaCardDemo = () => {
   return (

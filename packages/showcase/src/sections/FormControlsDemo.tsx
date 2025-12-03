@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Label } from '@elise/ui/label';
-import { RadioGroup, RadioGroupItem } from '@elise/ui/radio-group';
-import { Switch } from '@elise/ui/switch';
-import { Slider } from '@elise/ui/slider';
+import { Label } from "@elise/ui/label";
+import { RadioGroup, RadioGroupItem } from "@elise/ui/radio-group";
+import { Slider } from "@elise/ui/slider";
+import { Switch } from "@elise/ui/switch";
+import { useState } from "react";
 
 const FormControlsDemo = () => {
   const [enabled, setEnabled] = useState(true);
@@ -26,11 +26,19 @@ const FormControlsDemo = () => {
 
       <div className="space-y-4 rounded-sm border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
-          <Label htmlFor="switch-demo" className="text-base">Switch</Label>
-          <Switch id="switch-demo" checked={enabled} onCheckedChange={(v) => setEnabled(v === true)} />
+          <Label htmlFor="switch-demo" className="text-base">
+            Switch
+          </Label>
+          <Switch
+            id="switch-demo"
+            checked={enabled}
+            onCheckedChange={(v) => setEnabled(v === true)}
+          />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="slider-demo" className="text-base">Slider</Label>
+          <Label htmlFor="slider-demo" className="text-base">
+            Slider
+          </Label>
           <Slider id="slider-demo" value={volume} onValueChange={setVolume} max={100} step={5} />
           <p className="text-sm text-muted-foreground">Valor: {volume[0]}</p>
         </div>

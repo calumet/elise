@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Button } from '@elise/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,8 +7,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from '@elise/ui/alert-dialog';
+  AlertDialogTrigger,
+} from "@elise/ui/alert-dialog";
+import { Button } from "@elise/ui/button";
+import { useState } from "react";
 
 const AlertDialogStandalone = () => {
   const [open, setOpen] = useState(false);
