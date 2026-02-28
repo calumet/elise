@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Utilidades compartidas para Elise (validación, helpers).",
   "repository": {

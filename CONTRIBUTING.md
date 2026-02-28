@@ -69,6 +69,9 @@ La showcase incluye demos de todos los componentes y utilidades. Si agregas un c
 
 La configuración de ESLint y Prettier está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
 
+- Para proyectos no web usa `configs.base` o `configs.react`.
+- Si usas `configs.tailwind`, instala también `tailwindcss` y `eslint-plugin-better-tailwindcss`.
+
 - Usa TypeScript para todo el código.
 - Sigue el estilo de código existente.
 - Usa `React.forwardRef` para componentes interactivos.
