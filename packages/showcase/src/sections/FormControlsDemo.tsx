@@ -1,7 +1,7 @@
-import { Label } from "@elise/ui/label";
-import { RadioGroup, RadioGroupItem } from "@elise/ui/radio-group";
-import { Slider } from "@elise/ui/slider";
-import { Switch } from "@elise/ui/switch";
+import { Label } from "@calumet/elise-ui/label";
+import { RadioGroup, RadioGroupItem } from "@calumet/elise-ui/radio-group";
+import { Slider } from "@calumet/elise-ui/slider";
+import { Switch } from "@calumet/elise-ui/switch";
 import { useState } from "react";
 
 const FormControlsDemo = () => {

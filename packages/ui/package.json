@@ -1,7 +1,16 @@
 {
-  "name": "@elise/ui",
+  "name": "@calumet/elise-ui",
   "version": "0.1.0",
+  "private": false,
   "description": "Design system personalizado basado en Radix primitives y Tailwind CSS.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/ui"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -258,7 +267,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@elise/icons": "workspace:*",
+    "@calumet/elise-icons": "workspace:*",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.1.0",

@@ -1,7 +1,15 @@
 {
-  "name": "@elise/linter",
+  "name": "@calumet/elise-linter",
   "version": "0.1.0",
   "description": "Reglas compartidas de ESLint/Prettier para Elise.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/linter"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "index.js",
   "type": "module",
   "exports": {

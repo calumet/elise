@@ -1,4 +1,4 @@
-import { DotFilledIcon, ChevronDownIcon } from "@elise/icons";
+import { DotFilledIcon, ChevronDownIcon } from "@calumet/elise-icons";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import * as React from "react";
 

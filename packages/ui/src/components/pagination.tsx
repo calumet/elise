@@ -1,5 +1,5 @@
-import { ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from "@elise/icons";
-import { Button, buttonVariants } from "@elise/ui";
+import { ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from "@calumet/elise-icons";
+import { Button, buttonVariants } from "./button";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";

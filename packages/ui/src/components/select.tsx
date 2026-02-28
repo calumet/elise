@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@elise/icons";
+import { ChevronDownIcon } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 

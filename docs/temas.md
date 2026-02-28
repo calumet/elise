@@ -7,7 +7,7 @@ Elise incluye un sistema de temas basado en CSS custom properties (tokens) con s
 Componente que gestiona el tema activo, lo persiste en localStorage y lo aplica al DOM.
 
 ```tsx
-import { ThemeProvider } from "@elise/ui";
+import { ThemeProvider } from "@calumet/elise-ui";
 
 <ThemeProvider
   attribute="class"
@@ -32,7 +32,7 @@ import { ThemeProvider } from "@elise/ui";
 Hook para leer y cambiar el tema desde cualquier componente dentro del ThemeProvider.
 
 ```tsx
-import { useTheme } from "@elise/ui";
+import { useTheme } from "@calumet/elise-ui";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -49,7 +49,7 @@ function ThemeToggle() {
 
 ## Tokens CSS
 
-Los temas se implementan via CSS custom properties con prefijo `--elise-`. Estos tokens se definen en `@elise/ui/tailwind/elise.css` y se mapean automaticamente a utilidades de Tailwind.
+Los temas se implementan via CSS custom properties con prefijo `--elise-`. Estos tokens se definen en `@calumet/elise-ui/tailwind/elise.css` y se mapean automaticamente a utilidades de Tailwind.
 
 ### Colores
 
@@ -123,7 +123,7 @@ Los temas se implementan via CSS custom properties con prefijo `--elise-`. Estos
 Para crear un tema completamente personalizado, usa `applyTheme()` con un objeto `EliseTheme`:
 
 ```tsx
-import { applyTheme, type EliseTheme } from "@elise/ui";
+import { applyTheme, type EliseTheme } from "@calumet/elise-ui";
 
 const miTema: EliseTheme = {
   surface: "#fafafa",

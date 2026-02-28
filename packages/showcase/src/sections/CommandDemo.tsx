@@ -1,4 +1,4 @@
-import { Button } from "@elise/ui/button";
+import { Button } from "@calumet/elise-ui/button";
 import {
   Command,
   CommandDialog,
@@ -9,7 +9,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@elise/ui/command";
+} from "@calumet/elise-ui/command";
 import { useState } from "react";
 
 const CommandDemo = () => {

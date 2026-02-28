@@ -1,5 +1,5 @@
-import { Button } from "@elise/ui/button";
-import { toast } from "@elise/utils/toasts";
+import { Button } from "@calumet/elise-ui/button";
+import { toast } from "@calumet/elise-utils/toasts";
 
 const ToastDemo = () => {
   return (

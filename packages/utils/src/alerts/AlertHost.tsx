@@ -4,7 +4,7 @@ import {
   CrossCircledIcon,
   QuestionMarkCircledIcon,
   CheckCircledIcon,
-} from "@elise/icons";
+} from "@calumet/elise-icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +14,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@elise/ui/alert-dialog";
-import { Button } from "@elise/ui/button";
+} from "@calumet/elise-ui/alert-dialog";
+import { Button } from "@calumet/elise-ui/button";
 import * as React from "react";
 
 import { closeAlert, onAlert, onCloseAlert, type AlertEvent } from "./bus";

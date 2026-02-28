@@ -1,12 +1,12 @@
 "use client";
 
-import { HamburgerMenuIcon as PanelLeftIcon } from "@elise/icons";
-import { Button } from "@elise/ui";
-import { Input } from "@elise/ui";
-import { Separator } from "@elise/ui";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@elise/ui";
-import { Skeleton } from "@elise/ui";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@elise/ui";
+import { HamburgerMenuIcon as PanelLeftIcon } from "@calumet/elise-icons";
+import { Button } from "./button";
+import { Input } from "./input";
+import { Separator } from "./separator";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./sheet";
+import { Skeleton } from "./skeleton";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";

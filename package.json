@@ -5,17 +5,18 @@
   "type": "module",
   "description": "Monorepo para un design system basado en Radix primitives.",
   "scripts": {
-    "dev": "pnpm --filter @elise/ui dev",
-    "dev:showcase": "pnpm -r --parallel --filter \"@elise/icons\" --filter \"@elise/ui\" --filter \"@elise/utils\" --filter \"showcase\" dev",
-    "build": "pnpm --filter @elise/icons build && pnpm --filter @elise/ui build && pnpm --filter @elise/utils build && pnpm --filter @elise/showcase build",
+    "dev": "pnpm --filter @calumet/elise-ui dev",
+    "dev:showcase": "pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-utils\" --filter \"showcase\" dev",
+    "build": "pnpm --filter @calumet/elise-icons build && pnpm --filter @calumet/elise-ui build && pnpm --filter @calumet/elise-utils build && pnpm --filter showcase build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "pnpm --filter @elise/ui clean"
+    "clean": "pnpm --filter @calumet/elise-ui clean",
+    "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks"
   },
   "devDependencies": {
-    "@elise/linter": "workspace:*",
+    "@calumet/elise-linter": "workspace:*",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
     "prettier": "^3.7.3",

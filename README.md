@@ -6,10 +6,10 @@ Design system moderno basado en [Radix UI](https://www.radix-ui.com/) primitives
 
 | Paquete | Descripcion |
 | --- | --- |
-| [`@elise/ui`](packages/ui) | Libreria principal con 45+ componentes accesibles |
-| [`@elise/utils`](packages/utils) | Utilidades: formularios (Zod), tablas (TanStack), toasts, alerts, fechas |
-| [`@elise/icons`](packages/icons) | Re-export de [Radix Icons](https://www.radix-ui.com/icons) |
-| [`@elise/linter`](packages/linter) | Configuracion compartida de ESLint y Prettier |
+| [`@calumet/elise-ui`](packages/ui) | Libreria principal con 45+ componentes accesibles |
+| [`@calumet/elise-utils`](packages/utils) | Utilidades: formularios (Zod), tablas (TanStack), toasts, alerts, fechas |
+| [`@calumet/elise-icons`](packages/icons) | Re-export de [Radix Icons](https://www.radix-ui.com/icons) |
+| [`@calumet/elise-linter`](packages/linter) | Configuracion compartida de ESLint y Prettier |
 | [`showcase`](packages/showcase) | App demo interactiva con ejemplos de todos los componentes |
 
 ## Requisitos
@@ -30,7 +30,7 @@ pnpm install
 
 | Comando | Descripcion |
 | --- | --- |
-| `pnpm dev` | Modo desarrollo de `@elise/ui` (watch + dts) |
+| `pnpm dev` | Modo desarrollo de `@calumet/elise-ui` (watch + dts) |
 | `pnpm dev:showcase` | Desarrollo paralelo de todos los paquetes + showcase |
 | `pnpm build` | Build de produccion (icons → ui → utils → showcase) |
 | `pnpm lint` | Verificar ESLint |
@@ -59,8 +59,8 @@ elise/
 ## Inicio rapido
 
 ```tsx
-import { ThemeProvider } from "@elise/ui";
-import { Button } from "@elise/ui/button";
+import { ThemeProvider } from "@calumet/elise-ui";
+import { Button } from "@calumet/elise-ui/button";
 
 function App() {
   return (
@@ -77,10 +77,10 @@ Asegurate de importar los estilos de Elise en tu CSS:
 
 ```css
 @import "tailwindcss";
-@import "@elise/ui/tailwind/elise.css";
+@import "@calumet/elise-ui/tailwind/elise.css";
 
-@source '../node_modules/@elise/ui/dist';
-@source '../node_modules/@elise/utils/dist';
+@source '../node_modules/@calumet/elise-ui/dist';
+@source '../node_modules/@calumet/elise-utils/dist';
 ```
 
 ## Documentacion

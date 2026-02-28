@@ -1,7 +1,7 @@
-import { Button } from "@elise/ui/button";
-import { Progress } from "@elise/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@elise/ui/tabs";
-import { Toggle, ToggleGroup } from "@elise/ui/toggle-group";
+import { Button } from "@calumet/elise-ui/button";
+import { Progress } from "@calumet/elise-ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@calumet/elise-ui/tabs";
+import { Toggle, ToggleGroup } from "@calumet/elise-ui/toggle-group";
 import { useState } from "react";
 
 const ComponentsSampler = () => {

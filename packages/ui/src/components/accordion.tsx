@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@elise/icons";
+import { ChevronDownIcon } from "@calumet/elise-icons";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import * as React from "react";
 

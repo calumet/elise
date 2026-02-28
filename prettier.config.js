@@ -1,3 +1,3 @@
-import prettierConfig from "@elise/linter/prettier";
+import prettierConfig from "@calumet/elise-linter/prettier";
 
 export default prettierConfig;

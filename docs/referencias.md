@@ -6,8 +6,8 @@ Elise se construye sobre librerias de codigo abierto bien documentadas. Aqui est
 
 | Libreria | Uso en Elise | Documentacion |
 | --- | --- | --- |
-| **Radix UI Primitives** | Base de todos los componentes de `@elise/ui` (accesibilidad, comportamiento) | https://www.radix-ui.com/primitives |
-| **Radix Icons** | Iconos en `@elise/icons` | https://www.radix-ui.com/icons |
+| **Radix UI Primitives** | Base de todos los componentes de `@calumet/elise-ui` (accesibilidad, comportamiento) | https://www.radix-ui.com/primitives |
+| **Radix Icons** | Iconos en `@calumet/elise-icons` | https://www.radix-ui.com/icons |
 | **Tailwind CSS v4** | Sistema de estilos y tokens CSS | https://tailwindcss.com/docs |
 | **React 19** | Framework de UI | https://react.dev/ |
 | **TypeScript** | Tipado estatico en todo el proyecto | https://www.typescriptlang.org/docs/ |

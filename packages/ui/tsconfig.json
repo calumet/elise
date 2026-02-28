@@ -4,7 +4,7 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@elise/ui": ["src"],
+      "@calumet/elise-ui": ["src"],
       "@/*": ["src/*"],
       "@/lib/*": ["src/lib/*"]
     }

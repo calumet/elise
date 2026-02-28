@@ -1,5 +1,5 @@
-import { Button } from "@elise/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@elise/ui/dialog";
+import { Button } from "@calumet/elise-ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@calumet/elise-ui/dialog";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,12 +8,12 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@elise/ui/navigation-menu";
-import { Popover, PopoverContent, PopoverTrigger } from "@elise/ui/popover";
-import { ThemeProvider, useTheme } from "@elise/ui/theme";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@elise/ui/tooltip";
-import { AlertHost } from "@elise/utils/alerts";
-import { Toaster } from "@elise/utils/toasts";
+} from "@calumet/elise-ui/navigation-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
+import { ThemeProvider, useTheme } from "@calumet/elise-ui/theme";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@calumet/elise-ui/tooltip";
+import { AlertHost } from "@calumet/elise-utils/alerts";
+import { Toaster } from "@calumet/elise-utils/toasts";
 import React from "react";
 import ReactDOM from "react-dom/client";
 

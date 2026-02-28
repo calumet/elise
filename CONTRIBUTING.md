@@ -47,7 +47,7 @@ elise/
 Cada paquete tiene su propio modo de desarrollo:
 
 ```bash
-# Watch para @elise/ui solamente
+# Watch para @calumet/elise-ui solamente
 pnpm dev
 
 # Watch para todos los paquetes + showcase en paralelo
@@ -67,7 +67,7 @@ La showcase incluye demos de todos los componentes y utilidades. Si agregas un c
 
 ## Estilo de Código
 
-La configuración de ESLint y Prettier está centralizada en `@elise/linter`. No necesitas configurar nada adicional.
+La configuración de ESLint y Prettier está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
 
 - Usa TypeScript para todo el código.
 - Sigue el estilo de código existente.
@@ -109,7 +109,7 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
 
 ## Versionado y Publicación
 
-- Los paquetes se publican bajo el scope `@elise/*`.
+- Los paquetes se publican bajo el scope `@calumet/elise-*`.
 - No republiques una versión existente.
 - Para cualquier cambio publicable, incrementa versión en su `package.json` antes de publicar.
 - Política de versionado:

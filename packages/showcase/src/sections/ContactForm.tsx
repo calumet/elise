@@ -1,5 +1,5 @@
-import { Button } from "@elise/ui/button";
-import { Checkbox } from "@elise/ui/checkbox";
+import { Button } from "@calumet/elise-ui/button";
+import { Checkbox } from "@calumet/elise-ui/checkbox";
 import {
   Form,
   FormControl,
@@ -9,10 +9,10 @@ import {
   FormLabel,
   FormMessage,
   FormSubmit,
-} from "@elise/ui/form";
-import { Input } from "@elise/ui/input";
-import { Textarea } from "@elise/ui/textarea";
-import { useZodForm } from "@elise/utils/forms";
+} from "@calumet/elise-ui/form";
+import { Input } from "@calumet/elise-ui/input";
+import { Textarea } from "@calumet/elise-ui/textarea";
+import { useZodForm } from "@calumet/elise-utils/forms";
 import { useState } from "react";
 import { z } from "zod";
 

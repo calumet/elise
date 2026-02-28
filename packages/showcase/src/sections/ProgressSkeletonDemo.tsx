@@ -1,6 +1,6 @@
-import { Button } from "@elise/ui/button";
-import { Progress } from "@elise/ui/progress";
-import { Skeleton } from "@elise/ui/skeleton";
+import { Button } from "@calumet/elise-ui/button";
+import { Progress } from "@calumet/elise-ui/progress";
+import { Skeleton } from "@calumet/elise-ui/skeleton";
 import { useEffect, useState } from "react";
 
 const ProgressSkeletonDemo = () => {

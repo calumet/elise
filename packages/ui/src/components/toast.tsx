@@ -1,4 +1,4 @@
-import { Cross2Icon } from "@elise/icons";
+import { Cross2Icon } from "@calumet/elise-icons";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import * as React from "react";
 

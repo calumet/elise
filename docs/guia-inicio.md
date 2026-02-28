@@ -12,7 +12,7 @@
 
 ```bash
 # Instalar los paquetes que necesites
-pnpm add @elise/ui @elise/icons @elise/utils
+pnpm add @calumet/elise-ui @calumet/elise-icons @calumet/elise-utils
 ```
 
 ### Desarrollo del monorepo
@@ -30,11 +30,11 @@ Elise usa Tailwind CSS v4 con tokens CSS personalizados. En el archivo CSS princ
 
 ```css
 @import "tailwindcss";
-@import "@elise/ui/tailwind/elise.css";
+@import "@calumet/elise-ui/tailwind/elise.css";
 
 /* Permite que Tailwind detecte las clases usadas en los paquetes */
-@source '../node_modules/@elise/ui/dist';
-@source '../node_modules/@elise/utils/dist';
+@source '../node_modules/@calumet/elise-ui/dist';
+@source '../node_modules/@calumet/elise-utils/dist';
 ```
 
 Esto importa:
@@ -48,7 +48,7 @@ Esto importa:
 Envuelve tu aplicacion con `ThemeProvider` para habilitar el sistema de temas:
 
 ```tsx
-import { ThemeProvider } from "@elise/ui";
+import { ThemeProvider } from "@calumet/elise-ui";
 
 function App() {
   return (
@@ -71,9 +71,9 @@ function App() {
 ## Tu primer componente
 
 ```tsx
-import { ThemeProvider } from "@elise/ui";
-import { Button } from "@elise/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@elise/ui/card";
+import { ThemeProvider } from "@calumet/elise-ui";
+import { Button } from "@calumet/elise-ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@calumet/elise-ui/card";
 
 function App() {
   return (
@@ -102,27 +102,27 @@ Elise soporta dos estilos de importacion:
 
 ```tsx
 // Import directo por componente (recomendado)
-import { Button } from "@elise/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@elise/ui/dialog";
+import { Button } from "@calumet/elise-ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@calumet/elise-ui/dialog";
 
 // Import desde el barrel principal
-import { Button, Dialog, DialogContent } from "@elise/ui";
+import { Button, Dialog, DialogContent } from "@calumet/elise-ui";
 ```
 
 Para utilidades, usa los sub-modulos:
 
 ```tsx
-import { useZodForm } from "@elise/utils/forms";
-import { toast, Toaster } from "@elise/utils/toasts";
-import { openAlert, AlertHost } from "@elise/utils/alerts";
-import { DataTable } from "@elise/utils/tables";
-import { formatDate, useDateRange } from "@elise/utils/dates";
+import { useZodForm } from "@calumet/elise-utils/forms";
+import { toast, Toaster } from "@calumet/elise-utils/toasts";
+import { openAlert, AlertHost } from "@calumet/elise-utils/alerts";
+import { DataTable } from "@calumet/elise-utils/tables";
+import { formatDate, useDateRange } from "@calumet/elise-utils/dates";
 ```
 
 Para iconos:
 
 ```tsx
-import { MagnifyingGlassIcon, ChevronDownIcon } from "@elise/icons";
+import { MagnifyingGlassIcon, ChevronDownIcon } from "@calumet/elise-icons";
 ```
 
 > Los iconos disponibles son los de [Radix Icons](https://www.radix-ui.com/icons). Consulta su galeria para ver todos los iconos disponibles.

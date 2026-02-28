@@ -1,7 +1,7 @@
 import {
   ChevronRightIcon as ChevronRight,
   DotsHorizontalIcon as MoreHorizontal,
-} from "@elise/icons";
+} from "@calumet/elise-icons";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 

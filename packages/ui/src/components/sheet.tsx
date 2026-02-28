@@ -1,4 +1,4 @@
-import { Cross2Icon } from "@elise/icons";
+import { Cross2Icon } from "@calumet/elise-icons";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 

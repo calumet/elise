@@ -1,8 +1,16 @@
 {
-  "name": "@elise/icons",
+  "name": "@calumet/elise-icons",
   "version": "0.1.0",
   "private": false,
   "description": "Re-export de los íconos de Radix para Elise.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/icons"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

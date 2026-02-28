@@ -9,9 +9,9 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@elise/icons": "workspace:*",
-    "@elise/ui": "workspace:*",
-    "@elise/utils": "workspace:*",
+    "@calumet/elise-icons": "workspace:*",
+    "@calumet/elise-ui": "workspace:*",
+    "@calumet/elise-utils": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zod": "^4.1.12"

@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@elise/icons";
+import { ChevronDownIcon } from "@calumet/elise-icons";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 

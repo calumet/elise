@@ -1,5 +1,5 @@
-import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight } from "@elise/icons";
-import { Button } from "@elise/ui";
+import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight } from "@calumet/elise-icons";
+import { Button } from "./button";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import * as React from "react";
 

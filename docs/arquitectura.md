@@ -7,10 +7,10 @@ Elise esta organizado como un monorepo gestionado con [pnpm workspaces](https://
 ```
 elise/
 ├── packages/
-│   ├── ui/           @elise/ui        Componentes UI
-│   ├── utils/        @elise/utils     Utilidades y hooks
-│   ├── icons/        @elise/icons     Iconos (Radix)
-│   ├── linter/       @elise/linter    Config ESLint + Prettier
+│   ├── ui/           @calumet/elise-ui        Componentes UI
+│   ├── utils/        @calumet/elise-utils     Utilidades y hooks
+│   ├── icons/        @calumet/elise-icons     Iconos (Radix)
+│   ├── linter/       @calumet/elise-linter    Config ESLint + Prettier
 │   ├── showcase/     showcase         App demo
 │   └── blocks/       (futuro)         Bloques prefabricados
 ├── package.json                       Scripts globales
@@ -22,21 +22,21 @@ elise/
 ## Grafo de dependencias
 
 ```
-@elise/icons  ──────────────────┐
+@calumet/elise-icons  ──────────────────┐
                                 │
-@elise/ui  ────── @elise/icons  │
+@calumet/elise-ui  ────── @calumet/elise-icons  │
                                 │
-@elise/utils ──── @elise/ui ────┤
-              └── @elise/icons  │
+@calumet/elise-utils ──── @calumet/elise-ui ────┤
+              └── @calumet/elise-icons  │
                                 │
-showcase ──────── @elise/ui ────┤
-              ├── @elise/utils  │
-              └── @elise/icons ─┘
+showcase ──────── @calumet/elise-ui ────┤
+              ├── @calumet/elise-utils  │
+              └── @calumet/elise-icons ─┘
 ```
 
 ## Paquetes
 
-### @elise/ui
+### @calumet/elise-ui
 
 Libreria principal de componentes. Construida sobre [Radix UI Primitives](https://www.radix-ui.com/primitives) para accesibilidad y estilizada con [Tailwind CSS v4](https://tailwindcss.com/).
 
@@ -45,9 +45,9 @@ Libreria principal de componentes. Construida sobre [Radix UI Primitives](https:
 - **Tokens CSS** personalizados (`--elise-*`) mapeados a utilidades de Tailwind
 - **Peer dependencies**: React 19, React DOM 19
 
-### @elise/utils
+### @calumet/elise-utils
 
-Utilidades de alto nivel que componen los componentes de `@elise/ui` en abstracciones mas complejas.
+Utilidades de alto nivel que componen los componentes de `@calumet/elise-ui` en abstracciones mas complejas.
 
 | Sub-modulo | Descripcion | Dependencia externa |
 | --- | --- | --- |
@@ -57,11 +57,11 @@ Utilidades de alto nivel que componen los componentes de `@elise/ui` en abstracc
 | `./alerts` | Sistema de alertas modales | — (usa event bus interno) |
 | `./dates` | Formateo y rangos de fechas | [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) |
 
-### @elise/icons
+### @calumet/elise-icons
 
-Wrapper de re-exportacion sobre [`@radix-ui/react-icons`](https://www.radix-ui.com/icons). Centraliza la dependencia de iconos para que los consumidores solo necesiten importar desde `@elise/icons`.
+Wrapper de re-exportacion sobre [`@radix-ui/react-icons`](https://www.radix-ui.com/icons). Centraliza la dependencia de iconos para que los consumidores solo necesiten importar desde `@calumet/elise-icons`.
 
-### @elise/linter
+### @calumet/elise-linter
 
 Configuracion compartida de herramientas de calidad de codigo:
 
@@ -76,7 +76,7 @@ Configuracion compartida de herramientas de calidad de codigo:
 Los componentes complejos se exportan como multiples sub-componentes composables:
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@elise/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@calumet/elise-ui/card";
 
 <Card>
   <CardHeader>
@@ -118,7 +118,7 @@ cn("px-4 py-2", condition && "bg-primary", className);
 Muchos componentes soportan la prop `asChild` de Radix, que permite renderizar el componente como un hijo personalizado en lugar del elemento por defecto:
 
 ```tsx
-import { Button } from "@elise/ui/button";
+import { Button } from "@calumet/elise-ui/button";
 
 // Renderiza como <a> en lugar de <button>
 <Button asChild>

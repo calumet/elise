@@ -8,8 +8,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@elise/ui/alert-dialog";
-import { Button } from "@elise/ui/button";
+} from "@calumet/elise-ui/alert-dialog";
+import { Button } from "@calumet/elise-ui/button";
 import { useState } from "react";
 
 const AlertDialogStandalone = () => {

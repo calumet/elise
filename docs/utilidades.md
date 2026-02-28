@@ -1,13 +1,13 @@
 # Utilidades
 
-`@elise/utils` proporciona utilidades de alto nivel que componen los componentes de `@elise/ui` en abstracciones mas complejas. Cada sub-modulo se importa por separado.
+`@calumet/elise-utils` proporciona utilidades de alto nivel que componen los componentes de `@calumet/elise-ui` en abstracciones mas complejas. Cada sub-modulo se importa por separado.
 
 ```tsx
-import { useZodForm } from "@elise/utils/forms";
-import { toast, Toaster } from "@elise/utils/toasts";
-import { openAlert, AlertHost } from "@elise/utils/alerts";
-import { DataTable } from "@elise/utils/tables";
-import { formatDate, useDateRange } from "@elise/utils/dates";
+import { useZodForm } from "@calumet/elise-utils/forms";
+import { toast, Toaster } from "@calumet/elise-utils/toasts";
+import { openAlert, AlertHost } from "@calumet/elise-utils/alerts";
+import { DataTable } from "@calumet/elise-utils/tables";
+import { formatDate, useDateRange } from "@calumet/elise-utils/dates";
 ```
 
 ---
@@ -19,11 +19,11 @@ Hook que integra [react-hook-form](https://react-hook-form.com/) con [Zod](https
 ### Uso basico
 
 ```tsx
-import { useZodForm } from "@elise/utils/forms";
+import { useZodForm } from "@calumet/elise-utils/forms";
 import { z } from "zod";
-import { Form, FormField, FormLabel, FormControl, FormMessage } from "@elise/ui/form";
-import { Input } from "@elise/ui/input";
-import { Button } from "@elise/ui/button";
+import { Form, FormField, FormLabel, FormControl, FormMessage } from "@calumet/elise-ui/form";
+import { Input } from "@calumet/elise-ui/input";
+import { Button } from "@calumet/elise-ui/button";
 
 const schema = z.object({
   nombre: z.string().min(2, "Minimo 2 caracteres"),
@@ -90,7 +90,7 @@ Sistema de notificaciones no-bloqueantes basado en un event bus interno. No requ
 Agrega `<Toaster />` una sola vez en el root de tu aplicacion:
 
 ```tsx
-import { Toaster } from "@elise/utils/toasts";
+import { Toaster } from "@calumet/elise-utils/toasts";
 
 function App() {
   return (
@@ -105,7 +105,7 @@ function App() {
 ### Disparar un toast
 
 ```tsx
-import { toast, dismiss } from "@elise/utils/toasts";
+import { toast, dismiss } from "@calumet/elise-utils/toasts";
 
 // Toast basico
 toast({ title: "Guardado", description: "Los cambios se guardaron correctamente." });
@@ -173,7 +173,7 @@ Sistema de alertas/confirmaciones modales basado en event bus, similar a toasts 
 Agrega `<AlertHost />` una sola vez en el root de tu aplicacion:
 
 ```tsx
-import { AlertHost } from "@elise/utils/alerts";
+import { AlertHost } from "@calumet/elise-utils/alerts";
 
 function App() {
   return (
@@ -188,7 +188,7 @@ function App() {
 ### Abrir una alerta
 
 ```tsx
-import { openAlert, closeAlert } from "@elise/utils/alerts";
+import { openAlert, closeAlert } from "@calumet/elise-utils/alerts";
 
 // Alerta informativa
 openAlert({
@@ -250,7 +250,7 @@ Utilidades para formateo de fechas y manejo de rangos. Usa `Intl.DateTimeFormat`
 ### `formatDate()`
 
 ```tsx
-import { formatDate } from "@elise/utils/dates";
+import { formatDate } from "@calumet/elise-utils/dates";
 
 formatDate(new Date());
 // "Feb 27, 2026"
@@ -265,7 +265,7 @@ formatDate(new Date(), { locale: "en-US", weekday: "long" });
 ### `formatDateRange()`
 
 ```tsx
-import { formatDateRange } from "@elise/utils/dates";
+import { formatDateRange } from "@calumet/elise-utils/dates";
 
 formatDateRange({
   from: new Date(2026, 0, 1),
@@ -285,8 +285,8 @@ formatDateRange({
 Hook para manejar estado de un rango de fechas:
 
 ```tsx
-import { useDateRange } from "@elise/utils/dates";
-import { DateRangePicker } from "@elise/ui/date-picker";
+import { useDateRange } from "@calumet/elise-utils/dates";
+import { DateRangePicker } from "@calumet/elise-ui/date-picker";
 
 function MiComponente() {
   const { range, setRange, setFrom, setTo, reset } = useDateRange();
@@ -328,7 +328,7 @@ Componente de tabla avanzada con filtros, ordenamiento, paginacion y exportacion
 ### Uso basico
 
 ```tsx
-import { DataTable, type ColumnDef } from "@elise/utils/tables";
+import { DataTable, type ColumnDef } from "@calumet/elise-utils/tables";
 
 type Persona = {
   nombre: string;
@@ -433,10 +433,10 @@ function MiTabla() {
 
 ## Icons
 
-`@elise/icons` re-exporta todos los iconos de [`@radix-ui/react-icons`](https://www.radix-ui.com/icons).
+`@calumet/elise-icons` re-exporta todos los iconos de [`@radix-ui/react-icons`](https://www.radix-ui.com/icons).
 
 ```tsx
-import { MagnifyingGlassIcon, ChevronDownIcon, Cross2Icon } from "@elise/icons";
+import { MagnifyingGlassIcon, ChevronDownIcon, Cross2Icon } from "@calumet/elise-icons";
 
 <MagnifyingGlassIcon className="size-4" />
 <ChevronDownIcon className="size-4 text-muted-foreground" />

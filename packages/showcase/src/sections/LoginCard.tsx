@@ -1,8 +1,8 @@
-import { Button } from "@elise/ui/button";
-import { Form, FormControl, FormField, FormLabel } from "@elise/ui/form";
-import { Input } from "@elise/ui/input";
-import { PasswordField } from "@elise/ui/password-field";
-import { Separator } from "@elise/ui/separator";
+import { Button } from "@calumet/elise-ui/button";
+import { Form, FormControl, FormField, FormLabel } from "@calumet/elise-ui/form";
+import { Input } from "@calumet/elise-ui/input";
+import { PasswordField } from "@calumet/elise-ui/password-field";
+import { Separator } from "@calumet/elise-ui/separator";
 import React, { useState } from "react";
 
 const LoginCard = () => {

@@ -4,8 +4,8 @@ import {
   CrossCircledIcon,
   Cross2Icon,
   CheckCircledIcon,
-} from "@elise/icons";
-import { Button } from "@elise/ui/button";
+} from "@calumet/elise-icons";
+import { Button } from "@calumet/elise-ui/button";
 import {
   Toast,
   ToastClose,
@@ -13,7 +13,7 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@elise/ui/toast";
+} from "@calumet/elise-ui/toast";
 import * as React from "react";
 
 import { dismiss, onDismiss, onToast, type ToastEvent } from "./bus";

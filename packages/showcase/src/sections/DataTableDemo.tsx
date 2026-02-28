@@ -1,4 +1,4 @@
-import { DataTable, type ColumnDef } from "@elise/utils/tables";
+import { DataTable, type ColumnDef } from "@calumet/elise-utils/tables";
 import { useMemo } from "react";
 
 type Project = {

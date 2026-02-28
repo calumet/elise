@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@elise/ui/table";
+} from "@calumet/elise-ui/table";
 
 const rows = [
   { name: "Elise UI", status: "Stable", version: "0.1.0" },

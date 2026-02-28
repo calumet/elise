@@ -1,7 +1,7 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@elise/ui/accordion";
-import { Button } from "@elise/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@elise/ui/collapsible";
-import { Separator } from "@elise/ui/separator";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@calumet/elise-ui/accordion";
+import { Button } from "@calumet/elise-ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@calumet/elise-ui/collapsible";
+import { Separator } from "@calumet/elise-ui/separator";
 import { useState } from "react";
 
 const AccordionCollapsibleDemo = () => {

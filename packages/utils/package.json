@@ -1,8 +1,16 @@
 {
-  "name": "@elise/utils",
+  "name": "@calumet/elise-utils",
   "version": "0.1.0",
   "private": false,
   "description": "Utilidades compartidas para Elise (validación, helpers).",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/utils"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -48,8 +56,8 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@elise/icons": "workspace:*",
-    "@elise/ui": "workspace:*",
+    "@calumet/elise-icons": "workspace:*",
+    "@calumet/elise-ui": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
@@ -67,7 +75,7 @@
     "typescript": "^5.6.3"
   },
   "peerDependencies": {
-    "@elise/ui": "workspace:*",
+    "@calumet/elise-ui": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": ">=5.0.0"
