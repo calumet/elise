@@ -1,15 +1,10 @@
-logs
-pids
-lib-cov
-coverage
-build/Release
 node_modules
+dist
+.DS_Store
+pnpm-lock.yaml
+**/*.tsbuildinfo
 
-.grunt
-.lock-wscript
-
-*.log
-*.pid
-*.seed
-*.sublime-project
-*.sublime-workspace
+# Showcase app outputs
+packages/showcase/node_modules
+packages/showcase/dist
+packages/showcase/.vite

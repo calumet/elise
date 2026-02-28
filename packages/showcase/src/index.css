@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@calumet/elise-ui/tailwind/elise.css";
+
+@source '../node_modules/@calumet/elise-ui/dist';
+@source '../node_modules/@calumet/elise-utils/dist';

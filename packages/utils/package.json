@@ -1,0 +1,84 @@
+{
+  "name": "@calumet/elise-utils",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Utilidades compartidas para Elise (validación, helpers).",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/utils"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./forms": {
+      "types": "./dist/forms/index.d.ts",
+      "import": "./dist/forms/index.mjs",
+      "require": "./dist/forms/index.cjs"
+    },
+    "./toasts": {
+      "types": "./dist/toasts/index.d.ts",
+      "import": "./dist/toasts/index.mjs",
+      "require": "./dist/toasts/index.cjs"
+    },
+    "./alerts": {
+      "types": "./dist/alerts/index.d.ts",
+      "import": "./dist/alerts/index.mjs",
+      "require": "./dist/alerts/index.cjs"
+    },
+    "./dates": {
+      "types": "./dist/dates/index.d.ts",
+      "import": "./dist/dates/index.mjs",
+      "require": "./dist/dates/index.cjs"
+    },
+    "./tables": {
+      "types": "./dist/tables/index.d.ts",
+      "import": "./dist/tables/index.mjs",
+      "require": "./dist/tables/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --dts",
+    "dev": "tsup --watch --dts",
+    "lint": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@calumet/elise-icons": "workspace:*",
+    "@calumet/elise-ui": "workspace:*",
+    "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-table": "^8.21.3",
+    "clsx": "^2.1.1",
+    "react-hook-form": "^7.66.0",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.4",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "@calumet/elise-ui": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "showcase",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@calumet/elise-icons": "workspace:*",
+    "@calumet/elise-ui": "workspace:*",
+    "@calumet/elise-utils": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.6.3",
+    "vite": "^7.2.4"
+  }
+}

@@ -1,0 +1,17 @@
+export default {
+  semi: true,
+  singleQuote: false,
+  quoteProps: "as-needed",
+  jsxSingleQuote: false,
+  trailingComma: "all",
+  printWidth: 100,
+  tabWidth: 2,
+  useTabs: false,
+  bracketSpacing: true,
+  bracketSameLine: false,
+  arrowParens: "always",
+  endOfLine: "lf",
+  proseWrap: "preserve",
+  htmlWhitespaceSensitivity: "css",
+  embeddedLanguageFormatting: "auto",
+};

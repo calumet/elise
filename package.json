@@ -1,32 +1,26 @@
 {
   "name": "elise",
-  "version": "0.8.0-beta",
-  "description": "Frontend library to develop web applications",
-  "keywords": [
-    "calumet",
-    "interface",
-    "ui"
-  ],
-  "private": false,
-  "license": "MIT",
-  "author": "Grupo Calumet (http://cormoran.uis.edu.co/calumet)",
-  "contributors": [{
-      "name": "Romel Pérez",
-      "url": "http://romelperez.blogspot.com"
-    }, {
-      "name": "Duvan Vargas",
-      "url": "http://twitter.com/DuvanJamid"
-  }],
-  "homepage": "https://github.com/calumet/elise",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/calumet/elise.git"
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Monorepo para un design system basado en Radix primitives.",
+  "scripts": {
+    "dev": "pnpm --filter @calumet/elise-ui dev",
+    "dev:showcase": "pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-utils\" --filter \"showcase\" dev",
+    "build": "pnpm --filter @calumet/elise-icons build && pnpm --filter @calumet/elise-ui build && pnpm --filter @calumet/elise-utils build && pnpm --filter showcase build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "pnpm --filter @calumet/elise-ui clean",
+    "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-uglify": "^0.9.1",
-    "grunt-contrib-cssmin": "^0.13.0",
-    "grunt-contrib-copy": "^0.8.x"
-  }
+    "@calumet/elise-linter": "workspace:*",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "prettier": "^3.7.3",
+    "typescript": "^5.6.3"
+  },
+  "packageManager": "pnpm@10.14.0"
 }

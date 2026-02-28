@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@calumet/elise-ui": ["src"],
+      "@/*": ["src/*"],
+      "@/lib/*": ["src/lib/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"]
+}

@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+/* Usa clase .dark o data-theme="dark" para el modo oscuro */
+@custom-variant dark (&:is(.dark *), &:is([data-theme="dark"] *));
+
+@theme inline {
+  /* Map Elise tokens -> Tailwind color system */
+  --color-background: var(--elise-background);
+  --color-surface: var(--elise-surface);
+  --color-muted: var(--elise-muted);
+  --color-border: var(--elise-border);
+  --color-border-strong: var(--elise-border-strong);
+  --color-foreground: var(--elise-foreground);
+  --color-muted-foreground: var(--elise-muted-foreground);
+  --color-primary: var(--elise-primary);
+  --color-primary-hover: var(--elise-primary-hover);
+  --color-primary-active: var(--elise-primary-active);
+  --color-primary-contrast: var(--elise-primary-contrast);
+  --color-secondary: var(--elise-secondary);
+  --color-secondary-hover: var(--elise-secondary-hover);
+  --color-secondary-active: var(--elise-secondary-active);
+  --color-secondary-contrast: var(--elise-secondary-contrast);
+  --color-accent: var(--elise-accent);
+  --color-accent-hover: var(--elise-accent-hover);
+  --color-accent-active: var(--elise-accent-active);
+  --color-accent-contrast: var(--elise-accent-contrast);
+  --color-focus: var(--elise-focus);
+  --color-success: var(--elise-success);
+  --color-warning: var(--elise-warning);
+  --color-danger: var(--elise-danger);
+  --color-overlay: var(--elise-overlay);
+  --color-sidebar: var(--elise-sidebar);
+  --color-sidebar-foreground: var(--elise-sidebar-foreground);
+  --color-sidebar-primary: var(--elise-sidebar-primary);
+  --color-sidebar-primary-foreground: var(--elise-sidebar-primary-foreground);
+  --color-sidebar-accent: var(--elise-sidebar-accent);
+  --color-sidebar-accent-foreground: var(--elise-sidebar-accent-foreground);
+  --color-sidebar-border: var(--elise-sidebar-border);
+  --color-sidebar-ring: var(--elise-sidebar-ring);
+
+  --radius-xs: var(--elise-radius-xs);
+  --radius-sm: var(--elise-radius-sm);
+  --radius-md: var(--elise-radius-md);
+  --radius-lg: var(--elise-radius-lg);
+  --radius-pill: var(--elise-radius-pill);
+
+  --shadow-soft: var(--elise-shadow-soft);
+  --shadow-floating: var(--elise-shadow-floating);
+
+  --font-family-sans: var(--elise-font-family-sans);
+  --font-family-mono: var(--elise-font-family-mono);
+
+  --text-xs: var(--elise-font-size-xs);
+  --text-sm: var(--elise-font-size-sm);
+  --text-base: var(--elise-font-size-base);
+  --text-lg: var(--elise-font-size-lg);
+  --text-xl: var(--elise-font-size-xl);
+  --text-2xl: var(--elise-font-size-2xl);
+  --text-3xl: var(--elise-font-size-3xl);
+}
+
+:root {
+  --elise-background: #fcfcfd;
+  --elise-surface: #fefefe;
+  --elise-muted: #e8e8ec;
+  --elise-border: #d9d9e0;
+  --elise-border-strong: #b9bbc6;
+  --elise-foreground: #1e1f24;
+  --elise-muted-foreground: #62636c;
+
+  --elise-primary: #3b82f6;
+  --elise-primary-hover: #346fd6;
+  --elise-primary-active: #2d5fb6;
+  --elise-primary-contrast: #ffffff;
+
+  --elise-secondary: #8b5cf6;
+  --elise-secondary-hover: #7a4cd8;
+  --elise-secondary-active: #6a3cba;
+  --elise-secondary-contrast: #ffffff;
+
+  --elise-accent: #46a758;
+  --elise-accent-hover: #3d9a50;
+  --elise-accent-active: #297c3b;
+  --elise-accent-contrast: #fcfcfd;
+
+  --elise-focus: #7ca7ff;
+  --elise-success: #3d9a50;
+  --elise-warning: #f5a623;
+  --elise-danger: #e5484d;
+  --elise-overlay: #0f172a;
+  --elise-sidebar: #f7f7fb;
+  --elise-sidebar-foreground: #1f2937;
+  --elise-sidebar-primary: #3b82f6;
+  --elise-sidebar-primary-foreground: #ffffff;
+  --elise-sidebar-accent: #e4e7ed;
+  --elise-sidebar-accent-foreground: #111827;
+  --elise-sidebar-border: #d9d9e0;
+  --elise-sidebar-ring: #3b82f6;
+
+  --elise-radius-xs: 2px;
+  --elise-radius-sm: 4px;
+  --elise-radius-md: 8px;
+  --elise-radius-lg: 12px;
+  --elise-radius-pill: 999px;
+
+  --elise-shadow-soft: 0 10px 30px -18px rgba(15, 23, 42, 0.45);
+  --elise-shadow-floating: 0 18px 60px -22px rgba(15, 23, 42, 0.55);
+
+  --elise-font-family-sans:
+    "Space Grotesk", "Satoshi", "Inter", system-ui, -apple-system, sans-serif;
+  --elise-font-family-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  --elise-font-size-xs: 0.75rem;
+  --elise-font-size-sm: 0.875rem;
+  --elise-font-size-base: 1rem;
+  --elise-font-size-lg: 1.125rem;
+  --elise-font-size-xl: 1.25rem;
+  --elise-font-size-2xl: 1.5rem;
+  --elise-font-size-3xl: 1.875rem;
+}
+
+.dark,
+[data-theme="dark"] {
+  --elise-background: #111113;
+  --elise-surface: #212225;
+  --elise-muted: #272a2d;
+  --elise-border: #363a3f;
+  --elise-border-strong: #5a6169;
+  --elise-foreground: #edeef0;
+  --elise-muted-foreground: #b0b4ba;
+
+  --elise-primary: #76a7ff;
+  --elise-primary-hover: #6590e3;
+  --elise-primary-active: #5479c7;
+  --elise-primary-contrast: #0f172a;
+
+  --elise-secondary: #bba8ff;
+  --elise-secondary-hover: #a592e3;
+  --elise-secondary-active: #907cc7;
+  --elise-secondary-contrast: #0f172a;
+
+  --elise-accent: #53b365;
+  --elise-accent-hover: #5fc173;
+  --elise-accent-active: #71c083;
+  --elise-accent-contrast: #edeef0;
+
+  --elise-focus: #7ca7ff;
+  --elise-success: #53b365;
+  --elise-warning: #f5a623;
+  --elise-danger: #f2555a;
+  --elise-overlay: #0f172a;
+  --elise-sidebar: #18181b;
+  --elise-sidebar-foreground: #e5e7eb;
+  --elise-sidebar-primary: #76a7ff;
+  --elise-sidebar-primary-foreground: #0f172a;
+  --elise-sidebar-accent: #27272a;
+  --elise-sidebar-accent-foreground: #e5e7eb;
+  --elise-sidebar-border: #363a3f;
+  --elise-sidebar-ring: #76a7ff;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+}
+
+@layer utilities {
+  .bg-elise-noise {
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(124, 167, 255, 0.08), transparent 32%),
+      radial-gradient(circle at 80% 0%, rgba(90, 210, 169, 0.12), transparent 26%);
+  }
+}

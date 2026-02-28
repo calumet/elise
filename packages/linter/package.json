@@ -1,0 +1,46 @@
+{
+  "name": "@calumet/elise-linter",
+  "version": "0.1.0",
+  "description": "Reglas compartidas de ESLint/Prettier para Elise.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/linter"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./prettier": "./prettier.js"
+  },
+  "files": [
+    "index.js",
+    "prettier.js"
+  ],
+  "scripts": {
+    "lint": "echo \"Config package, no lint\""
+  },
+  "keywords": [
+    "eslint-config",
+    "prettier-config",
+    "elise"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-better-tailwindcss": "^3.7.11"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0",
+    "prettier": ">=3.0.0",
+    "typescript": ">=5.0.0"
+  }
+}
