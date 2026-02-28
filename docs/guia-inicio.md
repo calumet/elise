@@ -26,7 +26,29 @@ pnpm dev:showcase  # Levanta todos los paquetes + app demo en localhost:5173
 
 ## Configurar Tailwind CSS
 
-Elise usa Tailwind CSS v4 con tokens CSS personalizados. En el archivo CSS principal de tu proyecto:
+Elise usa Tailwind CSS v4 con tokens CSS personalizados.
+
+Si usas **Vite**, instala Tailwind + plugin oficial de Vite:
+
+```bash
+pnpm add -D tailwindcss @tailwindcss/vite
+```
+
+Configura el plugin en `vite.config.ts`:
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+```
+
+> Con Vite no necesitas `postcss` ni `@tailwindcss/postcss`.
+
+Luego, en el archivo CSS principal de tu proyecto:
 
 ```css
 @import "tailwindcss";

@@ -75,6 +75,24 @@ function App() {
 
 Asegurate de importar los estilos de Elise en tu CSS:
 
+Si usas Vite, instala y activa el plugin oficial de Tailwind:
+
+```bash
+pnpm add -D tailwindcss @tailwindcss/vite
+```
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+```
+
+> Con Vite no necesitas `postcss` ni `@tailwindcss/postcss`.
+
 ```css
 @import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
