@@ -110,6 +110,7 @@ Consulta la documentacion completa en [`./docs`](docs/):
 - [Temas](docs/temas.md)
 - [Componentes](docs/componentes.md)
 - [Utilidades](docs/utilidades.md)
+- [Linter y formato](docs/linter.md)
 - [Referencias externas](docs/referencias.md)
 
 ## Licencia

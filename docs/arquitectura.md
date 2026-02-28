@@ -67,7 +67,10 @@ Configuracion compartida de herramientas de calidad de codigo:
 
 - **ESLint** (flat config): tres presets combinables — `base`, `react`, `tailwind`
 - **Prettier**: 100 caracteres, 2 espacios, trailing commas, LF
-- Plugins: `@typescript-eslint`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-import`, `eslint-plugin-better-tailwindcss`
+- Plugins base: `@typescript-eslint`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-import`
+- Tailwind lint opcional: `eslint-plugin-better-tailwindcss` (solo si usas `configs.tailwind`)
+
+Ver setup completo en [Linter y formato](linter.md).
 
 ## Patrones de diseno
 
@@ -166,4 +169,4 @@ Cada paquete extiende la configuracion base y agrega sus propios paths y configu
 
 ---
 
-Siguiente: [Temas](temas.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)
+Siguiente: [Temas](temas.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md) | [Linter y formato](linter.md)

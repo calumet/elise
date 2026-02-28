@@ -55,4 +55,4 @@ Elise se construye sobre librerias de codigo abierto bien documentadas. Aqui est
 
 ---
 
-Volver a: [Guia de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)
+Volver a: [Guia de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Linter y formato](linter.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)

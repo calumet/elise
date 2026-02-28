@@ -154,6 +154,10 @@ import { MagnifyingGlassIcon, ChevronDownIcon } from "@calumet/elise-icons";
 
 > Los iconos disponibles son los de [Radix Icons](https://www.radix-ui.com/icons). Consulta su galeria para ver todos los iconos disponibles.
 
+## Linter y formato
+
+Para configurar ESLint/Prettier con los presets de Elise, consulta [Linter y formato](linter.md).
+
 ---
 
-Siguiente: [Arquitectura](arquitectura.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)
+Siguiente: [Arquitectura](arquitectura.md) | [Linter y formato](linter.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)
