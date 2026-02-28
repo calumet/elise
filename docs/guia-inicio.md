@@ -8,33 +8,21 @@
 
 ## Instalacion
 
-### Como dependencia en tu proyecto
+### Setup recomendado (Vite + React)
+
+1. Instala los paquetes de Elise:
 
 ```bash
-# Instalar los paquetes que necesites
 pnpm add @calumet/elise-ui @calumet/elise-icons @calumet/elise-utils
 ```
 
-### Desarrollo del monorepo
-
-```bash
-git clone https://github.com/calumet/elise.git
-cd elise
-pnpm install
-pnpm dev:showcase  # Levanta todos los paquetes + app demo en localhost:5173
-```
-
-## Configurar Tailwind CSS
-
-Elise usa Tailwind CSS v4 con tokens CSS personalizados.
-
-Si usas **Vite**, instala Tailwind + plugin oficial de Vite:
+2. Instala Tailwind CSS v4 y su plugin oficial para Vite:
 
 ```bash
 pnpm add -D tailwindcss @tailwindcss/vite
 ```
 
-Configura el plugin en `vite.config.ts`:
+3. Configura `vite.config.ts`:
 
 ```ts
 import { defineConfig } from "vite";
@@ -48,23 +36,39 @@ export default defineConfig({
 
 > Con Vite no necesitas `postcss` ni `@tailwindcss/postcss`.
 
-Luego, en el archivo CSS principal de tu proyecto:
+4. En tu CSS principal (por ejemplo `src/index.css`), importa Tailwind y los estilos de Elise:
 
 ```css
 @import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
 
 /* Permite que Tailwind detecte las clases usadas en los paquetes */
-@source '../node_modules/@calumet/elise-ui/dist';
-@source '../node_modules/@calumet/elise-utils/dist';
+@source "../node_modules/@calumet/elise-ui/dist";
+@source "../node_modules/@calumet/elise-utils/dist";
 ```
 
-Esto importa:
+5. Verifica que tu app levanta correctamente:
 
-- Los tokens de color de Elise (`--elise-primary`, `--elise-border`, etc.)
-- El mapeo de tokens a utilidades de Tailwind (`bg-primary`, `text-foreground`, etc.)
-- Los estilos base (tipografia, seleccion de texto, box-sizing)
-- El soporte para modo oscuro via clase `.dark` o atributo `data-theme="dark"`
+```bash
+pnpm dev
+```
+
+### Referencias oficiales de Tailwind
+
+- Documentacion general: https://tailwindcss.com/docs
+- Guia de instalacion: https://tailwindcss.com/docs/installation
+- Integracion con Vite: https://tailwindcss.com/docs/installation/framework-guides/vite
+
+> Si Tailwind cambia algun paso en nuevas versiones, toma como fuente de verdad su documentacion oficial.
+
+### Desarrollo del monorepo Elise
+
+```bash
+git clone https://github.com/calumet/elise.git
+cd elise
+pnpm install
+pnpm dev:showcase  # Levanta todos los paquetes + app demo en localhost:5173
+```
 
 ## Configurar el ThemeProvider
 

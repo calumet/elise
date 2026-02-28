@@ -2,6 +2,8 @@
 
 `@calumet/elise-ui` exporta 45 componentes construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos los componentes son accesibles, soportan `ref` via `React.forwardRef` y se estilizan con Tailwind CSS.
 
+> Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
+
 ## Importacion
 
 ```tsx

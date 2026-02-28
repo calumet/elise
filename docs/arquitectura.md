@@ -144,7 +144,13 @@ Todos los paquetes de libreria usan [tsup](https://tsup.egoist.dev/) como bundle
 - **Source maps**: habilitados
 - **Orden de build**: `icons → ui → utils → showcase`
 
-La app de showcase usa [Vite](https://vite.dev/) con el plugin de React para desarrollo con hot reload.
+La app de showcase usa [Vite](https://vite.dev/) con:
+
+- `@vitejs/plugin-react` para React/JSX
+- `@tailwindcss/vite` para procesar Tailwind CSS v4 sin PostCSS
+
+Para detalles de setup en apps consumidoras, ver [Guia de inicio](guia-inicio.md) y la
+[documentacion oficial de Tailwind](https://tailwindcss.com/docs/installation/framework-guides/vite).
 
 ## TypeScript
 
