@@ -41,7 +41,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@calumet/elise-ui/select";
-import { Skeleton } from "@calumet/elise-ui/skeleton";
 import {
   Table,
   TableBody,
@@ -65,8 +64,7 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { Suspense } from "react";
-import React, { Fragment, useId, useMemo } from "react";
+import React, { Fragment, useCallback, useId, useMemo } from "react";
 
 import { cn, dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters";
 
@@ -93,6 +91,17 @@ interface DataTableProps<TData, TValue> {
   pageSizeOptions?: number[];
   initialPageSize?: number;
 }
+
+type DateRangePickerValue = { from: Date | undefined; to?: Date };
+
+const isDateRangePickerValue = (value: unknown): value is DateRangePickerValue => {
+  if (!value || typeof value !== "object") return false;
+
+  const candidate = value as { from?: unknown; to?: unknown };
+  const isDateOrUndefined = (item: unknown) => item === undefined || item instanceof Date;
+
+  return isDateOrUndefined(candidate.from) && isDateOrUndefined(candidate.to);
+};
 
 function DataTableContent<TData, TValue>({
   name,
@@ -160,31 +169,22 @@ function DataTableContent<TData, TValue>({
     return Array.from(new Set(base)).sort((a, b) => a - b);
   }, [pageSizeOptions, initialPageSize]);
 
-  const exportData = !exportTo
-    ? []
-    : table.getFilteredRowModel().rows.map((row) => {
-        const rowData: Record<string, string> = {};
+  const getExportData = useCallback(() => {
+    return table.getFilteredRowModel().rows.map((row) => {
+      const rowData: Record<string, string> = {};
 
-        table.getAllColumns().forEach((column) => {
-          if (column.id === "actions" || !column.columnDef.header) return;
+      table.getAllColumns().forEach((column) => {
+        if (column.id === "actions" || !column.columnDef.header) return;
 
-          const headerText =
-            typeof column.columnDef.header === "string" ? column.columnDef.header : column.id;
+        const headerText =
+          typeof column.columnDef.header === "string" ? column.columnDef.header : column.id;
 
-          let value: unknown;
-          // @ts-expect-error accessorFn exists
-          if (column.columnDef.accessorFn) {
-            // @ts-expect-error accessorFn exists
-            value = column.columnDef.accessorFn(row.original, row.index);
-          } else {
-            value = row.getValue(column.id);
-          }
-
-          rowData[headerText] = String(value ?? "");
-        });
-
-        return rowData;
+        rowData[headerText] = String(row.getValue(column.id) ?? "");
       });
+
+      return rowData;
+    });
+  }, [table]);
 
   return (
     <div className="w-full h-full flex flex-col justify-between">
@@ -223,7 +223,7 @@ function DataTableContent<TData, TValue>({
                   <DropdownMenuItem
                     onClick={() => {
                       const exportName = name || "datos";
-                      exportToCSV(exportData, exportName);
+                      exportToCSV(getExportData(), exportName);
                     }}
                   >
                     <FileTextIcon className="size-4" />
@@ -232,7 +232,7 @@ function DataTableContent<TData, TValue>({
                   <DropdownMenuItem
                     onClick={() => {
                       const exportName = name || "datos";
-                      exportToJSON(exportData, exportName);
+                      exportToJSON(getExportData(), exportName);
                     }}
                   >
                     <FileTextIcon className="size-4" />
@@ -452,18 +452,23 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   const sortedUniqueValues = useMemo(() => {
     if (filterVariant === "range" || filterVariant === "daterange") return [];
 
-    const values = Array.from(column.getFacetedUniqueValues().keys());
+    const flattenedValues: string[] = [];
 
-    const flattenedValues = values.reduce((acc: string[], curr) => {
-      if (Array.isArray(curr)) {
-        return [...acc, ...curr];
+    for (const value of column.getFacetedUniqueValues().keys()) {
+      if (Array.isArray(value)) {
+        for (const nestedValue of value) {
+          flattenedValues.push(String(nestedValue));
+        }
+        continue;
       }
 
-      return [...acc, curr];
-    }, []);
+      if (value !== null && value !== undefined) {
+        flattenedValues.push(String(value));
+      }
+    }
 
-    return Array.from(new Set(flattenedValues)).sort();
-  }, [column.getFacetedUniqueValues(), filterVariant]);
+    return Array.from(new Set(flattenedValues)).sort((a, b) => a.localeCompare(b));
+  }, [column, filterVariant]);
 
   if (filterVariant === "range") {
     return (
@@ -504,31 +509,29 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   }
 
   if (filterVariant === "daterange") {
+    const rangeValue = isDateRangePickerValue(columnFilterValue) ? columnFilterValue : undefined;
+
     return (
       <div className="*:not-first:mt-1">
         <Label>{columnHeader}</Label>
-        <DateRangePicker
-          value={columnFilterValue as any}
-          onChange={(value) => column.setFilterValue(value)}
-        />
+        <DateRangePicker value={rangeValue} onChange={(value) => column.setFilterValue(value)} />
       </div>
     );
   }
 
   if (filterVariant === "date") {
+    const dateValue = columnFilterValue instanceof Date ? columnFilterValue : undefined;
+
     return (
       <div className="*:not-first:mt-1">
         <Label>{columnHeader}</Label>
-        <DatePicker
-          value={columnFilterValue as any}
-          onChange={(value) => column.setFilterValue(value)}
-        />
+        <DatePicker value={dateValue} onChange={(value) => column.setFilterValue(value)} />
       </div>
     );
   }
   if (filterVariant === "select") {
     const selectedValues = Array.isArray(columnFilterValue)
-      ? columnFilterValue
+      ? columnFilterValue.map((value) => String(value))
       : columnFilterValue
         ? [String(columnFilterValue)]
         : [];
@@ -646,18 +649,16 @@ export function DataTable<TData, TValue>({
   initialPageSize,
 }: DataTableProps<TData, TValue>) {
   return (
-    <Suspense fallback={<Skeleton className="w-full h-96" />}>
-      <DataTableContent
-        name={name}
-        columns={columns}
-        data={data}
-        isLoading={isLoading}
-        exportTo={exportTo}
-        refresh={refresh}
-        pageSizeOptions={pageSizeOptions}
-        initialPageSize={initialPageSize}
-      />
-    </Suspense>
+    <DataTableContent
+      name={name}
+      columns={columns}
+      data={data}
+      isLoading={isLoading}
+      exportTo={exportTo}
+      refresh={refresh}
+      pageSizeOptions={pageSizeOptions}
+      initialPageSize={initialPageSize}
+    />
   );
 }
 

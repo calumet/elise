@@ -30,24 +30,25 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 import { SectionCard } from "./components/SectionCard";
-import AccordionCollapsibleDemo from "./sections/AccordionCollapsibleDemo";
-import AlertDialogStandalone from "./sections/AlertDialogStandalone";
-import CommandDemo from "./sections/CommandDemo";
-import ComponentsSampler from "./sections/ComponentsSampler";
-import ContactForm from "./sections/ContactForm";
-import DataTableDemo from "./sections/DataTableDemo";
-import DatePickersDemo from "./sections/DatePickersDemo";
-import DialogsDemo from "./sections/DialogsDemo";
-import FormControlsDemo from "./sections/FormControlsDemo";
-import HelloWorld from "./sections/HelloWorld";
-import LoginCard from "./sections/LoginCard";
-import MediaCardDemo from "./sections/MediaCardDemo";
-import MenusHoverDemo from "./sections/MenusHoverDemo";
-import MenusSelectDemo from "./sections/MenusSelectDemo";
-import ProgressSkeletonDemo from "./sections/ProgressSkeletonDemo";
-import ScrollToolbarDemo from "./sections/ScrollToolbarDemo";
-import TableDemo from "./sections/TableDemo";
-import ToastDemo from "./sections/ToastDemo";
+
+const AccordionCollapsibleDemo = React.lazy(() => import("./sections/AccordionCollapsibleDemo"));
+const AlertDialogStandalone = React.lazy(() => import("./sections/AlertDialogStandalone"));
+const CommandDemo = React.lazy(() => import("./sections/CommandDemo"));
+const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"));
+const ContactForm = React.lazy(() => import("./sections/ContactForm"));
+const DataTableDemo = React.lazy(() => import("./sections/DataTableDemo"));
+const DatePickersDemo = React.lazy(() => import("./sections/DatePickersDemo"));
+const DialogsDemo = React.lazy(() => import("./sections/DialogsDemo"));
+const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
+const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
+const LoginCard = React.lazy(() => import("./sections/LoginCard"));
+const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
+const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
+const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
+const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
+const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
+const TableDemo = React.lazy(() => import("./sections/TableDemo"));
+const ToastDemo = React.lazy(() => import("./sections/ToastDemo"));
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -65,6 +66,12 @@ const ThemeToggle = () => {
     </div>
   );
 };
+
+const SectionFallback = () => <div className="min-h-[220px] w-full animate-pulse rounded-sm bg-muted" />;
+
+const LazySection = ({ children }: { children: React.ReactNode }) => (
+  <React.Suspense fallback={<SectionFallback />}>{children}</React.Suspense>
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -123,7 +130,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
         <main className="flex flex-col flex-1 gap-8 pb-12">
           <SectionCard title="Date Picker & Range">
-            <DatePickersDemo />
+            <LazySection>
+              <DatePickersDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard
@@ -143,7 +152,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <div className="flex items-center justify-center min-h-[260px] relative">
-              <HelloWorld />
+              <LazySection>
+                <HelloWorld />
+              </LazySection>
             </div>
           </SectionCard>
 
@@ -164,7 +175,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <div className="flex items-center justify-center min-h-80 relative">
-              <ContactForm />
+              <LazySection>
+                <ContactForm />
+              </LazySection>
             </div>
           </SectionCard>
 
@@ -190,65 +203,95 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <div className="flex justify-center min-h-80 relative">
-              <ComponentsSampler />
+              <LazySection>
+                <ComponentsSampler />
+              </LazySection>
             </div>
           </SectionCard>
 
           <SectionCard title="Dialog & Alert Dialog">
-            <DialogsDemo />
+            <LazySection>
+              <DialogsDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Alert Dialog (standalone)">
-            <AlertDialogStandalone />
+            <LazySection>
+              <AlertDialogStandalone />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Accordion & Collapsible">
-            <AccordionCollapsibleDemo />
+            <LazySection>
+              <AccordionCollapsibleDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Progress & Skeleton">
-            <ProgressSkeletonDemo />
+            <LazySection>
+              <ProgressSkeletonDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Menubar, Context Menu y Select">
-            <MenusSelectDemo />
+            <LazySection>
+              <MenusSelectDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Dropdown & Hover Card">
-            <MenusHoverDemo />
+            <LazySection>
+              <MenusHoverDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Form controls (Radio, Switch, Slider)">
-            <FormControlsDemo />
+            <LazySection>
+              <FormControlsDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Media Card, Avatar y Aspect Ratio">
-            <MediaCardDemo />
+            <LazySection>
+              <MediaCardDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Command Palette">
-            <CommandDemo />
+            <LazySection>
+              <CommandDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Table">
-            <TableDemo />
+            <LazySection>
+              <TableDemo />
+            </LazySection>
           </SectionCard>
 
-          <SectionCard title="Data Table (filtros y exportación)">
-            <DataTableDemo />
+          <SectionCard title="Data Table (filtros y exportacion)">
+            <LazySection>
+              <DataTableDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Scroll & Toolbar">
-            <ScrollToolbarDemo />
+            <LazySection>
+              <ScrollToolbarDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard title="Toast">
-            <ToastDemo />
+            <LazySection>
+              <ToastDemo />
+            </LazySection>
           </SectionCard>
 
           <SectionCard id="login" title="Tarjeta de login simple.">
             <div className="flex items-center justify-center min-h-[260px] relative">
-              <LoginCard />
+              <LazySection>
+                <LoginCard />
+              </LazySection>
             </div>
           </SectionCard>
         </main>

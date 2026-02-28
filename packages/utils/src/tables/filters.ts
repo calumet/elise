@@ -70,10 +70,19 @@ export function getCurrentFullMonthRange() {
   return [start.toISOString(), end.toISOString()];
 }
 
-export function exportToCSV(data: Record<string, string>[], name: string) {
+const triggerDownload = (blob: Blob, fileName: string) => {
+  const href = URL.createObjectURL(blob);
+  const link = Object.assign(document.createElement("a"), {
+    href,
+    download: fileName,
+  });
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(href), 0);
+};
+
+export function exportToCSV(data: Record<string, string>[], name: string): boolean {
   if (!data || data.length === 0) {
-    console.warn("No hay datos para exportar.");
-    return;
+    return false;
   }
 
   const headers = Object.keys(data[0]);
@@ -94,27 +103,18 @@ export function exportToCSV(data: Record<string, string>[], name: string) {
 
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const fileName = `${(name || "datos").toLowerCase()}-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.csv`;
-  const link = Object.assign(document.createElement("a"), {
-    href: URL.createObjectURL(blob),
-    download: fileName,
-  });
-  link.click();
-  URL.revokeObjectURL(link.href);
+  triggerDownload(blob, fileName);
+  return true;
 }
 
-export function exportToJSON(data: Record<string, string>[], name: string) {
+export function exportToJSON(data: Record<string, string>[], name: string): boolean {
   if (!data || data.length === 0) {
-    console.warn("No hay datos para exportar.");
-    return;
+    return false;
   }
 
   const jsonContent = JSON.stringify(data, null, 2);
   const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
   const fileName = `${(name || "datos").toLowerCase()}-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`;
-  const link = Object.assign(document.createElement("a"), {
-    href: URL.createObjectURL(blob),
-    download: fileName,
-  });
-  link.click();
-  URL.revokeObjectURL(link.href);
+  triggerDownload(blob, fileName);
+  return true;
 }

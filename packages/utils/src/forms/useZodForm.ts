@@ -5,12 +5,12 @@ import type { z } from "zod";
 export type UseZodFormReturn<TFieldValues extends FieldValues = FieldValues> =
   UseFormReturn<TFieldValues>;
 
-export function useZodForm<TSchema extends z.ZodType<any, any, any>>(
+export function useZodForm<TSchema extends z.ZodType<FieldValues, FieldValues>>(
   schema: TSchema,
-  options?: Omit<UseFormProps<z.infer<TSchema>>, "resolver">,
-): UseFormReturn<z.infer<TSchema>> {
-  return useForm({
+  options?: Omit<UseFormProps<z.input<TSchema>, unknown, z.output<TSchema>>, "resolver">,
+): UseFormReturn<z.input<TSchema>, unknown, z.output<TSchema>> {
+  return useForm<z.input<TSchema>, unknown, z.output<TSchema>>({
     ...options,
-    resolver: zodResolver(schema) as any,
-  }) as UseFormReturn<z.infer<TSchema>>;
+    resolver: zodResolver(schema),
+  });
 }

@@ -15,4 +15,17 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (id.includes("@tanstack/react-table")) return "vendor-tanstack";
+          if (id.includes("react-day-picker")) return "vendor-calendar";
+          if (id.includes("@radix-ui")) return "vendor-radix";
+          return "vendor";
+        },
+      },
+    },
+  },
 });
