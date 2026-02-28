@@ -132,35 +132,35 @@ dismiss(id);
 
 ### Variantes
 
-| Variante | Icono | Color |
-| --- | --- | --- |
-| `"info"` (default) | Info circulo | `--elise-primary` |
-| `"success"` | Check circulo | `--elise-success` |
-| `"alert"` | Triangulo exclamacion | `--elise-warning` |
-| `"error"` | Cruz circulo | `--elise-danger` |
+| Variante           | Icono                 | Color             |
+| ------------------ | --------------------- | ----------------- |
+| `"info"` (default) | Info circulo          | `--elise-primary` |
+| `"success"`        | Check circulo         | `--elise-success` |
+| `"alert"`          | Triangulo exclamacion | `--elise-warning` |
+| `"error"`          | Cruz circulo          | `--elise-danger`  |
 
 ### API `toast()`
 
 ```typescript
 type ToastOptions = {
-  id?: string;           // ID personalizado (auto-generado si se omite)
-  title?: string;        // Titulo del toast
-  description?: string;  // Descripcion/cuerpo
-  variant?: "info" | "alert" | "error" | "success";  // Default: "info"
-  duration?: number;     // Duracion en ms (default: 4000)
-  actionLabel?: string;  // Texto del boton de accion
-  action?: () => void;   // Callback al hacer click en la accion
+  id?: string; // ID personalizado (auto-generado si se omite)
+  title?: string; // Titulo del toast
+  description?: string; // Descripcion/cuerpo
+  variant?: "info" | "alert" | "error" | "success"; // Default: "info"
+  duration?: number; // Duracion en ms (default: 4000)
+  actionLabel?: string; // Texto del boton de accion
+  action?: () => void; // Callback al hacer click en la accion
 };
 ```
 
 ### Posiciones del Toaster
 
-| Valor | Ubicacion |
-| --- | --- |
-| `"top-right"` (default) | Arriba a la derecha |
-| `"top-left"` | Arriba a la izquierda |
-| `"bottom-right"` | Abajo a la derecha |
-| `"bottom-left"` | Abajo a la izquierda |
+| Valor                   | Ubicacion             |
+| ----------------------- | --------------------- |
+| `"top-right"` (default) | Arriba a la derecha   |
+| `"top-left"`            | Arriba a la izquierda |
+| `"bottom-right"`        | Abajo a la derecha    |
+| `"bottom-left"`         | Abajo a la izquierda  |
 
 ---
 
@@ -218,26 +218,26 @@ openAlert({
 
 ### Variantes
 
-| Variante | Icono | Color | Comportamiento |
-| --- | --- | --- | --- |
-| `"alert"` (default) | Triangulo exclamacion | `--elise-warning` | Muestra boton cancelar si hay `onCancel` o `cancelLabel` |
-| `"info"` | Info circulo | `--elise-primary` | Solo boton "Aceptar" |
-| `"error"` | Cruz circulo | `--elise-danger` | Solo boton "Aceptar" |
-| `"confirm"` | Signo de interrogacion | `--elise-primary` | Siempre muestra "Confirmar" + "Cancelar" |
-| `"success"` | Check circulo | `--elise-success` | Solo boton "Aceptar" |
+| Variante            | Icono                  | Color             | Comportamiento                                           |
+| ------------------- | ---------------------- | ----------------- | -------------------------------------------------------- |
+| `"alert"` (default) | Triangulo exclamacion  | `--elise-warning` | Muestra boton cancelar si hay `onCancel` o `cancelLabel` |
+| `"info"`            | Info circulo           | `--elise-primary` | Solo boton "Aceptar"                                     |
+| `"error"`           | Cruz circulo           | `--elise-danger`  | Solo boton "Aceptar"                                     |
+| `"confirm"`         | Signo de interrogacion | `--elise-primary` | Siempre muestra "Confirmar" + "Cancelar"                 |
+| `"success"`         | Check circulo          | `--elise-success` | Solo boton "Aceptar"                                     |
 
 ### API `openAlert()`
 
 ```typescript
 type AlertOptions = {
-  id?: string;             // ID personalizado (auto-generado si se omite)
-  title?: string;          // Titulo de la alerta
-  description?: string;    // Descripcion/cuerpo
-  variant?: "alert" | "info" | "error" | "confirm" | "success";  // Default: "alert"
-  confirmLabel?: string;   // Texto del boton de confirmacion (default: "Aceptar")
-  cancelLabel?: string;    // Texto del boton de cancelar (default: "Cancelar")
-  onConfirm?: () => void;  // Callback al confirmar
-  onCancel?: () => void;   // Callback al cancelar
+  id?: string; // ID personalizado (auto-generado si se omite)
+  title?: string; // Titulo de la alerta
+  description?: string; // Descripcion/cuerpo
+  variant?: "alert" | "info" | "error" | "confirm" | "success"; // Default: "alert"
+  confirmLabel?: string; // Texto del boton de confirmacion (default: "Aceptar")
+  cancelLabel?: string; // Texto del boton de cancelar (default: "Cancelar")
+  onConfirm?: () => void; // Callback al confirmar
+  onCancel?: () => void; // Callback al cancelar
 };
 ```
 
@@ -273,10 +273,13 @@ formatDateRange({
 });
 // "Jan 1, 2026 – Jan 31, 2026"
 
-formatDateRange({
-  from: new Date(2026, 0, 1),
-  to: new Date(2026, 0, 31),
-}, { locale: "es-CO" });
+formatDateRange(
+  {
+    from: new Date(2026, 0, 1),
+    to: new Date(2026, 0, 31),
+  },
+  { locale: "es-CO" },
+);
 // "1 ene 2026 – 31 ene 2026"
 ```
 
@@ -386,13 +389,13 @@ const columns: ColumnDef<Persona>[] = [
 ];
 ```
 
-| filterVariant | Descripcion | Control |
-| --- | --- | --- |
-| `"text"` | Busqueda de texto libre | Input con icono de lupa |
-| `"select"` | Seleccion multiple de valores unicos | Popover con Command (busqueda + checkboxes) |
-| `"range"` | Rango numerico min/max | Dos inputs numericos |
-| `"date"` | Fecha individual | DatePicker |
-| `"daterange"` | Rango de fechas | DateRangePicker |
+| filterVariant | Descripcion                          | Control                                     |
+| ------------- | ------------------------------------ | ------------------------------------------- |
+| `"text"`      | Busqueda de texto libre              | Input con icono de lupa                     |
+| `"select"`    | Seleccion multiple de valores unicos | Popover con Command (busqueda + checkboxes) |
+| `"range"`     | Rango numerico min/max               | Dos inputs numericos                        |
+| `"date"`      | Fecha individual                     | DatePicker                                  |
+| `"daterange"` | Rango de fechas                      | DateRangePicker                             |
 
 ### Con exportacion y refresh
 
@@ -402,12 +405,12 @@ function MiTabla() {
 
   return (
     <DataTable
-      name="empleados"       // Nombre para el archivo exportado
+      name="empleados" // Nombre para el archivo exportado
       columns={columns}
       data={data}
-      exportTo               // Habilita boton de exportacion (CSV/JSON)
-      refresh={refetch}      // Habilita boton de refresh
-      initialPageSize={25}   // Filas por pagina iniciales
+      exportTo // Habilita boton de exportacion (CSV/JSON)
+      refresh={refetch} // Habilita boton de refresh
+      initialPageSize={25} // Filas por pagina iniciales
       pageSizeOptions={[10, 25, 50, 100]}
     />
   );
@@ -416,16 +419,16 @@ function MiTabla() {
 
 ### Props
 
-| Prop | Tipo | Default | Descripcion |
-| --- | --- | --- | --- |
-| `columns` | `ColumnDef<TData>[]` | *requerido* | Definicion de columnas (TanStack) |
-| `data` | `TData[]` | *requerido* | Datos a mostrar |
-| `name` | `string` | — | Nombre para archivos de exportacion |
-| `isLoading` | `boolean` | — | Muestra mensaje de carga si no hay datos |
-| `exportTo` | `boolean` | — | Habilita exportacion CSV/JSON |
-| `refresh` | `() => void \| Promise<unknown>` | — | Callback para boton de refresh |
-| `pageSizeOptions` | `number[]` | `[5, 10, 25, 50]` | Opciones de tamano de pagina |
-| `initialPageSize` | `number` | — | Tamano de pagina inicial |
+| Prop              | Tipo                             | Default           | Descripcion                              |
+| ----------------- | -------------------------------- | ----------------- | ---------------------------------------- |
+| `columns`         | `ColumnDef<TData>[]`             | _requerido_       | Definicion de columnas (TanStack)        |
+| `data`            | `TData[]`                        | _requerido_       | Datos a mostrar                          |
+| `name`            | `string`                         | —                 | Nombre para archivos de exportacion      |
+| `isLoading`       | `boolean`                        | —                 | Muestra mensaje de carga si no hay datos |
+| `exportTo`        | `boolean`                        | —                 | Habilita exportacion CSV/JSON            |
+| `refresh`         | `() => void \| Promise<unknown>` | —                 | Callback para boton de refresh           |
+| `pageSizeOptions` | `number[]`                       | `[5, 10, 25, 50]` | Opciones de tamano de pagina             |
+| `initialPageSize` | `number`                         | —                 | Tamano de pagina inicial                 |
 
 > **Dependencia externa**: La definicion de columnas (`ColumnDef`) y toda la API de tablas viene de [TanStack React Table v8](https://tanstack.com/table/latest/docs/introduction). Consulta su documentacion para guias de columnas, celdas personalizadas y features avanzados.
 

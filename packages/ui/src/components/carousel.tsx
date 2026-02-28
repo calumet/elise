@@ -1,10 +1,10 @@
 import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight } from "@calumet/elise-icons";
-import { Button } from "./button";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import * as React from "react";
 
-import { cn } from "@/lib/cn";
+import { Button } from "./button";
 
+import { cn } from "@/lib/cn";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;

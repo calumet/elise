@@ -9,23 +9,19 @@ Componente que gestiona el tema activo, lo persiste en localStorage y lo aplica 
 ```tsx
 import { ThemeProvider } from "@calumet/elise-ui";
 
-<ThemeProvider
-  attribute="class"
-  storageKey="elise-theme"
-  defaultTheme="light"
->
+<ThemeProvider attribute="class" storageKey="elise-theme" defaultTheme="light">
   <App />
-</ThemeProvider>
+</ThemeProvider>;
 ```
 
 ### Props
 
-| Prop | Tipo | Default | Descripcion |
-| --- | --- | --- | --- |
-| `attribute` | `"class" \| "data-theme"` | `"class"` | `"class"` agrega/quita la clase `.dark` en `<html>`. `"data-theme"` usa el atributo `data-theme="dark"` |
-| `storageKey` | `string` | `"elise-theme"` | Clave de localStorage para persistir la preferencia del usuario |
-| `defaultTheme` | `"light" \| "dark"` | `"light"` | Tema inicial cuando no hay preferencia guardada |
-| `forcedTheme` | `"light" \| "dark"` | — | Fuerza un tema especifico, ignorando la preferencia guardada |
+| Prop           | Tipo                      | Default         | Descripcion                                                                                             |
+| -------------- | ------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| `attribute`    | `"class" \| "data-theme"` | `"class"`       | `"class"` agrega/quita la clase `.dark` en `<html>`. `"data-theme"` usa el atributo `data-theme="dark"` |
+| `storageKey`   | `string`                  | `"elise-theme"` | Clave de localStorage para persistir la preferencia del usuario                                         |
+| `defaultTheme` | `"light" \| "dark"`       | `"light"`       | Tema inicial cuando no hay preferencia guardada                                                         |
+| `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema especifico, ignorando la preferencia guardada                                            |
 
 ## Hook `useTheme()`
 
@@ -53,70 +49,70 @@ Los temas se implementan via CSS custom properties con prefijo `--elise-`. Estos
 
 ### Colores
 
-| Token CSS | Utilidad Tailwind | Proposito |
-| --- | --- | --- |
-| `--elise-background` | `bg-background` | Fondo principal de la pagina |
-| `--elise-surface` | `bg-surface` | Fondo de tarjetas y superficies elevadas |
-| `--elise-muted` | `bg-muted` | Fondos sutiles, hovers |
-| `--elise-foreground` | `text-foreground` | Texto principal |
-| `--elise-muted-foreground` | `text-muted-foreground` | Texto secundario/gris |
-| `--elise-border` | `border-border` | Bordes estandar |
-| `--elise-border-strong` | `border-border-strong` | Bordes con mayor contraste |
-| `--elise-primary` | `bg-primary`, `text-primary` | Color primario (azul) |
-| `--elise-primary-hover` | `bg-primary-hover` | Hover del primario |
-| `--elise-primary-active` | `bg-primary-active` | Active del primario |
-| `--elise-primary-contrast` | `text-primary-contrast` | Texto sobre fondo primario |
-| `--elise-secondary` | `bg-secondary` | Color secundario (violeta) |
-| `--elise-accent` | `bg-accent` | Color de acento (verde) |
-| `--elise-success` | `bg-success` | Exito |
-| `--elise-warning` | `bg-warning` | Advertencia |
-| `--elise-danger` | `bg-danger` | Error/peligro |
-| `--elise-focus` | `ring-focus` | Anillo de focus |
-| `--elise-overlay` | `bg-overlay` | Overlay de modales |
+| Token CSS                  | Utilidad Tailwind            | Proposito                                |
+| -------------------------- | ---------------------------- | ---------------------------------------- |
+| `--elise-background`       | `bg-background`              | Fondo principal de la pagina             |
+| `--elise-surface`          | `bg-surface`                 | Fondo de tarjetas y superficies elevadas |
+| `--elise-muted`            | `bg-muted`                   | Fondos sutiles, hovers                   |
+| `--elise-foreground`       | `text-foreground`            | Texto principal                          |
+| `--elise-muted-foreground` | `text-muted-foreground`      | Texto secundario/gris                    |
+| `--elise-border`           | `border-border`              | Bordes estandar                          |
+| `--elise-border-strong`    | `border-border-strong`       | Bordes con mayor contraste               |
+| `--elise-primary`          | `bg-primary`, `text-primary` | Color primario (azul)                    |
+| `--elise-primary-hover`    | `bg-primary-hover`           | Hover del primario                       |
+| `--elise-primary-active`   | `bg-primary-active`          | Active del primario                      |
+| `--elise-primary-contrast` | `text-primary-contrast`      | Texto sobre fondo primario               |
+| `--elise-secondary`        | `bg-secondary`               | Color secundario (violeta)               |
+| `--elise-accent`           | `bg-accent`                  | Color de acento (verde)                  |
+| `--elise-success`          | `bg-success`                 | Exito                                    |
+| `--elise-warning`          | `bg-warning`                 | Advertencia                              |
+| `--elise-danger`           | `bg-danger`                  | Error/peligro                            |
+| `--elise-focus`            | `ring-focus`                 | Anillo de focus                          |
+| `--elise-overlay`          | `bg-overlay`                 | Overlay de modales                       |
 
 ### Otros tokens
 
-| Token CSS | Utilidad Tailwind | Valor default (light) |
-| --- | --- | --- |
-| `--elise-radius-xs` | `rounded-xs` | `2px` |
-| `--elise-radius-sm` | `rounded-sm` | `4px` |
-| `--elise-radius-md` | `rounded-md` | `8px` |
-| `--elise-radius-lg` | `rounded-lg` | `12px` |
-| `--elise-radius-pill` | `rounded-pill` | `999px` |
-| `--elise-shadow-soft` | `shadow-soft` | Sombra suave |
-| `--elise-shadow-floating` | `shadow-floating` | Sombra para elementos flotantes |
-| `--elise-font-family-sans` | `font-sans` | Space Grotesk, Satoshi, Inter, system-ui |
-| `--elise-font-family-mono` | `font-mono` | JetBrains Mono, Consolas |
+| Token CSS                  | Utilidad Tailwind | Valor default (light)                    |
+| -------------------------- | ----------------- | ---------------------------------------- |
+| `--elise-radius-xs`        | `rounded-xs`      | `2px`                                    |
+| `--elise-radius-sm`        | `rounded-sm`      | `4px`                                    |
+| `--elise-radius-md`        | `rounded-md`      | `8px`                                    |
+| `--elise-radius-lg`        | `rounded-lg`      | `12px`                                   |
+| `--elise-radius-pill`      | `rounded-pill`    | `999px`                                  |
+| `--elise-shadow-soft`      | `shadow-soft`     | Sombra suave                             |
+| `--elise-shadow-floating`  | `shadow-floating` | Sombra para elementos flotantes          |
+| `--elise-font-family-sans` | `font-sans`       | Space Grotesk, Satoshi, Inter, system-ui |
+| `--elise-font-family-mono` | `font-mono`       | JetBrains Mono, Consolas                 |
 
 ## Valores por defecto
 
 ### Tema claro (`:root`)
 
-| Token | Valor |
-| --- | --- |
+| Token      | Valor     |
+| ---------- | --------- |
 | background | `#fcfcfd` |
-| surface | `#fefefe` |
+| surface    | `#fefefe` |
 | foreground | `#1e1f24` |
-| primary | `#3b82f6` |
-| secondary | `#8b5cf6` |
-| accent | `#46a758` |
-| success | `#3d9a50` |
-| warning | `#f5a623` |
-| danger | `#e5484d` |
+| primary    | `#3b82f6` |
+| secondary  | `#8b5cf6` |
+| accent     | `#46a758` |
+| success    | `#3d9a50` |
+| warning    | `#f5a623` |
+| danger     | `#e5484d` |
 
 ### Tema oscuro (`.dark` / `[data-theme="dark"]`)
 
-| Token | Valor |
-| --- | --- |
+| Token      | Valor     |
+| ---------- | --------- |
 | background | `#111113` |
-| surface | `#212225` |
+| surface    | `#212225` |
 | foreground | `#edeef0` |
-| primary | `#76a7ff` |
-| secondary | `#bba8ff` |
-| accent | `#53b365` |
-| success | `#53b365` |
-| warning | `#f5a623` |
-| danger | `#f2555a` |
+| primary    | `#76a7ff` |
+| secondary  | `#bba8ff` |
+| accent     | `#53b365` |
+| success    | `#53b365` |
+| warning    | `#f5a623` |
+| danger     | `#f2555a` |
 
 ## Personalizacion con `applyTheme()`
 

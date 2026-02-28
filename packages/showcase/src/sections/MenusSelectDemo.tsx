@@ -18,7 +18,13 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@calumet/elise-ui/menubar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@calumet/elise-ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@calumet/elise-ui/select";
 import { useState } from "react";
 
 const radioItems = ["Andy", "Benoit", "Luis"];

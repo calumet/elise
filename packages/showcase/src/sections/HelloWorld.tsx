@@ -1,5 +1,10 @@
 import { Button } from "@calumet/elise-ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@calumet/elise-ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@calumet/elise-ui/tooltip";
 
 const HelloWorld = () => (
   <div className="flex flex-col items-center gap-4 text-center">

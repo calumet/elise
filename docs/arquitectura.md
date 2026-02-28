@@ -49,13 +49,13 @@ Libreria principal de componentes. Construida sobre [Radix UI Primitives](https:
 
 Utilidades de alto nivel que componen los componentes de `@calumet/elise-ui` en abstracciones mas complejas.
 
-| Sub-modulo | Descripcion | Dependencia externa |
-| --- | --- | --- |
-| `./forms` | Hook `useZodForm()` | [react-hook-form](https://react-hook-form.com/) + [Zod](https://zod.dev/) |
-| `./tables` | Componente `DataTable` | [TanStack React Table v8](https://tanstack.com/table) |
-| `./toasts` | Sistema de notificaciones | — (usa event bus interno) |
-| `./alerts` | Sistema de alertas modales | — (usa event bus interno) |
-| `./dates` | Formateo y rangos de fechas | [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) |
+| Sub-modulo | Descripcion                 | Dependencia externa                                                                                                         |
+| ---------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `./forms`  | Hook `useZodForm()`         | [react-hook-form](https://react-hook-form.com/) + [Zod](https://zod.dev/)                                                   |
+| `./tables` | Componente `DataTable`      | [TanStack React Table v8](https://tanstack.com/table)                                                                       |
+| `./toasts` | Sistema de notificaciones   | — (usa event bus interno)                                                                                                   |
+| `./alerts` | Sistema de alertas modales  | — (usa event bus interno)                                                                                                   |
+| `./dates`  | Formateo y rangos de fechas | [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) |
 
 ### @calumet/elise-icons
 
@@ -76,7 +76,14 @@ Configuracion compartida de herramientas de calidad de codigo:
 Los componentes complejos se exportan como multiples sub-componentes composables:
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@calumet/elise-ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@calumet/elise-ui/card";
 
 <Card>
   <CardHeader>
@@ -85,7 +92,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
   </CardHeader>
   <CardContent>Contenido</CardContent>
   <CardFooter>Pie</CardFooter>
-</Card>
+</Card>;
 ```
 
 Este patron proviene de [Radix UI](https://www.radix-ui.com/primitives/docs/overview/introduction) y permite componer la UI de forma flexible y accesible.
@@ -98,7 +105,7 @@ Todos los componentes interactivos usan `React.forwardRef` para exponer el ref a
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "solid", ...props }, ref) => {
     return <button ref={ref} className={cn(baseClasses, className)} {...props} />;
-  }
+  },
 );
 ```
 
@@ -123,7 +130,7 @@ import { Button } from "@calumet/elise-ui/button";
 // Renderiza como <a> en lugar de <button>
 <Button asChild>
   <a href="/pagina">Ir a pagina</a>
-</Button>
+</Button>;
 ```
 
 Consulta la [documentacion de Radix sobre asChild](https://www.radix-ui.com/primitives/docs/guides/composition) para mas detalles.

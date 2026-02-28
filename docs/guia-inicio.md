@@ -38,6 +38,7 @@ Elise usa Tailwind CSS v4 con tokens CSS personalizados. En el archivo CSS princ
 ```
 
 Esto importa:
+
 - Los tokens de color de Elise (`--elise-primary`, `--elise-border`, etc.)
 - El mapeo de tokens a utilidades de Tailwind (`bg-primary`, `text-foreground`, etc.)
 - Los estilos base (tipografia, seleccion de texto, box-sizing)
@@ -61,12 +62,12 @@ function App() {
 
 ### Props del ThemeProvider
 
-| Prop | Tipo | Default | Descripcion |
-| --- | --- | --- | --- |
-| `attribute` | `"class" \| "data-theme"` | `"class"` | Metodo para aplicar el tema al DOM |
-| `storageKey` | `string` | `"elise-theme"` | Clave de localStorage para persistir la preferencia |
-| `defaultTheme` | `"light" \| "dark"` | `"light"` | Tema inicial si no hay preferencia guardada |
-| `forcedTheme` | `"light" \| "dark"` | — | Fuerza un tema ignorando la preferencia del usuario |
+| Prop           | Tipo                      | Default         | Descripcion                                         |
+| -------------- | ------------------------- | --------------- | --------------------------------------------------- |
+| `attribute`    | `"class" \| "data-theme"` | `"class"`       | Metodo para aplicar el tema al DOM                  |
+| `storageKey`   | `string`                  | `"elise-theme"` | Clave de localStorage para persistir la preferencia |
+| `defaultTheme` | `"light" \| "dark"`       | `"light"`       | Tema inicial si no hay preferencia guardada         |
+| `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema ignorando la preferencia del usuario |
 
 ## Tu primer componente
 

@@ -4,13 +4,13 @@ Design system moderno basado en [Radix UI](https://www.radix-ui.com/) primitives
 
 ## Paquetes
 
-| Paquete | Descripcion |
-| --- | --- |
-| [`@calumet/elise-ui`](packages/ui) | Libreria principal con 45+ componentes accesibles |
-| [`@calumet/elise-utils`](packages/utils) | Utilidades: formularios (Zod), tablas (TanStack), toasts, alerts, fechas |
-| [`@calumet/elise-icons`](packages/icons) | Re-export de [Radix Icons](https://www.radix-ui.com/icons) |
-| [`@calumet/elise-linter`](packages/linter) | Configuracion compartida de ESLint y Prettier |
-| [`showcase`](packages/showcase) | App demo interactiva con ejemplos de todos los componentes |
+| Paquete                                    | Descripcion                                                              |
+| ------------------------------------------ | ------------------------------------------------------------------------ |
+| [`@calumet/elise-ui`](packages/ui)         | Libreria principal con 45+ componentes accesibles                        |
+| [`@calumet/elise-utils`](packages/utils)   | Utilidades: formularios (Zod), tablas (TanStack), toasts, alerts, fechas |
+| [`@calumet/elise-icons`](packages/icons)   | Re-export de [Radix Icons](https://www.radix-ui.com/icons)               |
+| [`@calumet/elise-linter`](packages/linter) | Configuracion compartida de ESLint y Prettier                            |
+| [`showcase`](packages/showcase)            | App demo interactiva con ejemplos de todos los componentes               |
 
 ## Requisitos
 
@@ -28,16 +28,16 @@ pnpm install
 
 ## Scripts
 
-| Comando | Descripcion |
-| --- | --- |
-| `pnpm dev` | Modo desarrollo de `@calumet/elise-ui` (watch + dts) |
+| Comando             | Descripcion                                          |
+| ------------------- | ---------------------------------------------------- |
+| `pnpm dev`          | Modo desarrollo de `@calumet/elise-ui` (watch + dts) |
 | `pnpm dev:showcase` | Desarrollo paralelo de todos los paquetes + showcase |
-| `pnpm build` | Build de produccion (icons → ui → utils → showcase) |
-| `pnpm lint` | Verificar ESLint |
-| `pnpm lint:fix` | Corregir problemas de ESLint |
-| `pnpm format` | Formatear con Prettier |
-| `pnpm format:check` | Verificar formato |
-| `pnpm clean` | Limpiar carpetas dist |
+| `pnpm build`        | Build de produccion (icons → ui → utils → showcase)  |
+| `pnpm lint`         | Verificar ESLint                                     |
+| `pnpm lint:fix`     | Corregir problemas de ESLint                         |
+| `pnpm format`       | Formatear con Prettier                               |
+| `pnpm format:check` | Verificar formato                                    |
+| `pnpm clean`        | Limpiar carpetas dist                                |
 
 ## Estructura del proyecto
 
