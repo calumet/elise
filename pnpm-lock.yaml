@@ -24,12 +24,6 @@ importers:
         specifier: ^5.6.3
         version: 5.9.3
 
-  .tmp-linter-check:
-    dependencies:
-      '@calumet/elise-linter':
-        specifier: link:C:/Users/juand/Documents/calumet/elise/packages/linter
-        version: link:../packages/linter
-
   packages/icons:
     dependencies:
       '@radix-ui/react-icons':

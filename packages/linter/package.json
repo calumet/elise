@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Reglas compartidas de ESLint/Prettier para Elise.",
   "repository": {
     "type": "git",
@@ -39,17 +39,7 @@
   },
   "peerDependencies": {
     "eslint": ">=9.0.0",
-    "eslint-plugin-better-tailwindcss": "^3.8.0",
     "prettier": ">=3.0.0",
-    "tailwindcss": "^3.3.0 || ^4.1.6",
     "typescript": ">=5.0.0"
-  },
-  "peerDependenciesMeta": {
-    "eslint-plugin-better-tailwindcss": {
-      "optional": true
-    },
-    "tailwindcss": {
-      "optional": true
-    }
   }
 }
