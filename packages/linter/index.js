@@ -172,7 +172,7 @@ const createTailwindConfig = () => {
         "react/react-in-jsx-scope": "off",
         "react/prop-types": "off",
         "better-tailwindcss/enforce-consistent-class-order": "warn",
-        "better-tailwindcss/no-unregistered-classes": "warn",
+        "better-tailwindcss/no-unknown-classes": "warn",
         "better-tailwindcss/no-conflicting-classes": "warn",
         "better-tailwindcss/no-duplicate-classes": "warn",
       },
