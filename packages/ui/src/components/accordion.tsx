@@ -18,7 +18,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
       <AccordionContext value={{ name: type === "single" ? name : "", defaultValue }}>
         <div
           ref={ref}
-          className={cn("rounded-sm border border-border bg-surface", className)}
+          className={cn("rounded-sm border border-border bg-card", className)}
           {...props}
         >
           {children}
@@ -40,7 +40,7 @@ export const AccordionItem = React.forwardRef<
       name={name || undefined}
       open={value && value === defaultValue ? true : undefined}
       className={cn(
-        "group border-t border-border rounded-sm bg-surface first:border-t-0",
+        "group border-t border-border rounded-sm bg-card first:border-t-0",
         className,
       )}
       {...props}
@@ -56,7 +56,7 @@ export const AccordionTrigger = React.forwardRef<
   <summary
     ref={ref as React.Ref<HTMLElement>}
     className={cn(
-      "flex cursor-pointer list-none items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden",
+      "flex cursor-pointer list-none items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden",
       className,
     )}
     {...props}

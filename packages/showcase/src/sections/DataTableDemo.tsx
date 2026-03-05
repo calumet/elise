@@ -45,7 +45,7 @@ const DataTableDemo = () => {
               ? "bg-success/15 text-success border-success/30"
               : value === "Draft"
                 ? "bg-warning/15 text-warning border-warning/30"
-                : "bg-danger/15 text-danger border-danger/30";
+                : "bg-destructive/15 text-destructive border-destructive/30";
           return (
             <span
               className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-xs font-semibold ${toneClass}`}

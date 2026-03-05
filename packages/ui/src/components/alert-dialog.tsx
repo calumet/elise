@@ -85,7 +85,7 @@ export function AlertDialogContent({
       <dialog
         id={id}
         className={cn(
-          "m-auto w-[min(90vw,480px)] rounded-sm border border-border bg-surface p-6 shadow-floating outline-none",
+          "m-auto w-[min(90vw,480px)] rounded-sm border border-border bg-card p-6 shadow-lg outline-none",
           className,
         )}
         {...props}

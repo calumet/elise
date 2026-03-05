@@ -10,7 +10,7 @@ const FormControlsDemo = () => {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <div className="space-y-3 rounded-sm border border-border bg-surface p-4">
+      <div className="space-y-3 rounded-sm border border-border bg-card p-4">
         <Label className="text-sm font-semibold">Opciones</Label>
         <RadioGroup defaultValue="opt1">
           <label className="flex items-center gap-2 text-base">
@@ -24,7 +24,7 @@ const FormControlsDemo = () => {
         </RadioGroup>
       </div>
 
-      <div className="space-y-4 rounded-sm border border-border bg-surface p-4">
+      <div className="space-y-4 rounded-sm border border-border bg-card p-4">
         <div className="flex items-center justify-between">
           <Label htmlFor="switch-demo" className="text-base">
             Switch

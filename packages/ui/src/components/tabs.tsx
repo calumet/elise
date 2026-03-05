@@ -44,7 +44,7 @@ export const TabsTrigger = React.forwardRef<
     <label
       ref={ref}
       className={cn(
-        "inline-flex h-10 cursor-pointer items-center justify-center rounded-t-sm px-4 text-base font-semibold text-muted-foreground transition-colors border-b-2 border-transparent hover:text-foreground has-checked:text-foreground has-checked:border-primary has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-focus has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
+        "inline-flex h-10 cursor-pointer items-center justify-center rounded-t-sm px-4 text-base font-semibold text-muted-foreground transition-colors border-b-2 border-transparent hover:text-foreground has-checked:text-foreground has-checked:border-primary has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
         className,
       )}
       {...props}
@@ -79,7 +79,7 @@ export const TabsContent = React.forwardRef<
         role="tabpanel"
         data-tab-content={value}
         className={cn(
-          "mt-2 rounded-sm p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "mt-2 rounded-sm p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           className,
         )}
         {...props}

@@ -19,7 +19,7 @@ const AccordionCollapsibleDemo = () => {
         <Accordion
           type="single"
           collapsible
-          className="w-full rounded-sm border border-border bg-surface"
+          className="w-full rounded-sm border border-border bg-card"
         >
           <AccordionItem value="item-1">
             <AccordionTrigger>¿Qué incluye Elise UI?</AccordionTrigger>
@@ -39,7 +39,7 @@ const AccordionCollapsibleDemo = () => {
         <Collapsible
           open={open}
           onOpenChange={setOpen}
-          className="rounded-sm border border-border bg-surface p-3"
+          className="rounded-sm border border-border bg-card p-3"
         >
           <div className="flex items-center justify-between gap-2">
             <div>

@@ -116,12 +116,12 @@ export function DialogContent({
       <dialog
         id={id}
         className={cn(
-          "m-auto w-[min(90vw,480px)] rounded-sm border border-border bg-background p-6 shadow-floating outline-none",
+          "m-auto w-[min(90vw,480px)] rounded-sm border border-border bg-background p-6 shadow-lg outline-none",
           className,
         )}
         {...props}
       >
-        <DialogClose className="absolute right-3 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface" />
+        <DialogClose className="absolute right-3 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
         {children}
       </dialog>
     </>

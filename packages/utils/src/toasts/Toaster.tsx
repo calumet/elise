@@ -25,10 +25,10 @@ export type ToasterProps = {
 };
 
 const iconColor = {
-  info: "var(--elise-primary)",
-  alert: "var(--elise-warning)",
-  error: "var(--elise-danger)",
-  success: "var(--elise-success)",
+  info: "var(--primary)",
+  alert: "var(--warning)",
+  error: "var(--destructive)",
+  success: "var(--success)",
 };
 
 const viewportPosition = (position: Position) => {
@@ -69,7 +69,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
           onOpenChange={(open: boolean) => {
             if (!open) dismiss(toastItem.id);
           }}
-          className="group relative flex w-full max-w-sm flex-col gap-2 rounded-sm border border-border bg-surface p-4 pr-12 text-foreground shadow-floating transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
+          className="group relative flex w-full max-w-sm flex-col gap-2 rounded-sm border border-border bg-card p-4 pr-12 text-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
         >
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />
@@ -95,7 +95,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
               ) : null}
             </div>
             <ToastClose
-              className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
               aria-label="Cerrar"
             >
               <Cross2Icon className="h-4 w-4" aria-hidden />
@@ -104,7 +104,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
         </Toast>
       ))}
       <ToastViewport
-        className={`fixed z-(--elise-z-toast,50) flex max-h-screen flex-col gap-2 outline-none ${viewportPosition(position)}`}
+        className={`fixed z-50 flex max-h-screen flex-col gap-2 outline-none ${viewportPosition(position)}`}
       />
     </ToastProvider>
   );

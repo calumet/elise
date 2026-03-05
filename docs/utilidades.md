@@ -132,12 +132,12 @@ dismiss(id);
 
 ### Variantes
 
-| Variante           | Icono                 | Color             |
-| ------------------ | --------------------- | ----------------- |
-| `"info"` (default) | Info circulo          | `--elise-primary` |
-| `"success"`        | Check circulo         | `--elise-success` |
-| `"alert"`          | Triangulo exclamacion | `--elise-warning` |
-| `"error"`          | Cruz circulo          | `--elise-danger`  |
+| Variante           | Icono                 | Color            |
+| ------------------ | --------------------- | ---------------- |
+| `"info"` (default) | Info circulo          | `--primary`      |
+| `"success"`        | Check circulo         | `--success`      |
+| `"alert"`          | Triangulo exclamacion | `--warning`      |
+| `"error"`          | Cruz circulo          | `--destructive`  |
 
 ### API `toast()`
 
@@ -218,13 +218,13 @@ openAlert({
 
 ### Variantes
 
-| Variante            | Icono                  | Color             | Comportamiento                                           |
-| ------------------- | ---------------------- | ----------------- | -------------------------------------------------------- |
-| `"alert"` (default) | Triangulo exclamacion  | `--elise-warning` | Muestra boton cancelar si hay `onCancel` o `cancelLabel` |
-| `"info"`            | Info circulo           | `--elise-primary` | Solo boton "Aceptar"                                     |
-| `"error"`           | Cruz circulo           | `--elise-danger`  | Solo boton "Aceptar"                                     |
-| `"confirm"`         | Signo de interrogacion | `--elise-primary` | Siempre muestra "Confirmar" + "Cancelar"                 |
-| `"success"`         | Check circulo          | `--elise-success` | Solo boton "Aceptar"                                     |
+| Variante            | Icono                  | Color           | Comportamiento                                           |
+| ------------------- | ---------------------- | --------------- | -------------------------------------------------------- |
+| `"alert"` (default) | Triangulo exclamacion  | `--warning`     | Muestra boton cancelar si hay `onCancel` o `cancelLabel` |
+| `"info"`            | Info circulo           | `--primary`     | Solo boton "Aceptar"                                     |
+| `"error"`           | Cruz circulo           | `--destructive` | Solo boton "Aceptar"                                     |
+| `"confirm"`         | Signo de interrogacion | `--primary`     | Siempre muestra "Confirmar" + "Cancelar"                 |
+| `"success"`         | Check circulo          | `--success`     | Solo boton "Aceptar"                                     |
 
 ### API `openAlert()`
 

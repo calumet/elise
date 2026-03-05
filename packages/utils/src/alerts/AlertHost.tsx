@@ -29,11 +29,11 @@ const variantIcon = {
 };
 
 const iconColor = {
-  alert: "var(--elise-warning)",
-  info: "var(--elise-primary)",
-  error: "var(--elise-danger)",
-  confirm: "var(--elise-primary)",
-  success: "var(--elise-success)",
+  alert: "var(--warning)",
+  info: "var(--primary)",
+  error: "var(--destructive)",
+  confirm: "var(--primary)",
+  success: "var(--success)",
 };
 
 export const AlertHost: React.FC = () => {

@@ -31,7 +31,7 @@ export const MenubarTrigger = React.forwardRef<
   <MenubarPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
+      "flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
       className,
     )}
     onPointerMove={(event) => {
@@ -62,7 +62,7 @@ export const MenubarContent = React.forwardRef<
     alignOffset={alignOffset}
     sideOffset={sideOffset}
     className={cn(
-      "z-60 min-w-[220px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
+      "z-60 min-w-[220px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
       className,
     )}
     {...props}
@@ -180,7 +180,7 @@ export const MenubarSubContent = React.forwardRef<
   <MenubarPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-(--elise-z-dialog,40)] min-w-[180px] rounded-sm border border-border bg-surface p-1 shadow-floating data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
+      "z-40 min-w-[180px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
       className,
     )}
     {...props}

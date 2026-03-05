@@ -42,7 +42,7 @@ Libreria principal de componentes. Construida sobre [Radix UI Primitives](https:
 
 - **45 componentes** exportados individualmente y via barrel
 - **Sistema de temas** con ThemeProvider (light/dark)
-- **Tokens CSS** personalizados (`--elise-*`) mapeados a utilidades de Tailwind
+- **Tokens CSS** semanticos (e.g., `--primary`, `--background`) mapeados a utilidades de Tailwind
 - **Peer dependencies**: React 19, React DOM 19
 
 ### @calumet/elise-utils

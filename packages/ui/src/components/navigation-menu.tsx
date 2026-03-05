@@ -40,7 +40,7 @@ export const NavigationMenuTrigger = React.forwardRef<
   <NavigationMenuPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex select-none items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
+      "flex select-none items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
       className,
     )}
     {...props}
@@ -61,7 +61,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      "absolute left-0 right-0 z-60 top-full w-[calc(100vw-24px)] max-w-sm rounded-sm border border-border bg-surface p-3 shadow-floating data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:left-auto sm:right-auto sm:w-auto sm:min-w-[320px",
+      "absolute left-0 right-0 z-60 top-full w-[calc(100vw-24px)] max-w-sm rounded-sm border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:left-auto sm:right-auto sm:w-auto sm:min-w-[320px",
       className,
     )}
     {...props}
@@ -76,7 +76,7 @@ export const NavigationMenuLink = React.forwardRef<
   <NavigationMenuPrimitive.Link
     ref={ref}
     className={cn(
-      "select-none items-center justify-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      "select-none items-center justify-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       className,
     )}
     {...props}
@@ -91,7 +91,7 @@ export const NavigationMenuViewport = React.forwardRef<
   <NavigationMenuPrimitive.Viewport
     ref={ref}
     className={cn(
-      "relative mt-2 h-(--radix-navigation-menu-viewport-height)] w-full origin-top-left overflow-hidden rounded-sm border border-border bg-surface shadow-floating transition-all duration-200 sm:w-[var(--radix-navigation-menu-viewport-width)",
+      "relative mt-2 h-(--radix-navigation-menu-viewport-height)] w-full origin-top-left overflow-hidden rounded-sm border border-border bg-popover shadow-lg transition-all duration-200 sm:w-[var(--radix-navigation-menu-viewport-width)",
       className,
     )}
     {...props}
@@ -111,7 +111,7 @@ export const NavigationMenuIndicator = React.forwardRef<
     )}
     {...props}
   >
-    <div className="relative top-px h-2 w-2 rotate-45 rounded-sm bg-surface border-l border-t border-border" />
+    <div className="relative top-px h-2 w-2 rotate-45 rounded-sm bg-popover border-l border-t border-border" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName = NavigationMenuPrimitive.Indicator.displayName;
