@@ -122,7 +122,8 @@ function ToastIcon({ variant }: { variant: ToastEvent["variant"] }) {
           : InfoCircledIcon;
   return (
     <div
-      className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-muted-foreground"
+      className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full"
+      style={{ backgroundColor: `color-mix(in oklch, ${color} 15%, transparent)` }}
       aria-hidden
     >
       <Icon className="h-5 w-5" style={{ color }} />
