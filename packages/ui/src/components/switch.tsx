@@ -1,24 +1,31 @@
-import * as SwitchPrimitive from "@radix-ui/react-switch";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export type SwitchProps = React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>;
+export type SwitchProps = Omit<React.ComponentPropsWithoutRef<"input">, "type"> & {
+  onCheckedChange?: (checked: boolean) => void;
+};
 
-export const Switch = React.forwardRef<
-  React.ComponentRef<typeof SwitchPrimitive.Root>,
-  SwitchProps
->(({ className, ...props }, ref) => (
-  <SwitchPrimitive.Root
-    ref={ref}
-    className={cn(
-      "peer inline-flex h-6 w-11 shrink-0 items-center rounded-full border border-transparent bg-muted transition data-[state=checked]:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
-      className,
-    )}
-    {...props}
-  >
-    <SwitchPrimitive.Thumb className="pointer-events-none block h-5 w-5 translate-x-1 rounded-full bg-background shadow-soft ring-1 ring-border transition data-[state=checked]:translate-x-5" />
-  </SwitchPrimitive.Root>
-));
-
+export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
+  ({ className, onCheckedChange, onChange, ...props }, ref) => (
+    <label
+      className={cn(
+        "inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-muted transition has-checked:bg-primary has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-focus has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background has-disabled:cursor-not-allowed has-disabled:opacity-50",
+        className,
+      )}
+    >
+      <input
+        ref={ref}
+        type="checkbox"
+        className="peer sr-only"
+        onChange={(e) => {
+          onChange?.(e);
+          onCheckedChange?.(e.target.checked);
+        }}
+        {...props}
+      />
+      <span className="pointer-events-none block h-5 w-5 translate-x-1 rounded-full bg-background shadow-soft ring-1 ring-border transition peer-checked:translate-x-5" />
+    </label>
+  ),
+);
 Switch.displayName = "Switch";

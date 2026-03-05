@@ -1,22 +1,60 @@
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export const ToggleGroup = ToggleGroupPrimitive.Root;
+export const ToggleGroupContext = React.createContext({
+  name: "",
+  type: "multiple" as "single" | "multiple",
+});
 
-export const ToggleGroupItem = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>
->(({ className, ...props }, ref) => (
-  <ToggleGroupPrimitive.Item
-    ref={ref}
-    className={cn(
-      "inline-flex items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-primary-contrast",
-      className,
-    )}
-    {...props}
-  />
-));
+export type ToggleGroupProps = React.ComponentPropsWithoutRef<"div"> & {
+  type?: "single" | "multiple";
+};
 
-ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
+export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
+  ({ className, type = "multiple", children, ...props }, ref) => {
+    const name = React.useId();
+    return (
+      <ToggleGroupContext value={{ name, type }}>
+        <div ref={ref} role="group" className={cn("flex gap-1", className)} {...props}>
+          {children}
+        </div>
+      </ToggleGroupContext>
+    );
+  },
+);
+ToggleGroup.displayName = "ToggleGroup";
+
+export type ToggleGroupItemProps = Omit<
+  React.ComponentPropsWithoutRef<"label">,
+  "htmlFor"
+> & {
+  value: string;
+  defaultChecked?: boolean;
+};
+
+export const ToggleGroupItem = React.forwardRef<HTMLLabelElement, ToggleGroupItemProps>(
+  ({ className, value, children, defaultChecked, ...props }, ref) => {
+    const { name, type } = React.useContext(ToggleGroupContext);
+    return (
+      <label
+        ref={ref}
+        className={cn(
+          "inline-flex cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted has-checked:bg-primary has-checked:text-primary-contrast has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-focus has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
+          className,
+        )}
+        {...props}
+      >
+        <input
+          type={type === "single" ? "radio" : "checkbox"}
+          name={name}
+          value={value}
+          defaultChecked={defaultChecked}
+          className="sr-only"
+        />
+        {children}
+      </label>
+    );
+  },
+);
+ToggleGroupItem.displayName = "ToggleGroupItem";

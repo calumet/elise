@@ -1,20 +1,36 @@
-import * as TogglePrimitive from "@radix-ui/react-toggle";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { ToggleGroupContext } from "./toggle-group";
 
-export const Toggle = React.forwardRef<
-  React.ComponentRef<typeof TogglePrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>
->(({ className, ...props }, ref) => (
-  <TogglePrimitive.Root
-    ref={ref}
-    className={cn(
-      "inline-flex items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-primary-contrast",
-      className,
-    )}
-    {...props}
-  />
-));
+export type ToggleProps = Omit<React.ComponentPropsWithoutRef<"label">, "htmlFor"> & {
+  value?: string;
+  defaultPressed?: boolean;
+};
 
-Toggle.displayName = TogglePrimitive.Root.displayName;
+export const Toggle = React.forwardRef<HTMLLabelElement, ToggleProps>(
+  ({ className, value, defaultPressed, children, ...props }, ref) => {
+    const ctx = React.useContext(ToggleGroupContext);
+    const inGroup = ctx.name !== "";
+    return (
+      <label
+        ref={ref}
+        className={cn(
+          "inline-flex cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted has-checked:bg-primary has-checked:text-primary-contrast has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-focus has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
+          className,
+        )}
+        {...props}
+      >
+        <input
+          type={inGroup && ctx.type === "single" ? "radio" : "checkbox"}
+          name={inGroup ? ctx.name : undefined}
+          value={value}
+          defaultChecked={defaultPressed}
+          className="sr-only"
+        />
+        {children}
+      </label>
+    );
+  },
+);
+Toggle.displayName = "Toggle";

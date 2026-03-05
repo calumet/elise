@@ -1,23 +1,29 @@
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export type CheckboxProps = React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>;
+export type CheckboxProps = Omit<React.ComponentPropsWithoutRef<"input">, "type"> & {
+  onCheckedChange?: (checked: boolean) => void;
+};
 
-export const Checkbox = React.forwardRef<
-  React.ComponentRef<typeof CheckboxPrimitive.Root>,
-  CheckboxProps
->(({ className, children, ...props }, ref) => (
-  <CheckboxPrimitive.Root
-    ref={ref}
-    className={cn(
-      "peer inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-border bg-surface text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-contrast disabled:cursor-not-allowed disabled:opacity-50",
-      className,
-    )}
-    {...props}
-  >
-    <CheckboxPrimitive.Indicator className="flex items-center justify-center">
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ className, onCheckedChange, onChange, ...props }, ref) => (
+    <span
+      className={cn(
+        "inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-border bg-surface text-transparent transition has-checked:border-primary has-checked:bg-primary has-checked:text-primary-contrast has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-focus has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background has-disabled:cursor-not-allowed has-disabled:opacity-50",
+        className,
+      )}
+    >
+      <input
+        ref={ref}
+        type="checkbox"
+        className="sr-only"
+        onChange={(e) => {
+          onChange?.(e);
+          onCheckedChange?.(e.target.checked);
+        }}
+        {...props}
+      />
       <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
         <polyline
           points="3.5 8.5 6.5 11.5 12.5 4.5"
@@ -28,9 +34,7 @@ export const Checkbox = React.forwardRef<
           strokeLinejoin="round"
         />
       </svg>
-    </CheckboxPrimitive.Indicator>
-    {children}
-  </CheckboxPrimitive.Root>
-));
-
+    </span>
+  ),
+);
 Checkbox.displayName = "Checkbox";
