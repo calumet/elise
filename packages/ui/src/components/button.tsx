@@ -38,16 +38,12 @@ const toneOverrides: Record<
 };
 
 export const buttonVariants = ({
-  variant,
-  size,
+  variant = "solid",
+  size = "md",
 }: {
-  variant: ButtonProps["variant"];
+  variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-}) => {
-  if (!variant) return baseClasses;
-  if (!size) return cn(baseClasses, variantClasses[variant]);
-  return cn(baseClasses, variantClasses[variant], sizeClasses[size]);
-};
+} = {}) => cn(baseClasses, variantClasses[variant], sizeClasses[size]);
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   sm: "h-9 px-3 text-sm",
