@@ -49,69 +49,69 @@ Los temas se implementan via CSS custom properties definidas en `@calumet/elise-
 
 ### Colores semanticos
 
-| Token CSS                | Utilidad Tailwind              | Proposito                                         |
-| ------------------------ | ------------------------------ | ------------------------------------------------- |
-| `--background`           | `bg-background`                | Fondo principal de la pagina                       |
-| `--foreground`           | `text-foreground`              | Texto principal                                    |
-| `--card`                 | `bg-card`                      | Fondo de tarjetas y superficies elevadas           |
-| `--card-foreground`      | `text-card-foreground`         | Texto sobre superficies card                       |
-| `--popover`              | `bg-popover`                   | Fondo de menus flotantes, dropdowns, popovers      |
-| `--popover-foreground`   | `text-popover-foreground`      | Texto sobre superficies popover                    |
-| `--primary`              | `bg-primary`, `text-primary`   | Color primario (azul)                              |
-| `--primary-foreground`   | `text-primary-foreground`      | Texto sobre fondo primario                         |
-| `--secondary`            | `bg-secondary`                 | Fondos secundarios                                 |
-| `--secondary-foreground` | `text-secondary-foreground`    | Texto sobre fondo secundario                       |
-| `--muted`                | `bg-muted`                     | Fondos sutiles, hovers                             |
-| `--muted-foreground`     | `text-muted-foreground`        | Texto secundario/gris                              |
-| `--accent`               | `bg-accent`                    | Color de acento                                    |
-| `--accent-foreground`    | `text-accent-foreground`       | Texto sobre fondo de acento                        |
-| `--destructive`          | `bg-destructive`               | Acciones destructivas/errores                      |
-| `--destructive-foreground` | `text-destructive-foreground` | Texto sobre fondo destructive                     |
-| `--border`               | `border-border`                | Bordes estandar                                    |
-| `--input`                | `border-input`                 | Bordes de campos de entrada                        |
-| `--ring`                 | `ring-ring`                    | Anillo de focus                                    |
-| `--success`              | `bg-success`, `text-success`   | Exito                                              |
-| `--warning`              | `bg-warning`, `text-warning`   | Advertencia                                        |
+| Token CSS                  | Utilidad Tailwind             | Proposito                                     |
+| -------------------------- | ----------------------------- | --------------------------------------------- |
+| `--background`             | `bg-background`               | Fondo principal de la pagina                  |
+| `--foreground`             | `text-foreground`             | Texto principal                               |
+| `--card`                   | `bg-card`                     | Fondo de tarjetas y superficies elevadas      |
+| `--card-foreground`        | `text-card-foreground`        | Texto sobre superficies card                  |
+| `--popover`                | `bg-popover`                  | Fondo de menus flotantes, dropdowns, popovers |
+| `--popover-foreground`     | `text-popover-foreground`     | Texto sobre superficies popover               |
+| `--primary`                | `bg-primary`, `text-primary`  | Color primario (azul)                         |
+| `--primary-foreground`     | `text-primary-foreground`     | Texto sobre fondo primario                    |
+| `--secondary`              | `bg-secondary`                | Fondos secundarios                            |
+| `--secondary-foreground`   | `text-secondary-foreground`   | Texto sobre fondo secundario                  |
+| `--muted`                  | `bg-muted`                    | Fondos sutiles, hovers                        |
+| `--muted-foreground`       | `text-muted-foreground`       | Texto secundario/gris                         |
+| `--accent`                 | `bg-accent`                   | Color de acento                               |
+| `--accent-foreground`      | `text-accent-foreground`      | Texto sobre fondo de acento                   |
+| `--destructive`            | `bg-destructive`              | Acciones destructivas/errores                 |
+| `--destructive-foreground` | `text-destructive-foreground` | Texto sobre fondo destructive                 |
+| `--border`                 | `border-border`               | Bordes estandar                               |
+| `--input`                  | `border-input`                | Bordes de campos de entrada                   |
+| `--ring`                   | `ring-ring`                   | Anillo de focus                               |
+| `--success`                | `bg-success`, `text-success`  | Exito                                         |
+| `--warning`                | `bg-warning`, `text-warning`  | Advertencia                                   |
 
 ### Colores de charts
 
-| Token CSS    | Utilidad Tailwind  |
-| ------------ | ------------------ |
-| `--chart-1`  | `bg-chart-1`, etc. |
-| `--chart-2`  | `bg-chart-2`       |
-| `--chart-3`  | `bg-chart-3`       |
-| `--chart-4`  | `bg-chart-4`       |
-| `--chart-5`  | `bg-chart-5`       |
+| Token CSS   | Utilidad Tailwind  |
+| ----------- | ------------------ |
+| `--chart-1` | `bg-chart-1`, etc. |
+| `--chart-2` | `bg-chart-2`       |
+| `--chart-3` | `bg-chart-3`       |
+| `--chart-4` | `bg-chart-4`       |
+| `--chart-5` | `bg-chart-5`       |
 
 ### Colores de sidebar
 
-| Token CSS                       | Utilidad Tailwind                  |
-| ------------------------------- | ---------------------------------- |
-| `--sidebar`                     | `bg-sidebar`                       |
-| `--sidebar-foreground`          | `text-sidebar-foreground`          |
-| `--sidebar-primary`             | `bg-sidebar-primary`               |
-| `--sidebar-primary-foreground`  | `text-sidebar-primary-foreground`  |
-| `--sidebar-accent`              | `bg-sidebar-accent`                |
-| `--sidebar-accent-foreground`   | `text-sidebar-accent-foreground`   |
-| `--sidebar-border`              | `border-sidebar-border`            |
-| `--sidebar-ring`                | `ring-sidebar-ring`                |
+| Token CSS                      | Utilidad Tailwind                 |
+| ------------------------------ | --------------------------------- |
+| `--sidebar`                    | `bg-sidebar`                      |
+| `--sidebar-foreground`         | `text-sidebar-foreground`         |
+| `--sidebar-primary`            | `bg-sidebar-primary`              |
+| `--sidebar-primary-foreground` | `text-sidebar-primary-foreground` |
+| `--sidebar-accent`             | `bg-sidebar-accent`               |
+| `--sidebar-accent-foreground`  | `text-sidebar-accent-foreground`  |
+| `--sidebar-border`             | `border-sidebar-border`           |
+| `--sidebar-ring`               | `ring-sidebar-ring`               |
 
 ### Otros tokens
 
-| Token CSS      | Utilidad Tailwind                    | Descripcion                                      |
-| -------------- | ------------------------------------ | ------------------------------------------------ |
+| Token CSS      | Utilidad Tailwind                                      | Descripcion                                                 |
+| -------------- | ------------------------------------------------------ | ----------------------------------------------------------- |
 | `--radius`     | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | Radio base (0.375rem). Las escalas se calculan con `calc()` |
-| `--shadow-2xs` | `shadow-2xs`                         | Sombra minima                                    |
-| `--shadow-xs`  | `shadow-xs`                          | Sombra extra-pequena                             |
-| `--shadow-sm`  | `shadow-sm`                          | Sombra pequena                                   |
-| `--shadow`     | `shadow`                             | Sombra por defecto                               |
-| `--shadow-md`  | `shadow-md`                          | Sombra mediana                                   |
-| `--shadow-lg`  | `shadow-lg`                          | Sombra grande (menus, popovers)                  |
-| `--shadow-xl`  | `shadow-xl`                          | Sombra extra-grande                              |
-| `--shadow-2xl` | `shadow-2xl`                         | Sombra maxima                                    |
-| `--font-sans`  | `font-sans`                          | Geist, system-ui                                 |
-| `--font-serif` | `font-serif`                         | Source Serif 4, serif                            |
-| `--font-mono`  | `font-mono`                          | JetBrains Mono, monospace                        |
+| `--shadow-2xs` | `shadow-2xs`                                           | Sombra minima                                               |
+| `--shadow-xs`  | `shadow-xs`                                            | Sombra extra-pequena                                        |
+| `--shadow-sm`  | `shadow-sm`                                            | Sombra pequena                                              |
+| `--shadow`     | `shadow`                                               | Sombra por defecto                                          |
+| `--shadow-md`  | `shadow-md`                                            | Sombra mediana                                              |
+| `--shadow-lg`  | `shadow-lg`                                            | Sombra grande (menus, popovers)                             |
+| `--shadow-xl`  | `shadow-xl`                                            | Sombra extra-grande                                         |
+| `--shadow-2xl` | `shadow-2xl`                                           | Sombra maxima                                               |
+| `--font-sans`  | `font-sans`                                            | Geist, system-ui                                            |
+| `--font-serif` | `font-serif`                                           | Source Serif 4, serif                                       |
+| `--font-mono`  | `font-mono`                                            | JetBrains Mono, monospace                                   |
 
 ## Usando los colores en Tailwind
 
@@ -137,9 +137,7 @@ Los tokens se usan directamente como utilidades de Tailwind. Cada token de color
 <button class="focus-visible:ring-2 focus-visible:ring-ring">...</button>
 
 <!-- Estados con opacidad -->
-<button class="bg-primary hover:bg-primary/90 active:bg-primary/80">
-  Boton
-</button>
+<button class="bg-primary hover:bg-primary/90 active:bg-primary/80">Boton</button>
 
 <!-- Destructive -->
 <button class="bg-destructive text-destructive-foreground">Eliminar</button>
@@ -155,55 +153,55 @@ Los tokens se usan directamente como utilidades de Tailwind. Cada token de color
 
 ### Tema claro (`:root`)
 
-| Token                | Valor oklch                   |
-| -------------------- | ----------------------------- |
-| background           | `oklch(1.00 0 0)`            |
-| foreground           | `oklch(0.32 0 0)`            |
-| card                 | `oklch(1.00 0 0)`            |
-| card-foreground      | `oklch(0.32 0 0)`            |
-| popover              | `oklch(1.00 0 0)`            |
-| popover-foreground   | `oklch(0.32 0 0)`            |
-| primary              | `oklch(0.62 0.19 259.76)`    |
-| primary-foreground   | `oklch(1.00 0 0)`            |
-| secondary            | `oklch(0.97 0 0)`            |
-| secondary-foreground | `oklch(0.45 0.03 257.68)`    |
-| muted                | `oklch(0.98 0 0)`            |
-| muted-foreground     | `oklch(0.55 0.02 264.41)`    |
-| accent               | `oklch(0.95 0.03 233.56)`    |
-| accent-foreground    | `oklch(0.38 0.14 265.59)`    |
-| destructive          | `oklch(0.64 0.21 25.39)`     |
-| destructive-foreground | `oklch(1.00 0 0)`          |
-| border               | `oklch(0.93 0.01 261.82)`    |
-| input                | `oklch(0.93 0.01 261.82)`    |
-| ring                 | `oklch(0.62 0.19 259.76)`    |
-| success              | `oklch(0.60 0.15 145)`       |
-| warning              | `oklch(0.75 0.15 75)`        |
+| Token                  | Valor oklch               |
+| ---------------------- | ------------------------- |
+| background             | `oklch(1.00 0 0)`         |
+| foreground             | `oklch(0.32 0 0)`         |
+| card                   | `oklch(1.00 0 0)`         |
+| card-foreground        | `oklch(0.32 0 0)`         |
+| popover                | `oklch(1.00 0 0)`         |
+| popover-foreground     | `oklch(0.32 0 0)`         |
+| primary                | `oklch(0.62 0.19 259.76)` |
+| primary-foreground     | `oklch(1.00 0 0)`         |
+| secondary              | `oklch(0.97 0 0)`         |
+| secondary-foreground   | `oklch(0.45 0.03 257.68)` |
+| muted                  | `oklch(0.98 0 0)`         |
+| muted-foreground       | `oklch(0.55 0.02 264.41)` |
+| accent                 | `oklch(0.95 0.03 233.56)` |
+| accent-foreground      | `oklch(0.38 0.14 265.59)` |
+| destructive            | `oklch(0.64 0.21 25.39)`  |
+| destructive-foreground | `oklch(1.00 0 0)`         |
+| border                 | `oklch(0.93 0.01 261.82)` |
+| input                  | `oklch(0.93 0.01 261.82)` |
+| ring                   | `oklch(0.62 0.19 259.76)` |
+| success                | `oklch(0.60 0.15 145)`    |
+| warning                | `oklch(0.75 0.15 75)`     |
 
 ### Tema oscuro (`.dark` / `[data-theme="dark"]`)
 
-| Token                | Valor oklch                   |
-| -------------------- | ----------------------------- |
-| background           | `oklch(0.20 0 0)`            |
-| foreground           | `oklch(0.92 0 0)`            |
-| card                 | `oklch(0.27 0 0)`            |
-| card-foreground      | `oklch(0.92 0 0)`            |
-| popover              | `oklch(0.27 0 0)`            |
-| popover-foreground   | `oklch(0.92 0 0)`            |
-| primary              | `oklch(0.62 0.19 259.76)`    |
-| primary-foreground   | `oklch(1.00 0 0)`            |
-| secondary            | `oklch(0.27 0 0)`            |
-| secondary-foreground | `oklch(0.92 0 0)`            |
-| muted                | `oklch(0.27 0 0)`            |
-| muted-foreground     | `oklch(0.72 0 0)`            |
-| accent               | `oklch(0.38 0.14 265.59)`    |
-| accent-foreground    | `oklch(0.88 0.06 254.63)`    |
-| destructive          | `oklch(0.64 0.21 25.39)`     |
-| destructive-foreground | `oklch(1.00 0 0)`          |
-| border               | `oklch(0.37 0 0)`            |
-| input                | `oklch(0.37 0 0)`            |
-| ring                 | `oklch(0.62 0.19 259.76)`    |
-| success              | `oklch(0.60 0.15 145)`       |
-| warning              | `oklch(0.75 0.15 75)`        |
+| Token                  | Valor oklch               |
+| ---------------------- | ------------------------- |
+| background             | `oklch(0.20 0 0)`         |
+| foreground             | `oklch(0.92 0 0)`         |
+| card                   | `oklch(0.27 0 0)`         |
+| card-foreground        | `oklch(0.92 0 0)`         |
+| popover                | `oklch(0.27 0 0)`         |
+| popover-foreground     | `oklch(0.92 0 0)`         |
+| primary                | `oklch(0.62 0.19 259.76)` |
+| primary-foreground     | `oklch(1.00 0 0)`         |
+| secondary              | `oklch(0.27 0 0)`         |
+| secondary-foreground   | `oklch(0.92 0 0)`         |
+| muted                  | `oklch(0.27 0 0)`         |
+| muted-foreground       | `oklch(0.72 0 0)`         |
+| accent                 | `oklch(0.38 0.14 265.59)` |
+| accent-foreground      | `oklch(0.88 0.06 254.63)` |
+| destructive            | `oklch(0.64 0.21 25.39)`  |
+| destructive-foreground | `oklch(1.00 0 0)`         |
+| border                 | `oklch(0.37 0 0)`         |
+| input                  | `oklch(0.37 0 0)`         |
+| ring                   | `oklch(0.62 0.19 259.76)` |
+| success                | `oklch(0.60 0.15 145)`    |
+| warning                | `oklch(0.75 0.15 75)`     |
 
 ## Sobrescribir el tema con CSS
 
@@ -219,17 +217,17 @@ En tu CSS principal (despues de importar `elise.css`), redefine los tokens que q
 
 /* Sobrescribir colores del tema claro */
 :root {
-  --primary: oklch(0.55 0.20 150);       /* verde en lugar de azul */
-  --primary-foreground: oklch(1.00 0 0);
-  --ring: oklch(0.55 0.20 150);
-  --accent: oklch(0.90 0.05 150);
-  --accent-foreground: oklch(0.30 0.15 150);
+  --primary: oklch(0.55 0.2 150); /* verde en lugar de azul */
+  --primary-foreground: oklch(1 0 0);
+  --ring: oklch(0.55 0.2 150);
+  --accent: oklch(0.9 0.05 150);
+  --accent-foreground: oklch(0.3 0.15 150);
 }
 
 /* Sobrescribir colores del tema oscuro */
 .dark {
   --primary: oklch(0.65 0.18 150);
-  --primary-foreground: oklch(1.00 0 0);
+  --primary-foreground: oklch(1 0 0);
   --ring: oklch(0.65 0.18 150);
 }
 ```
@@ -242,8 +240,8 @@ Puedes aplicar tokens diferentes a secciones especificas de la pagina:
 
 ```css
 .seccion-marketing {
-  --primary: oklch(0.70 0.15 30);
-  --primary-foreground: oklch(1.00 0 0);
+  --primary: oklch(0.7 0.15 30);
+  --primary-foreground: oklch(1 0 0);
   --accent: oklch(0.92 0.04 30);
 }
 ```
@@ -251,7 +249,7 @@ Puedes aplicar tokens diferentes a secciones especificas de la pagina:
 ```html
 <div class="seccion-marketing">
   <!-- Los componentes de Elise aqui usaran los colores personalizados -->
-  <Button variant="solid">Comprar ahora</Button>
+  <button variant="solid">Comprar ahora</button>
 </div>
 ```
 
@@ -266,6 +264,7 @@ El radio de bordes se calcula a partir de un unico token `--radius`. Cambiarlo a
 ```
 
 Las escalas derivadas son:
+
 - `rounded-sm` = `calc(var(--radius) - 4px)`
 - `rounded-md` = `calc(var(--radius) - 2px)`
 - `rounded-lg` = `var(--radius)`

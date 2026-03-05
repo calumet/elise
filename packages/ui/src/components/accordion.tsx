@@ -39,10 +39,7 @@ export const AccordionItem = React.forwardRef<
       ref={ref}
       name={name || undefined}
       open={value && value === defaultValue ? true : undefined}
-      className={cn(
-        "group border-t border-border rounded-sm bg-card first:border-t-0",
-        className,
-      )}
+      className={cn("group border-t border-border rounded-sm bg-card first:border-t-0", className)}
       {...props}
     />
   );

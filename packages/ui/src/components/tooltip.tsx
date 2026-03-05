@@ -13,16 +13,9 @@ function TooltipProvider({
   return <>{children}</>;
 }
 
-function Tooltip({
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+function Tooltip({ className, children, ...props }: React.ComponentPropsWithoutRef<"div">) {
   return (
-    <div
-      className={cn("group/tooltip relative inline-flex", className)}
-      {...props}
-    >
+    <div className={cn("group/tooltip relative inline-flex", className)} {...props}>
       {children}
     </div>
   );

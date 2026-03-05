@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import { cn } from "@/lib/cn";
 import { ToggleGroupContext } from "./toggle-group";
+
+import { cn } from "@/lib/cn";
 
 export type ToggleProps = Omit<React.ComponentPropsWithoutRef<"label">, "htmlFor"> & {
   value?: string;

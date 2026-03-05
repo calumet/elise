@@ -19,20 +19,19 @@ export const Tabs = React.forwardRef<
 });
 Tabs.displayName = "Tabs";
 
-export const TabsList = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="tablist"
-    className={cn(
-      "inline-flex items-center gap-1 border-b border-border text-base font-semibold",
-      className,
-    )}
-    {...props}
-  />
-));
+export const TabsList = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      role="tablist"
+      className={cn(
+        "inline-flex items-center gap-1 border-b border-border text-base font-semibold",
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
 TabsList.displayName = "TabsList";
 
 export const TabsTrigger = React.forwardRef<

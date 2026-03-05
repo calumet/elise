@@ -81,11 +81,7 @@ function SheetTrigger({
   );
 }
 
-function SheetClose({
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithoutRef<"button">) {
+function SheetClose({ className, children, ...props }: React.ComponentPropsWithoutRef<"button">) {
   return (
     <form method="dialog" className="contents">
       <button type="submit" className={cn(className)} {...props}>
@@ -121,10 +117,8 @@ function SheetContent({
         <div
           className={cn(
             "absolute flex flex-col gap-4 bg-background shadow-lg",
-            side === "right" &&
-              "inset-y-0 right-0 w-3/4 border-l sm:max-w-sm",
-            side === "left" &&
-              "inset-y-0 left-0 w-3/4 border-r sm:max-w-sm",
+            side === "right" && "inset-y-0 right-0 w-3/4 border-l sm:max-w-sm",
+            side === "left" && "inset-y-0 left-0 w-3/4 border-r sm:max-w-sm",
             side === "top" && "inset-x-0 top-0 border-b",
             side === "bottom" && "inset-x-0 bottom-0 border-t",
           )}
@@ -137,49 +131,20 @@ function SheetContent({
   );
 }
 
-function SheetHeader({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  return (
-    <div className={cn("flex flex-col gap-1.5 p-4", className)} {...props} />
-  );
+function SheetHeader({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+  return <div className={cn("flex flex-col gap-1.5 p-4", className)} {...props} />;
 }
 
-function SheetFooter({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  return (
-    <div
-      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
-      {...props}
-    />
-  );
+function SheetFooter({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+  return <div className={cn("mt-auto flex flex-col gap-2 p-4", className)} {...props} />;
 }
 
-function SheetTitle({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"h2">) {
-  return (
-    <h2
-      className={cn("text-foreground font-semibold", className)}
-      {...props}
-    />
-  );
+function SheetTitle({ className, ...props }: React.ComponentPropsWithoutRef<"h2">) {
+  return <h2 className={cn("text-foreground font-semibold", className)} {...props} />;
 }
 
-function SheetDescription({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"p">) {
-  return (
-    <p
-      className={cn("text-muted-foreground text-sm", className)}
-      {...props}
-    />
-  );
+function SheetDescription({ className, ...props }: React.ComponentPropsWithoutRef<"p">) {
+  return <p className={cn("text-muted-foreground text-sm", className)} {...props} />;
 }
 
 export {

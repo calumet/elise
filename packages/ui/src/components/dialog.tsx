@@ -128,10 +128,7 @@ export function DialogContent({
   );
 }
 
-export const DialogHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn("flex flex-col gap-2 text-left", className)} {...props} />
 );
 DialogHeader.displayName = "DialogHeader";
@@ -140,11 +137,7 @@ export const DialogTitle = React.forwardRef<
   HTMLHeadingElement,
   React.ComponentPropsWithoutRef<"h2">
 >(({ className, ...props }, ref) => (
-  <h2
-    ref={ref}
-    className={cn("text-lg font-semibold tracking-tight", className)}
-    {...props}
-  />
+  <h2 ref={ref} className={cn("text-lg font-semibold tracking-tight", className)} {...props} />
 ));
 DialogTitle.displayName = "DialogTitle";
 

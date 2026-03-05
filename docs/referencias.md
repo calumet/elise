@@ -44,14 +44,14 @@ Elise se construye sobre librerias de codigo abierto bien documentadas. Aqui est
 
 ## Herramientas de build
 
-| Herramienta  | Uso en Elise                                        | Documentacion            |
-| ------------ | --------------------------------------------------- | ------------------------ |
-| **pnpm**     | Package manager y workspaces                        | https://pnpm.io/         |
-| **tsup**     | Bundler de paquetes de libreria (ESM + CJS + .d.ts) | https://tsup.egoist.dev/ |
-| **Vite**     | Dev server de la app showcase                       | https://vite.dev/        |
+| Herramienta           | Uso en Elise                                         | Documentacion                                                   |
+| --------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| **pnpm**              | Package manager y workspaces                         | https://pnpm.io/                                                |
+| **tsup**              | Bundler de paquetes de libreria (ESM + CJS + .d.ts)  | https://tsup.egoist.dev/                                        |
+| **Vite**              | Dev server de la app showcase                        | https://vite.dev/                                               |
 | **@tailwindcss/vite** | Integracion de Tailwind CSS v4 en Vite (sin PostCSS) | https://tailwindcss.com/docs/installation/framework-guides/vite |
-| **ESLint**   | Linter de codigo (flat config)                      | https://eslint.org/      |
-| **Prettier** | Formateador de codigo                               | https://prettier.io/     |
+| **ESLint**            | Linter de codigo (flat config)                       | https://eslint.org/                                             |
+| **Prettier**          | Formateador de codigo                                | https://prettier.io/                                            |
 
 ---
 

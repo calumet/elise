@@ -32,7 +32,8 @@ const toneOverrides: Record<
     solid: "bg-warning text-destructive-foreground hover:bg-warning/90 active:bg-warning/80",
   },
   danger: {
-    solid: "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
+    solid:
+      "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
   },
 };
 

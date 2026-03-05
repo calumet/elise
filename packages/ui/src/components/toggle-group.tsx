@@ -25,10 +25,7 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
 );
 ToggleGroup.displayName = "ToggleGroup";
 
-export type ToggleGroupItemProps = Omit<
-  React.ComponentPropsWithoutRef<"label">,
-  "htmlFor"
-> & {
+export type ToggleGroupItemProps = Omit<React.ComponentPropsWithoutRef<"label">, "htmlFor"> & {
   value: string;
   defaultChecked?: boolean;
 };

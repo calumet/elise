@@ -134,11 +134,7 @@ export const AlertDialogTitle = React.forwardRef<
   HTMLHeadingElement,
   React.ComponentPropsWithoutRef<"h2">
 >(({ className, ...props }, ref) => (
-  <h2
-    ref={ref}
-    className={cn("text-lg font-semibold tracking-tight", className)}
-    {...props}
-  />
+  <h2 ref={ref} className={cn("text-lg font-semibold tracking-tight", className)} {...props} />
 ));
 AlertDialogTitle.displayName = "AlertDialogTitle";
 
@@ -159,10 +155,7 @@ export const AlertDialogFooter = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      "mt-4 flex flex-col-reverse sm:flex-row gap-2 sm:justify-end",
-      className,
-    )}
+    className={cn("mt-4 flex flex-col-reverse sm:flex-row gap-2 sm:justify-end", className)}
     {...props}
   />
 );

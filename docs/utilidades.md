@@ -132,12 +132,12 @@ dismiss(id);
 
 ### Variantes
 
-| Variante           | Icono                 | Color            |
-| ------------------ | --------------------- | ---------------- |
-| `"info"` (default) | Info circulo          | `--primary`      |
-| `"success"`        | Check circulo         | `--success`      |
-| `"alert"`          | Triangulo exclamacion | `--warning`      |
-| `"error"`          | Cruz circulo          | `--destructive`  |
+| Variante           | Icono                 | Color           |
+| ------------------ | --------------------- | --------------- |
+| `"info"` (default) | Info circulo          | `--primary`     |
+| `"success"`        | Check circulo         | `--success`     |
+| `"alert"`          | Triangulo exclamacion | `--warning`     |
+| `"error"`          | Cruz circulo          | `--destructive` |
 
 ### API `toast()`
 

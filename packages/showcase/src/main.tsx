@@ -67,7 +67,9 @@ const ThemeToggle = () => {
   );
 };
 
-const SectionFallback = () => <div className="min-h-[220px] w-full animate-pulse rounded-sm bg-muted" />;
+const SectionFallback = () => (
+  <div className="min-h-[220px] w-full animate-pulse rounded-sm bg-muted" />
+);
 
 const LazySection = ({ children }: { children: React.ReactNode }) => (
   <React.Suspense fallback={<SectionFallback />}>{children}</React.Suspense>
