@@ -29,7 +29,7 @@ export const Toast = React.forwardRef<React.ComponentRef<typeof ToastPrimitive.R
     <ToastPrimitive.Root
       ref={ref}
       className={cn(
-        "group relative flex w-full flex-col gap-2 rounded-sm border border-border bg-card p-4 pr-12 text-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end:animate-swipe-out",
+        "group relative flex w-full flex-col gap-2 rounded-sm border border-border bg-card p-4 pr-12 text-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out",
         className,
       )}
       {...props}
