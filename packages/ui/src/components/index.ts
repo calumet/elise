@@ -12,6 +12,7 @@ export * from "./collapsible";
 export * from "./context-menu";
 export * from "./dialog";
 export * from "./dropdown-menu";
+export * from "./dropdown-native";
 export * from "./form";
 export * from "./hover-card";
 export * from "./input";
