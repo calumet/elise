@@ -65,7 +65,6 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
         <Toast
           key={toastItem.id}
           duration={toastItem.duration}
-          open
           onOpenChange={(open: boolean) => {
             if (!open) dismiss(toastItem.id);
           }}
