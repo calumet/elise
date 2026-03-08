@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Reglas compartidas de ESLint/Prettier para Elise.",
   "repository": {
     "type": "git",
