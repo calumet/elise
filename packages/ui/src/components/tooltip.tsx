@@ -39,45 +39,30 @@ const TooltipContent = React.forwardRef<
   }
 >(({ className, side = "top", sideOffset = 8, align = "center", style, ...props }, ref) => {
   const isHorizontal = side === "top" || side === "bottom";
-  const pos: React.CSSProperties = {};
 
-  if (side === "top") {
-    pos.bottom = "100%";
-    pos.marginBottom = sideOffset;
-  } else if (side === "bottom") {
-    pos.top = "100%";
-    pos.marginTop = sideOffset;
-  } else if (side === "left") {
-    pos.right = "100%";
-    pos.marginRight = sideOffset;
-  } else {
-    pos.left = "100%";
-    pos.marginLeft = sideOffset;
-  }
-
-  if (align === "center") {
-    if (isHorizontal) {
-      pos.left = "50%";
-      pos.transform = "translateX(-50%)";
-    } else {
-      pos.top = "50%";
-      pos.transform = "translateY(-50%)";
-    }
-  } else if (align === "start") {
-    if (isHorizontal) pos.left = 0;
-    else pos.top = 0;
-  } else {
-    if (isHorizontal) pos.right = 0;
-    else pos.bottom = 0;
-  }
+  const offsetStyle: React.CSSProperties =
+    side === "top" ? { marginBottom: sideOffset } :
+    side === "bottom" ? { marginTop: sideOffset } :
+    side === "left" ? { marginRight: sideOffset } :
+    { marginLeft: sideOffset };
 
   return (
     <div
       ref={ref}
       role="tooltip"
-      style={{ ...pos, ...style }}
+      style={{ ...offsetStyle, ...style }}
       className={cn(
         "invisible pointer-events-none absolute z-50 w-max max-w-[calc(100vw-1rem)] rounded-sm bg-foreground px-3 py-1.5 text-xs text-background text-balance opacity-0 transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100",
+        side === "top" && "bottom-full",
+        side === "bottom" && "top-full",
+        side === "left" && "right-full",
+        side === "right" && "left-full",
+        align === "center" && isHorizontal && "left-1/2 -translate-x-1/2",
+        align === "center" && !isHorizontal && "top-1/2 -translate-y-1/2",
+        align === "start" && isHorizontal && "left-0",
+        align === "start" && !isHorizontal && "top-0",
+        align === "end" && isHorizontal && "right-0",
+        align === "end" && !isHorizontal && "bottom-0",
         className,
       )}
       {...props}
