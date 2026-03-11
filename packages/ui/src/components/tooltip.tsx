@@ -13,11 +13,36 @@ function TooltipProvider({
   return <>{children}</>;
 }
 
+function clampToViewport(group: HTMLElement) {
+  const el = group.querySelector<HTMLElement>('[role="tooltip"]');
+  if (!el) return;
+  el.style.translate = "";
+  const rect = el.getBoundingClientRect();
+  const pad = 8;
+  let dx = 0;
+  if (rect.right > window.innerWidth - pad) dx = window.innerWidth - pad - rect.right;
+  if (rect.left < pad) dx = pad - rect.left;
+  if (dx) el.style.translate = `${dx}px 0`;
+}
+
+function resetClamp(group: HTMLElement) {
+  const el = group.querySelector<HTMLElement>('[role="tooltip"]');
+  if (el) el.style.translate = "";
+}
+
 const Tooltip = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("group/tooltip relative inline-flex", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn("group/tooltip relative inline-flex", className)}
+    onMouseEnter={(e) => clampToViewport(e.currentTarget)}
+    onMouseLeave={(e) => resetClamp(e.currentTarget)}
+    onFocusCapture={(e) => clampToViewport(e.currentTarget)}
+    onBlurCapture={(e) => resetClamp(e.currentTarget)}
+    {...props}
+  />
 ));
 Tooltip.displayName = "Tooltip";
 
