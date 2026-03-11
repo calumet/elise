@@ -1,18 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
-import { createPortal } from "react-dom";
 
 import { cn } from "@/lib/cn";
-
-interface TooltipContextValue {
-  open: boolean;
-  triggerRef: React.RefObject<HTMLElement | null>;
-}
-
-const TooltipContext = React.createContext<TooltipContextValue>({
-  open: false,
-  triggerRef: { current: null },
-});
 
 function TooltipProvider({
   children,
@@ -24,125 +13,77 @@ function TooltipProvider({
   return <>{children}</>;
 }
 
-function Tooltip({ className, children, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  const [open, setOpen] = React.useState(false);
-  const triggerRef = React.useRef<HTMLElement>(null);
+const Tooltip = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<"div">
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("group/tooltip relative inline-flex", className)} {...props} />
+));
+Tooltip.displayName = "Tooltip";
+
+const TooltipTrigger = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<"span"> & { asChild?: boolean }
+>(({ asChild, className, ...props }, ref) => {
+  const Comp = asChild ? Slot : "span";
+  return <Comp ref={ref} className={cn("inline-flex", className)} {...props} />;
+});
+TooltipTrigger.displayName = "TooltipTrigger";
+
+const TooltipContent = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<"div"> & {
+    side?: "top" | "bottom" | "left" | "right";
+    sideOffset?: number;
+    align?: "start" | "center" | "end";
+  }
+>(({ className, side = "top", sideOffset = 8, align = "center", style, ...props }, ref) => {
+  const isHorizontal = side === "top" || side === "bottom";
+  const pos: React.CSSProperties = {};
+
+  if (side === "top") {
+    pos.bottom = "100%";
+    pos.marginBottom = sideOffset;
+  } else if (side === "bottom") {
+    pos.top = "100%";
+    pos.marginTop = sideOffset;
+  } else if (side === "left") {
+    pos.right = "100%";
+    pos.marginRight = sideOffset;
+  } else {
+    pos.left = "100%";
+    pos.marginLeft = sideOffset;
+  }
+
+  if (align === "center") {
+    if (isHorizontal) {
+      pos.left = "50%";
+      pos.transform = "translateX(-50%)";
+    } else {
+      pos.top = "50%";
+      pos.transform = "translateY(-50%)";
+    }
+  } else if (align === "start") {
+    if (isHorizontal) pos.left = 0;
+    else pos.top = 0;
+  } else {
+    if (isHorizontal) pos.right = 0;
+    else pos.bottom = 0;
+  }
 
   return (
-    <TooltipContext.Provider value={{ open, triggerRef }}>
-      <div
-        className={cn("relative inline-flex", className)}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        onFocusCapture={() => setOpen(true)}
-        onBlurCapture={() => setOpen(false)}
-        {...props}
-      >
-        {children}
-      </div>
-    </TooltipContext.Provider>
-  );
-}
-
-function TooltipTrigger({
-  asChild,
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"span"> & { asChild?: boolean }) {
-  const { triggerRef } = React.useContext(TooltipContext);
-  const Comp = asChild ? Slot : "span";
-  return <Comp ref={triggerRef as React.Ref<HTMLElement>} className={cn("inline-flex", className)} {...props} />;
-}
-
-function getAlignedPosition(
-  rect: DOMRect,
-  size: number,
-  align: "start" | "center" | "end",
-  isHorizontal: boolean,
-): number {
-  if (isHorizontal) {
-    if (align === "center") return rect.left + rect.width / 2 - size / 2;
-    if (align === "start") return rect.left;
-    return rect.right - size;
-  }
-  if (align === "center") return rect.top + rect.height / 2 - size / 2;
-  if (align === "start") return rect.top;
-  return rect.bottom - size;
-}
-
-function TooltipContent({
-  className,
-  children,
-  side = "top",
-  sideOffset = 8,
-  align = "center",
-  hidden,
-  ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  side?: "top" | "bottom" | "left" | "right";
-  sideOffset?: number;
-  align?: "start" | "center" | "end";
-}) {
-  const { open, triggerRef } = React.useContext(TooltipContext);
-  const tooltipRef = React.useRef<HTMLDivElement>(null);
-  const [style, setStyle] = React.useState<React.CSSProperties | null>(null);
-
-  const isVisible = open && !hidden;
-
-  React.useLayoutEffect(() => {
-    if (!isVisible || !triggerRef.current || !tooltipRef.current) {
-      setStyle(null);
-      return;
-    }
-
-    const rect = triggerRef.current.getBoundingClientRect();
-    const tw = tooltipRef.current.offsetWidth;
-    const th = tooltipRef.current.offsetHeight;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const pad = 8;
-
-    let top: number;
-    let left: number;
-
-    if (side === "top") {
-      top = rect.top - th - sideOffset;
-      left = getAlignedPosition(rect, tw, align, true);
-    } else if (side === "bottom") {
-      top = rect.bottom + sideOffset;
-      left = getAlignedPosition(rect, tw, align, true);
-    } else if (side === "left") {
-      top = getAlignedPosition(rect, th, align, false);
-      left = rect.left - tw - sideOffset;
-    } else {
-      top = getAlignedPosition(rect, th, align, false);
-      left = rect.right + sideOffset;
-    }
-
-    left = Math.max(pad, Math.min(left, vw - tw - pad));
-    top = Math.max(pad, Math.min(top, vh - th - pad));
-
-    setStyle({ position: "fixed", top, left });
-  }, [isVisible, side, sideOffset, align, triggerRef]);
-
-  if (!isVisible) return null;
-
-  return createPortal(
     <div
-      ref={tooltipRef}
+      ref={ref}
       role="tooltip"
-      style={style ?? { position: "fixed", visibility: "hidden" }}
+      style={{ ...pos, ...style }}
       className={cn(
-        "pointer-events-none z-50 w-max max-w-[calc(100vw-1rem)] rounded-sm bg-foreground px-3 py-1.5 text-xs text-background text-balance transition-opacity",
-        style ? "opacity-100" : "opacity-0",
+        "invisible pointer-events-none absolute z-50 w-max max-w-[calc(100vw-1rem)] rounded-sm bg-foreground px-3 py-1.5 text-xs text-background text-balance opacity-0 transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100",
         className,
       )}
       {...props}
-    >
-      {children}
-    </div>,
-    document.body,
+    />
   );
-}
+});
+TooltipContent.displayName = "TooltipContent";
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
