@@ -149,10 +149,10 @@ import { formatDate, useDateRange } from "@calumet/elise-utils/dates";
 Para iconos:
 
 ```tsx
-import { MagnifyingGlassIcon, ChevronDownIcon } from "@calumet/elise-icons";
+import { Search, ChevronDown } from "@calumet/elise-icons";
 ```
 
-> Los iconos disponibles son los de [Radix Icons](https://www.radix-ui.com/icons). Consulta su galeria para ver todos los iconos disponibles.
+> Los iconos disponibles son los de [Lucide](https://lucide.dev/icons/). Consulta su galeria para ver todos los iconos disponibles.
 
 ## Linter y formato
 

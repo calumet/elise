@@ -1,4 +1,4 @@
-import { Cross2Icon } from "@calumet/elise-icons";
+import { X } from "@calumet/elise-icons";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
@@ -91,7 +91,7 @@ export function DialogClose({
       <button type="submit" className={cn(className)} {...props}>
         {children ?? (
           <>
-            <Cross2Icon aria-hidden />
+            <X aria-hidden />
             <span className="sr-only">Close</span>
           </>
         )}

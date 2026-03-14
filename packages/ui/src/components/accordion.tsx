@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@calumet/elise-icons";
+import { ChevronDown } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
@@ -59,7 +59,7 @@ export const AccordionTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <ChevronDownIcon
+    <ChevronDown
       className="ml-2 h-4 w-4 shrink-0 transition-transform group-open:rotate-180"
       aria-hidden
     />

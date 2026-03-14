@@ -1,4 +1,4 @@
-import { Cross2Icon } from "@calumet/elise-icons";
+import { X } from "@calumet/elise-icons";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
@@ -87,7 +87,7 @@ function SheetClose({ className, children, ...props }: React.ComponentPropsWitho
       <button type="submit" className={cn(className)} {...props}>
         {children ?? (
           <>
-            <Cross2Icon className="size-4" />
+            <X className="size-4" />
             <span className="sr-only">Close</span>
           </>
         )}

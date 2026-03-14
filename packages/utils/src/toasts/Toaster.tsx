@@ -1,10 +1,4 @@
-import {
-  ExclamationTriangleIcon,
-  InfoCircledIcon,
-  CrossCircledIcon,
-  Cross2Icon,
-  CheckCircledIcon,
-} from "@calumet/elise-icons";
+import { TriangleAlert, Info, CircleX, X, CircleCheck } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import {
   Toast,
@@ -97,7 +91,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
               className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
               aria-label="Cerrar"
             >
-              <Cross2Icon className="h-4 w-4" aria-hidden />
+              <X className="h-4 w-4" aria-hidden />
             </ToastClose>
           </div>
         </Toast>
@@ -113,12 +107,12 @@ function ToastIcon({ variant }: { variant: ToastEvent["variant"] }) {
   const color = iconColor[variant] ?? iconColor.info;
   const Icon =
     variant === "error"
-      ? CrossCircledIcon
+      ? CircleX
       : variant === "alert"
-        ? ExclamationTriangleIcon
+        ? TriangleAlert
         : variant === "success"
-          ? CheckCircledIcon
-          : InfoCircledIcon;
+          ? CircleCheck
+          : Info;
   return (
     <div
       className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full"

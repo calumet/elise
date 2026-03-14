@@ -1,10 +1,4 @@
-import {
-  ExclamationTriangleIcon,
-  InfoCircledIcon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-  CheckCircledIcon,
-} from "@calumet/elise-icons";
+import { TriangleAlert, Info, CircleX, CircleHelp, CircleCheck } from "@calumet/elise-icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,11 +15,11 @@ import * as React from "react";
 import { closeAlert, onAlert, onCloseAlert, type AlertEvent } from "./bus";
 
 const variantIcon = {
-  alert: ExclamationTriangleIcon,
-  info: InfoCircledIcon,
-  error: CrossCircledIcon,
-  confirm: QuestionMarkCircledIcon,
-  success: CheckCircledIcon,
+  alert: TriangleAlert,
+  info: Info,
+  error: CircleX,
+  confirm: CircleHelp,
+  success: CircleCheck,
 };
 
 const iconColor = {

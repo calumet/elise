@@ -1,4 +1,4 @@
-import { Cross2Icon } from "@calumet/elise-icons";
+import { X } from "@calumet/elise-icons";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import * as React from "react";
 
@@ -70,7 +70,7 @@ export const ToastClose = React.forwardRef<
     )}
     {...props}
   >
-    <Cross2Icon aria-hidden />
+    <X aria-hidden />
     <span className="sr-only">Cerrar</span>
   </ToastPrimitive.Close>
 ));

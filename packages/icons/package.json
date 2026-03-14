@@ -2,7 +2,7 @@
   "name": "@calumet/elise-icons",
   "version": "0.1.0",
   "private": false,
-  "description": "Re-export de los íconos de Radix para Elise.",
+  "description": "Re-export de los íconos de Lucide para Elise.",
   "repository": {
     "type": "git",
     "url": "https://github.com/calumet/elise.git",
@@ -31,7 +31,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-icons": "^1.3.1"
+    "lucide-react": "^0.577.0"
   },
   "devDependencies": {
     "rimraf": "^6.0.1",

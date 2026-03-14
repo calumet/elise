@@ -1,17 +1,17 @@
 import {
-  ChevronDownIcon,
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronUpIcon,
-  FileTextIcon,
-  UpdateIcon,
-  MagnifyingGlassIcon,
-  Cross2Icon,
-  CheckIcon,
-  CaretSortIcon,
-  DownloadIcon,
+  ChevronDown,
+  ChevronsLeft,
+  ChevronsRight,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  FileText,
+  RefreshCw,
+  Search,
+  X,
+  Check,
+  ChevronsUpDown,
+  Download,
 } from "@calumet/elise-icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui";
 import { Button } from "@calumet/elise-ui/button";
@@ -207,7 +207,7 @@ function DataTableContent<TData, TValue>({
                 }}
                 variant="outline"
               >
-                <Cross2Icon className="size-4" />
+                <X className="size-4" />
               </Button>
             )}
           </div>
@@ -216,7 +216,7 @@ function DataTableContent<TData, TValue>({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon">
-                    <DownloadIcon className="size-4" />
+                    <Download className="size-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -226,7 +226,7 @@ function DataTableContent<TData, TValue>({
                       exportToCSV(getExportData(), exportName);
                     }}
                   >
-                    <FileTextIcon className="size-4" />
+                    <FileText className="size-4" />
                     CSV (.csv)
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -235,7 +235,7 @@ function DataTableContent<TData, TValue>({
                       exportToJSON(getExportData(), exportName);
                     }}
                   >
-                    <FileTextIcon className="size-4" />
+                    <FileText className="size-4" />
                     JSON (.json)
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -243,7 +243,7 @@ function DataTableContent<TData, TValue>({
             )}
             {refresh && (
               <Button onClick={refresh} variant="outline">
-                <UpdateIcon className="size-4" />
+                <RefreshCw className="size-4" />
               </Button>
             )}
           </div>
@@ -292,13 +292,13 @@ function DataTableContent<TData, TValue>({
                           </span>
                           {{
                             asc: (
-                              <ChevronUpIcon
+                              <ChevronUp
                                 className="shrink-0 opacity-60 size-4"
                                 aria-hidden="true"
                               />
                             ),
                             desc: (
-                              <ChevronDownIcon
+                              <ChevronDown
                                 className="shrink-0 opacity-60 size-4"
                                 aria-hidden="true"
                               />
@@ -392,7 +392,7 @@ function DataTableContent<TData, TValue>({
                   disabled={!table.getCanPreviousPage()}
                   aria-label="Go to first page"
                 >
-                  <DoubleArrowLeftIcon className="size-4" aria-hidden />
+                  <ChevronsLeft className="size-4" aria-hidden />
                 </Button>
               </PaginationItem>
 
@@ -405,7 +405,7 @@ function DataTableContent<TData, TValue>({
                   disabled={!table.getCanPreviousPage()}
                   aria-label="Go to previous page"
                 >
-                  <ChevronLeftIcon className="size-4" aria-hidden="true" />
+                  <ChevronLeft className="size-4" aria-hidden="true" />
                 </Button>
               </PaginationItem>
 
@@ -418,7 +418,7 @@ function DataTableContent<TData, TValue>({
                   disabled={!table.getCanNextPage()}
                   aria-label="Go to next page"
                 >
-                  <ChevronRightIcon className="size-4" aria-hidden="true" />
+                  <ChevronRight className="size-4" aria-hidden="true" />
                 </Button>
               </PaginationItem>
 
@@ -431,7 +431,7 @@ function DataTableContent<TData, TValue>({
                   disabled={!table.getCanNextPage()}
                   aria-label="Go to last page"
                 >
-                  <DoubleArrowRightIcon className="size-4" aria-hidden />
+                  <ChevronsRight className="size-4" aria-hidden />
                 </Button>
               </PaginationItem>
             </PaginationContent>
@@ -567,7 +567,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                   <span className="text-muted-foreground">Select...</span>
                 )}
               </div>
-              <CaretSortIcon
+              <ChevronsUpDown
                 className="size-4 text-muted-foreground/80 shrink-0"
                 aria-hidden="true"
               />
@@ -590,7 +590,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                     >
                       <span className="truncate">{String(value)}</span>
                       {selectedValues.includes(String(value)) && (
-                        <CheckIcon className="size-4 ml-auto" />
+                        <Check className="size-4 ml-auto" />
                       )}
                     </CommandItem>
                   ))}
@@ -604,7 +604,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                         className="w-full justify-start px-3 font-normal"
                         onClick={clearAllSelections}
                       >
-                        <Cross2Icon className="size-4 -ms-1 opacity-60" aria-hidden="true" />
+                        <X className="size-4 -ms-1 opacity-60" aria-hidden="true" />
                         Clear
                       </Button>
                     </CommandGroup>
@@ -631,7 +631,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
           type="text"
         />
         <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-          <MagnifyingGlassIcon className="size-4" />
+          <Search className="size-4" />
         </div>
       </div>
     </div>

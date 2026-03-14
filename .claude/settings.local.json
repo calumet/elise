@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["Bash(npm view eslint-plugin-react-hooks@latest peerDependencies)"]
+  }
+}

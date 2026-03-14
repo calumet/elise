@@ -1,4 +1,4 @@
-import { DotFilledIcon, ChevronDownIcon } from "@calumet/elise-icons";
+import { Circle, ChevronDown } from "@calumet/elise-icons";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import * as React from "react";
 
@@ -44,7 +44,7 @@ export const MenubarTrigger = React.forwardRef<
     {...props}
   >
     {props.children}
-    <ChevronDownIcon
+    <ChevronDown
       className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 data-[state=open]:rotate-180 -mr-1"
       aria-hidden
     />
@@ -120,7 +120,7 @@ export const MenubarRadioItem = React.forwardRef<
   <MenubarPrimitive.RadioItem ref={ref} className={cn(baseItem, "pl-6", className)} {...props}>
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
-        <DotFilledIcon className="h-3 w-3" />
+        <Circle className="h-3 w-3" />
       </MenubarPrimitive.ItemIndicator>
     </span>
     {children}

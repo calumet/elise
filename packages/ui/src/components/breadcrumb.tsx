@@ -1,7 +1,4 @@
-import {
-  ChevronRightIcon as ChevronRight,
-  DotsHorizontalIcon as MoreHorizontal,
-} from "@calumet/elise-icons";
+import { ChevronRight, Ellipsis as MoreHorizontal } from "@calumet/elise-icons";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 

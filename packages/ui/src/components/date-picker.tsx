@@ -1,4 +1,4 @@
-import { CalendarIcon, ChevronDownIcon } from "@calumet/elise-icons";
+import { Calendar as CalendarIcon, ChevronDown } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { Button } from "./button";
@@ -31,10 +31,10 @@ export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
             className="w-full justify-between font-normal border-border"
           >
             <div className="flex items-center gap-3">
-              <CalendarIcon />
+              <CalendarIcon className="size-5" />
               {label}
             </div>
-            <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-70" />
+            <ChevronDown className="h-4 w-4 shrink-0 opacity-70" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
@@ -79,10 +79,10 @@ export function DateRangePicker({ value, onChange, formatLabel }: DateRangePicke
             className="w-full justify-between font-normal border-border"
           >
             <div className="flex items-center gap-3">
-              <CalendarIcon />
+              <CalendarIcon className="size-5" />
               {label}
             </div>
-            <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-70" />
+            <ChevronDown className="h-4 w-4 shrink-0 opacity-70" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">

@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@calumet/elise-icons";
+import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
@@ -22,7 +22,7 @@ export const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+      <ChevronDown className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));

@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@calumet/elise-icons";
+import { ChevronDown } from "@calumet/elise-icons";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 
@@ -46,7 +46,7 @@ export const NavigationMenuTrigger = React.forwardRef<
     {...props}
   >
     {props.children}
-    <ChevronDownIcon
+    <ChevronDown
       className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 data-[state=open]:rotate-180 -mr-1"
       aria-hidden
     />

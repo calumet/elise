@@ -51,7 +51,13 @@ function TooltipTrigger({
 }: React.ComponentPropsWithoutRef<"span"> & { asChild?: boolean }) {
   const { triggerRef } = React.useContext(TooltipContext);
   const Comp = asChild ? Slot : "span";
-  return <Comp ref={triggerRef as React.Ref<HTMLElement>} className={cn("inline-flex", className)} {...props} />;
+  return (
+    <Comp
+      ref={triggerRef as React.Ref<HTMLElement>}
+      className={cn("inline-flex", className)}
+      {...props}
+    />
+  );
 }
 
 function getAlignedPosition(

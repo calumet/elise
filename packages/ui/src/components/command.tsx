@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from "@calumet/elise-icons";
+import { Search } from "@calumet/elise-icons";
 import { Command as CommandPrimitive } from "cmdk";
 import * as React from "react";
 
@@ -56,7 +56,7 @@ function CommandInput({
       data-slot="command-input-wrapper"
       className="flex h-11 items-center gap-2 border-b border-border px-3"
     >
-      <MagnifyingGlassIcon className="size-4 shrink-0 text-muted-foreground" />
+      <Search className="size-4 shrink-0 text-muted-foreground" />
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(

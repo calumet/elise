@@ -59,7 +59,7 @@ Utilidades de alto nivel que componen los componentes de `@calumet/elise-ui` en 
 
 ### @calumet/elise-icons
 
-Wrapper de re-exportacion sobre [`@radix-ui/react-icons`](https://www.radix-ui.com/icons). Centraliza la dependencia de iconos para que los consumidores solo necesiten importar desde `@calumet/elise-icons`.
+Wrapper de re-exportacion sobre [`lucide-react`](https://lucide.dev/icons/). Centraliza la dependencia de iconos para que los consumidores solo necesiten importar desde `@calumet/elise-icons`.
 
 ### @calumet/elise-linter
 

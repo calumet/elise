@@ -2,7 +2,9 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-const DropdownContext = React.createContext<React.RefObject<HTMLDetailsElement | null> | null>(null);
+const DropdownContext = React.createContext<React.RefObject<HTMLDetailsElement | null> | null>(
+  null,
+);
 
 const useDropdownClose = () => {
   const ref = React.useContext(DropdownContext);

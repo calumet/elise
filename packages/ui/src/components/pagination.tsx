@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from "@calumet/elise-icons";
+import { ChevronLeft, ChevronRight, Ellipsis } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { Button, buttonVariants } from "./button";
@@ -61,7 +61,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
-      <ChevronLeftIcon />
+      <ChevronLeft />
       <span className="hidden sm:block">Previous</span>
     </PaginationLink>
   );
@@ -75,7 +75,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
       {...props}
     >
       <span className="hidden sm:block">Next</span>
-      <ChevronRightIcon />
+      <ChevronRight />
     </PaginationLink>
   );
 }
@@ -88,7 +88,7 @@ function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span"
       className={cn("flex size-9 items-center justify-center", className)}
       {...props}
     >
-      <DotsHorizontalIcon className="size-4" />
+      <Ellipsis className="size-4" />
       <span className="sr-only">More pages</span>
     </span>
   );

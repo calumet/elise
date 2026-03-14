@@ -436,16 +436,16 @@ function MiTabla() {
 
 ## Icons
 
-`@calumet/elise-icons` re-exporta todos los iconos de [`@radix-ui/react-icons`](https://www.radix-ui.com/icons).
+`@calumet/elise-icons` re-exporta todos los iconos de [`lucide-react`](https://lucide.dev/icons/).
 
 ```tsx
-import { MagnifyingGlassIcon, ChevronDownIcon, Cross2Icon } from "@calumet/elise-icons";
+import { Search, ChevronDown, X } from "@calumet/elise-icons";
 
-<MagnifyingGlassIcon className="size-4" />
-<ChevronDownIcon className="size-4 text-muted-foreground" />
+<Search className="size-4" />
+<ChevronDown className="size-4 text-muted-foreground" />
 ```
 
-> Consulta la [galeria de Radix Icons](https://www.radix-ui.com/icons) para ver todos los iconos disponibles con sus nombres de importacion.
+> Consulta la [galeria de Lucide](https://lucide.dev/icons/) para ver todos los iconos disponibles con sus nombres de importacion.
 
 ---
 
