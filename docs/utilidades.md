@@ -19,8 +19,7 @@ Hook que integra [react-hook-form](https://react-hook-form.com/) con [Zod](https
 ### Uso basico
 
 ```tsx
-import { useZodForm } from "@calumet/elise-utils/forms";
-import { z } from "zod";
+import { useZodForm, z } from "@calumet/elise-utils/forms";
 import { Form, FormField, FormLabel, FormControl, FormMessage } from "@calumet/elise-ui/form";
 import { Input } from "@calumet/elise-ui/input";
 import { Button } from "@calumet/elise-ui/button";

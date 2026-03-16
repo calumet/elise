@@ -139,7 +139,7 @@ import { Button, Dialog, DialogContent } from "@calumet/elise-ui";
 Para utilidades, usa los sub-modulos:
 
 ```tsx
-import { useZodForm } from "@calumet/elise-utils/forms";
+import { useZodForm, z } from "@calumet/elise-utils/forms";
 import { toast, Toaster } from "@calumet/elise-utils/toasts";
 import { openAlert, AlertHost } from "@calumet/elise-utils/alerts";
 import { DataTable } from "@calumet/elise-utils/tables";

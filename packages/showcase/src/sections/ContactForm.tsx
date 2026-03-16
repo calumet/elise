@@ -12,9 +12,8 @@ import {
 } from "@calumet/elise-ui/form";
 import { Input } from "@calumet/elise-ui/input";
 import { Textarea } from "@calumet/elise-ui/textarea";
-import { useZodForm } from "@calumet/elise-utils/forms";
+import { useZodForm, z } from "@calumet/elise-utils/forms";
 import { useState } from "react";
-import { z } from "zod";
 
 const schema = z.object({
   name: z.string().min(2, "Nombre es requerido (mínimo 2 caracteres)"),

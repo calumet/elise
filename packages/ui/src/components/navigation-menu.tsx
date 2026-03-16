@@ -61,7 +61,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      "absolute left-0 right-0 z-60 top-full w-[calc(100vw-24px)] max-w-sm rounded-sm border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:left-auto sm:right-auto sm:w-auto sm:min-w-[320px",
+      "absolute left-0 right-0 z-60 top-full w-[calc(100vw-24px)] max-w-sm rounded-sm border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:left-auto sm:right-auto sm:w-auto sm:min-w-[320px]",
       className,
     )}
     {...props}
