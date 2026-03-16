@@ -32,6 +32,7 @@ import "./index.css";
 import { SectionCard } from "./components/SectionCard";
 
 const AccordionCollapsibleDemo = React.lazy(() => import("./sections/AccordionCollapsibleDemo"));
+const CarouselDemo = React.lazy(() => import("./sections/CarouselDemo"));
 const AlertDialogStandalone = React.lazy(() => import("./sections/AlertDialogStandalone"));
 const CommandDemo = React.lazy(() => import("./sections/CommandDemo"));
 const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"));
@@ -274,6 +275,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <SectionCard title="Data Table (filtros y exportacion)">
             <LazySection>
               <DataTableDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Carousel">
+            <LazySection>
+              <CarouselDemo />
             </LazySection>
           </SectionCard>
 
