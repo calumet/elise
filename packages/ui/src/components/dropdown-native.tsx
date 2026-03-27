@@ -61,7 +61,7 @@ export const DropdownContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "absolute z-40 mt-1 min-w-[200px] rounded-sm border border-border bg-popover p-1 shadow-lg",
+      "absolute z-50 mt-1 min-w-[200px] rounded-sm border border-border bg-popover p-1 shadow-lg",
       align === "start" && "left-0",
       align === "center" && "left-1/2 -translate-x-1/2",
       align === "end" && "right-0",
