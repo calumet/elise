@@ -100,9 +100,11 @@ function SheetContent({
   className,
   children,
   side = "right",
+  animate = true,
   ...props
 }: React.ComponentPropsWithoutRef<"dialog"> & {
   side?: "top" | "right" | "bottom" | "left";
+  animate?: boolean;
 }) {
   const { id } = React.useContext(SheetContext);
   const sv = { right: "100% 0", left: "-100% 0", top: "0 -100%", bottom: "0 100%" }[side];
@@ -110,13 +112,15 @@ function SheetContent({
     <>
       <style
         dangerouslySetInnerHTML={{
-          __html: `#${id}::backdrop{background:rgba(0,0,0,.5);opacity:0;transition:opacity .3s,display .3s allow-discrete,overlay .3s allow-discrete}#${id}[open]::backdrop{opacity:1}@starting-style{#${id}[open]::backdrop{opacity:0}}#${id}{position:fixed;inset:0;margin:0;padding:0;max-width:none;max-height:none;width:100%;height:100dvh;border:none;background:transparent;overflow:hidden;transition:display .3s allow-discrete,overlay .3s allow-discrete}#${id}>div{translate:${sv};transition:translate .3s ease-in}#${id}[open]>div{translate:0 0;transition:translate .5s cubic-bezier(.32,.72,0,1)}@starting-style{#${id}[open]>div{translate:${sv}}}`,
+          __html: animate
+            ? `#${id}::backdrop{background:rgba(0,0,0,.5);opacity:0;transition:opacity .3s,display .3s allow-discrete,overlay .3s allow-discrete}#${id}[open]::backdrop{opacity:1}@starting-style{#${id}[open]::backdrop{opacity:0}}#${id}{position:fixed;inset:0;margin:0;padding:0;max-width:none;max-height:none;width:100%;height:100dvh;border:none;background:transparent;overflow:hidden;transition:display .3s allow-discrete,overlay .3s allow-discrete}#${id}>div{translate:${sv};transition:translate .3s ease-in}#${id}[open]>div{translate:0 0;transition:translate .3s ease-out}@starting-style{#${id}[open]>div{translate:${sv}}}`
+            : `#${id}::backdrop{background:rgba(0,0,0,.5)}#${id}{position:fixed;inset:0;margin:0;padding:0;max-width:none;max-height:none;width:100%;height:100dvh;border:none;background:transparent;overflow:hidden}`,
         }}
       />
       <dialog id={id} className={cn(className)} {...props}>
         <div
           className={cn(
-            "absolute flex flex-col gap-4 bg-background shadow-lg",
+            "absolute flex flex-col gap-4 bg-background shadow-lg border-border",
             side === "right" && "inset-y-0 right-0 w-3/4 border-l sm:max-w-sm",
             side === "left" && "inset-y-0 left-0 w-3/4 border-r sm:max-w-sm",
             side === "top" && "inset-x-0 top-0 border-b",
