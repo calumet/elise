@@ -449,12 +449,14 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
   const [selectOpen, setSelectOpen] = React.useState(false);
 
+  const facetedUniqueValues = column.getFacetedUniqueValues();
+
   const sortedUniqueValues = useMemo(() => {
     if (filterVariant === "range" || filterVariant === "daterange") return [];
 
     const flattenedValues: string[] = [];
 
-    for (const value of column.getFacetedUniqueValues().keys()) {
+    for (const value of facetedUniqueValues.keys()) {
       if (Array.isArray(value)) {
         for (const nestedValue of value) {
           flattenedValues.push(String(nestedValue));
@@ -468,7 +470,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
     }
 
     return Array.from(new Set(flattenedValues)).sort((a, b) => a.localeCompare(b));
-  }, [column, filterVariant]);
+  }, [facetedUniqueValues, filterVariant]);
 
   if (filterVariant === "range") {
     return (
