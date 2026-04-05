@@ -43,7 +43,7 @@ export const NavigationMenuTrigger = React.forwardRef<
       "flex select-none items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
       className,
     )}
-    onPointerDown={(e) => {
+    onClick={(e) => {
       if (e.currentTarget.getAttribute("data-state") === "open") {
         e.preventDefault();
       }
