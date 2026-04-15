@@ -187,8 +187,8 @@ function DataTableContent<TData, TValue>({
   }, [table]);
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
-      <div className="rounded-sm border border-border">
+    <div className="w-full h-full min-w-0 flex flex-col justify-between">
+      <div className="rounded-sm border border-border min-w-0">
         <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3 px-4 py-4">
           <div className="flex flex-wrap gap-3 items-end">
             {table.getAllColumns().map((column) => {
@@ -248,96 +248,98 @@ function DataTableContent<TData, TValue>({
             )}
           </div>
         </section>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      aria-sort={
-                        header.column.getIsSorted() === "asc"
-                          ? "ascending"
-                          : header.column.getIsSorted() === "desc"
-                            ? "descending"
-                            : "none"
-                      }
-                      className={
-                        header.column.id === "actions"
-                          ? "w-0 text-center"
-                          : (header.column.columnDef.meta?.className ?? "")
-                      }
-                    >
-                      {header.isPlaceholder ? null : (
-                        <div
-                          className={cn(
-                            header.column.getCanSort() &&
-                              "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
-                          )}
-                          onClick={header.column.getToggleSortingHandler()}
-                          onKeyDown={(e) => {
-                            if (
+        <div className="w-full overflow-x-auto">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.id}
+                        aria-sort={
+                          header.column.getIsSorted() === "asc"
+                            ? "ascending"
+                            : header.column.getIsSorted() === "desc"
+                              ? "descending"
+                              : "none"
+                        }
+                        className={
+                          header.column.id === "actions"
+                            ? "w-0 text-center"
+                            : (header.column.columnDef.meta?.className ?? "")
+                        }
+                      >
+                        {header.isPlaceholder ? null : (
+                          <div
+                            className={cn(
                               header.column.getCanSort() &&
-                              (e.key === "Enter" || e.key === " ")
-                            ) {
-                              e.preventDefault();
-                              header.column.getToggleSortingHandler()?.(e);
-                            }
-                          }}
-                          tabIndex={header.column.getCanSort() ? 0 : undefined}
-                        >
-                          <span className="truncate">
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                          </span>
-                          {{
-                            asc: (
-                              <ChevronUp
-                                className="shrink-0 opacity-60 size-4"
-                                aria-hidden="true"
-                              />
-                            ),
-                            desc: (
-                              <ChevronDown
-                                className="shrink-0 opacity-60 size-4"
-                                aria-hidden="true"
-                              />
-                            ),
-                          }[header.column.getIsSorted() as string] ?? null}
-                        </div>
-                      )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+                                "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
+                            )}
+                            onClick={header.column.getToggleSortingHandler()}
+                            onKeyDown={(e) => {
+                              if (
+                                header.column.getCanSort() &&
+                                (e.key === "Enter" || e.key === " ")
+                              ) {
+                                e.preventDefault();
+                                header.column.getToggleSortingHandler()?.(e);
+                              }
+                            }}
+                            tabIndex={header.column.getCanSort() ? 0 : undefined}
+                          >
+                            <span className="truncate">
+                              {flexRender(header.column.columnDef.header, header.getContext())}
+                            </span>
+                            {{
+                              asc: (
+                                <ChevronUp
+                                  className="shrink-0 opacity-60 size-4"
+                                  aria-hidden="true"
+                                />
+                              ),
+                              desc: (
+                                <ChevronDown
+                                  className="shrink-0 opacity-60 size-4"
+                                  aria-hidden="true"
+                                />
+                              ),
+                            }[header.column.getIsSorted() as string] ?? null}
+                          </div>
+                        )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                {isLoading == undefined || !isLoading ? (
-                  <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
-                    There is no data to display.
-                  </TableCell>
-                ) : (
-                  <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
-                    Loading data.
-                  </TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  {isLoading == undefined || !isLoading ? (
+                    <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
+                      There is no data to display.
+                    </TableCell>
+                  ) : (
+                    <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
+                      Loading data.
+                    </TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
       <div className="flex items-center justify-between gap-8 mt-4">
         <div className="flex items-center gap-3">
