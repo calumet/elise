@@ -1,0 +1,38 @@
+export default {
+  tables: {
+    noData: "No hay datos para mostrar.",
+    loading: "Cargando datos.",
+    rowsPerPage: "Filas por página:",
+    rowsPerPagePlaceholder: "Cantidad de resultados",
+    of: "de",
+    firstPage: "Ir a la primera página",
+    previousPage: "Página anterior",
+    nextPage: "Página siguiente",
+    lastPage: "Ir a la última página",
+    min: "Mín",
+    max: "Máx",
+    selectPlaceholder: "Seleccionar...",
+    noOptions: "Sin opciones.",
+    clear: "Limpiar",
+    searchInColumn: "Buscar en {column}...",
+    searchByColumn: "Buscar {column}",
+  },
+  alerts: {
+    ok: "Aceptar",
+    confirm: "Confirmar",
+    cancel: "Cancelar",
+  },
+  toasts: {
+    close: "Cerrar",
+  },
+  app: {
+    title: "Showcase de Elise UI",
+    subtitle: "Ejemplos rápidos usando Radix + Tailwind con el design system.",
+    theme: "Tema",
+    languageSwitcher: "Idioma: {locale}",
+    contactGreeting: "Hola {name}, gracias por contactarnos.",
+    currentTime: "Ahora son las {time}.",
+    revenue: "Ingresos del mes: {amount}",
+    growth: "Crecimiento: {percent}",
+  },
+};

@@ -1,15 +1,17 @@
-import { buildMessages, type EagerGlobModules } from "@calumet/elise-i18n";
+import { buildMessages } from "@calumet/elise-i18n";
 
 /**
- * Auto-descubre todos los archivos `<namespace>.<locale>.ts` en este directorio
- * y los mergea en la forma `Messages` que `<I18nProvider>` espera.
+ * Auto-descubre archivos de traducciones en este directorio y los mergea
+ * en la forma `Messages` que `<I18nProvider>` espera.
  *
- * Para agregar un namespace o locale, crea un archivo nuevo con el patrón
- * `<namespace>.<locale>.ts` y exporta default un objeto con las traducciones.
- * No se necesita registrarlo en ningún lado: Vite lo levanta automáticamente.
+ * Convenciones soportadas (puedes mezclarlas):
+ * - `<locale>.ts`              → exporta `{ <namespace>: { key: ... } }` (todo junto)
+ * - `<namespace>.<locale>.ts`  → exporta `{ key: ... }` (un namespace por archivo)
+ *
+ * Si ambos existen para el mismo locale+namespace, gana el más específico.
  */
-const modules = import.meta.glob<{ default: Record<string, string> }>("./*.ts", {
+const modules = import.meta.glob<{ default: unknown }>(["./*.ts", "!./index.ts"], {
   eager: true,
 });
 
-export const messages = buildMessages(modules as EagerGlobModules);
+export const messages = buildMessages(modules);
