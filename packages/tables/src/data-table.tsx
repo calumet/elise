@@ -67,6 +67,7 @@ import {
 import React, { Fragment, useCallback, useId, useMemo } from "react";
 
 import { cn, dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters";
+import { useElLabel } from "./i18n";
 
 declare module "@tanstack/react-table" {
   // @ts-expect-error this is for override the column metadata
@@ -117,6 +118,20 @@ function DataTableContent<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const labelNoData = useElLabel("tables", "noData", "There is no data to display.");
+  const labelLoading = useElLabel("tables", "loading", "Loading data.");
+  const labelRowsPerPage = useElLabel("tables", "rowsPerPage", "Rows per page:");
+  const labelPageSizePlaceholder = useElLabel(
+    "tables",
+    "rowsPerPagePlaceholder",
+    "Select number of results",
+  );
+  const labelOf = useElLabel("tables", "of", "of");
+  const labelFirstPage = useElLabel("tables", "firstPage", "Go to first page");
+  const labelPreviousPage = useElLabel("tables", "previousPage", "Go to previous page");
+  const labelNextPage = useElLabel("tables", "nextPage", "Go to next page");
+  const labelLastPage = useElLabel("tables", "lastPage", "Go to last page");
 
   const enhancedColumns = useMemo(() => {
     return columns.map((column) => {
@@ -328,11 +343,11 @@ function DataTableContent<TData, TValue>({
                 <TableRow>
                   {isLoading == undefined || !isLoading ? (
                     <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
-                      There is no data to display.
+                      {labelNoData}
                     </TableCell>
                   ) : (
                     <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
-                      Loading data.
+                      {labelLoading}
                     </TableCell>
                   )}
                 </TableRow>
@@ -344,7 +359,7 @@ function DataTableContent<TData, TValue>({
       <div className="flex items-center justify-between gap-8 mt-4">
         <div className="flex items-center gap-3">
           <Label htmlFor={id} className="max-sm:sr-only">
-            Rows per page:
+            {labelRowsPerPage}
           </Label>
           <Select
             value={table.getState().pagination.pageSize.toString()}
@@ -353,7 +368,7 @@ function DataTableContent<TData, TValue>({
             }}
           >
             <SelectTrigger id={id} className="w-fit whitespace-nowrap">
-              <SelectValue placeholder="Select number of results" />
+              <SelectValue placeholder={labelPageSizePlaceholder} />
             </SelectTrigger>
             <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
               {pageOptions.map((pageSize) => (
@@ -378,7 +393,7 @@ function DataTableContent<TData, TValue>({
                 table.getRowCount(),
               )}
             </span>{" "}
-            of <span className="text-foreground">{table.getRowCount().toString()}</span>
+            {labelOf} <span className="text-foreground">{table.getRowCount().toString()}</span>
           </p>
         </div>
 
@@ -392,7 +407,7 @@ function DataTableContent<TData, TValue>({
                   className="disabled:pointer-events-none disabled:opacity-50"
                   onClick={() => table.firstPage()}
                   disabled={!table.getCanPreviousPage()}
-                  aria-label="Go to first page"
+                  aria-label={labelFirstPage}
                 >
                   <ChevronsLeft className="size-4" aria-hidden />
                 </Button>
@@ -405,7 +420,7 @@ function DataTableContent<TData, TValue>({
                   className="disabled:pointer-events-none disabled:opacity-50"
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
-                  aria-label="Go to previous page"
+                  aria-label={labelPreviousPage}
                 >
                   <ChevronLeft className="size-4" aria-hidden="true" />
                 </Button>
@@ -418,7 +433,7 @@ function DataTableContent<TData, TValue>({
                   className="disabled:pointer-events-none disabled:opacity-50"
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
-                  aria-label="Go to next page"
+                  aria-label={labelNextPage}
                 >
                   <ChevronRight className="size-4" aria-hidden="true" />
                 </Button>
@@ -431,7 +446,7 @@ function DataTableContent<TData, TValue>({
                   className="disabled:pointer-events-none disabled:opacity-50"
                   onClick={() => table.lastPage()}
                   disabled={!table.getCanNextPage()}
-                  aria-label="Go to last page"
+                  aria-label={labelLastPage}
                 >
                   <ChevronsRight className="size-4" aria-hidden />
                 </Button>
@@ -450,6 +465,22 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   const { filterVariant } = column.columnDef.meta ?? {};
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
   const [selectOpen, setSelectOpen] = React.useState(false);
+
+  const labelMin = useElLabel("tables", "min", "Min");
+  const labelMax = useElLabel("tables", "max", "Max");
+  const labelSelectPlaceholder = useElLabel("tables", "selectPlaceholder", "Select...");
+  const labelNoOptions = useElLabel("tables", "noOptions", "No options found.");
+  const labelClear = useElLabel("tables", "clear", "Clear");
+  const labelSearchInColumn = useElLabel(
+    "tables",
+    "searchInColumn",
+    `Search ${columnHeader.toLowerCase()}...`,
+  );
+  const labelSearch = useElLabel(
+    "tables",
+    "searchByColumn",
+    `Buscar ${columnHeader.toLowerCase()}`,
+  );
 
   const facetedUniqueValues = column.getFacetedUniqueValues();
 
@@ -489,9 +520,9 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                 old?.[1],
               ])
             }
-            placeholder="Min"
+            placeholder={labelMin}
             type="number"
-            aria-label={`${columnHeader} min`}
+            aria-label={`${columnHeader} ${labelMin}`}
           />
           <Input
             id={`${id}-range-2`}
@@ -503,9 +534,9 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                 e.target.value ? Number(e.target.value) : undefined,
               ])
             }
-            placeholder="Max"
+            placeholder={labelMax}
             type="number"
-            aria-label={`${columnHeader} max`}
+            aria-label={`${columnHeader} ${labelMax}`}
           />
         </div>
       </div>
@@ -568,7 +599,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                 {selectedValues.length > 0 ? (
                   <span className="truncate">{selectedValues.join(", ")}</span>
                 ) : (
-                  <span className="text-muted-foreground">Select...</span>
+                  <span className="text-muted-foreground">{labelSelectPlaceholder}</span>
                 )}
               </div>
               <ChevronsUpDown
@@ -582,9 +613,9 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
             align="start"
           >
             <Command>
-              <CommandInput placeholder={`Search ${columnHeader.toLowerCase()}...`} />
+              <CommandInput placeholder={labelSearchInColumn} />
               <CommandList>
-                <CommandEmpty>No options found.</CommandEmpty>
+                <CommandEmpty>{labelNoOptions}</CommandEmpty>
                 <CommandGroup>
                   {sortedUniqueValues.map((value) => (
                     <CommandItem
@@ -609,7 +640,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
                         onClick={clearAllSelections}
                       >
                         <X className="size-4 -ms-1 opacity-60" aria-hidden="true" />
-                        Clear
+                        {labelClear}
                       </Button>
                     </CommandGroup>
                   </Fragment>
@@ -631,7 +662,7 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
           className="peer ps-9"
           value={(columnFilterValue ?? "") as string}
           onChange={(e) => column.setFilterValue(e.target.value)}
-          placeholder={`Buscar ${columnHeader.toLowerCase()}`}
+          placeholder={labelSearch}
           type="text"
         />
         <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">

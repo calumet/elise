@@ -13,6 +13,7 @@ import { Button } from "@calumet/elise-ui/button";
 import * as React from "react";
 
 import { closeAlert, onAlert, onCloseAlert, type AlertEvent } from "./bus";
+import { useElLabel } from "./i18n";
 
 const variantIcon = {
   alert: TriangleAlert,
@@ -33,6 +34,10 @@ const iconColor = {
 export const AlertHost: React.FC = () => {
   const [queue, setQueue] = React.useState<AlertEvent[]>([]);
   const current = queue[0];
+
+  const labelCancel = useElLabel("alerts", "cancel", "Cancelar");
+  const labelConfirm = useElLabel("alerts", "confirm", "Confirmar");
+  const labelOk = useElLabel("alerts", "ok", "Aceptar");
 
   React.useEffect(() => {
     const offAlert = onAlert((alert) => setQueue((curr) => [...curr, alert]));
@@ -87,7 +92,7 @@ export const AlertHost: React.FC = () => {
                 }}
                 className="font-semibold"
               >
-                {current.cancelLabel ?? "Cancelar"}
+                {current.cancelLabel ?? labelCancel}
               </Button>
             </AlertDialogCancel>
           ) : null}
@@ -98,7 +103,7 @@ export const AlertHost: React.FC = () => {
                 closeAlert(current.id);
               }}
             >
-              {current.confirmLabel ?? (current.variant === "confirm" ? "Confirmar" : "Aceptar")}
+              {current.confirmLabel ?? (current.variant === "confirm" ? labelConfirm : labelOk)}
             </Button>
           </AlertDialogAction>
         </AlertDialogFooter>

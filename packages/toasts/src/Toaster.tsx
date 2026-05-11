@@ -11,6 +11,7 @@ import {
 import * as React from "react";
 
 import { dismiss, onDismiss, onToast, type ToastEvent } from "./bus";
+import { useElLabel } from "./i18n";
 
 type Position = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
@@ -41,6 +42,7 @@ const viewportPosition = (position: Position) => {
 
 export const Toaster = ({ position = "top-right" }: ToasterProps) => {
   const [toasts, setToasts] = React.useState<ToastEvent[]>([]);
+  const closeLabel = useElLabel("toasts", "close", "Cerrar");
 
   React.useEffect(() => {
     const unsubscribeToast = onToast((toast) => setToasts((current) => [...current, toast]));
@@ -89,7 +91,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
             </div>
             <ToastClose
               className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
-              aria-label="Cerrar"
+              aria-label={closeLabel}
             >
               <X className="h-4 w-4" aria-hidden />
             </ToastClose>

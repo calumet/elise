@@ -1,8 +1,8 @@
 {
   "name": "@calumet/elise-i18n",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
-  "description": "Internacionalización y formateo localizado (Intl) para Elise.",
+  "description": "Internacionalización (provider + hooks) y formateo localizado (Intl) para Elise.",
   "repository": {
     "type": "git",
     "url": "https://github.com/calumet/elise.git",
@@ -24,6 +24,11 @@
       "types": "./dist/dates/index.d.ts",
       "import": "./dist/dates/index.mjs",
       "require": "./dist/dates/index.cjs"
+    },
+    "./numbers": {
+      "types": "./dist/numbers/index.d.ts",
+      "import": "./dist/numbers/index.mjs",
+      "require": "./dist/numbers/index.cjs"
     }
   },
   "files": [

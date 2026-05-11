@@ -17,7 +17,11 @@ import { formatDate, useDateRange } from "@calumet/elise-i18n/dates";
 | `@calumet/elise-toasts` | Notificaciones (event bus + `Toaster`)    | `@calumet/elise-ui`, `@calumet/elise-icons`                          |
 | `@calumet/elise-alerts` | Alertas modales (event bus + `AlertHost`) | `@calumet/elise-ui`, `@calumet/elise-icons`                          |
 | `@calumet/elise-tables` | `DataTable` con filtros y export          | `@calumet/elise-ui`, `@calumet/elise-icons`, `@tanstack/react-table` |
-| `@calumet/elise-i18n`   | Formateo localizado (Intl)                | (solo React)                                                         |
+| `@calumet/elise-i18n`   | Traducciones + formateo localizado (Intl) | (solo React)                                                         |
+
+> **Internacionalización**: el sistema de traducciones (`I18nProvider`, `useTranslation`),
+> formateo de fechas y números y la integración automática con `elise-tables`/
+> `elise-alerts`/`elise-toasts` están documentados en [`docs/i18n.md`](i18n.md).
 
 > **Migración desde `@calumet/elise-utils`**: este paquete agregador fue eliminado.
 > Los imports cambian de `@calumet/elise-utils/<modulo>` a `@calumet/elise-<modulo>`.
