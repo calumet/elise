@@ -1,0 +1,18 @@
+export default {
+  noData: "There is no data to display.",
+  loading: "Loading data.",
+  rowsPerPage: "Rows per page:",
+  rowsPerPagePlaceholder: "Select number of results",
+  of: "of",
+  firstPage: "Go to first page",
+  previousPage: "Go to previous page",
+  nextPage: "Go to next page",
+  lastPage: "Go to last page",
+  min: "Min",
+  max: "Max",
+  selectPlaceholder: "Select...",
+  noOptions: "No options found.",
+  clear: "Clear",
+  searchInColumn: "Search {column}...",
+  searchByColumn: "Search {column}",
+};

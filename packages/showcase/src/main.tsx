@@ -32,7 +32,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { LocaleToggle } from "./components/LocaleToggle";
 import { SectionCard } from "./components/SectionCard";
-import { messages } from "./locale/messages";
+import { i18nConfig } from "./config";
+import { messages } from "./i18n";
 
 const AccordionCollapsibleDemo = React.lazy(() => import("./sections/AccordionCollapsibleDemo"));
 const CarouselDemo = React.lazy(() => import("./sections/CarouselDemo"));
@@ -104,7 +105,11 @@ const LazySection = ({ children }: { children: React.ReactNode }) => (
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <I18nProvider defaultLocale="es-CO" fallbackLocale="en-US" messages={messages}>
+    <I18nProvider
+      defaultLocale={i18nConfig.defaultLocale}
+      fallbackLocale={i18nConfig.fallbackLocale}
+      messages={messages}
+    >
       <ThemeProvider attribute="class" defaultTheme="light">
         <div className="max-w-6xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
           <AppHeader />
