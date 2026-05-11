@@ -1,0 +1,58 @@
+{
+  "name": "@calumet/elise-alerts",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Sistema de alertas modales basado en event bus para Elise.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/alerts"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --dts",
+    "dev": "tsup --watch --dts",
+    "lint": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@calumet/elise-icons": "workspace:*",
+    "@calumet/elise-ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.4",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "@calumet/elise-ui": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "license": "MIT"
+}

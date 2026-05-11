@@ -1,0 +1,56 @@
+{
+  "name": "@calumet/elise-i18n",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Internacionalización y formateo localizado (Intl) para Elise.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumet/elise.git",
+    "directory": "packages/i18n"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./dates": {
+      "types": "./dist/dates/index.d.ts",
+      "import": "./dist/dates/index.mjs",
+      "require": "./dist/dates/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --dts",
+    "dev": "tsup --watch --dts",
+    "lint": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "react": "^19.2.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.4",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "license": "MIT"
+}

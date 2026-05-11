@@ -13,8 +13,18 @@
 1. Instala los paquetes de Elise:
 
 ```bash
-pnpm add @calumet/elise-ui @calumet/elise-icons @calumet/elise-utils
+# Base: UI + iconos
+pnpm add @calumet/elise-ui @calumet/elise-icons
+
+# Añade los paquetes de utilidades que necesites
+pnpm add @calumet/elise-forms     # useZodForm (RHF + Zod)
+pnpm add @calumet/elise-tables    # DataTable (TanStack)
+pnpm add @calumet/elise-toasts    # Sistema de toasts
+pnpm add @calumet/elise-alerts    # Sistema de alertas modales
+pnpm add @calumet/elise-i18n      # Formateo localizado (Intl)
 ```
+
+> Cada paquete de utilidades es opcional. Instala solo los que vayas a usar.
 
 2. Instala Tailwind CSS v4 y su plugin oficial para Vite:
 
@@ -44,7 +54,10 @@ export default defineConfig({
 
 /* Permite que Tailwind detecte las clases usadas en los paquetes */
 @source "../node_modules/@calumet/elise-ui/dist";
-@source "../node_modules/@calumet/elise-utils/dist";
+/* Solo incluye los que uses */
+@source "../node_modules/@calumet/elise-tables/dist";
+@source "../node_modules/@calumet/elise-toasts/dist";
+@source "../node_modules/@calumet/elise-alerts/dist";
 ```
 
 5. Verifica que tu app levanta correctamente:
@@ -139,11 +152,11 @@ import { Button, Dialog, DialogContent } from "@calumet/elise-ui";
 Para utilidades, usa los sub-modulos:
 
 ```tsx
-import { useZodForm, z } from "@calumet/elise-utils/forms";
-import { toast, Toaster } from "@calumet/elise-utils/toasts";
-import { openAlert, AlertHost } from "@calumet/elise-utils/alerts";
-import { DataTable } from "@calumet/elise-utils/tables";
-import { formatDate, useDateRange } from "@calumet/elise-utils/dates";
+import { useZodForm, z } from "@calumet/elise-forms";
+import { toast, Toaster } from "@calumet/elise-toasts";
+import { openAlert, AlertHost } from "@calumet/elise-alerts";
+import { DataTable } from "@calumet/elise-tables";
+import { formatDate, useDateRange } from "@calumet/elise-i18n/dates";
 ```
 
 Para iconos:

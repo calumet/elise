@@ -1,16 +1,20 @@
 # Elise
 
-Design system moderno basado en [Radix UI](https://www.radix-ui.com/) primitives y [Tailwind CSS](https://tailwindcss.com/), construido como monorepo con pnpm.
+Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind CSS](https://tailwindcss.com/)) y utilidades de frontend que lo acompañan, construida como monorepo con pnpm.
 
 ## Paquetes
 
-| Paquete                                    | Descripcion                                                              |
-| ------------------------------------------ | ------------------------------------------------------------------------ |
-| [`@calumet/elise-ui`](packages/ui)         | Libreria principal con 45+ componentes accesibles                        |
-| [`@calumet/elise-utils`](packages/utils)   | Utilidades: formularios (Zod), tablas (TanStack), toasts, alerts, fechas |
-| [`@calumet/elise-icons`](packages/icons)   | Re-export de [Radix Icons](https://www.radix-ui.com/icons)               |
-| [`@calumet/elise-linter`](packages/linter) | Configuracion compartida de ESLint y Prettier                            |
-| [`showcase`](packages/showcase)            | App demo interactiva con ejemplos de todos los componentes               |
+| Paquete                                    | Descripcion                                                                        |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| [`@calumet/elise-ui`](packages/ui)         | Libreria principal con 45+ componentes accesibles                                  |
+| [`@calumet/elise-forms`](packages/forms)   | Hook `useZodForm` (react-hook-form + Zod)                                          |
+| [`@calumet/elise-tables`](packages/tables) | `DataTable` con filtros, ordenamiento, paginación y export (TanStack React Table)  |
+| [`@calumet/elise-toasts`](packages/toasts) | Sistema de toasts (event bus + `Toaster`)                                          |
+| [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                               |
+| [`@calumet/elise-i18n`](packages/i18n)     | Internacionalización y formateo con `Intl` (dates, próximamente numbers/i18n core) |
+| [`@calumet/elise-icons`](packages/icons)   | Re-export de [Lucide Icons](https://lucide.dev/icons/)                             |
+| [`@calumet/elise-linter`](packages/linter) | Configuración compartida de ESLint y Prettier                                      |
+| [`showcase`](packages/showcase)            | App demo interactiva con ejemplos de todos los componentes                         |
 
 ## Requisitos
 
@@ -45,8 +49,12 @@ pnpm install
 elise/
 ├── packages/
 │   ├── ui/           # Componentes UI (Radix + Tailwind)
-│   ├── utils/        # Utilidades (forms, tables, toasts, alerts, dates)
-│   ├── icons/        # Iconos (Radix Icons)
+│   ├── forms/        # useZodForm (react-hook-form + Zod)
+│   ├── tables/       # DataTable (TanStack)
+│   ├── toasts/       # Sistema de toasts
+│   ├── alerts/       # Sistema de alertas modales
+│   ├── i18n/         # Internacionalización (Intl)
+│   ├── icons/        # Iconos (Lucide)
 │   ├── linter/       # Config ESLint + Prettier
 │   ├── showcase/     # App demo (Vite + React 19)
 │   └── blocks/       # (reservado para uso futuro)
@@ -98,7 +106,9 @@ export default defineConfig({
 @import "@calumet/elise-ui/tailwind/elise.css";
 
 @source '../node_modules/@calumet/elise-ui/dist';
-@source '../node_modules/@calumet/elise-utils/dist';
+@source '../node_modules/@calumet/elise-tables/dist';
+@source '../node_modules/@calumet/elise-toasts/dist';
+@source '../node_modules/@calumet/elise-alerts/dist';
 ```
 
 ## Documentacion

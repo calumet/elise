@@ -1,14 +1,27 @@
 # Utilidades
 
-`@calumet/elise-utils` proporciona utilidades de alto nivel que componen los componentes de `@calumet/elise-ui` en abstracciones mas complejas. Cada sub-modulo se importa por separado.
+Las utilidades de frontend de Elise están organizadas en paquetes independientes,
+cada uno con su propio scope y peer-deps. Instala solo los que necesites.
 
 ```tsx
-import { useZodForm } from "@calumet/elise-utils/forms";
-import { toast, Toaster } from "@calumet/elise-utils/toasts";
-import { openAlert, AlertHost } from "@calumet/elise-utils/alerts";
-import { DataTable } from "@calumet/elise-utils/tables";
-import { formatDate, useDateRange } from "@calumet/elise-utils/dates";
+import { useZodForm, z } from "@calumet/elise-forms";
+import { toast, Toaster } from "@calumet/elise-toasts";
+import { openAlert, AlertHost } from "@calumet/elise-alerts";
+import { DataTable } from "@calumet/elise-tables";
+import { formatDate, useDateRange } from "@calumet/elise-i18n/dates";
 ```
+
+| Paquete                 | Propósito                                 | Peer-deps clave                                                      |
+| ----------------------- | ----------------------------------------- | -------------------------------------------------------------------- |
+| `@calumet/elise-forms`  | Formularios con `useZodForm`              | react-hook-form, zod, @hookform/resolvers                            |
+| `@calumet/elise-toasts` | Notificaciones (event bus + `Toaster`)    | `@calumet/elise-ui`, `@calumet/elise-icons`                          |
+| `@calumet/elise-alerts` | Alertas modales (event bus + `AlertHost`) | `@calumet/elise-ui`, `@calumet/elise-icons`                          |
+| `@calumet/elise-tables` | `DataTable` con filtros y export          | `@calumet/elise-ui`, `@calumet/elise-icons`, `@tanstack/react-table` |
+| `@calumet/elise-i18n`   | Formateo localizado (Intl)                | (solo React)                                                         |
+
+> **Migración desde `@calumet/elise-utils`**: este paquete agregador fue eliminado.
+> Los imports cambian de `@calumet/elise-utils/<modulo>` a `@calumet/elise-<modulo>`.
+> La API de cada módulo es idéntica.
 
 ---
 
@@ -19,7 +32,7 @@ Hook que integra [react-hook-form](https://react-hook-form.com/) con [Zod](https
 ### Uso basico
 
 ```tsx
-import { useZodForm, z } from "@calumet/elise-utils/forms";
+import { useZodForm, z } from "@calumet/elise-forms";
 import { Form, FormField, FormLabel, FormControl, FormMessage } from "@calumet/elise-ui/form";
 import { Input } from "@calumet/elise-ui/input";
 import { Button } from "@calumet/elise-ui/button";
@@ -89,7 +102,7 @@ Sistema de notificaciones no-bloqueantes basado en un event bus interno. No requ
 Agrega `<Toaster />` una sola vez en el root de tu aplicacion:
 
 ```tsx
-import { Toaster } from "@calumet/elise-utils/toasts";
+import { Toaster } from "@calumet/elise-toasts";
 
 function App() {
   return (
@@ -104,7 +117,7 @@ function App() {
 ### Disparar un toast
 
 ```tsx
-import { toast, dismiss } from "@calumet/elise-utils/toasts";
+import { toast, dismiss } from "@calumet/elise-toasts";
 
 // Toast basico
 toast({ title: "Guardado", description: "Los cambios se guardaron correctamente." });
@@ -172,7 +185,7 @@ Sistema de alertas/confirmaciones modales basado en event bus, similar a toasts 
 Agrega `<AlertHost />` una sola vez en el root de tu aplicacion:
 
 ```tsx
-import { AlertHost } from "@calumet/elise-utils/alerts";
+import { AlertHost } from "@calumet/elise-alerts";
 
 function App() {
   return (
@@ -187,7 +200,7 @@ function App() {
 ### Abrir una alerta
 
 ```tsx
-import { openAlert, closeAlert } from "@calumet/elise-utils/alerts";
+import { openAlert, closeAlert } from "@calumet/elise-alerts";
 
 // Alerta informativa
 openAlert({
@@ -242,87 +255,6 @@ type AlertOptions = {
 
 ---
 
-## Dates - Fechas
-
-Utilidades para formateo de fechas y manejo de rangos. Usa `Intl.DateTimeFormat` para internacionalizacion nativa.
-
-### `formatDate()`
-
-```tsx
-import { formatDate } from "@calumet/elise-utils/dates";
-
-formatDate(new Date());
-// "Feb 27, 2026"
-
-formatDate(new Date(), { locale: "es-CO", month: "long" });
-// "27 de febrero de 2026"
-
-formatDate(new Date(), { locale: "en-US", weekday: "long" });
-// "Thursday, Feb 27, 2026"
-```
-
-### `formatDateRange()`
-
-```tsx
-import { formatDateRange } from "@calumet/elise-utils/dates";
-
-formatDateRange({
-  from: new Date(2026, 0, 1),
-  to: new Date(2026, 0, 31),
-});
-// "Jan 1, 2026 – Jan 31, 2026"
-
-formatDateRange(
-  {
-    from: new Date(2026, 0, 1),
-    to: new Date(2026, 0, 31),
-  },
-  { locale: "es-CO" },
-);
-// "1 ene 2026 – 31 ene 2026"
-```
-
-### `useDateRange()`
-
-Hook para manejar estado de un rango de fechas:
-
-```tsx
-import { useDateRange } from "@calumet/elise-utils/dates";
-import { DateRangePicker } from "@calumet/elise-ui/date-picker";
-
-function MiComponente() {
-  const { range, setRange, setFrom, setTo, reset } = useDateRange();
-
-  return (
-    <div>
-      <DateRangePicker value={range} onChange={setRange} />
-      <button onClick={reset}>Limpiar</button>
-    </div>
-  );
-}
-```
-
-### API
-
-```typescript
-type DateRange = { from?: Date; to?: Date };
-type DateFormatOptions = Intl.DateTimeFormatOptions & { locale?: string | string[] };
-
-function formatDate(date: Date, options?: DateFormatOptions): string;
-function formatDateRange(range: DateRange, options?: DateFormatOptions): string;
-function useDateRange(options?: { initial?: DateRange }): {
-  range: DateRange | undefined;
-  setRange: (range: DateRange | undefined) => void;
-  setFrom: (from?: Date) => void;
-  setTo: (to?: Date) => void;
-  reset: () => void;
-};
-```
-
-> Las opciones de formato son las mismas de [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#options).
-
----
-
 ## Tables - DataTable
 
 Componente de tabla avanzada con filtros, ordenamiento, paginacion y exportacion. Construido sobre [TanStack React Table v8](https://tanstack.com/table/latest).
@@ -330,7 +262,7 @@ Componente de tabla avanzada con filtros, ordenamiento, paginacion y exportacion
 ### Uso basico
 
 ```tsx
-import { DataTable, type ColumnDef } from "@calumet/elise-utils/tables";
+import { DataTable, type ColumnDef } from "@calumet/elise-tables";
 
 type Persona = {
   nombre: string;

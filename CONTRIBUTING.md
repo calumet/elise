@@ -24,13 +24,19 @@ Gracias por tu interés en contribuir a Elise.
 elise/
   packages/
     ui/           # Componentes UI (Radix + Tailwind)
-    utils/        # Utilidades (forms, tables, toasts, alerts, dates)
-    icons/        # Iconos (re-export de Radix Icons)
+    forms/        # useZodForm (react-hook-form + Zod)
+    tables/       # DataTable (TanStack React Table)
+    toasts/       # Sistema de toasts (event bus + Toaster)
+    alerts/       # Sistema de alertas modales (event bus + AlertHost)
+    i18n/         # Internacionalización y formateo (Intl)
+    icons/        # Iconos (re-export de Lucide)
     linter/       # Config compartida de ESLint + Prettier
     showcase/     # App demo interactiva (Vite + React 19)
     blocks/       # (reservado para uso futuro)
   docs/           # Documentación del proyecto
 ```
+
+Cada utilidad de frontend vive en su propio paquete (`elise-forms`, `elise-tables`, etc.) para que los consumidores externos instalen solo lo que necesiten. Ver criterios de fragmentación en [`docs/arquitectura.md`](docs/arquitectura.md#criterios-de-fragmentacion-de-paquetes).
 
 ## Flujo de Desarrollo
 
@@ -106,9 +112,10 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
 
 1. Asegura que linting y build pasen sin errores.
 2. Actualiza documentación si aplica.
-3. Si agregas un componente nuevo, agrégalo al barrel export en `packages/ui/src/components/index.ts`.
-4. Si agregas una utilidad nueva, documéntala en `docs/utilidades.md`.
-5. Referencia issues relacionados.
+3. Si agregas un componente nuevo a `elise-ui`, agrégalo al barrel export en `packages/ui/src/components/index.ts`.
+4. Si agregas una utilidad a un paquete existente (`elise-forms`, `elise-tables`, etc.), documéntala en `docs/utilidades.md`.
+5. Si propones un paquete nuevo, valida primero contra los [criterios de fragmentación](docs/arquitectura.md#criterios-de-fragmentacion-de-paquetes).
+6. Referencia issues relacionados.
 
 ## Versionado y Publicación
 

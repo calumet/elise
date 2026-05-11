@@ -1,3 +1,4 @@
+import { openAlert } from "@calumet/elise-alerts";
 import { Button } from "@calumet/elise-ui/button";
 import {
   Dialog,
@@ -7,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@calumet/elise-ui/dialog";
-import { openAlert } from "@calumet/elise-utils/alerts";
 import { useState } from "react";
 
 const DialogsDemo = () => {

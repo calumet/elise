@@ -100,7 +100,7 @@ import { Button, Dialog, Card } from "@calumet/elise-ui";
 | ------------------------------------------------------------- | ------------------------- | ----- |
 | Table, TableHeader, TableBody, TableRow, TableHead, TableCell | `@calumet/elise-ui/table` | —     |
 
-> Para tablas con funcionalidad avanzada (filtros, paginacion, ordenamiento, exportacion), usa el componente `DataTable` de `@calumet/elise-utils/tables`. Ver [Utilidades](utilidades.md#tables---datatable).
+> Para tablas con funcionalidad avanzada (filtros, paginacion, ordenamiento, exportacion), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).
 
 ## Ejemplo: Button
 

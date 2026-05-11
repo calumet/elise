@@ -23,6 +23,83 @@ importers:
         specifier: ^5.6.3
         version: 5.9.3
 
+  packages/alerts:
+    dependencies:
+      "@calumet/elise-icons":
+        specifier: workspace:*
+        version: link:../icons
+      "@calumet/elise-ui":
+        specifier: workspace:*
+        version: link:../ui
+    devDependencies:
+      "@types/react":
+        specifier: ^19.2.7
+        version: 19.2.7
+      "@types/react-dom":
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.7)
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.0(react@19.2.0)
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.2
+      tsup:
+        specifier: ^8.3.4
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  packages/forms:
+    dependencies:
+      "@hookform/resolvers":
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.67.0(react@19.2.0))
+      react-hook-form:
+        specifier: ^7.66.0
+        version: 7.67.0(react@19.2.0)
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
+    devDependencies:
+      "@types/react":
+        specifier: ^19.2.7
+        version: 19.2.7
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.2
+      tsup:
+        specifier: ^8.3.4
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  packages/i18n:
+    devDependencies:
+      "@types/react":
+        specifier: ^19.2.7
+        version: 19.2.7
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.2
+      tsup:
+        specifier: ^8.3.4
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
   packages/icons:
     dependencies:
       lucide-react:
@@ -62,15 +139,27 @@ importers:
 
   packages/showcase:
     dependencies:
+      "@calumet/elise-alerts":
+        specifier: workspace:*
+        version: link:../alerts
+      "@calumet/elise-forms":
+        specifier: workspace:*
+        version: link:../forms
+      "@calumet/elise-i18n":
+        specifier: workspace:*
+        version: link:../i18n
       "@calumet/elise-icons":
         specifier: workspace:*
         version: link:../icons
+      "@calumet/elise-tables":
+        specifier: workspace:*
+        version: link:../tables
+      "@calumet/elise-toasts":
+        specifier: workspace:*
+        version: link:../toasts
       "@calumet/elise-ui":
         specifier: workspace:*
         version: link:../ui
-      "@calumet/elise-utils":
-        specifier: workspace:*
-        version: link:../utils
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -105,6 +194,77 @@ importers:
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.31.1)
+
+  packages/tables:
+    dependencies:
+      "@calumet/elise-icons":
+        specifier: workspace:*
+        version: link:../icons
+      "@calumet/elise-ui":
+        specifier: workspace:*
+        version: link:../ui
+      "@tanstack/react-table":
+        specifier: ^8.21.3
+        version: 8.21.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      tailwind-merge:
+        specifier: ^3.4.0
+        version: 3.4.0
+    devDependencies:
+      "@types/react":
+        specifier: ^19.2.7
+        version: 19.2.7
+      "@types/react-dom":
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.7)
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.0(react@19.2.0)
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.2
+      tsup:
+        specifier: ^8.3.4
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  packages/toasts:
+    dependencies:
+      "@calumet/elise-icons":
+        specifier: workspace:*
+        version: link:../icons
+      "@calumet/elise-ui":
+        specifier: workspace:*
+        version: link:../ui
+    devDependencies:
+      "@types/react":
+        specifier: ^19.2.7
+        version: 19.2.7
+      "@types/react-dom":
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.7)
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.0(react@19.2.0)
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.2
+      tsup:
+        specifier: ^8.3.4
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
 
   packages/ui:
     dependencies:
@@ -202,55 +362,6 @@ importers:
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1
-      tsup:
-        specifier: ^8.3.4
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-
-  packages/utils:
-    dependencies:
-      "@calumet/elise-icons":
-        specifier: workspace:*
-        version: link:../icons
-      "@calumet/elise-ui":
-        specifier: workspace:*
-        version: link:../ui
-      "@hookform/resolvers":
-        specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.67.0(react@19.2.0))
-      "@tanstack/react-table":
-        specifier: ^8.21.3
-        version: 8.21.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
-      react-hook-form:
-        specifier: ^7.66.0
-        version: 7.67.0(react@19.2.0)
-      tailwind-merge:
-        specifier: ^3.4.0
-        version: 3.4.0
-      zod:
-        specifier: ^4.1.12
-        version: 4.1.12
-    devDependencies:
-      "@types/react":
-        specifier: ^19.2.7
-        version: 19.2.7
-      "@types/react-dom":
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.7)
-      react:
-        specifier: ^19.2.0
-        version: 19.2.0
-      react-dom:
-        specifier: ^19.2.0
-        version: 19.2.0(react@19.2.0)
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.1.2
       tsup:
         specifier: ^8.3.4
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)

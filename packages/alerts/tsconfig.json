@@ -2,9 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "baseUrl": ".",
     "types": ["node", "react"]
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"]
 }
