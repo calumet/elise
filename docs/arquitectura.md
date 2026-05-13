@@ -100,14 +100,14 @@ Sistema de alertas modales basado en event bus, con componente `AlertHost` y API
 ### @calumet/elise-i18n
 
 Internacionalización y formateo localizado. Independiente de `elise-ui`; solo
-requiere React como peer-dependency.
+requiere React como peer-dependency. El barrel raíz expone `I18nProvider`,
+`useTranslation`, `useLocale`, `buildMessages` y `buildLazyLoader`. Para más
+detalles ver [docs/i18n.md](i18n.md).
 
-| Sub-modulo | Descripcion                                                           | Dependencia externa                                                                                                         |
-| ---------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `./dates`  | `formatDate`, `formatDateRange`, `useDateRange` (formateo con `Intl`) | [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) |
-
-> Provider y hooks de traducción (`I18nProvider`, `useTranslation`) están
-> planificados en una próxima iteración (Fase 2 del plan de reposicionamiento).
+| Sub-modulo  | Descripcion                                                             | Dependencia externa                                                                                                         |
+| ----------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `./dates`   | `formatDate`, `formatDateRange`, `useDateRange` (formateo con `Intl`)   | [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) |
+| `./numbers` | `formatNumber`, `formatCurrency`, `formatPercent` (formateo con `Intl`) | [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)     |
 
 ### @calumet/elise-icons
 

@@ -4,17 +4,17 @@ Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind C
 
 ## Paquetes
 
-| Paquete                                    | Descripcion                                                                        |
-| ------------------------------------------ | ---------------------------------------------------------------------------------- |
-| [`@calumet/elise-ui`](packages/ui)         | Libreria principal con 45+ componentes accesibles                                  |
-| [`@calumet/elise-forms`](packages/forms)   | Hook `useZodForm` (react-hook-form + Zod)                                          |
-| [`@calumet/elise-tables`](packages/tables) | `DataTable` con filtros, ordenamiento, paginación y export (TanStack React Table)  |
-| [`@calumet/elise-toasts`](packages/toasts) | Sistema de toasts (event bus + `Toaster`)                                          |
-| [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                               |
-| [`@calumet/elise-i18n`](packages/i18n)     | Internacionalización y formateo con `Intl` (dates, próximamente numbers/i18n core) |
-| [`@calumet/elise-icons`](packages/icons)   | Re-export de [Lucide Icons](https://lucide.dev/icons/)                             |
-| [`@calumet/elise-linter`](packages/linter) | Configuración compartida de ESLint y Prettier                                      |
-| [`showcase`](packages/showcase)            | App demo interactiva con ejemplos de todos los componentes                         |
+| Paquete                                    | Descripcion                                                                       |
+| ------------------------------------------ | --------------------------------------------------------------------------------- |
+| [`@calumet/elise-ui`](packages/ui)         | Libreria principal con 45+ componentes accesibles                                 |
+| [`@calumet/elise-forms`](packages/forms)   | Hook `useZodForm` (react-hook-form + Zod)                                         |
+| [`@calumet/elise-tables`](packages/tables) | `DataTable` con filtros, ordenamiento, paginación y export (TanStack React Table) |
+| [`@calumet/elise-toasts`](packages/toasts) | Sistema de toasts (event bus + `Toaster`)                                         |
+| [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                              |
+| [`@calumet/elise-i18n`](packages/i18n)     | Internacionalización: `I18nProvider`, hooks y formateo `Intl` (dates, numbers)    |
+| [`@calumet/elise-icons`](packages/icons)   | Re-export de [Lucide Icons](https://lucide.dev/icons/)                            |
+| [`@calumet/elise-linter`](packages/linter) | Configuración compartida de ESLint y Prettier                                     |
+| [`showcase`](packages/showcase)            | App demo interactiva con ejemplos de todos los componentes                        |
 
 ## Requisitos
 
@@ -32,16 +32,16 @@ pnpm install
 
 ## Scripts
 
-| Comando             | Descripcion                                          |
-| ------------------- | ---------------------------------------------------- |
-| `pnpm dev`          | Modo desarrollo de `@calumet/elise-ui` (watch + dts) |
-| `pnpm dev:showcase` | Desarrollo paralelo de todos los paquetes + showcase |
-| `pnpm build`        | Build de produccion (icons → ui → utils → showcase)  |
-| `pnpm lint`         | Verificar ESLint                                     |
-| `pnpm lint:fix`     | Corregir problemas de ESLint                         |
-| `pnpm format`       | Formatear con Prettier                               |
-| `pnpm format:check` | Verificar formato                                    |
-| `pnpm clean`        | Limpiar carpetas dist                                |
+| Comando             | Descripcion                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `pnpm dev`          | Modo desarrollo de `@calumet/elise-ui` (watch + dts)                                  |
+| `pnpm dev:showcase` | Desarrollo paralelo de todos los paquetes + showcase                                  |
+| `pnpm build`        | Build de produccion (icons → ui → i18n → forms → tables → toasts → alerts → showcase) |
+| `pnpm lint`         | Verificar ESLint                                                                      |
+| `pnpm lint:fix`     | Corregir problemas de ESLint                                                          |
+| `pnpm format`       | Formatear con Prettier                                                                |
+| `pnpm format:check` | Verificar formato                                                                     |
+| `pnpm clean`        | Limpiar carpetas dist                                                                 |
 
 ## Estructura del proyecto
 

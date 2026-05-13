@@ -83,11 +83,13 @@ function ContactForm() {
 ### API
 
 ```typescript
-function useZodForm<TSchema extends z.ZodType>(
+function useZodForm<TSchema extends z.ZodType<FieldValues, FieldValues>>(
   schema: TSchema,
-  options?: Omit<UseFormProps<z.infer<TSchema>>, "resolver">,
-): UseFormReturn<z.infer<TSchema>>;
+  options?: Omit<UseFormProps<z.input<TSchema>, unknown, z.output<TSchema>>, "resolver">,
+): UseFormReturn<z.input<TSchema>, unknown, z.output<TSchema>>;
 ```
+
+> El hook separa `z.input<TSchema>` (valores que entran al form, antes de coerciones) de `z.output<TSchema>` (valores que salen de `handleSubmit`, después de validar y transformar). Esto te da tipos correctos cuando el schema usa `z.coerce.*`, `transform`, defaults, etc.
 
 - `schema`: Esquema Zod que define la estructura y validacion del formulario
 - `options`: Todas las opciones de `useForm` de react-hook-form **excepto** `resolver` (que se configura automaticamente)
