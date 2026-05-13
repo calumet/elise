@@ -61,6 +61,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type RowData,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -70,8 +71,12 @@ import { cn, dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON }
 import { useElLabel } from "./i18n";
 
 declare module "@tanstack/react-table" {
-  // @ts-expect-error this is for override the column metadata
-  interface ColumnMeta {
+  // Los generics deben coincidir con los de @tanstack/react-table (mismo
+  // nombre, count y bounds) para que el declaration merging produzca un .d.ts
+  // válido. tsup descarta @ts-expect-error en el emit, así que tenemos que
+  // declarar la firma correcta en vez de silenciarla.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
     filterVariant?: "text" | "range" | "select" | "date" | "daterange";
     className?: string;
   }
