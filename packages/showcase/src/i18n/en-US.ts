@@ -25,6 +25,22 @@ export default {
   toasts: {
     close: "Close",
   },
+  ui: {
+    close: "Close",
+    previous: "Previous",
+    next: "Next",
+    previousPage: "Go to previous page",
+    nextPage: "Go to next page",
+    previousSlide: "Previous slide",
+    nextSlide: "Next slide",
+    toggleSidebar: "Toggle sidebar",
+    sidebar: "Sidebar",
+    sidebarDescription: "Displays the mobile sidebar.",
+    selectDate: "Select date",
+    togglePassword: "Show or hide password",
+    otpGroup: "Verification code",
+    otpDigit: "Digit",
+  },
   app: {
     title: "Elise UI Showcase",
     subtitle: "Quick examples using Radix + Tailwind with the design system.",

@@ -1,4 +1,5 @@
 import { Label } from "@calumet/elise-ui/label";
+import { OTPField } from "@calumet/elise-ui/otp-field";
 import { RadioGroup, RadioGroupItem } from "@calumet/elise-ui/radio-group";
 import { Slider } from "@calumet/elise-ui/slider";
 import { Switch } from "@calumet/elise-ui/switch";
@@ -7,6 +8,9 @@ import { useState } from "react";
 const FormControlsDemo = () => {
   const [enabled, setEnabled] = useState(true);
   const [volume, setVolume] = useState<number[]>([40]);
+  const [range, setRange] = useState<number[]>([20, 80]);
+  const [otp, setOtp] = useState("");
+  const [otpDone, setOtpDone] = useState("");
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
@@ -42,6 +46,29 @@ const FormControlsDemo = () => {
           <Slider id="slider-demo" value={volume} onValueChange={setVolume} max={100} step={5} />
           <p className="text-sm text-muted-foreground">Valor: {volume[0]}</p>
         </div>
+        <div className="space-y-2">
+          <Label htmlFor="range-demo" className="text-base">
+            Slider de rango
+          </Label>
+          <Slider
+            id="range-demo"
+            data-testid="range-slider"
+            value={range}
+            onValueChange={setRange}
+            max={100}
+            step={5}
+          />
+          <p className="text-sm text-muted-foreground">Rango: {range.join(" – ")}</p>
+        </div>
+      </div>
+
+      <div className="space-y-3 rounded-sm border border-border bg-card p-4 sm:col-span-2">
+        <Label className="text-sm font-semibold">Código OTP</Label>
+        <OTPField length={6} value={otp} onChange={setOtp} onComplete={setOtpDone} />
+        <p className="text-sm text-muted-foreground" data-testid="otp-readout">
+          Valor: <code>{JSON.stringify(otp)}</code>
+          {otpDone ? <> · onComplete: <code>{JSON.stringify(otpDone)}</code></> : null}
+        </p>
       </div>
     </div>
   );

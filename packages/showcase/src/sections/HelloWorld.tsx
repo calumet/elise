@@ -23,6 +23,15 @@ const HelloWorld = () => (
         </Tooltip>
       </TooltipProvider>
     </div>
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <Button tone="danger">Solid danger</Button>
+      <Button variant="outline" tone="danger" data-testid="outline-danger">
+        Outline danger
+      </Button>
+      <Button variant="ghost" tone="success" data-testid="ghost-success">
+        Ghost success
+      </Button>
+    </div>
   </div>
 );
 
