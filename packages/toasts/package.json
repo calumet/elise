@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-toasts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Sistema de toasts basado en event bus para Elise.",
   "repository": {

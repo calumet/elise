@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-tables",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "DataTable (TanStack React Table) y utilidades de filtrado/exportación para Elise.",
   "repository": {
