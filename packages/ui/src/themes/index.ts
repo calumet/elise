@@ -19,7 +19,9 @@ export type EliseTheme = {
   input: string;
   ring: string;
   success: string;
+  successForeground: string;
   warning: string;
+  warningForeground: string;
 };
 
 export const defaultLightTheme: EliseTheme = {
@@ -29,7 +31,7 @@ export const defaultLightTheme: EliseTheme = {
   cardForeground: "oklch(0.32 0 0)",
   popover: "oklch(1.00 0 0)",
   popoverForeground: "oklch(0.32 0 0)",
-  primary: "oklch(0.62 0.19 259.76)",
+  primary: "oklch(0.55 0.19 259.76)",
   primaryForeground: "oklch(1.00 0 0)",
   secondary: "oklch(0.97 0 0)",
   secondaryForeground: "oklch(0.45 0.03 257.68)",
@@ -37,13 +39,15 @@ export const defaultLightTheme: EliseTheme = {
   mutedForeground: "oklch(0.55 0.02 264.41)",
   accent: "oklch(0.95 0.03 233.56)",
   accentForeground: "oklch(0.38 0.14 265.59)",
-  destructive: "oklch(0.64 0.21 25.39)",
+  destructive: "oklch(0.577 0.225 27)",
   destructiveForeground: "oklch(1.00 0 0)",
   border: "oklch(0.93 0.01 261.82)",
   input: "oklch(0.93 0.01 261.82)",
-  ring: "oklch(0.62 0.19 259.76)",
-  success: "oklch(0.60 0.15 145)",
+  ring: "oklch(0.55 0.19 259.76)",
+  success: "oklch(0.52 0.15 145)",
+  successForeground: "oklch(1.00 0 0)",
   warning: "oklch(0.75 0.15 75)",
+  warningForeground: "oklch(0.25 0 0)",
 };
 
 export const defaultDarkTheme: EliseTheme = {
@@ -53,7 +57,7 @@ export const defaultDarkTheme: EliseTheme = {
   cardForeground: "oklch(0.92 0 0)",
   popover: "oklch(0.27 0 0)",
   popoverForeground: "oklch(0.92 0 0)",
-  primary: "oklch(0.62 0.19 259.76)",
+  primary: "oklch(0.55 0.19 259.76)",
   primaryForeground: "oklch(1.00 0 0)",
   secondary: "oklch(0.27 0 0)",
   secondaryForeground: "oklch(0.92 0 0)",
@@ -61,13 +65,15 @@ export const defaultDarkTheme: EliseTheme = {
   mutedForeground: "oklch(0.72 0 0)",
   accent: "oklch(0.38 0.14 265.59)",
   accentForeground: "oklch(0.88 0.06 254.63)",
-  destructive: "oklch(0.64 0.21 25.39)",
+  destructive: "oklch(0.577 0.225 27)",
   destructiveForeground: "oklch(1.00 0 0)",
   border: "oklch(0.37 0 0)",
   input: "oklch(0.37 0 0)",
-  ring: "oklch(0.62 0.19 259.76)",
-  success: "oklch(0.60 0.15 145)",
+  ring: "oklch(0.55 0.19 259.76)",
+  success: "oklch(0.52 0.15 145)",
+  successForeground: "oklch(1.00 0 0)",
   warning: "oklch(0.75 0.15 75)",
+  warningForeground: "oklch(0.25 0 0)",
 };
 
 export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.documentElement) => {
@@ -91,5 +97,7 @@ export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.do
   element.style.setProperty("--input", theme.input);
   element.style.setProperty("--ring", theme.ring);
   element.style.setProperty("--success", theme.success);
+  element.style.setProperty("--success-foreground", theme.successForeground);
   element.style.setProperty("--warning", theme.warning);
+  element.style.setProperty("--warning-foreground", theme.warningForeground);
 };
