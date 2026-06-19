@@ -96,7 +96,7 @@ function Calendar({
           defaultClassNames.range_start,
         ),
         range_middle: cn(
-          "rounded-none bg-primary/15 text-primary-foreground",
+          "rounded-none bg-primary/15 text-foreground",
           defaultClassNames.range_middle,
         ),
         range_end: cn(
