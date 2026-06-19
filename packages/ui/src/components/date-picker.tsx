@@ -5,6 +5,8 @@ import { Button } from "./button";
 import { Calendar } from "./calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
+import { useElLabel } from "@/lib/i18n";
+
 type DatePickerProps = {
   value?: Date;
   onChange: (date?: Date) => void;
@@ -13,23 +15,20 @@ type DatePickerProps = {
 
 export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
+  const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
 
   const isValidDate = value && !isNaN(value.getTime());
   const label = formatLabel
     ? formatLabel(value)
     : isValidDate
       ? value!.toLocaleDateString()
-      : "Select date";
+      : placeholder;
 
   return (
     <div className="flex flex-col gap-3">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            id="date"
-            className="w-full justify-between font-normal border-border"
-          >
+          <Button variant="outline" className="w-full justify-between font-normal border-border">
             <div className="flex items-center gap-3">
               <CalendarIcon className="size-5" />
               {label}
@@ -62,22 +61,19 @@ type DateRangePickerProps = {
 };
 
 export function DateRangePicker({ value, onChange, formatLabel }: DateRangePickerProps) {
+  const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
   const range: DateRangeValue = value ?? { from: undefined, to: undefined };
   const label =
     formatLabel?.(range) ??
     (range?.from && range?.to
       ? `${range.from.toLocaleDateString()}-${range.to.toLocaleDateString()}`
-      : "Pick a date");
+      : placeholder);
 
   return (
     <div className="w-full space-y-2">
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            id="dates"
-            className="w-full justify-between font-normal border-border"
-          >
+          <Button variant="outline" className="w-full justify-between font-normal border-border">
             <div className="flex items-center gap-3">
               <CalendarIcon className="size-5" />
               {label}

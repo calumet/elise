@@ -20,14 +20,12 @@ export const ScrollArea = React.forwardRef<
     <ScrollAreaPrimitive.Scrollbar
       className="flex touch-none select-none bg-transparent p-0.5 transition-colors data-[orientation=vertical]:h-full data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:h-2.5 data-[orientation=horizontal]:w-full"
       orientation="vertical"
-      forceMount
     >
       <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-full bg-foreground/20 hover:bg-foreground/35" />
     </ScrollAreaPrimitive.Scrollbar>
     <ScrollAreaPrimitive.Scrollbar
       className="flex touch-none select-none bg-transparent p-0.5 transition-colors data-[orientation=vertical]:h-full data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:h-2.5 data-[orientation=horizontal]:w-full"
       orientation="horizontal"
-      forceMount
     >
       <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-full bg-foreground/20 hover:bg-foreground/35" />
     </ScrollAreaPrimitive.Scrollbar>

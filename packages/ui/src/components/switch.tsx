@@ -17,6 +17,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       <input
         ref={ref}
         type="checkbox"
+        role="switch"
         className="peer sr-only"
         onChange={(e) => {
           onChange?.(e);

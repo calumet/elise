@@ -1,14 +1,16 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
 
-export type PasswordFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export type PasswordFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & {
   toggleAriaLabel?: string;
 };
 
 export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
-  ({ className, toggleAriaLabel = "Mostrar u ocultar contraseña", ...props }, ref) => {
+  ({ className, toggleAriaLabel, ...props }, ref) => {
     const [visible, setVisible] = React.useState(false);
+    const defaultToggleLabel = useElLabel("ui", "togglePassword", "Mostrar u ocultar contraseña");
     return (
       <div className="relative">
         <input
@@ -22,7 +24,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
         />
         <button
           type="button"
-          aria-label={toggleAriaLabel}
+          aria-label={toggleAriaLabel ?? defaultToggleLabel}
           onClick={() => setVisible((v) => !v)}
           className="absolute inset-y-0 right-2 my-auto inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >

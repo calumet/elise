@@ -3,6 +3,7 @@ import * as ToastPrimitive from "@radix-ui/react-toast";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
 
 export type ToastProps = React.ComponentPropsWithoutRef<typeof ToastPrimitive.Root>;
 export type ToastActionElement = React.ReactElement<typeof ToastPrimitive.Action>;
@@ -61,19 +62,22 @@ ToastDescription.displayName = ToastPrimitive.Description.displayName;
 export const ToastClose = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Close>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Close>
->(({ className, ...props }, ref) => (
-  <ToastPrimitive.Close
-    ref={ref}
-    className={cn(
-      "absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
-      className,
-    )}
-    {...props}
-  >
-    <X aria-hidden />
-    <span className="sr-only">Cerrar</span>
-  </ToastPrimitive.Close>
-));
+>(({ className, ...props }, ref) => {
+  const closeLabel = useElLabel("ui", "close", "Cerrar");
+  return (
+    <ToastPrimitive.Close
+      ref={ref}
+      className={cn(
+        "absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+        className,
+      )}
+      {...props}
+    >
+      <X aria-hidden />
+      <span className="sr-only">{closeLabel}</span>
+    </ToastPrimitive.Close>
+  );
+});
 ToastClose.displayName = ToastPrimitive.Close.displayName;
 
 export const ToastAction = React.forwardRef<

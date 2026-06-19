@@ -4,6 +4,7 @@ import * as React from "react";
 import { Button, buttonVariants } from "./button";
 
 import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -55,26 +56,32 @@ function PaginationLink({ className, isActive, size = "icon", ...props }: Pagina
 }
 
 function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
+  const label = useElLabel("ui", "previous", "Anterior");
+  const ariaLabel = useElLabel("ui", "previousPage", "Ir a la página anterior");
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={ariaLabel}
+      size="md"
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
       <ChevronLeft />
-      <span className="hidden sm:block">Previous</span>
+      <span className="hidden sm:block">{label}</span>
     </PaginationLink>
   );
 }
 
 function PaginationNext({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
+  const label = useElLabel("ui", "next", "Siguiente");
+  const ariaLabel = useElLabel("ui", "nextPage", "Ir a la página siguiente");
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={ariaLabel}
+      size="md"
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <span className="hidden sm:block">{label}</span>
       <ChevronRight />
     </PaginationLink>
   );
@@ -89,7 +96,6 @@ function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span"
       {...props}
     >
       <Ellipsis className="size-4" />
-      <span className="sr-only">More pages</span>
     </span>
   );
 }
