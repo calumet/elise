@@ -18,10 +18,9 @@ export const Dropdown = React.forwardRef<
   React.ComponentPropsWithoutRef<"details">
 >(({ className, ...props }, ref) => {
   const innerRef = React.useRef<HTMLDetailsElement>(null);
-  const detailsRef = (ref as React.RefObject<HTMLDetailsElement | null>) ?? innerRef;
 
   React.useEffect(() => {
-    const el = detailsRef.current;
+    const el = innerRef.current;
     if (!el) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (el.open && !el.contains(e.target as Node)) {
@@ -30,11 +29,22 @@ export const Dropdown = React.forwardRef<
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, [detailsRef]);
+  }, []);
 
   return (
-    <DropdownContext value={detailsRef}>
-      <details ref={detailsRef} className={cn("relative", className)} {...props} />
+    <DropdownContext value={innerRef}>
+      <details
+        ref={(node) => {
+          innerRef.current = node;
+          if (typeof ref === "function") {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+        }}
+        className={cn("relative", className)}
+        {...props}
+      />
     </DropdownContext>
   );
 });
@@ -87,7 +97,9 @@ export const DropdownItem = React.forwardRef<
       className={cn(baseItem, "w-full text-left", className)}
       onClick={(e) => {
         onClick?.(e);
-        close();
+        if (!e.defaultPrevented) {
+          close();
+        }
       }}
       {...props}
     />

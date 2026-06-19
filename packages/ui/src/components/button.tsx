@@ -23,17 +23,23 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
 
 const toneOverrides: Record<
   NonNullable<ButtonProps["tone"]>,
-  { solid: string; outline?: string; ghost?: string; contrast?: string }
+  Record<NonNullable<ButtonProps["variant"]>, string>
 > = {
   success: {
-    solid: "bg-success text-destructive-foreground hover:bg-success/90 active:bg-success/80",
+    solid: "bg-success text-success-foreground hover:bg-success/90 active:bg-success/80",
+    outline: "border-success text-success hover:bg-success/10 active:bg-success/20",
+    ghost: "text-success hover:bg-success/10 active:bg-success/20",
   },
   warning: {
-    solid: "bg-warning text-destructive-foreground hover:bg-warning/90 active:bg-warning/80",
+    solid: "bg-warning text-warning-foreground hover:bg-warning/90 active:bg-warning/80",
+    outline: "border-warning text-warning hover:bg-warning/10 active:bg-warning/20",
+    ghost: "text-warning hover:bg-warning/10 active:bg-warning/20",
   },
   danger: {
     solid:
       "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
+    outline: "border-destructive text-destructive hover:bg-destructive/10 active:bg-destructive/20",
+    ghost: "text-destructive hover:bg-destructive/10 active:bg-destructive/20",
   },
 };
 

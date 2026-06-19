@@ -27,25 +27,18 @@ export const MenubarPortal: typeof MenubarPrimitive.Portal = MenubarPrimitive.Po
 export const MenubarTrigger = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>
->(({ className, onPointerMove, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <MenubarPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
+      "group flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
       className,
     )}
-    onPointerMove={(event) => {
-      if (event.pointerType === "touch") return;
-      if (event.currentTarget.getAttribute("data-state") !== "open") {
-        event.currentTarget.click();
-      }
-      onPointerMove?.(event);
-    }}
     {...props}
   >
     {props.children}
     <ChevronDown
-      className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 data-[state=open]:rotate-180 -mr-1"
+      className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]:rotate-180 -mr-1"
       aria-hidden
     />
   </MenubarPrimitive.Trigger>
@@ -56,17 +49,22 @@ export const MenubarContent = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>
 >(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => (
-  <MenubarPrimitive.Content
-    ref={ref}
-    align={align}
-    alignOffset={alignOffset}
-    sideOffset={sideOffset}
-    className={cn(
-      "z-60 min-w-[220px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
-      className,
-    )}
-    {...props}
-  />
+  <MenubarPrimitive.Portal>
+    <MenubarPrimitive.Content
+      ref={ref}
+      align={align}
+      alignOffset={alignOffset}
+      sideOffset={sideOffset}
+      className={cn(
+        // Solo animación de entrada: una animación de salida mantiene montado el
+        // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
+        // de trigger con hover (mismo criterio que shadcn para Menubar).
+        "z-50 min-w-[220px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+        className,
+      )}
+      {...props}
+    />
+  </MenubarPrimitive.Portal>
 ));
 MenubarContent.displayName = MenubarPrimitive.Content.displayName;
 
@@ -180,7 +178,7 @@ export const MenubarSubContent = React.forwardRef<
   <MenubarPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-50 min-w-[180px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open:fade-in",
+      "z-50 min-w-[180px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
       className,
     )}
     {...props}

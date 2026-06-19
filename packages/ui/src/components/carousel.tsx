@@ -5,6 +5,7 @@ import * as React from "react";
 import { Button } from "./button";
 
 import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -97,7 +98,8 @@ function Carousel({
     api.on("select", onSelect);
 
     return () => {
-      api?.off("select", onSelect);
+      api.off("reInit", onSelect);
+      api.off("select", onSelect);
     };
   }, [api, onSelect]);
 
@@ -166,6 +168,7 @@ function CarouselPrevious({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+  const label = useElLabel("ui", "previousSlide", "Diapositiva anterior");
 
   return (
     <Button
@@ -184,7 +187,7 @@ function CarouselPrevious({
       {...props}
     >
       <ChevronLeft />
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">{label}</span>
     </Button>
   );
 }
@@ -196,6 +199,7 @@ function CarouselNext({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
+  const label = useElLabel("ui", "nextSlide", "Diapositiva siguiente");
 
   return (
     <Button
@@ -214,7 +218,7 @@ function CarouselNext({
       {...props}
     >
       <ChevronRight />
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">{label}</span>
     </Button>
   );
 }
