@@ -80,10 +80,44 @@ La configuración de ESLint y Prettier está centralizada en `@calumet/elise-lin
 
 - Usa TypeScript para todo el código.
 - Sigue el estilo de código existente.
-- Usa `React.forwardRef` para componentes interactivos.
 - Usa la utilidad `cn()` para concatenar clases de Tailwind.
-- Usa el atributo `data-slot` para identificar sub-componentes.
 - Prefija parámetros no usados con `_`.
+
+### Convención de componentes en `elise-ui`
+
+Hoy conviven dos generaciones de componentes (los más antiguos usan
+`React.forwardRef` + `displayName`; los más nuevos son funciones planas estilo
+React 19). **La convención canónica para componentes nuevos es la segunda**;
+los antiguos se migran de forma oportunista cuando se toquen por otra razón.
+
+Para todo componente nuevo:
+
+- Función plana tipada con `React.ComponentProps<...>`; con React 19 (peer
+  mínimo del paquete) `ref` llega como prop normal, no se necesita
+  `forwardRef` ni `displayName`.
+- Atributo `data-slot="<nombre>"` en cada sub-componente, para poder
+  estilizarlos desde el exterior (`has-data-[slot=...]`).
+- Solo tokens semánticos del tema (`bg-primary`, `text-muted-foreground`,
+  `border-border`, …); nunca colores literales ni de la paleta de Tailwind.
+  Si falta un token (p. ej. un `*-foreground`), se agrega a `elise.css`,
+  `themes/index.ts` y al `@theme inline`, no se improvisa con otro token.
+- Foco visible con la convención `focus-visible:ring-2 focus-visible:ring-ring
+  focus-visible:ring-offset-2 focus-visible:ring-offset-background`.
+- Textos visibles o de accesibilidad mediante el puente i18n:
+  `useElLabel("ui", "<clave>", "<fallback en español>")` (ver
+  `src/lib/i18n.ts`). Nunca strings hardcodeados.
+- `className` del consumidor siempre al final del `cn(...)` para que pueda
+  sobreescribir los estilos base.
+
+**Radix vs implementación propia:** para componentes con interacción o
+accesibilidad no triviales (menús, diálogos, tooltips, tabs, sliders…) se
+usa el primitive de Radix. Una implementación propia solo se justifica para
+casos simples, y debe documentar explícitamente qué partes de la API de
+Radix no soporta (modo controlado, `asChild`, atributos `data-state`, etc.).
+Componentes actualmente hand-rolled que no alcanzan paridad con Radix:
+accordion, checkbox, radio-group, switch, toggle, toggle-group, progress y
+separator — tenlo en cuenta antes de asumir que aceptan la API completa del
+primitive equivalente.
 
 ### Formateo automático
 
