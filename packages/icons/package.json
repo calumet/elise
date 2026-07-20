@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-icons",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": false,
   "description": "Re-export de los íconos de Lucide para Elise.",
   "repository": {
@@ -31,7 +31,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "lucide-react": "^0.577.0"
+    "lucide-react": "^1.25.0"
   },
   "devDependencies": {
     "rimraf": "^6.0.1",

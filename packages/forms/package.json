@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-forms",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "Hook useZodForm: integración de react-hook-form + Zod para Elise.",
   "repository": {
@@ -31,9 +31,9 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "react-hook-form": "^7.66.0",
-    "zod": "^4.1.12"
+    "@hookform/resolvers": "^5.4.0",
+    "react-hook-form": "^7.82.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/react": "^19.2.7",

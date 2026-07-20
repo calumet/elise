@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-tables",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "description": "DataTable (TanStack React Table) y utilidades de filtrado/exportación para Elise.",
   "repository": {
@@ -35,7 +35,7 @@
     "@calumet/elise-ui": "workspace:*",
     "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.7",
