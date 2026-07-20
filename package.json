@@ -7,12 +7,12 @@
   "scripts": {
     "dev": "pnpm --filter @calumet/elise-ui dev",
     "dev:showcase": "pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-forms\" --filter \"@calumet/elise-tables\" --filter \"@calumet/elise-toasts\" --filter \"@calumet/elise-alerts\" --filter \"@calumet/elise-i18n\" --filter \"showcase\" dev",
-    "build": "pnpm --filter @calumet/elise-icons build && pnpm --filter @calumet/elise-ui build && pnpm --filter @calumet/elise-i18n build && pnpm --filter @calumet/elise-forms build && pnpm --filter @calumet/elise-tables build && pnpm --filter @calumet/elise-toasts build && pnpm --filter @calumet/elise-alerts build && pnpm --filter showcase build",
+    "build": "pnpm -r build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "pnpm --filter @calumet/elise-ui clean",
+    "clean": "pnpm -r clean",
     "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks"
   },
   "devDependencies": {
