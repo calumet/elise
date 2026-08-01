@@ -49,6 +49,10 @@ export default defineConfig({
 4. En tu CSS principal (por ejemplo `src/index.css`), importa Tailwind y los estilos de Elise:
 
 ```css
+/* Tipografias autoalojadas (Geist, JetBrains Mono, Source Serif 4).
+   Va primero, antes de Tailwind. */
+@import "@calumet/elise-ui/tailwind/fonts.css";
+
 @import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
 
@@ -59,6 +63,16 @@ export default defineConfig({
 @source "../node_modules/@calumet/elise-toasts/dist";
 @source "../node_modules/@calumet/elise-alerts/dist";
 ```
+
+> **No te saltees `fonts.css`.** Sin el, `--font-sans` cae en la fuente del
+> sistema y tu app se ve distinta en macOS, Windows y Linux. Las tres familias
+> vienen incluidas en `@calumet/elise-ui` como fuentes variables: un archivo por
+> familia cubre todo el rango de pesos.
+>
+> Es un import aparte para que puedas omitirlo si tu app ya carga Geist por su
+> cuenta (por ejemplo con `geist/font` en Next.js) y no quieras descargarla dos
+> veces. Los tokens `--font-*` resuelven igual en ese caso: listan tanto
+> `"Geist Variable"` (el nombre que registra Fontsource) como `"Geist"`.
 
 5. Verifica que tu app levanta correctamente:
 

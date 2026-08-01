@@ -170,6 +170,23 @@ resaltadas), en lugar de derivarla con opacidad sobre el color solido. Un
 | `--duration-base`      | `duration-(--duration-base)`                           | 200ms — entradas y salidas                                |
 | `--duration-slow`      | `duration-(--duration-slow)`                           | 320ms — sheets, drawers                                   |
 
+### Tipografias
+
+Las tres familias vienen incluidas en el paquete como fuentes variables y se
+cargan importando `@calumet/elise-ui/tailwind/fonts.css` (ver
+[Guia de inicio](guia-inicio.md)). Sin ese import, los tokens caen en la fuente
+del sistema y la app se ve distinta en cada sistema operativo.
+
+Cada stack lista primero el nombre que registra Fontsource y despues el nombre
+plano, asi resuelve tanto con `fonts.css` como si la app carga la fuente por su
+cuenta:
+
+```css
+--font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, …;
+--font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
+--font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, …;
+```
+
 La escala de sombras es monotona: el blur, el spread negativo y la opacidad crecen
 juntos, y el modo oscuro define su propio juego de valores (una sombra negra al 10%
 es invisible sobre el fondo oscuro). `shadow-bevel` es aparte de la escala: se

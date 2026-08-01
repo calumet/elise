@@ -102,6 +102,9 @@ export default defineConfig({
 > Con Vite no necesitas `postcss` ni `@tailwindcss/postcss`.
 
 ```css
+/* Tipografias autoalojadas. Omitilo solo si tu app ya carga Geist. */
+@import "@calumet/elise-ui/tailwind/fonts.css";
+
 @import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
 

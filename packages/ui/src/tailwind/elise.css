@@ -136,12 +136,20 @@
   --info-subtle: oklch(0.962 0.028 240);
   --info-subtle-foreground: oklch(0.42 0.12 245);
 
+  /* Cada familia lista primero el nombre que registra Fontsource ("… Variable")
+     y despues el nombre plano, para que resuelva tanto con
+     `@calumet/elise-ui/tailwind/fonts.css` como si la app carga la fuente por
+     su cuenta. Antes el stack empezaba por "Geist", que el paquete nunca
+     cargaba, y por "Geist Fallback", que no existe en ningun lado: en la
+     practica todo caia en la fuente del sistema. */
   --font-sans:
-    "Geist", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: Source Serif 4, serif;
-  --font-mono: JetBrains Mono, monospace;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
+  --font-mono:
+    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
 
   /* Radio base = radio de controles (8px). Las escalas derivadas se separan
      ±2px en lugar de restar 4px, que dejaba `rounded-sm` en 2px. */
