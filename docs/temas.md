@@ -79,6 +79,30 @@ Los temas se implementan via CSS custom properties definidas en `@calumet/elise-
 > los divisores son mas claros que el contorno de un control, y un campo de entrada
 > necesita mas peso que ambos para leerse como editable.
 
+### Estados de los rellenos solidos
+
+Cada relleno solido tiene sus propios tokens de `hover` y `active`. No se derivan
+con opacidad: `bg-primary/90` compone el color contra la pagina, o sea que mueve
+el relleno _hacia_ el fondo y el hover termina bajando el contraste. Estos tokens
+hacen lo contrario — en el tema claro oscurecen, en el oscuro aclaran; en ambos
+casos se alejan del fondo.
+
+| Token CSS              | Utilidad Tailwind       | Proposito                       |
+| ---------------------- | ----------------------- | ------------------------------- |
+| `--primary-hover`      | `bg-primary-hover`      | Hover del relleno primario      |
+| `--primary-active`     | `bg-primary-active`     | Presionado del relleno primario |
+| `--destructive-hover`  | `bg-destructive-hover`  | Hover destructive               |
+| `--destructive-active` | `bg-destructive-active` | Presionado destructive          |
+| `--success-hover`      | `bg-success-hover`      | Hover success                   |
+| `--success-active`     | `bg-success-active`     | Presionado success              |
+| `--warning-hover`      | `bg-warning-hover`      | Hover warning                   |
+| `--warning-active`     | `bg-warning-active`     | Presionado warning              |
+| `--info-hover`         | `bg-info-hover`         | Hover info                      |
+| `--info-active`        | `bg-info-active`        | Presionado info                 |
+
+Las variantes `outline` y `ghost` no usan estos tokens: sobre fondo transparente
+el hover se resuelve con `bg-muted` o con la superficie sutil del estado.
+
 ### Superficies sutiles de estado
 
 Cada estado tiene una superficie propia para fondos suaves (badges, alerts, filas
@@ -211,7 +235,7 @@ Los tokens se usan directamente como utilidades de Tailwind. Cada token de color
 <button class="focus-visible:ring-2 focus-visible:ring-ring">...</button>
 
 <!-- Estados con opacidad -->
-<button class="bg-primary hover:bg-primary/90 active:bg-primary/80">Boton</button>
+<button class="bg-primary hover:bg-primary-hover active:bg-primary-active">Boton</button>
 
 <!-- Destructive -->
 <button class="bg-destructive text-destructive-foreground">Eliminar</button>
@@ -230,7 +254,9 @@ Los tokens se usan directamente como utilidades de Tailwind. Cada token de color
 > `text-destructive-foreground` sobre `bg-warning`: el warning lleva texto oscuro
 > para cumplir contraste, y el destructive lo lleva blanco.
 
-> Los estados hover/active se manejan con modificadores de opacidad (e.g., `bg-primary/90` para hover, `bg-primary/80` para active) en lugar de tokens separados.
+> Los estados hover/active de los rellenos solidos usan tokens propios
+> (`bg-primary-hover`, `bg-primary-active`), no modificadores de opacidad. Ver
+> [Estados de los rellenos solidos](#estados-de-los-rellenos-solidos).
 
 ## Valores por defecto
 

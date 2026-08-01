@@ -30,6 +30,16 @@ export type EliseTheme = {
   borderStrong?: string;
   info?: string;
   infoForeground?: string;
+  primaryHover?: string;
+  primaryActive?: string;
+  destructiveHover?: string;
+  destructiveActive?: string;
+  successHover?: string;
+  successActive?: string;
+  warningHover?: string;
+  warningActive?: string;
+  infoHover?: string;
+  infoActive?: string;
   successSubtle?: string;
   successSubtleForeground?: string;
   warningSubtle?: string;
@@ -68,6 +78,16 @@ export const defaultLightTheme: EliseTheme = {
   borderStrong: "oklch(0.865 0.008 265)",
   info: "oklch(0.55 0.15 240)",
   infoForeground: "oklch(1 0 0)",
+  primaryHover: "oklch(0.5 0.19 262)",
+  primaryActive: "oklch(0.455 0.18 262)",
+  destructiveHover: "oklch(0.53 0.22 27)",
+  destructiveActive: "oklch(0.485 0.205 27)",
+  successHover: "oklch(0.475 0.145 152)",
+  successActive: "oklch(0.43 0.135 152)",
+  warningHover: "oklch(0.71 0.15 75)",
+  warningActive: "oklch(0.67 0.145 75)",
+  infoHover: "oklch(0.5 0.15 240)",
+  infoActive: "oklch(0.455 0.145 240)",
   successSubtle: "oklch(0.962 0.032 152)",
   successSubtleForeground: "oklch(0.4 0.11 152)",
   warningSubtle: "oklch(0.965 0.045 85)",
@@ -106,6 +126,16 @@ export const defaultDarkTheme: EliseTheme = {
   borderStrong: "oklch(0.38 0.016 265)",
   info: "oklch(0.68 0.14 240)",
   infoForeground: "oklch(0.16 0.03 240)",
+  primaryHover: "oklch(0.705 0.165 262)",
+  primaryActive: "oklch(0.75 0.15 262)",
+  destructiveHover: "oklch(0.67 0.2 27)",
+  destructiveActive: "oklch(0.715 0.185 27)",
+  successHover: "oklch(0.73 0.145 152)",
+  successActive: "oklch(0.775 0.135 152)",
+  warningHover: "oklch(0.845 0.135 75)",
+  warningActive: "oklch(0.885 0.12 75)",
+  infoHover: "oklch(0.73 0.135 240)",
+  infoActive: "oklch(0.775 0.125 240)",
   successSubtle: "oklch(0.28 0.05 152)",
   successSubtleForeground: "oklch(0.86 0.12 152)",
   warningSubtle: "oklch(0.3 0.05 75)",
@@ -147,6 +177,16 @@ export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.do
     ["--border-strong", theme.borderStrong],
     ["--info", theme.info],
     ["--info-foreground", theme.infoForeground],
+    ["--primary-hover", theme.primaryHover],
+    ["--primary-active", theme.primaryActive],
+    ["--destructive-hover", theme.destructiveHover],
+    ["--destructive-active", theme.destructiveActive],
+    ["--success-hover", theme.successHover],
+    ["--success-active", theme.successActive],
+    ["--warning-hover", theme.warningHover],
+    ["--warning-active", theme.warningActive],
+    ["--info-hover", theme.infoHover],
+    ["--info-active", theme.infoActive],
     ["--success-subtle", theme.successSubtle],
     ["--success-subtle-foreground", theme.successSubtleForeground],
     ["--warning-subtle", theme.warningSubtle],

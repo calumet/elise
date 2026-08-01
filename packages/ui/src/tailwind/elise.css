@@ -110,6 +110,21 @@
   --info: oklch(0.55 0.15 240);
   --info-foreground: oklch(1 0 0);
 
+  /* Estados de los rellenos sólidos. Antes se derivaban con alfa
+     (`bg-primary/90`), que compone el color contra el fondo y por lo tanto
+     mueve el relleno *hacia* la página: el hover bajaba el contraste. Estos
+     tokens se alejan del fondo — en claro oscurecen, en oscuro aclaran. */
+  --primary-hover: oklch(0.5 0.19 262);
+  --primary-active: oklch(0.455 0.18 262);
+  --destructive-hover: oklch(0.53 0.22 27);
+  --destructive-active: oklch(0.485 0.205 27);
+  --success-hover: oklch(0.475 0.145 152);
+  --success-active: oklch(0.43 0.135 152);
+  --warning-hover: oklch(0.71 0.15 75);
+  --warning-active: oklch(0.67 0.145 75);
+  --info-hover: oklch(0.5 0.15 240);
+  --info-active: oklch(0.455 0.145 240);
+
   /* Superficies sutiles de estado. Reemplazan los `bg-success/10` y
      `bg-warning/20`: el alfa sobre fondo oscuro se enloda, un token no. */
   --success-subtle: oklch(0.962 0.032 152);
@@ -204,6 +219,18 @@
   --info: oklch(0.68 0.14 240);
   --info-foreground: oklch(0.16 0.03 240);
 
+  /* En oscuro el hover aclara: alejarse del fondo es lo que sube el contraste. */
+  --primary-hover: oklch(0.705 0.165 262);
+  --primary-active: oklch(0.75 0.15 262);
+  --destructive-hover: oklch(0.67 0.2 27);
+  --destructive-active: oklch(0.715 0.185 27);
+  --success-hover: oklch(0.73 0.145 152);
+  --success-active: oklch(0.775 0.135 152);
+  --warning-hover: oklch(0.845 0.135 75);
+  --warning-active: oklch(0.885 0.12 75);
+  --info-hover: oklch(0.73 0.135 240);
+  --info-active: oklch(0.775 0.125 240);
+
   --success-subtle: oklch(0.28 0.05 152);
   --success-subtle-foreground: oklch(0.86 0.12 152);
   --warning-subtle: oklch(0.3 0.05 75);
@@ -267,6 +294,17 @@
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
   --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-destructive-hover: var(--destructive-hover);
+  --color-destructive-active: var(--destructive-active);
+  --color-success-hover: var(--success-hover);
+  --color-success-active: var(--success-active);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-active: var(--warning-active);
+  --color-info-hover: var(--info-hover);
+  --color-info-active: var(--info-active);
 
   --color-success-subtle: var(--success-subtle);
   --color-success-subtle-foreground: var(--success-subtle-foreground);

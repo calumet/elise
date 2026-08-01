@@ -21,7 +21,7 @@ const baseClasses =
    las superficies sutiles en vez de derivar el fondo con opacidad. */
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   solid:
-    "bg-primary text-primary-foreground shadow-bevel hover:bg-primary/90 active:bg-primary/80 active:shadow-bevel-inset",
+    "bg-primary text-primary-foreground shadow-bevel hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset",
   outline:
     "border border-border-strong text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset",
   ghost: "text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset",
@@ -32,14 +32,16 @@ const toneOverrides: Record<
   Record<NonNullable<ButtonProps["variant"]>, string>
 > = {
   success: {
-    solid: "bg-success text-success-foreground hover:bg-success/90 active:bg-success/80",
+    solid:
+      "bg-success text-success-foreground shadow-bevel hover:bg-success-hover active:bg-success-active active:shadow-bevel-inset",
     outline:
       "border-success text-success hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     ghost:
       "text-success hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
   },
   warning: {
-    solid: "bg-warning text-warning-foreground hover:bg-warning/90 active:bg-warning/80",
+    solid:
+      "bg-warning text-warning-foreground shadow-bevel hover:bg-warning-hover active:bg-warning-active active:shadow-bevel-inset",
     outline:
       "border-warning text-warning hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     ghost:
@@ -47,7 +49,7 @@ const toneOverrides: Record<
   },
   danger: {
     solid:
-      "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
+      "bg-destructive text-destructive-foreground shadow-bevel hover:bg-destructive-hover active:bg-destructive-active active:shadow-bevel-inset",
     outline:
       "border-destructive text-destructive hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     ghost:
