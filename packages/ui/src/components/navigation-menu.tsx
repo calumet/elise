@@ -23,7 +23,7 @@ export const NavigationMenuList = React.forwardRef<
   <NavigationMenuPrimitive.List
     ref={ref}
     className={cn(
-      "flex flex-1 list-none items-center justify-start gap-1 rounded-sm bg-background p-1 border border-border",
+      "flex flex-1 list-none items-center justify-start gap-1 rounded-md bg-background p-1 border border-border",
       className,
     )}
     {...props}
@@ -61,7 +61,7 @@ export const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      "absolute left-0 right-0 z-50 top-full w-[calc(100vw-24px)] max-w-sm rounded-sm border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:left-auto sm:right-auto sm:w-auto sm:min-w-[320px]",
+      "absolute left-0 right-0 z-50 top-full w-[calc(100vw-24px)] max-w-sm rounded-xl border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:left-auto sm:right-auto sm:w-auto sm:min-w-[320px]",
       className,
     )}
     {...props}
@@ -91,7 +91,7 @@ export const NavigationMenuViewport = React.forwardRef<
   <NavigationMenuPrimitive.Viewport
     ref={ref}
     className={cn(
-      "relative mt-2 h-(--radix-navigation-menu-viewport-height) w-full origin-top-left overflow-hidden rounded-sm border border-border bg-popover shadow-lg transition-all duration-200 sm:w-(--radix-navigation-menu-viewport-width)",
+      "relative mt-2 h-(--radix-navigation-menu-viewport-height) w-full origin-top-left overflow-hidden rounded-xl border border-border bg-popover shadow-lg transition-all duration-200 sm:w-(--radix-navigation-menu-viewport-width)",
       className,
     )}
     {...props}

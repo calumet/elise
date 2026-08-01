@@ -18,7 +18,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
       <AccordionContext value={{ name: type === "single" ? name : "", defaultValue }}>
         <div
           ref={ref}
-          className={cn("rounded-sm border border-border bg-card", className)}
+          className={cn("rounded-xl border border-border bg-card", className)}
           {...props}
         >
           {children}

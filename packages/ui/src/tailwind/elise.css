@@ -152,8 +152,11 @@
   --shadow-2xl:
     0 12px 24px -6px oklch(0.21 0.02 265 / 0.16), 0 36px 64px -16px oklch(0.21 0.02 265 / 0.26);
   /* Bisel para rellenos sólidos: borde inferior oscuro + highlight superior.
-     Es lo que hace que un botón se lea como objeto y no como un rectángulo. */
+     Es lo que hace que un botón se lea como objeto y no como un rectángulo.
+     El estado presionado invierte el bisel hacia adentro, en vez de solo
+     oscurecer el fondo. */
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16);
+  --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
 }
 
 .dark,
@@ -221,6 +224,7 @@
   --shadow-xl: 0 8px 18px -4px oklch(0 0 0 / 0.6), 0 24px 48px -12px oklch(0 0 0 / 0.65);
   --shadow-2xl: 0 12px 26px -6px oklch(0 0 0 / 0.65), 0 36px 68px -16px oklch(0 0 0 / 0.72);
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.16), inset 0 -1px 0 oklch(0 0 0 / 0.3);
+  --shadow-bevel-inset: inset 0 2px 4px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(0 0 0 / 0.25);
 }
 
 @theme inline {
@@ -291,6 +295,7 @@
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
   --shadow-bevel: var(--shadow-bevel);
+  --shadow-bevel-inset: var(--shadow-bevel-inset);
 }
 
 @layer base {

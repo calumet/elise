@@ -10,7 +10,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, onCheckedChange, onChange, ...props }, ref) => (
     <label
       className={cn(
-        "inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border bg-card text-transparent transition has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background has-disabled:cursor-not-allowed has-disabled:opacity-50",
+        "inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-sm border border-border-strong bg-card text-transparent transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground has-checked:shadow-bevel has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background has-disabled:cursor-not-allowed has-disabled:opacity-50",
         className,
       )}
     >

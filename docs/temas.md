@@ -121,30 +121,44 @@ resaltadas), en lugar de derivarla con opacidad sobre el color solido. Un
 
 ### Otros tokens
 
-| Token CSS         | Utilidad Tailwind                                      | Descripcion                                               |
-| ----------------- | ------------------------------------------------------ | --------------------------------------------------------- |
-| `--radius`        | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | Radio base (0.5rem). Las escalas se calculan con `calc()` |
-| `--shadow-2xs`    | `shadow-2xs`                                           | Sombra minima                                             |
-| `--shadow-xs`     | `shadow-xs`                                            | Sombra extra-pequena                                      |
-| `--shadow-sm`     | `shadow-sm`                                            | Sombra pequena (tarjetas)                                 |
-| `--shadow`        | `shadow`                                               | Sombra por defecto                                        |
-| `--shadow-md`     | `shadow-md`                                            | Sombra mediana                                            |
-| `--shadow-lg`     | `shadow-lg`                                            | Sombra grande (menus, popovers)                           |
-| `--shadow-xl`     | `shadow-xl`                                            | Sombra extra-grande (dialogos)                            |
-| `--shadow-2xl`    | `shadow-2xl`                                           | Sombra maxima                                             |
-| `--shadow-bevel`  | `shadow-bevel`                                         | Bisel `inset` para rellenos solidos                       |
-| `--font-sans`     | `font-sans`                                            | Geist, system-ui                                          |
-| `--font-serif`    | `font-serif`                                           | Source Serif 4, serif                                     |
-| `--font-mono`     | `font-mono`                                            | JetBrains Mono, monospace                                 |
-| `--duration-fast` | `duration-(--duration-fast)`                           | 140ms — hovers y cambios de color                         |
-| `--duration-base` | `duration-(--duration-base)`                           | 200ms — entradas y salidas                                |
-| `--duration-slow` | `duration-(--duration-slow)`                           | 320ms — sheets, drawers                                   |
+| Token CSS              | Utilidad Tailwind                                      | Descripcion                                               |
+| ---------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
+| `--radius`             | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | Radio base (0.5rem). Las escalas se calculan con `calc()` |
+| `--shadow-2xs`         | `shadow-2xs`                                           | Sombra minima                                             |
+| `--shadow-xs`          | `shadow-xs`                                            | Sombra extra-pequena                                      |
+| `--shadow-sm`          | `shadow-sm`                                            | Sombra pequena (tarjetas)                                 |
+| `--shadow`             | `shadow`                                               | Sombra por defecto                                        |
+| `--shadow-md`          | `shadow-md`                                            | Sombra mediana                                            |
+| `--shadow-lg`          | `shadow-lg`                                            | Sombra grande (menus, popovers)                           |
+| `--shadow-xl`          | `shadow-xl`                                            | Sombra extra-grande (dialogos)                            |
+| `--shadow-2xl`         | `shadow-2xl`                                           | Sombra maxima                                             |
+| `--shadow-bevel`       | `shadow-bevel`                                         | Bisel `inset` para rellenos solidos                       |
+| `--shadow-bevel-inset` | `shadow-bevel-inset`                                   | Bisel invertido: estado presionado                        |
+| `--font-sans`          | `font-sans`                                            | Geist, system-ui                                          |
+| `--font-serif`         | `font-serif`                                           | Source Serif 4, serif                                     |
+| `--font-mono`          | `font-mono`                                            | JetBrains Mono, monospace                                 |
+| `--duration-fast`      | `duration-(--duration-fast)`                           | 140ms — hovers y cambios de color                         |
+| `--duration-base`      | `duration-(--duration-base)`                           | 200ms — entradas y salidas                                |
+| `--duration-slow`      | `duration-(--duration-slow)`                           | 320ms — sheets, drawers                                   |
 
 La escala de sombras es monotona: el blur, el spread negativo y la opacidad crecen
 juntos, y el modo oscuro define su propio juego de valores (una sombra negra al 10%
 es invisible sobre el fondo oscuro). `shadow-bevel` es aparte de la escala: se
 combina con un fondo solido para darle un borde inferior oscuro y un highlight
 superior, de modo que el relleno se lea como un objeto y no como un plano de color.
+`shadow-bevel-inset` lo invierte hacia adentro y se usa en `active:`, para que el
+estado presionado se sienta hundido en lugar de solo cambiar de color.
+
+### Radios por rol
+
+Los componentes no eligen radio libremente. La convencion es:
+
+| Rol                                                 | Utilidad       | Valor |
+| --------------------------------------------------- | -------------- | ----- |
+| Superficies (Card, Dialog, Popover, menus, Toast)   | `rounded-xl`   | 12px  |
+| Controles y barras (Button, Input, Select, Toolbar) | `rounded-md`   | 8px   |
+| Items dentro de una superficie (opciones de menu)   | `rounded-sm`   | 6px   |
+| Pildoras y avatares                                 | `rounded-full` | —     |
 
 ### Tipografia
 

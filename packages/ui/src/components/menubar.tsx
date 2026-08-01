@@ -5,7 +5,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-foreground";
+  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground";
 
 export const Menubar = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Root>,
@@ -14,7 +14,7 @@ export const Menubar = React.forwardRef<
   <MenubarPrimitive.Root
     ref={ref}
     className={cn(
-      "flex items-center gap-1 rounded-sm border border-border bg-background px-1 py-1",
+      "flex items-center gap-1 rounded-md border border-border bg-background px-1 py-1",
       className,
     )}
     {...props}
@@ -59,7 +59,7 @@ export const MenubarContent = React.forwardRef<
         // Solo animación de entrada: una animación de salida mantiene montado el
         // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
         // de trigger con hover (mismo criterio que shadcn para Menubar).
-        "z-50 min-w-[220px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+        "z-50 min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
         className,
       )}
       {...props}
@@ -178,7 +178,7 @@ export const MenubarSubContent = React.forwardRef<
   <MenubarPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-50 min-w-[180px] rounded-sm border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+      "z-50 min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
       className,
     )}
     {...props}
