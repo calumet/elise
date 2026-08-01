@@ -20,6 +20,26 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./alert": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./badge": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./empty-state": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./spinner": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./accordion": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

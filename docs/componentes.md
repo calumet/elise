@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 45 componentes construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos los componentes son accesibles, soportan `ref` via `React.forwardRef` y se estilizan con Tailwind CSS.
+`@calumet/elise-ui` exporta 49 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
 
@@ -60,12 +60,113 @@ import { Button, Dialog, Card } from "@calumet/elise-ui";
 
 ### Feedback
 
-| Componente                                                                    | Import                           | Radix                                                                           |
-| ----------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------- |
-| Toast, ToastProvider, ToastViewport, ToastTitle, ToastDescription, ToastClose | `@calumet/elise-ui/toast`        | [Toast](https://www.radix-ui.com/primitives/docs/components/toast)              |
-| AlertDialog, AlertDialogTrigger, AlertDialogContent, ...                      | `@calumet/elise-ui/alert-dialog` | [AlertDialog](https://www.radix-ui.com/primitives/docs/components/alert-dialog) |
-| Progress                                                                      | `@calumet/elise-ui/progress`     | [Progress](https://www.radix-ui.com/primitives/docs/components/progress)        |
-| Skeleton                                                                      | `@calumet/elise-ui/skeleton`     | —                                                                               |
+| Componente                                                                             | Import                           | Radix                                                                           |
+| -------------------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------- |
+| Toast, ToastProvider, ToastViewport, ToastTitle, ToastDescription, ToastClose          | `@calumet/elise-ui/toast`        | [Toast](https://www.radix-ui.com/primitives/docs/components/toast)              |
+| AlertDialog, AlertDialogTrigger, AlertDialogContent, ...                               | `@calumet/elise-ui/alert-dialog` | [AlertDialog](https://www.radix-ui.com/primitives/docs/components/alert-dialog) |
+| Progress                                                                               | `@calumet/elise-ui/progress`     | [Progress](https://www.radix-ui.com/primitives/docs/components/progress)        |
+| Skeleton                                                                               | `@calumet/elise-ui/skeleton`     | —                                                                               |
+| Alert, AlertTitle, AlertDescription                                                    | `@calumet/elise-ui/alert`        | —                                                                               |
+| Badge                                                                                  | `@calumet/elise-ui/badge`        | —                                                                               |
+| Spinner                                                                                | `@calumet/elise-ui/spinner`      | —                                                                               |
+| EmptyState, EmptyStateMedia, EmptyStateTitle, EmptyStateDescription, EmptyStateActions | `@calumet/elise-ui/empty-state`  | —                                                                               |
+
+#### Alert vs AlertDialog
+
+`Alert` es un mensaje en linea que no interrumpe: se renderiza dentro del flujo de
+la pagina. `AlertDialog` es modal y bloquea hasta que el usuario decide. Si el
+mensaje no exige una decision, es `Alert`.
+
+Los tonos `danger` y `warning` se anuncian con `role="alert"`, que interrumpe al
+lector de pantalla; `info` y `success` usan `role="status"`, que espera a que
+termine de leer lo que estaba diciendo.
+
+```tsx
+import { Alert, AlertTitle, AlertDescription } from "@calumet/elise-ui/alert";
+
+<Alert tone="warning">
+  <AlertTitle>Tu plan vence en 5 dias</AlertTitle>
+  <AlertDescription>Renueva para no perder los reportes programados.</AlertDescription>
+</Alert>;
+
+// Con boton de cierre
+<Alert tone="danger" onDismiss={() => setVisible(false)}>
+  <AlertTitle>No pudimos procesar el pago</AlertTitle>
+</Alert>;
+```
+
+| Prop        | Tipo                                           | Default  | Descripcion                           |
+| ----------- | ---------------------------------------------- | -------- | ------------------------------------- |
+| `tone`      | `"info" \| "success" \| "warning" \| "danger"` | `"info"` | Superficie, icono y `role` del bloque |
+| `icon`      | `React.ReactNode`                              | —        | Sustituye el icono. `null` lo quita   |
+| `onDismiss` | `() => void`                                   | —        | Muestra el boton de cierre            |
+
+#### Badge
+
+```tsx
+import { Badge } from "@calumet/elise-ui/badge";
+
+<Badge tone="success">Activo</Badge>
+<Badge tone="danger" variant="solid">Fallido</Badge>
+<Badge tone="neutral" variant="outline" size="sm">Borrador</Badge>
+```
+
+| Prop      | Tipo                                                                   | Default     |
+| --------- | ---------------------------------------------------------------------- | ----------- |
+| `tone`    | `"neutral" \| "brand" \| "success" \| "warning" \| "danger" \| "info"` | `"neutral"` |
+| `variant` | `"subtle" \| "solid" \| "outline"`                                     | `"subtle"`  |
+| `size`    | `"sm" \| "md"`                                                         | `"md"`      |
+| `asChild` | `boolean`                                                              | `false`     |
+
+#### Spinner
+
+Hereda el color del texto, asi que se tiñe con cualquier utilidad `text-*`.
+Sigue girando bajo `prefers-reduced-motion` — lleva `data-motion="essential"`,
+porque un indicador detenido no comunica que algo sigue en curso.
+
+```tsx
+import { Spinner } from "@calumet/elise-ui/spinner";
+
+<Spinner />
+<Spinner size="lg" className="text-primary" />
+
+<Button disabled>
+  <Spinner size="sm" />
+  Guardando
+</Button>
+```
+
+La etiqueta para lectores de pantalla sale del puente i18n
+(`ui.loading`, fallback `"Cargando"`) y se puede sobrescribir con `label`.
+
+#### EmptyState
+
+```tsx
+import {
+  EmptyState,
+  EmptyStateActions,
+  EmptyStateDescription,
+  EmptyStateMedia,
+  EmptyStateTitle,
+} from "@calumet/elise-ui/empty-state";
+import { FolderOpen } from "@calumet/elise-icons";
+
+<EmptyState>
+  <EmptyStateMedia>
+    <FolderOpen />
+  </EmptyStateMedia>
+  <EmptyStateTitle>Todavia no hay proyectos</EmptyStateTitle>
+  <EmptyStateDescription>
+    Crea el primero para empezar a agrupar tableros, tablas y reportes.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button size="sm">Crear proyecto</Button>
+  </EmptyStateActions>
+</EmptyState>;
+```
+
+Para el caso "no hay resultados" de una busqueda, el titulo deberia nombrar el
+termino buscado en vez de decir solo "Sin resultados".
 
 ### Overlay
 

@@ -193,7 +193,10 @@
   --muted-foreground: oklch(0.685 0.014 265);
   --accent: oklch(0.33 0.09 262);
   --accent-foreground: oklch(0.89 0.06 255);
-  --destructive: oklch(0.62 0.21 27);
+  /* Excepcion a la regla de aclarar en oscuro: destructive lleva texto blanco y
+     aclararlo lo baja de 4.5:1. Se queda en 0.577 y sus estados oscurecen, que
+     igual lo separa del fondo (0.172) y de paso sube el contraste del texto. */
+  --destructive: oklch(0.577 0.225 27);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.302 0.013 265);
   --border-strong: oklch(0.38 0.016 265);
@@ -222,8 +225,8 @@
   /* En oscuro el hover aclara: alejarse del fondo es lo que sube el contraste. */
   --primary-hover: oklch(0.705 0.165 262);
   --primary-active: oklch(0.75 0.15 262);
-  --destructive-hover: oklch(0.67 0.2 27);
-  --destructive-active: oklch(0.715 0.185 27);
+  --destructive-hover: oklch(0.53 0.22 27);
+  --destructive-active: oklch(0.485 0.205 27);
   --success-hover: oklch(0.73 0.145 152);
   --success-active: oklch(0.775 0.135 152);
   --warning-hover: oklch(0.845 0.135 75);
@@ -358,10 +361,13 @@
     color: var(--color-accent-foreground);
   }
 
+  /* Neutraliza el movimiento decorativo. `[data-motion="essential"]` queda
+     fuera: un indicador de carga que no gira deja de comunicar que algo esta
+     pasando, que es justo lo contrario de lo que busca esta preferencia. */
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *:not([data-motion="essential"]),
+    *:not([data-motion="essential"])::before,
+    *:not([data-motion="essential"])::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;

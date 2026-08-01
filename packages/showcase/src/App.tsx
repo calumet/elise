@@ -42,6 +42,7 @@ const ContactForm = React.lazy(() => import("./sections/ContactForm"));
 const DataTableDemo = React.lazy(() => import("./sections/DataTableDemo"));
 const DatePickersDemo = React.lazy(() => import("./sections/DatePickersDemo"));
 const DialogsDemo = React.lazy(() => import("./sections/DialogsDemo"));
+const FeedbackDemo = React.lazy(() => import("./sections/FeedbackDemo"));
 const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
 const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
 const LoginCard = React.lazy(() => import("./sections/LoginCard"));
@@ -120,9 +121,7 @@ const App = () => (
                   <NavigationMenuLink asChild>
                     <a href="#hello">
                       <h3 className="text-sm font-semibold">Hello World</h3>
-                      <p className="text-xs text-muted-foreground">
-                        Primer componente de ejemplo.
-                      </p>
+                      <p className="text-xs text-muted-foreground">Primer componente de ejemplo.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
@@ -256,6 +255,12 @@ const App = () => (
           <SectionCard title="Progress & Skeleton">
             <LazySection>
               <ProgressSkeletonDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Badge, Alert, Spinner y Empty State">
+            <LazySection>
+              <FeedbackDemo />
             </LazySection>
           </SectionCard>
 

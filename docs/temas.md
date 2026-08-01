@@ -103,6 +103,11 @@ casos se alejan del fondo.
 Las variantes `outline` y `ghost` no usan estos tokens: sobre fondo transparente
 el hover se resuelve con `bg-muted` o con la superficie sutil del estado.
 
+> **Excepcion:** en el tema oscuro `destructive` tambien oscurece. Lleva texto
+> blanco y aclararlo lo baja de 4.5:1. Igual queda muy separado del fondo
+> (`0.577` contra `0.172`), y de paso el hover sube el contraste del texto.
+> Todos los pares de color del tema cumplen WCAG AA (>=4.5:1) en ambos temas.
+
 ### Superficies sutiles de estado
 
 Cada estado tiene una superficie propia para fondos suaves (badges, alerts, filas
