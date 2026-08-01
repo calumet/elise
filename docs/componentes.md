@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 49 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 55 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
 
@@ -15,6 +15,137 @@ import { Button, Dialog, Card } from "@calumet/elise-ui";
 ```
 
 ## Catalogo por categoria
+
+### Primitivas
+
+La capa base sobre la que se compone todo lo demas. Sin ella, cada pantalla
+resuelve su layout con Tailwind crudo y termina inventando su propia escala de
+espaciado y su propia jerarquia tipografica — que es justo lo que un design
+system deberia evitar.
+
+| Componente              | Import                        | Proposito                                       |
+| ----------------------- | ----------------------------- | ----------------------------------------------- |
+| Box                     | `@calumet/elise-ui/box`       | Contenedor: espaciado, superficie, borde, radio |
+| BlockStack, InlineStack | `@calumet/elise-ui/stack`     | Apilado en el eje de bloque / en linea          |
+| Grid                    | `@calumet/elise-ui/grid`      | Rejilla de columnas, mobile-first               |
+| Container               | `@calumet/elise-ui/container` | Ancho maximo + centrado + gutter responsive     |
+| Bleed                   | `@calumet/elise-ui/bleed`     | Rompe el padding del contenedor padre           |
+| Text                    | `@calumet/elise-ui/text`      | Primitiva tipografica                           |
+
+Todas aceptan `as` para elegir la etiqueta HTML, y `className` al final para
+escapar del sistema cuando hace falta.
+
+> **Por que los valores son un conjunto cerrado.** Las props no aceptan valores
+> arbitrarios (`padding={4}`, no `padding="17px"`). Ademas de mantener la
+> escala, es un requisito tecnico: Tailwind escanea el codigo fuente en build,
+> asi que una clase construida por interpolacion (`` `p-${n}` ``) nunca se
+> genera. Por eso cada valor posible vive en un mapa estatico.
+
+#### BlockStack e InlineStack
+
+Se nombran por el eje logico de CSS y no por "vertical" y "horizontal": el
+nombre sigue siendo correcto si el modo de escritura cambia.
+
+```tsx
+import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
+
+<BlockStack gap={4}>
+  <Text size="lg" weight="semibold">
+    Facturacion
+  </Text>
+  <InlineStack gap={2} justify="between">
+    <Badge tone="success">Al dia</Badge>
+    <Button size="sm">Ver detalle</Button>
+  </InlineStack>
+</BlockStack>;
+```
+
+| Prop      | Tipo                                                                | Default                   |
+| --------- | ------------------------------------------------------------------- | ------------------------- |
+| `gap`     | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 8 \| 10 \| 12 \| 16`            | `0`                       |
+| `align`   | `"start" \| "center" \| "end" \| "stretch" \| "baseline"`           | `"center"` en InlineStack |
+| `justify` | `"start" \| "center" \| "end" \| "between" \| "around" \| "evenly"` | —                         |
+| `wrap`    | `boolean` (solo InlineStack)                                        | `true`                    |
+
+#### Box
+
+```tsx
+import { Box } from "@calumet/elise-ui/box";
+
+<Box padding={4} background="card" border radius="xl" shadow="sm">
+  contenido
+</Box>;
+```
+
+| Prop                                | Tipo                                                                               | Default  |
+| ----------------------------------- | ---------------------------------------------------------------------------------- | -------- |
+| `padding` / `paddingX` / `paddingY` | escala de espaciado                                                                | —        |
+| `background`                        | `"none" \| "card" \| "popover" \| "muted" \| "secondary" \| "accent" \| "sidebar"` | `"none"` |
+| `border`                            | `boolean \| "strong"`                                                              | —        |
+| `radius`                            | `"none" \| "sm" \| "md" \| "lg" \| "xl" \| "full"`                                 | —        |
+| `shadow`                            | `"none" \| "xs" \| "sm" \| "md" \| "lg" \| "xl"`                                   | —        |
+| `overflowHidden`                    | `boolean`                                                                          | —        |
+
+`background` setea tambien el color de texto que le corresponde (`card` trae
+`text-card-foreground`), asi que los pares nunca se desemparejan.
+
+#### Grid
+
+Mobile-first: `columns` aplica desde el ancho mas chico y los breakpoints lo
+sobrescriben hacia arriba.
+
+```tsx
+<Grid columns={1} smColumns={2} lgColumns={4} gap={4}>
+  {items.map((i) => (
+    <Card key={i.id} />
+  ))}
+</Grid>
+```
+
+#### Bleed
+
+Rompe el padding del padre con margen negativo, para que algo llegue al borde
+sin tener que sacarle el padding al contenedor entero.
+
+```tsx
+<Box padding={4} background="card" border radius="xl" overflowHidden>
+  <Text weight="semibold">Resumen</Text>
+  <Bleed x={4}>
+    <Separator />
+  </Bleed>
+  <Text size="sm" tone="muted">
+    El separador llega de borde a borde.
+  </Text>
+</Box>
+```
+
+El valor tiene que coincidir con el padding del padre; si no, el contenido se
+desborda.
+
+#### Text
+
+Cada `size` ya trae su interlineado y su tracking desde los tokens, asi que no
+hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
+
+```tsx
+<Text as="h2" size="xl" weight="bold" balance>Plan Empresa</Text>
+<Text size="sm" tone="muted">Renueva el 14 de septiembre</Text>
+<Text size="sm" lines={2}>Descripcion larga que se corta a dos lineas…</Text>
+```
+
+| Prop       | Tipo                                                                                | Default     |
+| ---------- | ----------------------------------------------------------------------------------- | ----------- |
+| `as`       | `React.ElementType`                                                                 | `"p"`       |
+| `size`     | `"2xs" \| "xs" \| "sm" \| "base" \| "lg" \| "xl" \| "2xl" \| "3xl"`                 | `"base"`    |
+| `weight`   | `"normal" \| "medium" \| "semibold" \| "bold"`                                      | `"normal"`  |
+| `tone`     | `"default" \| "muted" \| "primary" \| "success" \| "warning" \| "danger" \| "info"` | `"default"` |
+| `align`    | `"start" \| "center" \| "end"`                                                      | —           |
+| `truncate` | `boolean`                                                                           | —           |
+| `lines`    | `2 \| 3 \| 4`                                                                       | —           |
+| `balance`  | `boolean`                                                                           | —           |
+
+`as` y `size` son independientes a proposito: un `h2` puede verse pequeño sin
+dejar de ser un `h2` para el lector de pantalla.
 
 ### Layout
 

@@ -1,6 +1,7 @@
 import { FolderOpen } from "@calumet/elise-icons";
 import { Alert, AlertDescription, AlertTitle } from "@calumet/elise-ui/alert";
 import { Badge } from "@calumet/elise-ui/badge";
+import { Box } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
 import {
   EmptyState,
@@ -10,6 +11,8 @@ import {
   EmptyStateTitle,
 } from "@calumet/elise-ui/empty-state";
 import { Spinner } from "@calumet/elise-ui/spinner";
+import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
+import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
 const tonos = ["neutral", "brand", "success", "warning", "danger", "info"] as const;
@@ -18,34 +21,38 @@ const FeedbackDemo = () => {
   const [visible, setVisible] = useState(true);
 
   return (
-    <div className="flex w-full flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Badge</p>
-        <div className="flex flex-wrap items-center gap-2">
+    <BlockStack gap={6} className="w-full">
+      <BlockStack gap={3}>
+        <Text size="sm" weight="semibold">
+          Badge
+        </Text>
+        <InlineStack gap={2}>
           {tonos.map((tone) => (
             <Badge key={tone} tone={tone}>
               {tone}
             </Badge>
           ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
+        </InlineStack>
+        <InlineStack gap={2}>
           {tonos.map((tone) => (
             <Badge key={tone} tone={tone} variant="solid">
               {tone}
             </Badge>
           ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
+        </InlineStack>
+        <InlineStack gap={2}>
           {tonos.map((tone) => (
             <Badge key={tone} tone={tone} variant="outline" size="sm">
               {tone}
             </Badge>
           ))}
-        </div>
-      </div>
+        </InlineStack>
+      </BlockStack>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Alert</p>
+      <BlockStack gap={3}>
+        <Text size="sm" weight="semibold">
+          Alert
+        </Text>
         <Alert tone="info">
           <AlertTitle>Migración programada</AlertTitle>
           <AlertDescription>
@@ -67,15 +74,19 @@ const FeedbackDemo = () => {
             </AlertDescription>
           </Alert>
         ) : (
-          <Button size="sm" variant="outline" onClick={() => setVisible(true)}>
-            Restaurar alerta
-          </Button>
+          <InlineStack>
+            <Button size="sm" variant="outline" onClick={() => setVisible(true)}>
+              Restaurar alerta
+            </Button>
+          </InlineStack>
         )}
-      </div>
+      </BlockStack>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Spinner</p>
-        <div className="flex items-center gap-4">
+      <BlockStack gap={3}>
+        <Text size="sm" weight="semibold">
+          Spinner
+        </Text>
+        <InlineStack gap={4}>
           <Spinner size="sm" />
           <Spinner />
           <Spinner size="lg" className="text-primary" />
@@ -83,12 +94,14 @@ const FeedbackDemo = () => {
             <Spinner size="sm" />
             Guardando
           </Button>
-        </div>
-      </div>
+        </InlineStack>
+      </BlockStack>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Empty state</p>
-        <div className="rounded-xl border border-border bg-card">
+      <BlockStack gap={3}>
+        <Text size="sm" weight="semibold">
+          Empty state
+        </Text>
+        <Box background="card" border radius="xl">
           <EmptyState>
             <EmptyStateMedia>
               <FolderOpen />
@@ -104,9 +117,9 @@ const FeedbackDemo = () => {
               </Button>
             </EmptyStateActions>
           </EmptyState>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </BlockStack>
+    </BlockStack>
   );
 };
 

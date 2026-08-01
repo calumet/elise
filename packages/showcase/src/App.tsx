@@ -49,6 +49,7 @@ const LoginCard = React.lazy(() => import("./sections/LoginCard"));
 const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
 const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
 const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
+const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
@@ -255,6 +256,12 @@ const App = () => (
           <SectionCard title="Progress & Skeleton">
             <LazySection>
               <ProgressSkeletonDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Primitivas: Box, Stack, Grid, Bleed y Text">
+            <LazySection>
+              <PrimitivesDemo />
             </LazySection>
           </SectionCard>
 
