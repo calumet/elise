@@ -22,58 +22,98 @@ export type EliseTheme = {
   successForeground: string;
   warning: string;
   warningForeground: string;
+
+  /* Tokens agregados despues de la v0.2. Son opcionales para no romper los
+     temas que ya se construyen como literal completo: si no los defines, el
+     valor del CSS se mantiene. `defaultLightTheme` / `defaultDarkTheme` si los
+     traen, asi que extenderlos con spread los incluye automaticamente. */
+  borderStrong?: string;
+  info?: string;
+  infoForeground?: string;
+  successSubtle?: string;
+  successSubtleForeground?: string;
+  warningSubtle?: string;
+  warningSubtleForeground?: string;
+  destructiveSubtle?: string;
+  destructiveSubtleForeground?: string;
+  infoSubtle?: string;
+  infoSubtleForeground?: string;
 };
 
 export const defaultLightTheme: EliseTheme = {
-  background: "oklch(1.00 0 0)",
-  foreground: "oklch(0.32 0 0)",
-  card: "oklch(1.00 0 0)",
-  cardForeground: "oklch(0.32 0 0)",
-  popover: "oklch(1.00 0 0)",
-  popoverForeground: "oklch(0.32 0 0)",
-  primary: "oklch(0.55 0.19 259.76)",
-  primaryForeground: "oklch(1.00 0 0)",
-  secondary: "oklch(0.97 0 0)",
-  secondaryForeground: "oklch(0.45 0.03 257.68)",
-  muted: "oklch(0.98 0 0)",
-  mutedForeground: "oklch(0.55 0.02 264.41)",
-  accent: "oklch(0.95 0.03 233.56)",
-  accentForeground: "oklch(0.38 0.14 265.59)",
+  background: "oklch(0.984 0.002 265)",
+  foreground: "oklch(0.21 0.012 265)",
+  card: "oklch(1 0 0)",
+  cardForeground: "oklch(0.21 0.012 265)",
+  popover: "oklch(1 0 0)",
+  popoverForeground: "oklch(0.21 0.012 265)",
+  primary: "oklch(0.55 0.19 262)",
+  primaryForeground: "oklch(1 0 0)",
+  secondary: "oklch(0.968 0.004 265)",
+  secondaryForeground: "oklch(0.37 0.02 265)",
+  muted: "oklch(0.965 0.004 265)",
+  mutedForeground: "oklch(0.548 0.016 265)",
+  accent: "oklch(0.955 0.025 250)",
+  accentForeground: "oklch(0.38 0.14 262)",
   destructive: "oklch(0.577 0.225 27)",
-  destructiveForeground: "oklch(1.00 0 0)",
-  border: "oklch(0.93 0.01 261.82)",
-  input: "oklch(0.93 0.01 261.82)",
-  ring: "oklch(0.55 0.19 259.76)",
-  success: "oklch(0.52 0.15 145)",
-  successForeground: "oklch(1.00 0 0)",
+  destructiveForeground: "oklch(1 0 0)",
+  border: "oklch(0.922 0.005 265)",
+  input: "oklch(0.878 0.007 265)",
+  ring: "oklch(0.55 0.19 262)",
+  success: "oklch(0.52 0.15 152)",
+  successForeground: "oklch(1 0 0)",
   warning: "oklch(0.75 0.15 75)",
   warningForeground: "oklch(0.25 0 0)",
+
+  borderStrong: "oklch(0.865 0.008 265)",
+  info: "oklch(0.55 0.15 240)",
+  infoForeground: "oklch(1 0 0)",
+  successSubtle: "oklch(0.962 0.032 152)",
+  successSubtleForeground: "oklch(0.4 0.11 152)",
+  warningSubtle: "oklch(0.965 0.045 85)",
+  warningSubtleForeground: "oklch(0.45 0.1 70)",
+  destructiveSubtle: "oklch(0.962 0.03 25)",
+  destructiveSubtleForeground: "oklch(0.45 0.17 27)",
+  infoSubtle: "oklch(0.962 0.028 240)",
+  infoSubtleForeground: "oklch(0.42 0.12 245)",
 };
 
 export const defaultDarkTheme: EliseTheme = {
-  background: "oklch(0.20 0 0)",
-  foreground: "oklch(0.92 0 0)",
-  card: "oklch(0.27 0 0)",
-  cardForeground: "oklch(0.92 0 0)",
-  popover: "oklch(0.27 0 0)",
-  popoverForeground: "oklch(0.92 0 0)",
-  primary: "oklch(0.55 0.19 259.76)",
-  primaryForeground: "oklch(1.00 0 0)",
-  secondary: "oklch(0.27 0 0)",
-  secondaryForeground: "oklch(0.92 0 0)",
-  muted: "oklch(0.27 0 0)",
-  mutedForeground: "oklch(0.72 0 0)",
-  accent: "oklch(0.38 0.14 265.59)",
-  accentForeground: "oklch(0.88 0.06 254.63)",
-  destructive: "oklch(0.577 0.225 27)",
-  destructiveForeground: "oklch(1.00 0 0)",
-  border: "oklch(0.37 0 0)",
-  input: "oklch(0.37 0 0)",
-  ring: "oklch(0.55 0.19 259.76)",
-  success: "oklch(0.52 0.15 145)",
-  successForeground: "oklch(1.00 0 0)",
-  warning: "oklch(0.75 0.15 75)",
-  warningForeground: "oklch(0.25 0 0)",
+  background: "oklch(0.172 0.008 265)",
+  foreground: "oklch(0.962 0.003 265)",
+  card: "oklch(0.216 0.011 265)",
+  cardForeground: "oklch(0.962 0.003 265)",
+  popover: "oklch(0.235 0.012 265)",
+  popoverForeground: "oklch(0.962 0.003 265)",
+  primary: "oklch(0.655 0.17 262)",
+  primaryForeground: "oklch(0.17 0.03 262)",
+  secondary: "oklch(0.262 0.012 265)",
+  secondaryForeground: "oklch(0.93 0.005 265)",
+  muted: "oklch(0.262 0.012 265)",
+  mutedForeground: "oklch(0.685 0.014 265)",
+  accent: "oklch(0.33 0.09 262)",
+  accentForeground: "oklch(0.89 0.06 255)",
+  destructive: "oklch(0.62 0.21 27)",
+  destructiveForeground: "oklch(1 0 0)",
+  border: "oklch(0.302 0.013 265)",
+  input: "oklch(0.36 0.015 265)",
+  ring: "oklch(0.655 0.17 262)",
+  success: "oklch(0.68 0.15 152)",
+  successForeground: "oklch(0.16 0.03 152)",
+  warning: "oklch(0.8 0.14 75)",
+  warningForeground: "oklch(0.22 0.04 75)",
+
+  borderStrong: "oklch(0.38 0.016 265)",
+  info: "oklch(0.68 0.14 240)",
+  infoForeground: "oklch(0.16 0.03 240)",
+  successSubtle: "oklch(0.28 0.05 152)",
+  successSubtleForeground: "oklch(0.86 0.12 152)",
+  warningSubtle: "oklch(0.3 0.05 75)",
+  warningSubtleForeground: "oklch(0.88 0.11 82)",
+  destructiveSubtle: "oklch(0.285 0.06 27)",
+  destructiveSubtleForeground: "oklch(0.85 0.11 27)",
+  infoSubtle: "oklch(0.285 0.055 240)",
+  infoSubtleForeground: "oklch(0.85 0.1 240)",
 };
 
 export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.documentElement) => {
@@ -100,4 +140,24 @@ export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.do
   element.style.setProperty("--success-foreground", theme.successForeground);
   element.style.setProperty("--warning", theme.warning);
   element.style.setProperty("--warning-foreground", theme.warningForeground);
+
+  /* Los opcionales solo se escriben si el tema los define: asi un tema parcial
+     no borra los valores que ya vienen del CSS. */
+  const optional: Array<[string, string | undefined]> = [
+    ["--border-strong", theme.borderStrong],
+    ["--info", theme.info],
+    ["--info-foreground", theme.infoForeground],
+    ["--success-subtle", theme.successSubtle],
+    ["--success-subtle-foreground", theme.successSubtleForeground],
+    ["--warning-subtle", theme.warningSubtle],
+    ["--warning-subtle-foreground", theme.warningSubtleForeground],
+    ["--destructive-subtle", theme.destructiveSubtle],
+    ["--destructive-subtle-foreground", theme.destructiveSubtleForeground],
+    ["--info-subtle", theme.infoSubtle],
+    ["--info-subtle-foreground", theme.infoSubtleForeground],
+  ];
+
+  for (const [property, value] of optional) {
+    if (value !== undefined) element.style.setProperty(property, value);
+  }
 };
