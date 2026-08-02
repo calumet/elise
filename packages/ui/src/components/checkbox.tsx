@@ -11,8 +11,7 @@ export type CheckboxProps = React.ComponentProps<typeof CheckboxPrimitive.Root>;
  *
  * `checked` admite `"indeterminate"` además de los dos booleanos, que es el
  * estado de una casilla maestra cuando solo parte de sus hijas está marcada.
- * Ese tercer estado no existe en un `input` nativo salvo por propiedad del DOM,
- * y era lo que faltaba en la versión anterior.
+ * Ese tercer estado no existe en un `input` nativo salvo por propiedad del DOM.
  *
  * Con `name` el primitivo emite un input oculto, de modo que un formulario
  * nativo la envía igual.

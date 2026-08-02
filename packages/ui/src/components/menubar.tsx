@@ -9,7 +9,8 @@ const baseItem =
 
 /* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
    modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
-   px-3. Mezcladas en el mismo menú, cada fila empezaba en una x distinta.
+   px-3. Sin reservar la canaleta, mezcladas en el mismo menú cada fila
+   arrancaría en una x distinta.
 
    La canaleta se reserva solo cuando el menú de verdad trae una fila con
    indicador, que es para lo que sirve data-slot. Un menú de puras acciones se

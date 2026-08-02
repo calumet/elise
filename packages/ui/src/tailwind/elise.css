@@ -148,10 +148,10 @@
   --info: oklch(0.55 0.15 240);
   --info-foreground: oklch(1 0 0);
 
-  /* Estados de los rellenos sólidos. Antes se derivaban con alfa
-     (`bg-primary/90`), que compone el color contra el fondo y mueve el relleno
-     *hacia* la página, así que el hover bajaba el contraste. Estos tokens se
-     alejan del fondo (en claro oscurecen, en oscuro aclaran). */
+  /* Estados de los rellenos sólidos. No se derivan con alfa (`bg-primary/90`),
+     que compone el color contra el fondo y mueve el relleno *hacia* la página,
+     con lo que el hover baja el contraste. Estos tokens se alejan del fondo:
+     en claro oscurecen y en oscuro aclaran. */
   --primary-hover: oklch(0.5 0.19 262);
   --primary-active: oklch(0.455 0.18 262);
   --destructive-hover: oklch(0.53 0.22 27);
@@ -178,9 +178,8 @@
   /* Cada familia lista primero el nombre que registra Fontsource ("… Variable")
      y despues el nombre plano, para que resuelva tanto con
      `@calumet/elise-ui/tailwind/fonts.css` como si la app carga la fuente por
-     su cuenta. Antes el stack empezaba por "Geist", que el paquete nunca
-     cargaba, y por "Geist Fallback", que no existe en ningun lado, de modo que
-     en la practica todo caia en la fuente del sistema. */
+     su cuenta. Un nombre que nadie registra no falla de forma visible: la
+     familia cae en la siguiente del stack y todo termina en la del sistema. */
   --font-sans:
     "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -198,8 +197,8 @@
   --duration-base: 200ms;
   --duration-slow: 320ms;
 
-  /* Elevación monótona: blur, spread negativo y opacidad crecen juntos.
-     Antes la opacidad era 0.1 fija en toda la escala y 2xl era menor que xl. */
+  /* Elevación monótona: blur, spread negativo y opacidad crecen juntos, de modo
+     que cada escalón se lee más alto que el anterior. */
   --shadow-2xs: 0 1px 1px -0.5px oklch(0.21 0.02 265 / 0.04);
   --shadow-xs: 0 1px 2px -1px oklch(0.21 0.02 265 / 0.06);
   --shadow-sm:

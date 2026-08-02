@@ -11,8 +11,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   asChild?: boolean;
 };
 
-/* El foco sigue la convención única del design system (ver CONTRIBUTING.md).
-   Antes este componente usaba ring-1/ring-offset-1, distinto del resto. */
+/* El foco sigue la convención única del design system (ver CONTRIBUTING.md). */
 const baseClasses =
   "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-semibold tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:border-border disabled:shadow-none";
 

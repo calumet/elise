@@ -10,8 +10,7 @@ export type RadioGroupItemProps = React.ComponentProps<typeof RadioGroupPrimitiv
  * Grupo de opciones excluyentes.
  *
  * El grupo es dueño del valor, con `value` y `onValueChange` en modo controlado
- * y `defaultValue` en el no controlado. Antes cada opción era un radio nativo y
- * el valor solo se podía leer del formulario.
+ * y `defaultValue` en el no controlado.
  *
  * El foco entra una vez al grupo y las flechas recorren las opciones, de modo
  * que tabular salta al control siguiente y no a la opción siguiente.

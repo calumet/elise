@@ -31,7 +31,7 @@ function Switch({ className, ...props }: SwitchProps) {
         data-slot="switch-thumb"
         /* El carril mide 44px con 1px de borde a cada lado y el pulgar 20px, de
            modo que 2px de desplazamiento dejan 3px de hueco, el mismo que deja
-           el extremo contrario al encenderse. Antes eran 5px contra 3px. */
+           el extremo contrario al encenderse. */
         className="pointer-events-none block h-5 w-5 translate-x-0.5 rounded-full bg-background shadow-sm ring-1 ring-border transition-transform duration-(--duration-fast) ease-out data-[state=checked]:translate-x-5"
       />
     </SwitchPrimitive.Root>

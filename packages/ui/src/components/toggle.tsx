@@ -13,9 +13,8 @@ export type ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root> & {
 /**
  * Botón de dos estados.
  *
- * Ahora es un `button` con `aria-pressed`, que es como se anuncia un botón que
- * queda hundido. Antes era un `label` con un input oculto, de modo que el
- * lector de pantalla decía "casilla" y no "botón".
+ * Es un `button` con `aria-pressed`, que es como se anuncia un botón que queda
+ * hundido.
  *
  * Dentro de un `ToggleGroup` se comporta como una opción del grupo. Con
  * `pressed` u `onPressedChange` funciona suelto, y en ese caso lleva su propio

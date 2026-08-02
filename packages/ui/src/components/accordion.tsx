@@ -13,9 +13,7 @@ export type AccordionContentProps = React.ComponentProps<typeof AccordionPrimiti
  * Secciones plegables.
  *
  * `type="single"` deja una abierta a la vez, y con `collapsible` esa una puede
- * cerrarse. `type="multiple"` permite varias. En la versión anterior
- * `collapsible` se aceptaba y no hacía nada, porque el estado lo llevaba un
- * `details` y no el componente.
+ * cerrarse. `type="multiple"` permite varias.
  *
  * Admite modo controlado con `value` y `onValueChange`.
  */

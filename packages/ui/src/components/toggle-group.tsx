@@ -4,8 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 /* Un Toggle suelto y una opción de ToggleGroup son el mismo control, así que
-   comparten las clases. Antes divergían: el suelto llevaba border-border-strong
-   y bisel al encenderse, y el del grupo un borde más claro y ningún bisel. */
+   comparten las clases. */
 export const clasesToggle =
   "inline-flex cursor-pointer select-none items-center justify-center gap-2 rounded-md border border-border-strong bg-background px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out hover:bg-muted data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-bevel focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 

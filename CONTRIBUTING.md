@@ -90,9 +90,9 @@ Hoy conviven dos generaciones de componentes (los más antiguos usan
 React 19). **La convención canónica para componentes nuevos es la segunda**;
 los antiguos se migran de forma oportunista cuando se toquen por otra razón.
 
-El `data-slot` es la excepción a esa migración perezosa, porque un atributo que
-está en unos componentes y en otros no sirve de poco: lo llevan los 109
-sub-componentes de la generación antigua además de los nuevos.
+El `data-slot` queda fuera de esa migración perezosa y lo llevan las dos
+generaciones, ya que un atributo presente en unos componentes y ausente en
+otros no se puede usar para nada.
 
 Para todo componente nuevo:
 
@@ -121,11 +121,6 @@ accesibilidad no triviales (menús, diálogos, tooltips, tabs, sliders…) se
 usa el primitive de Radix. Una implementación propia solo se justifica para
 casos simples, y debe documentar explícitamente qué partes de la API de
 Radix no soporta (modo controlado, `asChild`, atributos `data-state`, etc.).
-
-Ya no queda ninguno hand-rolled. Los ocho que lo eran (accordion, checkbox,
-radio-group, switch, toggle, toggle-group, progress y separator) están sobre su
-primitive, así que la API completa se puede dar por sentada en todo el
-catálogo.
 
 ### Formateo automático
 
