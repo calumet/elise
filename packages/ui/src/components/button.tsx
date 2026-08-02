@@ -35,25 +35,25 @@ const toneOverrides: Record<
     solid:
       "bg-success text-success-foreground shadow-bevel hover:bg-success-hover active:bg-success-active active:shadow-bevel-inset",
     outline:
-      "border-success text-success hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
+      "border-success text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     ghost:
-      "text-success hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
+      "text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
   },
   warning: {
     solid:
       "bg-warning text-warning-foreground shadow-bevel hover:bg-warning-hover active:bg-warning-active active:shadow-bevel-inset",
     outline:
-      "border-warning text-warning hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
+      "border-warning text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     ghost:
-      "text-warning hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
+      "text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
   },
   danger: {
     solid:
       "bg-destructive text-destructive-foreground shadow-bevel hover:bg-destructive-hover active:bg-destructive-active active:shadow-bevel-inset",
     outline:
-      "border-destructive text-destructive hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
+      "border-destructive text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     ghost:
-      "text-destructive hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
+      "text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
   },
 };
 

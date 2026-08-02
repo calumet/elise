@@ -12,6 +12,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "audit:visual": "node scripts/audit-visual.mjs -- --tema=ambos",
     "clean": "pnpm -r clean",
     "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks"
   },
@@ -19,6 +20,7 @@
     "@calumet/elise-linter": "workspace:*",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
+    "playwright": "^1.56.1",
     "prettier": "^3.7.3",
     "typescript": "^5.6.3"
   },

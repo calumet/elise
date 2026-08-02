@@ -41,6 +41,7 @@ pnpm install
 | `pnpm lint:fix`     | Corregir problemas de ESLint                                                          |
 | `pnpm format`       | Formatear con Prettier                                                                |
 | `pnpm format:check` | Verificar formato                                                                     |
+| `pnpm audit:visual` | Auditoria visual del showcase en Chromium (ver [docs](docs/auditoria-visual.md))      |
 | `pnpm clean`        | Limpiar carpetas dist                                                                 |
 
 ## Estructura del proyecto
@@ -125,6 +126,7 @@ Consulta la documentacion completa en [`./docs`](docs/):
 - [Utilidades](docs/utilidades.md)
 - [Internacionalización (i18n)](docs/i18n.md)
 - [Linter y formato](docs/linter.md)
+- [Auditoria visual](docs/auditoria-visual.md)
 - [Referencias externas](docs/referencias.md)
 
 ## Licencia

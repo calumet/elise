@@ -20,7 +20,11 @@ const sizeClasses: Record<NonNullable<BadgeProps["size"]>, string> = {
 };
 
 /* Las superficies suaves salen de los tokens `-subtle`, no de opacidad sobre el
-   color solido: el alfa sobre fondo oscuro se enloda. Ver docs/temas.md. */
+   color solido: el alfa sobre fondo oscuro se enloda. Ver docs/temas.md.
+
+   La variante `outline` usa el color solido para el borde pero el `-subtle-foreground`
+   para el texto: los solidos estan calibrados como relleno, y usados como texto
+   sobre la pagina no llegan a 4.5:1 — `warning` medido daba 2.18:1. */
 const toneClasses: Record<
   NonNullable<BadgeProps["tone"]>,
   Record<NonNullable<BadgeProps["variant"]>, string>
@@ -33,27 +37,27 @@ const toneClasses: Record<
   brand: {
     subtle: "bg-accent text-accent-foreground",
     solid: "bg-primary text-primary-foreground",
-    outline: "border-primary text-primary",
+    outline: "border-primary text-accent-foreground",
   },
   success: {
     subtle: "bg-success-subtle text-success-subtle-foreground",
     solid: "bg-success text-success-foreground",
-    outline: "border-success text-success",
+    outline: "border-success text-success-subtle-foreground",
   },
   warning: {
     subtle: "bg-warning-subtle text-warning-subtle-foreground",
     solid: "bg-warning text-warning-foreground",
-    outline: "border-warning text-warning",
+    outline: "border-warning text-warning-subtle-foreground",
   },
   danger: {
     subtle: "bg-destructive-subtle text-destructive-subtle-foreground",
     solid: "bg-destructive text-destructive-foreground",
-    outline: "border-destructive text-destructive",
+    outline: "border-destructive text-destructive-subtle-foreground",
   },
   info: {
     subtle: "bg-info-subtle text-info-subtle-foreground",
     solid: "bg-info text-info-foreground",
-    outline: "border-info text-info",
+    outline: "border-info text-info-subtle-foreground",
   },
 };
 

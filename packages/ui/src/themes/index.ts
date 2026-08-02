@@ -62,7 +62,7 @@ export const defaultLightTheme: EliseTheme = {
   secondary: "oklch(0.968 0.004 265)",
   secondaryForeground: "oklch(0.37 0.02 265)",
   muted: "oklch(0.965 0.004 265)",
-  mutedForeground: "oklch(0.548 0.016 265)",
+  mutedForeground: "oklch(0.525 0.016 265)",
   accent: "oklch(0.955 0.025 250)",
   accentForeground: "oklch(0.38 0.14 262)",
   destructive: "oklch(0.577 0.225 27)",
