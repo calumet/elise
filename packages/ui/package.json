@@ -20,6 +20,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./field": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./file-upload": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
