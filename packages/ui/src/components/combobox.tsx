@@ -170,28 +170,36 @@ function Combobox({
             <CommandEmpty>{emptyMessage ?? sinResultados}</CommandEmpty>
             {grupos.map(([grupo, items]) => (
               <CommandGroup key={grupo || "sin-grupo"} heading={grupo || undefined}>
-                {items.map((o) => (
-                  <CommandItem
-                    key={o.value}
-                    value={o.value}
-                    keywords={[o.label, ...(o.keywords ?? [])]}
-                    disabled={o.disabled}
-                    onSelect={() => elegir(o.value)}
-                  >
-                    <Check
-                      className={cn("size-4 shrink-0", o.value === value ? "" : "invisible")}
-                      aria-hidden="true"
-                    />
-                    <span className="flex min-w-0 flex-col">
-                      <span className="truncate">{o.label}</span>
-                      {o.description ? (
-                        <span className="truncate text-xs text-muted-foreground">
-                          {o.description}
-                        </span>
-                      ) : null}
-                    </span>
-                  </CommandItem>
-                ))}
+                {items.map((o) => {
+                  const elegida = o.value === value;
+                  return (
+                    <CommandItem
+                      key={o.value}
+                      value={o.value}
+                      keywords={[o.label, ...(o.keywords ?? [])]}
+                      disabled={o.disabled}
+                      onSelect={() => elegir(o.value)}
+                      /* El fondo de cmdk (`data-selected`) marca el resaltado
+                         del teclado, que se mueve con las flechas. La opcion
+                         *elegida* se distingue por peso, para que ambos estados
+                         se lean a la vez. */
+                      className={cn(elegida && "font-semibold")}
+                    >
+                      <Check
+                        className={cn("size-4 shrink-0", elegida ? "text-primary" : "invisible")}
+                        aria-hidden="true"
+                      />
+                      <span className="flex min-w-0 flex-col">
+                        <span className="truncate">{o.label}</span>
+                        {o.description ? (
+                          <span className="truncate text-xs font-normal text-muted-foreground">
+                            {o.description}
+                          </span>
+                        ) : null}
+                      </span>
+                    </CommandItem>
+                  );
+                })}
               </CommandGroup>
             ))}
           </CommandList>
