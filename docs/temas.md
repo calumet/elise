@@ -1,6 +1,6 @@
 # Temas
 
-Elise incluye un sistema de temas basado en CSS custom properties con soporte para modo claro y oscuro. Los colores usan el espacio de color [oklch](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch) para mejor percepcion y consistencia.
+Elise incluye un sistema de temas basado en CSS custom properties con soporte para modo claro y oscuro. Los colores usan el espacio de color [oklch](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch) para mejor percepción y consistencia.
 
 ## ThemeProvider
 
@@ -16,12 +16,12 @@ import { ThemeProvider } from "@calumet/elise-ui";
 
 ### Props
 
-| Prop           | Tipo                      | Default         | Descripcion                                                                                             |
+| Prop           | Tipo                      | Default         | Descripción                                                                                             |
 | -------------- | ------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
 | `attribute`    | `"class" \| "data-theme"` | `"class"`       | `"class"` agrega/quita la clase `.dark` en `<html>`. `"data-theme"` usa el atributo `data-theme="dark"` |
 | `storageKey`   | `string`                  | `"elise-theme"` | Clave de localStorage para persistir la preferencia del usuario                                         |
 | `defaultTheme` | `"light" \| "dark"`       | `"light"`       | Tema inicial cuando no hay preferencia guardada                                                         |
-| `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema especifico, ignorando la preferencia guardada                                            |
+| `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema específico, ignorando la preferencia guardada                                            |
 
 ## Hook `useTheme()`
 
@@ -41,21 +41,21 @@ function ThemeToggle() {
 }
 ```
 
-> `useTheme()` debe usarse dentro de un `ThemeProvider`. Lanzara un error si se usa fuera.
+> `useTheme()` debe usarse dentro de un `ThemeProvider`. Lanzará un error si se usa fuera.
 
 ## Tokens CSS
 
-Los temas se implementan via CSS custom properties definidas en `@calumet/elise-ui/tailwind/elise.css`. Cada token se mapea automaticamente a utilidades de Tailwind CSS v4 mediante el bloque `@theme inline`.
+Los temas se implementan vía CSS custom properties definidas en `@calumet/elise-ui/tailwind/elise.css`. Cada token se mapea automáticamente a utilidades de Tailwind CSS v4 mediante el bloque `@theme inline`.
 
-### Colores semanticos
+### Colores semánticos
 
-| Token CSS                  | Utilidad Tailwind             | Proposito                                     |
+| Token CSS                  | Utilidad Tailwind             | Propósito                                     |
 | -------------------------- | ----------------------------- | --------------------------------------------- |
-| `--background`             | `bg-background`               | Fondo principal de la pagina                  |
+| `--background`             | `bg-background`               | Fondo principal de la página                  |
 | `--foreground`             | `text-foreground`             | Texto principal                               |
 | `--card`                   | `bg-card`                     | Fondo de tarjetas y superficies elevadas      |
 | `--card-foreground`        | `text-card-foreground`        | Texto sobre superficies card                  |
-| `--popover`                | `bg-popover`                  | Fondo de menus flotantes, dropdowns, popovers |
+| `--popover`                | `bg-popover`                  | Fondo de menús flotantes, dropdowns, popovers |
 | `--popover-foreground`     | `text-popover-foreground`     | Texto sobre superficies popover               |
 | `--primary`                | `bg-primary`, `text-primary`  | Color primario (azul)                         |
 | `--primary-foreground`     | `text-primary-foreground`     | Texto sobre fondo primario                    |
@@ -67,27 +67,27 @@ Los temas se implementan via CSS custom properties definidas en `@calumet/elise-
 | `--accent-foreground`      | `text-accent-foreground`      | Texto sobre fondo de acento                   |
 | `--destructive`            | `bg-destructive`              | Acciones destructivas/errores                 |
 | `--destructive-foreground` | `text-destructive-foreground` | Texto sobre fondo destructive                 |
-| `--border`                 | `border-border`               | Divisores y bordes estandar                   |
+| `--border`                 | `border-border`               | Divisores y bordes estándar                   |
 | `--border-strong`          | `border-border-strong`        | Contorno de controles (botones outline)       |
 | `--input`                  | `border-input`                | Bordes de campos de entrada                   |
 | `--ring`                   | `ring-ring`                   | Anillo de focus                               |
-| `--success`                | `bg-success`, `text-success`  | Exito                                         |
+| `--success`                | `bg-success`, `text-success`  | Éxito                                         |
 | `--warning`                | `bg-warning`, `text-warning`  | Advertencia                                   |
-| `--info`                   | `bg-info`, `text-info`        | Informacion                                   |
+| `--info`                   | `bg-info`, `text-info`        | Información                                   |
 
-> `--border`, `--border-strong` e `--input` son tres valores distintos a proposito,
-> porque los divisores son mas claros que el contorno de un control y un campo de
-> entrada necesita mas peso que ambos para leerse como editable.
+> `--border`, `--border-strong` e `--input` son tres valores distintos a propósito,
+> porque los divisores son más claros que el contorno de un control y un campo de
+> entrada necesita más peso que ambos para leerse como editable.
 
-### Estados de los rellenos solidos
+### Estados de los rellenos sólidos
 
-Cada relleno solido tiene sus propios tokens de `hover` y `active`. No se derivan
-con opacidad, ya que `bg-primary/90` compone el color contra la pagina, o sea que
+Cada relleno sólido tiene sus propios tokens de `hover` y `active`. No se derivan
+con opacidad, ya que `bg-primary/90` compone el color contra la página, o sea que
 mueve el relleno _hacia_ el fondo y el hover termina bajando el contraste. Estos
 tokens hacen lo contrario. En el tema claro oscurecen y en el oscuro aclaran; en
 ambos casos se alejan del fondo.
 
-| Token CSS              | Utilidad Tailwind       | Proposito                       |
+| Token CSS              | Utilidad Tailwind       | Propósito                       |
 | ---------------------- | ----------------------- | ------------------------------- |
 | `--primary-hover`      | `bg-primary-hover`      | Hover del relleno primario      |
 | `--primary-active`     | `bg-primary-active`     | Presionado del relleno primario |
@@ -104,7 +104,7 @@ Las variantes `outline` y `ghost` no usan estos tokens, dado que sobre fondo
 transparente el hover se resuelve con `bg-muted` o con la superficie sutil del
 estado.
 
-> **Excepcion:** en el tema oscuro `destructive` tambien oscurece. Lleva texto
+> **Excepción:** en el tema oscuro `destructive` también oscurece. Lleva texto
 > blanco y aclararlo lo baja de 4.5:1. Igual queda muy separado del fondo
 > (`0.577` contra `0.172`), y de paso el hover sube el contraste del texto.
 > Todos los pares de color del tema cumplen WCAG AA (>=4.5:1) en ambos temas.
@@ -112,12 +112,12 @@ estado.
 ### Superficies sutiles de estado
 
 Cada estado tiene una superficie propia para fondos suaves (badges, alerts, filas
-resaltadas), en lugar de derivarla con opacidad sobre el color solido. Un
+resaltadas), en lugar de derivarla con opacidad sobre el color sólido. Un
 `bg-success/10` se enloda sobre fondo oscuro; un token se define para cada tema.
 
-| Token CSS                         | Utilidad Tailwind                    | Proposito                           |
+| Token CSS                         | Utilidad Tailwind                    | Propósito                           |
 | --------------------------------- | ------------------------------------ | ----------------------------------- |
-| `--success-subtle`                | `bg-success-subtle`                  | Fondo suave de exito                |
+| `--success-subtle`                | `bg-success-subtle`                  | Fondo suave de éxito                |
 | `--success-subtle-foreground`     | `text-success-subtle-foreground`     | Texto sobre `bg-success-subtle`     |
 | `--warning-subtle`                | `bg-warning-subtle`                  | Fondo suave de advertencia          |
 | `--warning-subtle-foreground`     | `text-warning-subtle-foreground`     | Texto sobre `bg-warning-subtle`     |
@@ -126,14 +126,14 @@ resaltadas), en lugar de derivarla con opacidad sobre el color solido. Un
 | `--info-subtle`                   | `bg-info-subtle`                     | Fondo suave informativo             |
 | `--info-subtle-foreground`        | `text-info-subtle-foreground`        | Texto sobre `bg-info-subtle`        |
 
-#### Los solidos son relleno, no texto
+#### Los sólidos son relleno, no texto
 
-`--success`, `--warning`, `--destructive` e `--info` estan calibrados para
+`--success`, `--warning`, `--destructive` e `--info` están calibrados para
 llevar texto encima, y no para ser el texto. Puestos con `text-*` sobre las
 superficies normales del tema, tres de los cuatro caen por debajo del 4.5:1 que
 pide WCAG AA:
 
-| Solido como texto      | Sobre `--background` | Sobre `--card` |
+| Sólido como texto      | Sobre `--background` | Sobre `--card` |
 | ---------------------- | -------------------- | -------------- |
 | `warning` (claro)      | 2.18:1               | 2.28:1         |
 | `info` (claro)         | 4.48:1               | 4.68:1         |
@@ -143,18 +143,18 @@ pide WCAG AA:
 Solo `success` pasa en los dos temas. Los `-subtle-foreground` pasan siempre y
 con margen, ya que el peor de todos da 7.30:1.
 
-La regla practica queda asi. El solido pinta fondos y bordes; el
+La regla práctica queda así. El sólido pinta fondos y bordes; el
 `-subtle-foreground` pinta cualquier cosa que se lea.
 
 | Para                               | Va                                         |
 | ---------------------------------- | ------------------------------------------ |
-| Relleno de un boton o badge solido | `bg-warning` con `text-warning-foreground` |
+| Relleno de un botón o badge sólido | `bg-warning` con `text-warning-foreground` |
 | Borde de una variante `outline`    | `border-warning`                           |
-| Texto, icono o simbolo de estado   | `text-warning-subtle-foreground`           |
+| Texto, icono o símbolo de estado   | `text-warning-subtle-foreground`           |
 
-El borde si puede usar el solido, porque WCAG pide 3:1 para elementos no
-textuales y ahi todos llegan. De ahi que un `outline` de estado combine las dos
-cosas, el borde del solido y el texto del `-subtle-foreground`. Asi estan
+El borde si puede usar el sólido, porque WCAG pide 3:1 para elementos no
+textuales y ahí todos llegan. De ahí que un `outline` de estado combine las dos
+cosas, el borde del sólido y el texto del `-subtle-foreground`. Así están
 resueltos `Badge`, las variantes `outline` y `ghost` de `Button`, y el asterisco
 de campo obligatorio de `Field`.
 
@@ -183,18 +183,18 @@ de campo obligatorio de `Field`.
 
 ### Otros tokens
 
-| Token CSS              | Utilidad Tailwind                                      | Descripcion                                               |
+| Token CSS              | Utilidad Tailwind                                      | Descripción                                               |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
 | `--radius`             | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | Radio base (0.5rem). Las escalas se calculan con `calc()` |
-| `--shadow-2xs`         | `shadow-2xs`                                           | Sombra minima                                             |
-| `--shadow-xs`          | `shadow-xs`                                            | Sombra extra-pequena                                      |
-| `--shadow-sm`          | `shadow-sm`                                            | Sombra pequena (tarjetas)                                 |
+| `--shadow-2xs`         | `shadow-2xs`                                           | Sombra mínima                                             |
+| `--shadow-xs`          | `shadow-xs`                                            | Sombra extra-pequeña                                      |
+| `--shadow-sm`          | `shadow-sm`                                            | Sombra pequeña (tarjetas)                                 |
 | `--shadow`             | `shadow`                                               | Sombra por defecto                                        |
 | `--shadow-md`          | `shadow-md`                                            | Sombra mediana                                            |
-| `--shadow-lg`          | `shadow-lg`                                            | Sombra grande (menus, popovers)                           |
-| `--shadow-xl`          | `shadow-xl`                                            | Sombra extra-grande (dialogos)                            |
-| `--shadow-2xl`         | `shadow-2xl`                                           | Sombra maxima                                             |
-| `--shadow-bevel`       | `shadow-bevel`                                         | Bisel `inset` para rellenos solidos                       |
+| `--shadow-lg`          | `shadow-lg`                                            | Sombra grande (menús, popovers)                           |
+| `--shadow-xl`          | `shadow-xl`                                            | Sombra extra-grande (diálogos)                            |
+| `--shadow-2xl`         | `shadow-2xl`                                           | Sombra máxima                                             |
+| `--shadow-bevel`       | `shadow-bevel`                                         | Bisel `inset` para rellenos sólidos                       |
 | `--shadow-bevel-inset` | `shadow-bevel-inset`                                   | Bisel invertido: estado presionado                        |
 | `--font-sans`          | `font-sans`                                            | Geist, system-ui                                          |
 | `--font-serif`         | `font-serif`                                           | Source Serif 4, serif                                     |
@@ -203,15 +203,15 @@ de campo obligatorio de `Field`.
 | `--duration-base`      | `duration-(--duration-base)`                           | 200ms para entradas y salidas                             |
 | `--duration-slow`      | `duration-(--duration-slow)`                           | 320ms para sheets y drawers                               |
 
-### Tipografias
+### Tipografías
 
 Las tres familias vienen incluidas en el paquete como fuentes variables y se
 cargan importando `@calumet/elise-ui/tailwind/fonts.css` (ver
-[Guia de inicio](guia-inicio.md)). Sin ese import, los tokens caen en la fuente
+[Guía de inicio](guia-inicio.md)). Sin ese import, los tokens caen en la fuente
 del sistema y la app se ve distinta en cada sistema operativo.
 
-Cada stack lista primero el nombre que registra Fontsource y despues el nombre
-plano, asi resuelve tanto con `fonts.css` como si la app carga la fuente por su
+Cada stack lista primero el nombre que registra Fontsource y después el nombre
+plano, así resuelve tanto con `fonts.css` como si la app carga la fuente por su
 cuenta:
 
 ```css
@@ -223,29 +223,29 @@ cuenta:
 En la escala de sombras el blur, el spread negativo y la opacidad crecen juntos, y
 el modo oscuro define su propio juego de valores (una sombra negra al 10% es
 invisible sobre el fondo oscuro). `shadow-bevel` queda fuera de esa escala. Se
-combina con un fondo solido para darle un borde inferior oscuro y un highlight
+combina con un fondo sólido para darle un borde inferior oscuro y un highlight
 superior, de modo que el relleno se lea como un objeto y no como un plano de color.
 `shadow-bevel-inset` lo invierte hacia adentro y se usa en `active:`, para que el
 estado presionado se sienta hundido en lugar de solo cambiar de color.
 
 ### Radios por rol
 
-Los componentes no eligen radio libremente. La convencion es:
+Los componentes no eligen radio libremente. La convención es:
 
 | Rol                                                 | Utilidad       | Valor |
 | --------------------------------------------------- | -------------- | ----- |
-| Superficies (Card, Dialog, Popover, menus, Toast)   | `rounded-xl`   | 12px  |
+| Superficies (Card, Dialog, Popover, menús, Toast)   | `rounded-xl`   | 12px  |
 | Controles y barras (Button, Input, Select, Toolbar) | `rounded-md`   | 8px   |
-| Items dentro de una superficie (opciones de menu)   | `rounded-sm`   | 6px   |
-| Pildoras y avatares                                 | `rounded-full` | —     |
+| Items dentro de una superficie (opciones de menú)   | `rounded-sm`   | 6px   |
+| Píldoras y avatares                                 | `rounded-full` | —     |
 
-### Tipografia
+### Tipografía
 
-Cada tamano trae su interlineado y su tracking emparejados, asi que `text-sm` ya
+Cada tamaño trae su interlineado y su tracking emparejados, así que `text-sm` ya
 aplica los tres valores. El tracking se aprieta progresivamente al crecer el
-tamano (correccion optica). El chrome de la UI vive en `text-sm` y `text-base`.
+tamaño (corrección óptica). El chrome de la UI vive en `text-sm` y `text-base`.
 
-| Utilidad    | Tamano | Interlineado | Tracking   |
+| Utilidad    | Tamaño | Interlineado | Tracking   |
 | ----------- | ------ | ------------ | ---------- |
 | `text-2xs`  | 11px   | 16px         | `0.01em`   |
 | `text-xs`   | 12px   | 16px         | `0.005em`  |
@@ -256,14 +256,14 @@ tamano (correccion optica). El chrome de la UI vive en `text-sm` y `text-base`.
 | `text-2xl`  | 24px   | 32px         | `-0.022em` |
 | `text-3xl`  | 30px   | 36px         | `-0.026em` |
 
-### Curvas de animacion
+### Curvas de animación
 
 | Utilidad      | Valor                            |
 | ------------- | -------------------------------- |
 | `ease-out`    | `cubic-bezier(0.22, 1, 0.36, 1)` |
 | `ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` |
 
-`elise.css` tambien incluye un bloque `@media (prefers-reduced-motion: reduce)` que
+`elise.css` también incluye un bloque `@media (prefers-reduced-motion: reduce)` que
 neutraliza transiciones y animaciones para quien lo tenga activado.
 
 ## Usando los colores en Tailwind
@@ -309,15 +309,15 @@ Los tokens se usan directamente como utilidades de Tailwind. Cada token de color
 > `text-destructive-foreground` sobre `bg-warning`, porque el warning lleva texto
 > oscuro para cumplir contraste y el destructive lo lleva blanco.
 
-> Los estados hover/active de los rellenos solidos usan tokens propios
+> Los estados hover/active de los rellenos sólidos usan tokens propios
 > (`bg-primary-hover`, `bg-primary-active`), no modificadores de opacidad. Ver
-> [Estados de los rellenos solidos](#estados-de-los-rellenos-solidos).
+> [Estados de los rellenos sólidos](#estados-de-los-rellenos-sólidos).
 
 ## Valores por defecto
 
 ### Tema claro (`:root`)
 
-Los neutrales llevan una croma minima (0.002–0.016) sesgada hacia el hue del
+Los neutrales llevan una croma mínima (0.002–0.016) sesgada hacia el hue del
 primario. Un gris de croma 0 se lee como heredado del default; uno con un sesgo
 apenas perceptible se lee como elegido.
 
@@ -398,11 +398,11 @@ vez de compartir su valor.
 
 ## Sobrescribir el tema con CSS
 
-La forma mas directa de personalizar Elise es redefinir las CSS custom properties en tu propio CSS. Esto funciona porque los tokens se resuelven en tiempo de ejecucion.
+La forma más directa de personalizar Elise es redefinir las CSS custom properties en tu propio CSS. Esto funciona porque los tokens se resuelven en tiempo de ejecución.
 
 ### Cambiar colores globalmente
 
-En tu CSS principal (despues de importar `elise.css`), redefine los tokens que quieras cambiar:
+En tu CSS principal (después de importar `elise.css`), redefine los tokens que quieras cambiar:
 
 ```css
 @import "tailwindcss";
@@ -425,11 +425,11 @@ En tu CSS principal (despues de importar `elise.css`), redefine los tokens que q
 }
 ```
 
-Solo necesitas redefinir los tokens que quieras cambiar — los demas mantienen sus valores por defecto.
+Solo necesitas redefinir los tokens que quieras cambiar — los demás mantienen sus valores por defecto.
 
-### Tema por seccion
+### Tema por sección
 
-Puedes aplicar tokens diferentes a secciones especificas de la pagina:
+Puedes aplicar tokens diferentes a secciones específicas de la página:
 
 ```css
 .seccion-marketing {
@@ -448,7 +448,7 @@ Puedes aplicar tokens diferentes a secciones especificas de la pagina:
 
 ### Cambiar el radio base
 
-El radio de bordes se calcula a partir de un unico token `--radius`, que equivale
+El radio de bordes se calcula a partir de un único token `--radius`, que equivale
 al radio de un control. Cambiarlo ajusta toda la escala:
 
 ```css
@@ -466,12 +466,12 @@ Las escalas derivadas se separan ±2px:
 | `rounded-lg` | `calc(var(--radius) + 2px)` | 10px                 |
 | `rounded-xl` | `calc(var(--radius) + 4px)` | 12px                 |
 
-## Personalizacion con `applyTheme()`
+## Personalización con `applyTheme()`
 
-Para crear un tema programaticamente (por ejemplo, un selector de temas en runtime), usa `applyTheme()`:
+Para crear un tema programáticamente (por ejemplo, un selector de temas en runtime), usa `applyTheme()`:
 
 La forma recomendada es extender uno de los temas por defecto y sobrescribir solo
-lo que cambia. Asi el tema hereda automaticamente los tokens que se agreguen en
+lo que cambia. Así el tema hereda automáticamente los tokens que se agreguen en
 versiones futuras:
 
 ```tsx
@@ -493,9 +493,9 @@ applyTheme(miTema);
 applyTheme(miTema, document.getElementById("mi-seccion")!);
 ```
 
-`applyTheme()` establece las CSS custom properties directamente en el elemento, lo que permite tener multiples temas en diferentes secciones de la pagina.
+`applyTheme()` establece las CSS custom properties directamente en el elemento, lo que permite tener múltiples temas en diferentes secciones de la página.
 
-Tambien podes construir el objeto completo a mano. En ese caso solo hacen falta
+También podés construir el objeto completo a mano. En ese caso solo hacen falta
 los campos obligatorios del tipo, porque los opcionales que no definas conservan
 el valor que ya trae `elise.css`.
 

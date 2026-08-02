@@ -1,4 +1,4 @@
-# Auditoria visual
+# Auditoría visual
 
 `pnpm audit:visual` abre el showcase en un Chromium headless y comprueba, sobre
 el DOM ya renderizado, cosas que el typecheck no ve y una captura no delata a
@@ -21,11 +21,11 @@ node scripts/audit-visual.mjs -- --abrir             # ademas abre cada panel
 node scripts/audit-visual.mjs -- --url=http://…      # contra otra URL
 ```
 
-Sale con codigo 1 si hay hallazgos, para poder colgarlo de CI.
+Sale con código 1 si hay hallazgos, para poder colgarlo de CI.
 
 `--abrir` es el modo que importa antes de dar por hecho un componente con panel,
-porque la mitad de los defectos de alineacion y de recorte solo existen con el
-menu desplegado.
+porque la mitad de los defectos de alineación y de recorte solo existen con el
+menú desplegado.
 
 Si el entorno ya trae un Chromium, `CHROMIUM_PATH` evita que Playwright
 descargue el suyo.
@@ -35,55 +35,55 @@ descargue el suyo.
 | Chequeo           | Que busca                                                                         |
 | ----------------- | --------------------------------------------------------------------------------- |
 | **Radios**        | Radios fuera de la escala de tokens, que delatan un valor escrito a mano          |
-| **Iconos**        | Iconos fuera de `12/14/16/20/24`, y cualquiera en pixeles fraccionarios           |
-| **Tipografia**    | Tamanos de texto fuera de la escala, que pierden interlineado y tracking pareados |
+| **Iconos**        | Iconos fuera de `12/14/16/20/24`, y cualquiera en píxeles fraccionarios           |
+| **Tipografía**    | Tamaños de texto fuera de la escala, que pierden interlineado y tracking pareados |
 | **Fraccionarios** | Controles cuyo alto no cae en pixel entero                                        |
 | **Anidamiento**   | Un `<button>` dentro de otro, o cualquier interactivo anidado                     |
 | **Solapamiento**  | Dos controles del flujo normal que se pisan                                       |
 | **Recorte**       | Un hijo opaco que pinta sobre la esquina redondeada de su contenedor              |
-| **Alineacion**    | Filas de una misma lista cuyo texto no arranca en la misma x                      |
+| **Alineación**    | Filas de una misma lista cuyo texto no arranca en la misma x                      |
 | **Contraste**     | Pares texto/fondo por debajo de WCAG AA, componiendo capas semitransparentes      |
 
 Las escalas viven al principio del script y tienen que seguir a `elise.css`.
-Cuando cambia un token de radio o de tipografia, se cambia ahi tambien.
+Cuando cambia un token de radio o de tipografía, se cambia ahí también.
 
 ## Por que cada chequeo
 
-Ninguno es hipotetico. Cada uno viene de un defecto que se colo de verdad y se
+Ninguno es hipotético. Cada uno viene de un defecto que se coló de verdad y se
 encontro tarde:
 
 - Los **iconos** median 14.08px porque la base de espaciado era `0.22rem`. Se
-  veian borrosos y nadie sabia por que.
-- El **anidamiento** aparecio poniendo el boton de limpiar del Combobox dentro
-  de su disparador, que es HTML invalido.
+  veían borrosos y nadie sabía por que.
+- El **anidamiento** apareció poniendo el botón de limpiar del Combobox dentro
+  de su disparador, que es HTML inválido.
 - El **solapamiento** dejo la X y el chevron del Combobox uno encima del otro.
 - El **recorte** dejo el fondo cuadrado del `Command` desbordando las esquinas
   del Popover.
-- La **alineacion** dejo la fila de accion 24px a la izquierda del resto.
-- El **contraste** encontro `destructive` solido en oscuro a 4.02:1, y despues
-  los `outline` de Badge y Button, que usaban el color solido como texto y
+- La **alineación** dejo la fila de acción 24px a la izquierda del resto.
+- El **contraste** encontro `destructive` sólido en oscuro a 4.02:1, y después
+  los `outline` de Badge y Button, que usaban el color sólido como texto y
   dejaban `warning` en 2.18:1.
 
 ## Falsos positivos ya descartados
 
 Conviene conocerlos antes de agregar chequeos nuevos, ya que son las trampas en
-las que ya cayo esta herramienta:
+las que ya cayó esta herramienta:
 
 - **Texto de lector de pantalla.** El `sr-only` se recorta a 1px y nunca se ve;
-  medirle contraste no dice nada. Se excluye por tamano.
-- **Superposicion deliberada.** Una X de limpiar posicionada en absoluto sobre
+  medirle contraste no dice nada. Se excluye por tamaño.
+- **Superposición deliberada.** Una X de limpiar posicionada en absoluto sobre
   su campo no es un error. Solo se mira el solapamiento entre elementos del
   flujo normal.
 - **Fondos semitransparentes.** Un fondo como `bg-primary/10` se compone contra
-  lo que tiene detras. Tratarlo como si fuera solido daba 1.09:1 en texto
+  lo que tiene detras. Tratarlo como si fuera sólido daba 1.09:1 en texto
   perfectamente legible.
-- **Colores a mitad de transicion.** Al cambiar de tema, Chrome reporta el valor
-  interpolado como `oklab(...)` y la medicion sale del tema equivocado. El
+- **Colores a mitad de transición.** Al cambiar de tema, Chrome reporta el valor
+  interpolado como `oklab(...)` y la medición sale del tema equivocado. El
   script congela transiciones y animaciones antes de medir.
 - **Cambiar de tema por detras del `ThemeProvider`.** El provider es dueño de
   ese atributo y lo reescribe, por eso forzar `.dark` en el `<html>` deja la
-  pagina a medio camino. Se usa el control de la app.
+  página a medio camino. Se usa el control de la app.
 
-Cuando un chequeo falle, el informe trae los valores crudos que midio. Un numero
+Cuando un chequeo falle, el informe trae los valores crudos que midio. Un número
 sin evidencia no se puede refutar, y un fallo de la sonda se confunde con uno del
 tema.

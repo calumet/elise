@@ -36,7 +36,7 @@ elise/
   docs/           # Documentación del proyecto
 ```
 
-Cada utilidad de frontend vive en su propio paquete (`elise-forms`, `elise-tables`, etc.) para que los consumidores externos instalen solo lo que necesiten. Ver criterios de fragmentación en [`docs/arquitectura.md`](docs/arquitectura.md#criterios-de-fragmentacion-de-paquetes).
+Cada utilidad de frontend vive en su propio paquete (`elise-forms`, `elise-tables`, etc.) para que los consumidores externos instalen solo lo que necesiten. Ver criterios de fragmentación en [`docs/arquitectura.md`](docs/arquitectura.md#criterios-de-fragmentación-de-paquetes).
 
 ## Flujo de Desarrollo
 
@@ -155,7 +155,7 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
 2. Actualiza documentación si aplica.
 3. Si agregas un componente nuevo a `elise-ui`, agrégalo al barrel export en `packages/ui/src/components/index.ts`.
 4. Si agregas una utilidad a un paquete existente (`elise-forms`, `elise-tables`, etc.), documéntala en `docs/utilidades.md`.
-5. Si propones un paquete nuevo, valida primero contra los [criterios de fragmentación](docs/arquitectura.md#criterios-de-fragmentacion-de-paquetes).
+5. Si propones un paquete nuevo, valida primero contra los [criterios de fragmentación](docs/arquitectura.md#criterios-de-fragmentación-de-paquetes).
 6. Referencia issues relacionados.
 
 ## Versionado y Publicación

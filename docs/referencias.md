@@ -1,58 +1,58 @@
 # Referencias externas
 
-Elise se construye sobre librerias de codigo abierto bien documentadas. Aqui estan los links a la documentacion oficial de cada dependencia principal.
+Elise se construye sobre librerías de código abierto bien documentadas. Aquí están los links a la documentación oficial de cada dependencia principal.
 
 ## Core
 
-| Libreria                | Uso en Elise                                                                         | Documentacion                        |
+| Librería                | Uso en Elise                                                                         | Documentación                        |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------ |
 | **Radix UI Primitives** | Base de todos los componentes de `@calumet/elise-ui` (accesibilidad, comportamiento) | https://www.radix-ui.com/primitives  |
 | **Lucide Icons**        | Iconos en `@calumet/elise-icons` (re-export de `lucide-react`)                       | https://lucide.dev/icons/            |
 | **Tailwind CSS v4**     | Sistema de estilos y tokens CSS                                                      | https://tailwindcss.com/docs         |
 | **React 19**            | Framework de UI                                                                      | https://react.dev/                   |
-| **TypeScript**          | Tipado estatico en todo el proyecto                                                  | https://www.typescriptlang.org/docs/ |
+| **TypeScript**          | Tipado estático en todo el proyecto                                                  | https://www.typescriptlang.org/docs/ |
 
 ## Utilidades de formularios
 
-| Libreria                | Uso en Elise                                                    | Documentacion                                |
+| Librería                | Uso en Elise                                                    | Documentación                                |
 | ----------------------- | --------------------------------------------------------------- | -------------------------------------------- |
-| **react-hook-form**     | Manejo de estado y validacion de formularios (via `useZodForm`) | https://react-hook-form.com/                 |
+| **react-hook-form**     | Manejo de estado y validación de formularios (vía `useZodForm`) | https://react-hook-form.com/                 |
 | **@hookform/resolvers** | Conecta Zod con react-hook-form                                 | https://github.com/react-hook-form/resolvers |
-| **Zod**                 | Definicion de schemas y validacion de datos                     | https://zod.dev/                             |
+| **Zod**                 | Definición de schemas y validación de datos                     | https://zod.dev/                             |
 
 ## Tablas
 
-| Libreria                    | Uso en Elise                                             | Documentacion                     |
+| Librería                    | Uso en Elise                                             | Documentación                     |
 | --------------------------- | -------------------------------------------------------- | --------------------------------- |
-| **TanStack React Table v8** | Motor de `DataTable` (filtros, ordenamiento, paginacion) | https://tanstack.com/table/latest |
+| **TanStack React Table v8** | Motor de `DataTable` (filtros, ordenamiento, paginación) | https://tanstack.com/table/latest |
 
 ## Componentes especializados
 
-| Libreria             | Uso en Elise                                                 | Documentacion                    |
+| Librería             | Uso en Elise                                                 | Documentación                    |
 | -------------------- | ------------------------------------------------------------ | -------------------------------- |
 | **Embla Carousel**   | Motor del componente `Carousel`                              | https://www.embla-carousel.com/  |
 | **react-day-picker** | Motor de `Calendar`, `DatePicker` y `DateRangePicker`        | https://react-day-picker.js.org/ |
-| **cmdk**             | Motor del componente `Command` (paleta de comandos/busqueda) | https://cmdk.paco.me/            |
+| **cmdk**             | Motor del componente `Command` (paleta de comandos/búsqueda) | https://cmdk.paco.me/            |
 
 ## Utilidades CSS
 
-| Libreria                           | Uso en Elise                                      | Documentacion                             |
+| Librería                           | Uso en Elise                                      | Documentación                             |
 | ---------------------------------- | ------------------------------------------------- | ----------------------------------------- |
-| **clsx**                           | Concatenacion condicional de clases CSS           | https://github.com/lukeed/clsx            |
-| **tailwind-merge**                 | Resolucion de conflictos entre clases de Tailwind | https://github.com/dcastil/tailwind-merge |
+| **clsx**                           | Concatenación condicional de clases CSS           | https://github.com/lukeed/clsx            |
+| **tailwind-merge**                 | Resolución de conflictos entre clases de Tailwind | https://github.com/dcastil/tailwind-merge |
 | **class-variance-authority (CVA)** | Manejo de variantes de componentes                | https://cva.style/docs                    |
 
 ## Herramientas de build
 
-| Herramienta           | Uso en Elise                                         | Documentacion                                                   |
+| Herramienta           | Uso en Elise                                         | Documentación                                                   |
 | --------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
 | **pnpm**              | Package manager y workspaces                         | https://pnpm.io/                                                |
-| **tsup**              | Bundler de paquetes de libreria (ESM + CJS + .d.ts)  | https://tsup.egoist.dev/                                        |
+| **tsup**              | Bundler de paquetes de librería (ESM + CJS + .d.ts)  | https://tsup.egoist.dev/                                        |
 | **Vite**              | Dev server de la app showcase                        | https://vite.dev/                                               |
-| **@tailwindcss/vite** | Integracion de Tailwind CSS v4 en Vite (sin PostCSS) | https://tailwindcss.com/docs/installation/framework-guides/vite |
-| **ESLint**            | Linter de codigo (flat config)                       | https://eslint.org/                                             |
-| **Prettier**          | Formateador de codigo                                | https://prettier.io/                                            |
+| **@tailwindcss/vite** | Integración de Tailwind CSS v4 en Vite (sin PostCSS) | https://tailwindcss.com/docs/installation/framework-guides/vite |
+| **ESLint**            | Linter de código (flat config)                       | https://eslint.org/                                             |
+| **Prettier**          | Formateador de código                                | https://prettier.io/                                            |
 
 ---
 
-Volver a: [Guia de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Linter y formato](linter.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)
+Volver a: [Guía de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Linter y formato](linter.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)

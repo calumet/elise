@@ -1,10 +1,10 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 59 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 59 componentes, la mayoría construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
-> Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
+> Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guía de inicio](guia-inicio.md).
 
-## Importacion
+## Importación
 
 ```tsx
 // Por componente (recomendado)
@@ -14,37 +14,37 @@ import { Button } from "@calumet/elise-ui/button";
 import { Button, Dialog, Card } from "@calumet/elise-ui";
 ```
 
-## Catalogo por categoria
+## Catálogo por categoría
 
 ### Primitivas
 
-La capa base sobre la que se compone todo lo demas. Sin ella, cada pantalla
+La capa base sobre la que se compone todo lo demás. Sin ella, cada pantalla
 resuelve su layout con Tailwind crudo y termina inventando su propia escala de
-espaciado y su propia jerarquia tipografica, que es justo lo que un design
-system deberia evitar.
+espaciado y su propia jerarquía tipográfica, que es justo lo que un design
+system debería evitar.
 
-| Componente              | Import                        | Proposito                                       |
+| Componente              | Import                        | Propósito                                       |
 | ----------------------- | ----------------------------- | ----------------------------------------------- |
 | Box                     | `@calumet/elise-ui/box`       | Contenedor: espaciado, superficie, borde, radio |
-| BlockStack, InlineStack | `@calumet/elise-ui/stack`     | Apilado en el eje de bloque / en linea          |
+| BlockStack, InlineStack | `@calumet/elise-ui/stack`     | Apilado en el eje de bloque / en línea          |
 | Grid                    | `@calumet/elise-ui/grid`      | Rejilla de columnas, mobile-first               |
-| Container               | `@calumet/elise-ui/container` | Ancho maximo + centrado + gutter responsive     |
+| Container               | `@calumet/elise-ui/container` | Ancho máximo + centrado + gutter responsive     |
 | Bleed                   | `@calumet/elise-ui/bleed`     | Rompe el padding del contenedor padre           |
-| Text                    | `@calumet/elise-ui/text`      | Primitiva tipografica                           |
+| Text                    | `@calumet/elise-ui/text`      | Primitiva tipográfica                           |
 
 Todas aceptan `as` para elegir la etiqueta HTML, y `className` al final para
 escapar del sistema cuando hace falta.
 
 > **Por que los valores son un conjunto cerrado.** Las props no aceptan valores
-> arbitrarios (`padding={4}`, no `padding="17px"`). Ademas de mantener la
-> escala, es un requisito tecnico de Tailwind, que escanea el codigo fuente en
-> build y nunca genera una clase construida por interpolacion (`` `p-${n}` ``).
-> Por eso cada valor posible vive en un mapa estatico.
+> arbitrarios (`padding={4}`, no `padding="17px"`). Además de mantener la
+> escala, es un requisito técnico de Tailwind, que escanea el código fuente en
+> build y nunca genera una clase construida por interpolación (`` `p-${n}` ``).
+> Por eso cada valor posible vive en un mapa estático.
 
 #### BlockStack e InlineStack
 
-Se nombran por el eje logico de CSS y no por "vertical" y "horizontal", porque
-asi el nombre sigue siendo correcto si el modo de escritura cambia.
+Se nombran por el eje lógico de CSS y no por "vertical" y "horizontal", porque
+así el nombre sigue siendo correcto si el modo de escritura cambia.
 
 ```tsx
 import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
@@ -86,12 +86,12 @@ import { Box } from "@calumet/elise-ui/box";
 | `shadow`                            | `"none" \| "xs" \| "sm" \| "md" \| "lg" \| "xl"`                                   | —        |
 | `overflowHidden`                    | `boolean`                                                                          | —        |
 
-`background` setea tambien el color de texto que le corresponde (`card` trae
-`text-card-foreground`), asi que los pares nunca se desemparejan.
+`background` setea también el color de texto que le corresponde (`card` trae
+`text-card-foreground`), así que los pares nunca se desemparejan.
 
 #### Grid
 
-`columns` aplica desde el ancho mas chico y los breakpoints lo sobrescriben
+`columns` aplica desde el ancho más chico y los breakpoints lo sobrescriben
 hacia arriba, al estilo mobile-first.
 
 ```tsx
@@ -124,7 +124,7 @@ desborda.
 
 #### Text
 
-Cada `size` ya trae su interlineado y su tracking desde los tokens, asi que no
+Cada `size` ya trae su interlineado y su tracking desde los tokens, así que no
 hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 
 ```tsx
@@ -144,7 +144,7 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 | `lines`    | `2 \| 3 \| 4`                                                                       | —           |
 | `balance`  | `boolean`                                                                           | —           |
 
-`as` y `size` son independientes a proposito, de modo que un `h2` puede verse
+`as` y `size` son independientes a propósito, de modo que un `h2` puede verse
 pequeño sin dejar de ser un `h2` para el lector de pantalla.
 
 ### Layout
@@ -182,12 +182,12 @@ pequeño sin dejar de ser un `h2` para el lector de pantalla.
 
 #### Field
 
-Agrupa rotulo, control, ayuda y error, y resuelve el enlace de accesibilidad
+Agrupa rótulo, control, ayuda y error, y resuelve el enlace de accesibilidad
 entre las cuatro partes.
 
-El control se pasa como funcion y no como hijo directo, de modo que aplicar
+El control se pasa como función y no como hijo directo, de modo que aplicar
 `aria-describedby` y `aria-invalid` deja de ser opcional. Con un hijo normal es
-facil escribir el mensaje de error sin enlazarlo, y entonces el lector de
+fácil escribir el mensaje de error sin enlazarlo, y entonces el lector de
 pantalla lo anuncia suelto, sin decir a que campo pertenece.
 
 ```tsx
@@ -198,45 +198,45 @@ import { Field } from "@calumet/elise-ui/field";
 </Field>;
 ```
 
-| Prop          | Tipo                                              | Default  | Descripcion                            |
+| Prop          | Tipo                                              | Default  | Descripción                            |
 | ------------- | ------------------------------------------------- | -------- | -------------------------------------- |
 | `label`       | `React.ReactNode`                                 | —        | Requerido                              |
 | `children`    | `(control: FieldControlProps) => React.ReactNode` | —        | Requerido; recibe el control           |
 | `description` | `React.ReactNode`                                 | —        | Ayuda; sigue visible aunque haya error |
-| `error`       | `React.ReactNode`                                 | —        | Su presencia marca el campo invalido   |
+| `error`       | `React.ReactNode`                                 | —        | Su presencia marca el campo inválido   |
 | `required`    | `boolean`                                         | —        | Asterisco y `aria-required`            |
 | `id`          | `string`                                          | generado | Fuerza el `id` del control             |
 
-La funcion recibe `id`, `aria-describedby`, `aria-invalid` y `aria-required` ya
+La función recibe `id`, `aria-describedby`, `aria-invalid` y `aria-required` ya
 calculados. Cuando hay ayuda y error a la vez, `aria-describedby` apunta a los
 dos, porque la ayuda hace falta sobre todo en el momento en que algo sale mal. El
-parrafo de error lleva `role="alert"` y se anuncia al aparecer, sin esperar a que
+párrafo de error lleva `role="alert"` y se anuncia al aparecer, sin esperar a que
 el foco vuelva al campo.
 
-`Field` no conoce react-hook-form ni Radix Form. Recibe `error` ya resuelto, asi
-que sirve igual con `useZodForm`, con estado propio o sin libreria.
+`Field` no conoce react-hook-form ni Radix Form. Recibe `error` ya resuelto, así
+que sirve igual con `useZodForm`, con estado propio o sin librería.
 
-Para formularios que validan con la API nativa del navegador esta `Form` y su
+Para formularios que validan con la API nativa del navegador está `Form` y su
 familia, montada sobre Radix Form. Las dos no se mezclan en un mismo campo, ya
 que cada una quiere ser dueña del estado.
 
 #### Combobox
 
-Select con busqueda. `Popover` posiciona el panel y `Command` (cmdk) aporta el
-filtrado, la navegacion por teclado y el patron ARIA de combobox:
+Select con búsqueda. `Popover` posiciona el panel y `Command` (cmdk) aporta el
+filtrado, la navegación por teclado y el patrón ARIA de combobox:
 `role="combobox"`, `aria-expanded`, `aria-controls` y `aria-activedescendant`.
 Ninguno de esos atributos se replica a mano.
 
 Usa `Select` cuando las opciones sean pocas y conocidas; `Combobox` cuando haya
-suficientes como para que buscar sea mas rapido que recorrer la lista.
+suficientes como para que buscar sea más rápido que recorrer la lista.
 
 Viene en dos niveles, igual que en Polaris (`Combobox` + `Listbox` como
 primitivo, `Autocomplete` como envoltorio):
 
 - **`Combobox` y sus partes.** El primitivo componible. Sostiene el valor y la
   apertura, y no pinta nada por su cuenta.
-- **`ComboboxField`.** El envoltorio para el caso comun, un array de opciones.
-  Esta construido sobre las partes, asi que no puede hacer nada que el primitivo
+- **`ComboboxField`.** El envoltorio para el caso común, un array de opciones.
+  Esta construido sobre las partes, así que no puede hacer nada que el primitivo
   no permita.
 
 ##### ComboboxField
@@ -252,13 +252,13 @@ const paises: ComboboxOption[] = [
 <ComboboxField options={paises} value={pais} onValueChange={setPais} clearable />;
 ```
 
-| Prop                | Tipo                      | Default | Descripcion                              |
+| Prop                | Tipo                      | Default | Descripción                              |
 | ------------------- | ------------------------- | ------- | ---------------------------------------- |
 | `options`           | `ComboboxOption[]`        | —       | Requerido                                |
 | `value`             | `string`                  | —       | Modo controlado                          |
 | `defaultValue`      | `string`                  | —       | Modo no controlado                       |
 | `onValueChange`     | `(value: string) => void` | —       | —                                        |
-| `placeholder`       | `string`                  | i18n    | Texto del disparador sin seleccion       |
+| `placeholder`       | `string`                  | i18n    | Texto del disparador sin selección       |
 | `searchPlaceholder` | `string`                  | i18n    | —                                        |
 | `emptyMessage`      | `string`                  | i18n    | —                                        |
 | `clearable`         | `boolean`                 | `false` | Muestra una X para volver a sin valor    |
@@ -267,13 +267,13 @@ const paises: ComboboxOption[] = [
 | `disabled`          | `boolean`                 | —       | —                                        |
 
 `ComboboxOption` acepta `value`, `label`, `description`, `disabled`, `group`
-(agrupa bajo un encabezado) y `keywords`. Con `keywords` se suman terminos extra
-por los que la opcion tambien se encuentra, util para que "bogota" encuentre
+(agrupa bajo un encabezado) y `keywords`. Con `keywords` se suman términos extra
+por los que la opción también se encuentra, útil para que "bogota" encuentre
 Colombia.
 
 ##### Partes componibles
 
-Para carga asincrona, secciones a medida o acciones dentro de la lista:
+Para carga asíncrona, secciones a medida o acciones dentro de la lista:
 
 ```tsx
 <Combobox value={valor} onValueChange={setValor} open={abierto} onOpenChange={setAbierto}>
@@ -306,17 +306,17 @@ Para carga asincrona, secciones a medida o acciones dentro de la lista:
 </Combobox>
 ```
 
-| Parte               | Proposito                                                        |
+| Parte               | Propósito                                                        |
 | ------------------- | ---------------------------------------------------------------- |
-| `Combobox`          | Raiz: valor, apertura y `Popover`. `closeOnSelect` para multiple |
-| `ComboboxTrigger`   | Boton disparador. `size`, y `onClear` para la X                  |
+| `Combobox`          | Raíz: valor, apertura y `Popover`. `closeOnSelect` para múltiple |
+| `ComboboxTrigger`   | Botón disparador. `size`, y `onClear` para la X                  |
 | `ComboboxValue`     | Texto del disparador; cae en `placeholder` si no recibe children |
 | `ComboboxContent`   | Panel + `Command`. `shouldFilter={false}` desactiva el filtrado  |
-| `ComboboxInput`     | Campo de busqueda                                                |
+| `ComboboxInput`     | Campo de búsqueda                                                |
 | `ComboboxList`      | Contenedor desplazable                                           |
 | `ComboboxEmpty`     | Mensaje de "sin resultados"                                      |
-| `ComboboxGroup`     | Seccion con encabezado                                           |
-| `ComboboxItem`      | Opcion. `keywords`, e `icon` para items que son acciones         |
+| `ComboboxGroup`     | Sección con encabezado                                           |
+| `ComboboxItem`      | Opción. `keywords`, e `icon` para items que son acciones         |
 | `ComboboxSeparator` | Divisor                                                          |
 | `ComboboxLoading`   | Fila con spinner                                                 |
 
@@ -324,12 +324,12 @@ Para carga asincrona, secciones a medida o acciones dentro de la lista:
 > viven dentro del panel y se desmontan al cerrarlo. Quien compone es dueño de
 > su estado y pasa el texto, que en `ComboboxField` sale de sus `options`.
 
-La opcion **elegida** se marca con peso semibold y un check al final de la fila;
+La opción **elegida** se marca con peso semibold y un check al final de la fila;
 el fondo gris es el **resaltado del teclado**, que se mueve con las flechas. Son
 dos estados distintos y se leen a la vez.
 
-> El check va al final y solo existe cuando el item esta elegido, en vez de
-> reservarle una columna al inicio. Asi todas las filas (opciones, acciones,
+> El check va al final y solo existe cuando el item está elegido, en vez de
+> reservarle una columna al inicio. Así todas las filas (opciones, acciones,
 > elegidas o no) arrancan en la misma x. Es como lo resuelve Polaris en su
 > `TextOption`; con el check al inicio, cualquier fila sin el queda corrida el
 > ancho del icono.
@@ -338,32 +338,32 @@ Los textos por defecto salen del puente i18n (`ui.comboboxPlaceholder`,
 `ui.comboboxSearch`, `ui.comboboxEmpty`, `ui.clear`, `ui.loading`) y cualquiera
 se sobrescribe por prop.
 
-##### Seleccion multiple
+##### Selección múltiple
 
-`MultiCombobox` comparte todas las partes con `Combobox`. Lo unico que cambia es
+`MultiCombobox` comparte todas las partes con `Combobox`. Lo único que cambia es
 que acumula un array y que elegir un item ya elegido lo quita. El panel se queda
-abierto por defecto, ya que cerrarlo tras cada eleccion obliga a reabrir para la
+abierto por defecto, ya que cerrarlo tras cada elección obliga a reabrir para la
 siguiente.
 
 `MultiComboboxField` es el envoltorio equivalente. Muestra lo elegido como chips
 removibles dentro del disparador y, a partir de `maxChips`, resume el resto con
-«+N» para que el control no crezca sin limite.
+«+N» para que el control no crezca sin límite.
 
 ```tsx
 <MultiComboboxField options={tecnologias} value={stack} onValueChange={setStack} maxChips={2} />
 ```
 
 > La X de cada chip es un `<span role="button">` y no un `<button>`, dado que
-> vive dentro del disparador y un boton dentro de otro es HTML invalido. El
-> disparador sigue siendo el unico control enfocable con Tab.
+> vive dentro del disparador y un botón dentro de otro es HTML inválido. El
+> disparador sigue siendo el único control enfocable con Tab.
 
 #### FileUpload
 
-Area para soltar o elegir archivos.
+Área para soltar o elegir archivos.
 
 Reporta **siempre las dos listas** (aceptados y rechazados, con el motivo) en
 vez de descartar en silencio lo que no pasa. Un archivo que desaparece sin
-explicacion es el peor resultado posible de un campo de subida; la idea viene
+explicación es el peor resultado posible de un campo de subida; la idea viene
 del `DropZone` de Polaris, que separa `onDropAccepted` de `onDropRejected`.
 
 No guarda los archivos ni los muestra. Esa parte se compone con `FileUploadList`
@@ -388,27 +388,27 @@ y `FileUploadItem`, para que la lista pueda vivir donde haga falta.
 </FileUploadList>
 ```
 
-| Prop        | Tipo                                              | Default | Descripcion                      |
+| Prop        | Tipo                                              | Default | Descripción                      |
 | ----------- | ------------------------------------------------- | ------- | -------------------------------- |
 | `accept`    | `string`                                          | —       | Filtro nativo: `"image/*,.pdf"`  |
 | `multiple`  | `boolean`                                         | `false` | —                                |
 | `maxSize`   | `number`                                          | —       | Bytes, por archivo               |
 | `validator` | `(file: File) => boolean`                         | —       | Regla propia; `false` lo rechaza |
 | `onFiles`   | `(aceptados, rechazados: RejectedFile[]) => void` | —       | —                                |
-| `invalid`   | `boolean`                                         | —       | Marca el area como invalida      |
+| `invalid`   | `boolean`                                         | —       | Marca el área como inválida      |
 | `label`     | `string`                                          | i18n    | Texto principal                  |
-| `hint`      | `string`                                          | —       | Formatos y tamano admitidos      |
+| `hint`      | `string`                                          | —       | Formatos y tamaño admitidos      |
 
 `RejectedFile` trae `{ file, reason }`, con `reason` en `"type" | "size" | "custom"`.
 
 #### Stepper
 
-Indicador de progreso por pasos. El orden es la informacion que transmite y un
-lector de pantalla debe poder anunciarlo, de ahi que se renderice como un `<ol>`
+Indicador de progreso por pasos. El orden es la información que transmite y un
+lector de pantalla debe poder anunciarlo, de ahí que se renderice como un `<ol>`
 y no como una fila de divs.
 
 El estado de cada paso lo decide quien lo usa, con `status`. El componente no lo
-deduce de un indice, porque un flujo real salta pasos y vuelve atras.
+deduce de un índice, porque un flujo real salta pasos y vuelve atrás.
 
 ```tsx
 <Stepper>
@@ -426,17 +426,17 @@ deduce de un indice, porque un flujo real salta pasos y vuelve atras.
 </Stepper>
 ```
 
-| Prop          | Tipo                                    | Default           | Descripcion                          |
+| Prop          | Tipo                                    | Default           | Descripción                          |
 | ------------- | --------------------------------------- | ----------------- | ------------------------------------ |
 | `orientation` | `"horizontal" \| "vertical"`            | `"horizontal"`    | En `Stepper`                         |
 | `status`      | `"complete" \| "current" \| "upcoming"` | `"upcoming"`      | En `StepperItem`                     |
-| `indicator`   | `React.ReactNode`                       | check si completo | Numero o icono del indicador         |
-| `last`        | `boolean`                               | —                 | Oculta la linea; ponelo en el ultimo |
+| `indicator`   | `React.ReactNode`                       | check si completo | Número o icono del indicador         |
+| `last`        | `boolean`                               | —                 | Oculta la línea; ponelo en el último |
 
 El paso actual lleva `aria-current="step"`, y completo y actual anuncian su
 estado con texto para lectores de pantalla.
 
-### Navegacion
+### Navegación
 
 | Componente                                                                                 | Import                              | Radix                                                                                 |
 | ------------------------------------------------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------- |
@@ -465,9 +465,9 @@ estado con texto para lectores de pantalla.
 
 #### Alert vs AlertDialog
 
-`Alert` es un mensaje en linea que se renderiza dentro del flujo de la pagina y
+`Alert` es un mensaje en línea que se renderiza dentro del flujo de la página y
 no interrumpe. `AlertDialog` es modal y bloquea hasta que el usuario decide. Si
-el mensaje no exige una decision, es `Alert`.
+el mensaje no exige una decisión, es `Alert`.
 
 Los tonos `danger` y `warning` se anuncian con `role="alert"`, que interrumpe al
 lector de pantalla; `info` y `success` usan `role="status"`, que espera a que
@@ -487,11 +487,11 @@ import { Alert, AlertTitle, AlertDescription } from "@calumet/elise-ui/alert";
 </Alert>;
 ```
 
-| Prop        | Tipo                                           | Default  | Descripcion                           |
+| Prop        | Tipo                                           | Default  | Descripción                           |
 | ----------- | ---------------------------------------------- | -------- | ------------------------------------- |
 | `tone`      | `"info" \| "success" \| "warning" \| "danger"` | `"info"` | Superficie, icono y `role` del bloque |
 | `icon`      | `React.ReactNode`                              | —        | Sustituye el icono. `null` lo quita   |
-| `onDismiss` | `() => void`                                   | —        | Muestra el boton de cierre            |
+| `onDismiss` | `() => void`                                   | —        | Muestra el botón de cierre            |
 
 #### Badge
 
@@ -512,7 +512,7 @@ import { Badge } from "@calumet/elise-ui/badge";
 
 #### Spinner
 
-Hereda el color del texto, asi que se tiñe con cualquier utilidad `text-*`.
+Hereda el color del texto, así que se tiñe con cualquier utilidad `text-*`.
 Sigue girando bajo `prefers-reduced-motion` (lleva `data-motion="essential"`),
 porque un indicador detenido no comunica que algo sigue en curso.
 
@@ -557,8 +557,8 @@ import { FolderOpen } from "@calumet/elise-icons";
 </EmptyState>;
 ```
 
-Para el caso "no hay resultados" de una busqueda, el titulo deberia nombrar el
-termino buscado en vez de decir solo "Sin resultados".
+Para el caso "no hay resultados" de una búsqueda, el título debería nombrar el
+término buscado en vez de decir solo "Sin resultados".
 
 ### Overlay
 
@@ -594,11 +594,11 @@ termino buscado en vez de decir solo "Sin resultados".
 | ------------------------------------------------------------- | ------------------------- | ----- |
 | Table, TableHeader, TableBody, TableRow, TableHead, TableCell | `@calumet/elise-ui/table` | —     |
 
-> Para tablas con funcionalidad avanzada (filtros, paginacion, ordenamiento, exportacion), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).
+> Para tablas con funcionalidad avanzada (filtros, paginación, ordenamiento, exportación), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).
 
 ## Ejemplo: Button
 
-El componente `Button` es el mas utilizado y demuestra los patrones principales de Elise.
+El componente `Button` es el más utilizado y demuestra los patrones principales de Elise.
 
 ### Variantes
 
@@ -610,7 +610,7 @@ import { Button } from "@calumet/elise-ui/button";
 <Button variant="ghost">Fantasma</Button>   // Sin fondo ni borde
 ```
 
-### Tamanos
+### Tamaños
 
 ```tsx
 <Button size="sm">Pequeno</Button>
@@ -629,16 +629,16 @@ import { Button } from "@calumet/elise-ui/button";
 
 ### Props
 
-| Prop      | Tipo                                 | Default   | Descripcion                               |
+| Prop      | Tipo                                 | Default   | Descripción                               |
 | --------- | ------------------------------------ | --------- | ----------------------------------------- |
 | `variant` | `"solid" \| "outline" \| "ghost"`    | `"solid"` | Estilo visual                             |
-| `size`    | `"sm" \| "md" \| "lg" \| "icon"`     | `"md"`    | Tamano                                    |
-| `tone`    | `"success" \| "warning" \| "danger"` | —         | Color semantico (sobreescribe el variant) |
+| `size`    | `"sm" \| "md" \| "lg" \| "icon"`     | `"md"`    | Tamaño                                    |
+| `tone`    | `"success" \| "warning" \| "danger"` | —         | Color semántico (sobreescribe el variant) |
 | `asChild` | `boolean`                            | `false`   | Renderiza el hijo en lugar de `<button>`  |
 
-Ademas, acepta todas las props nativas de `<button>` (onClick, disabled, type, etc.).
+Además, acepta todas las props nativas de `<button>` (onClick, disabled, type, etc.).
 
-## Patron `asChild`
+## Patrón `asChild`
 
 Muchos componentes soportan `asChild` para renderizar un elemento diferente al por defecto, manteniendo el comportamiento y los estilos:
 
@@ -651,7 +651,7 @@ import { Button } from "@calumet/elise-ui/button";
 </Button>;
 ```
 
-Este patron viene de Radix UI. Consulta la [guia de composicion de Radix](https://www.radix-ui.com/primitives/docs/guides/composition) para mas detalles.
+Este patrón viene de Radix UI. Consulta la [guía de composición de Radix](https://www.radix-ui.com/primitives/docs/guides/composition) para más detalles.
 
 ---
 
