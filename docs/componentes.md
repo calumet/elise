@@ -174,27 +174,38 @@ dejar de ser un `h2` para el lector de pantalla.
 | Slider                                                        | `@calumet/elise-ui/slider`         | [Slider](https://www.radix-ui.com/primitives/docs/components/slider)          |
 | OTPField                                                      | `@calumet/elise-ui/otp-field`      | —                                                                             |
 | PasswordField                                                 | `@calumet/elise-ui/password-field` | —                                                                             |
-| Combobox                                                      | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
+| Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
 
 #### Combobox
 
-Select con busqueda. Combina `Popover` para el posicionamiento con `Command`
-(cmdk) para el filtrado y la navegacion por teclado. El patron ARIA de combobox
-—`role="combobox"`, `aria-expanded`, `aria-controls` y `aria-activedescendant`—
-lo aporta cmdk; el componente no lo replica.
+Select con busqueda. `Popover` posiciona el panel y `Command` (cmdk) aporta el
+filtrado, la navegacion por teclado y el patron ARIA de combobox —
+`role="combobox"`, `aria-expanded`, `aria-controls` y `aria-activedescendant`.
+Ninguno de esos atributos se replica a mano.
 
 Usa `Select` cuando las opciones sean pocas y conocidas; `Combobox` cuando haya
 suficientes como para que buscar sea mas rapido que recorrer la lista.
 
+Viene en dos niveles, igual que en Polaris (`Combobox` + `Listbox` como
+primitivo, `Autocomplete` como envoltorio):
+
+- **`Combobox` y sus partes** — el primitivo componible. Sostiene el valor y la
+  apertura, y no pinta nada por su cuenta.
+- **`ComboboxField`** — el envoltorio para el caso comun, un array de opciones.
+  Esta construido sobre las partes, asi que no puede hacer nada que el primitivo
+  no permita.
+
+##### ComboboxField
+
 ```tsx
-import { Combobox, type ComboboxOption } from "@calumet/elise-ui/combobox";
+import { ComboboxField, type ComboboxOption } from "@calumet/elise-ui/combobox";
 
 const paises: ComboboxOption[] = [
   { value: "co", label: "Colombia", description: "Bogota", keywords: ["bogota"] },
   { value: "mx", label: "Mexico", description: "Ciudad de Mexico" },
 ];
 
-<Combobox options={paises} value={pais} onValueChange={setPais} clearable />;
+<ComboboxField options={paises} value={pais} onValueChange={setPais} clearable />;
 ```
 
 | Prop                | Tipo                      | Default | Descripcion                              |
@@ -215,8 +226,66 @@ const paises: ComboboxOption[] = [
 (agrupa bajo un encabezado) y `keywords` — terminos extra por los que la opcion
 tambien se encuentra, util para que "bogota" encuentre Colombia.
 
+##### Partes componibles
+
+Para carga asincrona, secciones a medida o acciones dentro de la lista:
+
+```tsx
+<Combobox value={valor} onValueChange={setValor} open={abierto} onOpenChange={setAbierto}>
+  <ComboboxTrigger onClear={valor ? () => setValor("") : undefined}>
+    <ComboboxValue placeholder="Buscar paquete…">{valor}</ComboboxValue>
+  </ComboboxTrigger>
+
+  {/* shouldFilter={false}: la lista ya viene filtrada de afuera */}
+  <ComboboxContent shouldFilter={false}>
+    <ComboboxInput value={texto} onValueChange={setTexto} />
+    <ComboboxList>
+      {cargando ? (
+        <ComboboxLoading />
+      ) : (
+        <>
+          <ComboboxEmpty>Ningun paquete coincide</ComboboxEmpty>
+          {resultados.map((p) => (
+            <ComboboxItem key={p} value={p}>
+              {p}
+            </ComboboxItem>
+          ))}
+          <ComboboxSeparator />
+          <ComboboxItem value="__nuevo" hideIndicator onSelect={crear}>
+            + Crear paquete nuevo
+          </ComboboxItem>
+        </>
+      )}
+    </ComboboxList>
+  </ComboboxContent>
+</Combobox>
+```
+
+| Parte               | Proposito                                                        |
+| ------------------- | ---------------------------------------------------------------- |
+| `Combobox`          | Raiz: valor, apertura y `Popover`. `closeOnSelect` para multiple |
+| `ComboboxTrigger`   | Boton disparador. `size`, y `onClear` para la X                  |
+| `ComboboxValue`     | Texto del disparador; cae en `placeholder` si no recibe children |
+| `ComboboxContent`   | Panel + `Command`. `shouldFilter={false}` desactiva el filtrado  |
+| `ComboboxInput`     | Campo de busqueda                                                |
+| `ComboboxList`      | Contenedor desplazable                                           |
+| `ComboboxEmpty`     | Mensaje de "sin resultados"                                      |
+| `ComboboxGroup`     | Seccion con encabezado                                           |
+| `ComboboxItem`      | Opcion. `keywords`, `hideIndicator` para items que son acciones  |
+| `ComboboxSeparator` | Divisor                                                          |
+| `ComboboxLoading`   | Fila con spinner                                                 |
+
+> `ComboboxValue` no adivina la etiqueta a partir del valor: los items viven
+> dentro del panel y se desmontan al cerrarlo. Quien compone es dueño de su
+> estado y pasa el texto — `ComboboxField` lo resuelve desde sus `options`.
+
+La opcion **elegida** se marca con peso semibold y un check; el fondo gris es el
+**resaltado del teclado**, que se mueve con las flechas. Son dos estados
+distintos y se leen a la vez.
+
 Los textos por defecto salen del puente i18n (`ui.comboboxPlaceholder`,
-`ui.comboboxSearch`, `ui.comboboxEmpty`) y cualquiera se sobrescribe por prop.
+`ui.comboboxSearch`, `ui.comboboxEmpty`, `ui.clear`, `ui.loading`) y cualquiera
+se sobrescribe por prop.
 
 ### Navegacion
 
