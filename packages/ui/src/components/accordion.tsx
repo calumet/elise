@@ -1,86 +1,89 @@
 import { ChevronDown } from "@calumet/elise-icons";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-const AccordionContext = React.createContext({ name: "", defaultValue: "" });
+export type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;
+export type AccordionItemProps = React.ComponentProps<typeof AccordionPrimitive.Item>;
+export type AccordionTriggerProps = React.ComponentProps<typeof AccordionPrimitive.Trigger>;
+export type AccordionContentProps = React.ComponentProps<typeof AccordionPrimitive.Content>;
 
-type AccordionProps = React.ComponentPropsWithoutRef<"div"> & {
-  type?: "single" | "multiple";
-  collapsible?: boolean;
-  defaultValue?: string;
-};
-
-export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
-  ({ className, type = "single", collapsible: _, defaultValue = "", children, ...props }, ref) => {
-    const name = React.useId();
-    return (
-      <AccordionContext value={{ name: type === "single" ? name : "", defaultValue }}>
-        <div
-          data-slot="accordion"
-          ref={ref}
-          className={cn("rounded-xl border border-border bg-card", className)}
-          {...props}
-        >
-          {children}
-        </div>
-      </AccordionContext>
-    );
-  },
-);
-Accordion.displayName = "Accordion";
-
-export const AccordionItem = React.forwardRef<
-  HTMLDetailsElement,
-  React.ComponentPropsWithoutRef<"details"> & { value?: string }
->(({ className, value, ...props }, ref) => {
-  const { name, defaultValue } = React.useContext(AccordionContext);
+/**
+ * Secciones plegables.
+ *
+ * `type="single"` deja una abierta a la vez, y con `collapsible` esa una puede
+ * cerrarse. `type="multiple"` permite varias. En la versión anterior
+ * `collapsible` se aceptaba y no hacía nada, porque el estado lo llevaba un
+ * `details` y no el componente.
+ *
+ * Admite modo controlado con `value` y `onValueChange`.
+ */
+function Accordion({ className, ...props }: AccordionProps) {
   return (
-    <details
-      data-slot="accordion-item"
-      ref={ref}
-      name={name || undefined}
-      open={value && value === defaultValue ? true : undefined}
-      className={cn("group border-t border-border rounded-sm bg-card first:border-t-0", className)}
+    <AccordionPrimitive.Root
+      data-slot="accordion"
+      className={cn("rounded-xl border border-border bg-card", className)}
       {...props}
     />
   );
-});
-AccordionItem.displayName = "AccordionItem";
+}
 
-export const AccordionTrigger = React.forwardRef<
-  HTMLElement,
-  React.ComponentPropsWithoutRef<"summary">
->(({ className, children, ...props }, ref) => (
-  <summary
-    data-slot="accordion-trigger"
-    ref={ref as React.Ref<HTMLElement>}
-    className={cn(
-      "flex cursor-pointer list-none items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <ChevronDown
-      className="ml-2 h-4 w-4 shrink-0 transition-transform group-open:rotate-180"
-      aria-hidden
+function AccordionItem({ className, ...props }: AccordionItemProps) {
+  return (
+    <AccordionPrimitive.Item
+      data-slot="accordion-item"
+      className={cn("border-t border-border first:border-t-0", className)}
+      {...props}
     />
-  </summary>
-));
-AccordionTrigger.displayName = "AccordionTrigger";
+  );
+}
 
-export const AccordionContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, children, ...props }, ref) => (
-  <div
-    data-slot="accordion-content"
-    ref={ref}
-    className={cn("overflow-hidden text-base text-muted-foreground", className)}
-    {...props}
-  >
-    <div className="px-3 pb-4 pt-0">{children}</div>
-  </div>
-));
-AccordionContent.displayName = "AccordionContent";
+/**
+ * El disparador va envuelto en el encabezado que pide el primitivo, para que la
+ * jerarquía de la página no se rompa al recorrerla por encabezados.
+ */
+function AccordionTrigger({ className, children, ...props }: AccordionTriggerProps) {
+  return (
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        data-slot="accordion-trigger"
+        className={cn(
+          "group flex flex-1 cursor-pointer items-center justify-between px-3 py-3 text-left text-base font-semibold text-foreground transition-colors duration-(--duration-fast) ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        <ChevronDown
+          className="ml-2 size-4 shrink-0 transition-transform duration-(--duration-fast) ease-out group-data-[state=open]:rotate-180"
+          aria-hidden="true"
+        />
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  );
+}
+
+/**
+ * El alto lo anima el primitivo, que publica el del contenido medido en
+ * `--radix-accordion-content-height`. El padding vive en el div de adentro
+ * porque animar el alto de un elemento que además tiene padding vertical deja
+ * el texto apretándose durante la transición.
+ */
+function AccordionContent({ className, children, ...props }: AccordionContentProps) {
+  return (
+    <AccordionPrimitive.Content
+      data-slot="accordion-content"
+      className={cn(
+        "overflow-hidden text-base text-muted-foreground",
+        "data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up",
+        className,
+      )}
+      {...props}
+    >
+      <div className="px-3 pt-0 pb-4">{children}</div>
+    </AccordionPrimitive.Content>
+  );
+}
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };

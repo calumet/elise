@@ -1,3 +1,4 @@
+import { Checkbox } from "@calumet/elise-ui/checkbox";
 import { Label } from "@calumet/elise-ui/label";
 import { OTPField } from "@calumet/elise-ui/otp-field";
 import { RadioGroup, RadioGroupItem } from "@calumet/elise-ui/radio-group";
@@ -5,7 +6,10 @@ import { Slider } from "@calumet/elise-ui/slider";
 import { Switch } from "@calumet/elise-ui/switch";
 import { useState } from "react";
 
+const TEMAS = ["Claro", "Oscuro"];
+
 const FormControlsDemo = () => {
+  const [marcadas, setMarcadas] = useState<string[]>(["Claro"]);
   const [enabled, setEnabled] = useState(true);
   const [volume, setVolume] = useState<number[]>([40]);
   const [range, setRange] = useState<number[]>([20, 80]);
@@ -16,16 +20,58 @@ const FormControlsDemo = () => {
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="space-y-3 rounded-sm border border-border bg-card p-4">
         <Label className="text-sm font-semibold">Opciones</Label>
+        {/* El rótulo se enlaza con `htmlFor`, porque la opción es un button y
+            no un input suelto dentro del label. */}
         <RadioGroup defaultValue="opt1">
-          <label className="flex items-center gap-2 text-base">
-            <RadioGroupItem value="opt1" />
-            Opción 1
-          </label>
-          <label className="flex items-center gap-2 text-base">
-            <RadioGroupItem value="opt2" />
-            Opción 2
-          </label>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="opt1" id="opt1" />
+            <Label htmlFor="opt1" className="text-base font-normal">
+              Opción 1
+            </Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="opt2" id="opt2" />
+            <Label htmlFor="opt2" className="text-base font-normal">
+              Opción 2
+            </Label>
+          </div>
         </RadioGroup>
+      </div>
+
+      <div className="space-y-3 rounded-sm border border-border bg-card p-4">
+        <Label className="text-sm font-semibold">Casilla de tres estados</Label>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="todas"
+            checked={
+              marcadas.length === TEMAS.length
+                ? true
+                : marcadas.length === 0
+                  ? false
+                  : "indeterminate"
+            }
+            onCheckedChange={(v) => setMarcadas(v === true ? [...TEMAS] : [])}
+          />
+          <Label htmlFor="todas" className="text-base">
+            Todas
+          </Label>
+        </div>
+        <div className="space-y-2 pl-6">
+          {TEMAS.map((t) => (
+            <div key={t} className="flex items-center gap-2">
+              <Checkbox
+                id={t}
+                checked={marcadas.includes(t)}
+                onCheckedChange={(v) =>
+                  setMarcadas((prev) => (v === true ? [...prev, t] : prev.filter((x) => x !== t)))
+                }
+              />
+              <Label htmlFor={t} className="text-base font-normal">
+                {t}
+              </Label>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-4 rounded-sm border border-border bg-card p-4">

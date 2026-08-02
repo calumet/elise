@@ -121,10 +121,11 @@ accesibilidad no triviales (menús, diálogos, tooltips, tabs, sliders…) se
 usa el primitive de Radix. Una implementación propia solo se justifica para
 casos simples, y debe documentar explícitamente qué partes de la API de
 Radix no soporta (modo controlado, `asChild`, atributos `data-state`, etc.).
-Componentes actualmente hand-rolled que no alcanzan paridad con Radix:
-accordion, checkbox, radio-group, switch, toggle, toggle-group, progress y
-separator — tenlo en cuenta antes de asumir que aceptan la API completa del
-primitive equivalente.
+
+Ya no queda ninguno hand-rolled. Los ocho que lo eran (accordion, checkbox,
+radio-group, switch, toggle, toggle-group, progress y separator) están sobre su
+primitive, así que la API completa se puede dar por sentada en todo el
+catálogo.
 
 ### Formateo automático
 

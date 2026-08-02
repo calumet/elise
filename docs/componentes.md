@@ -4,6 +4,44 @@
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guía de inicio](guia-inicio.md).
 
+## Ocho componentes pasaron a su primitive
+
+`Accordion`, `Checkbox`, `RadioGroup`, `Switch`, `Toggle`, `ToggleGroup`,
+`Progress` y `Separator` eran implementaciones propias. Esta tabla ya los
+enlazaba a Radix, pero por dentro no lo eran.
+
+Lo que ganan:
+
+| Componente         | Lo que faltaba                                                         |
+| ------------------ | ---------------------------------------------------------------------- |
+| `Accordion`        | `collapsible` se aceptaba y no hacía nada; ahora abre y cierra         |
+| `Checkbox`         | Tercer estado `"indeterminate"` para una casilla maestra               |
+| `RadioGroup`       | `value` y `onValueChange`; antes el valor solo salía del formulario    |
+| `Switch`, `Toggle` | Modo controlado                                                        |
+| `Toggle`           | Era un `label` con input oculto, de modo que se anunciaba como casilla |
+| `ToggleGroup`      | `value`, `onValueChange` y una sola parada de tabulación               |
+| `Progress`         | `value={null}` para progreso indeterminado                             |
+| `Separator`        | `asChild` y `data-orientation`                                         |
+
+Todos admiten además `asChild` y publican su `data-state`.
+
+Tres cosas cambian para quien ya los usaba:
+
+- **`Checkbox` y `Switch` dejaron de ser un `input`.** Ahora son un `button`
+  con `role="checkbox"` o `role="switch"`. `checked`, `defaultChecked`,
+  `onCheckedChange`, `name`, `value`, `disabled` y `required` siguen igual, y
+  con `name` se emite un input oculto para que un formulario nativo los envíe.
+  Lo que ya no llega es `onChange`.
+- **Un rótulo envolvente deja de funcionar.** `<label><Checkbox />Texto</label>`
+  activaba el input que estaba dentro. Con un `button` hay que enlazarlo:
+  `<Checkbox id="x" />` junto a `<Label htmlFor="x">`.
+- **`RadioGroupItem` ya no acepta props de `input`.** Recibe `value`,
+  `disabled`, `required` e `id`.
+
+`<Toggle>` dentro de un `<ToggleGroup>` se sigue escribiendo igual, aunque en
+Radix son dos componentes distintos: dentro de un grupo, `Toggle` se comporta
+como una opción del grupo.
+
 ## Importación
 
 ```tsx

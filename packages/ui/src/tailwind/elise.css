@@ -61,6 +61,43 @@
       transform: translateX(calc(100% + 1rem));
     }
   }
+
+  /* Apertura y cierre del Accordion. La altura la publica el primitivo en
+     `--radix-accordion-content-height` una vez medido el contenido, porque
+     `height: auto` no es animable. */
+  --animate-accordion-down: accordion-down 200ms var(--ease-out);
+  --animate-accordion-up: accordion-up 200ms var(--ease-out);
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  /* Progress sin valor conocido. La barra mide un tercio del carril y lo
+     recorre entera, de lado a lado. */
+  --animate-progress-indeterminate: progress-indeterminate 1.4s var(--ease-in-out) infinite;
+
+  @keyframes progress-indeterminate {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
 }
 
 :root {
