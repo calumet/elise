@@ -12,12 +12,12 @@ const sizeClasses: Record<NonNullable<EmptyStateProps["size"]>, string> = {
 };
 
 /**
- * Estado vacio para listas, tablas y paneles sin contenido. Es un contenedor
+ * Estado vacío para listas, tablas y paneles sin contenido. Es un contenedor
  * compuesto: `EmptyStateMedia`, `EmptyStateTitle`, `EmptyStateDescription` y
- * `EmptyStateActions` se combinan segun haga falta.
+ * `EmptyStateActions` se combinan según haga falta.
  *
- * Para "no hay resultados" de una busqueda, el titulo deberia nombrar el
- * termino buscado, no decir solo "Sin resultados".
+ * Para "no hay resultados" de una búsqueda, el título debería nombrar el
+ * término buscado, no decir solo "Sin resultados".
  */
 function EmptyState({ className, size = "md", ...props }: EmptyStateProps) {
   return (

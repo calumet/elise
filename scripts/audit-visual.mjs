@@ -1,5 +1,5 @@
 /**
- * Auditoria visual del showcase.
+ * Auditoría visual del showcase.
  *
  * Abre la app en un Chromium headless y comprueba, sobre el DOM ya renderizado,
  * las cosas que un typecheck no ve y una captura no delata a simple vista.
@@ -7,9 +7,9 @@
  *
  *   pnpm audit:visual                     # contra http://localhost:5173
  *   pnpm audit:visual -- --url=http://…   # contra otra URL
- *   pnpm audit:visual -- --abrir          # ademas abre cada disparador de panel
+ *   pnpm audit:visual -- --abrir          # además abre cada disparador de panel
  *
- * Sale con codigo 1 si hay fallos, para poder colgarlo de CI.
+ * Sale con código 1 si hay fallos, para poder colgarlo de CI.
  */
 
 import { chromium } from "playwright";
@@ -81,7 +81,7 @@ const CHEQUEOS = [
 ];
 
 /* ------------------------------------------------------------------ *
- * Sonda: corre dentro de la pagina
+ * Sonda: corre dentro de la página
  * ------------------------------------------------------------------ */
 
 const sonda = () => {
@@ -139,7 +139,7 @@ const sonda = () => {
     else if (!Number.isInteger(w)) anota("iconos", svg, `${w}px, no entero`);
   }
 
-  /* --- tipografia --- */
+  /* --- tipografía --- */
   for (const el of todos) {
     if (!el.childNodes.length) continue;
     const tieneTextoPropio = [...el.childNodes].some(
@@ -150,7 +150,7 @@ const sonda = () => {
     if (!TIPOGRAFIA.includes(Math.round(px))) anota("tipografia", el, `${px}px`);
   }
 
-  /* --- pixeles fraccionarios en controles --- */
+  /* --- píxeles fraccionarios en controles --- */
   const CONTROLES = 'button, input, select, textarea, [role="combobox"], [data-slot$="trigger"]';
   for (const el of document.querySelectorAll(CONTROLES)) {
     if (!visible(el)) continue;
@@ -160,7 +160,7 @@ const sonda = () => {
     }
   }
 
-  /* --- anidamiento invalido --- */
+  /* --- anidamiento inválido --- */
   const INTERACTIVOS = "button, a[href], input, select, textarea";
   for (const el of document.querySelectorAll(INTERACTIVOS)) {
     const padre = el.parentElement?.closest(INTERACTIVOS);
@@ -221,7 +221,7 @@ const sonda = () => {
     }
   }
 
-  /* --- alineacion de filas dentro de una lista --- */
+  /* --- alineación de filas dentro de una lista --- */
   const LISTAS = '[data-slot$="-list"], [role="listbox"], [role="menu"]';
   for (const lista of document.querySelectorAll(LISTAS)) {
     if (!visible(lista)) continue;
@@ -250,7 +250,7 @@ const sonda = () => {
   /* --- contraste --- */
   const cv = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
   /* Devuelve [r,g,b,a] de cualquier formato CSS, oklch incluido, dejando que el
-     canvas haga la conversion. */
+     canvas haga la conversión. */
   const aRgba = (css) => {
     cv.clearRect(0, 0, 1, 1);
     cv.fillStyle = css;
@@ -268,7 +268,7 @@ const sonda = () => {
     return 0.2126 * s[0] + 0.7152 * s[1] + 0.0722 * s[2];
   };
   /* Un fondo semitransparente se compone contra lo que tiene detras, subiendo
-     hasta encontrar algo opaco. Tratarlo como si fuera solido daba lecturas
+     hasta encontrar algo opaco. Tratarlo como si fuera sólido daba lecturas
      absurdas, 1.09:1 en texto perfectamente legible. */
   const fondoEfectivo = (el) => {
     const capas = [];
@@ -291,7 +291,7 @@ const sonda = () => {
     const caja = el.getBoundingClientRect();
     if (caja.width <= 1 || caja.height <= 1) continue;
     const cs = getComputedStyle(el);
-    if (parseFloat(cs.opacity) < 1) continue; // deshabilitado a proposito
+    if (parseFloat(cs.opacity) < 1) continue; // deshabilitado a propósito
     const px = parseFloat(cs.fontSize);
     const negrita = parseInt(cs.fontWeight, 10) >= 700;
     const grande = px >= 24 || (px >= 18.66 && negrita);
@@ -301,7 +301,7 @@ const sonda = () => {
     const [l1, l2] = [lum(texto), lum(fondo)].sort((a, b) => b - a);
     const ratio = (l1 + 0.05) / (l2 + 0.05);
     if (ratio < minimo) {
-      /* El detalle lleva los colores crudos, porque un numero sin evidencia no
+      /* El detalle lleva los colores crudos, porque un número sin evidencia no
          se puede refutar y un fallo de la sonda se confunde con uno del tema. */
       anota(
         "contraste",
@@ -316,7 +316,7 @@ const sonda = () => {
 };
 
 /* ------------------------------------------------------------------ *
- * Ejecucion
+ * Ejecución
  * ------------------------------------------------------------------ */
 
 /* CHROMIUM_PATH permite usar un navegador ya instalado en el entorno (CI,
@@ -341,7 +341,7 @@ try {
   process.exit(2);
 }
 
-/* Las secciones son React.lazy, asi que se recorre la pagina para montarlas. */
+/* Las secciones son React.lazy, así que se recorre la página para montarlas. */
 await pagina.evaluate(async () => {
   const paso = window.innerHeight;
   for (let y = 0; y < document.body.scrollHeight; y += paso) {
@@ -368,7 +368,7 @@ const recolectar = async (contexto) => {
   for (const f of fallos) todosLosFallos.push({ ...f, contexto });
 };
 
-/* Un color a mitad de transicion se lee como un valor que nadie escribio (Chrome
+/* Un color a mitad de transición se lee como un valor que nadie escribió (Chrome
    lo reporta como `oklab(...)`) y produce fallos fantasma. Se congelan las
    transiciones antes de medir. */
 const congelarMovimiento = async () => {
@@ -385,8 +385,8 @@ const auditarTema = async (nombre) => {
   await congelarMovimiento();
   await recolectar(nombre);
 
-  /* Los paneles flotantes solo existen abiertos, y es ahi donde vive la mitad
-     de los defectos de alineacion y recorte. */
+  /* Los paneles flotantes solo existen abiertos, y es ahí donde vive la mitad
+     de los defectos de alineación y recorte. */
   if (!ABRIR_PANELES) return;
   const disparadores = await pagina.locator('[data-slot$="-trigger"]:visible').all();
   for (const [n, d] of disparadores.entries()) {
@@ -398,7 +398,7 @@ const auditarTema = async (nombre) => {
       await pagina.keyboard.press("Escape");
       await pagina.waitForTimeout(200);
     } catch {
-      /* un disparador que no abre no es asunto de esta auditoria */
+      /* un disparador que no abre no es asunto de esta auditoría */
     }
   }
 };
@@ -408,7 +408,7 @@ const auditarTema = async (nombre) => {
  *
  * El cambio se hace por el control de la app. El ThemeProvider es dueño de ese
  * atributo y lo reescribe en su siguiente render, con lo cual forzar la clase en
- * <html> deja la pagina a medio camino entre los dos temas. */
+ * <html> deja la página a medio camino entre los dos temas. */
 const cambiarATemaOscuro = async () => {
   const toggle = pagina.getByRole("button", { name: /^dark$/i }).first();
   if (await toggle.count()) {

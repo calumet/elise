@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 export type BleedProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 
-  /** Cuanto sangrar en ambos ejes. */
+  /** Cuánto sangrar en ambos ejes. */
   all?: SpaceScale;
   x?: SpaceScale;
   y?: SpaceScale;
@@ -15,7 +15,7 @@ export type BleedProps = React.ComponentProps<"div"> & {
   bottom?: SpaceScale;
 };
 
-/* Margenes negativos, uno por valor de la escala. Van literales, ya que
+/* Márgenes negativos, uno por valor de la escala. Van literales, ya que
    Tailwind no ve las clases interpoladas. */
 const allClasses: Record<SpaceScale, string> = {
   0: "-m-0",

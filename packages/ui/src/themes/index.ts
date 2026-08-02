@@ -23,10 +23,10 @@ export type EliseTheme = {
   warning: string;
   warningForeground: string;
 
-  /* Tokens agregados despues de la v0.2. Son opcionales para no romper los
+  /* Tokens agregados después de la v0.2. Son opcionales para no romper los
      temas que ya se construyen como literal completo. Un tema que no los define
      deja en pie el valor del CSS. `defaultLightTheme` y `defaultDarkTheme` los
-     traen, asi que extenderlos con spread los incluye automaticamente. */
+     traen, así que extenderlos con spread los incluye automáticamente. */
   borderStrong?: string;
   info?: string;
   infoForeground?: string;

@@ -46,14 +46,14 @@ export type ComboboxProps = {
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 
-  /** Deja el panel abierto al elegir. Util para seleccion multiple. */
+  /** Deja el panel abierto al elegir. Útil para selección múltiple. */
   closeOnSelect?: boolean;
 
   children?: React.ReactNode;
 };
 
 /**
- * Raiz del combobox. Sostiene el valor y el estado de apertura, y monta el
+ * Raíz del combobox. Sostiene el valor y el estado de apertura, y monta el
  * `Popover`. No pinta nada por su cuenta; lo visible sale de las partes que se
  * componen adentro.
  *
@@ -72,7 +72,7 @@ export type ComboboxProps = {
  * </Combobox>
  * ```
  *
- * Para el caso comun de un array de opciones existe `ComboboxField`, construido
+ * Para el caso común de un array de opciones existe `ComboboxField`, construido
  * sobre estas mismas partes.
  */
 function Combobox({
@@ -133,10 +133,10 @@ export type MultiComboboxProps = Omit<ComboboxProps, "value" | "defaultValue" | 
 /**
  * Igual que `Combobox` pero acumula varios valores. Elegir un item que ya estaba
  * lo quita, y el panel se queda abierto por defecto para no obligar a reabrirlo
- * en cada eleccion.
+ * en cada elección.
  *
  * Comparte todas las partes con `Combobox`, donde `ComboboxItem` marca como
- * elegido cualquier valor que este en la seleccion.
+ * elegido cualquier valor que este en la selección.
  */
 function MultiCombobox({
   value: valueProp,
@@ -193,7 +193,7 @@ function MultiCombobox({
 export type ComboboxTriggerProps = React.ComponentProps<"button"> & {
   size?: "sm" | "md" | "lg";
 
-  /** Muestra una X que devuelve el combobox a "sin seleccion". */
+  /** Muestra una X que devuelve el combobox a "sin selección". */
   onClear?: () => void;
 };
 
@@ -216,8 +216,8 @@ function ComboboxTrigger({
   const mostrarLimpiar = Boolean(onClear) && !disabled;
 
   return (
-    /* El boton de limpiar va como hermano del disparador, porque un <button>
-       dentro de otro <button> es HTML invalido. */
+    /* El botón de limpiar va como hermano del disparador, porque un <button>
+       dentro de otro <button> es HTML inválido. */
     <div className="relative w-full">
       <PopoverTrigger asChild>
         <button
@@ -233,7 +233,7 @@ function ComboboxTrigger({
           {...props}
         >
           {/* El hueco para la X va en el contenido. Con el padding puesto en el
-              boton, el chevron se corre hacia adentro y queda debajo. */}
+              botón, el chevron se corre hacia adentro y queda debajo. */}
           <span className={cn("min-w-0 flex-1 truncate text-left", mostrarLimpiar && "pr-6")}>
             {children}
           </span>
@@ -297,7 +297,7 @@ function ComboboxContent({
     <PopoverContent
       align={align}
       data-slot="combobox-content"
-      /* El panel copia el ancho del disparador via la variable de Radix. */
+      /* El panel copia el ancho del disparador vía la variable de Radix. */
       className={cn("w-(--radix-popover-trigger-width) p-0", className)}
       {...props}
     >
@@ -370,7 +370,7 @@ export type ComboboxItemProps = Omit<
 > & {
   value: string;
 
-  /** Terminos extra por los que el item tambien deberia encontrarse. */
+  /** Términos extra por los que el item también debería encontrarse. */
   keywords?: string[];
 
   /** Icono al inicio de la fila. Para items que son acciones, no opciones. */
@@ -380,10 +380,10 @@ export type ComboboxItemProps = Omit<
 };
 
 /**
- * Opcion de la lista.
+ * Opción de la lista.
  *
- * El check va al final de la fila y solo existe cuando el item esta elegido, en
- * vez de reservarle una columna al inicio. Asi todas las filas (opciones,
+ * El check va al final de la fila y solo existe cuando el item está elegido, en
+ * vez de reservarle una columna al inicio. Así todas las filas (opciones,
  * acciones, elegidas o no) arrancan en la misma x, que es como lo resuelve
  * Polaris en su `TextOption`. Con el check al inicio, cualquier fila sin el
  * queda corrida el ancho del icono.
@@ -425,19 +425,19 @@ function ComboboxItem({
 }
 
 /* ------------------------------------------------------------------ *
- * Envoltorio para el caso comun
+ * Envoltorio para el caso común
  * ------------------------------------------------------------------ */
 
 export type ComboboxOption = {
   value: string;
   label: string;
 
-  /** Segunda linea dentro de la opcion. */
+  /** Segunda línea dentro de la opción. */
   description?: string;
 
   disabled?: boolean;
 
-  /** Terminos extra por los que la opcion tambien deberia encontrarse. */
+  /** Términos extra por los que la opción también debería encontrarse. */
   keywords?: string[];
 
   /** Agrupa opciones bajo un encabezado. */
@@ -468,11 +468,11 @@ export type ComboboxFieldProps = {
 } & Omit<React.ComponentProps<"button">, "value" | "defaultValue" | "onChange" | "name">;
 
 /**
- * Combobox para el caso comun de un array de opciones. Esta construido sobre
- * las partes de `Combobox`, asi que no puede hacer nada que el primitivo no
+ * Combobox para el caso común de un array de opciones. Está construido sobre
+ * las partes de `Combobox`, así que no puede hacer nada que el primitivo no
  * permita.
  *
- * Para carga asincrona, secciones a medida o acciones dentro de la lista, compone
+ * Para carga asíncrona, secciones a medida o acciones dentro de la lista, compone
  * las partes directamente.
  */
 function ComboboxField({
@@ -503,7 +503,7 @@ function ComboboxField({
 
   const seleccionada = options.find((o) => o.value === value);
 
-  /* Preserva el orden de aparicion de los grupos en `options`. */
+  /* Preserva el orden de aparición de los grupos en `options`. */
   const grupos = React.useMemo(() => {
     const mapa = new Map<string, ComboboxOption[]>();
     for (const o of options) {
@@ -567,14 +567,14 @@ export type MultiComboboxFieldProps = Omit<
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
 
-  /** A partir de cuantos chips se resume con "+N". */
+  /** A partir de cuántos chips se resume con "+N". */
   maxChips?: number;
 };
 
 /**
- * Multiseleccion lista para usar. Muestra lo elegido como chips removibles
+ * Multiselección lista para usar. Muestra lo elegido como chips removibles
  * dentro del disparador; a partir de `maxChips` resume el resto con "+N" para
- * que el control no crezca sin limite.
+ * que el control no crezca sin límite.
  */
 function MultiComboboxField({
   options,
@@ -635,8 +635,8 @@ function MultiComboboxField({
             {visibles.map((o) => (
               <Badge key={o.value} tone="neutral" size="sm" className="gap-1 pr-1">
                 {o.label}
-                {/* La X va como <span> con rol de boton, ya que anidarla como
-                    <button> dentro del disparador seria HTML invalido. El click
+                {/* La X va como <span> con rol de botón, ya que anidarla como
+                    <button> dentro del disparador sería HTML inválido. El click
                     se atiende igual y el disparador sigue siendo el control
                     enfocable. */}
                 <span

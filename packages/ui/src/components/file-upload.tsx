@@ -16,24 +16,24 @@ export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
 
   multiple?: boolean;
 
-  /** Tamano maximo por archivo, en bytes. */
+  /** Tamano máximo por archivo, en bytes. */
   maxSize?: number;
 
   disabled?: boolean;
 
-  /** Marca el area como invalida. */
+  /** Marca el área como inválida. */
   invalid?: boolean;
 
-  /** Regla propia de validacion. Devolver `false` rechaza el archivo. */
+  /** Regla propia de validación. Devolver `false` rechaza el archivo. */
   validator?: (file: File) => boolean;
 
   /** Recibe siempre las dos listas, aceptados y rechazados. */
   onFiles?: (aceptados: File[], rechazados: RejectedFile[]) => void;
 
-  /** Texto principal del area. */
+  /** Texto principal del área. */
   label?: string;
 
-  /** Linea secundaria: formatos admitidos, tamano maximo. */
+  /** Línea secundaria: formatos admitidos, tamano máximo. */
   hint?: string;
 };
 
@@ -58,13 +58,13 @@ const tipoAceptado = (file: File, accept?: string) => {
 };
 
 /**
- * Area para soltar o elegir archivos.
+ * Área para soltar o elegir archivos.
  *
  * Reporta siempre las dos listas (aceptados y rechazados, con el motivo) en vez
  * de descartar en silencio lo que no pasa, porque un archivo que desaparece sin
- * explicacion deja al usuario sin saber que corregir.
+ * explicación deja al usuario sin saber qué corregir.
  *
- * No guarda los archivos ni los muestra. Para eso esta `FileUploadList`.
+ * No guarda los archivos ni los muestra. Para eso está `FileUploadList`.
  */
 function FileUpload({
   className,
@@ -100,8 +100,8 @@ function FileUpload({
     onFiles?.(multiple ? aceptados : aceptados.slice(0, 1), rechazados);
   };
 
-  /* dragenter/dragleave se disparan tambien al pasar sobre los hijos. Un
-     contador evita que el area parpadee mientras el cursor la recorre. */
+  /* dragenter/dragleave se disparan también al pasar sobre los hijos. Un
+     contador evita que el área parpadee mientras el cursor la recorre. */
   const alEntrar = (e: React.DragEvent) => {
     e.preventDefault();
     if (disabled) return;
@@ -149,7 +149,7 @@ function FileUpload({
         className="sr-only"
         onChange={(e) => {
           repartir(e.target.files);
-          /* Permite volver a elegir el mismo archivo despues de quitarlo. */
+          /* Permite volver a elegir el mismo archivo después de quitarlo. */
           e.target.value = "";
         }}
       />
@@ -180,7 +180,7 @@ export type FileUploadItemProps = Omit<React.ComponentProps<"li">, "onRemove"> &
   name: string;
   size?: number;
 
-  /** Muestra el boton de quitar. */
+  /** Muestra el botón de quitar. */
   onRemove?: () => void;
 };
 

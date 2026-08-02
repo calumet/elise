@@ -10,12 +10,12 @@ export type AlertProps = React.ComponentProps<"div"> & {
   /** Sustituye el icono por defecto. `null` lo quita. */
   icon?: React.ReactNode;
 
-  /** Muestra el boton de cierre y avisa al cerrarlo. */
+  /** Muestra el botón de cierre y avisa al cerrarlo. */
   onDismiss?: () => void;
 };
 
 /* La superficie sutil va sin borde, porque el color del fondo ya separa el
-   bloque del resto de la pagina y un borde en el mismo tono agrega ruido. */
+   bloque del resto de la página y un borde en el mismo tono agrega ruido. */
 const toneClasses: Record<NonNullable<AlertProps["tone"]>, string> = {
   info: "bg-info-subtle text-info-subtle-foreground",
   success: "bg-success-subtle text-success-subtle-foreground",
@@ -31,7 +31,7 @@ const toneIcons: Record<NonNullable<AlertProps["tone"]>, React.ElementType> = {
 };
 
 /**
- * Mensaje en linea, no modal. Para interrumpir al usuario con una decision usa
+ * Mensaje en línea, no modal. Para interrumpir al usuario con una decisión usa
  * `AlertDialog`.
  *
  * `danger` y `warning` se anuncian con `role="alert"` (interrumpe al lector de

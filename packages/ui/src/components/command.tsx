@@ -12,7 +12,7 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
       data-slot="command"
       className={cn(
         /* Con `rounded-[inherit]` el fondo sigue el radio del contenedor que lo
-           envuelve. Sin eso pinta un rectangulo recto que desborda las esquinas
+           envuelve. Sin eso pinta un rectángulo recto que desborda las esquinas
            redondeadas de un Popover o un Dialog. */
         "flex h-full w-full flex-col overflow-hidden rounded-[inherit] bg-popover text-popover-foreground",
         className,
@@ -55,7 +55,7 @@ export type CommandInputProps = React.ComponentProps<typeof CommandPrimitive.Inp
   /** Clases del envoltorio. `className` va al `input`, no al contenedor. */
   wrapperClassName?: string;
 
-  /** Sustituye el icono de busqueda. `null` lo quita. */
+  /** Sustituye el icono de búsqueda. `null` lo quita. */
   icon?: React.ReactNode;
 };
 

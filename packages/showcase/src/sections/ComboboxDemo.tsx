@@ -45,7 +45,7 @@ const CATALOGO = [
   "elise-i18n",
 ];
 
-/** Compone las partes directamente: filtrado del "servidor" y una accion al pie. */
+/** Compone las partes directamente: filtrado del "servidor" y una acción al pie. */
 const BusquedaAsincrona = () => {
   const [abierto, setAbierto] = useState(false);
   const [texto, setTexto] = useState("");

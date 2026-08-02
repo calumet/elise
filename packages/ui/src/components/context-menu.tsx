@@ -8,11 +8,11 @@ const baseItem =
 
 /* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
    modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
-   px-3. Mezcladas en el mismo menu, cada fila empezaba en una x distinta.
+   px-3. Mezcladas en el mismo menú, cada fila empezaba en una x distinta.
 
-   La canaleta se reserva solo cuando el menu de verdad trae una fila con
-   indicador, que es para lo que sirve data-slot. Un menu de puras acciones se
-   queda sin sangria y no gana un hueco vacio a la izquierda. */
+   La canaleta se reserva solo cuando el menú de verdad trae una fila con
+   indicador, que es para lo que sirve data-slot. Un menú de puras acciones se
+   queda sin sangría y no gana un hueco vacío a la izquierda. */
 const canaletaIndicador =
   "[&:has([data-slot=context-menu-checkbox-item],[data-slot=context-menu-radio-item])_[data-slot=context-menu-item]]:pl-7 [&:has([data-slot=context-menu-checkbox-item],[data-slot=context-menu-radio-item])_[data-slot=context-menu-sub-trigger]]:pl-7";
 

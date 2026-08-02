@@ -14,7 +14,7 @@ type StackBase = React.ComponentProps<"div"> & {
 export type BlockStackProps = StackBase;
 
 export type InlineStackProps = StackBase & {
-  /** Permite que los hijos bajen de linea cuando no entran. */
+  /** Permite que los hijos bajen de línea cuando no entran. */
   wrap?: boolean;
 };
 
@@ -52,7 +52,7 @@ const justifyClasses: Record<NonNullable<StackBase["justify"]>, string> = {
 /**
  * Apila en el eje de bloque (vertical en escritura horizontal).
  *
- * Se nombra por el eje logico de CSS y no por "vertical", para que siga siendo
+ * Se nombra por el eje lógico de CSS y no por "vertical", para que siga siendo
  * correcto en modos de escritura distintos.
  */
 function BlockStack({
@@ -78,7 +78,7 @@ function BlockStack({
   );
 }
 
-/** Apila en el eje en linea (horizontal en escritura horizontal). */
+/** Apila en el eje en línea (horizontal en escritura horizontal). */
 function InlineStack({
   className,
   as: Comp = "div",

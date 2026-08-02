@@ -22,7 +22,7 @@ export type BoxProps = React.ComponentProps<"div"> & {
 };
 
 /* Cada valor de la escala aparece literal en su propio mapa, porque Tailwind no
-   detecta las clases construidas por interpolacion. */
+   detecta las clases construidas por interpolación. */
 export const paddingClasses: Record<SpaceScale, string> = {
   0: "p-0",
   1: "p-1",
@@ -94,8 +94,8 @@ const shadowClasses: Record<NonNullable<BoxProps["shadow"]>, string> = {
 };
 
 /**
- * Contenedor generico. Solo expone las propiedades que el sistema controla
- * (espaciado, superficie, borde, radio y elevacion) y siempre a traves de
+ * Contenedor genérico. Solo expone las propiedades que el sistema controla
+ * (espaciado, superficie, borde, radio y elevación) y siempre a través de
  * tokens, sin aceptar valores arbitrarios. Para cualquier otra cosa, `className`.
  */
 function Box({

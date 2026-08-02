@@ -11,17 +11,17 @@ export type TextProps = React.ComponentProps<"p"> & {
   tone?: "default" | "muted" | "primary" | "success" | "warning" | "danger" | "info";
   align?: "start" | "center" | "end";
 
-  /** Corta en una linea con elipsis. */
+  /** Corta en una línea con elipsis. */
   truncate?: boolean;
 
-  /** Corta a N lineas con elipsis. Tiene prioridad sobre `truncate`. */
+  /** Corta a N líneas con elipsis. Tiene prioridad sobre `truncate`. */
   lines?: 2 | 3 | 4;
 
-  /** Evita que la ultima linea quede huerfana. Util en titulos. */
+  /** Evita que la última línea quede huérfana. Útil en títulos. */
   balance?: boolean;
 };
 
-/* Los mapas son estaticos a proposito. Tailwind escanea el código fuente en
+/* Los mapas son estáticos a propósito. Tailwind escanea el código fuente en
    build y nunca genera una clase construida por interpolación. */
 const sizeClasses: Record<NonNullable<TextProps["size"]>, string> = {
   "2xs": "text-2xs",
@@ -64,8 +64,8 @@ const lineClasses: Record<NonNullable<TextProps["lines"]>, string> = {
 };
 
 /**
- * Primitiva tipografica. Cada `size` trae su interlineado y su tracking
- * emparejados desde los tokens, asi que no hay que combinar `text-*` con
+ * Primitiva tipográfica. Cada `size` trae su interlineado y su tracking
+ * emparejados desde los tokens, así que no hay que combinar `text-*` con
  * `leading-*` y `tracking-*` a mano.
  *
  * `as` y `size` son independientes: un `h2` puede verse pequeño sin dejar de

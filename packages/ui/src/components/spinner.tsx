@@ -18,7 +18,7 @@ const sizeClasses: Record<NonNullable<SpinnerProps["size"]>, string> = {
 
 /**
  * Indicador de carga indeterminado. Hereda el color del texto (`currentColor`),
- * asi que se tiñe con cualquier utilidad `text-*`.
+ * así que se tiñe con cualquier utilidad `text-*`.
  *
  * Lleva `data-motion="essential"` para seguir girando bajo
  * `prefers-reduced-motion`, porque un spinner detenido no comunica que algo

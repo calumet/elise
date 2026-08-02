@@ -10,7 +10,7 @@ export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 12;
 export type GridProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 
-  /** Columnas en el ancho mas chico. Los demas breakpoints heredan de este. */
+  /** Columnas en el ancho más chico. Los demás breakpoints heredan de este. */
   columns?: GridColumns;
   smColumns?: GridColumns;
   mdColumns?: GridColumns;
@@ -20,8 +20,8 @@ export type GridProps = React.ComponentProps<"div"> & {
   align?: "start" | "center" | "end" | "stretch";
 };
 
-/* Un mapa por breakpoint. Tailwind necesita la clase literal en el fuente, asi
-   que `sm:grid-cols-${n}` no se generaria. */
+/* Un mapa por breakpoint. Tailwind necesita la clase literal en el fuente, así
+   que `sm:grid-cols-${n}` no se generaría. */
 const columnClasses: Record<GridColumns, string> = {
   1: "grid-cols-1",
   2: "grid-cols-2",
@@ -70,8 +70,8 @@ const alignClasses: Record<NonNullable<GridProps["align"]>, string> = {
 };
 
 /**
- * Rejilla de columnas, mobile-first (el ancho mas chico manda por defecto).
- * `columns` aplica desde ahi y `smColumns` / `mdColumns` / `lgColumns` lo van
+ * Rejilla de columnas, mobile-first (el ancho más chico manda por defecto).
+ * `columns` aplica desde ahí y `smColumns` / `mdColumns` / `lgColumns` lo van
  * sobrescribiendo hacia arriba.
  */
 function Grid({

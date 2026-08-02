@@ -20,8 +20,8 @@ const sizeClasses: Record<NonNullable<ContainerProps["size"]>, string> = {
 };
 
 /**
- * Centra el contenido y le pone un ancho maximo. Evita que cada pantalla
- * invente su propio `max-w-*` y que las lineas de texto queden demasiado largas
+ * Centra el contenido y le pone un ancho máximo. Evita que cada pantalla
+ * invente su propio `max-w-*` y que las líneas de texto queden demasiado largas
  * para leerse.
  */
 function Container({

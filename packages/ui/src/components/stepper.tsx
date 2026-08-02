@@ -19,11 +19,11 @@ export type StepperProps = React.ComponentProps<"ol"> & {
 /**
  * Indicador de progreso por pasos.
  *
- * Se renderiza como `<ol>`, ya que el orden es la informacion que el componente
+ * Se renderiza como `<ol>`, ya que el orden es la información que el componente
  * transmite y un lector de pantalla debe poder anunciar "paso 2 de 4".
  *
  * El estado de cada paso lo decide quien lo usa, con `status`. El componente no
- * lo deduce de un indice, porque un flujo real salta pasos y vuelve atras.
+ * lo deduce de un índice, porque un flujo real salta pasos y vuelve atrás.
  */
 function Stepper({ className, orientation = "horizontal", ...props }: StepperProps) {
   const ctx = React.useMemo(() => ({ orientation }), [orientation]);
@@ -46,10 +46,10 @@ function Stepper({ className, orientation = "horizontal", ...props }: StepperPro
 export type StepperItemProps = React.ComponentProps<"li"> & {
   status?: StepStatus;
 
-  /** Numero o icono dentro del indicador. Por defecto, la posicion del paso. */
+  /** Número o icono dentro del indicador. Por defecto, la posición del paso. */
   indicator?: React.ReactNode;
 
-  /** Oculta la linea de union. Ponelo en el ultimo paso. */
+  /** Oculta la línea de unión. Ponelo en el último paso. */
   last?: boolean;
 };
 

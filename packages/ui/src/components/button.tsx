@@ -11,12 +11,12 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   asChild?: boolean;
 };
 
-/* El foco sigue la convencion unica del design system (ver CONTRIBUTING.md).
+/* El foco sigue la convención única del design system (ver CONTRIBUTING.md).
    Antes este componente usaba ring-1/ring-offset-1, distinto del resto. */
 const baseClasses =
   "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-semibold tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:border-border disabled:shadow-none";
 
-/* Los rellenos solidos llevan bisel, que al presionar se invierte hacia adentro
+/* Los rellenos sólidos llevan bisel, que al presionar se invierte hacia adentro
    en lugar de solo oscurecer el fondo. Las variantes outline/ghost se apoyan en
    las superficies sutiles y no derivan el fondo con opacidad. */
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
@@ -76,9 +76,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "solid", size = "md", tone, asChild = false, type, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const toneClass = tone ? toneOverrides[tone][variant] : undefined;
-    /* El default de HTML para `type` es "submit", asi que un Button dentro de un
-       form lo enviaba aunque solo llevara onClick. Quien envie tiene que pedir
-       `type="submit"` explicitamente. Con `asChild` no se fuerza nada, porque el
+    /* El default de HTML para `type` es "submit", así que un Button dentro de un
+       form lo enviaba aunque solo llevara onClick. Quien envíe tiene que pedir
+       `type="submit"` explícitamente. Con `asChild` no se fuerza nada, porque el
        hijo puede ser un <a> y `type` no le corresponde. */
     return (
       <Comp
