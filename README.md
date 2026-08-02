@@ -127,6 +127,7 @@ Consulta la documentación completa en [`./docs`](docs/):
 - [Internacionalización (i18n)](docs/i18n.md)
 - [Linter y formato](docs/linter.md)
 - [Auditoría visual](docs/auditoria-visual.md)
+- [Plan de modernización](docs/plan.md)
 - [Referencias externas](docs/referencias.md)
 
 ## Licencia

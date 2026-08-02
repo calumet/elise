@@ -53,6 +53,19 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 | **ESLint**            | Linter de código (flat config)                       | https://eslint.org/                                             |
 | **Prettier**          | Formateador de código                                | https://prettier.io/                                            |
 
+## Design systems de referencia
+
+No son dependencias. Se consultan para decidir gramática de tokens, división de
+componentes y alcance del catálogo; el [plan](plan.md) detalla qué se toma de
+cada uno.
+
+| Sistema               | Se consulta para                                                               |
+| --------------------- | ------------------------------------------------------------------------------ |
+| **Polaris** (Shopify) | Gramática de tokens y el patrón de primitivo componible más envoltorio opinado |
+| **Astryx** (Meta)     | El modelo de tres capas y el alcance del catálogo                              |
+
+Documentación: https://polaris.shopify.com/ y https://astryx.meta.com/
+
 ---
 
 Volver a: [Guía de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Linter y formato](linter.md) | [Componentes](componentes.md) | [Utilidades](utilidades.md)
