@@ -54,7 +54,8 @@ export type ComboboxProps = {
 
 /**
  * Raiz del combobox. Sostiene el valor y el estado de apertura, y monta el
- * `Popover`. No pinta nada por su cuenta: las partes se componen adentro.
+ * `Popover`. No pinta nada por su cuenta; lo visible sale de las partes que se
+ * componen adentro.
  *
  * ```tsx
  * <Combobox value={v} onValueChange={setV}>
@@ -71,7 +72,7 @@ export type ComboboxProps = {
  * </Combobox>
  * ```
  *
- * Para el caso comun —un array de opciones— existe `ComboboxField`, construido
+ * Para el caso comun de un array de opciones existe `ComboboxField`, construido
  * sobre estas mismas partes.
  */
 function Combobox({
@@ -131,11 +132,11 @@ export type MultiComboboxProps = Omit<ComboboxProps, "value" | "defaultValue" | 
 
 /**
  * Igual que `Combobox` pero acumula varios valores. Elegir un item que ya estaba
- * lo quita, y el panel se queda abierto por defecto — cerrar despues de cada
- * eleccion obliga a reabrir para la siguiente.
+ * lo quita, y el panel se queda abierto por defecto para no obligar a reabrirlo
+ * en cada eleccion.
  *
- * Comparte todas las partes con `Combobox`: `ComboboxItem` marca como elegido
- * cualquier valor que este en la seleccion.
+ * Comparte todas las partes con `Combobox`, donde `ComboboxItem` marca como
+ * elegido cualquier valor que este en la seleccion.
  */
 function MultiCombobox({
   value: valueProp,
@@ -215,7 +216,7 @@ function ComboboxTrigger({
   const mostrarLimpiar = Boolean(onClear) && !disabled;
 
   return (
-    /* El boton de limpiar es hermano del disparador, no hijo: un <button>
+    /* El boton de limpiar va como hermano del disparador, porque un <button>
        dentro de otro <button> es HTML invalido. */
     <div className="relative w-full">
       <PopoverTrigger asChild>
@@ -231,8 +232,8 @@ function ComboboxTrigger({
           )}
           {...props}
         >
-          {/* El hueco para la X va en el contenido, no en el boton: con padding
-              en el boton el chevron se corre hacia adentro y queda debajo. */}
+          {/* El hueco para la X va en el contenido. Con el padding puesto en el
+              boton, el chevron se corre hacia adentro y queda debajo. */}
           <span className={cn("min-w-0 flex-1 truncate text-left", mostrarLimpiar && "pr-6")}>
             {children}
           </span>
@@ -260,9 +261,10 @@ export type ComboboxValueProps = React.ComponentProps<"span"> & {
 /**
  * Texto del disparador. Si no recibe `children`, cae en el placeholder.
  *
- * El primitivo no adivina la etiqueta a partir del valor: los items viven
- * dentro del panel y se desmontan al cerrarlo. Quien compone es dueño de su
- * estado y pasa el texto; `ComboboxField` lo resuelve desde sus `options`.
+ * Los items viven dentro del panel y se desmontan al cerrarlo, de modo que el
+ * primitivo no puede deducir la etiqueta a partir del valor. Quien compone es
+ * dueño de su estado y pasa el texto; `ComboboxField` lo resuelve desde sus
+ * `options`.
  */
 function ComboboxValue({ className, placeholder, children, ...props }: ComboboxValueProps) {
   const phDefecto = useElLabel("ui", "comboboxPlaceholder", "Seleccionar…");
@@ -381,8 +383,8 @@ export type ComboboxItemProps = Omit<
  * Opcion de la lista.
  *
  * El check va al final de la fila y solo existe cuando el item esta elegido, en
- * vez de reservarle una columna al inicio. Asi todas las filas —opciones,
- * acciones, elegidas o no— arrancan en la misma x, que es como lo resuelve
+ * vez de reservarle una columna al inicio. Asi todas las filas (opciones,
+ * acciones, elegidas o no) arrancan en la misma x, que es como lo resuelve
  * Polaris en su `TextOption`. Con el check al inicio, cualquier fila sin el
  * queda corrida el ancho del icono.
  */
@@ -466,9 +468,9 @@ export type ComboboxFieldProps = {
 } & Omit<React.ComponentProps<"button">, "value" | "defaultValue" | "onChange" | "name">;
 
 /**
- * Combobox listo para el caso comun: un array de opciones. Esta construido
- * sobre las partes de `Combobox`, asi que no puede hacer nada que el primitivo
- * no permita.
+ * Combobox para el caso comun de un array de opciones. Esta construido sobre
+ * las partes de `Combobox`, asi que no puede hacer nada que el primitivo no
+ * permita.
  *
  * Para carga asincrona, secciones a medida o acciones dentro de la lista, compone
  * las partes directamente.
@@ -618,10 +620,7 @@ function MultiComboboxField({
   }, [options]);
 
   return (
-    <MultiCombobox
-      value={valores}
-      onValueChange={cambiar}
-    >
+    <MultiCombobox value={valores} onValueChange={cambiar}>
       <ComboboxTrigger
         size={size}
         disabled={disabled}
@@ -636,10 +635,10 @@ function MultiComboboxField({
             {visibles.map((o) => (
               <Badge key={o.value} tone="neutral" size="sm" className="gap-1 pr-1">
                 {o.label}
-                {/* Un <span> con rol, no un <button>: esto vive dentro del
-                    disparador, y un boton dentro de otro es HTML invalido. El
-                    click se atiende igual y el disparador sigue siendo el
-                    control enfocable. */}
+                {/* La X va como <span> con rol de boton, ya que anidarla como
+                    <button> dentro del disparador seria HTML invalido. El click
+                    se atiende igual y el disparador sigue siendo el control
+                    enfocable. */}
                 <span
                   role="button"
                   aria-label={`${quitarLabel} ${o.label}`}

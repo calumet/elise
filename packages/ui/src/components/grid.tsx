@@ -20,7 +20,7 @@ export type GridProps = React.ComponentProps<"div"> & {
   align?: "start" | "center" | "end" | "stretch";
 };
 
-/* Un mapa por breakpoint: Tailwind necesita la clase literal en el fuente, asi
+/* Un mapa por breakpoint. Tailwind necesita la clase literal en el fuente, asi
    que `sm:grid-cols-${n}` no se generaria. */
 const columnClasses: Record<GridColumns, string> = {
   1: "grid-cols-1",
@@ -70,8 +70,9 @@ const alignClasses: Record<NonNullable<GridProps["align"]>, string> = {
 };
 
 /**
- * Rejilla de columnas. Mobile-first: `columns` aplica desde el ancho mas chico
- * y `smColumns` / `mdColumns` / `lgColumns` lo van sobrescribiendo hacia arriba.
+ * Rejilla de columnas, mobile-first (el ancho mas chico manda por defecto).
+ * `columns` aplica desde ahi y `smColumns` / `mdColumns` / `lgColumns` lo van
+ * sobrescribiendo hacia arriba.
  */
 function Grid({
   className,

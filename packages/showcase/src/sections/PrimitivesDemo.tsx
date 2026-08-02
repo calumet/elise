@@ -13,7 +13,7 @@ const PrimitivesDemo = () => (
   <BlockStack gap={8} className="w-full">
     <BlockStack gap={3}>
       <Text size="sm" weight="semibold">
-        Text — cada tamaño trae su interlineado y tracking
+        Text, con interlineado y tracking por tamaño
       </Text>
       <BlockStack gap={2}>
         {tamanos.map((size) => (
@@ -31,7 +31,7 @@ const PrimitivesDemo = () => (
 
     <BlockStack gap={3}>
       <Text size="sm" weight="semibold">
-        Box — superficie, borde, radio y elevación por token
+        Box toma superficie, borde, radio y elevación de los tokens
       </Text>
       <Grid columns={1} smColumns={2} lgColumns={4} gap={4}>
         <Box padding={4} background="card" border radius="xl" shadow="sm">
@@ -51,7 +51,7 @@ const PrimitivesDemo = () => (
 
     <BlockStack gap={3}>
       <Text size="sm" weight="semibold">
-        Grid — mobile-first, 1 → 2 → 3 columnas
+        Grid mobile-first, de 1 a 2 y a 3 columnas
       </Text>
       <Grid columns={1} smColumns={2} mdColumns={3} gap={3}>
         {["Diseño", "Ingeniería", "Producto", "Soporte", "Ventas", "Datos"].map((area) => (
@@ -64,7 +64,7 @@ const PrimitivesDemo = () => (
 
     <BlockStack gap={3}>
       <Text size="sm" weight="semibold">
-        Bleed — rompe el padding del contenedor
+        Bleed rompe el padding del contenedor
       </Text>
       <Grid columns={1} mdColumns={2} gap={4}>
         <Box background="card" border radius="xl" padding={4} overflowHidden>
@@ -102,7 +102,7 @@ const PrimitivesDemo = () => (
 
     <BlockStack gap={3}>
       <Text size="sm" weight="semibold">
-        InlineStack — align y justify
+        InlineStack, align y justify
       </Text>
       <Box padding={4} background="muted" radius="xl">
         <InlineStack gap={3} justify="between">

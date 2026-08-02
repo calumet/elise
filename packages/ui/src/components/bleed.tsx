@@ -15,8 +15,8 @@ export type BleedProps = React.ComponentProps<"div"> & {
   bottom?: SpaceScale;
 };
 
-/* Margenes negativos, uno por valor de la escala. Estaticos porque Tailwind no
-   ve las clases interpoladas. */
+/* Margenes negativos, uno por valor de la escala. Van literales, ya que
+   Tailwind no ve las clases interpoladas. */
 const allClasses: Record<SpaceScale, string> = {
   0: "-m-0",
   1: "-m-1",

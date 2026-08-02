@@ -14,8 +14,8 @@ export type AlertProps = React.ComponentProps<"div"> & {
   onDismiss?: () => void;
 };
 
-/* Superficie sutil sin borde: el color del fondo ya separa el bloque del resto
-   de la pagina, y un borde en el mismo tono lo vuelve ruidoso. */
+/* La superficie sutil va sin borde, porque el color del fondo ya separa el
+   bloque del resto de la pagina y un borde en el mismo tono agrega ruido. */
 const toneClasses: Record<NonNullable<AlertProps["tone"]>, string> = {
   info: "bg-info-subtle text-info-subtle-foreground",
   success: "bg-success-subtle text-success-subtle-foreground",

@@ -93,7 +93,7 @@ const CatalogoDemo = () => {
                 : `No pudimos agregar ${rechazados.length} archivos`}
             </AlertTitle>
             <AlertDescription>
-              {rechazados.map((r) => `${r.file.name} — ${motivo(r)}`).join(". ")}
+              {rechazados.map((r) => `${r.file.name} (${motivo(r)})`).join(". ")}
             </AlertDescription>
           </Alert>
         ) : null}
@@ -129,7 +129,12 @@ const CatalogoDemo = () => {
           ))}
         </Stepper>
         <InlineStack gap={2}>
-          <Button size="sm" variant="outline" disabled={paso === 0} onClick={() => setPaso(paso - 1)}>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={paso === 0}
+            onClick={() => setPaso(paso - 1)}
+          >
             Anterior
           </Button>
           <Button size="sm" disabled={paso === PASOS.length - 1} onClick={() => setPaso(paso + 1)}>

@@ -24,8 +24,8 @@ export type EliseTheme = {
   warningForeground: string;
 
   /* Tokens agregados despues de la v0.2. Son opcionales para no romper los
-     temas que ya se construyen como literal completo: si no los defines, el
-     valor del CSS se mantiene. `defaultLightTheme` / `defaultDarkTheme` si los
+     temas que ya se construyen como literal completo. Un tema que no los define
+     deja en pie el valor del CSS. `defaultLightTheme` y `defaultDarkTheme` los
      traen, asi que extenderlos con spread los incluye automaticamente. */
   borderStrong?: string;
   info?: string;
@@ -171,8 +171,8 @@ export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.do
   element.style.setProperty("--warning", theme.warning);
   element.style.setProperty("--warning-foreground", theme.warningForeground);
 
-  /* Los opcionales solo se escriben si el tema los define: asi un tema parcial
-     no borra los valores que ya vienen del CSS. */
+  /* Los opcionales solo se escriben si el tema los define, de modo que un tema
+     parcial no borra los valores que ya vienen del CSS. */
   const optional: Array<[string, string | undefined]> = [
     ["--border-strong", theme.borderStrong],
     ["--info", theme.info],

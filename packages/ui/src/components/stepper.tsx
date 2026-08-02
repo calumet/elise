@@ -19,9 +19,8 @@ export type StepperProps = React.ComponentProps<"ol"> & {
 /**
  * Indicador de progreso por pasos.
  *
- * Es una lista ordenada de verdad (`<ol>`), no una fila de divs: el orden es la
- * informacion que el componente transmite, y un lector de pantalla debe poder
- * anunciar "paso 2 de 4".
+ * Se renderiza como `<ol>`, ya que el orden es la informacion que el componente
+ * transmite y un lector de pantalla debe poder anunciar "paso 2 de 4".
  *
  * El estado de cada paso lo decide quien lo usa, con `status`. El componente no
  * lo deduce de un indice, porque un flujo real salta pasos y vuelve atras.

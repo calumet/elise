@@ -21,8 +21,8 @@ const sizeClasses: Record<NonNullable<SpinnerProps["size"]>, string> = {
  * asi que se tiñe con cualquier utilidad `text-*`.
  *
  * Lleva `data-motion="essential"` para seguir girando bajo
- * `prefers-reduced-motion`: un spinner detenido no comunica que algo sigue en
- * curso, que es lo contrario de lo que la preferencia busca.
+ * `prefers-reduced-motion`, porque un spinner detenido no comunica que algo
+ * sigue en curso.
  */
 function Spinner({ className, size = "md", label, ...props }: SpinnerProps) {
   const fallback = useElLabel("ui", "loading", "Cargando");

@@ -11,7 +11,7 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        /* `rounded-[inherit]`: el fondo sigue el radio del contenedor que lo
+        /* Con `rounded-[inherit]` el fondo sigue el radio del contenedor que lo
            envuelve. Sin eso pinta un rectangulo recto que desborda las esquinas
            redondeadas de un Popover o un Dialog. */
         "flex h-full w-full flex-col overflow-hidden rounded-[inherit] bg-popover text-popover-foreground",

@@ -132,7 +132,7 @@ const sonda = () => {
     const w = Math.round(r.width * 100) / 100;
     const h = Math.round(r.height * 100) / 100;
     /* Los iconos decorativos que escalan con su caja (logos, ilustraciones)
-       quedan fuera: solo se auditan los que declaran un tamano fijo. */
+       quedan fuera, ya que solo se auditan los que declaran un tamano fijo. */
     if (Math.abs(w - h) > 1) continue;
     if (w > 48) continue;
     if (!ICONOS.includes(Math.round(w))) anota("iconos", svg, `${w}x${h}px`);
@@ -180,8 +180,8 @@ const sonda = () => {
     a.top < b.bottom - 0.5 &&
     b.top < a.bottom - 0.5;
   /* Solo se busca solapamiento accidental, el que sale del flujo normal. Un
-     control posicionado en absoluto encima de otro suele ser deliberado —una X
-     de limpiar sobre su campo— y no es asunto de este chequeo. */
+     control posicionado en absoluto encima de otro suele ser deliberado (una X
+     de limpiar sobre su campo) y no es asunto de este chequeo. */
   const enFlujo = (el) => {
     const pos = getComputedStyle(el).position;
     return pos !== "absolute" && pos !== "fixed";
@@ -249,7 +249,7 @@ const sonda = () => {
 
   /* --- contraste --- */
   const cv = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
-  /* Devuelve [r,g,b,a] de cualquier formato CSS —oklch incluido— dejando que el
+  /* Devuelve [r,g,b,a] de cualquier formato CSS, oklch incluido, dejando que el
      canvas haga la conversion. */
   const aRgba = (css) => {
     cv.clearRect(0, 0, 1, 1);
@@ -267,9 +267,9 @@ const sonda = () => {
     });
     return 0.2126 * s[0] + 0.7152 * s[1] + 0.0722 * s[2];
   };
-  /* Un fondo semitransparente no es su color: hay que componerlo contra lo que
-     tiene detras, subiendo hasta encontrar algo opaco. Tratarlo como opaco daba
-     lecturas absurdas — 1.09:1 en texto perfectamente legible. */
+  /* Un fondo semitransparente se compone contra lo que tiene detras, subiendo
+     hasta encontrar algo opaco. Tratarlo como si fuera solido daba lecturas
+     absurdas, 1.09:1 en texto perfectamente legible. */
   const fondoEfectivo = (el) => {
     const capas = [];
     for (let n = el; n; n = n.parentElement) {
@@ -286,8 +286,8 @@ const sonda = () => {
   for (const el of todos) {
     const propio = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
     if (!propio) continue;
-    /* El texto solo para lectores de pantalla se recorta a 1px y nunca se ve:
-       medirle contraste no dice nada. */
+    /* El texto solo para lectores de pantalla se recorta a 1px y nunca se ve,
+       de modo que medirle contraste no dice nada. */
     const caja = el.getBoundingClientRect();
     if (caja.width <= 1 || caja.height <= 1) continue;
     const cs = getComputedStyle(el);
@@ -301,12 +301,12 @@ const sonda = () => {
     const [l1, l2] = [lum(texto), lum(fondo)].sort((a, b) => b - a);
     const ratio = (l1 + 0.05) / (l2 + 0.05);
     if (ratio < minimo) {
-      /* El detalle lleva los colores crudos: un numero sin evidencia no se
-         puede refutar, y un fallo de la sonda se confunde con uno del tema. */
+      /* El detalle lleva los colores crudos, porque un numero sin evidencia no
+         se puede refutar y un fallo de la sonda se confunde con uno del tema. */
       anota(
         "contraste",
         el,
-        `${ratio.toFixed(2)}:1 (min ${minimo}) — "${el.textContent.trim().slice(0, 20)}" ` +
+        `${ratio.toFixed(2)}:1 (min ${minimo}) en "${el.textContent.trim().slice(0, 20)}", ` +
           `texto ${cs.color} sobre rgb(${fondo.map(Math.round).join(",")})`,
       );
     }
@@ -341,7 +341,7 @@ try {
   process.exit(2);
 }
 
-/* Las secciones son React.lazy: recorrer la pagina para montarlas todas. */
+/* Las secciones son React.lazy, asi que se recorre la pagina para montarlas. */
 await pagina.evaluate(async () => {
   const paso = window.innerHeight;
   for (let y = 0; y < document.body.scrollHeight; y += paso) {
@@ -368,8 +368,8 @@ const recolectar = async (contexto) => {
   for (const f of fallos) todosLosFallos.push({ ...f, contexto });
 };
 
-/* Un color a mitad de transicion se lee como un valor que nadie escribio —Chrome
-   lo reporta como `oklab(...)`— y produce fallos fantasma. Se congelan las
+/* Un color a mitad de transicion se lee como un valor que nadie escribio (Chrome
+   lo reporta como `oklab(...)`) y produce fallos fantasma. Se congelan las
    transiciones antes de medir. */
 const congelarMovimiento = async () => {
   await pagina.addStyleTag({
@@ -385,8 +385,8 @@ const auditarTema = async (nombre) => {
   await congelarMovimiento();
   await recolectar(nombre);
 
-  /* Los paneles flotantes solo existen abiertos: ahi vive la mitad de los
-     defectos de alineacion y recorte. */
+  /* Los paneles flotantes solo existen abiertos, y es ahi donde vive la mitad
+     de los defectos de alineacion y recorte. */
   if (!ABRIR_PANELES) return;
   const disparadores = await pagina.locator('[data-slot$="-trigger"]:visible').all();
   for (const [n, d] of disparadores.entries()) {
@@ -403,12 +403,12 @@ const auditarTema = async (nombre) => {
   }
 };
 
-/* El tema oscuro tiene sus propios valores, no es una inversion del claro:
-   auditar solo uno deja la mitad del sistema sin comprobar.
+/* El tema oscuro tiene sus propios valores; auditar solo el claro deja la mitad
+   del sistema sin comprobar.
  *
- * Se cambia por el control de la app, no forzando la clase en <html>: el
- * ThemeProvider es dueño de ese atributo y en su siguiente render lo reescribe,
- * dejando la pagina a medio camino entre los dos temas. */
+ * El cambio se hace por el control de la app. El ThemeProvider es dueño de ese
+ * atributo y lo reescribe en su siguiente render, con lo cual forzar la clase en
+ * <html> deja la pagina a medio camino entre los dos temas. */
 const cambiarATemaOscuro = async () => {
   const toggle = pagina.getByRole("button", { name: /^dark$/i }).first();
   if (await toggle.count()) {
@@ -442,7 +442,7 @@ const unicos = [
   ...new Map(todosLosFallos.map((f) => [`${f.chequeo}|${f.ruta}|${f.detalle}`, f])).values(),
 ];
 
-console.log(`\nAuditoria visual — ${URL}${ABRIR_PANELES ? " (con paneles)" : ""}\n`);
+console.log(`\nAuditoria visual de ${URL}${ABRIR_PANELES ? " (con paneles)" : ""}\n`);
 
 let fallando = 0;
 for (const c of CHEQUEOS) {

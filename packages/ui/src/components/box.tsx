@@ -21,8 +21,8 @@ export type BoxProps = React.ComponentProps<"div"> & {
   overflowHidden?: boolean;
 };
 
-/* Mapas estaticos: Tailwind no puede ver una clase construida por
-   interpolacion, asi que cada valor posible tiene que aparecer literal. */
+/* Cada valor de la escala aparece literal en su propio mapa, porque Tailwind no
+   detecta las clases construidas por interpolacion. */
 export const paddingClasses: Record<SpaceScale, string> = {
   0: "p-0",
   1: "p-1",
@@ -95,8 +95,8 @@ const shadowClasses: Record<NonNullable<BoxProps["shadow"]>, string> = {
 
 /**
  * Contenedor generico. Solo expone las propiedades que el sistema controla
- * —espaciado, superficie, borde, radio y elevacion— y siempre a traves de
- * tokens: no acepta valores arbitrarios. Para cualquier otra cosa, `className`.
+ * (espaciado, superficie, borde, radio y elevacion) y siempre a traves de
+ * tokens, sin aceptar valores arbitrarios. Para cualquier otra cosa, `className`.
  */
 function Box({
   className,

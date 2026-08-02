@@ -52,8 +52,8 @@ const justifyClasses: Record<NonNullable<StackBase["justify"]>, string> = {
 /**
  * Apila en el eje de bloque (vertical en escritura horizontal).
  *
- * Se nombra por el eje logico de CSS, no por "vertical", para que el nombre
- * siga siendo correcto en modos de escritura distintos.
+ * Se nombra por el eje logico de CSS y no por "vertical", para que siga siendo
+ * correcto en modos de escritura distintos.
  */
 function BlockStack({
   className,

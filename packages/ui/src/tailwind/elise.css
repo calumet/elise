@@ -11,8 +11,8 @@
   --spacing: 0.25rem;
 
   /* Escala tipográfica propia. Cada tamaño empaqueta su interlineado y su
-     tracking: el tracking se aprieta progresivamente al crecer el tamaño
-     (corrección óptica). El chrome de la UI vive en --text-sm / --text-base. */
+     tracking, que se aprieta progresivamente al crecer el tamaño por corrección
+     óptica. El chrome de la UI vive en --text-sm / --text-base. */
   --text-2xs: 0.6875rem; /* 11px */
   --text-2xs--line-height: 1rem;
   --text-2xs--letter-spacing: 0.01em;
@@ -45,8 +45,8 @@
   --text-3xl--line-height: 2.25rem;
   --text-3xl--letter-spacing: -0.026em;
 
-  /* Curvas de salida propias: la de Tailwind por defecto es demasiado suave
-     para transiciones de UI cortas. */
+  /* Curvas de salida propias, porque la de Tailwind por defecto es demasiado
+     suave para transiciones de UI cortas. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
@@ -64,8 +64,8 @@
 }
 
 :root {
-  /* Superficies: el fondo de página se separa de las tarjetas. Con ambos en
-     blanco puro una Card solo se distinguía por su borde de 1px. */
+  /* El fondo de página se separa de las tarjetas. Con ambos en blanco puro una
+     Card solo se distinguía por su borde de 1px. */
   --background: oklch(0.984 0.002 265);
   --foreground: oklch(0.21 0.012 265);
   --card: oklch(1 0 0);
@@ -112,9 +112,9 @@
   --info-foreground: oklch(1 0 0);
 
   /* Estados de los rellenos sólidos. Antes se derivaban con alfa
-     (`bg-primary/90`), que compone el color contra el fondo y por lo tanto
-     mueve el relleno *hacia* la página: el hover bajaba el contraste. Estos
-     tokens se alejan del fondo — en claro oscurecen, en oscuro aclaran. */
+     (`bg-primary/90`), que compone el color contra el fondo y mueve el relleno
+     *hacia* la página, así que el hover bajaba el contraste. Estos tokens se
+     alejan del fondo (en claro oscurecen, en oscuro aclaran). */
   --primary-hover: oklch(0.5 0.19 262);
   --primary-active: oklch(0.455 0.18 262);
   --destructive-hover: oklch(0.53 0.22 27);
@@ -127,7 +127,8 @@
   --info-active: oklch(0.455 0.145 240);
 
   /* Superficies sutiles de estado. Reemplazan los `bg-success/10` y
-     `bg-warning/20`: el alfa sobre fondo oscuro se enloda, un token no. */
+     `bg-warning/20`, ya que el alfa sobre fondo oscuro se enloda y un token
+     sólido no. */
   --success-subtle: oklch(0.962 0.032 152);
   --success-subtle-foreground: oklch(0.4 0.11 152);
   --warning-subtle: oklch(0.965 0.045 85);
@@ -141,8 +142,8 @@
      y despues el nombre plano, para que resuelva tanto con
      `@calumet/elise-ui/tailwind/fonts.css` como si la app carga la fuente por
      su cuenta. Antes el stack empezaba por "Geist", que el paquete nunca
-     cargaba, y por "Geist Fallback", que no existe en ningun lado: en la
-     practica todo caia en la fuente del sistema. */
+     cargaba, y por "Geist Fallback", que no existe en ningun lado, de modo que
+     en la practica todo caia en la fuente del sistema. */
   --font-sans:
     "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -176,9 +177,9 @@
   --shadow-2xl:
     0 12px 24px -6px oklch(0.21 0.02 265 / 0.16), 0 36px 64px -16px oklch(0.21 0.02 265 / 0.26);
   /* Bisel para rellenos sólidos: borde inferior oscuro + highlight superior.
-     Es lo que hace que un botón se lea como objeto y no como un rectángulo.
-     El estado presionado invierte el bisel hacia adentro, en vez de solo
-     oscurecer el fondo. */
+     Hace que un botón se lea como objeto y no como un rectángulo. El estado
+     presionado invierte el bisel hacia adentro, en vez de solo oscurecer el
+     fondo. */
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16);
   --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
 }
@@ -192,8 +193,8 @@
   /* popover se eleva por encima de card, no al mismo nivel */
   --popover: oklch(0.235 0.012 265);
   --popover-foreground: oklch(0.962 0.003 265);
-  /* primary aclarado: el mismo 0.55 del modo claro quedaba apagado sobre el
-     fondo oscuro. Con L 0.655 el texto encima pasa a ser oscuro para AA. */
+  /* primary sube a 0.655 porque el 0.55 del modo claro quedaba apagado sobre el
+     fondo oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
   --primary: oklch(0.655 0.17 262);
   --primary-foreground: oklch(0.17 0.03 262);
   --secondary: oklch(0.262 0.012 265);
@@ -202,9 +203,10 @@
   --muted-foreground: oklch(0.685 0.014 265);
   --accent: oklch(0.33 0.09 262);
   --accent-foreground: oklch(0.89 0.06 255);
-  /* Excepcion a la regla de aclarar en oscuro: destructive lleva texto blanco y
-     aclararlo lo baja de 4.5:1. Se queda en 0.577 y sus estados oscurecen, que
-     igual lo separa del fondo (0.172) y de paso sube el contraste del texto. */
+  /* Excepcion a la regla de aclarar en oscuro. Como destructive lleva texto
+     blanco, aclararlo lo baja de 4.5:1. Se queda en 0.577 y sus estados
+     oscurecen, que igual lo separa del fondo (0.172) y de paso sube el
+     contraste del texto. */
   --destructive: oklch(0.577 0.225 27);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.302 0.013 265);
@@ -231,7 +233,7 @@
   --info: oklch(0.68 0.14 240);
   --info-foreground: oklch(0.16 0.03 240);
 
-  /* En oscuro el hover aclara: alejarse del fondo es lo que sube el contraste. */
+  /* En oscuro el hover aclara, ya que alejarse del fondo sube el contraste. */
   --primary-hover: oklch(0.705 0.165 262);
   --primary-active: oklch(0.75 0.15 262);
   --destructive-hover: oklch(0.53 0.22 27);
@@ -252,8 +254,9 @@
   --info-subtle: oklch(0.285 0.055 240);
   --info-subtle-foreground: oklch(0.85 0.1 240);
 
-  /* Sombras propias del modo oscuro: negro al 10% sobre un fondo oklch(0.17)
-     es invisible. Además suman un highlight inset en el borde superior. */
+  /* El modo oscuro lleva sombras propias. Negro al 10% sobre un fondo
+     oklch(0.17) es invisible. Además suman un highlight inset en el borde
+     superior. */
   --shadow-2xs: 0 1px 1px -0.5px oklch(0 0 0 / 0.3);
   --shadow-xs: 0 1px 2px -1px oklch(0 0 0 / 0.4);
   --shadow-sm: 0 1px 2px -1px oklch(0 0 0 / 0.5), 0 2px 6px -2px oklch(0 0 0 / 0.45);
@@ -370,9 +373,8 @@
     color: var(--color-accent-foreground);
   }
 
-  /* Neutraliza el movimiento decorativo. `[data-motion="essential"]` queda
-     fuera: un indicador de carga que no gira deja de comunicar que algo esta
-     pasando, que es justo lo contrario de lo que busca esta preferencia. */
+  /* Neutraliza el movimiento decorativo, salvo `[data-motion="essential"]`. Un
+     indicador de carga que no gira deja de comunicar que algo esta pasando. */
   @media (prefers-reduced-motion: reduce) {
     *:not([data-motion="essential"]),
     *:not([data-motion="essential"])::before,

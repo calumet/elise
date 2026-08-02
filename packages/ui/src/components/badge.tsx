@@ -19,12 +19,12 @@ const sizeClasses: Record<NonNullable<BadgeProps["size"]>, string> = {
   md: "h-6 px-2.5 text-xs",
 };
 
-/* Las superficies suaves salen de los tokens `-subtle`, no de opacidad sobre el
-   color solido: el alfa sobre fondo oscuro se enloda. Ver docs/temas.md.
+/* Las superficies suaves salen de los tokens `-subtle` y no de opacidad sobre el
+   color solido, porque el alfa sobre fondo oscuro se enloda. Ver docs/temas.md.
 
    La variante `outline` usa el color solido para el borde pero el `-subtle-foreground`
-   para el texto: los solidos estan calibrados como relleno, y usados como texto
-   sobre la pagina no llegan a 4.5:1 — `warning` medido daba 2.18:1. */
+   para el texto, ya que los solidos estan calibrados como relleno. Usados como
+   texto sobre la pagina no llegan a 4.5:1 (`warning` medido daba 2.18:1). */
 const toneClasses: Record<
   NonNullable<BadgeProps["tone"]>,
   Record<NonNullable<BadgeProps["variant"]>, string>

@@ -21,8 +21,8 @@ export type TextProps = React.ComponentProps<"p"> & {
   balance?: boolean;
 };
 
-/* Los mapas son estaticos a proposito: Tailwind escanea el código fuente en
-   build, así que una clase construida por interpolación nunca se genera. */
+/* Los mapas son estaticos a proposito. Tailwind escanea el código fuente en
+   build y nunca genera una clase construida por interpolación. */
 const sizeClasses: Record<NonNullable<TextProps["size"]>, string> = {
   "2xs": "text-2xs",
   xs: "text-xs",

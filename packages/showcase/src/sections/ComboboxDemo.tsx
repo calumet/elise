@@ -105,7 +105,7 @@ const ComboboxDemo = () => {
     <BlockStack gap={6} className="w-full">
       <BlockStack gap={2}>
         <Text size="sm" weight="semibold">
-          ComboboxField — array de opciones
+          ComboboxField, array de opciones
         </Text>
         <Text size="xs" tone="muted">
           El envoltorio para el caso común, construido sobre las partes.
@@ -124,7 +124,7 @@ const ComboboxDemo = () => {
             searchPlaceholder="Buscar país…"
           />
           <Text size="xs" tone="muted">
-            Busca por nombre o por capital — "bogota" y "cdmx" también encuentran.
+            Busca por nombre o por capital: "bogota" y "cdmx" también encuentran.
           </Text>
         </BlockStack>
 
@@ -146,7 +146,7 @@ const ComboboxDemo = () => {
 
       <BlockStack gap={2}>
         <Text size="sm" weight="semibold">
-          Combobox — partes componibles
+          Combobox en partes componibles
         </Text>
         <Text size="xs" tone="muted">
           Filtrado externo con retardo simulado, fila de carga y una acción al pie de la lista.
