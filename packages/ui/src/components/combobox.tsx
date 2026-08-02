@@ -299,17 +299,26 @@ export type ComboboxItemProps = Omit<
   /** Terminos extra por los que el item tambien deberia encontrarse. */
   keywords?: string[];
 
-  /** Oculta el hueco del check. Para items que son acciones, no opciones. */
-  hideIndicator?: boolean;
+  /** Icono al inicio de la fila. Para items que son acciones, no opciones. */
+  icon?: React.ReactNode;
 
   onSelect?: (value: string) => void;
 };
 
+/**
+ * Opcion de la lista.
+ *
+ * El check va al final de la fila y solo existe cuando el item esta elegido, en
+ * vez de reservarle una columna al inicio. Asi todas las filas —opciones,
+ * acciones, elegidas o no— arrancan en la misma x, que es como lo resuelve
+ * Polaris en su `TextOption`. Con el check al inicio, cualquier fila sin el
+ * queda corrida el ancho del icono.
+ */
 function ComboboxItem({
   className,
   value,
   keywords,
-  hideIndicator,
+  icon,
   onSelect,
   children,
   ...props
@@ -329,16 +338,14 @@ function ComboboxItem({
       /* El fondo de cmdk (`data-selected`) marca el resaltado del teclado, que
          se mueve con las flechas. El *elegido* se distingue por peso, para que
          ambos estados se lean a la vez. */
-      className={cn(elegido && "font-semibold", className)}
+      className={cn("justify-between", elegido && "font-semibold", className)}
       {...props}
     >
-      {hideIndicator ? null : (
-        <Check
-          className={cn("size-4 shrink-0", elegido ? "text-primary" : "invisible")}
-          aria-hidden="true"
-        />
-      )}
-      {children}
+      <span className="flex min-w-0 flex-1 items-center gap-2">
+        {icon}
+        {children}
+      </span>
+      {elegido ? <Check className="size-4 shrink-0 text-primary" aria-hidden="true" /> : null}
     </CommandItem>
   );
 }

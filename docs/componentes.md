@@ -251,7 +251,7 @@ Para carga asincrona, secciones a medida o acciones dentro de la lista:
             </ComboboxItem>
           ))}
           <ComboboxSeparator />
-          <ComboboxItem value="__nuevo" hideIndicator onSelect={crear}>
+          <ComboboxItem value="__nuevo" onSelect={crear}>
             + Crear paquete nuevo
           </ComboboxItem>
         </>
@@ -271,7 +271,7 @@ Para carga asincrona, secciones a medida o acciones dentro de la lista:
 | `ComboboxList`      | Contenedor desplazable                                           |
 | `ComboboxEmpty`     | Mensaje de "sin resultados"                                      |
 | `ComboboxGroup`     | Seccion con encabezado                                           |
-| `ComboboxItem`      | Opcion. `keywords`, `hideIndicator` para items que son acciones  |
+| `ComboboxItem`      | Opcion. `keywords`, e `icon` para items que son acciones         |
 | `ComboboxSeparator` | Divisor                                                          |
 | `ComboboxLoading`   | Fila con spinner                                                 |
 
@@ -279,9 +279,15 @@ Para carga asincrona, secciones a medida o acciones dentro de la lista:
 > dentro del panel y se desmontan al cerrarlo. Quien compone es dueño de su
 > estado y pasa el texto — `ComboboxField` lo resuelve desde sus `options`.
 
-La opcion **elegida** se marca con peso semibold y un check; el fondo gris es el
-**resaltado del teclado**, que se mueve con las flechas. Son dos estados
-distintos y se leen a la vez.
+La opcion **elegida** se marca con peso semibold y un check al final de la fila;
+el fondo gris es el **resaltado del teclado**, que se mueve con las flechas. Son
+dos estados distintos y se leen a la vez.
+
+> El check va al final y solo existe cuando el item esta elegido, en vez de
+> reservarle una columna al inicio. Asi todas las filas —opciones, acciones,
+> elegidas o no— arrancan en la misma x. Es como lo resuelve Polaris en su
+> `TextOption`; con el check al inicio, cualquier fila sin el queda corrida el
+> ancho del icono.
 
 Los textos por defecto salen del puente i18n (`ui.comboboxPlaceholder`,
 `ui.comboboxSearch`, `ui.comboboxEmpty`, `ui.clear`, `ui.loading`) y cualquiera
