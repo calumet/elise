@@ -153,7 +153,11 @@ function Sidebar({
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   const sidebarLabel = useElLabel("ui", "sidebar", "Barra lateral");
-  const sidebarDescription = useElLabel("ui", "sidebarDescription", "Muestra la barra lateral móvil.");
+  const sidebarDescription = useElLabel(
+    "ui",
+    "sidebarDescription",
+    "Muestra la barra lateral móvil.",
+  );
 
   if (collapsible === "none") {
     return (

@@ -101,8 +101,7 @@ Para todo componente nuevo:
   `border-border`, …); nunca colores literales ni de la paleta de Tailwind.
   Si falta un token (p. ej. un `*-foreground`), se agrega a `elise.css`,
   `themes/index.ts` y al `@theme inline`, no se improvisa con otro token.
-- Foco visible con la convención `focus-visible:ring-2 focus-visible:ring-ring
-  focus-visible:ring-offset-2 focus-visible:ring-offset-background`.
+- Foco visible con la convención `focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`.
 - Textos visibles o de accesibilidad mediante el puente i18n:
   `useElLabel("ui", "<clave>", "<fallback en español>")` (ver
   `src/lib/i18n.ts`). Nunca strings hardcodeados.

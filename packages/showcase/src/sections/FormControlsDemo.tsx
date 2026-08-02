@@ -67,7 +67,12 @@ const FormControlsDemo = () => {
         <OTPField length={6} value={otp} onChange={setOtp} onComplete={setOtpDone} />
         <p className="text-sm text-muted-foreground" data-testid="otp-readout">
           Valor: <code>{JSON.stringify(otp)}</code>
-          {otpDone ? <> · onComplete: <code>{JSON.stringify(otpDone)}</code></> : null}
+          {otpDone ? (
+            <>
+              {" "}
+              · onComplete: <code>{JSON.stringify(otpDone)}</code>
+            </>
+          ) : null}
         </p>
       </div>
     </div>
