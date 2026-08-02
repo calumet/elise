@@ -13,6 +13,7 @@ export const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
+    data-slot="select-trigger"
     ref={ref}
     className={cn(
       "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-base text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground",
@@ -34,6 +35,7 @@ export const SelectContent = React.forwardRef<
 >(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
+      data-slot="select-content"
       ref={ref}
       position={position}
       className={cn(
@@ -54,6 +56,7 @@ export const SelectLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
+    data-slot="select-label"
     ref={ref}
     className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)}
     {...props}
@@ -66,6 +69,7 @@ export const SelectItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
+    data-slot="select-item"
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
@@ -95,6 +99,7 @@ export const SelectSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
+    data-slot="select-separator"
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border", className)}
     {...props}

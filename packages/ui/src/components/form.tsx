@@ -55,6 +55,7 @@ const lgColClasses: Record<GridColCount, string> = {
 export const FormRow = React.forwardRef<HTMLDivElement, FormRowProps>(
   ({ className, cols = 1, smCols = 2, mdCols, lgCols, ...props }, ref) => (
     <div
+      data-slot="form-row"
       ref={ref}
       className={cn(
         "grid gap-3",
@@ -74,7 +75,12 @@ export const FormField = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Field>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Field ref={ref} className={cn("flex flex-col gap-1", className)} {...props} />
+  <FormPrimitive.Field
+    data-slot="form-field"
+    ref={ref}
+    className={cn("flex flex-col gap-1", className)}
+    {...props}
+  />
 ));
 FormField.displayName = FormPrimitive.Field.displayName;
 
@@ -83,6 +89,7 @@ export const FormLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Label
+    data-slot="form-label"
     ref={ref}
     className={cn("text-base font-medium text-foreground", className)}
     {...props}
@@ -97,6 +104,7 @@ export const FormMessage = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
+    data-slot="form-message"
     ref={ref}
     className={cn("text-xs text-destructive data-[state=delayed-open]:animate-in", className)}
     {...props}
@@ -109,6 +117,7 @@ export const FormDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
 >(({ className, ...props }, ref) => (
   <FormPrimitive.Message
+    data-slot="form-description"
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
@@ -120,6 +129,11 @@ export const FormSubmit = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Submit>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>
 >(({ className, ...props }, ref) => (
-  <FormPrimitive.Submit ref={ref} className={cn("inline-flex", className)} {...props} />
+  <FormPrimitive.Submit
+    data-slot="form-submit"
+    ref={ref}
+    className={cn("inline-flex", className)}
+    {...props}
+  />
 ));
 FormSubmit.displayName = FormPrimitive.Submit.displayName;

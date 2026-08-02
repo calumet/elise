@@ -8,6 +8,7 @@ export const Avatar = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Root
+    data-slot="avatar"
     ref={ref}
     className={cn(
       "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted text-base",
@@ -23,6 +24,7 @@ export const AvatarImage = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Image
+    data-slot="avatar-image"
     ref={ref}
     className={cn("h-full w-full object-cover", className)}
     {...props}
@@ -35,6 +37,7 @@ export const AvatarFallback = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Fallback
+    data-slot="avatar-fallback"
     ref={ref}
     className={cn(
       "flex h-full w-full items-center justify-center bg-muted text-base font-semibold text-foreground",

@@ -82,6 +82,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
        hijo puede ser un <a> y `type` no le corresponde. */
     return (
       <Comp
+        data-slot="button"
         ref={ref}
         type={asChild ? type : (type ?? "button")}
         className={cn(

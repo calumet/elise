@@ -12,7 +12,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
     const [visible, setVisible] = React.useState(false);
     const defaultToggleLabel = useElLabel("ui", "togglePassword", "Mostrar u ocultar contraseña");
     return (
-      <div className="relative">
+      <div data-slot="password-field" className="relative">
         <input
           ref={ref}
           type={visible ? "text" : "password"}

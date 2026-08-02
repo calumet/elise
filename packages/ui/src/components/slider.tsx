@@ -13,6 +13,7 @@ export const Slider = React.forwardRef<
   const thumbCount = Array.isArray(values) ? values.length : 1;
   return (
     <SliderPrimitive.Root
+      data-slot="slider"
       ref={ref}
       className={cn("relative flex w-full touch-none select-none items-center", className)}
       {...props}

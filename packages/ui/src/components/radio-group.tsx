@@ -16,7 +16,13 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     const generatedName = React.useId();
     return (
       <RadioGroupContext value={{ name: name || generatedName, defaultValue }}>
-        <div ref={ref} role="radiogroup" className={cn("grid gap-3", className)} {...props}>
+        <div
+          data-slot="radio-group"
+          ref={ref}
+          role="radiogroup"
+          className={cn("grid gap-3", className)}
+          {...props}
+        >
           {children}
         </div>
       </RadioGroupContext>
@@ -30,6 +36,7 @@ export const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemP
     const { name, defaultValue } = React.useContext(RadioGroupContext);
     return (
       <span
+        data-slot="radio-group-item"
         className={cn(
           "inline-flex h-5 w-5 items-center justify-center rounded-full border border-border bg-background transition has-checked:border-primary has-checked:bg-primary has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
           className,

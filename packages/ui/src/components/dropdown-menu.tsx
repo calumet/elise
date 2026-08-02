@@ -6,6 +6,16 @@ import { cn } from "@/lib/cn";
 const baseItem =
   "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground";
 
+/* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
+   modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
+   px-3. Mezcladas en el mismo menu, cada fila empezaba en una x distinta.
+
+   La canaleta se reserva solo cuando el menu de verdad trae una fila con
+   indicador, que es para lo que sirve data-slot. Un menu de puras acciones se
+   queda sin sangria y no gana un hueco vacio a la izquierda. */
+const canaletaIndicador =
+  "[&:has([data-slot=dropdown-menu-checkbox-item],[data-slot=dropdown-menu-radio-item])_[data-slot=dropdown-menu-item]]:pl-7 [&:has([data-slot=dropdown-menu-checkbox-item],[data-slot=dropdown-menu-radio-item])_[data-slot=dropdown-menu-sub-trigger]]:pl-7";
+
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
@@ -19,11 +29,13 @@ export const DropdownMenuContent = React.forwardRef<
 >(({ className, sideOffset = 6, align = "start", ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
+      data-slot="dropdown-menu-content"
       ref={ref}
       sideOffset={sideOffset}
       align={align}
       className={cn(
         "z-50 min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+        canaletaIndicador,
         className,
       )}
       {...props}
@@ -36,7 +48,12 @@ export const DropdownMenuItem = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item ref={ref} className={cn(baseItem, className)} {...props} />
+  <DropdownMenuPrimitive.Item
+    data-slot="dropdown-menu-item"
+    ref={ref}
+    className={cn(baseItem, className)}
+    {...props}
+  />
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
@@ -45,6 +62,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
+    data-slot="dropdown-menu-checkbox-item"
     ref={ref}
     className={cn(baseItem, "pl-7", className)}
     checked={checked}
@@ -73,7 +91,12 @@ export const DropdownMenuRadioItem = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.RadioItem ref={ref} className={cn(baseItem, "pl-6", className)} {...props}>
+  <DropdownMenuPrimitive.RadioItem
+    data-slot="dropdown-menu-radio-item"
+    ref={ref}
+    className={cn(baseItem, "pl-7", className)}
+    {...props}
+  >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
         <span className="h-2 w-2 rounded-full bg-foreground" />
@@ -89,6 +112,7 @@ export const DropdownMenuLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
+    data-slot="dropdown-menu-label"
     ref={ref}
     className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)}
     {...props}
@@ -101,6 +125,7 @@ export const DropdownMenuSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
+    data-slot="dropdown-menu-separator"
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border", className)}
     {...props}
@@ -112,7 +137,12 @@ export const DropdownMenuSubTrigger = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger ref={ref} className={cn(baseItem, className)} {...props}>
+  <DropdownMenuPrimitive.SubTrigger
+    data-slot="dropdown-menu-sub-trigger"
+    ref={ref}
+    className={cn(baseItem, className)}
+    {...props}
+  >
     {children}
     <svg viewBox="0 0 16 16" className="ml-auto h-3.5 w-3.5" aria-hidden="true" focusable="false">
       <path
@@ -132,9 +162,11 @@ export const DropdownMenuSubContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.SubContent
+    data-slot="dropdown-menu-sub-content"
     ref={ref}
     className={cn(
       "z-50 min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+      canaletaIndicador,
       className,
     )}
     {...props}

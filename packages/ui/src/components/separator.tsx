@@ -10,6 +10,7 @@ export type SeparatorProps = React.ComponentPropsWithoutRef<"div"> & {
 export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
   ({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
     <div
+      data-slot="separator"
       ref={ref}
       role={decorative ? "none" : "separator"}
       aria-orientation={decorative ? undefined : orientation}

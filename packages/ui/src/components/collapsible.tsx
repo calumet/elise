@@ -9,7 +9,12 @@ export const CollapsibleTrigger = React.forwardRef<
   React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>
 >(({ className, ...props }, ref) => (
-  <CollapsiblePrimitive.Trigger ref={ref} className={cn("text-base", className)} {...props} />
+  <CollapsiblePrimitive.Trigger
+    data-slot="collapsible-trigger"
+    ref={ref}
+    className={cn("text-base", className)}
+    {...props}
+  />
 ));
 CollapsibleTrigger.displayName = CollapsiblePrimitive.Trigger.displayName;
 
@@ -18,6 +23,7 @@ export const CollapsibleContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>
 >(({ className, ...props }, ref) => (
   <CollapsiblePrimitive.Content
+    data-slot="collapsible-content"
     ref={ref}
     className={cn(
       "text-base overflow-hidden data-[state=closed]:animate-none data-[state=open]:animate-none",

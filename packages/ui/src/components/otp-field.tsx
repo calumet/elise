@@ -99,6 +99,7 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
 
     return (
       <div
+        data-slot="otp-field"
         ref={ref}
         role="group"
         aria-label={groupLabel}

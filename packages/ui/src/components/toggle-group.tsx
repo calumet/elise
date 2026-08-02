@@ -16,7 +16,13 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
     const name = React.useId();
     return (
       <ToggleGroupContext value={{ name, type }}>
-        <div ref={ref} role="group" className={cn("flex gap-1", className)} {...props}>
+        <div
+          data-slot="toggle-group"
+          ref={ref}
+          role="group"
+          className={cn("flex gap-1", className)}
+          {...props}
+        >
           {children}
         </div>
       </ToggleGroupContext>
@@ -35,6 +41,7 @@ export const ToggleGroupItem = React.forwardRef<HTMLLabelElement, ToggleGroupIte
     const { name, type } = React.useContext(ToggleGroupContext);
     return (
       <label
+        data-slot="toggle-group-item"
         ref={ref}
         className={cn(
           "inline-flex cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",

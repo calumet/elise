@@ -17,6 +17,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
     return (
       <AccordionContext value={{ name: type === "single" ? name : "", defaultValue }}>
         <div
+          data-slot="accordion"
           ref={ref}
           className={cn("rounded-xl border border-border bg-card", className)}
           {...props}
@@ -36,6 +37,7 @@ export const AccordionItem = React.forwardRef<
   const { name, defaultValue } = React.useContext(AccordionContext);
   return (
     <details
+      data-slot="accordion-item"
       ref={ref}
       name={name || undefined}
       open={value && value === defaultValue ? true : undefined}
@@ -51,6 +53,7 @@ export const AccordionTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<"summary">
 >(({ className, children, ...props }, ref) => (
   <summary
+    data-slot="accordion-trigger"
     ref={ref as React.Ref<HTMLElement>}
     className={cn(
       "flex cursor-pointer list-none items-center justify-between px-3 py-3 text-left text-base font-semibold transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden",
@@ -72,6 +75,7 @@ export const AccordionContent = React.forwardRef<
   React.ComponentPropsWithoutRef<"div">
 >(({ className, children, ...props }, ref) => (
   <div
+    data-slot="accordion-content"
     ref={ref}
     className={cn("overflow-hidden text-base text-muted-foreground", className)}
     {...props}

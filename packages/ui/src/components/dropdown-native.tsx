@@ -34,6 +34,7 @@ export const Dropdown = React.forwardRef<
   return (
     <DropdownContext value={innerRef}>
       <details
+        data-slot="dropdown"
         ref={(node) => {
           innerRef.current = node;
           if (typeof ref === "function") {
@@ -55,6 +56,7 @@ export const DropdownTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<"summary">
 >(({ className, children, ...props }, ref) => (
   <summary
+    data-slot="dropdown-trigger"
     ref={ref}
     className={cn("list-none cursor-pointer [&::-webkit-details-marker]:hidden", className)}
     {...props}
@@ -69,6 +71,7 @@ export const DropdownContent = React.forwardRef<
   React.ComponentPropsWithoutRef<"div"> & { align?: "start" | "center" | "end" }
 >(({ className, align = "start", ...props }, ref) => (
   <div
+    data-slot="dropdown-content"
     ref={ref}
     className={cn(
       "absolute z-50 mt-1 min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg",
@@ -92,6 +95,7 @@ export const DropdownItem = React.forwardRef<
   const close = useDropdownClose();
   return (
     <button
+      data-slot="dropdown-item"
       ref={ref}
       type="button"
       className={cn(baseItem, "w-full text-left", className)}
@@ -112,6 +116,7 @@ export const DropdownLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
   <div
+    data-slot="dropdown-label"
     ref={ref}
     className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)}
     {...props}
@@ -123,6 +128,11 @@ export const DropdownSeparator = React.forwardRef<
   HTMLHRElement,
   React.ComponentPropsWithoutRef<"hr">
 >(({ className, ...props }, ref) => (
-  <hr ref={ref} className={cn("-mx-1 my-1 h-px border-0 bg-border", className)} {...props} />
+  <hr
+    data-slot="dropdown-separator"
+    ref={ref}
+    className={cn("-mx-1 my-1 h-px border-0 bg-border", className)}
+    {...props}
+  />
 ));
 DropdownSeparator.displayName = "DropdownSeparator";

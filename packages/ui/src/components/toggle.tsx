@@ -15,6 +15,7 @@ export const Toggle = React.forwardRef<HTMLLabelElement, ToggleProps>(
     const inGroup = ctx.name !== "";
     return (
       <label
+        data-slot="toggle"
         ref={ref}
         className={cn(
           "inline-flex cursor-pointer items-center justify-center rounded-md border border-border-strong bg-background px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out hover:bg-muted has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground has-checked:shadow-bevel has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",

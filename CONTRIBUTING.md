@@ -90,13 +90,21 @@ Hoy conviven dos generaciones de componentes (los más antiguos usan
 React 19). **La convención canónica para componentes nuevos es la segunda**;
 los antiguos se migran de forma oportunista cuando se toquen por otra razón.
 
+El `data-slot` es la excepción a esa migración perezosa, porque un atributo que
+está en unos componentes y en otros no sirve de poco: lo llevan los 109
+sub-componentes de la generación antigua además de los nuevos.
+
 Para todo componente nuevo:
 
 - Función plana tipada con `React.ComponentProps<...>`; con React 19 (peer
   mínimo del paquete) `ref` llega como prop normal, no se necesita
   `forwardRef` ni `displayName`.
 - Atributo `data-slot="<nombre>"` en cada sub-componente, para poder
-  estilizarlos desde el exterior (`has-data-[slot=...]`).
+  estilizarlos desde el exterior (`has-data-[slot=...]`). El nombre es el del
+  componente en kebab-case (`OTPField` da `otp-field`) y va sobre el elemento
+  que recibe el `className`, que es la superficie que se estiliza. En un
+  `DialogContent` eso es el `Content` y no el `Portal` que lo envuelve; en un
+  `Checkbox`, el `<label>` visible y no el `<input>` `sr-only`.
 - Solo tokens semánticos del tema (`bg-primary`, `text-muted-foreground`,
   `border-border`, …); nunca colores literales ni de la paleta de Tailwind.
   Si falta un token (p. ej. un `*-foreground`), se agrega a `elise.css`,

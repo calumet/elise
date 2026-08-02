@@ -9,6 +9,7 @@ export type ProgressProps = React.ComponentPropsWithoutRef<"div"> & {
 export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ className, value = 0, ...props }, ref) => (
     <div
+      data-slot="progress"
       ref={ref}
       role="progressbar"
       aria-valuenow={value ?? 0}

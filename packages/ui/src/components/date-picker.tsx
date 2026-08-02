@@ -25,7 +25,7 @@ export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
       : placeholder;
 
   return (
-    <div className="flex flex-col gap-3">
+    <div data-slot="date-picker" className="flex flex-col gap-3">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-full justify-between font-normal border-border">
@@ -70,7 +70,7 @@ export function DateRangePicker({ value, onChange, formatLabel }: DateRangePicke
       : placeholder);
 
   return (
-    <div className="w-full space-y-2">
+    <div data-slot="date-range-picker" className="w-full space-y-2">
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-full justify-between font-normal border-border">

@@ -7,11 +7,22 @@ import { cn } from "@/lib/cn";
 const baseItem =
   "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground";
 
+/* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
+   modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
+   px-3. Mezcladas en el mismo menu, cada fila empezaba en una x distinta.
+
+   La canaleta se reserva solo cuando el menu de verdad trae una fila con
+   indicador, que es para lo que sirve data-slot. Un menu de puras acciones se
+   queda sin sangria y no gana un hueco vacio a la izquierda. */
+const canaletaIndicador =
+  "[&:has([data-slot=menubar-checkbox-item],[data-slot=menubar-radio-item])_[data-slot=menubar-item]]:pl-7 [&:has([data-slot=menubar-checkbox-item],[data-slot=menubar-radio-item])_[data-slot=menubar-sub-trigger]]:pl-7";
+
 export const Menubar = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.Root
+    data-slot="menubar"
     ref={ref}
     className={cn(
       "flex items-center gap-1 rounded-md border border-border bg-background px-1 py-1",
@@ -29,6 +40,7 @@ export const MenubarTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.Trigger
+    data-slot="menubar-trigger"
     ref={ref}
     className={cn(
       "group flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
@@ -51,6 +63,7 @@ export const MenubarContent = React.forwardRef<
 >(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => (
   <MenubarPrimitive.Portal>
     <MenubarPrimitive.Content
+      data-slot="menubar-content"
       ref={ref}
       align={align}
       alignOffset={alignOffset}
@@ -60,6 +73,7 @@ export const MenubarContent = React.forwardRef<
         // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
         // de trigger con hover (mismo criterio que shadcn para Menubar).
         "z-50 min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+        canaletaIndicador,
         className,
       )}
       {...props}
@@ -72,7 +86,12 @@ export const MenubarItem = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <MenubarPrimitive.Item ref={ref} className={cn(baseItem, className)} {...props} />
+  <MenubarPrimitive.Item
+    data-slot="menubar-item"
+    ref={ref}
+    className={cn(baseItem, className)}
+    {...props}
+  />
 ));
 MenubarItem.displayName = MenubarPrimitive.Item.displayName;
 
@@ -81,6 +100,7 @@ export const MenubarCheckboxItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
   <MenubarPrimitive.CheckboxItem
+    data-slot="menubar-checkbox-item"
     ref={ref}
     className={cn(
       baseItem,
@@ -115,7 +135,12 @@ export const MenubarRadioItem = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
-  <MenubarPrimitive.RadioItem ref={ref} className={cn(baseItem, "pl-6", className)} {...props}>
+  <MenubarPrimitive.RadioItem
+    data-slot="menubar-radio-item"
+    ref={ref}
+    className={cn(baseItem, "pl-7", className)}
+    {...props}
+  >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
         <Circle className="h-3 w-3" />
@@ -131,6 +156,7 @@ export const MenubarLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.Label
+    data-slot="menubar-label"
     ref={ref}
     className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)}
     {...props}
@@ -143,6 +169,7 @@ export const MenubarSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.Separator
+    data-slot="menubar-separator"
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border", className)}
     {...props}
@@ -156,7 +183,12 @@ export const MenubarSubTrigger = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
-  <MenubarPrimitive.SubTrigger ref={ref} className={cn(baseItem, className)} {...props}>
+  <MenubarPrimitive.SubTrigger
+    data-slot="menubar-sub-trigger"
+    ref={ref}
+    className={cn(baseItem, className)}
+    {...props}
+  >
     {children}
     <svg viewBox="0 0 16 16" className="ml-auto h-3.5 w-3.5" aria-hidden="true" focusable="false">
       <path
@@ -176,9 +208,11 @@ export const MenubarSubContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.SubContent
+    data-slot="menubar-sub-content"
     ref={ref}
     className={cn(
       "z-50 min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+      canaletaIndicador,
       className,
     )}
     {...props}
