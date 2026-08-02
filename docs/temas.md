@@ -75,17 +75,17 @@ Los temas se implementan via CSS custom properties definidas en `@calumet/elise-
 | `--warning`                | `bg-warning`, `text-warning`  | Advertencia                                   |
 | `--info`                   | `bg-info`, `text-info`        | Informacion                                   |
 
-> `--border`, `--border-strong` e `--input` son tres valores distintos a proposito:
-> los divisores son mas claros que el contorno de un control, y un campo de entrada
-> necesita mas peso que ambos para leerse como editable.
+> `--border`, `--border-strong` e `--input` son tres valores distintos a proposito,
+> porque los divisores son mas claros que el contorno de un control y un campo de
+> entrada necesita mas peso que ambos para leerse como editable.
 
 ### Estados de los rellenos solidos
 
 Cada relleno solido tiene sus propios tokens de `hover` y `active`. No se derivan
-con opacidad: `bg-primary/90` compone el color contra la pagina, o sea que mueve
-el relleno _hacia_ el fondo y el hover termina bajando el contraste. Estos tokens
-hacen lo contrario — en el tema claro oscurecen, en el oscuro aclaran; en ambos
-casos se alejan del fondo.
+con opacidad, ya que `bg-primary/90` compone el color contra la pagina, o sea que
+mueve el relleno _hacia_ el fondo y el hover termina bajando el contraste. Estos
+tokens hacen lo contrario. En el tema claro oscurecen y en el oscuro aclaran; en
+ambos casos se alejan del fondo.
 
 | Token CSS              | Utilidad Tailwind       | Proposito                       |
 | ---------------------- | ----------------------- | ------------------------------- |
@@ -100,8 +100,9 @@ casos se alejan del fondo.
 | `--info-hover`         | `bg-info-hover`         | Hover info                      |
 | `--info-active`        | `bg-info-active`        | Presionado info                 |
 
-Las variantes `outline` y `ghost` no usan estos tokens: sobre fondo transparente
-el hover se resuelve con `bg-muted` o con la superficie sutil del estado.
+Las variantes `outline` y `ghost` no usan estos tokens, dado que sobre fondo
+transparente el hover se resuelve con `bg-muted` o con la superficie sutil del
+estado.
 
 > **Excepcion:** en el tema oscuro `destructive` tambien oscurece. Lleva texto
 > blanco y aclararlo lo baja de 4.5:1. Igual queda muy separado del fondo
@@ -124,6 +125,38 @@ resaltadas), en lugar de derivarla con opacidad sobre el color solido. Un
 | `--destructive-subtle-foreground` | `text-destructive-subtle-foreground` | Texto sobre `bg-destructive-subtle` |
 | `--info-subtle`                   | `bg-info-subtle`                     | Fondo suave informativo             |
 | `--info-subtle-foreground`        | `text-info-subtle-foreground`        | Texto sobre `bg-info-subtle`        |
+
+#### Los solidos son relleno, no texto
+
+`--success`, `--warning`, `--destructive` e `--info` estan calibrados para
+llevar texto encima, y no para ser el texto. Puestos con `text-*` sobre las
+superficies normales del tema, tres de los cuatro caen por debajo del 4.5:1 que
+pide WCAG AA:
+
+| Solido como texto      | Sobre `--background` | Sobre `--card` |
+| ---------------------- | -------------------- | -------------- |
+| `warning` (claro)      | 2.18:1               | 2.28:1         |
+| `info` (claro)         | 4.48:1               | 4.68:1         |
+| `destructive` (oscuro) | 3.93:1               | 3.60:1         |
+| `success` (claro)      | 4.85:1               | 5.06:1         |
+
+Solo `success` pasa en los dos temas. Los `-subtle-foreground` pasan siempre y
+con margen, ya que el peor de todos da 7.30:1.
+
+La regla practica queda asi. El solido pinta fondos y bordes; el
+`-subtle-foreground` pinta cualquier cosa que se lea.
+
+| Para                               | Va                                         |
+| ---------------------------------- | ------------------------------------------ |
+| Relleno de un boton o badge solido | `bg-warning` con `text-warning-foreground` |
+| Borde de una variante `outline`    | `border-warning`                           |
+| Texto, icono o simbolo de estado   | `text-warning-subtle-foreground`           |
+
+El borde si puede usar el solido, porque WCAG pide 3:1 para elementos no
+textuales y ahi todos llegan. De ahi que un `outline` de estado combine las dos
+cosas, el borde del solido y el texto del `-subtle-foreground`. Asi estan
+resueltos `Badge`, las variantes `outline` y `ghost` de `Button`, y el asterisco
+de campo obligatorio de `Field`.
 
 ### Colores de charts
 
@@ -166,9 +199,9 @@ resaltadas), en lugar de derivarla con opacidad sobre el color solido. Un
 | `--font-sans`          | `font-sans`                                            | Geist, system-ui                                          |
 | `--font-serif`         | `font-serif`                                           | Source Serif 4, serif                                     |
 | `--font-mono`          | `font-mono`                                            | JetBrains Mono, monospace                                 |
-| `--duration-fast`      | `duration-(--duration-fast)`                           | 140ms — hovers y cambios de color                         |
-| `--duration-base`      | `duration-(--duration-base)`                           | 200ms — entradas y salidas                                |
-| `--duration-slow`      | `duration-(--duration-slow)`                           | 320ms — sheets, drawers                                   |
+| `--duration-fast`      | `duration-(--duration-fast)`                           | 140ms para hovers y cambios de color                      |
+| `--duration-base`      | `duration-(--duration-base)`                           | 200ms para entradas y salidas                             |
+| `--duration-slow`      | `duration-(--duration-slow)`                           | 320ms para sheets y drawers                               |
 
 ### Tipografias
 
@@ -187,9 +220,9 @@ cuenta:
 --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, …;
 ```
 
-La escala de sombras es monotona: el blur, el spread negativo y la opacidad crecen
-juntos, y el modo oscuro define su propio juego de valores (una sombra negra al 10%
-es invisible sobre el fondo oscuro). `shadow-bevel` es aparte de la escala: se
+En la escala de sombras el blur, el spread negativo y la opacidad crecen juntos, y
+el modo oscuro define su propio juego de valores (una sombra negra al 10% es
+invisible sobre el fondo oscuro). `shadow-bevel` queda fuera de esa escala. Se
 combina con un fondo solido para darle un borde inferior oscuro y un highlight
 superior, de modo que el relleno se lea como un objeto y no como un plano de color.
 `shadow-bevel-inset` lo invierte hacia adentro y se usa en `active:`, para que el
@@ -273,8 +306,8 @@ Los tokens se usan directamente como utilidades de Tailwind. Cada token de color
 ```
 
 > Cada color de estado tiene su propio `-foreground`. No uses
-> `text-destructive-foreground` sobre `bg-warning`: el warning lleva texto oscuro
-> para cumplir contraste, y el destructive lo lleva blanco.
+> `text-destructive-foreground` sobre `bg-warning`, porque el warning lleva texto
+> oscuro para cumplir contraste y el destructive lo lleva blanco.
 
 > Los estados hover/active de los rellenos solidos usan tokens propios
 > (`bg-primary-hover`, `bg-primary-active`), no modificadores de opacidad. Ver
@@ -324,10 +357,10 @@ apenas perceptible se lee como elegido.
 
 ### Tema oscuro (`.dark` / `[data-theme="dark"]`)
 
-El primario se aclara de `0.55` a `0.655`: el mismo valor del modo claro queda
-apagado sobre el fondo oscuro. Al aclararlo, su `-foreground` pasa a ser oscuro
-para mantener el contraste AA. `popover` se eleva por encima de `card` en vez de
-compartir su valor.
+El primario se aclara de `0.55` a `0.655`, ya que el mismo valor del modo claro
+queda apagado sobre el fondo oscuro. Al aclararlo, su `-foreground` pasa a ser
+oscuro para mantener el contraste AA. `popover` se eleva por encima de `card` en
+vez de compartir su valor.
 
 | Token                         | Valor oklch              |
 | ----------------------------- | ------------------------ |
@@ -462,9 +495,9 @@ applyTheme(miTema, document.getElementById("mi-seccion")!);
 
 `applyTheme()` establece las CSS custom properties directamente en el elemento, lo que permite tener multiples temas en diferentes secciones de la pagina.
 
-Tambien podes construir el objeto completo a mano. En ese caso solo los campos
-obligatorios del tipo son necesarios: los opcionales que no definas conservan el
-valor que ya trae `elise.css`.
+Tambien podes construir el objeto completo a mano. En ese caso solo hacen falta
+los campos obligatorios del tipo, porque los opcionales que no definas conservan
+el valor que ya trae `elise.css`.
 
 ### Tipo `EliseTheme`
 

@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 58 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 59 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
 
@@ -20,7 +20,7 @@ import { Button, Dialog, Card } from "@calumet/elise-ui";
 
 La capa base sobre la que se compone todo lo demas. Sin ella, cada pantalla
 resuelve su layout con Tailwind crudo y termina inventando su propia escala de
-espaciado y su propia jerarquia tipografica — que es justo lo que un design
+espaciado y su propia jerarquia tipografica, que es justo lo que un design
 system deberia evitar.
 
 | Componente              | Import                        | Proposito                                       |
@@ -37,14 +37,14 @@ escapar del sistema cuando hace falta.
 
 > **Por que los valores son un conjunto cerrado.** Las props no aceptan valores
 > arbitrarios (`padding={4}`, no `padding="17px"`). Ademas de mantener la
-> escala, es un requisito tecnico: Tailwind escanea el codigo fuente en build,
-> asi que una clase construida por interpolacion (`` `p-${n}` ``) nunca se
-> genera. Por eso cada valor posible vive en un mapa estatico.
+> escala, es un requisito tecnico de Tailwind, que escanea el codigo fuente en
+> build y nunca genera una clase construida por interpolacion (`` `p-${n}` ``).
+> Por eso cada valor posible vive en un mapa estatico.
 
 #### BlockStack e InlineStack
 
-Se nombran por el eje logico de CSS y no por "vertical" y "horizontal": el
-nombre sigue siendo correcto si el modo de escritura cambia.
+Se nombran por el eje logico de CSS y no por "vertical" y "horizontal", porque
+asi el nombre sigue siendo correcto si el modo de escritura cambia.
 
 ```tsx
 import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
@@ -91,8 +91,8 @@ import { Box } from "@calumet/elise-ui/box";
 
 #### Grid
 
-Mobile-first: `columns` aplica desde el ancho mas chico y los breakpoints lo
-sobrescriben hacia arriba.
+`columns` aplica desde el ancho mas chico y los breakpoints lo sobrescriben
+hacia arriba, al estilo mobile-first.
 
 ```tsx
 <Grid columns={1} smColumns={2} lgColumns={4} gap={4}>
@@ -144,8 +144,8 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 | `lines`    | `2 \| 3 \| 4`                                                                       | —           |
 | `balance`  | `boolean`                                                                           | —           |
 
-`as` y `size` son independientes a proposito: un `h2` puede verse pequeño sin
-dejar de ser un `h2` para el lector de pantalla.
+`as` y `size` son independientes a proposito, de modo que un `h2` puede verse
+pequeño sin dejar de ser un `h2` para el lector de pantalla.
 
 ### Layout
 
@@ -163,6 +163,7 @@ dejar de ser un `h2` para el lector de pantalla.
 
 | Componente                                                    | Import                             | Radix / Externo                                                               |
 | ------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| Field                                                         | `@calumet/elise-ui/field`          | —                                                                             |
 | Form, FormField, FormLabel, FormControl, FormMessage, FormRow | `@calumet/elise-ui/form`           | [Form](https://www.radix-ui.com/primitives/docs/components/form)              |
 | Input                                                         | `@calumet/elise-ui/input`          | —                                                                             |
 | Textarea                                                      | `@calumet/elise-ui/textarea`       | —                                                                             |
@@ -179,10 +180,50 @@ dejar de ser un `h2` para el lector de pantalla.
 | FileUpload, FileUploadList, FileUploadItem                    | `@calumet/elise-ui/file-upload`    | —                                                                             |
 | Stepper, StepperItem, StepperTitle, StepperDescription        | `@calumet/elise-ui/stepper`        | —                                                                             |
 
+#### Field
+
+Agrupa rotulo, control, ayuda y error, y resuelve el enlace de accesibilidad
+entre las cuatro partes.
+
+El control se pasa como funcion y no como hijo directo, de modo que aplicar
+`aria-describedby` y `aria-invalid` deja de ser opcional. Con un hijo normal es
+facil escribir el mensaje de error sin enlazarlo, y entonces el lector de
+pantalla lo anuncia suelto, sin decir a que campo pertenece.
+
+```tsx
+import { Field } from "@calumet/elise-ui/field";
+
+<Field label="Correo" description="Te avisamos ahi" error={errores.email} required>
+  {(control) => <Input type="email" {...control} {...register("email")} />}
+</Field>;
+```
+
+| Prop          | Tipo                                              | Default  | Descripcion                            |
+| ------------- | ------------------------------------------------- | -------- | -------------------------------------- |
+| `label`       | `React.ReactNode`                                 | —        | Requerido                              |
+| `children`    | `(control: FieldControlProps) => React.ReactNode` | —        | Requerido; recibe el control           |
+| `description` | `React.ReactNode`                                 | —        | Ayuda; sigue visible aunque haya error |
+| `error`       | `React.ReactNode`                                 | —        | Su presencia marca el campo invalido   |
+| `required`    | `boolean`                                         | —        | Asterisco y `aria-required`            |
+| `id`          | `string`                                          | generado | Fuerza el `id` del control             |
+
+La funcion recibe `id`, `aria-describedby`, `aria-invalid` y `aria-required` ya
+calculados. Cuando hay ayuda y error a la vez, `aria-describedby` apunta a los
+dos, porque la ayuda hace falta sobre todo en el momento en que algo sale mal. El
+parrafo de error lleva `role="alert"` y se anuncia al aparecer, sin esperar a que
+el foco vuelva al campo.
+
+`Field` no conoce react-hook-form ni Radix Form. Recibe `error` ya resuelto, asi
+que sirve igual con `useZodForm`, con estado propio o sin libreria.
+
+Para formularios que validan con la API nativa del navegador esta `Form` y su
+familia, montada sobre Radix Form. Las dos no se mezclan en un mismo campo, ya
+que cada una quiere ser dueña del estado.
+
 #### Combobox
 
 Select con busqueda. `Popover` posiciona el panel y `Command` (cmdk) aporta el
-filtrado, la navegacion por teclado y el patron ARIA de combobox —
+filtrado, la navegacion por teclado y el patron ARIA de combobox:
 `role="combobox"`, `aria-expanded`, `aria-controls` y `aria-activedescendant`.
 Ninguno de esos atributos se replica a mano.
 
@@ -192,9 +233,9 @@ suficientes como para que buscar sea mas rapido que recorrer la lista.
 Viene en dos niveles, igual que en Polaris (`Combobox` + `Listbox` como
 primitivo, `Autocomplete` como envoltorio):
 
-- **`Combobox` y sus partes** — el primitivo componible. Sostiene el valor y la
+- **`Combobox` y sus partes.** El primitivo componible. Sostiene el valor y la
   apertura, y no pinta nada por su cuenta.
-- **`ComboboxField`** — el envoltorio para el caso comun, un array de opciones.
+- **`ComboboxField`.** El envoltorio para el caso comun, un array de opciones.
   Esta construido sobre las partes, asi que no puede hacer nada que el primitivo
   no permita.
 
@@ -226,8 +267,9 @@ const paises: ComboboxOption[] = [
 | `disabled`          | `boolean`                 | —       | —                                        |
 
 `ComboboxOption` acepta `value`, `label`, `description`, `disabled`, `group`
-(agrupa bajo un encabezado) y `keywords` — terminos extra por los que la opcion
-tambien se encuentra, util para que "bogota" encuentre Colombia.
+(agrupa bajo un encabezado) y `keywords`. Con `keywords` se suman terminos extra
+por los que la opcion tambien se encuentra, util para que "bogota" encuentre
+Colombia.
 
 ##### Partes componibles
 
@@ -278,17 +320,17 @@ Para carga asincrona, secciones a medida o acciones dentro de la lista:
 | `ComboboxSeparator` | Divisor                                                          |
 | `ComboboxLoading`   | Fila con spinner                                                 |
 
-> `ComboboxValue` no adivina la etiqueta a partir del valor: los items viven
-> dentro del panel y se desmontan al cerrarlo. Quien compone es dueño de su
-> estado y pasa el texto — `ComboboxField` lo resuelve desde sus `options`.
+> `ComboboxValue` no adivina la etiqueta a partir del valor, porque los items
+> viven dentro del panel y se desmontan al cerrarlo. Quien compone es dueño de
+> su estado y pasa el texto, que en `ComboboxField` sale de sus `options`.
 
 La opcion **elegida** se marca con peso semibold y un check al final de la fila;
 el fondo gris es el **resaltado del teclado**, que se mueve con las flechas. Son
 dos estados distintos y se leen a la vez.
 
 > El check va al final y solo existe cuando el item esta elegido, en vez de
-> reservarle una columna al inicio. Asi todas las filas —opciones, acciones,
-> elegidas o no— arrancan en la misma x. Es como lo resuelve Polaris en su
+> reservarle una columna al inicio. Asi todas las filas (opciones, acciones,
+> elegidas o no) arrancan en la misma x. Es como lo resuelve Polaris en su
 > `TextOption`; con el check al inicio, cualquier fila sin el queda corrida el
 > ancho del icono.
 
@@ -298,9 +340,9 @@ se sobrescribe por prop.
 
 ##### Seleccion multiple
 
-`MultiCombobox` comparte todas las partes con `Combobox`: solo cambia que
-acumula un array y que elegir un item ya elegido lo quita. El panel se queda
-abierto por defecto — cerrarlo tras cada eleccion obliga a reabrir para la
+`MultiCombobox` comparte todas las partes con `Combobox`. Lo unico que cambia es
+que acumula un array y que elegir un item ya elegido lo quita. El panel se queda
+abierto por defecto, ya que cerrarlo tras cada eleccion obliga a reabrir para la
 siguiente.
 
 `MultiComboboxField` es el envoltorio equivalente. Muestra lo elegido como chips
@@ -311,21 +353,21 @@ removibles dentro del disparador y, a partir de `maxChips`, resume el resto con
 <MultiComboboxField options={tecnologias} value={stack} onValueChange={setStack} maxChips={2} />
 ```
 
-> La X de cada chip es un `<span role="button">`, no un `<button>`: vive dentro
-> del disparador, y un boton dentro de otro es HTML invalido. El disparador
-> sigue siendo el unico control enfocable con Tab.
+> La X de cada chip es un `<span role="button">` y no un `<button>`, dado que
+> vive dentro del disparador y un boton dentro de otro es HTML invalido. El
+> disparador sigue siendo el unico control enfocable con Tab.
 
 #### FileUpload
 
 Area para soltar o elegir archivos.
 
-Reporta **siempre las dos listas** —aceptados y rechazados, con el motivo— en
+Reporta **siempre las dos listas** (aceptados y rechazados, con el motivo) en
 vez de descartar en silencio lo que no pasa. Un archivo que desaparece sin
 explicacion es el peor resultado posible de un campo de subida; la idea viene
 del `DropZone` de Polaris, que separa `onDropAccepted` de `onDropRejected`.
 
-No guarda los archivos ni los muestra: eso se compone con `FileUploadList` y
-`FileUploadItem`, para que la lista pueda vivir donde haga falta.
+No guarda los archivos ni los muestra. Esa parte se compone con `FileUploadList`
+y `FileUploadItem`, para que la lista pueda vivir donde haga falta.
 
 ```tsx
 <FileUpload
@@ -361,9 +403,9 @@ No guarda los archivos ni los muestra: eso se compone con `FileUploadList` y
 
 #### Stepper
 
-Indicador de progreso por pasos. Es un `<ol>` de verdad, no una fila de divs: el
-orden es la informacion que transmite, y un lector de pantalla debe poder
-anunciarlo.
+Indicador de progreso por pasos. El orden es la informacion que transmite y un
+lector de pantalla debe poder anunciarlo, de ahi que se renderice como un `<ol>`
+y no como una fila de divs.
 
 El estado de cada paso lo decide quien lo usa, con `status`. El componente no lo
 deduce de un indice, porque un flujo real salta pasos y vuelve atras.
@@ -423,9 +465,9 @@ estado con texto para lectores de pantalla.
 
 #### Alert vs AlertDialog
 
-`Alert` es un mensaje en linea que no interrumpe: se renderiza dentro del flujo de
-la pagina. `AlertDialog` es modal y bloquea hasta que el usuario decide. Si el
-mensaje no exige una decision, es `Alert`.
+`Alert` es un mensaje en linea que se renderiza dentro del flujo de la pagina y
+no interrumpe. `AlertDialog` es modal y bloquea hasta que el usuario decide. Si
+el mensaje no exige una decision, es `Alert`.
 
 Los tonos `danger` y `warning` se anuncian con `role="alert"`, que interrumpe al
 lector de pantalla; `info` y `success` usan `role="status"`, que espera a que
@@ -471,7 +513,7 @@ import { Badge } from "@calumet/elise-ui/badge";
 #### Spinner
 
 Hereda el color del texto, asi que se tiñe con cualquier utilidad `text-*`.
-Sigue girando bajo `prefers-reduced-motion` — lleva `data-motion="essential"`,
+Sigue girando bajo `prefers-reduced-motion` (lleva `data-motion="essential"`),
 porque un indicador detenido no comunica que algo sigue en curso.
 
 ```tsx
