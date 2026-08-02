@@ -48,20 +48,27 @@ function CommandDialog({
   );
 }
 
-function CommandInput({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Input>) {
+export type CommandInputProps = React.ComponentProps<typeof CommandPrimitive.Input> & {
+  /** Clases del envoltorio. `className` va al `input`, no al contenedor. */
+  wrapperClassName?: string;
+
+  /** Sustituye el icono de busqueda. `null` lo quita. */
+  icon?: React.ReactNode;
+};
+
+function CommandInput({ className, wrapperClassName, icon, ...props }: CommandInputProps) {
   return (
     <div
       data-slot="command-input-wrapper"
-      className="flex h-11 items-center gap-2 border-b border-border px-3"
+      className={cn("flex h-11 items-center gap-2 border-b border-border px-3", wrapperClassName)}
     >
-      <Search className="size-4 shrink-0 text-muted-foreground" />
+      {icon === null
+        ? null
+        : (icon ?? <Search className="size-4 shrink-0 text-muted-foreground" />)}
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          "placeholder:text-muted-foreground flex h-11 w-full bg-transparent py-3 text-base outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          "placeholder:text-muted-foreground flex h-full w-full bg-transparent text-base outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         {...props}
@@ -80,11 +87,14 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
   );
 }
 
-function CommandEmpty({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
+function CommandEmpty({
+  className,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Empty>) {
   return (
     <CommandPrimitive.Empty
       data-slot="command-empty"
-      className="py-6 text-center text-base text-muted-foreground"
+      className={cn("py-6 text-center text-base text-muted-foreground", className)}
       {...props}
     />
   );

@@ -65,7 +65,7 @@ showcase ──────── @calumet/elise-ui ─────────�
 
 Libreria principal de componentes. Construida sobre [Radix UI Primitives](https://www.radix-ui.com/primitives) para accesibilidad y estilizada con [Tailwind CSS v4](https://tailwindcss.com/).
 
-- **55 componentes** exportados individualmente y via barrel
+- **56 componentes** exportados individualmente y via barrel
 - **Sistema de temas** con ThemeProvider (light/dark)
 - **Tokens CSS** semanticos (e.g., `--primary`, `--background`) mapeados a utilidades de Tailwind
 - **Peer dependencies**: React 19, React DOM 19

@@ -13,6 +13,7 @@ export * from "./carousel";
 export * from "./calendar";
 export * from "./checkbox";
 export * from "./collapsible";
+export * from "./combobox";
 export * from "./container";
 export * from "./context-menu";
 export * from "./dialog";

@@ -5,6 +5,11 @@ import { cn } from "@/lib/cn";
 
 export const Popover = PopoverPrimitive.Root;
 export const PopoverTrigger = PopoverPrimitive.Trigger;
+/* Ancla el panel a un elemento sin que ese elemento controle la apertura. Es lo
+   que hace falta cuando el panel no se abre al pulsar sino como consecuencia de
+   otra cosa — un campo de busqueda cuyo panel sigue abierto mientras haya texto:
+   con PopoverTrigger, pulsar el campo para seguir escribiendo lo cerraria. */
+export const PopoverAnchor = PopoverPrimitive.Anchor;
 
 export const PopoverContent = React.forwardRef<
   React.ComponentRef<typeof PopoverPrimitive.Content>,

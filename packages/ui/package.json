@@ -20,6 +20,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./combobox": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./bleed": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

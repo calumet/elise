@@ -36,6 +36,7 @@ import { messages } from "./i18n";
 const AccordionCollapsibleDemo = React.lazy(() => import("./sections/AccordionCollapsibleDemo"));
 const CarouselDemo = React.lazy(() => import("./sections/CarouselDemo"));
 const AlertDialogStandalone = React.lazy(() => import("./sections/AlertDialogStandalone"));
+const ComboboxDemo = React.lazy(() => import("./sections/ComboboxDemo"));
 const CommandDemo = React.lazy(() => import("./sections/CommandDemo"));
 const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"));
 const ContactForm = React.lazy(() => import("./sections/ContactForm"));
@@ -256,6 +257,12 @@ const App = () => (
           <SectionCard title="Progress & Skeleton">
             <LazySection>
               <ProgressSkeletonDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Combobox: select con busqueda">
+            <LazySection>
+              <ComboboxDemo />
             </LazySection>
           </SectionCard>
 

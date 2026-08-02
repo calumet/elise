@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 55 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 56 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
 
@@ -174,6 +174,49 @@ dejar de ser un `h2` para el lector de pantalla.
 | Slider                                                        | `@calumet/elise-ui/slider`         | [Slider](https://www.radix-ui.com/primitives/docs/components/slider)          |
 | OTPField                                                      | `@calumet/elise-ui/otp-field`      | —                                                                             |
 | PasswordField                                                 | `@calumet/elise-ui/password-field` | —                                                                             |
+| Combobox                                                      | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
+
+#### Combobox
+
+Select con busqueda. Combina `Popover` para el posicionamiento con `Command`
+(cmdk) para el filtrado y la navegacion por teclado. El patron ARIA de combobox
+—`role="combobox"`, `aria-expanded`, `aria-controls` y `aria-activedescendant`—
+lo aporta cmdk; el componente no lo replica.
+
+Usa `Select` cuando las opciones sean pocas y conocidas; `Combobox` cuando haya
+suficientes como para que buscar sea mas rapido que recorrer la lista.
+
+```tsx
+import { Combobox, type ComboboxOption } from "@calumet/elise-ui/combobox";
+
+const paises: ComboboxOption[] = [
+  { value: "co", label: "Colombia", description: "Bogota", keywords: ["bogota"] },
+  { value: "mx", label: "Mexico", description: "Ciudad de Mexico" },
+];
+
+<Combobox options={paises} value={pais} onValueChange={setPais} clearable />;
+```
+
+| Prop                | Tipo                      | Default | Descripcion                              |
+| ------------------- | ------------------------- | ------- | ---------------------------------------- |
+| `options`           | `ComboboxOption[]`        | —       | Requerido                                |
+| `value`             | `string`                  | —       | Modo controlado                          |
+| `defaultValue`      | `string`                  | —       | Modo no controlado                       |
+| `onValueChange`     | `(value: string) => void` | —       | —                                        |
+| `placeholder`       | `string`                  | i18n    | Texto del disparador sin seleccion       |
+| `searchPlaceholder` | `string`                  | i18n    | —                                        |
+| `emptyMessage`      | `string`                  | i18n    | —                                        |
+| `clearable`         | `boolean`                 | `false` | Muestra una X para volver a sin valor    |
+| `size`              | `"sm" \| "md" \| "lg"`    | `"md"`  | —                                        |
+| `name`              | `string`                  | —       | Emite un input oculto para forms nativos |
+| `disabled`          | `boolean`                 | —       | —                                        |
+
+`ComboboxOption` acepta `value`, `label`, `description`, `disabled`, `group`
+(agrupa bajo un encabezado) y `keywords` — terminos extra por los que la opcion
+tambien se encuentra, util para que "bogota" encuentre Colombia.
+
+Los textos por defecto salen del puente i18n (`ui.comboboxPlaceholder`,
+`ui.comboboxSearch`, `ui.comboboxEmpty`) y cualquiera se sobrescribe por prop.
 
 ### Navegacion
 

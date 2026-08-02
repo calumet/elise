@@ -73,12 +73,17 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "solid", size = "md", tone, asChild = false, ...props }, ref) => {
+  ({ className, variant = "solid", size = "md", tone, asChild = false, type, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const toneClass = tone ? toneOverrides[tone][variant] : undefined;
+    /* El default de HTML para `type` es "submit", asi que un Button dentro de un
+       form lo enviaba aunque solo llevara onClick. Quien envie tiene que pedir
+       `type="submit"` explicitamente. Con `asChild` no se fuerza nada: el hijo
+       puede ser un <a> y `type` no le corresponde. */
     return (
       <Comp
         ref={ref}
+        type={asChild ? type : (type ?? "button")}
         className={cn(
           baseClasses,
           variantClasses[variant],
