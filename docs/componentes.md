@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 56 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 58 componentes, la mayoria construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los mas antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guia de inicio](guia-inicio.md).
 
@@ -175,6 +175,9 @@ dejar de ser un `h2` para el lector de pantalla.
 | OTPField                                                      | `@calumet/elise-ui/otp-field`      | —                                                                             |
 | PasswordField                                                 | `@calumet/elise-ui/password-field` | —                                                                             |
 | Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
+| MultiCombobox, MultiComboboxField                             | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
+| FileUpload, FileUploadList, FileUploadItem                    | `@calumet/elise-ui/file-upload`    | —                                                                             |
+| Stepper, StepperItem, StepperTitle, StepperDescription        | `@calumet/elise-ui/stepper`        | —                                                                             |
 
 #### Combobox
 
@@ -292,6 +295,104 @@ dos estados distintos y se leen a la vez.
 Los textos por defecto salen del puente i18n (`ui.comboboxPlaceholder`,
 `ui.comboboxSearch`, `ui.comboboxEmpty`, `ui.clear`, `ui.loading`) y cualquiera
 se sobrescribe por prop.
+
+##### Seleccion multiple
+
+`MultiCombobox` comparte todas las partes con `Combobox`: solo cambia que
+acumula un array y que elegir un item ya elegido lo quita. El panel se queda
+abierto por defecto — cerrarlo tras cada eleccion obliga a reabrir para la
+siguiente.
+
+`MultiComboboxField` es el envoltorio equivalente. Muestra lo elegido como chips
+removibles dentro del disparador y, a partir de `maxChips`, resume el resto con
+«+N» para que el control no crezca sin limite.
+
+```tsx
+<MultiComboboxField options={tecnologias} value={stack} onValueChange={setStack} maxChips={2} />
+```
+
+> La X de cada chip es un `<span role="button">`, no un `<button>`: vive dentro
+> del disparador, y un boton dentro de otro es HTML invalido. El disparador
+> sigue siendo el unico control enfocable con Tab.
+
+#### FileUpload
+
+Area para soltar o elegir archivos.
+
+Reporta **siempre las dos listas** —aceptados y rechazados, con el motivo— en
+vez de descartar en silencio lo que no pasa. Un archivo que desaparece sin
+explicacion es el peor resultado posible de un campo de subida; la idea viene
+del `DropZone` de Polaris, que separa `onDropAccepted` de `onDropRejected`.
+
+No guarda los archivos ni los muestra: eso se compone con `FileUploadList` y
+`FileUploadItem`, para que la lista pueda vivir donde haga falta.
+
+```tsx
+<FileUpload
+  multiple
+  accept="image/*,.pdf"
+  maxSize={1024 * 1024}
+  hint="Imagenes o PDF, hasta 1 MB por archivo"
+  onFiles={(aceptados, rechazados) => {
+    setArchivos((p) => [...p, ...aceptados]);
+    setRechazados(rechazados);
+  }}
+/>
+
+<FileUploadList>
+  {archivos.map((f, i) => (
+    <FileUploadItem key={i} name={f.name} size={f.size} onRemove={() => quitar(i)} />
+  ))}
+</FileUploadList>
+```
+
+| Prop        | Tipo                                              | Default | Descripcion                      |
+| ----------- | ------------------------------------------------- | ------- | -------------------------------- |
+| `accept`    | `string`                                          | —       | Filtro nativo: `"image/*,.pdf"`  |
+| `multiple`  | `boolean`                                         | `false` | —                                |
+| `maxSize`   | `number`                                          | —       | Bytes, por archivo               |
+| `validator` | `(file: File) => boolean`                         | —       | Regla propia; `false` lo rechaza |
+| `onFiles`   | `(aceptados, rechazados: RejectedFile[]) => void` | —       | —                                |
+| `invalid`   | `boolean`                                         | —       | Marca el area como invalida      |
+| `label`     | `string`                                          | i18n    | Texto principal                  |
+| `hint`      | `string`                                          | —       | Formatos y tamano admitidos      |
+
+`RejectedFile` trae `{ file, reason }`, con `reason` en `"type" | "size" | "custom"`.
+
+#### Stepper
+
+Indicador de progreso por pasos. Es un `<ol>` de verdad, no una fila de divs: el
+orden es la informacion que transmite, y un lector de pantalla debe poder
+anunciarlo.
+
+El estado de cada paso lo decide quien lo usa, con `status`. El componente no lo
+deduce de un indice, porque un flujo real salta pasos y vuelve atras.
+
+```tsx
+<Stepper>
+  {pasos.map((p, i) => (
+    <StepperItem
+      key={p.titulo}
+      status={i < actual ? "complete" : i === actual ? "current" : "upcoming"}
+      indicator={i < actual ? undefined : i + 1}
+      last={i === pasos.length - 1}
+    >
+      <StepperTitle>{p.titulo}</StepperTitle>
+      <StepperDescription>{p.descripcion}</StepperDescription>
+    </StepperItem>
+  ))}
+</Stepper>
+```
+
+| Prop          | Tipo                                    | Default           | Descripcion                          |
+| ------------- | --------------------------------------- | ----------------- | ------------------------------------ |
+| `orientation` | `"horizontal" \| "vertical"`            | `"horizontal"`    | En `Stepper`                         |
+| `status`      | `"complete" \| "current" \| "upcoming"` | `"upcoming"`      | En `StepperItem`                     |
+| `indicator`   | `React.ReactNode`                       | check si completo | Numero o icono del indicador         |
+| `last`        | `boolean`                               | —                 | Oculta la linea; ponelo en el ultimo |
+
+El paso actual lleva `aria-current="step"`, y completo y actual anuncian su
+estado con texto para lectores de pantalla.
 
 ### Navegacion
 

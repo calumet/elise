@@ -1,6 +1,7 @@
 import { Check, ChevronsUpDown, X } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { Badge } from "./badge";
 import {
   Command,
   CommandEmpty,
@@ -21,9 +22,11 @@ import { useElLabel } from "@/lib/i18n";
  * ------------------------------------------------------------------ */
 
 type ComboboxContextValue = {
-  value: string;
+  /** Valores elegidos. En modo simple es un array de cero o un elemento. */
+  valores: string[];
   elegir: (valor: string) => void;
   abierto: boolean;
+  multiple: boolean;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
@@ -106,7 +109,76 @@ function Combobox({
     [valorControlado, onValueChange, closeOnSelect, cambiarApertura],
   );
 
-  const ctx = React.useMemo(() => ({ value, elegir, abierto }), [value, elegir, abierto]);
+  const ctx = React.useMemo(
+    () => ({ valores: value ? [value] : [], elegir, abierto, multiple: false }),
+    [value, elegir, abierto],
+  );
+
+  return (
+    <ComboboxContext.Provider value={ctx}>
+      <Popover open={abierto} onOpenChange={cambiarApertura}>
+        {children}
+      </Popover>
+    </ComboboxContext.Provider>
+  );
+}
+
+export type MultiComboboxProps = Omit<ComboboxProps, "value" | "defaultValue" | "onValueChange"> & {
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (value: string[]) => void;
+};
+
+/**
+ * Igual que `Combobox` pero acumula varios valores. Elegir un item que ya estaba
+ * lo quita, y el panel se queda abierto por defecto — cerrar despues de cada
+ * eleccion obliga a reabrir para la siguiente.
+ *
+ * Comparte todas las partes con `Combobox`: `ComboboxItem` marca como elegido
+ * cualquier valor que este en la seleccion.
+ */
+function MultiCombobox({
+  value: valueProp,
+  defaultValue,
+  onValueChange,
+  open: openProp,
+  defaultOpen,
+  onOpenChange,
+  closeOnSelect = false,
+  children,
+}: MultiComboboxProps) {
+  const [valoresInternos, setValoresInternos] = React.useState<string[]>(defaultValue ?? []);
+  const [abiertoInterno, setAbiertoInterno] = React.useState(defaultOpen ?? false);
+
+  const valorControlado = valueProp !== undefined;
+  const abiertoControlado = openProp !== undefined;
+  const valores = valorControlado ? valueProp : valoresInternos;
+  const abierto = abiertoControlado ? openProp : abiertoInterno;
+
+  const cambiarApertura = React.useCallback(
+    (siguiente: boolean) => {
+      if (!abiertoControlado) setAbiertoInterno(siguiente);
+      onOpenChange?.(siguiente);
+    },
+    [abiertoControlado, onOpenChange],
+  );
+
+  const elegir = React.useCallback(
+    (nuevo: string) => {
+      const siguiente = valores.includes(nuevo)
+        ? valores.filter((v) => v !== nuevo)
+        : [...valores, nuevo];
+      if (!valorControlado) setValoresInternos(siguiente);
+      onValueChange?.(siguiente);
+      if (closeOnSelect) cambiarApertura(false);
+    },
+    [valores, valorControlado, onValueChange, closeOnSelect, cambiarApertura],
+  );
+
+  const ctx = React.useMemo(
+    () => ({ valores, elegir, abierto, multiple: true }),
+    [valores, elegir, abierto],
+  );
 
   return (
     <ComboboxContext.Provider value={ctx}>
@@ -323,8 +395,8 @@ function ComboboxItem({
   children,
   ...props
 }: ComboboxItemProps) {
-  const { value: actual, elegir } = useCombobox("ComboboxItem");
-  const elegido = actual === value;
+  const { valores, elegir } = useCombobox("ComboboxItem");
+  const elegido = valores.includes(value);
 
   return (
     <CommandItem
@@ -485,8 +557,150 @@ function ComboboxField({
   );
 }
 
+export type MultiComboboxFieldProps = Omit<
+  ComboboxFieldProps,
+  "value" | "defaultValue" | "onValueChange" | "clearable"
+> & {
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (value: string[]) => void;
+
+  /** A partir de cuantos chips se resume con "+N". */
+  maxChips?: number;
+};
+
+/**
+ * Multiseleccion lista para usar. Muestra lo elegido como chips removibles
+ * dentro del disparador; a partir de `maxChips` resume el resto con "+N" para
+ * que el control no crezca sin limite.
+ */
+function MultiComboboxField({
+  options,
+  value: valueProp,
+  defaultValue,
+  onValueChange,
+  placeholder,
+  searchPlaceholder,
+  emptyMessage,
+  disabled,
+  size = "md",
+  name,
+  maxChips = 3,
+  className,
+  contentClassName,
+  align = "start",
+  ...props
+}: MultiComboboxFieldProps) {
+  const [internos, setInternos] = React.useState<string[]>(defaultValue ?? []);
+  const controlado = valueProp !== undefined;
+  const valores = controlado ? valueProp : internos;
+  const quitarLabel = useElLabel("ui", "remove", "Quitar");
+
+  const cambiar = (siguiente: string[]) => {
+    if (!controlado) setInternos(siguiente);
+    onValueChange?.(siguiente);
+  };
+
+  const elegidas = valores
+    .map((v) => options.find((o) => o.value === v))
+    .filter((o): o is ComboboxOption => Boolean(o));
+  const visibles = elegidas.slice(0, maxChips);
+  const resto = elegidas.length - visibles.length;
+
+  const grupos = React.useMemo(() => {
+    const mapa = new Map<string, ComboboxOption[]>();
+    for (const o of options) {
+      const clave = o.group ?? "";
+      if (!mapa.has(clave)) mapa.set(clave, []);
+      mapa.get(clave)!.push(o);
+    }
+    return [...mapa.entries()];
+  }, [options]);
+
+  return (
+    <MultiCombobox
+      value={valores}
+      onValueChange={cambiar}
+    >
+      <ComboboxTrigger
+        size={size}
+        disabled={disabled}
+        className={cn(elegidas.length > 0 && "h-auto min-h-10 py-1.5", className)}
+        onClear={elegidas.length > 0 && !disabled ? () => cambiar([]) : undefined}
+        {...props}
+      >
+        {elegidas.length === 0 ? (
+          <ComboboxValue placeholder={placeholder} />
+        ) : (
+          <span className="flex flex-wrap items-center gap-1">
+            {visibles.map((o) => (
+              <Badge key={o.value} tone="neutral" size="sm" className="gap-1 pr-1">
+                {o.label}
+                {/* Un <span> con rol, no un <button>: esto vive dentro del
+                    disparador, y un boton dentro de otro es HTML invalido. El
+                    click se atiende igual y el disparador sigue siendo el
+                    control enfocable. */}
+                <span
+                  role="button"
+                  aria-label={`${quitarLabel} ${o.label}`}
+                  tabIndex={-1}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    cambiar(valores.filter((v) => v !== o.value));
+                  }}
+                  className="inline-flex size-4 cursor-pointer items-center justify-center rounded-full hover:bg-foreground/10"
+                >
+                  <X className="size-3" aria-hidden="true" />
+                </span>
+              </Badge>
+            ))}
+            {resto > 0 ? (
+              <Badge tone="neutral" size="sm" variant="outline">
+                +{resto}
+              </Badge>
+            ) : null}
+          </span>
+        )}
+      </ComboboxTrigger>
+
+      {name ? valores.map((v) => <input key={v} type="hidden" name={name} value={v} />) : null}
+
+      <ComboboxContent align={align} className={contentClassName}>
+        <ComboboxInput placeholder={searchPlaceholder} />
+        <ComboboxList>
+          <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
+          {grupos.map(([grupo, items]) => (
+            <ComboboxGroup key={grupo || "sin-grupo"} heading={grupo || undefined}>
+              {items.map((o) => (
+                <ComboboxItem
+                  key={o.value}
+                  value={o.value}
+                  keywords={[o.label, ...(o.keywords ?? [])]}
+                  disabled={o.disabled}
+                >
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate">{o.label}</span>
+                    {o.description ? (
+                      <span className="truncate text-xs font-normal text-muted-foreground">
+                        {o.description}
+                      </span>
+                    ) : null}
+                  </span>
+                </ComboboxItem>
+              ))}
+            </ComboboxGroup>
+          ))}
+        </ComboboxList>
+      </ComboboxContent>
+    </MultiCombobox>
+  );
+}
+
 export {
   Combobox,
+  MultiCombobox,
+  MultiComboboxField,
   ComboboxTrigger,
   ComboboxValue,
   ComboboxContent,
