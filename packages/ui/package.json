@@ -160,6 +160,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./date-field": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./date-picker": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

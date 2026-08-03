@@ -96,6 +96,14 @@ caso de `Box` o de `InlineStack`.
 - [x] `FileUpload`, `Stepper`, `Field`
 - [x] Los ocho componentes que eran implementación propia, sobre su primitive de
       Radix
+- [x] `DateField`, el campo de fecha con calendario emergente
+- [ ] `ColorPicker`. Hoy no hay ninguna forma de elegir un color. El contrato de
+      referencia es el de `s-color-picker`: acepta HSL, HSLA, RGB, RGBA y hex de
+      3, 4, 6 y 8 dígitos, y emite siempre hex —de 6, o de 8 con `alpha`—.
+      Necesita área de saturación y brillo, barra de tono, barra de alfa
+      opcional y campo hex. No hay medidas publicadas: el manifiesto de Shopify
+      no expone `cssProperties` ni `cssParts` para ninguno de sus componentes,
+      así que la geometría se decide aquí
 - [ ] `Stat`, `Timeline`, `DescriptionList`, `AvatarGroup`, `Tree`
 - [ ] `TagInput`, `NumberField`, `SearchField`, `SegmentedControl`, `TimePicker`,
       `Rating`
@@ -105,6 +113,12 @@ caso de `Box` o de `InlineStack`.
 `Tag` y `Banner` estaban en la lista y conviene decidirlos antes de escribirlos:
 `Tag` es un `Badge` con una X, y `Banner` es un `Alert` a ancho completo. Puede
 que sean dos variantes y no dos componentes nuevos.
+
+`DateField` no copia las cadenas de `allow` y `disallow` de Shopify, que
+codifican rangos como `2024-02--2025` dentro de un atributo. Eso existe porque un
+componente web solo recibe cadenas; aquí `min`, `max` e `isDateDisabled` dicen lo
+mismo con las herramientas del lenguaje. Tampoco hay rangos ni selección
+múltiple, igual que en `s-date-field`: para eso está `DateRangePicker`.
 
 ## Fase 3 — `packages/blocks`
 
