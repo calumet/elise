@@ -70,6 +70,14 @@ const TableDemo = () => {
 
   return (
     <div className="flex flex-col gap-6">
+      <Text size="sm" tone="muted">
+        Esto y la sección de abajo se ven igual a propósito. <code>Table</code> es el primitivo:
+        escribes el marcado y llevas tú el estado. <code>DataTable</code> es el envoltorio opinado
+        que va encima, sobre TanStack Table: le pasas columnas y datos y arma solo los filtros, el
+        orden, las páginas y la exportación. Lo que cambia es cuánto escribes y quién guarda el
+        estado, no cómo se ve.
+      </Text>
+
       <Table variant="table">
         <TableHeader>
           <TableRow>

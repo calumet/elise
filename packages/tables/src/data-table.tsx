@@ -283,6 +283,28 @@ function DataTableContent<TData, TValue>({
           onFirstPage={() => table.firstPage()}
           onLastPage={() => table.lastPage()}
           paginationLabel={`${primeraFila}-${ultimaFila} ${labelOf} ${total}`}
+          paginationStart={
+            <div className="flex items-center gap-2">
+              <Label htmlFor={id} className="max-sm:sr-only text-xs whitespace-nowrap">
+                {labelRowsPerPage}
+              </Label>
+              <Select
+                value={pageSize.toString()}
+                onValueChange={(valor) => table.setPageSize(Number(valor))}
+              >
+                <SelectTrigger id={id} className="h-7 w-fit px-2 text-xs">
+                  <SelectValue placeholder={labelPageSizePlaceholder} />
+                </SelectTrigger>
+                <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
+                  {pageOptions.map((opcion) => (
+                    <SelectItem key={opcion} value={opcion.toString()}>
+                      {opcion}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          }
           frameClassName="min-w-0"
         >
           <TableHeader>
@@ -370,29 +392,6 @@ function DataTableContent<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
-
-      <div className="flex items-center gap-3 mt-4">
-        <Label htmlFor={id} className="max-sm:sr-only">
-          {labelRowsPerPage}
-        </Label>
-        <Select
-          value={table.getState().pagination.pageSize.toString()}
-          onValueChange={(value) => {
-            table.setPageSize(Number(value));
-          }}
-        >
-          <SelectTrigger id={id} className="w-fit whitespace-nowrap">
-            <SelectValue placeholder={labelPageSizePlaceholder} />
-          </SelectTrigger>
-          <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
-            {pageOptions.map((pageSize) => (
-              <SelectItem key={pageSize} value={pageSize.toString()}>
-                {pageSize}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
     </div>
   );

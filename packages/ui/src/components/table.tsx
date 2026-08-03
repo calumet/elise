@@ -163,6 +163,13 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   paginationLabel?: React.ReactNode;
 
   /**
+   * Un control al principio de la franja, del tipo «filas por página». Va ahí y
+   * no debajo de la tarjeta porque es parte de cómo se pagina esta tabla: por
+   * fuera se lee como un ajuste suelto que no se sabe a qué se refiere.
+   */
+  paginationStart?: React.ReactNode;
+
+  /**
    * Barra de filtros, arriba del todo y dentro del marco. Va aquí y no como
    * hijo suelto porque lo que la define es dónde se apoya: encima de la tabla,
    * dentro de la misma tarjeta y separada por un filete.
@@ -225,6 +232,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       onFirstPage,
       onLastPage,
       paginationLabel,
+      paginationStart,
       filters,
       loading = false,
       loadingLabel,
@@ -273,7 +281,12 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       );
 
     const franja = paginate ? (
-      <Pagination variant="table" className="rounded-b-[inherit]" inert={loading || undefined}>
+      <Pagination
+        variant="table"
+        className="rounded-b-[inherit]"
+        start={paginationStart}
+        inert={loading || undefined}
+      >
         <PaginationContent>
           {onFirstPage ? (
             <PaginationItem>
