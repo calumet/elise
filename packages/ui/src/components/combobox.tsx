@@ -197,10 +197,12 @@ export type ComboboxTriggerProps = React.ComponentProps<"button"> & {
   onClear?: () => void;
 };
 
+/* La misma escala que `Button`, para que un combobox y un botón puestos uno al
+   lado del otro en una barra de herramientas cuadren de alto. */
 const triggerSizes: Record<NonNullable<ComboboxTriggerProps["size"]>, string> = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-10 px-3 text-base",
-  lg: "h-11 px-4 text-base",
+  sm: "h-8 px-3 text-sm",
+  md: "h-9 px-3 text-base",
+  lg: "h-10 px-4 text-base",
 };
 
 function ComboboxTrigger({
