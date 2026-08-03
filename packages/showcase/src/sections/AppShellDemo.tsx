@@ -34,6 +34,8 @@ const AppShellDemo = () => {
     setRuta(href);
   };
 
+  const hijasDeClientes = ["/segmentos", "/companies"];
+
   return (
     <div className="h-[560px] w-full overflow-hidden rounded-xl border border-border">
       <AppShell className="h-full">
@@ -72,7 +74,7 @@ const AppShellDemo = () => {
             <AppShellNavItem
               href="/clientes"
               icon={<Users />}
-              hasChildren
+              childActive={hijasDeClientes.includes(ruta)}
               active={ruta === "/clientes"}
               onClick={ir("/clientes")}
             >

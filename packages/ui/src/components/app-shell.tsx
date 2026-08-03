@@ -321,7 +321,7 @@ type Guia = "linea" | "puntero" | "ninguna";
    sin cuadrar nada a mano. La altura sale del margen del texto, no de un padding
    en la fila: con padding, el fondo del estado activo crecería con ella. */
 const FILA =
-  "relative flex w-full items-start rounded-lg pe-1 text-sm transition-[background-color,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar";
+  "relative flex w-full items-start rounded-md pe-1 text-sm transition-[background-color,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar";
 
 const VERTICAL = "M9 0H10.5V28H9V0Z";
 const CODO = "M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
@@ -376,7 +376,7 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
       ) : null}
 
       {variante === "linea" || variante === "ninguna" ? (
-        <g className={cn(alApuntar, "group-hover:opacity-100")}>
+        <g className={cn(alApuntar, "group-hover:opacity-100 group-focus-visible:opacity-100")}>
           <path
             d={variante === "linea" ? CODO : ASOMO_Y_CODO}
             className="fill-sidebar-guide-hover"
@@ -421,7 +421,7 @@ function AppShellNavSubItem({ className, active, children, ...props }: AppShellN
           "group ps-9",
           active
             ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
-            : "font-normal text-muted-foreground hover:bg-sidebar-hover hover:text-sidebar-foreground",
+            : "font-normal text-muted-foreground hover:bg-sidebar-hover hover:text-sidebar-foreground active:bg-sidebar-accent",
           className,
         )}
         {...resto}
@@ -464,8 +464,15 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
   icon?: React.ReactNode;
 
-  /** Marca que de esta entrada cuelga una lista abierta, y dibuja el arranque. */
-  hasChildren?: boolean;
+  /**
+   * De esta entrada cuelga una lista con una hija activa.
+   *
+   * Dibuja el arranque de la guía y deja la fila marcada, porque la rama en la
+   * que estás sigue siendo esta aunque lo elegido cuelgue de ella. Se pide que
+   * sea la hija la que esté activa, y no solo que haya lista: sin hija activa
+   * no hay guía debajo y el arranque quedaría colgando de nada.
+   */
+  childActive?: boolean;
 };
 
 /** Entrada de navegacion. `active` la marca con `aria-current="page"`. */
@@ -473,7 +480,7 @@ function AppShellNavItem({
   className,
   active,
   icon,
-  hasChildren,
+  childActive,
   children,
   ...props
 }: AppShellNavItemProps) {
@@ -484,15 +491,18 @@ function AppShellNavItem({
         aria-current={active ? "page" : undefined}
         className={cn(
           FILA,
-          "ps-2",
-          active
-            ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
-            : "font-medium text-sidebar-foreground hover:bg-sidebar-hover",
+          /* El peso no cambia al elegirla: la de primer nivel se marca solo con
+             el fondo. Solo las hijas suben de peso, porque ahí el fondo tiene
+             que competir con la guía y no basta por sí solo. */
+          "ps-2 font-medium",
+          active || childActive
+            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+            : "text-sidebar-foreground hover:bg-sidebar-hover active:bg-sidebar-accent",
           className,
         )}
         {...props}
       >
-        {hasChildren ? <GuiaNav variante="munion" /> : null}
+        {childActive ? <GuiaNav variante="munion" /> : null}
         {icon ? (
           <span
             aria-hidden="true"

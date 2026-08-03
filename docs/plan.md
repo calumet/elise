@@ -119,6 +119,30 @@ patrones que lo usan son los que se mudan.
 - [ ] PageHeader, página de tabla, wizard, ajustes, autenticación, estados de
       error
 
+### Lo que le falta al `AppShell`
+
+De la auditoría contra el volcado del admin de Shopify. La calibración —guía,
+pesos, riel, radios, colores— ya está; lo que queda cambia la forma del
+componente, y por eso va aparte.
+
+- [ ] La lista de hijas es hermana del `<li>` del padre y no va dentro, así que
+      un `<ul>` cuelga de otro `<ul>`. Se arregla con un `AppShellNavGroup` que
+      sea dueño del `<li>` y reciba la fila y la lista
+- [ ] La lista de hijas no se pliega. Shopify le pone `aria-expanded` y
+      `aria-controls` al padre y anima el panel en 100ms
+- [ ] `AppShellNav` monta el mismo `<nav>` dos veces, para escritorio y para el
+      cajón, así que cualquier `id` que se le pase sale duplicado. Y el landmark
+      no tiene nombre accesible
+- [ ] `AppShellMain` puede quedar inerte para siempre: el guardia de ancho solo
+      escucha el cambio de breakpoint y no mira el ancho al montar, de modo que
+      montar abierto por encima de 768px deja el contenido inalcanzable a la
+      vista
+- [ ] Faltan tres ranuras que Shopify sí tiene en la fila: contador, acciones
+      que aparecen al apuntar, e icono relleno para la entrada elegida
+- [ ] Falta la zona fija al pie de la navegación, donde Shopify pone Ajustes
+- [ ] El arte de la guía no se refleja en RTL: la posición sí usa propiedades
+      lógicas, pero el codo y la punta están dibujados de izquierda a derecha
+
 ## Fase 4 — El sistema alrededor del catálogo
 
 - [x] Auditoría visual ejecutable, con su job en CI (ver

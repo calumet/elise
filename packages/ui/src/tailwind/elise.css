@@ -182,10 +182,10 @@
   --sidebar-border: oklch(0.894 0.003 265);
   /* Guía de continuidad de la navegación. Va entre el borde y el texto tenue:
      tiene que leerse como trazo sin competir con la etiqueta. */
-  --sidebar-guide: oklch(0.78 0.008 265);
+  --sidebar-guide: oklch(0.773 0 0);
   /* El codo que se asoma al apuntar una entrada. Contrasta menos que la guía
      firme, que es lo que lo hace leer como anticipo y no como estado. */
-  --sidebar-guide-hover: oklch(0.848 0.006 265);
+  --sidebar-guide-hover: oklch(0.845 0 0);
   --sidebar-ring: oklch(0.55 0.19 262);
   --success: oklch(0.52 0.15 152);
   --success-foreground: oklch(1 0 0);
