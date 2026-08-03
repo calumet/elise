@@ -97,6 +97,17 @@ caso de `Box` o de `InlineStack`.
 - [x] Los ocho componentes que eran implementación propia, sobre su primitive de
       Radix
 - [x] `DateField`, el campo de fecha con calendario emergente
+- [x] `Table`, contra el contrato de `s-table`: `variant` con los tres modos,
+      `listSlot` y `format` por columna, y `paginate` con sus dos pasos. Lo que
+      queda de ese contrato:
+  - [ ] `loading`. Shopify deja la tabla inerte mientras carga la página
+        siguiente; aquí no hay estado de carga ni skeleton de fila
+  - [ ] `clickDelegate`, que hace que pulsar la fila dispare un elemento
+        interactivo de dentro. Es solo ratón: el teclado y el lector de pantalla
+        siguen llegando al elemento por su cuenta, y por eso el destino tiene que
+        estar dentro de la fila
+  - [ ] La ranura `filters`. La tabla de datos tiene su barra de filtros propia,
+        pero `Table` no ofrece dónde ponerla
 - [ ] `ColorPicker`. Hoy no hay ninguna forma de elegir un color. El contrato de
       referencia es el de `s-color-picker`: acepta HSL, HSLA, RGB, RGBA y hex de
       3, 4, 6 y 8 dígitos, y emite siempre hex —de 6, o de 8 con `alpha`—.

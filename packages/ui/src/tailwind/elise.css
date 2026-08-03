@@ -168,6 +168,13 @@
   /* El techo AA lo marca --secondary (0.539), que es el fondo más oscuro donde
      se lee este color; sobre --muted queda margen de sobra. */
   --muted-foreground: oklch(0.525 0.016 265);
+  /* Relleno terciario: un gris plano, sin borde ni bisel, para controles que
+     acompañan a otra cosa en vez de pedir la acción por su cuenta —los botones
+     de paginar al pie de una tabla—. En Polaris es la familia `bg-fill-tertiary`
+     y son los mismos valores: 235 en reposo, 212 al apuntar, 204 al pulsar. */
+  --fill-tertiary: oklch(0.94 0.004 265);
+  --fill-tertiary-hover: oklch(0.87 0.006 265);
+  --fill-tertiary-active: oklch(0.845 0.007 265);
   --accent: oklch(0.955 0.025 250);
   --accent-foreground: oklch(0.38 0.14 262);
   --destructive: oklch(0.577 0.225 27);
@@ -322,6 +329,13 @@
   --secondary-foreground: oklch(0.93 0.005 265);
   --muted: oklch(0.262 0.012 265);
   --muted-foreground: oklch(0.685 0.014 265);
+  /* Polaris solo define el reposo de esta familia en oscuro, así que los otros
+     dos salen de trasladar los saltos del tema claro —0.07 y 0.145 y 0.175 por
+     encima de la superficie— al de aquí. Quedan entre --muted y
+     --border-strong, que es donde tienen que caer. */
+  --fill-tertiary: oklch(0.29 0.013 265);
+  --fill-tertiary-hover: oklch(0.355 0.015 265);
+  --fill-tertiary-active: oklch(0.39 0.016 265);
   --accent: oklch(0.33 0.09 262);
   --accent-foreground: oklch(0.89 0.06 255);
   /* Excepcion a la regla de aclarar en oscuro. Como destructive lleva texto
@@ -421,6 +435,9 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-fill-tertiary: var(--fill-tertiary);
+  --color-fill-tertiary-hover: var(--fill-tertiary-hover);
+  --color-fill-tertiary-active: var(--fill-tertiary-active);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);

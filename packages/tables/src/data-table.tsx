@@ -33,7 +33,13 @@ import {
 } from "@calumet/elise-ui/dropdown-menu";
 import { Input } from "@calumet/elise-ui/input";
 import { Label } from "@calumet/elise-ui/label";
-import { Pagination, PaginationContent, PaginationItem } from "@calumet/elise-ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLabel,
+  PaginationStep,
+} from "@calumet/elise-ui/pagination";
 import {
   Select,
   SelectContent,
@@ -189,6 +195,11 @@ function DataTableContent<TData, TValue>({
     const base = initialPageSize ? [...pageSizeOptions, initialPageSize] : pageSizeOptions;
     return Array.from(new Set(base)).sort((a, b) => a - b);
   }, [pageSizeOptions, initialPageSize]);
+
+  const { pageIndex, pageSize } = table.getState().pagination;
+  const total = table.getRowCount();
+  const primeraFila = total === 0 ? 0 : pageIndex * pageSize + 1;
+  const ultimaFila = Math.min(pageIndex * pageSize + pageSize, total);
 
   const getExportData = useCallback(() => {
     return table.getFilteredRowModel().rows.map((row) => {
@@ -366,105 +377,79 @@ function DataTableContent<TData, TValue>({
             </TableBody>
           </Table>
         </div>
+
+        {/* La paginación va dentro de la tarjeta y al pie, que es donde la pone
+            Polaris: colgada por fuera se lee como otro bloque y no como el pie
+            de esta tabla. El rango va entre los dos pasos y no aparte, porque
+            es lo que separa las dos mitades del grupo. */}
+        <Pagination variant="table">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationStep
+                onClick={() => table.firstPage()}
+                disabled={!table.getCanPreviousPage()}
+                aria-label={labelFirstPage}
+              >
+                <ChevronsLeft className="size-4" aria-hidden />
+              </PaginationStep>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationStep
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                aria-label={labelPreviousPage}
+              >
+                <ChevronLeft className="size-4" aria-hidden />
+              </PaginationStep>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLabel>
+                {primeraFila}–{ultimaFila} {labelOf} {total}
+              </PaginationLabel>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationStep
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                aria-label={labelNextPage}
+              >
+                <ChevronRight className="size-4" aria-hidden />
+              </PaginationStep>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationStep
+                onClick={() => table.lastPage()}
+                disabled={!table.getCanNextPage()}
+                aria-label={labelLastPage}
+              >
+                <ChevronsRight className="size-4" aria-hidden />
+              </PaginationStep>
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
-      <div className="flex items-center justify-between gap-8 mt-4">
-        <div className="flex items-center gap-3">
-          <Label htmlFor={id} className="max-sm:sr-only">
-            {labelRowsPerPage}
-          </Label>
-          <Select
-            value={table.getState().pagination.pageSize.toString()}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
-            }}
-          >
-            <SelectTrigger id={id} className="w-fit whitespace-nowrap">
-              <SelectValue placeholder={labelPageSizePlaceholder} />
-            </SelectTrigger>
-            <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
-              {pageOptions.map((pageSize) => (
-                <SelectItem key={pageSize} value={pageSize.toString()}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
 
-        <div className="text-muted-foreground flex grow justify-end text-base whitespace-nowrap">
-          <p className="text-muted-foreground text-base whitespace-nowrap" aria-live="polite">
-            <span className="text-foreground">
-              {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
-              {Math.min(
-                Math.max(
-                  table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
-                    table.getState().pagination.pageSize,
-                  0,
-                ),
-                table.getRowCount(),
-              )}
-            </span>{" "}
-            {labelOf} <span className="text-foreground">{table.getRowCount().toString()}</span>
-          </p>
-        </div>
-
-        <div>
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                  onClick={() => table.firstPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  aria-label={labelFirstPage}
-                >
-                  <ChevronsLeft className="size-4" aria-hidden />
-                </Button>
-              </PaginationItem>
-
-              <PaginationItem>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  aria-label={labelPreviousPage}
-                >
-                  <ChevronLeft className="size-4" aria-hidden="true" />
-                </Button>
-              </PaginationItem>
-
-              <PaginationItem>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                  aria-label={labelNextPage}
-                >
-                  <ChevronRight className="size-4" aria-hidden="true" />
-                </Button>
-              </PaginationItem>
-
-              <PaginationItem>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                  onClick={() => table.lastPage()}
-                  disabled={!table.getCanNextPage()}
-                  aria-label={labelLastPage}
-                >
-                  <ChevronsRight className="size-4" aria-hidden />
-                </Button>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+      <div className="flex items-center gap-3 mt-4">
+        <Label htmlFor={id} className="max-sm:sr-only">
+          {labelRowsPerPage}
+        </Label>
+        <Select
+          value={table.getState().pagination.pageSize.toString()}
+          onValueChange={(value) => {
+            table.setPageSize(Number(value));
+          }}
+        >
+          <SelectTrigger id={id} className="w-fit whitespace-nowrap">
+            <SelectValue placeholder={labelPageSizePlaceholder} />
+          </SelectTrigger>
+          <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
+            {pageOptions.map((pageSize) => (
+              <SelectItem key={pageSize} value={pageSize.toString()}>
+                {pageSize}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
