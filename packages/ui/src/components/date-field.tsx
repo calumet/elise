@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Calendar } from "./calendar";
 import { Field } from "./field";
-import { CAMPO_INVALIDO } from "./input";
+import { CAJA_CAMPO, CAMPO_INVALIDO } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 import { cn } from "@/lib/cn";
@@ -216,10 +216,7 @@ export function DateField({
             placeholder={placeholder ?? formato}
             onChange={(e) => escribir(e.target.value)}
             onBlur={cerrarEdicion}
-            className={cn(
-              "flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pe-10 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-border-strong placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
-              CAMPO_INVALIDO,
-            )}
+            className={cn(CAJA_CAMPO, "pe-9 placeholder:text-muted-foreground", CAMPO_INVALIDO)}
           />
 
           <Popover open={abierto} onOpenChange={setAbierto}>
@@ -232,7 +229,7 @@ export function DateField({
                    escribir la fecha entera, así que un segundo tope solo alarga
                    el recorrido del formulario. */
                 tabIndex={-1}
-                className="absolute inset-y-0 end-2 my-auto inline-flex size-7 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
+                className="absolute inset-y-0 end-2 my-auto inline-flex size-6 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <CalendarIcon aria-hidden="true" className="size-4" />
               </button>

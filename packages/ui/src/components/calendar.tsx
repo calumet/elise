@@ -154,18 +154,14 @@ function Calendar({
           "relative w-full h-full p-0 text-center group/day aspect-square select-none",
           defaultClassNames.day,
         ),
-        /* El tramo intermedio va cuadrado y en superficie tenue; solo los
-           extremos redondean, y solo por fuera. Así el rango se lee como una
-           barra con dos topes en vez de como días sueltos pintados. */
-        range_start: cn(
-          "rounded-l-md bg-primary text-primary-foreground",
-          defaultClassNames.range_start,
-        ),
-        range_middle: cn("rounded-none bg-muted text-foreground", defaultClassNames.range_middle),
-        range_end: cn(
-          "rounded-r-md rounded-l-none bg-primary text-primary-foreground",
-          defaultClassNames.range_end,
-        ),
+        /* El rango lo pinta el botón, no la celda. Pintarlo en las dos hacía que
+           con un rango de un solo día —donde la misma celda es principio y fin—
+           se aplicaran a la vez `rounded-l-md` de principio y `rounded-l-none`
+           de fin, y las esquinas izquierdas salían rectas detrás del botón. La
+           celda solo aporta el color de texto, que el botón hereda. */
+        range_start: cn(defaultClassNames.range_start),
+        range_middle: cn("text-foreground", defaultClassNames.range_middle),
+        range_end: cn(defaultClassNames.range_end),
         /* El peso de hoy lo pone el propio botón, no esta celda: el número vive
            en el botón y ahí manda su `font-normal`. */
         today: cn(defaultClassNames.today),
