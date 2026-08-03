@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { CAMPO_INVALIDO } from "./input";
+
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
@@ -18,6 +20,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
           type={visible ? "text" : "password"}
           className={cn(
             "flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+            CAMPO_INVALIDO,
             className,
           )}
           {...props}
