@@ -46,10 +46,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     return (
       <div
         data-slot="table-frame"
-        className={cn(
-          "w-full overflow-x-auto rounded-xl bg-card shadow-surface",
-          frameClassName,
-        )}
+        className={cn("w-full overflow-x-auto rounded-xl bg-card shadow-surface", frameClassName)}
       >
         {tabla}
       </div>
