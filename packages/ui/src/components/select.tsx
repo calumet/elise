@@ -2,6 +2,8 @@ import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
+import { CAMPO_INVALIDO } from "./input";
+
 import { cn } from "@/lib/cn";
 
 export const Select = SelectPrimitive.Root;
@@ -17,6 +19,7 @@ export const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "flex h-10 w-full items-center justify-between rounded-md border border-input hover:border-border-strong bg-background px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground",
+      CAMPO_INVALIDO,
       className,
     )}
     {...props}

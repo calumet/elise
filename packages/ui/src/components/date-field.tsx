@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { Calendar } from "./calendar";
 import { Field } from "./field";
+import { CAMPO_INVALIDO } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 import { cn } from "@/lib/cn";
@@ -217,7 +218,7 @@ export function DateField({
             onBlur={cerrarEdicion}
             className={cn(
               "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pe-10 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-border-strong placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
-              "aria-[invalid=true]:border-destructive",
+              CAMPO_INVALIDO,
             )}
           />
 
