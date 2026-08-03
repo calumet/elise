@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -17,7 +16,6 @@ const rows = [
 const TableDemo = () => {
   return (
     <Table>
-      <TableCaption>Ejemplo de tabla simple con los primitivos de UI.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Proyecto</TableHead>

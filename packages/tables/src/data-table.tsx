@@ -208,7 +208,7 @@ function DataTableContent<TData, TValue>({
 
   return (
     <div className="w-full h-full min-w-0 flex flex-col justify-between">
-      <div className="rounded-xl border border-border bg-card min-w-0 overflow-hidden">
+      <div className="rounded-xl bg-card shadow-surface min-w-0 overflow-hidden">
         <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3 px-4 py-4">
           <div className="flex flex-wrap gap-3 items-end">
             {table.getAllColumns().map((column) => {

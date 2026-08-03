@@ -280,6 +280,15 @@
      fondo. */
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16);
   --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
+  /* Contorno de superficie apoyada, a la manera de Polaris: en vez de un borde
+     plano del mismo tono en los cuatro lados, un bisel interior donde el filo de
+     abajo pesa más que el de arriba, y una sombra de 1px por fuera. Es lo que
+     hace que una tarjeta se lea puesta sobre el lienzo y no recortada en él; con
+     un borde uniforme el plano no tiene arriba ni abajo. */
+  --shadow-surface:
+    0 1px 0 0 oklch(0.21 0.02 265 / 0.07), inset 1px 0 0 0 oklch(0 0 0 / 0.13),
+    inset -1px 0 0 0 oklch(0 0 0 / 0.13), inset 0 -1px 0 0 oklch(0 0 0 / 0.17),
+    inset 0 1px 0 0 oklch(0.845 0 0 / 0.5);
 }
 
 .dark,
@@ -374,6 +383,13 @@
   --shadow-2xl: 0 12px 26px -6px oklch(0 0 0 / 0.65), 0 36px 68px -16px oklch(0 0 0 / 0.72);
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.16), inset 0 -1px 0 oklch(0 0 0 / 0.3);
   --shadow-bevel-inset: inset 0 2px 4px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(0 0 0 / 0.25);
+  /* En oscuro la luz sigue viniendo de arriba, así que el filo superior se
+     aclara y el inferior se oscurece; lo que cambia es que sobre un fondo
+     oscuro el realce tiene que ser blanco y no gris. */
+  --shadow-surface:
+    0 1px 0 0 oklch(0 0 0 / 0.4), inset 1px 0 0 0 oklch(1 0 0 / 0.06),
+    inset -1px 0 0 0 oklch(1 0 0 / 0.06), inset 0 -1px 0 0 oklch(0 0 0 / 0.35),
+    inset 0 1px 0 0 oklch(1 0 0 / 0.1);
 }
 
 @theme inline {
@@ -461,6 +477,7 @@
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
   --shadow-bevel: var(--shadow-bevel);
+  --shadow-surface: var(--shadow-surface);
   --shadow-bevel-inset: var(--shadow-bevel-inset);
 }
 

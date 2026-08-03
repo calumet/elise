@@ -16,7 +16,11 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
 /**
  * Tabla.
  *
- * Trae su propio marco: borde, radio y recorte. La banda del encabezado llega
+ * Trae su propio marco: contorno, radio y recorte. El contorno no es un borde
+ * plano sino un bisel —filo de abajo más pesado que el de arriba— más una
+ * sombra de 1px, que es como Polaris apoya sus superficies: con un borde
+ * uniforme el plano no tiene arriba ni abajo y la tabla se lee recortada en el
+ * lienzo en vez de puesta sobre él. La banda del encabezado llega
  * hasta el borde, así que sin recorte sus esquinas cuadradas se salen por
  * encima de cualquier contorno redondeado que la envuelva —y quien la usa no
  * tiene por qué saberlo—. Dentro de una tarjeta que ya lo pone, `bare` lo
@@ -43,7 +47,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       <div
         data-slot="table-frame"
         className={cn(
-          "w-full overflow-x-auto rounded-xl border border-border bg-card",
+          "w-full overflow-x-auto rounded-xl bg-card shadow-surface",
           frameClassName,
         )}
       >
