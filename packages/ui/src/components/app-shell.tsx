@@ -232,54 +232,63 @@ function AppShellNav({ className, children, ...props }: AppShellNavProps) {
   );
 }
 
-export type AppShellNavSectionProps = React.ComponentProps<"li"> & {
+export type AppShellNavSectionProps = Omit<React.ComponentProps<"li">, "title"> & {
   title: React.ReactNode;
-  defaultOpen?: boolean;
+
+  /**
+   * Convierte el rótulo en acción y le pone un caret al final. El caret no gira:
+   * no despliega nada, lleva a otro sitio. Sin esto el rótulo es solo un
+   * encabezado.
+   */
+  onAction?: () => void;
 };
 
 /**
- * Grupo plegable de entradas.
+ * Grupo de entradas con su rótulo.
  *
- * El plegado va con `grid-template-rows`, que sí interpola de 0 a auto, en vez
- * de `Collapsible`: aquel desmonta el contenido al cerrar y con eso pierde el
- * fotograma de salida.
+ * El rótulo no pliega el grupo. En un marco de aplicación las secciones se ven
+ * enteras, y el caret que Shopify pone al lado es un acceso a otra pantalla, no
+ * un disclosure: por eso apunta siempre en la misma dirección.
  */
 function AppShellNavSection({
   className,
   title,
-  defaultOpen = true,
+  onAction,
   children,
   ...props
 }: AppShellNavSectionProps) {
-  const [abierta, setAbierta] = React.useState(defaultOpen);
-  const idPanel = React.useId();
+  /* En la variante con acción el caret va pegado al rótulo, no al borde: es
+     parte de la etiqueta, no un control alineado a la derecha. */
+  const rotulo = (claseExtra?: string) => (
+    <span className={cn("my-1 min-w-0 truncate text-start", claseExtra)}>{title}</span>
+  );
 
   return (
-    <li data-slot="app-shell-nav-section" className={cn("list-none pb-2", className)} {...props}>
-      <button
-        type="button"
-        data-slot="app-shell-nav-section-trigger"
-        aria-expanded={abierta}
-        aria-controls={idPanel}
-        onClick={() => setAbierta((v) => !v)}
-        className="group flex w-full cursor-pointer items-center rounded-md px-2 py-1 text-sm font-semibold text-sidebar-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
-      >
-        <span>{title}</span>
-        {/* El caret gira al abrir y se corre un pixel al pasar por encima. Es un
-            trazo de 5x8, más fino que un icono del catálogo, porque acompaña a
-            un rótulo y no es un objetivo por su cuenta. */}
-        <ChevronRight
-          aria-hidden="true"
-          className="mx-1.5 size-3 shrink-0 transition-transform duration-(--duration-fast) ease-out group-hover:translate-x-px group-aria-expanded:rotate-90"
-        />
-      </button>
-      <div
-        id={idPanel}
-        data-abierta={abierta ? "" : undefined}
-        className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-(--duration-base) ease-out data-abierta:grid-rows-[1fr]"
-      >
-        <ul className="overflow-hidden">{children}</ul>
+    <li data-slot="app-shell-nav-section" className={cn("list-none pt-3", className)} {...props}>
+      <div className="px-2.5">
+        {onAction ? (
+          <button
+            type="button"
+            data-slot="app-shell-nav-section-action"
+            onClick={onAction}
+            className={cn(
+              FILA,
+              "ps-2 cursor-pointer font-semibold text-sidebar-foreground hover:bg-sidebar-accent",
+            )}
+          >
+            {rotulo()}
+            <ChevronRight aria-hidden="true" className="my-1.5 me-1 size-3 shrink-0" />
+          </button>
+        ) : (
+          <p
+            data-slot="app-shell-nav-section-title"
+            className={cn(FILA, "ps-2 font-semibold text-sidebar-foreground")}
+          >
+            {rotulo("flex-1")}
+          </p>
+        )}
       </div>
+      <ul className="list-none">{children}</ul>
     </li>
   );
 }

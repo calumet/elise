@@ -1,6 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
+import { Spinner } from "./spinner";
+
 import { cn } from "@/lib/cn";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -9,6 +11,13 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   tone?: "success" | "warning" | "danger";
 
   asChild?: boolean;
+
+  /**
+   * Anuncia con `aria-busy` que la acción está corriendo, antepone un indicador
+   * y deshabilita el control, ya que evitar el envío repetido es su motivo de
+   * existir. El rótulo se queda: sin él, no se sabe qué está corriendo.
+   */
+  loading?: boolean;
 };
 
 /* El foco sigue la convención única del design system (ver CONTRIBUTING.md). */
@@ -72,7 +81,21 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "solid", size = "md", tone, asChild = false, type, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = "solid",
+      size = "md",
+      tone,
+      asChild = false,
+      loading = false,
+      disabled,
+      type,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : "button";
     const toneClass = tone ? toneOverrides[tone][variant] : undefined;
     /* El default de HTML para `type` es "submit", así que un Button dentro de un
@@ -84,6 +107,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-slot="button"
         ref={ref}
         type={asChild ? type : (type ?? "button")}
+        disabled={disabled || (!asChild && loading) || undefined}
+        data-loading={loading ? "" : undefined}
+        aria-busy={loading || undefined}
         className={cn(
           baseClasses,
           variantClasses[variant],
@@ -92,7 +118,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className,
         )}
         {...props}
-      />
+      >
+        {/* Con `asChild` el contenido pasa intacto: `Slot` admite un solo hijo,
+            así que anteponer el indicador rompería la composición. Ahí el estado
+            queda anunciado por `aria-busy` y el hijo pinta lo que quiera. */}
+        {loading && !asChild ? <Spinner className="size-4 shrink-0" /> : null}
+        {children}
+      </Comp>
     );
   },
 );

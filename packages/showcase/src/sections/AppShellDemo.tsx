@@ -11,6 +11,7 @@ import {
   AppShellNavToggle,
 } from "@calumet/elise-ui/app-shell";
 import { Badge } from "@calumet/elise-ui/badge";
+import { Button } from "@calumet/elise-ui/button";
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
@@ -100,7 +101,7 @@ const AppShellDemo = () => {
               Analítica
             </AppShellNavItem>
 
-            <AppShellNavSection title="Canales de venta">
+            <AppShellNavSection title="Canales de venta" onAction={() => setRuta("/canales")}>
               <AppShellNavItem href="/tienda" active={ruta === "/tienda"} onClick={ir("/tienda")}>
                 Tienda online
               </AppShellNavItem>
@@ -117,8 +118,15 @@ const AppShellDemo = () => {
           </Text>
           <Text size="sm" tone="muted" className="mt-1">
             La guía baja desde el icono del padre y dobla en codo hacia la hija activa. Elegí
-            «Segmentos» para verla moverse.
+            «Segmentos» para verla moverse. El caret de la sección es una acción, no un desplegable,
+            así que no gira.
           </Text>
+          <div className="mt-4 flex gap-2">
+            <Button loading>Guardando</Button>
+            <Button variant="outline" loading>
+              Exportando
+            </Button>
+          </div>
         </AppShellMain>
       </AppShell>
     </div>
