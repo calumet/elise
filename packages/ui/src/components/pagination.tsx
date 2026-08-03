@@ -39,6 +39,13 @@ export type PaginationProps = React.ComponentProps<"nav"> & {
    * miden lo mismo, así que los pasos quedan centrados en el ancho de la tabla
    * y no en el hueco que sobra. Puestos con `justify-between` se desplazarían
    * cada vez que este control cambia de ancho.
+   *
+   * Las bandas son `flex-1` y no una rejilla de `1fr auto 1fr`. Con la rejilla
+   * el reparto vive en una utilidad de valor arbitrario, y una utilidad que no
+   * llegue a generarse no falla a la vista: la rejilla cae a una sola columna,
+   * las tres bandas se apilan y la franja pasa de 41px a 65px sin que nada
+   * diga por qué. Con `flex-1` el reparto no depende de ninguna clase que
+   * pueda faltar.
    */
   end?: React.ReactNode;
 };
@@ -52,18 +59,19 @@ function Pagination({ className, variant = "default", end, children, ...props }:
       data-slot="pagination"
       data-variant={variant}
       className={cn(
+        "flex w-full items-center",
         variant === "table"
-          ? "grid w-full grid-cols-[1fr_auto_1fr] items-center gap-3 border-t border-border bg-muted px-3 py-1.5"
-          : "flex w-full items-center justify-center",
+          ? "gap-3 border-t border-border bg-muted px-3 py-1.5"
+          : "justify-center",
         className,
       )}
       {...props}
     >
       {variant === "table" ? (
         <>
-          <div aria-hidden />
-          <div className="justify-self-center">{children}</div>
-          <div className="min-w-0 justify-self-end">{end}</div>
+          <div className="flex-1" aria-hidden />
+          {children}
+          <div className="flex min-w-0 flex-1 justify-end">{end}</div>
         </>
       ) : (
         children
