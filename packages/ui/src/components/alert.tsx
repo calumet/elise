@@ -52,7 +52,7 @@ const BOTON_CERRAR =
  * `AlertDialog`.
  *
  * Con un `AlertTitle` toma la forma de anuncio de página: tarjeta con una barra
- * del tono arriba —icono, título y cierre— y el cuerpo en blanco debajo. Sin
+ * del tono arriba (icono, título y cierre) y el cuerpo en blanco debajo. Sin
  * título se queda en un bloque de una sola pieza en superficie sutil, que es lo
  * que cabe dentro de una tarjeta sin competir con ella. Las dos formas existen
  * en Polaris y se eligen por lo mismo: cuánto tiene que pesar el aviso.

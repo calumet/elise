@@ -1,9 +1,5 @@
 import {
   ChevronDown,
-  ChevronsLeft,
-  ChevronsRight,
-  ChevronLeft,
-  ChevronRight,
   ChevronUp,
   FileText,
   RefreshCw,
@@ -34,13 +30,6 @@ import {
 import { Input } from "@calumet/elise-ui/input";
 import { Label } from "@calumet/elise-ui/label";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLabel,
-  PaginationStep,
-} from "@calumet/elise-ui/pagination";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -48,7 +37,6 @@ import {
   SelectValue,
 } from "@calumet/elise-ui/select";
 import {
-  SUPERFICIE,
   Table,
   TableBody,
   TableCell,
@@ -140,10 +128,6 @@ function DataTableContent<TData, TValue>({
     "Select number of results",
   );
   const labelOf = useElLabel("tables", "of", "of");
-  const labelFirstPage = useElLabel("tables", "firstPage", "Go to first page");
-  const labelPreviousPage = useElLabel("tables", "previousPage", "Go to previous page");
-  const labelNextPage = useElLabel("tables", "nextPage", "Go to next page");
-  const labelLastPage = useElLabel("tables", "lastPage", "Go to last page");
 
   const enhancedColumns = useMemo(() => {
     return columns.map((column) => {
@@ -218,215 +202,174 @@ function DataTableContent<TData, TValue>({
     });
   }, [table]);
 
+  /* La barra de filtros, la franja de paginar y el aviso de carga los pone
+     `Table` por su cuenta: son la ranura `filters` y los atributos `paginate` y
+     `loading` de `s-table`. Antes esto armaba su propia tarjeta con la misma
+     `SUPERFICIE`, y eran dos sitios donde arreglar lo mismo. */
+  const barraDeFiltros = (
+    <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3">
+      <div className="flex flex-wrap gap-3 items-end">
+        {table.getAllColumns().map((column) => {
+          if (!column.columnDef.meta?.filterVariant) return null;
+
+          return (
+            <div className="w-45" key={column.id}>
+              <Filter column={column} />
+            </div>
+          );
+        })}
+        {columnFilters.length > 0 && (
+          <Button
+            onClick={() => {
+              setColumnFilters([]);
+            }}
+            variant="outline"
+          >
+            <X className="size-4" />
+          </Button>
+        )}
+      </div>
+      <div className="flex justify-end gap-2">
+        {exportTo && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Download className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  const exportName = name || "datos";
+                  exportToCSV(getExportData(), exportName);
+                }}
+              >
+                <FileText className="size-4" />
+                CSV (.csv)
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  const exportName = name || "datos";
+                  exportToJSON(getExportData(), exportName);
+                }}
+              >
+                <FileText className="size-4" />
+                JSON (.json)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        {refresh && (
+          <Button onClick={refresh} variant="outline">
+            <RefreshCw className="size-4" />
+          </Button>
+        )}
+      </div>
+    </section>
+  );
+
   return (
     <div className="w-full h-full min-w-0 flex flex-col justify-between">
-      {/* `overflow-hidden` para que el fondo de la última fila apuntada no
-          cuadre las esquinas de abajo de la tarjeta. */}
-      <div data-slot="data-table-card" className={cn(SUPERFICIE, "min-w-0 overflow-hidden")}>
-        <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3 px-4 py-4">
-          <div className="flex flex-wrap gap-3 items-end">
-            {table.getAllColumns().map((column) => {
-              if (!column.columnDef.meta?.filterVariant) return null;
-
-              return (
-                <div className="w-45" key={column.id}>
-                  <Filter column={column} />
-                </div>
-              );
-            })}
-            {columnFilters.length > 0 && (
-              <Button
-                onClick={() => {
-                  setColumnFilters([]);
-                }}
-                variant="outline"
-              >
-                <X className="size-4" />
-              </Button>
-            )}
-          </div>
-          <div className="flex justify-end gap-2">
-            {exportTo && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Download className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      const exportName = name || "datos";
-                      exportToCSV(getExportData(), exportName);
-                    }}
-                  >
-                    <FileText className="size-4" />
-                    CSV (.csv)
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      const exportName = name || "datos";
-                      exportToJSON(getExportData(), exportName);
-                    }}
-                  >
-                    <FileText className="size-4" />
-                    JSON (.json)
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-            {refresh && (
-              <Button onClick={refresh} variant="outline">
-                <RefreshCw className="size-4" />
-              </Button>
-            )}
-          </div>
-        </section>
-        {/* La tarjeta de la tabla de datos ya pone borde, radio y recorte, y
-            además la tabla va debajo de la barra de filtros: con su marco propio
-            saldrían dos contornos concéntricos. */}
-        <div className="w-full overflow-x-auto">
-          <Table bare>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        aria-sort={
-                          header.column.getIsSorted() === "asc"
-                            ? "ascending"
-                            : header.column.getIsSorted() === "desc"
-                              ? "descending"
-                              : "none"
-                        }
-                        className={
-                          header.column.id === "actions"
-                            ? "w-0 text-center"
-                            : (header.column.columnDef.meta?.className ?? "")
-                        }
-                      >
-                        {header.isPlaceholder ? null : (
-                          <div
-                            className={cn(
+      <div data-slot="data-table-card" className="min-w-0">
+        <Table
+          filters={barraDeFiltros}
+          loading={isLoading}
+          loadingLabel={labelLoading}
+          paginate
+          hasPreviousPage={table.getCanPreviousPage()}
+          hasNextPage={table.getCanNextPage()}
+          onPreviousPage={() => table.previousPage()}
+          onNextPage={() => table.nextPage()}
+          onFirstPage={() => table.firstPage()}
+          onLastPage={() => table.lastPage()}
+          paginationLabel={`${primeraFila}-${ultimaFila} ${labelOf} ${total}`}
+          frameClassName="min-w-0"
+        >
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      aria-sort={
+                        header.column.getIsSorted() === "asc"
+                          ? "ascending"
+                          : header.column.getIsSorted() === "desc"
+                            ? "descending"
+                            : "none"
+                      }
+                      className={
+                        header.column.id === "actions"
+                          ? "w-0 text-center"
+                          : (header.column.columnDef.meta?.className ?? "")
+                      }
+                    >
+                      {header.isPlaceholder ? null : (
+                        <div
+                          className={cn(
+                            header.column.getCanSort() &&
+                              "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
+                          )}
+                          onClick={header.column.getToggleSortingHandler()}
+                          onKeyDown={(e) => {
+                            if (
                               header.column.getCanSort() &&
-                                "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
-                            )}
-                            onClick={header.column.getToggleSortingHandler()}
-                            onKeyDown={(e) => {
-                              if (
-                                header.column.getCanSort() &&
-                                (e.key === "Enter" || e.key === " ")
-                              ) {
-                                e.preventDefault();
-                                header.column.getToggleSortingHandler()?.(e);
-                              }
-                            }}
-                            tabIndex={header.column.getCanSort() ? 0 : undefined}
-                          >
-                            <span className="truncate">
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                            </span>
-                            {{
-                              asc: (
-                                <ChevronUp
-                                  className="shrink-0 opacity-60 size-4"
-                                  aria-hidden="true"
-                                />
-                              ),
-                              desc: (
-                                <ChevronDown
-                                  className="shrink-0 opacity-60 size-4"
-                                  aria-hidden="true"
-                                />
-                              ),
-                            }[header.column.getIsSorted() as string] ?? null}
-                          </div>
-                        )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  {isLoading == undefined || !isLoading ? (
-                    <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
-                      {labelNoData}
+                              (e.key === "Enter" || e.key === " ")
+                            ) {
+                              e.preventDefault();
+                              header.column.getToggleSortingHandler()?.(e);
+                            }
+                          }}
+                          tabIndex={header.column.getCanSort() ? 0 : undefined}
+                        >
+                          <span className="truncate">
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                          </span>
+                          {{
+                            asc: (
+                              <ChevronUp
+                                className="shrink-0 opacity-60 size-4"
+                                aria-hidden="true"
+                              />
+                            ),
+                            desc: (
+                              <ChevronDown
+                                className="shrink-0 opacity-60 size-4"
+                                aria-hidden="true"
+                              />
+                            ),
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
+                      )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
-                  ) : (
-                    <TableCell colSpan={columns.length} className="h-24 text-center w-[100px]">
-                      {labelLoading}
-                    </TableCell>
-                  )}
+                  ))}
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* La paginación va dentro de la tarjeta y al pie, que es donde la pone
-            Polaris: colgada por fuera se lee como otro bloque y no como el pie
-            de esta tabla. El rango va entre los dos pasos y no aparte, porque
-            es lo que separa las dos mitades del grupo. */}
-        <Pagination variant="table">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationStep
-                onClick={() => table.firstPage()}
-                disabled={!table.getCanPreviousPage()}
-                aria-label={labelFirstPage}
-              >
-                <ChevronsLeft className="size-4" aria-hidden />
-              </PaginationStep>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationStep
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-                aria-label={labelPreviousPage}
-              >
-                <ChevronLeft className="size-4" aria-hidden />
-              </PaginationStep>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLabel>
-                {primeraFila}–{ultimaFila} {labelOf} {total}
-              </PaginationLabel>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationStep
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-                aria-label={labelNextPage}
-              >
-                <ChevronRight className="size-4" aria-hidden />
-              </PaginationStep>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationStep
-                onClick={() => table.lastPage()}
-                disabled={!table.getCanNextPage()}
-                aria-label={labelLastPage}
-              >
-                <ChevronsRight className="size-4" aria-hidden />
-              </PaginationStep>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              ))
+            ) : (
+              <TableRow>
+                {/* Solo «no hay datos»: mientras carga, el aviso lo baja
+                      `Table` sobre las filas que ya estuvieran. */}
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  {labelNoData}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
 
       <div className="flex items-center gap-3 mt-4">

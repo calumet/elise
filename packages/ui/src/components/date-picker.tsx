@@ -12,8 +12,8 @@ import { useElLabel } from "@/lib/i18n";
 /**
  * Disparador de los selectores de fecha.
  *
- * Se presenta como campo y no como botón: los tres controles de fecha —este, el
- * de rango y `DateField`— aparecen juntos en un formulario, y si uno tiene borde
+ * Se presenta como campo y no como botón: los tres controles de fecha (este, el
+ * de rango y `DateField`) aparecen juntos en un formulario, y si uno tiene borde
  * de campo y otro relleno de botón se leen como cosas distintas cuando solo
  * cambia lo que hay dentro. Lleva el calendario al final, del mismo tamaño y a
  * la misma distancia del borde que el de `DateField`.

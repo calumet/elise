@@ -11,7 +11,7 @@ import { cn } from "@/lib/cn";
  *
  * Sigue la retícula del `DatePicker` de Polaris: celda de 32px con radio de 8,
  * número en 12px y encabezado de día tenue. Los días de los meses vecinos no se
- * pintan —Polaris deja la celda vacía— porque son fechas de otro mes ofrecidas
+ * pintan (Polaris deja la celda vacía) porque son fechas de otro mes ofrecidas
  * como si fueran de este, y el único sitio donde se distinguen es en un gris
  * que también usan las deshabilitadas.
  *
@@ -39,7 +39,7 @@ function Calendar({
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
 
   /**
-   * Idioma de los nombres de mes y de día, en BCP 47 —`"es-CO"`, `"en-US"`—.
+   * Idioma de los nombres de mes y de día, en BCP 47: `"es-CO"`, `"en-US"`.
    * Sin él se usa el del navegador.
    */
   locale?: string;
@@ -53,7 +53,7 @@ function Calendar({
   const nombres = React.useMemo(() => {
     const conIntl = (opciones: Intl.DateTimeFormatOptions) =>
       new Intl.DateTimeFormat(locale, opciones);
-    /* Varios idiomas abrevian con punto —«dom.», «lun.»—; en una columna de
+    /* Varios idiomas abrevian con punto («dom.», «lun.»); en una columna de
        32px ese punto solo gasta ancho. */
     const sinPunto = (texto: string) => texto.replace(/\.$/, "");
     const mes = conIntl({ month: "long", year: "numeric" });
@@ -155,7 +155,7 @@ function Calendar({
           defaultClassNames.day,
         ),
         /* El rango lo pinta el botón, no la celda. Pintarlo en las dos hacía que
-           con un rango de un solo día —donde la misma celda es principio y fin—
+           con un rango de un solo día, donde la misma celda es principio y fin,
            se aplicaran a la vez `rounded-l-md` de principio y `rounded-l-none`
            de fin, y las esquinas izquierdas salían rectas detrás del botón. La
            celda solo aporta el color de texto, que el botón hereda. */

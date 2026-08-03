@@ -1,4 +1,10 @@
-import { ChevronLeft, ChevronRight, Ellipsis } from "@calumet/elise-icons";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Ellipsis,
+} from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
@@ -119,8 +125,26 @@ function PaginationNext({ className, ...props }: PaginationButtonProps) {
   );
 }
 
+function PaginationFirst({ className, ...props }: PaginationButtonProps) {
+  const ariaLabel = useElLabel("ui", "firstPage", "Ir a la primera página");
+  return (
+    <PaginationStep aria-label={ariaLabel} className={className} {...props}>
+      <ChevronsLeft className="size-4" aria-hidden />
+    </PaginationStep>
+  );
+}
+
+function PaginationLast({ className, ...props }: PaginationButtonProps) {
+  const ariaLabel = useElLabel("ui", "lastPage", "Ir a la última página");
+  return (
+    <PaginationStep aria-label={ariaLabel} className={className} {...props}>
+      <ChevronsRight className="size-4" aria-hidden />
+    </PaginationStep>
+  );
+}
+
 /**
- * El rótulo que va entre los dos pasos —«1–20 de 340»—. Va dentro del grupo y
+ * El rótulo que va entre los dos pasos, del estilo «1-20 de 340». Va dentro del grupo y
  * no al lado porque es lo que separa los dos controles; fuera, los dos botones
  * quedarían pegados y el rótulo suelto en un extremo.
  */
@@ -155,7 +179,9 @@ export {
   PaginationItem,
   PaginationLabel,
   PaginationStep,
+  PaginationFirst,
   PaginationPrevious,
   PaginationNext,
+  PaginationLast,
   PaginationEllipsis,
 };

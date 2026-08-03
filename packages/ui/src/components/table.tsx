@@ -3,17 +3,20 @@ import * as React from "react";
 import {
   Pagination,
   PaginationContent,
+  PaginationFirst,
   PaginationItem,
   PaginationLabel,
+  PaginationLast,
   PaginationNext,
   PaginationPrevious,
 } from "./pagination";
+import { Spinner } from "./spinner";
 
 import { cn } from "@/lib/cn";
 
 /**
  * Contorno de superficie: la sombra de 1px por fuera y el bisel por dentro, con
- * el bisel en una capa aparte —un `::after`— en vez de como sombra interior del
+ * el bisel en una capa aparte, un `::after`, en vez de como sombra interior del
  * propio marco.
  *
  * Una sombra interior se pinta por debajo del fondo de los descendientes, así
@@ -94,8 +97,8 @@ const recogerColumnas = (hijos: React.ReactNode): Columna[] => {
 };
 
 /**
- * Reparte los papeles de la lista. Los tres únicos —principal, secundaria y
- * antetítulo— se quedan con la primera columna que los pida; las demás caen a
+ * Reparte los papeles de la lista. Los tres únicos (principal, secundaria y
+ * antetítulo) se quedan con la primera columna que los pida; las demás caen a
  * par de rótulo y valor.
  *
  * Si ninguna columna se declara principal, la primera sin designar hace de
@@ -147,21 +150,51 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   onPreviousPage?: () => void;
   onNextPage?: () => void;
 
-  /** Lo que va entre los dos pasos, del estilo «1–20 de 340». */
+  /**
+   * Saltar a la primera y a la última. `s-table` solo tiene anterior y
+   * siguiente, así que estos dos pasos solo aparecen si les das manejador: una
+   * tabla que sepa cuántas páginas hay puede ofrecerlos, y una que vaya con
+   * cursor, que no lo sabe, se queda con los dos de siempre.
+   */
+  onFirstPage?: () => void;
+  onLastPage?: () => void;
+
+  /** Lo que va entre los dos pasos, del estilo «1-20 de 340». */
   paginationLabel?: React.ReactNode;
+
+  /**
+   * Barra de filtros, arriba del todo y dentro del marco. Va aquí y no como
+   * hijo suelto porque lo que la define es dónde se apoya: encima de la tabla,
+   * dentro de la misma tarjeta y separada por un filete.
+   */
+  filters?: React.ReactNode;
+
+  /**
+   * Cargando. Baja un aviso sobre la tabla y deja lo de debajo sin responder,
+   * en vez de vaciarla: al pasar de página las filas que ya estaban siguen
+   * ahí, así que la tarjeta no pega un salto de alto ni parpadea en blanco.
+   *
+   * Se apoya en `inert`, que quita del paso al ratón, al tabulador y al lector
+   * de pantalla de una vez. Deshabilitar los controles uno por uno haría lo
+   * primero pero dejaría el foco entrando en una tabla que está cambiando.
+   */
+  loading?: boolean;
+
+  /** Lo que dice el aviso mientras carga. */
+  loadingLabel?: React.ReactNode;
 };
 
 /**
  * Tabla.
  *
  * Trae su propio marco: contorno, radio y recorte. El contorno no es un borde
- * plano sino un bisel —filo de abajo más pesado que el de arriba— más una
+ * plano sino un bisel, con el filo de abajo más pesado que el de arriba, más una
  * sombra de 1px, que es como Polaris apoya sus superficies: con un borde
  * uniforme el plano no tiene arriba ni abajo y la tabla se lee recortada en el
  * lienzo en vez de puesta sobre él. La banda del encabezado llega
  * hasta el borde, así que sin recorte sus esquinas cuadradas se salen por
- * encima de cualquier contorno redondeado que la envuelva —y quien la usa no
- * tiene por qué saberlo—. Dentro de una tarjeta que ya lo pone, `bare` lo
+ * encima de cualquier contorno redondeado que la envuelva, y quien la usa no
+ * tiene por qué saberlo. Dentro de una tarjeta que ya lo pone, `bare` lo
  * quita.
  *
  * El marco es un `<div>` aparte y no el propio `<table>` porque también hace de
@@ -173,7 +206,7 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
  * la tabla el filo se saldría del marco.
  *
  * Estrecha se lee como lista, no como tabla apretada. Cambia el marcado de
- * verdad —`<ul>` y `<li>` en vez de `<table>`— en lugar de tumbar la tabla con
+ * verdad, `<ul>` y `<li>` en vez de `<table>`, en lugar de tumbar la tabla con
  * `display`, que deja el contenido bien pero le quita a un lector de pantalla
  * las relaciones de fila y columna sin poner nada en su lugar.
  */
@@ -189,7 +222,12 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       hasNextPage = false,
       onPreviousPage,
       onNextPage,
+      onFirstPage,
+      onLastPage,
       paginationLabel,
+      filters,
+      loading = false,
+      loadingLabel,
       children,
       ...props
     },
@@ -200,7 +238,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
     React.useLayoutEffect(() => {
       if (variant !== "auto") return;
-      /* Se mide el hueco disponible —el padre— y no lo que ocupa la tabla: una
+      /* Se mide el hueco disponible, o sea el padre, y no lo que ocupa la tabla: una
          tabla que no cabe empuja a su propio contenedor, así que midiéndola a
          ella el ancho siempre daría de sobra y nunca pasaría a lista. */
       const hueco = contenedor.current?.parentElement;
@@ -235,8 +273,13 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       );
 
     const franja = paginate ? (
-      <Pagination variant="table" className="rounded-b-[inherit]">
+      <Pagination variant="table" className="rounded-b-[inherit]" inert={loading || undefined}>
         <PaginationContent>
+          {onFirstPage ? (
+            <PaginationItem>
+              <PaginationFirst disabled={!hasPreviousPage} onClick={onFirstPage} />
+            </PaginationItem>
+          ) : null}
           <PaginationItem>
             <PaginationPrevious disabled={!hasPreviousPage} onClick={onPreviousPage} />
           </PaginationItem>
@@ -248,24 +291,69 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
           <PaginationItem>
             <PaginationNext disabled={!hasNextPage} onClick={onNextPage} />
           </PaginationItem>
+          {onLastPage ? (
+            <PaginationItem>
+              <PaginationLast disabled={!hasNextPage} onClick={onLastPage} />
+            </PaginationItem>
+          ) : null}
         </PaginationContent>
       </Pagination>
     ) : null;
 
+    const barra = filters ? (
+      <div data-slot="table-filters" className="border-b border-border px-3 py-3">
+        {filters}
+      </div>
+    ) : null;
+
+    /* El aviso se recorta contra este `div`: entra deslizándose desde arriba y
+       sin recorte se vería flotando por encima de la tarjeta antes de entrar.
+       El radio va aquí y no en el carril porque este es ahora el que toca las
+       esquinas de la tarjeta. */
+    const zona = (
+      <div className="relative overflow-hidden rounded-[inherit]">
+        <div className="w-full overflow-x-auto" inert={loading || undefined}>
+          {cuerpo}
+        </div>
+        <div
+          data-slot="table-loading"
+          aria-hidden={!loading}
+          className={cn(
+            "pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center bg-card px-3 py-2 shadow-md",
+            "transition-[transform,opacity,visibility] duration-(--duration-fast) ease-out",
+            loading ? "translate-y-0 opacity-100" : "invisible -translate-y-full opacity-0",
+          )}
+        >
+          <span className="flex items-center gap-2 rounded-md bg-info-subtle px-2 py-1 text-sm text-info-subtle-foreground">
+            <Spinner size="sm" label="" />
+            {loadingLabel}
+          </span>
+        </div>
+      </div>
+    );
+
     return (
       <TablaCtx.Provider value={contexto}>
         {bare ? (
-          <div ref={contenedor} data-slot="table-bare" className={cn("w-full", frameClassName)}>
-            {cuerpo}
+          <div
+            ref={contenedor}
+            data-slot="table-bare"
+            aria-busy={loading || undefined}
+            className={cn("w-full", frameClassName)}
+          >
+            {barra}
+            {zona}
             {franja}
           </div>
         ) : (
           <div
             ref={contenedor}
             data-slot="table-frame"
+            aria-busy={loading || undefined}
             className={cn(SUPERFICIE, "w-full", frameClassName)}
           >
-            <div className="w-full overflow-x-auto rounded-[inherit]">{cuerpo}</div>
+            {barra}
+            {zona}
             {franja}
           </div>
         )}
@@ -345,11 +433,10 @@ export const TableFooter = React.forwardRef<
 TableFooter.displayName = "TableFooter";
 
 /** Reparte las celdas de una fila por el papel que tenga su columna. */
-function FilaDeLista({
-  children,
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLLIElement> & { children?: React.ReactNode }) {
+const FilaDeLista = React.forwardRef<
+  HTMLLIElement,
+  React.HTMLAttributes<HTMLLIElement> & { clickDelegate?: string }
+>(({ children, className, clickDelegate, ...props }, ref) => {
   const { columnas, ranuras } = React.useContext(TablaCtx);
 
   const celdas = React.Children.toArray(children).filter(
@@ -380,7 +467,12 @@ function FilaDeLista({
        `labeled` se salía de la tarjeta, que además recorta. */
     <li
       data-slot="table-row"
-      className={cn("flex flex-wrap items-start gap-x-4 gap-y-2 px-3 py-2", className)}
+      ref={ref}
+      className={cn(
+        "flex flex-wrap items-start gap-x-4 gap-y-2 px-3 py-2",
+        clickDelegate && "cursor-pointer hover:bg-muted",
+        className,
+      )}
       {...props}
     >
       <div className="flex min-w-40 flex-1 flex-col gap-0.5">
@@ -421,52 +513,105 @@ function FilaDeLista({
       ) : null}
     </li>
   );
-}
-
-export const TableRow = React.forwardRef<
-  HTMLTableRowElement,
-  React.HTMLAttributes<HTMLTableRowElement>
->(({ className, children, ...props }, ref) => {
-  const { modo } = React.useContext(TablaCtx);
-
-  if (modo === "list") {
-    return (
-      <FilaDeLista className={className} {...(props as React.HTMLAttributes<HTMLLIElement>)}>
-        {children}
-      </FilaDeLista>
-    );
-  }
-
-  /* Cada celda recibe el número de columna en la que cae. Es lo que le permite
-     alinearse sola cuando su columna es numérica, sin que quien escribe la
-     tabla tenga que repetir el formato celda por celda. */
-  const numeradas = React.Children.toArray(children).map((hijo, i) =>
-    React.isValidElement(hijo) ? (
-      <ColumnaCtx.Provider key={hijo.key ?? i} value={i}>
-        {hijo}
-      </ColumnaCtx.Provider>
-    ) : (
-      hijo
-    ),
-  );
-
-  return (
-    <tr
-      data-slot="table-row"
-      ref={ref}
-      /* Apuntar una fila la deja del mismo tono que el encabezado, que es lo que
-         hace Polaris: un solo valor para «superficie que no es la del contenido».
-         Elegida baja un paso más, para que se distinga de la que solo se apunta. */
-      className={cn(
-        "transition-colors hover:bg-muted data-[state=selected]:bg-secondary",
-        className,
-      )}
-      {...props}
-    >
-      {numeradas}
-    </tr>
-  );
 });
+FilaDeLista.displayName = "FilaDeLista";
+
+export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
+  /**
+   * `id` de un elemento interactivo de dentro de la fila. Pulsar la fila lo
+   * pulsa a él, que es la acción principal de la fila y nunca una secundaria.
+   *
+   * Es solo para el ratón. No añade `role`, ni `tabIndex`, ni tecla: el destino
+   * ya está en la fila y el teclado y el lector de pantalla llegan a él por su
+   * cuenta. Poner encima un `role="button"` con su tecla duplicaría la acción y
+   * dejaría a la fila anunciándose como botón cuando no lo es.
+   */
+  clickDelegate?: string;
+};
+
+/* Elementos que ya hacen algo por su cuenta: un clic ahí se queda ahí, y no
+   pasa a la fila. */
+const INTERACTIVOS =
+  "a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=checkbox],[contenteditable=true]";
+
+const usarDelegado = (clickDelegate: string | undefined) => {
+  const fila = React.useRef<HTMLElement | null>(null);
+
+  const alPulsar = (evento: React.MouseEvent<HTMLElement>) => {
+    if (!clickDelegate || evento.defaultPrevented || evento.button !== 0) return;
+    if ((evento.target as HTMLElement | null)?.closest(INTERACTIVOS)) return;
+    /* Arrastrar para seleccionar texto termina en un clic sobre la fila, y no
+       es lo mismo que pulsarla. */
+    if (!(window.getSelection()?.isCollapsed ?? true)) return;
+
+    const dentro = fila.current?.querySelector<HTMLElement>(`#${CSS.escape(clickDelegate)}`);
+    (dentro ?? document.getElementById(clickDelegate))?.click();
+  };
+
+  return { fila, alPulsar };
+};
+
+export const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
+  ({ className, children, clickDelegate, onClick, ...props }, ref) => {
+    const { modo } = React.useContext(TablaCtx);
+    const { fila, alPulsar } = usarDelegado(clickDelegate);
+
+    const pulsar = (evento: React.MouseEvent<HTMLElement>) => {
+      onClick?.(evento as React.MouseEvent<HTMLTableRowElement>);
+      alPulsar(evento);
+    };
+
+    if (modo === "list") {
+      return (
+        <FilaDeLista
+          ref={fila as React.Ref<HTMLLIElement>}
+          className={className}
+          clickDelegate={clickDelegate}
+          onClick={pulsar}
+          {...(props as React.HTMLAttributes<HTMLLIElement>)}
+        >
+          {children}
+        </FilaDeLista>
+      );
+    }
+
+    /* Cada celda recibe el número de columna en la que cae. Es lo que le permite
+       alinearse sola cuando su columna es numérica, sin que quien escribe la
+       tabla tenga que repetir el formato celda por celda. */
+    const numeradas = React.Children.toArray(children).map((hijo, i) =>
+      React.isValidElement(hijo) ? (
+        <ColumnaCtx.Provider key={hijo.key ?? i} value={i}>
+          {hijo}
+        </ColumnaCtx.Provider>
+      ) : (
+        hijo
+      ),
+    );
+
+    return (
+      <tr
+        data-slot="table-row"
+        ref={(nodo) => {
+          fila.current = nodo;
+          if (typeof ref === "function") ref(nodo);
+          else if (ref) ref.current = nodo;
+        }}
+        onClick={pulsar}
+        /* Apuntar una fila la deja del mismo tono que el encabezado, que es lo que
+           hace Polaris: un solo valor para «superficie que no es la del contenido».
+           Elegida baja un paso más, para que se distinga de la que solo se apunta. */
+        className={cn(
+          "transition-colors hover:bg-muted data-[state=selected]:bg-secondary",
+          clickDelegate && "cursor-pointer",
+          className,
+        )}
+        {...props}
+      >
+        {numeradas}
+      </tr>
+    );
+  },
+);
 TableRow.displayName = "TableRow";
 
 export type TableHeadProps = React.ThHTMLAttributes<HTMLTableCellElement> & {

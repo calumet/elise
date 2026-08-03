@@ -155,13 +155,13 @@
   --primary-foreground: oklch(1 0 0);
   /* Superficie de trabajo: el lienzo sobre el que se apoyan las tarjetas. Cae
      entre la barra de navegación (0.94) y la tarjeta (1.0), y esa es toda su
-     razón de ser —tres planos en orden—. Antes estaba en 0.968, tan cerca del
+     razón de ser: tres planos en orden. Antes estaba en 0.968, tan cerca del
      blanco que el marco de aplicación se leía como una sola superficie plana. */
   --secondary: oklch(0.958 0.002 265);
   --secondary-foreground: oklch(0.37 0.02 265);
   /* Superficie de «lo que no es contenido»: encabezado de tabla, fila apuntada,
-     botón apuntado. Polaris usa un solo valor para las tres —bg-surface-hover y
-     bg-surface-secondary son el mismo #F7F7F7— y este es ese valor. Estaba en
+     botón apuntado. Polaris usa un solo valor para las tres (bg-surface-hover y
+     bg-surface-secondary son el mismo #F7F7F7) y este es ese valor. Estaba en
      0.965, cinco niveles más oscuro, y con el bisel de la tarjeta encima el
      contorno se leía más pesado al costado del encabezado que al del cuerpo. */
   --muted: oklch(0.976 0.004 265);
@@ -169,8 +169,8 @@
      se lee este color; sobre --muted queda margen de sobra. */
   --muted-foreground: oklch(0.525 0.016 265);
   /* Relleno terciario: un gris plano, sin borde ni bisel, para controles que
-     acompañan a otra cosa en vez de pedir la acción por su cuenta —los botones
-     de paginar al pie de una tabla—. En Polaris es la familia `bg-fill-tertiary`
+     acompañan a otra cosa en vez de pedir la acción por su cuenta, como los
+     botones de paginar al pie de una tabla. En Polaris es la familia `bg-fill-tertiary`
      y son los mismos valores: 235 en reposo, 212 al apuntar, 204 al pulsar. */
   --fill-tertiary: oklch(0.94 0.004 265);
   --fill-tertiary-hover: oklch(0.87 0.006 265);
@@ -183,7 +183,7 @@
      Son tres valores distintos porque un campo necesita más peso que un
      divisor para leerse como editable.
      border-subtle es el cuarto y va por debajo: separa cosas de la misma
-     familia —las filas de una tabla— donde la línea solo tiene que dejar
+     familia, como las filas de una tabla, donde la línea solo tiene que dejar
      contar, no dividir. Con el mismo tono que el resto, una tabla de veinte
      filas se convierte en una reja. */
   --border-subtle: oklch(0.94 0.004 265);
@@ -300,7 +300,7 @@
      uniforme el plano no tiene arriba ni abajo.
      Van en dos tokens porque se pintan en sitios distintos. Una sombra interior
      queda por debajo del fondo de cualquier descendiente, así que sobre una
-     tabla el encabezado —que sí tiene fondo— se comía su tramo de bisel y el
+     tabla el encabezado, que sí tiene fondo, se comía su tramo de bisel y el
      contorno salía distinto arriba que abajo. El bisel se dibuja encima del
      contenido, en una capa aparte, que es como lo resuelve Polaris. */
   --shadow-surface: 0 1px 0 0 oklch(0.21 0.02 265 / 0.07);
@@ -330,8 +330,8 @@
   --muted: oklch(0.262 0.012 265);
   --muted-foreground: oklch(0.685 0.014 265);
   /* Polaris solo define el reposo de esta familia en oscuro, así que los otros
-     dos salen de trasladar los saltos del tema claro —0.07 y 0.145 y 0.175 por
-     encima de la superficie— al de aquí. Quedan entre --muted y
+     dos salen de trasladar los saltos del tema claro (0.07 y 0.145 y 0.175 por
+     encima de la superficie) al de aquí. Quedan entre --muted y
      --border-strong, que es donde tienen que caer. */
   --fill-tertiary: oklch(0.29 0.013 265);
   --fill-tertiary-hover: oklch(0.355 0.015 265);
@@ -411,7 +411,7 @@
   /* En oscuro los cuatro filos aclaran, el de arriba el doble que los otros
      tres. No es que la luz cambie de sitio: sobre un lienzo casi negro un filo
      oscuro no dibuja nada, y la tarjeta se quedaría sin contorno por abajo. Son
-     los mismos valores de Polaris —#CCC al 8% y al 16%—; el borde ya no depende
+     los mismos valores de Polaris, #CCC al 8% y al 16%; el borde ya no depende
      de por dónde caiga la luz sino de que haya con qué separar la superficie
      del fondo. */
   --shadow-surface: 0 1px 0 0 oklch(0 0 0 / 0.4);
@@ -529,7 +529,7 @@
     letter-spacing: var(--text-base--letter-spacing);
     /* La escala de pesos de Polaris arranca en 450, no en 400. Sin esta línea
        el token existía y la utilidad `font-normal` lo daba, pero todo lo que no
-       llevara clase de peso —el texto de una celda, un párrafo suelto— se
+       llevara clase de peso (el texto de una celda, un párrafo suelto) se
        quedaba en el 400 del navegador, medio paso por debajo del resto. */
     font-weight: var(--font-weight-normal);
     -webkit-font-smoothing: antialiased;
@@ -551,8 +551,8 @@
 
   /* El grosor va en `*` y el color en `html` porque no se heredan igual:
      `scrollbar-color` sí y `scrollbar-width` no. Declarando las dos en `html`,
-     la página quedaba con la barra fina y todo lo que desplaza por dentro —la
-     lista de un combobox, el cuerpo de un modal, la barra lateral— se quedaba
+     la página quedaba con la barra fina y todo lo que desplaza por dentro (la
+     lista de un combobox, el cuerpo de un modal, la barra lateral) se quedaba
      con la del sistema: mismo color, otro grosor.
 
      El color se queda en `html` a propósito, para que una zona con su propio

@@ -45,7 +45,7 @@ mismo se queda `danger` donde Polaris dice `critical`, y se conserva `warning`,
 que Polaris no tiene.
 
 **Las alturas exactas de botón de Polaris.** Polaris baja a 28px de alto con
-texto de 12px a partir de 768px. Elise se queda un escalón por encima —32/36/40—
+texto de 12px a partir de 768px. Elise se queda un escalón por encima, en 32/36/40,
 porque el resto del catálogo escribe a 14px y un botón de 28px al lado de ese
 texto se lee como un control secundario. Lo que sí se toma es el peso (550), el
 radio (8px) y el comportamiento de `loading`.
@@ -58,7 +58,7 @@ de las variantes transparentes, `pressed` con su `aria-pressed`, el empujón de
 1px al presionar, y las variantes tipo enlace. Ninguna es un defecto; son
 decisiones que conviene tomar con un caso delante.
 
-## Fase 0 — La capa de tokens
+## Fase 0: la capa de tokens
 
 Es donde estaba el grueso de la sensación de plantilla genérica, y se resuelve
 sin tocar ninguna API pública.
@@ -76,7 +76,7 @@ sin tocar ninguna API pública.
       popover y los tres menús, de modo que no hay forma de saber qué se apila
       sobre qué sin leerlos todos
 
-## Fase 1 — Primitivas
+## Fase 1: primitivas
 
 La capa que separa una librería de widgets de un design system. Sin ella, cada
 pantalla resuelve su layout con Tailwind crudo y termina inventando su propia
@@ -89,7 +89,7 @@ escala.
 acepta `as="h2"` con el tamaño independiente de la semántica, y centrar es un
 caso de `Box` o de `InlineStack`.
 
-## Fase 2 — Cerrar el catálogo
+## Fase 2: cerrar el catálogo
 
 - [x] `Badge`, `Alert`, `EmptyState`, `Spinner`
 - [x] `Combobox` y `MultiCombobox`, con sus envoltorios
@@ -98,19 +98,12 @@ caso de `Box` o de `InlineStack`.
       Radix
 - [x] `DateField`, el campo de fecha con calendario emergente
 - [x] `Table`, contra el contrato de `s-table`: `variant` con los tres modos,
-      `listSlot` y `format` por columna, y `paginate` con sus dos pasos. Lo que
-      queda de ese contrato:
-  - [ ] `loading`. Shopify deja la tabla inerte mientras carga la página
-        siguiente; aquí no hay estado de carga ni skeleton de fila
-  - [ ] `clickDelegate`, que hace que pulsar la fila dispare un elemento
-        interactivo de dentro. Es solo ratón: el teclado y el lector de pantalla
-        siguen llegando al elemento por su cuenta, y por eso el destino tiene que
-        estar dentro de la fila
-  - [ ] La ranura `filters`. La tabla de datos tiene su barra de filtros propia,
-        pero `Table` no ofrece dónde ponerla
+      `listSlot` y `format` por columna, `paginate`, `loading`, `clickDelegate`
+      y la ranura `filters`. `DataTable` no arma tarjeta propia: pasa por estas
+      tres últimas, que antes duplicaba
 - [ ] `ColorPicker`. Hoy no hay ninguna forma de elegir un color. El contrato de
       referencia es el de `s-color-picker`: acepta HSL, HSLA, RGB, RGBA y hex de
-      3, 4, 6 y 8 dígitos, y emite siempre hex —de 6, o de 8 con `alpha`—.
+      3, 4, 6 y 8 dígitos, y emite siempre hex: de 6, o de 8 con `alpha`.
       Necesita área de saturación y brillo, barra de tono, barra de alfa
       opcional y campo hex. No hay medidas publicadas: el manifiesto de Shopify
       no expone `cssProperties` ni `cssParts` para ninguno de sus componentes,
@@ -131,7 +124,7 @@ componente web solo recibe cadenas; aquí `min`, `max` e `isDateDisabled` dicen 
 mismo con las herramientas del lenguaje. Tampoco hay rangos ni selección
 múltiple, igual que en `s-date-field`: para eso está `DateRangePicker`.
 
-## Fase 3 — `packages/blocks`
+## Fase 3: `packages/blocks`
 
 La tercera capa. El paquete está reservado en `arquitectura.md` y no existe en
 disco.
@@ -146,8 +139,8 @@ patrones que lo usan son los que se mudan.
 
 ### Lo que le falta al `AppShell`
 
-De la auditoría contra el volcado del admin de Shopify. La calibración —guía,
-pesos, riel, radios, colores— ya está; lo que queda cambia la forma del
+De la auditoría contra el volcado del admin de Shopify. La calibración (guía,
+pesos, riel, radios, colores) ya está; lo que queda cambia la forma del
 componente, y por eso va aparte.
 
 - [ ] La lista de hijas es hermana del `<li>` del padre y no va dentro, así que
@@ -168,7 +161,7 @@ componente, y por eso va aparte.
 - [ ] El arte de la guía no se refleja en RTL: la posición sí usa propiedades
       lógicas, pero el codo y la punta están dibujados de izquierda a derecha
 
-## Fase 4 — El sistema alrededor del catálogo
+## Fase 4: el sistema alrededor del catálogo
 
 - [x] Auditoría visual ejecutable, con su job en CI (ver
       [auditoría visual](auditoria-visual.md))

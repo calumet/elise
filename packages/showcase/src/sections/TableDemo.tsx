@@ -1,4 +1,6 @@
 import { Badge } from "@calumet/elise-ui/badge";
+import { Button } from "@calumet/elise-ui/button";
+import { Input } from "@calumet/elise-ui/input";
 import {
   Table,
   TableBody,
@@ -50,9 +52,21 @@ const PorPagina = 3;
 
 const TableDemo = () => {
   const [pagina, setPagina] = useState(0);
+  const [cargando, setCargando] = useState(false);
+  const [pulsaciones, setPulsaciones] = useState<string[]>([]);
   const total = clientes.length * 3; // finge tres páginas para poder pasarlas
   const desde = pagina * PorPagina + 1;
   const hasta = Math.min(desde + PorPagina - 1, total);
+
+  /* Pasar de página tarda: es lo que deja ver el aviso de carga y que lo de
+     debajo deja de responder mientras tanto. */
+  const pasar = (a: number) => {
+    setCargando(true);
+    setTimeout(() => {
+      setPagina(a);
+      setCargando(false);
+    }, 1200);
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -79,16 +93,36 @@ const TableDemo = () => {
         <Text size="sm" tone="muted">
           Con <code>paginate</code> la franja va dentro de la tarjeta y al pie, y el rango se lee
           entre los dos pasos. <code>format</code> alinea a la derecha y numera a ancho fijo, así
-          que las cifras cuadran columna abajo.
+          que las cifras cuadran columna abajo. Los filtros van por la ranura <code>filters</code>,
+          dentro de la misma tarjeta. Pulsa una fila: con <code>clickDelegate</code> el clic se lo
+          lleva el enlace del nombre, y pulsar el correo o la insignia no dispara nada. Al pasar de
+          página baja el aviso de carga y lo de debajo deja de responder.
+        </Text>
+        <Text size="sm" tone="muted" aria-live="polite">
+          Pulsaciones: <strong>{pulsaciones.length}</strong>, la última en{" "}
+          <strong>{pulsaciones[pulsaciones.length - 1] ?? "ninguna"}</strong>
         </Text>
         <Table
           variant="table"
           paginate
           hasPreviousPage={pagina > 0}
           hasNextPage={hasta < total}
-          onPreviousPage={() => setPagina((p) => Math.max(0, p - 1))}
-          onNextPage={() => setPagina((p) => p + 1)}
-          paginationLabel={`${desde}–${hasta} de ${total}`}
+          onPreviousPage={() => pasar(Math.max(0, pagina - 1))}
+          onNextPage={() => pasar(pagina + 1)}
+          paginationLabel={`${desde}-${hasta} de ${total}`}
+          loading={cargando}
+          loadingLabel="Cargando clientes"
+          filters={
+            <div className="flex flex-wrap items-center gap-2">
+              <Input placeholder="Buscar cliente" className="w-56" />
+              <Button variant="outline" size="sm">
+                Estado
+              </Button>
+              <Button variant="outline" size="sm">
+                Más filtros
+              </Button>
+            </div>
+          }
         >
           <TableHeader>
             <TableRow>
@@ -106,9 +140,18 @@ const TableDemo = () => {
           </TableHeader>
           <TableBody>
             {clientes.map((cliente) => (
-              <TableRow key={cliente.id}>
+              <TableRow key={cliente.id} clickDelegate={`abrir-${cliente.id.slice(1)}`}>
                 <TableCell>{cliente.id}</TableCell>
-                <TableCell>{cliente.nombre}</TableCell>
+                <TableCell>
+                  <button
+                    type="button"
+                    id={`abrir-${cliente.id.slice(1)}`}
+                    className="cursor-pointer rounded-xs underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    onClick={() => setPulsaciones((p) => [...p, cliente.nombre])}
+                  >
+                    {cliente.nombre}
+                  </button>
+                </TableCell>
                 <TableCell>{cliente.correo}</TableCell>
                 <TableCell>
                   <Badge tone={cliente.tono}>{cliente.estado}</Badge>
@@ -126,8 +169,8 @@ const TableDemo = () => {
           La misma tabla en modo lista. Cada columna dice qué papel juega con <code>listSlot</code>:
           el ID va de antetítulo, el nombre de principal, el correo debajo, el estado pegado al
           nombre y las dos cifras como pares de rótulo y valor. Con{" "}
-          <code>variant=&quot;auto&quot;</code>
-          —el valor por omisión— la tabla cambia sola a esto cuando no le caben 490px.
+          <code>variant=&quot;auto&quot;</code>, que es el valor por omisión, la tabla cambia sola a
+          esto cuando no le caben 490px.
         </Text>
         <div className="max-w-100">
           <Table variant="list">

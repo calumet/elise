@@ -14,7 +14,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
   /**
    * Anuncia con `aria-busy` que la acción está corriendo, deshabilita el
-   * control —evitar el envío repetido es su motivo de existir— y tapa el
+   * control (evitar el envío repetido es su motivo de existir) y tapa el
    * contenido con un indicador centrado.
    *
    * El rótulo no se quita: se vuelve transparente. Así el botón no cambia de
@@ -91,8 +91,8 @@ export const buttonVariants = ({
   size?: ButtonProps["size"];
 } = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
-/* Un escalón por debajo de lo que traía Elise, acercándose a Polaris —que a
-   partir de 768px baja a 28/28/32— sin llegar del todo: el resto del catálogo
+/* Un escalón por debajo de lo que traía Elise, acercándose a Polaris, que a
+   partir de 768px baja a 28/28/32, sin llegar del todo: el resto del catálogo
    escribe a 14px y un botón de 28px al lado de ese texto se lee como un
    control secundario. `icon` iguala a `md` para que una barra de acciones
    mezcle ambos sin desnivelarse. */

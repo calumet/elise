@@ -48,8 +48,8 @@ export const SelectContent = React.forwardRef<
       )}
       {...props}
     >
-      {/* Radix esconde la barra del visor —mete su propia regla para
-          `[data-radix-select-viewport]`— porque da por hecho que en su lugar se
+      {/* Radix esconde la barra del visor, con su propia regla para
+          `[data-radix-select-viewport]`, porque da por hecho que en su lugar se
           usan sus botones de subir y bajar. Sin ellos una lista larga se
           desplazaba sin que nada lo indicara. Se devuelve la del sistema, que
           es la misma que la de la página y la de cualquier otra lista.
