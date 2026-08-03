@@ -37,10 +37,12 @@ export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+          {/* Rótulo de mes, no desplegables: Polaris navega con las flechas y
+              deja el encabezado como título. Quien necesite saltar años puede
+              montar `Calendar` con `captionLayout="dropdown"`. */}
           <Calendar
             mode="single"
             selected={isValidDate ? value : undefined}
-            captionLayout="dropdown"
             disabled={(d) => d < new Date("1900-01-01")}
             onSelect={(d) => {
               onChange(d ?? undefined);

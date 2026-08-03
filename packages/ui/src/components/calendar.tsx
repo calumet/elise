@@ -6,10 +6,24 @@ import { Button, buttonVariants } from "./button";
 
 import { cn } from "@/lib/cn";
 
+/**
+ * Calendario.
+ *
+ * Sigue la retícula del `DatePicker` de Polaris: celda de 32px con radio de 8,
+ * número en 12px y encabezado de día tenue. Los días de los meses vecinos no se
+ * pintan —Polaris deja la celda vacía— porque son fechas de otro mes ofrecidas
+ * como si fueran de este, y el único sitio donde se distinguen es en un gris
+ * que también usan las deshabilitadas.
+ *
+ * Al apuntar un día se rellena como si ya estuviera elegido: el estado de foco
+ * y el de selección son el mismo dibujo, así que apuntar es la vista previa de
+ * elegir. Hoy se marca solo con el peso del número, sin fondo, para no competir
+ * con lo que sí está elegido.
+ */
 function Calendar({
   className,
   classNames,
-  showOutsideDays = true,
+  showOutsideDays = false,
   captionLayout = "label",
   buttonVariant = "ghost",
   formatters,
@@ -75,10 +89,20 @@ function Calendar({
         table: "w-full border-collapse",
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
-          "text-muted-foreground rounded-sm flex-1 font-normal text-[0.8rem] select-none",
+          "text-muted-foreground flex-1 font-normal text-xs select-none",
           defaultClassNames.weekday,
         ),
-        week: cn("flex w-full mt-2", defaultClassNames.week),
+        /* 2px entre semanas, no 8: la retícula tiene que leerse como un bloque
+           y no como siete columnas sueltas.
+           Un rango que cruza varias semanas se corta al final de cada fila; ahí
+           el tramo remata con una esquina pequeña, para que el corte se lea
+           como un dobladillo y no como si el rango terminara en el sábado. */
+        week: cn(
+          "flex w-full mt-0.5",
+          "[&>td:first-child>button[data-range-middle=true]]:rounded-l-[0.25rem]",
+          "[&>td:last-child>button[data-range-middle=true]]:rounded-r-[0.25rem]",
+          defaultClassNames.week,
+        ),
         week_number_header: cn("select-none w-(--cell-size)", defaultClassNames.week_number_header),
         week_number: cn(
           "text-[0.8rem] select-none text-muted-foreground",
@@ -86,31 +110,24 @@ function Calendar({
         ),
         day: cn(
           "relative w-full h-full p-0 text-center group/day aspect-square select-none",
-          props.showWeekNumber
-            ? "[&:nth-child(2)[data-range-start=true]_button]:rounded-l-sm"
-            : "[&:first-child[data-range-start=true]_button]:rounded-l-sm",
           defaultClassNames.day,
         ),
+        /* El tramo intermedio va cuadrado y en superficie tenue; solo los
+           extremos redondean, y solo por fuera. Así el rango se lee como una
+           barra con dos topes en vez de como días sueltos pintados. */
         range_start: cn(
-          "rounded-l-sm bg-primary text-primary-foreground",
+          "rounded-l-md bg-primary text-primary-foreground",
           defaultClassNames.range_start,
         ),
-        range_middle: cn(
-          "rounded-none bg-accent text-accent-foreground",
-          defaultClassNames.range_middle,
-        ),
+        range_middle: cn("rounded-none bg-muted text-foreground", defaultClassNames.range_middle),
         range_end: cn(
-          "rounded-r-sm rounded-l-none bg-primary text-primary-foreground",
+          "rounded-r-md rounded-l-none bg-primary text-primary-foreground",
           defaultClassNames.range_end,
         ),
-        today: cn(
-          "bg-accent rounded-sm text-accent-foreground data-[selected=true]:rounded-none",
-          defaultClassNames.today,
-        ),
-        outside: cn(
-          "text-muted-foreground opacity-50 aria-selected:text-muted-foreground",
-          defaultClassNames.outside,
-        ),
+        /* Hoy solo cambia de peso. Un fondo lo pondría a competir con el día
+           elegido, que es el que de verdad tiene que destacar. */
+        today: cn("font-bold", defaultClassNames.today),
+        outside: cn("text-muted-foreground opacity-50", defaultClassNames.outside),
         disabled: cn("text-muted-foreground opacity-50", defaultClassNames.disabled),
         hidden: cn("invisible", defaultClassNames.hidden),
         ...classNames,
@@ -176,7 +193,18 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-primary-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-r-sm [&[data-range-end=true][data-range-start=false]]:rounded-l-none data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-sm data-[range-start=true]:rounded-l-sm [&[data-range-end=false][data-range-start=true]]:rounded-r-none [&>span]:text-xs [&>span]:opacity-70",
+        "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md text-xs leading-none font-normal",
+        /* Apuntar pinta el mismo relleno que elegir, un tono por debajo: así se
+           ve de antemano en qué queda el clic. Gana al tramo intermedio a
+           propósito, que es lo que hace que el rango se pueda recorrer. */
+        "hover:bg-primary-hover hover:text-primary-foreground",
+        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground",
+        "data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-start=true]:rounded-md",
+        "data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-end=true]:rounded-r-md",
+        "data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-middle=true]:rounded-none",
+        "[&[data-range-end=true][data-range-start=false]]:rounded-l-none [&[data-range-end=false][data-range-start=true]]:rounded-r-none",
+        "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50",
+        "[&>span]:text-xs [&>span]:opacity-70",
         defaultClassNames.day,
         className,
       )}
