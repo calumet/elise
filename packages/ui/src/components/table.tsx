@@ -626,9 +626,20 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
         onClick={pulsar}
         /* Apuntar una fila la deja del mismo tono que el encabezado, que es lo que
            hace Polaris: un solo valor para «superficie que no es la del contenido».
-           Elegida baja un paso más, para que se distinga de la que solo se apunta. */
+           Elegida baja un paso más, para que se distinga de la que solo se apunta.
+
+           El color del filete se repite aquí aunque ya lo ponga `divide-y` en el
+           cuerpo, porque `divide-*` no alcanza a la última fila: su regla es
+           `:not(:last-child)`, y sin ella el color cae a `currentColor`, o sea
+           al del texto. No se ve mientras el filete mide 0, pero al reordenar la
+           última fila deja de serlo, gana su píxel y arranca desde casi negro.
+
+           Y la transición se limita al fondo, que es lo único que cambia al
+           apuntarla o elegirla. Con `transition-colors` entraba también el color
+           del borde, así que ese píxel no aparecía ya claro sino oscureciéndose
+           y aclarándose durante 150ms. */
         className={cn(
-          "transition-colors hover:bg-muted data-[state=selected]:bg-secondary",
+          "border-border-subtle transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted data-[state=selected]:bg-secondary",
           clickDelegate && "cursor-pointer",
           className,
         )}
