@@ -20,7 +20,6 @@ import {
   AppShellNavSubList,
   AppShellNavToggle,
 } from "@calumet/elise-ui/app-shell";
-import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
@@ -66,9 +65,6 @@ const AppShellDemo = () => {
           </div>
 
           <div className="flex min-w-0 items-center justify-end gap-3">
-            <Badge tone="neutral" size="sm">
-              {ruta}
-            </Badge>
             <div className="flex h-9 items-center gap-2 rounded-md bg-card ps-3 pe-1">
               <span className="hidden text-sm font-semibold md:inline">Juan D.</span>
               <span className="flex size-7 items-center justify-center rounded-sm bg-primary text-2xs font-bold text-primary-foreground">
