@@ -21,7 +21,10 @@ export const TableHeader = React.forwardRef<
   <thead
     data-slot="table-header"
     ref={ref}
-    className={cn("[&_tr]:border-b [&_tr]:border-border", className)}
+    /* Sin filete propio: la raya bajo el encabezado la pone el borde superior
+       de la primera fila del cuerpo. Con las dos salían dos líneas de 1px
+       pegadas. */
+    className={cn(className)}
     {...props}
   />
 ));
@@ -34,7 +37,13 @@ export const TableBody = React.forwardRef<
   <tbody
     data-slot="table-body"
     ref={ref}
-    className={cn("divide-y divide-border", className)}
+    /* El filete va arriba de cada fila y no debajo, que es como lo reparte
+       Polaris: así la última fila no cierra con una raya suelta contra el borde
+       de la tarjeta, y la primera queda separada del encabezado sin regla
+       aparte. `divide-y` hace exactamente eso —borde superior salvo en la
+       primera—, pero aquí sí la queremos, que es la que hace de línea del
+       encabezado. */
+    className={cn("border-t border-border divide-y divide-border", className)}
     {...props}
   />
 ));
@@ -74,7 +83,7 @@ export const TableHead = React.forwardRef<
     data-slot="table-head"
     ref={ref}
     className={cn(
-      "px-3 py-2 text-left align-middle text-2xs font-semibold text-muted-foreground",
+      "px-3 py-2 text-left align-middle text-xs font-medium text-muted-foreground",
       className,
     )}
     {...props}
@@ -89,7 +98,7 @@ export const TableCell = React.forwardRef<
   <td
     data-slot="table-cell"
     ref={ref}
-    className={cn("px-3 py-2.5 align-middle text-sm text-foreground", className)}
+    className={cn("px-3 py-1.5 align-middle text-sm text-foreground", className)}
     {...props}
   />
 ));
