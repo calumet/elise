@@ -10,7 +10,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./pagination";
-import { Spinner } from "./spinner";
 
 import { cn } from "@/lib/cn";
 
@@ -53,11 +52,23 @@ type Columna = {
 
 type Modo = "table" | "list";
 
-const TablaCtx = React.createContext<{ modo: Modo; columnas: Columna[]; ranuras: ListSlot[] }>({
+const TablaCtx = React.createContext<{
+  modo: Modo;
+  columnas: Columna[];
+  ranuras: ListSlot[];
+  cargando: boolean;
+}>({
   modo: "table",
   columnas: [],
   ranuras: [],
+  cargando: false,
 });
+
+/* Lo que se apaga mientras carga. 0.35 es la opacidad a la que equivale
+   `--p-color-text-disabled` de Polaris leído sobre blanco: su texto inhabilitado
+   sale en 181 partiendo de 48, o sea (255-181)/(255-48). Una tabla con la que no
+   se puede interactuar es contenido inhabilitado, así que se apaga hasta ahí. */
+const APAGADO = "opacity-35 transition-opacity duration-(--duration-fast) ease-out";
 
 /** Índice de la columna en la que cae una celda, puesto por su fila. */
 const ColumnaCtx = React.createContext(0);
@@ -163,11 +174,12 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   paginationLabel?: React.ReactNode;
 
   /**
-   * Un control al principio de la franja, del tipo «filas por página». Va ahí y
-   * no debajo de la tarjeta porque es parte de cómo se pagina esta tabla: por
-   * fuera se lee como un ajuste suelto que no se sabe a qué se refiere.
+   * Un control al final de la franja, del tipo «filas por página». Va ahí y no
+   * debajo de la tarjeta porque es parte de cómo se pagina esta tabla: por
+   * fuera se lee como un ajuste suelto que no se sabe a qué se refiere. Los
+   * pasos siguen centrados en el ancho de la tabla, no en el hueco que deja.
    */
-  paginationStart?: React.ReactNode;
+  paginationEnd?: React.ReactNode;
 
   /**
    * Barra de filtros, arriba del todo y dentro del marco. Va aquí y no como
@@ -232,7 +244,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       onFirstPage,
       onLastPage,
       paginationLabel,
-      paginationStart,
+      paginationEnd,
       filters,
       loading = false,
       loadingLabel,
@@ -262,7 +274,10 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
     const columnas = React.useMemo(() => recogerColumnas(children), [children]);
     const ranuras = React.useMemo(() => repartirRanuras(columnas), [columnas]);
-    const contexto = React.useMemo(() => ({ modo, columnas, ranuras }), [modo, columnas, ranuras]);
+    const contexto = React.useMemo(
+      () => ({ modo, columnas, ranuras, cargando: loading }),
+      [modo, columnas, ranuras, loading],
+    );
 
     const cuerpo =
       modo === "list" ? (
@@ -283,8 +298,8 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     const franja = paginate ? (
       <Pagination
         variant="table"
-        className="rounded-b-[inherit]"
-        start={paginationStart}
+        className={cn("rounded-b-[inherit]", loading && APAGADO)}
+        end={paginationEnd}
         inert={loading || undefined}
       >
         <PaginationContent>
@@ -314,45 +329,38 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     ) : null;
 
     const barra = filters ? (
-      <div data-slot="table-filters" className="border-b border-border px-3 py-3">
+      <div
+        data-slot="table-filters"
+        className={cn("border-b border-border px-3 py-3", loading && APAGADO)}
+        inert={loading || undefined}
+      >
         {filters}
       </div>
     ) : null;
 
-    /* El aviso se recorta contra este `div`: entra deslizándose desde arriba y
-       sin recorte se vería flotando por encima de la tarjeta antes de entrar.
-       El radio va aquí y no en el carril porque este es ahora el que toca las
-       esquinas de la tarjeta. */
+    /* Cargando, `s-table` apaga las filas y deja la tabla sin responder. No baja
+       ningún cartel: eso es lo que hace `IndexTable` de Polaris React, que es
+       otro componente, y traérselo aquí tapaba la banda del encabezado con algo
+       que en la referencia no existe.
+
+       El encabezado no se apaga. Es el rótulo de las columnas, no dato que esté
+       cambiando, y dejarlo firme es lo que mantiene la tabla legible mientras
+       llega la página siguiente. */
     const zona = (
       <div className="relative overflow-hidden rounded-[inherit]">
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
           {cuerpo}
-        </div>
-        {/* Entra por arriba y tapa la banda del encabezado, que es donde lo
-            pone Polaris: su panel va a `top: 0` del contenedor de la tabla y
-            con un z-index por encima del de los encabezados fijos. La banda de
-            aviso ocupa el ancho entero y no es una pastilla suelta en medio;
-            centrada y pequeña, el blanco de detrás se lee como un encabezado
-            que se borró en vez de como un aviso que llegó. */}
-        <div
-          data-slot="table-loading"
-          aria-hidden={!loading}
-          className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center bg-card px-4 py-2 shadow-md",
-            "transition-[transform,opacity,visibility] duration-(--duration-fast) ease-out",
-            loading ? "translate-y-0 opacity-100" : "invisible -translate-y-full opacity-0",
-          )}
-        >
-          <span className="flex w-full flex-nowrap items-center rounded-sm bg-info-subtle px-2 pt-2 pb-1 text-sm text-foreground">
-            <Spinner size="sm" label="" />
-            <span className="ms-3">{loadingLabel}</span>
-          </span>
         </div>
       </div>
     );
 
     return (
       <TablaCtx.Provider value={contexto}>
+        {/* Con la tabla inerte, un lector de pantalla ya no llega a sus filas.
+            Esto es lo único que queda anunciando que hay algo en curso. */}
+        <span role="status" aria-live="polite" className="sr-only">
+          {loading ? loadingLabel : null}
+        </span>
         {bare ? (
           <div
             ref={contenedor}
@@ -408,13 +416,13 @@ export const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => {
-  const { modo } = React.useContext(TablaCtx);
+  const { modo, cargando } = React.useContext(TablaCtx);
   /* `divide-y` pone el filete debajo de cada fila menos de la última, así que
      la tabla no cierra con una raya suelta contra el borde del marco. La línea
      bajo el encabezado la pone este `border-t`, y va un tono más firme que los
      separadores: en Polaris el de la primera fila usa `--p-color-border` y el
      de entre filas `border-secondary`, que es más claro. */
-  const filetes = "border-t border-border divide-y divide-border-subtle";
+  const filetes = cn("border-t border-border divide-y divide-border-subtle", cargando && APAGADO);
 
   if (modo === "list") {
     return (

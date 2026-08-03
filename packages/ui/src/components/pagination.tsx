@@ -32,7 +32,7 @@ export type PaginationProps = React.ComponentProps<"nav"> & {
   variant?: "default" | "table";
 
   /**
-   * Un control que acompaña a los pasos, al principio de la franja. Solo en la
+   * Un control que acompaña a los pasos, al final de la franja. Solo en la
    * variante de tabla.
    *
    * La franja se reparte en tres bandas de las que la primera y la tercera
@@ -40,16 +40,10 @@ export type PaginationProps = React.ComponentProps<"nav"> & {
    * y no en el hueco que sobra. Puestos con `justify-between` se desplazarían
    * cada vez que este control cambia de ancho.
    */
-  start?: React.ReactNode;
+  end?: React.ReactNode;
 };
 
-function Pagination({
-  className,
-  variant = "default",
-  start,
-  children,
-  ...props
-}: PaginationProps) {
+function Pagination({ className, variant = "default", end, children, ...props }: PaginationProps) {
   const label = useElLabel("ui", "pagination", "Paginación");
   return (
     <nav
@@ -67,9 +61,9 @@ function Pagination({
     >
       {variant === "table" ? (
         <>
-          <div className="min-w-0 justify-self-start">{start}</div>
-          <div className="justify-self-center">{children}</div>
           <div aria-hidden />
+          <div className="justify-self-center">{children}</div>
+          <div className="min-w-0 justify-self-end">{end}</div>
         </>
       ) : (
         children

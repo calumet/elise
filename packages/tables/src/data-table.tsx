@@ -283,7 +283,7 @@ function DataTableContent<TData, TValue>({
           onFirstPage={() => table.firstPage()}
           onLastPage={() => table.lastPage()}
           paginationLabel={`${primeraFila}-${ultimaFila} ${labelOf} ${total}`}
-          paginationStart={
+          paginationEnd={
             <div className="flex items-center gap-2">
               <Label htmlFor={id} className="max-sm:sr-only text-xs whitespace-nowrap">
                 {labelRowsPerPage}
