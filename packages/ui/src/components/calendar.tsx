@@ -51,7 +51,13 @@ function Calendar({
       classNames={{
         root: cn("w-fit", defaultClassNames.root),
         months: cn("flex gap-4 flex-col md:flex-row relative", defaultClassNames.months),
-        month: cn("flex flex-col w-full gap-4", defaultClassNames.month),
+        /* 4px entre el título y la retícula. Con 16 el encabezado se despega y
+           el mes deja de leerse como una sola pieza. */
+        month: cn("flex flex-col w-full gap-1", defaultClassNames.month),
+        /* Nada de `w-full` aquí: la raíz es `w-fit`, así que el ancho de la
+           tabla y el de su contenedor se definirían el uno al otro. El ancho
+           sale de las celdas, que miden `--cell-size`. */
+        month_grid: cn("border-collapse", defaultClassNames.month_grid),
         nav: cn(
           "flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between",
           defaultClassNames.nav,
@@ -86,18 +92,21 @@ function Calendar({
             : "rounded-sm pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
           defaultClassNames.caption_label,
         ),
-        weekdays: cn("flex", defaultClassNames.weekdays),
+        /* Las filas se quedan como filas de tabla en vez de pasar a `flex`.
+           Dentro de un `role="grid"`, poner `display:flex` en un `<tr>` le quita
+           el rol implícito de fila, y el lector de pantalla se encuentra celdas
+           sueltas sin nada que las agrupe. El ancho lo reparte `table-fixed`. */
+        weekdays: cn(defaultClassNames.weekdays),
         weekday: cn(
-          "text-muted-foreground flex-1 font-normal text-xs select-none",
+          "text-muted-foreground py-2 font-normal text-xs select-none",
           defaultClassNames.weekday,
         ),
-        /* 2px entre semanas, no 8: la retícula tiene que leerse como un bloque
-           y no como siete columnas sueltas.
-           Un rango que cruza varias semanas se corta al final de cada fila; ahí
-           el tramo remata con una esquina pequeña, para que el corte se lea
-           como un dobladillo y no como si el rango terminara en el sábado. */
+        /* Sin separación entre semanas: un rango de varias filas tiene que
+           leerse como un bloque y no como barras sueltas.
+           Al cruzar de semana el tramo se corta, y ahí remata con una esquina
+           pequeña, para que el corte se lea como un dobladillo y no como si el
+           rango terminara en el sábado. */
         week: cn(
-          "flex w-full mt-0.5",
           "[&>td:first-child>button[data-range-middle=true]]:rounded-l-[0.25rem]",
           "[&>td:last-child>button[data-range-middle=true]]:rounded-r-[0.25rem]",
           defaultClassNames.week,
@@ -123,9 +132,9 @@ function Calendar({
           "rounded-r-md rounded-l-none bg-primary text-primary-foreground",
           defaultClassNames.range_end,
         ),
-        /* Hoy solo cambia de peso. Un fondo lo pondría a competir con el día
-           elegido, que es el que de verdad tiene que destacar. */
-        today: cn("font-bold", defaultClassNames.today),
+        /* El peso de hoy lo pone el propio botón, no esta celda: el número vive
+           en el botón y ahí manda su `font-normal`. */
+        today: cn(defaultClassNames.today),
         outside: cn("text-muted-foreground opacity-50", defaultClassNames.outside),
         disabled: cn("text-muted-foreground opacity-50", defaultClassNames.disabled),
         hidden: cn("invisible", defaultClassNames.hidden),
@@ -191,8 +200,12 @@ function CalendarDayButton({
       data-range-start={modifiers.range_start}
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
+      data-today={modifiers.today}
       className={cn(
         "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md text-xs leading-none font-normal",
+        /* Hoy solo cambia de peso. Un fondo lo pondría a competir con el día
+           elegido, que es el que de verdad tiene que destacar. */
+        "data-[today=true]:font-bold",
         /* Apuntar pinta el mismo relleno que elegir, un tono por debajo: así se
            ve de antemano en qué queda el clic. Gana al tramo intermedio a
            propósito, que es lo que hace que el rango se pueda recorrer. */
