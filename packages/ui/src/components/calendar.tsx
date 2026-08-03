@@ -20,19 +20,51 @@ import { cn } from "@/lib/cn";
  * elegir. Hoy se marca solo con el peso del número, sin fondo, para no competir
  * con lo que sí está elegido.
  */
+/* `DayPickerProps` es una unión discriminada por `mode`, y un `Omit` normal la
+   colapsa en un solo miembro: `selected` deja de existir. Distribuyendo sobre
+   cada miembro, la unión sobrevive. */
+type SinLocale<T> = T extends unknown ? Omit<T, "locale"> : never;
+
 function Calendar({
   className,
   classNames,
   showOutsideDays = false,
   captionLayout = "label",
   buttonVariant = "ghost",
+  locale,
   formatters,
   components,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
+}: SinLocale<React.ComponentProps<typeof DayPicker>> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
+
+  /**
+   * Idioma de los nombres de mes y de día, en BCP 47 —`"es-CO"`, `"en-US"`—.
+   * Sin él se usa el del navegador.
+   */
+  locale?: string;
 }) {
   const defaultClassNames = getDefaultClassNames();
+
+  /* `react-day-picker` trae el inglés incrustado, así que sin esto un mes se
+     escribe «August» dentro de una interfaz en español. Se formatea con `Intl`
+     y no con un paquete de idiomas para no arrastrar uno por cada lengua: el
+     navegador ya sabe escribir fechas en la suya. */
+  const nombres = React.useMemo(() => {
+    const conIntl = (opciones: Intl.DateTimeFormatOptions) =>
+      new Intl.DateTimeFormat(locale, opciones);
+    /* Varios idiomas abrevian con punto —«dom.», «lun.»—; en una columna de
+       32px ese punto solo gasta ancho. */
+    const sinPunto = (texto: string) => texto.replace(/\.$/, "");
+    const mes = conIntl({ month: "long", year: "numeric" });
+    const mesCorto = conIntl({ month: "short" });
+    const diaSemana = conIntl({ weekday: "short" });
+    return {
+      mes: (f: Date) => mes.format(f),
+      mesCorto: (f: Date) => sinPunto(mesCorto.format(f)),
+      diaSemana: (f: Date) => sinPunto(diaSemana.format(f)),
+    };
+  }, [locale]);
 
   return (
     <DayPicker
@@ -45,7 +77,9 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        formatCaption: nombres.mes,
+        formatMonthDropdown: nombres.mesCorto,
+        formatWeekdayName: nombres.diaSemana,
         ...formatters,
       }}
       classNames={{
