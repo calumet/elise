@@ -315,18 +315,24 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
           {cuerpo}
         </div>
+        {/* Entra por arriba y tapa la banda del encabezado, que es donde lo
+            pone Polaris: su panel va a `top: 0` del contenedor de la tabla y
+            con un z-index por encima del de los encabezados fijos. La banda de
+            aviso ocupa el ancho entero y no es una pastilla suelta en medio;
+            centrada y pequeña, el blanco de detrás se lee como un encabezado
+            que se borró en vez de como un aviso que llegó. */}
         <div
           data-slot="table-loading"
           aria-hidden={!loading}
           className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center bg-card px-3 py-2 shadow-md",
+            "pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center bg-card px-4 py-2 shadow-md",
             "transition-[transform,opacity,visibility] duration-(--duration-fast) ease-out",
             loading ? "translate-y-0 opacity-100" : "invisible -translate-y-full opacity-0",
           )}
         >
-          <span className="flex items-center gap-2 rounded-md bg-info-subtle px-2 py-1 text-sm text-info-subtle-foreground">
+          <span className="flex w-full flex-nowrap items-center rounded-sm bg-info-subtle px-2 pt-2 pb-1 text-sm text-foreground">
             <Spinner size="sm" label="" />
-            {loadingLabel}
+            <span className="ms-3">{loadingLabel}</span>
           </span>
         </div>
       </div>
