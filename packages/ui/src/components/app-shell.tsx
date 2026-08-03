@@ -188,7 +188,7 @@ function AppShellNav({ className, children, ...props }: AppShellNavProps) {
     <nav
       data-slot="app-shell-nav"
       className={cn(
-        "flex w-60 shrink-0 flex-col gap-1 overflow-y-auto border-e border-sidebar-border bg-sidebar p-3 text-sidebar-foreground",
+        "flex w-60 shrink-0 flex-col overflow-y-auto border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
         className,
       )}
       {...props}
@@ -284,22 +284,26 @@ function AppShellNavSection({
   );
 }
 
-type Guia = "linea" | "puntero" | "linea-puntero" | "union";
+type Guia = "linea" | "puntero" | "linea-puntero";
+
+/* La fila mide 28px exactos y la guía también, así que una encaja sobre la otra
+   sin cuadrar nada a mano. La altura sale del margen del texto, no de un padding
+   en la fila: con padding, el fondo del estado activo crecería con ella. */
+const FILA =
+  "relative flex w-full items-start rounded-lg pe-1 text-sm transition-[background-color,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar";
 
 /**
  * Guía de continuidad entre una entrada y sus hijas.
  *
  * Baja desde el icono del padre y, en la hija activa, dobla en codo y remata en
- * punta de flecha. Un borde izquierdo plano diría "estas van juntas"; el codo
- * además dice cuál de ellas es la que se está viendo.
+ * punta. Un borde izquierdo plano diría "estas van juntas"; el codo además dice
+ * cuál se está viendo.
  *
- * Va en SVG y no como imagen de fondo para que el trazo tome `currentColor` y
- * siga al tema.
+ * La caja mide 21x28, la misma altura que una fila, y se ancla a 8px del borde
+ * para que su vertical caiga sobre el centro del icono del padre. Va en SVG y no
+ * como imagen de fondo para que el trazo tome `currentColor` y siga al tema.
  */
-function GuiaNav({ variante }: { variante: Guia }) {
-  const conLinea = variante === "linea" || variante === "linea-puntero";
-  const conPuntero = variante === "puntero" || variante === "linea-puntero";
-
+function GuiaNav({ variante }: { variante: Guia | "munion" }) {
   return (
     <svg
       width="21"
@@ -308,22 +312,25 @@ function GuiaNav({ variante }: { variante: Guia }) {
       fill="none"
       aria-hidden="true"
       focusable="false"
-      className="pointer-events-none absolute top-0 start-2 text-sidebar-border"
+      className="pointer-events-none absolute top-0 start-2 text-sidebar-guide"
     >
-      {conLinea ? <path d="M9 0H10.5V28H9V0Z" fill="currentColor" /> : null}
+      {variante === "linea" ? <path d="M9 0H10.5V28H9V0Z" fill="currentColor" /> : null}
+      {variante === "linea-puntero" ? (
+        <>
+          <path d="M9 0H10.5V28H9V0Z" fill="currentColor" />
+          <path
+            d="M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z"
+            fill="currentColor"
+          />
+        </>
+      ) : null}
       {variante === "puntero" ? (
         <path
           d="M9 0H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z"
           fill="currentColor"
         />
       ) : null}
-      {variante === "linea-puntero" ? (
-        <path
-          d="M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z"
-          fill="currentColor"
-        />
-      ) : null}
-      {conPuntero ? (
+      {variante === "puntero" || variante === "linea-puntero" ? (
         <path
           d="M17 12L20 15L17 18"
           stroke="currentColor"
@@ -332,7 +339,9 @@ function GuiaNav({ variante }: { variante: Guia }) {
           strokeLinejoin="round"
         />
       ) : null}
-      {variante === "union" ? (
+      {/* Muñon: el arranque de la vertical, en la fila del padre. Sin el, la
+          linea de las hijas nace despegada del icono del que cuelga. */}
+      {variante === "munion" ? (
         <path
           d="M9 24.75C9 24.3358 9.33579 24 9.75 24C10.1642 24 10.5 24.3358 10.5 24.75V28H9V24.75Z"
           fill="currentColor"
@@ -347,31 +356,31 @@ export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
 };
 
 /**
- * Hija de una entrada. La guía la decide `AppShellNavSubList`, que es quien sabe
- * la posición de cada una y cuál está activa.
+ * Hija de una entrada. La sangria de 36px alinea su texto con el del padre, que
+ * arranca despues del icono. La guia la reparte `AppShellNavSubList`.
  */
-function AppShellNavSubItem({
-  className,
-  active,
-  children,
-  ...props
-}: AppShellNavSubItemProps & { "data-guia"?: Guia }) {
-  const { "data-guia": guia, ...resto } = props as AppShellNavSubItemProps & { "data-guia"?: Guia };
+function AppShellNavSubItem({ className, active, children, ...props }: AppShellNavSubItemProps) {
+  const { "data-guia": guia, ...resto } = props as AppShellNavSubItemProps & {
+    "data-guia"?: Guia;
+  };
 
   return (
-    <li className="relative list-none">
-      {guia ? <GuiaNav variante={guia} /> : null}
+    <li className="list-none px-2.5">
       <a
         data-slot="app-shell-nav-sub-item"
         aria-current={active ? "page" : undefined}
         className={cn(
-          "ms-7 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar",
-          "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-semibold aria-[current=page]:text-sidebar-accent-foreground",
+          FILA,
+          "ps-9",
+          active
+            ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
+            : "font-normal text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground",
           className,
         )}
         {...resto}
       >
-        <span className="min-w-0 truncate">{children}</span>
+        {guia ? <GuiaNav variante={guia} /> : null}
+        <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
       </a>
     </li>
   );
@@ -380,21 +389,24 @@ function AppShellNavSubItem({
 export type AppShellNavSubListProps = React.ComponentProps<"ul">;
 
 /**
- * Lista de hijas. Reparte la guía según la posición: las anteriores a la activa
- * llevan línea, y la activa dobla en codo. Si es la última, el codo sustituye a
- * la línea en vez de sumarse, para que la vertical no siga hacia la nada.
+ * Lista de hijas. Reparte la guia segun la posicion: las anteriores a la activa
+ * llevan la vertical, y la activa dobla en codo.
+ *
+ * La ultima sin activar no lleva ninguna, que es lo que evita que la vertical
+ * siga por debajo del grupo. Y si la activa es la ultima, el codo sustituye a la
+ * linea en vez de sumarse, por la misma razon.
  */
 function AppShellNavSubList({ className, children, ...props }: AppShellNavSubListProps) {
   const hijas = React.Children.toArray(children).filter(React.isValidElement);
   const activa = hijas.findIndex((h) => (h.props as AppShellNavSubItemProps).active === true);
 
   return (
-    <ul data-slot="app-shell-nav-sub-list" className={cn("relative", className)} {...props}>
+    <ul data-slot="app-shell-nav-sub-list" className={cn("mb-2 list-none", className)} {...props}>
       {hijas.map((h, i) => {
-        let guia: Guia = "linea";
-        if (i === activa) guia = i === hijas.length - 1 ? "puntero" : "linea-puntero";
-        else if (activa === -1 && i === hijas.length - 1) guia = "union";
-        return React.cloneElement(h as React.ReactElement<{ "data-guia": Guia }>, {
+        const ultima = i === hijas.length - 1;
+        const guia: Guia | undefined =
+          i === activa ? (ultima ? "puntero" : "linea-puntero") : ultima ? undefined : "linea";
+        return React.cloneElement(h as React.ReactElement<{ "data-guia"?: Guia }>, {
           key: h.key ?? i,
           "data-guia": guia,
         });
@@ -406,26 +418,45 @@ function AppShellNavSubList({ className, children, ...props }: AppShellNavSubLis
 export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
   icon?: React.ReactNode;
+
+  /** Marca que de esta entrada cuelga una lista abierta, y dibuja el arranque. */
+  hasChildren?: boolean;
 };
 
-/** Entrada de navegación. `active` la marca con `aria-current="page"`. */
-function AppShellNavItem({ className, active, icon, children, ...props }: AppShellNavItemProps) {
+/** Entrada de navegacion. `active` la marca con `aria-current="page"`. */
+function AppShellNavItem({
+  className,
+  active,
+  icon,
+  hasChildren,
+  children,
+  ...props
+}: AppShellNavItemProps) {
   return (
-    <li className="list-none">
+    <li className="list-none px-2.5">
       <a
         data-slot="app-shell-nav-item"
         aria-current={active ? "page" : undefined}
         className={cn(
-          "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar",
-          "aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-semibold aria-[current=page]:text-sidebar-accent-foreground",
+          FILA,
+          "ps-2",
+          active
+            ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
+            : "font-medium text-sidebar-foreground hover:bg-sidebar-accent",
           className,
         )}
         {...props}
       >
+        {hasChildren ? <GuiaNav variante="munion" /> : null}
         {icon ? (
-          <span className="flex size-4 shrink-0 items-center justify-center">{icon}</span>
+          <span
+            aria-hidden="true"
+            className="my-1 me-2 flex size-5 flex-none items-center justify-center [&_svg]:size-4"
+          >
+            {icon}
+          </span>
         ) : null}
-        <span className="min-w-0 truncate">{children}</span>
+        <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
       </a>
     </li>
   );

@@ -165,6 +165,9 @@
   --sidebar-accent: oklch(0.945 0.006 265);
   --sidebar-accent-foreground: oklch(0.21 0.012 265);
   --sidebar-border: oklch(0.912 0.006 265);
+  /* Guía de continuidad de la navegación. Va entre el borde y el texto tenue:
+     tiene que leerse como trazo sin competir con la etiqueta. */
+  --sidebar-guide: oklch(0.78 0.008 265);
   --sidebar-ring: oklch(0.55 0.19 262);
   --success: oklch(0.52 0.15 152);
   --success-foreground: oklch(1 0 0);
@@ -286,6 +289,7 @@
   --sidebar-accent: oklch(0.268 0.013 265);
   --sidebar-accent-foreground: oklch(0.945 0.004 265);
   --sidebar-border: oklch(0.302 0.013 265);
+  --sidebar-guide: oklch(0.44 0.014 265);
   --sidebar-ring: oklch(0.655 0.17 262);
   --success: oklch(0.68 0.15 152);
   --success-foreground: oklch(0.16 0.03 152);
@@ -362,6 +366,7 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-guide: var(--sidebar-guide);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);

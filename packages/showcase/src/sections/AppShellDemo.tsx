@@ -36,18 +36,13 @@ const AppShellDemo = () => {
         </AppShellHeader>
 
         <AppShellNav>
-          <ul className="flex list-none flex-col gap-0.5 p-0">
-            <AppShellNavItem
-              href="/"
-              icon={<Home className="size-4" />}
-              active={ruta === "/"}
-              onClick={ir("/")}
-            >
+          <ul className="list-none p-0">
+            <AppShellNavItem href="/" icon={<Home />} active={ruta === "/"} onClick={ir("/")}>
               Inicio
             </AppShellNavItem>
             <AppShellNavItem
               href="/pedidos"
-              icon={<ShoppingCart className="size-4" />}
+              icon={<ShoppingCart />}
               active={ruta === "/pedidos"}
               onClick={ir("/pedidos")}
             >
@@ -55,7 +50,7 @@ const AppShellDemo = () => {
             </AppShellNavItem>
             <AppShellNavItem
               href="/productos"
-              icon={<Package className="size-4" />}
+              icon={<Package />}
               active={ruta === "/productos"}
               onClick={ir("/productos")}
             >
@@ -64,7 +59,8 @@ const AppShellDemo = () => {
 
             <AppShellNavItem
               href="/clientes"
-              icon={<Users className="size-4" />}
+              icon={<Users />}
+              hasChildren
               active={ruta === "/clientes"}
               onClick={ir("/clientes")}
             >
@@ -89,7 +85,7 @@ const AppShellDemo = () => {
 
             <AppShellNavItem
               href="/descuentos"
-              icon={<Tag className="size-4" />}
+              icon={<Tag />}
               active={ruta === "/descuentos"}
               onClick={ir("/descuentos")}
             >
@@ -97,7 +93,7 @@ const AppShellDemo = () => {
             </AppShellNavItem>
             <AppShellNavItem
               href="/analitica"
-              icon={<BarChart3 className="size-4" />}
+              icon={<BarChart3 />}
               active={ruta === "/analitica"}
               onClick={ir("/analitica")}
             >
