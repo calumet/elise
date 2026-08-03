@@ -27,7 +27,7 @@ export const ToolbarButton = React.forwardRef<
     data-slot="toolbar-button"
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center rounded-md bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+      "inline-flex items-center justify-center rounded-md bg-background px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
       className,
     )}
     {...props}

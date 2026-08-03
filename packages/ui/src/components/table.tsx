@@ -7,7 +7,7 @@ export const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTM
     <table
       data-slot="table"
       ref={ref}
-      className={cn("w-full border-collapse text-base text-foreground", className)}
+      className={cn("w-full border-collapse text-sm text-foreground", className)}
       {...props}
     />
   ),
@@ -47,7 +47,7 @@ export const TableFooter = React.forwardRef<
   <tfoot
     data-slot="table-footer"
     ref={ref}
-    className={cn("bg-muted font-semibold text-foreground", className)}
+    className={cn("border-t border-border font-semibold text-foreground", className)}
     {...props}
   />
 ));
@@ -74,7 +74,7 @@ export const TableHead = React.forwardRef<
     data-slot="table-head"
     ref={ref}
     className={cn(
-      "h-10 px-3 text-left align-middle text-base font-semibold tracking-wide bg-muted",
+      "px-3 py-2 text-left align-middle text-2xs font-semibold text-muted-foreground",
       className,
     )}
     {...props}
@@ -89,7 +89,7 @@ export const TableCell = React.forwardRef<
   <td
     data-slot="table-cell"
     ref={ref}
-    className={cn("h-10 px-3 align-middle text-base text-foreground", className)}
+    className={cn("px-3 py-2.5 align-middle text-sm text-foreground", className)}
     {...props}
   />
 ));

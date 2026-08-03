@@ -32,7 +32,7 @@ export const Toast = React.forwardRef<React.ComponentRef<typeof ToastPrimitive.R
       data-slot="toast"
       ref={ref}
       className={cn(
-        "group relative flex w-full flex-col gap-2 rounded-xl border border-border bg-card p-4 pr-12 text-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out",
+        "group relative flex w-full flex-col gap-2 rounded-xl border border-border bg-card p-4 pr-12 text-foreground shadow-lg transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out",
         className,
       )}
       {...props}
@@ -77,7 +77,7 @@ export const ToastClose = React.forwardRef<
       data-slot="toast-close"
       ref={ref}
       className={cn(
-        "absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+        "absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
         className,
       )}
       {...props}
@@ -97,7 +97,7 @@ export const ToastAction = React.forwardRef<
     data-slot="toast-action"
     ref={ref}
     className={cn(
-      "mt-2 inline-flex items-center justify-center rounded-md border border-border px-3 py-1.5 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+      "mt-2 inline-flex items-center justify-center rounded-md border border-border px-3 py-1.5 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
       className,
     )}
     {...props}

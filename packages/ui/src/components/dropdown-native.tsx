@@ -86,7 +86,7 @@ export const DropdownContent = React.forwardRef<
 DropdownContent.displayName = "DropdownContent";
 
 const baseItem =
-  "flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition hover:bg-muted hover:text-foreground";
+  "flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground";
 
 export const DropdownItem = React.forwardRef<
   HTMLButtonElement,

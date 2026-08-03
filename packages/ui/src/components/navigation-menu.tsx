@@ -43,7 +43,7 @@ export const NavigationMenuTrigger = React.forwardRef<
     data-slot="navigation-menu-trigger"
     ref={ref}
     className={cn(
-      "group flex select-none items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
+      "group flex select-none items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted data-[state=open]:text-foreground",
       className,
     )}
     {...props}
@@ -81,7 +81,7 @@ export const NavigationMenuLink = React.forwardRef<
     data-slot="navigation-menu-link"
     ref={ref}
     className={cn(
-      "select-none items-center justify-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      "select-none items-center justify-center gap-2 rounded-sm px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       className,
     )}
     {...props}
