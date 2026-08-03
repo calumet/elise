@@ -18,7 +18,6 @@ export * from "./container";
 export * from "./context-menu";
 export * from "./dialog";
 export * from "./dropdown-menu";
-export * from "./dropdown-native";
 export * from "./empty-state";
 export * from "./field";
 export * from "./file-upload";

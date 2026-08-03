@@ -82,7 +82,7 @@ export const ToastClose = React.forwardRef<
       )}
       {...props}
     >
-      <X aria-hidden />
+      <X className="size-4" aria-hidden />
       <span className="sr-only">{closeLabel}</span>
     </ToastPrimitive.Close>
   );

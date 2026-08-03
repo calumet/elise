@@ -29,10 +29,10 @@ function Switch({ className, ...props }: SwitchProps) {
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
-        /* El carril mide 44px con 1px de borde a cada lado y el pulgar 20px, de
-           modo que 2px de desplazamiento dejan 3px de hueco, el mismo que deja
-           el extremo contrario al encenderse. */
-        className="pointer-events-none block h-5 w-5 translate-x-0.5 rounded-full bg-background shadow-sm ring-1 ring-border transition-transform duration-(--duration-fast) ease-out data-[state=checked]:translate-x-5"
+        /* El carril mide 44x24 con 1px de borde y el pulgar 18px, de modo que
+           quedan 3px de hueco en los cuatro lados: arriba y abajo por el alto, y
+           a los costados por los dos desplazamientos. */
+        className="pointer-events-none block h-4.5 w-4.5 translate-x-0.5 rounded-full bg-background shadow-sm ring-1 ring-border transition-transform duration-(--duration-fast) ease-out data-[state=checked]:translate-x-5.5"
       />
     </SwitchPrimitive.Root>
   );

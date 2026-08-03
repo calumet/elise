@@ -11,6 +11,11 @@ Radix que la documentación ya les atribuía.
 
 ### Rompe
 
+- **`Dropdown` y su familia se retiran.** La variante basada en `<details>`
+  duplicaba lo que hace `DropdownMenu` sin llegar a su comportamiento: sin foco
+  itinerante, sin cierre al pulsar fuera y sin `data-state`. `DropdownMenu`
+  cubre los mismos casos, incluidos encabezado y separador. El subpath
+  `@calumet/elise-ui/dropdown-native` deja de existir.
 - **`Checkbox` y `Switch` dejan de ser un `input`.** Son un `button` con
   `role="checkbox"` o `role="switch"`. `checked`, `defaultChecked`,
   `onCheckedChange`, `name`, `value`, `disabled` y `required` siguen igual, y

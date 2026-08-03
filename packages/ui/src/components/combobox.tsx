@@ -567,14 +567,35 @@ export type MultiComboboxFieldProps = Omit<
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
 
-  /** A partir de cuántos chips se resume con "+N". */
+  /**
+   * Tope duro de chips visibles. Sin él, la cantidad la decide el ancho
+   * disponible.
+   */
   maxChips?: number;
 };
 
 /**
+ * Cuántos de los anchos dados entran en `disponible`, dejando sitio para el
+ * contador cuando de verdad sobra alguno.
+ *
+ * Los anchos se miden sobre una fila aparte que siempre lleva todos los chips,
+ * de modo que el cálculo no dependa de su propio resultado.
+ */
+const cuantosCaben = (anchos: number[], anchoContador: number, disponible: number, gap: number) => {
+  let usado = 0;
+  for (let i = 0; i < anchos.length; i++) {
+    const sumaChip = anchos[i] + (i > 0 ? gap : 0);
+    const sobranDespues = anchos.length - i - 1;
+    const reserva = sobranDespues > 0 ? gap + anchoContador : 0;
+    if (usado + sumaChip + reserva > disponible) return i;
+    usado += sumaChip;
+  }
+  return anchos.length;
+};
+
+/**
  * Multiselección lista para usar. Muestra lo elegido como chips removibles
- * dentro del disparador; a partir de `maxChips` resume el resto con "+N" para
- * que el control no crezca sin límite.
+ * dentro del disparador y resume con "+N" los que no entran en el ancho.
  */
 function MultiComboboxField({
   options,
@@ -587,7 +608,7 @@ function MultiComboboxField({
   disabled,
   size = "md",
   name,
-  maxChips = 3,
+  maxChips,
   className,
   contentClassName,
   align = "start",
@@ -606,7 +627,34 @@ function MultiComboboxField({
   const elegidas = valores
     .map((v) => options.find((o) => o.value === v))
     .filter((o): o is ComboboxOption => Boolean(o));
-  const visibles = elegidas.slice(0, maxChips);
+
+  const filaRef = React.useRef<HTMLSpanElement>(null);
+  const medidorRef = React.useRef<HTMLSpanElement>(null);
+  const [caben, setCaben] = React.useState(elegidas.length);
+
+  const claves = elegidas.map((o) => o.value).join("|");
+  React.useLayoutEffect(() => {
+    const fila = filaRef.current;
+    const medidor = medidorRef.current;
+    if (!fila || !medidor) return;
+
+    const medir = () => {
+      const hijos = [...medidor.children] as HTMLElement[];
+      if (hijos.length === 0) return;
+      const anchoContador = hijos[hijos.length - 1].getBoundingClientRect().width;
+      const anchos = hijos.slice(0, -1).map((c) => c.getBoundingClientRect().width);
+      const gap = parseFloat(getComputedStyle(fila).columnGap) || 4;
+      setCaben(Math.max(1, cuantosCaben(anchos, anchoContador, fila.clientWidth, gap)));
+    };
+
+    medir();
+    const ro = new ResizeObserver(medir);
+    ro.observe(fila);
+    return () => ro.disconnect();
+  }, [claves]);
+
+  const tope = maxChips === undefined ? caben : Math.min(caben, maxChips);
+  const visibles = elegidas.slice(0, tope);
   const resto = elegidas.length - visibles.length;
 
   const grupos = React.useMemo(() => {
@@ -631,9 +679,9 @@ function MultiComboboxField({
         {elegidas.length === 0 ? (
           <ComboboxValue placeholder={placeholder} />
         ) : (
-          <span className="flex flex-wrap items-center gap-1">
+          <span ref={filaRef} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
             {visibles.map((o) => (
-              <Badge key={o.value} tone="neutral" size="sm" className="gap-1 pr-1">
+              <Badge key={o.value} tone="neutral" size="sm" className="shrink-0 gap-1 pr-1">
                 {o.label}
                 {/* La X va como <span> con rol de botón, ya que anidarla como
                     <button> dentro del disparador sería HTML inválido. El click
@@ -655,10 +703,31 @@ function MultiComboboxField({
               </Badge>
             ))}
             {resto > 0 ? (
-              <Badge tone="neutral" size="sm" variant="outline">
+              <Badge tone="neutral" size="sm" variant="outline" className="shrink-0">
                 +{resto}
               </Badge>
             ) : null}
+
+            {/* Fila de medición: lleva siempre todos los chips y el contador, a
+                su ancho natural y fuera del flujo. De aquí salen los anchos que
+                deciden cuántos entran. */}
+            <span
+              ref={medidorRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0 left-0 flex w-max items-center gap-1 opacity-0"
+            >
+              {elegidas.map((o) => (
+                <Badge key={o.value} tone="neutral" size="sm" className="gap-1 pr-1">
+                  {o.label}
+                  <span className="inline-flex size-4 items-center justify-center">
+                    <X className="size-3" aria-hidden="true" />
+                  </span>
+                </Badge>
+              ))}
+              <Badge tone="neutral" size="sm" variant="outline">
+                +{elegidas.length}
+              </Badge>
+            </span>
           </span>
         )}
       </ComboboxTrigger>

@@ -63,10 +63,10 @@ const CatalogoDemo = () => {
             onValueChange={setStack}
             placeholder="Elegir tecnologías"
             searchPlaceholder="Buscar…"
-            maxChips={2}
           />
           <Text size="xs" tone="muted">
-            El panel se queda abierto al elegir. A partir de 2 chips se resume con «+N».
+            El panel se queda abierto al elegir. Los chips que no entran en el ancho se resumen con
+            «+N».
           </Text>
         </BlockStack>
       </BlockStack>

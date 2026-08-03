@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 59 componentes, la mayoría construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 58 componentes, la mayoría construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guía de inicio](guia-inicio.md).
 
@@ -455,17 +455,16 @@ estado con texto para lectores de pantalla.
 
 ### Navegación
 
-| Componente                                                                                 | Import                              | Radix                                                                                 |
-| ------------------------------------------------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------- |
-| Tabs, TabsList, TabsTrigger, TabsContent                                                   | `@calumet/elise-ui/tabs`            | [Tabs](https://www.radix-ui.com/primitives/docs/components/tabs)                      |
-| Accordion, AccordionItem, AccordionTrigger, AccordionContent                               | `@calumet/elise-ui/accordion`       | [Accordion](https://www.radix-ui.com/primitives/docs/components/accordion)            |
-| Collapsible, CollapsibleTrigger, CollapsibleContent                                        | `@calumet/elise-ui/collapsible`     | [Collapsible](https://www.radix-ui.com/primitives/docs/components/collapsible)        |
-| NavigationMenu, NavigationMenuList, NavigationMenuItem, ...                                | `@calumet/elise-ui/navigation-menu` | [NavigationMenu](https://www.radix-ui.com/primitives/docs/components/navigation-menu) |
-| Menubar, MenubarMenu, MenubarTrigger, MenubarContent, ...                                  | `@calumet/elise-ui/menubar`         | [Menubar](https://www.radix-ui.com/primitives/docs/components/menubar)                |
-| DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, ...                                | `@calumet/elise-ui/dropdown-menu`   | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
-| Dropdown, DropdownTrigger, DropdownContent, DropdownItem, DropdownLabel, DropdownSeparator | `@calumet/elise-ui/dropdown-native` | — (HTML `<details>` nativo)                                                           |
-| ContextMenu, ContextMenuTrigger, ContextMenuContent, ...                                   | `@calumet/elise-ui/context-menu`    | [ContextMenu](https://www.radix-ui.com/primitives/docs/components/context-menu)       |
-| Pagination, PaginationContent, PaginationItem                                              | `@calumet/elise-ui/pagination`      | —                                                                                     |
+| Componente                                                   | Import                              | Radix                                                                                 |
+| ------------------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------- |
+| Tabs, TabsList, TabsTrigger, TabsContent                     | `@calumet/elise-ui/tabs`            | [Tabs](https://www.radix-ui.com/primitives/docs/components/tabs)                      |
+| Accordion, AccordionItem, AccordionTrigger, AccordionContent | `@calumet/elise-ui/accordion`       | [Accordion](https://www.radix-ui.com/primitives/docs/components/accordion)            |
+| Collapsible, CollapsibleTrigger, CollapsibleContent          | `@calumet/elise-ui/collapsible`     | [Collapsible](https://www.radix-ui.com/primitives/docs/components/collapsible)        |
+| NavigationMenu, NavigationMenuList, NavigationMenuItem, ...  | `@calumet/elise-ui/navigation-menu` | [NavigationMenu](https://www.radix-ui.com/primitives/docs/components/navigation-menu) |
+| Menubar, MenubarMenu, MenubarTrigger, MenubarContent, ...    | `@calumet/elise-ui/menubar`         | [Menubar](https://www.radix-ui.com/primitives/docs/components/menubar)                |
+| DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, ...  | `@calumet/elise-ui/dropdown-menu`   | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
+| ContextMenu, ContextMenuTrigger, ContextMenuContent, ...     | `@calumet/elise-ui/context-menu`    | [ContextMenu](https://www.radix-ui.com/primitives/docs/components/context-menu)       |
+| Pagination, PaginationContent, PaginationItem                | `@calumet/elise-ui/pagination`      | —                                                                                     |
 
 ### Feedback
 

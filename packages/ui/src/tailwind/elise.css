@@ -410,6 +410,40 @@
     color: var(--color-accent-foreground);
   }
 
+  /* Barras de desplazamiento del sistema, en los dos motores que las exponen de
+     forma distinta. `scrollbar-*` es el estándar y lo entienden Firefox y
+     Chromium moderno; `::-webkit-scrollbar` cubre a los WebKit que todavía no.
+     Declarar los dos deja el mismo aspecto en ambos, y el color sale de los
+     tokens, así que la barra sigue al tema. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-strong);
+    border: 2px solid transparent;
+    border-radius: var(--radius-full, 9999px);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-muted-foreground);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   /* Neutraliza el movimiento decorativo, salvo `[data-motion="essential"]`. Un
      indicador de carga que no gira deja de comunicar que algo esta pasando. */
   @media (prefers-reduced-motion: reduce) {

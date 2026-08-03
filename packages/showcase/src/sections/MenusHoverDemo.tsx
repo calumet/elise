@@ -3,16 +3,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@calumet/elise-ui/dropdown-menu";
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownLabel,
-  DropdownSeparator,
-  DropdownTrigger,
-} from "@calumet/elise-ui/dropdown-native";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@calumet/elise-ui/hover-card";
 
 const MenusHoverDemo = () => {
@@ -33,21 +27,19 @@ const MenusHoverDemo = () => {
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-semibold text-foreground">Dropdown Nativo</p>
-        <Dropdown>
-          <DropdownTrigger>
-            <Button variant="outline" asChild>
-              <span>Acciones</span>
-            </Button>
-          </DropdownTrigger>
-          <DropdownContent>
-            <DropdownLabel>Archivo</DropdownLabel>
-            <DropdownItem onClick={() => console.log("nuevo")}>Nuevo</DropdownItem>
-            <DropdownItem onClick={() => console.log("duplicar")}>Duplicar</DropdownItem>
-            <DropdownSeparator />
-            <DropdownItem onClick={() => console.log("eliminar")}>Eliminar</DropdownItem>
-          </DropdownContent>
-        </Dropdown>
+        <p className="text-sm font-semibold text-foreground">Con encabezado y separador</p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Acciones</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>Archivo</DropdownMenuLabel>
+            <DropdownMenuItem>Nuevo</DropdownMenuItem>
+            <DropdownMenuItem>Duplicar</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Eliminar</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div>

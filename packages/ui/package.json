@@ -170,11 +170,6 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./dropdown-native": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
     "./form": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
