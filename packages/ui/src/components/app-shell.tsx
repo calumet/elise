@@ -467,10 +467,11 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   /**
    * De esta entrada cuelga una lista con una hija activa.
    *
-   * Dibuja el arranque de la guía y deja la fila marcada, porque la rama en la
-   * que estás sigue siendo esta aunque lo elegido cuelgue de ella. Se pide que
-   * sea la hija la que esté activa, y no solo que haya lista: sin hija activa
-   * no hay guía debajo y el arranque quedaría colgando de nada.
+   * Dibuja el arranque de la guía, y nada más: lo elegido es la hija, y marcar
+   * también al padre pone dos filas con el mismo aspecto de seleccionado. Quien
+   * dice de dónde cuelga es la guía. Se pide que la hija esté activa, y no solo
+   * que haya lista, porque sin hija activa no hay guía debajo y el arranque
+   * quedaría colgando de nada.
    */
   childActive?: boolean;
 };
@@ -495,7 +496,7 @@ function AppShellNavItem({
              el fondo. Solo las hijas suben de peso, porque ahí el fondo tiene
              que competir con la guía y no basta por sí solo. */
           "ps-2 font-medium",
-          active || childActive
+          active
             ? "bg-sidebar-accent text-sidebar-accent-foreground"
             : "text-sidebar-foreground hover:bg-sidebar-hover active:bg-sidebar-accent",
           className,

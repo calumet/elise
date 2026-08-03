@@ -36,6 +36,12 @@ const AppShellDemo = () => {
 
   const hijasDeClientes = ["/segmentos", "/companies"];
 
+  const [guardando, setGuardando] = useState(false);
+  const guardar = () => {
+    setGuardando(true);
+    setTimeout(() => setGuardando(false), 1600);
+  };
+
   return (
     <div className="h-[560px] w-full overflow-hidden rounded-xl border border-border">
       <AppShell className="h-full">
@@ -144,12 +150,19 @@ const AppShellDemo = () => {
             de ella ya no sigue. Al apuntar otra hija se asoma el codo que tendría si la eligieras.
             El caret de la sección es una acción, no un desplegable, así que no gira.
           </Text>
-          <div className="mt-4 flex gap-2">
-            <Button loading>Guardando</Button>
-            <Button variant="outline" loading>
-              Exportando
+          <div className="mt-4 flex items-center gap-2">
+            <Button loading={guardando} onClick={guardar}>
+              Guardar cambios
+            </Button>
+            <Button variant="outline">Descartar</Button>
+            <Button variant="ghost" disabled>
+              No disponible
             </Button>
           </div>
+          <Text size="xs" tone="muted" className="mt-2">
+            Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva su
+            ancho y no empuja a los de al lado.
+          </Text>
         </AppShellMain>
       </AppShell>
     </div>
