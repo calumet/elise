@@ -510,6 +510,11 @@
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
     letter-spacing: var(--text-base--letter-spacing);
+    /* La escala de pesos de Polaris arranca en 450, no en 400. Sin esta línea
+       el token existía y la utilidad `font-normal` lo daba, pero todo lo que no
+       llevara clase de peso —el texto de una celda, un párrafo suelto— se
+       quedaba en el 400 del navegador, medio paso por debajo del resto. */
+    font-weight: var(--font-weight-normal);
     -webkit-font-smoothing: antialiased;
   }
 

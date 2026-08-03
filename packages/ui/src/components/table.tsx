@@ -143,8 +143,11 @@ export const TableHead = React.forwardRef<
   <th
     data-slot="table-head"
     ref={ref}
+    /* Mismo tamaño que una celda del cuerpo: el encabezado se distingue por el
+       peso y el color, no por ser más pequeño. Encogerlo además desalineaba la
+       banda, que salía cuatro píxeles más baja que una fila. */
     className={cn(
-      "bg-muted px-1.5 py-2 text-left align-middle text-xs font-medium whitespace-nowrap text-muted-foreground first:ps-3 last:pe-3",
+      "bg-muted px-1.5 py-2 text-left align-middle text-sm font-medium whitespace-nowrap text-muted-foreground first:ps-3 last:pe-3",
       className,
     )}
     {...props}
@@ -160,7 +163,7 @@ export const TableCell = React.forwardRef<
     data-slot="table-cell"
     ref={ref}
     className={cn(
-      "px-1.5 py-1.5 align-middle text-sm text-foreground first:ps-3 last:pe-3",
+      "px-1.5 py-2 align-middle text-sm text-foreground first:ps-3 last:pe-3",
       className,
     )}
     {...props}
