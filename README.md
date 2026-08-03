@@ -35,7 +35,8 @@ pnpm install
 | Comando             | Descripción                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------- |
 | `pnpm dev`          | Modo desarrollo de `@calumet/elise-ui` (watch + dts)                                  |
-| `pnpm dev:showcase` | Desarrollo paralelo de todos los paquetes + showcase                                  |
+| `pnpm build:libs`   | Build de los paquetes de librería, sin el showcase                                    |
+| `pnpm dev:showcase` | Build de librerías y luego desarrollo paralelo de todo + showcase                     |
 | `pnpm build`        | Build de producción (icons → ui → i18n → forms → tables → toasts → alerts → showcase) |
 | `pnpm lint`         | Verificar ESLint                                                                      |
 | `pnpm lint:fix`     | Corregir problemas de ESLint                                                          |

@@ -60,6 +60,11 @@ pnpm dev
 pnpm dev:showcase
 ```
 
+`dev:showcase` construye las librerías antes de levantar los watchers. El
+showcase importa por subpath (`@calumet/elise-ui/dialog`) y cada subpath apunta
+a `dist`, así que sin un build previo Vite arranca antes de que tsup lo escriba
+y falla al resolver el primer import.
+
 ### Probar Cambios
 
 Usa la app showcase para validar tus cambios visualmente:
