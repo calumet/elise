@@ -159,8 +159,14 @@
      blanco que el marco de aplicación se leía como una sola superficie plana. */
   --secondary: oklch(0.958 0.002 265);
   --secondary-foreground: oklch(0.37 0.02 265);
-  --muted: oklch(0.965 0.004 265);
-  /* Leído sobre --muted (0.965), el mínimo AA no admite subir de 0.525. */
+  /* Superficie de «lo que no es contenido»: encabezado de tabla, fila apuntada,
+     botón apuntado. Polaris usa un solo valor para las tres —bg-surface-hover y
+     bg-surface-secondary son el mismo #F7F7F7— y este es ese valor. Estaba en
+     0.965, cinco niveles más oscuro, y con el bisel de la tarjeta encima el
+     contorno se leía más pesado al costado del encabezado que al del cuerpo. */
+  --muted: oklch(0.976 0.004 265);
+  /* El techo AA lo marca --secondary (0.539), que es el fondo más oscuro donde
+     se lee este color; sobre --muted queda margen de sobra. */
   --muted-foreground: oklch(0.525 0.016 265);
   --accent: oklch(0.955 0.025 250);
   --accent-foreground: oklch(0.38 0.14 262);
@@ -281,14 +287,19 @@
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16);
   --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
   /* Contorno de superficie apoyada, a la manera de Polaris: en vez de un borde
-     plano del mismo tono en los cuatro lados, un bisel interior donde el filo de
-     abajo pesa más que el de arriba, y una sombra de 1px por fuera. Es lo que
-     hace que una tarjeta se lea puesta sobre el lienzo y no recortada en él; con
-     un borde uniforme el plano no tiene arriba ni abajo. */
-  --shadow-surface:
-    0 1px 0 0 oklch(0.21 0.02 265 / 0.07), inset 1px 0 0 0 oklch(0 0 0 / 0.13),
-    inset -1px 0 0 0 oklch(0 0 0 / 0.13), inset 0 -1px 0 0 oklch(0 0 0 / 0.17),
-    inset 0 1px 0 0 oklch(0.845 0 0 / 0.5);
+     plano del mismo tono en los cuatro lados, un bisel donde el filo de abajo
+     pesa más que el de arriba, y una sombra de 1px por fuera. Es lo que hace que
+     una tarjeta se lea puesta sobre el lienzo y no recortada en él; con un borde
+     uniforme el plano no tiene arriba ni abajo.
+     Van en dos tokens porque se pintan en sitios distintos. Una sombra interior
+     queda por debajo del fondo de cualquier descendiente, así que sobre una
+     tabla el encabezado —que sí tiene fondo— se comía su tramo de bisel y el
+     contorno salía distinto arriba que abajo. El bisel se dibuja encima del
+     contenido, en una capa aparte, que es como lo resuelve Polaris. */
+  --shadow-surface: 0 1px 0 0 oklch(0.21 0.02 265 / 0.07);
+  --shadow-surface-bevel:
+    inset 1px 0 0 0 oklch(0 0 0 / 0.13), inset -1px 0 0 0 oklch(0 0 0 / 0.13),
+    inset 0 -1px 0 0 oklch(0 0 0 / 0.17), inset 0 1px 0 0 oklch(0.845 0 0 / 0.5);
 }
 
 .dark,
@@ -383,13 +394,16 @@
   --shadow-2xl: 0 12px 26px -6px oklch(0 0 0 / 0.65), 0 36px 68px -16px oklch(0 0 0 / 0.72);
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.16), inset 0 -1px 0 oklch(0 0 0 / 0.3);
   --shadow-bevel-inset: inset 0 2px 4px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(0 0 0 / 0.25);
-  /* En oscuro la luz sigue viniendo de arriba, así que el filo superior se
-     aclara y el inferior se oscurece; lo que cambia es que sobre un fondo
-     oscuro el realce tiene que ser blanco y no gris. */
-  --shadow-surface:
-    0 1px 0 0 oklch(0 0 0 / 0.4), inset 1px 0 0 0 oklch(1 0 0 / 0.06),
-    inset -1px 0 0 0 oklch(1 0 0 / 0.06), inset 0 -1px 0 0 oklch(0 0 0 / 0.35),
-    inset 0 1px 0 0 oklch(1 0 0 / 0.1);
+  /* En oscuro los cuatro filos aclaran, el de arriba el doble que los otros
+     tres. No es que la luz cambie de sitio: sobre un lienzo casi negro un filo
+     oscuro no dibuja nada, y la tarjeta se quedaría sin contorno por abajo. Son
+     los mismos valores de Polaris —#CCC al 8% y al 16%—; el borde ya no depende
+     de por dónde caiga la luz sino de que haya con qué separar la superficie
+     del fondo. */
+  --shadow-surface: 0 1px 0 0 oklch(0 0 0 / 0.4);
+  --shadow-surface-bevel:
+    inset 1px 0 0 0 oklch(0.845 0 0 / 0.08), inset -1px 0 0 0 oklch(0.845 0 0 / 0.08),
+    inset 0 -1px 0 0 oklch(0.845 0 0 / 0.08), inset 0 1px 0 0 oklch(0.845 0 0 / 0.16);
 }
 
 @theme inline {
@@ -478,6 +492,7 @@
   --shadow-2xl: var(--shadow-2xl);
   --shadow-bevel: var(--shadow-bevel);
   --shadow-surface: var(--shadow-surface);
+  --shadow-surface-bevel: var(--shadow-surface-bevel);
   --shadow-bevel-inset: var(--shadow-bevel-inset);
 }
 

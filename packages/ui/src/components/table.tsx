@@ -2,6 +2,23 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/**
+ * Contorno de superficie: la sombra de 1px por fuera y el bisel por dentro, con
+ * el bisel en una capa aparte —un `::after`— en vez de como sombra interior del
+ * propio marco.
+ *
+ * Una sombra interior se pinta por debajo del fondo de los descendientes, así
+ * que el encabezado, que lleva fondo opaco, se comía su tramo de bisel: el
+ * contorno salía marcado a los lados del cuerpo y liso a los del encabezado. La
+ * capa va por encima del contenido y el contorno queda igual en todo el
+ * perímetro, que es como Polaris resuelve el suyo.
+ *
+ * La tarjeta de la tabla de datos lo reutiliza para que los dos marcos se lean
+ * iguales.
+ */
+export const SUPERFICIE =
+  "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
+
 export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   /**
    * Quita el marco propio para meter la tabla dentro de una tarjeta que ya lo
@@ -29,6 +46,10 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
  * El marco es un `<div>` aparte y no el propio `<table>` porque también hace de
  * carril de desplazamiento: una tabla que no cabe se desliza dentro del marco
  * en vez de estirar la página.
+ *
+ * Son dos `<div>` y no uno porque el que desplaza no puede ser el mismo que
+ * lleva el contorno: la capa del bisel se iría con el contenido y al arrastrar
+ * la tabla el filo se saldría del marco.
  */
 export const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, bare = false, frameClassName, ...props }, ref) => {
@@ -44,11 +65,8 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     if (bare) return tabla;
 
     return (
-      <div
-        data-slot="table-frame"
-        className={cn("w-full overflow-x-auto rounded-xl bg-card shadow-surface", frameClassName)}
-      >
-        {tabla}
+      <div data-slot="table-frame" className={cn(SUPERFICIE, "w-full", frameClassName)}>
+        <div className="w-full overflow-x-auto rounded-[inherit]">{tabla}</div>
       </div>
     );
   },

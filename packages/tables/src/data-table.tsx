@@ -42,6 +42,7 @@ import {
   SelectValue,
 } from "@calumet/elise-ui/select";
 import {
+  SUPERFICIE,
   Table,
   TableBody,
   TableCell,
@@ -208,7 +209,9 @@ function DataTableContent<TData, TValue>({
 
   return (
     <div className="w-full h-full min-w-0 flex flex-col justify-between">
-      <div className="rounded-xl bg-card shadow-surface min-w-0 overflow-hidden">
+      {/* `overflow-hidden` para que el fondo de la última fila apuntada no
+          cuadre las esquinas de abajo de la tarjeta. */}
+      <div data-slot="data-table-card" className={cn(SUPERFICIE, "min-w-0 overflow-hidden")}>
         <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3 px-4 py-4">
           <div className="flex flex-wrap gap-3 items-end">
             {table.getAllColumns().map((column) => {
