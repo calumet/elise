@@ -2,15 +2,55 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <table
-      data-slot="table"
-      ref={ref}
-      className={cn("w-full border-collapse text-sm text-foreground", className)}
-      {...props}
-    />
-  ),
+export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
+  /**
+   * Quita el marco propio para meter la tabla dentro de una tarjeta que ya lo
+   * pone. Con los dos salen dos bordes concéntricos.
+   */
+  bare?: boolean;
+
+  /** Clases para el marco, no para la tabla. */
+  frameClassName?: string;
+};
+
+/**
+ * Tabla.
+ *
+ * Trae su propio marco: borde, radio y recorte. La banda del encabezado llega
+ * hasta el borde, así que sin recorte sus esquinas cuadradas se salen por
+ * encima de cualquier contorno redondeado que la envuelva —y quien la usa no
+ * tiene por qué saberlo—. Dentro de una tarjeta que ya lo pone, `bare` lo
+ * quita.
+ *
+ * El marco es un `<div>` aparte y no el propio `<table>` porque también hace de
+ * carril de desplazamiento: una tabla que no cabe se desliza dentro del marco
+ * en vez de estirar la página.
+ */
+export const Table = React.forwardRef<HTMLTableElement, TableProps>(
+  ({ className, bare = false, frameClassName, ...props }, ref) => {
+    const tabla = (
+      <table
+        data-slot="table"
+        ref={ref}
+        className={cn("w-full border-collapse text-sm text-foreground", className)}
+        {...props}
+      />
+    );
+
+    if (bare) return tabla;
+
+    return (
+      <div
+        data-slot="table-frame"
+        className={cn(
+          "w-full overflow-x-auto rounded-xl border border-border bg-card",
+          frameClassName,
+        )}
+      >
+        {tabla}
+      </div>
+    );
+  },
 );
 Table.displayName = "Table";
 
@@ -37,12 +77,11 @@ export const TableBody = React.forwardRef<
   <tbody
     data-slot="table-body"
     ref={ref}
-    /* El filete va arriba de cada fila y no debajo, que es como lo reparte
-       Polaris: así la última fila no cierra con una raya suelta contra el borde
-       de la tarjeta, y la primera queda separada del encabezado sin regla
-       aparte. `divide-y` hace exactamente eso —borde superior salvo en la
-       primera—, pero aquí sí la queremos, que es la que hace de línea del
-       encabezado. */
+    /* `divide-y` pone el filete debajo de cada fila menos de la última, así que
+       la tabla no cierra con una raya suelta contra el borde del marco. La línea
+       bajo el encabezado la pone este `border-t`, y va un tono más firme que los
+       separadores: en Polaris el de la primera fila usa `--p-color-border` y el
+       de entre filas `border-secondary`, que es más claro. */
     className={cn("border-t border-border divide-y divide-border-subtle", className)}
     {...props}
   />
@@ -117,7 +156,7 @@ export const TableCaption = React.forwardRef<
   <caption
     data-slot="table-caption"
     ref={ref}
-    className={cn("mt-3 mb-2 text-sm text-muted-foreground", className)}
+    className={cn("mt-3 mb-2 px-3 text-sm text-muted-foreground", className)}
     {...props}
   />
 ));

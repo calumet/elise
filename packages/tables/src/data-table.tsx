@@ -268,8 +268,11 @@ function DataTableContent<TData, TValue>({
             )}
           </div>
         </section>
+        {/* La tarjeta de la tabla de datos ya pone borde, radio y recorte, y
+            además la tabla va debajo de la barra de filtros: con su marco propio
+            saldrían dos contornos concéntricos. */}
         <div className="w-full overflow-x-auto">
-          <Table>
+          <Table bare>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
