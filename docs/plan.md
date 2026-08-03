@@ -37,6 +37,27 @@ existen cubren los casos, y agregar un nivel intermedio obliga a mantener dos
 nombres para cada color sin que nadie consuma el de abajo. Si algún día hacen
 falta varios temas de marca, esta decisión se revisa; hasta entonces, no.
 
+**El vocabulario de botones de Polaris.** Polaris los nombra por jerarquía
+(`primary`, `secondary`, `tertiary`, `plain`) y Elise por aspecto (`solid`,
+`outline`, `ghost`). El nombre por aspecto es más predecible desde la pantalla
+que lo escribe, y renombrar rompería a todo consumidor sin resolver nada. Por lo
+mismo se queda `danger` donde Polaris dice `critical`, y se conserva `warning`,
+que Polaris no tiene.
+
+**Las alturas exactas de botón de Polaris.** Polaris baja a 28px de alto con
+texto de 12px a partir de 768px. Elise se queda un escalón por encima —32/36/40—
+porque el resto del catálogo escribe a 14px y un botón de 28px al lado de ese
+texto se lee como un control secundario. Lo que sí se toma es el peso (550), el
+radio (8px) y el comportamiento de `loading`.
+
+De la auditoría del botón contra el CSS publicado de Polaris 13.9.5 quedan sin
+aplicar, y a propósito: el `variant` por defecto (Polaris usa el de emphasis
+media, Elise el sólido), el borde de `outline` como sombra interior de tres
+capas en lugar de un borde de 1px, el `tone` que en Polaris solo tiñe el texto
+de las variantes transparentes, `pressed` con su `aria-pressed`, el empujón de
+1px al presionar, y las variantes tipo enlace. Ninguna es un defecto; son
+decisiones que conviene tomar con un caso delante.
+
 ## Fase 0 — La capa de tokens
 
 Es donde estaba el grueso de la sensación de plantilla genérica, y se resuelve

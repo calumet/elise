@@ -24,22 +24,33 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
 };
 
-/* El foco sigue la convención única del design system (ver CONTRIBUTING.md). */
+/* El foco sigue la convención única del design system (ver CONTRIBUTING.md).
+   El peso es `medium`: a estos tamaños el grado de arriba engorda el rótulo lo
+   bastante como para que un botón secundario pese más que el texto que lo
+   rodea. */
 const baseClasses =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-semibold tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background";
 
+/* El apagado es un cambio de tokens, no una capa de opacidad encima: sumar las
+   dos apaga dos veces y el rótulo baja de contraste más de lo que se pretendía.
+   El fondo lo pone cada variante, porque `ghost` no tiene ninguno que apagar y
+   dárselo al deshabilitarlo le inventa una caja que nunca tuvo. */
 const disabledClasses =
-  "disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:border-border disabled:shadow-none";
+  "disabled:cursor-not-allowed disabled:text-muted-foreground disabled:shadow-none";
 
 /* Los rellenos sólidos llevan bisel, que al presionar se invierte hacia adentro
    en lugar de solo oscurecer el fondo. Las variantes outline/ghost se apoyan en
-   las superficies sutiles y no derivan el fondo con opacidad. */
+   las superficies sutiles y no derivan el fondo con opacidad.
+   `data-[state=open]` acompaña a `active` porque con `asChild` este botón es el
+   disparador de un menú o un popover, y al soltar el ratón se quedaría plano
+   mientras la superficie sigue abierta. */
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   solid:
-    "bg-primary text-primary-foreground shadow-bevel hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset",
+    "bg-primary text-primary-foreground shadow-bevel hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   outline:
-    "border border-border-strong text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset",
-  ghost: "text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset",
+    "border border-border-strong text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset data-[state=open]:bg-muted data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
+  ghost:
+    "text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset data-[state=open]:bg-muted data-[state=open]:shadow-bevel-inset",
 };
 
 const toneOverrides: Record<
@@ -80,10 +91,15 @@ export const buttonVariants = ({
   size?: ButtonProps["size"];
 } = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
+/* Un escalón por debajo de lo que traía Elise, acercándose a Polaris —que a
+   partir de 768px baja a 28/28/32— sin llegar del todo: el resto del catálogo
+   escribe a 14px y un botón de 28px al lado de ese texto se lee como un
+   control secundario. `icon` iguala a `md` para que una barra de acciones
+   mezcle ambos sin desnivelarse. */
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-10 px-4 text-base",
-  lg: "h-11 px-5 text-base",
+  sm: "h-8 px-3 text-sm",
+  md: "h-9 px-4 text-base",
+  lg: "h-10 px-5 text-base",
   icon: "size-9",
 };
 
