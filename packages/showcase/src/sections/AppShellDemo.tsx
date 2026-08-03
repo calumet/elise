@@ -1,4 +1,13 @@
-import { BarChart3, Home, Package, ShoppingCart, Tag, Users } from "@calumet/elise-icons";
+import {
+  BarChart3,
+  CreditCard,
+  Home,
+  Package,
+  ShoppingCart,
+  Store,
+  Tag,
+  Users,
+} from "@calumet/elise-icons";
 import {
   AppShell,
   AppShellHeader,
@@ -16,7 +25,9 @@ import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
 const AppShellDemo = () => {
-  const [ruta, setRuta] = useState("/companies");
+  /* Arranca en la primera hija a propósito: es el caso donde la vertical tiene
+     hermanas por debajo y donde se ve que el codo la termina. */
+  const [ruta, setRuta] = useState("/segmentos");
 
   const ir = (href: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -102,10 +113,20 @@ const AppShellDemo = () => {
             </AppShellNavItem>
 
             <AppShellNavSection title="Canales de venta" onAction={() => setRuta("/canales")}>
-              <AppShellNavItem href="/tienda" active={ruta === "/tienda"} onClick={ir("/tienda")}>
+              <AppShellNavItem
+                href="/tienda"
+                icon={<Store />}
+                active={ruta === "/tienda"}
+                onClick={ir("/tienda")}
+              >
                 Tienda online
               </AppShellNavItem>
-              <AppShellNavItem href="/pos" active={ruta === "/pos"} onClick={ir("/pos")}>
+              <AppShellNavItem
+                href="/pos"
+                icon={<CreditCard />}
+                active={ruta === "/pos"}
+                onClick={ir("/pos")}
+              >
                 Punto de venta
               </AppShellNavItem>
             </AppShellNavSection>
@@ -117,9 +138,9 @@ const AppShellDemo = () => {
             {ruta}
           </Text>
           <Text size="sm" tone="muted" className="mt-1">
-            La guía baja desde el icono del padre y dobla en codo hacia la hija activa. Elegí
-            «Segmentos» para verla moverse. El caret de la sección es una acción, no un desplegable,
-            así que no gira.
+            La guía baja desde el icono del padre y termina en codo sobre la hija activa; por debajo
+            de ella ya no sigue. Al apuntar otra hija se asoma el codo que tendría si la eligieras.
+            El caret de la sección es una acción, no un desplegable, así que no gira.
           </Text>
           <div className="mt-4 flex gap-2">
             <Button loading>Guardando</Button>

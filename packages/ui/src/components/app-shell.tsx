@@ -1,4 +1,3 @@
-import { ChevronRight } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
@@ -152,7 +151,7 @@ function AppShellNavToggle({ className, children, ...props }: AppShellNavToggleP
       aria-expanded={cajonAbierto}
       onClick={() => setCajonAbierto(!cajonAbierto)}
       className={cn(
-        "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-sidebar-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar md:hidden",
+        "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-sidebar-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar md:hidden",
         className,
       )}
       {...props}
@@ -257,15 +256,18 @@ function AppShellNavSection({
   children,
   ...props
 }: AppShellNavSectionProps) {
-  /* En la variante con acción el caret va pegado al rótulo, no al borde: es
-     parte de la etiqueta, no un control alineado a la derecha. */
+  /* Un punto por debajo del resto de la barra y en tono tenue: el rótulo
+     ordena, no compite con las entradas que agrupa. El margen sube a 6px para
+     que la fila siga midiendo 28px con un interlineado de 16. */
   const rotulo = (claseExtra?: string) => (
-    <span className={cn("my-1 min-w-0 truncate text-start", claseExtra)}>{title}</span>
+    <span className={cn("my-1.5 min-w-0 truncate text-start", claseExtra)}>{title}</span>
   );
+
+  const ROTULO = "ps-2 text-xs font-medium text-muted-foreground";
 
   return (
     <li data-slot="app-shell-nav-section" className={cn("list-none pt-3", className)} {...props}>
-      <div className="px-2.5">
+      <div className="px-3">
         {onAction ? (
           <button
             type="button"
@@ -273,17 +275,30 @@ function AppShellNavSection({
             onClick={onAction}
             className={cn(
               FILA,
-              "ps-2 cursor-pointer font-semibold text-sidebar-foreground hover:bg-sidebar-accent",
+              ROTULO,
+              "cursor-pointer hover:bg-sidebar-hover hover:text-sidebar-foreground",
             )}
           >
             {rotulo()}
-            <ChevronRight aria-hidden="true" className="my-1.5 me-1 size-3 shrink-0" />
+            {/* El caret va pegado al rótulo, no al borde: es parte de la
+                etiqueta, no un control alineado a la derecha. Se dibuja aquí en
+                vez de tomar un icono del catálogo porque los del catálogo son
+                cuadrados y este mide 5x8: encogerlo a 8 de alto lo deja en 8 de
+                ancho y el trazo se vuelve un ángulo achatado. */}
+            <span className="mx-1.5 flex h-7 flex-none items-center justify-center">
+              <svg width="5" height="8" viewBox="0 0 5 8" fill="none" aria-hidden="true">
+                <path
+                  d="M1 1L4 4L1 7"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
           </button>
         ) : (
-          <p
-            data-slot="app-shell-nav-section-title"
-            className={cn(FILA, "ps-2 font-semibold text-sidebar-foreground")}
-          >
+          <p data-slot="app-shell-nav-section-title" className={cn(FILA, ROTULO)}>
             {rotulo("flex-1")}
           </p>
         )}
@@ -293,7 +308,14 @@ function AppShellNavSection({
   );
 }
 
-type Guia = "linea" | "puntero" | "linea-puntero";
+/**
+ * Tramo de guía que le toca a una hija según dónde cae respecto de la activa.
+ *
+ * - `linea`: queda por encima de la activa, así que la vertical la atraviesa.
+ * - `puntero`: es la activa. La vertical llega hasta el codo y ahí termina.
+ * - `ninguna`: queda por debajo de la activa. La rama ya acabó.
+ */
+type Guia = "linea" | "puntero" | "ninguna";
 
 /* La fila mide 28px exactos y la guía también, así que una encaja sobre la otra
    sin cuadrar nada a mano. La altura sale del margen del texto, no de un padding
@@ -301,18 +323,34 @@ type Guia = "linea" | "puntero" | "linea-puntero";
 const FILA =
   "relative flex w-full items-start rounded-lg pe-1 text-sm transition-[background-color,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar";
 
+const VERTICAL = "M9 0H10.5V28H9V0Z";
+const CODO = "M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
+const BAJADA_Y_CODO =
+  "M9 0H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
+const ASOMO_Y_CODO =
+  "M9 7H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
+const PUNTA = "M17 12L20 15L17 18";
+const MUNON =
+  "M9 24.75C9 24.3358 9.33579 24 9.75 24C10.1642 24 10.5 24.3358 10.5 24.75V28H9V24.75Z";
+
 /**
  * Guía de continuidad entre una entrada y sus hijas.
  *
- * Baja desde el icono del padre y, en la hija activa, dobla en codo y remata en
- * punta. Un borde izquierdo plano diría "estas van juntas"; el codo además dice
- * cuál se está viendo.
+ * Baja desde el icono del padre y dobla en codo sobre la hija activa. Un borde
+ * izquierdo plano diría "estas van juntas"; el codo además dice cuál se está
+ * viendo, y por eso la vertical no lo pasa de largo: donde dobla, se acaba.
+ *
+ * Al apuntar una hija que no es la activa se dibuja el codo que tendría si lo
+ * fuera, en un tono más claro. Sobre las que sostienen la vertical el codo se
+ * suma, porque quitarla cortaría la rama que sigue hacia abajo; sobre las de más
+ * abajo, que no tienen ninguna, sale un asomo corto en su lugar.
  *
  * La caja mide 21x28, la misma altura que una fila, y se ancla a 8px del borde
- * para que su vertical caiga sobre el centro del icono del padre. Va en SVG y no
- * como imagen de fondo para que el trazo tome `currentColor` y siga al tema.
+ * para que su vertical caiga sobre el centro del icono del padre.
  */
 function GuiaNav({ variante }: { variante: Guia | "munion" }) {
+  const alApuntar = "opacity-0 transition-opacity duration-(--duration-fast) ease-out";
+
   return (
     <svg
       width="21"
@@ -321,41 +359,41 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
       fill="none"
       aria-hidden="true"
       focusable="false"
-      className="pointer-events-none absolute top-0 start-2 text-sidebar-guide"
+      className="pointer-events-none absolute top-0 start-2"
     >
-      {variante === "linea" ? <path d="M9 0H10.5V28H9V0Z" fill="currentColor" /> : null}
-      {variante === "linea-puntero" ? (
+      {variante === "linea" ? <path d={VERTICAL} className="fill-sidebar-guide" /> : null}
+      {variante === "puntero" ? (
         <>
-          <path d="M9 0H10.5V28H9V0Z" fill="currentColor" />
+          <path d={BAJADA_Y_CODO} className="fill-sidebar-guide" />
           <path
-            d="M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z"
-            fill="currentColor"
+            d={PUNTA}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="stroke-sidebar-guide"
           />
         </>
       ) : null}
-      {variante === "puntero" ? (
-        <path
-          d="M9 0H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z"
-          fill="currentColor"
-        />
+
+      {variante === "linea" || variante === "ninguna" ? (
+        <g className={cn(alApuntar, "group-hover:opacity-100")}>
+          <path
+            d={variante === "linea" ? CODO : ASOMO_Y_CODO}
+            className="fill-sidebar-guide-hover"
+          />
+          <path
+            d={PUNTA}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="stroke-sidebar-guide-hover"
+          />
+        </g>
       ) : null}
-      {variante === "puntero" || variante === "linea-puntero" ? (
-        <path
-          d="M17 12L20 15L17 18"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      ) : null}
-      {/* Muñon: el arranque de la vertical, en la fila del padre. Sin el, la
-          linea de las hijas nace despegada del icono del que cuelga. */}
-      {variante === "munion" ? (
-        <path
-          d="M9 24.75C9 24.3358 9.33579 24 9.75 24C10.1642 24 10.5 24.3358 10.5 24.75V28H9V24.75Z"
-          fill="currentColor"
-        />
-      ) : null}
+
+      {/* Muñón: el arranque de la vertical, en la fila del padre. Sin él, la
+          línea de las hijas nace despegada del icono del que cuelga. */}
+      {variante === "munion" ? <path d={MUNON} className="fill-sidebar-guide" /> : null}
     </svg>
   );
 }
@@ -369,26 +407,26 @@ export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
  * arranca despues del icono. La guia la reparte `AppShellNavSubList`.
  */
 function AppShellNavSubItem({ className, active, children, ...props }: AppShellNavSubItemProps) {
-  const { "data-guia": guia, ...resto } = props as AppShellNavSubItemProps & {
+  const { "data-guia": guia = "ninguna", ...resto } = props as AppShellNavSubItemProps & {
     "data-guia"?: Guia;
   };
 
   return (
-    <li className="list-none px-2.5">
+    <li className="list-none px-3">
       <a
         data-slot="app-shell-nav-sub-item"
         aria-current={active ? "page" : undefined}
         className={cn(
           FILA,
-          "ps-9",
+          "group ps-9",
           active
             ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
-            : "font-normal text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground",
+            : "font-normal text-muted-foreground hover:bg-sidebar-hover hover:text-sidebar-foreground",
           className,
         )}
         {...resto}
       >
-        {guia ? <GuiaNav variante={guia} /> : null}
+        <GuiaNav variante={guia} />
         <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
       </a>
     </li>
@@ -398,12 +436,11 @@ function AppShellNavSubItem({ className, active, children, ...props }: AppShellN
 export type AppShellNavSubListProps = React.ComponentProps<"ul">;
 
 /**
- * Lista de hijas. Reparte la guia segun la posicion: las anteriores a la activa
- * llevan la vertical, y la activa dobla en codo.
+ * Lista de hijas. Reparte la guía según dónde cae cada una respecto de la
+ * activa: la vertical baja del padre, atraviesa las de encima y dobla en codo
+ * sobre la activa. Las de debajo no llevan nada, porque la rama ya terminó.
  *
- * La ultima sin activar no lleva ninguna, que es lo que evita que la vertical
- * siga por debajo del grupo. Y si la activa es la ultima, el codo sustituye a la
- * linea en vez de sumarse, por la misma razon.
+ * Sin hija activa no hay a dónde llegar, así que no se dibuja ninguna vertical.
  */
 function AppShellNavSubList({ className, children, ...props }: AppShellNavSubListProps) {
   const hijas = React.Children.toArray(children).filter(React.isValidElement);
@@ -412,9 +449,8 @@ function AppShellNavSubList({ className, children, ...props }: AppShellNavSubLis
   return (
     <ul data-slot="app-shell-nav-sub-list" className={cn("mb-2 list-none", className)} {...props}>
       {hijas.map((h, i) => {
-        const ultima = i === hijas.length - 1;
-        const guia: Guia | undefined =
-          i === activa ? (ultima ? "puntero" : "linea-puntero") : ultima ? undefined : "linea";
+        const guia: Guia =
+          activa === -1 || i > activa ? "ninguna" : i === activa ? "puntero" : "linea";
         return React.cloneElement(h as React.ReactElement<{ "data-guia"?: Guia }>, {
           key: h.key ?? i,
           "data-guia": guia,
@@ -442,7 +478,7 @@ function AppShellNavItem({
   ...props
 }: AppShellNavItemProps) {
   return (
-    <li className="list-none px-2.5">
+    <li className="list-none px-3">
       <a
         data-slot="app-shell-nav-item"
         aria-current={active ? "page" : undefined}
@@ -451,7 +487,7 @@ function AppShellNavItem({
           "ps-2",
           active
             ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
-            : "font-medium text-sidebar-foreground hover:bg-sidebar-accent",
+            : "font-medium text-sidebar-foreground hover:bg-sidebar-hover",
           className,
         )}
         {...props}

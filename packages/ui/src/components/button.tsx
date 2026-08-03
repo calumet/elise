@@ -13,16 +13,23 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   asChild?: boolean;
 
   /**
-   * Anuncia con `aria-busy` que la acción está corriendo, antepone un indicador
-   * y deshabilita el control, ya que evitar el envío repetido es su motivo de
-   * existir. El rótulo se queda: sin él, no se sabe qué está corriendo.
+   * Anuncia con `aria-busy` que la acción está corriendo, deshabilita el
+   * control —evitar el envío repetido es su motivo de existir— y tapa el
+   * contenido con un indicador centrado.
+   *
+   * El rótulo no se quita: se vuelve transparente. Así el botón no cambia de
+   * ancho al empezar a cargar, y quien navegue por lector de pantalla sigue
+   * sabiendo qué acción está en curso.
    */
   loading?: boolean;
 };
 
 /* El foco sigue la convención única del design system (ver CONTRIBUTING.md). */
 const baseClasses =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-semibold tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:border-border disabled:shadow-none";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-semibold tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background";
+
+const disabledClasses =
+  "disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:border-border disabled:shadow-none";
 
 /* Los rellenos sólidos llevan bisel, que al presionar se invierte hacia adentro
    en lugar de solo oscurecer el fondo. Las variantes outline/ghost se apoyan en
@@ -71,7 +78,7 @@ export const buttonVariants = ({
 }: {
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-} = {}) => cn(baseClasses, variantClasses[variant], sizeClasses[size]);
+} = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   sm: "h-9 px-3 text-sm",
@@ -98,6 +105,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : "button";
     const toneClass = tone ? toneOverrides[tone][variant] : undefined;
+    /* Con `asChild` el contenido pasa intacto: `Slot` admite un solo hijo, así
+       que envolverlo rompería la composición. Ahí el estado lo anuncia
+       `aria-busy` y el hijo pinta lo que quiera. */
+    const cargando = loading && !asChild;
     /* El default de HTML para `type` es "submit", así que un Button dentro de un
        form lo enviaba aunque solo llevara onClick. Quien envíe tiene que pedir
        `type="submit"` explícitamente. Con `asChild` no se fuerza nada, porque el
@@ -107,11 +118,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-slot="button"
         ref={ref}
         type={asChild ? type : (type ?? "button")}
-        disabled={disabled || (!asChild && loading) || undefined}
+        disabled={disabled || cargando || undefined}
         data-loading={loading ? "" : undefined}
         aria-busy={loading || undefined}
         className={cn(
           baseClasses,
+          disabledClasses,
           variantClasses[variant],
           toneClass,
           sizeClasses[size],
@@ -119,11 +131,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        {/* Con `asChild` el contenido pasa intacto: `Slot` admite un solo hijo,
-            así que anteponer el indicador rompería la composición. Ahí el estado
-            queda anunciado por `aria-busy` y el hijo pinta lo que quiera. */}
-        {loading && !asChild ? <Spinner className="size-4 shrink-0" /> : null}
-        {children}
+        {cargando ? (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center justify-center text-muted-foreground"
+          >
+            <Spinner />
+          </span>
+        ) : null}
+        {/* `contents` saca la envoltura del layout, de modo que el hueco y la
+            separación entre los hijos siguen siendo los del botón sin cargar; lo
+            único que aporta es el color que los apaga. */}
+        {cargando ? <span className="contents text-transparent">{children}</span> : children}
       </Comp>
     );
   },
