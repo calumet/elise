@@ -86,6 +86,30 @@
     }
   }
 
+  /* Apertura y cierre del Collapsible. Mismo mecanismo que el Accordion: la
+     altura medida la publica el primitivo, porque `height: auto` no es
+     animable. */
+  --animate-collapsible-down: collapsible-down 200ms var(--ease-out);
+  --animate-collapsible-up: collapsible-up 200ms var(--ease-out);
+
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes collapsible-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
   /* Progress sin valor conocido. La barra mide un tercio del carril y lo
      recorre entera, de lado a lado. */
   --animate-progress-indeterminate: progress-indeterminate 1.4s var(--ease-in-out) infinite;

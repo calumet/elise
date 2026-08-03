@@ -26,7 +26,7 @@ export const CollapsibleContent = React.forwardRef<
     data-slot="collapsible-content"
     ref={ref}
     className={cn(
-      "text-base overflow-hidden data-[state=closed]:animate-none data-[state=open]:animate-none",
+      "overflow-hidden text-base data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up",
       className,
     )}
     {...props}

@@ -90,9 +90,13 @@ que sean dos variantes y no dos componentes nuevos.
 La tercera capa. El paquete está reservado en `arquitectura.md` y no existe en
 disco.
 
+`AppShell` vive por ahora en `elise-ui`, no aquí: es un componente con estado y
+partes componibles, no una pantalla armada. Cuando exista el paquete, los
+patrones que lo usan son los que se mudan.
+
 - [ ] Crear el paquete
-- [ ] AppShell, PageHeader, página de tabla, wizard, ajustes, autenticación,
-      estados de error
+- [ ] PageHeader, página de tabla, wizard, ajustes, autenticación, estados de
+      error
 
 ## Fase 4 — El sistema alrededor del catálogo
 
