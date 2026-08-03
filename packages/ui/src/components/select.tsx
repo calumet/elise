@@ -48,7 +48,18 @@ export const SelectContent = React.forwardRef<
       )}
       {...props}
     >
-      <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
+      {/* Radix esconde la barra del visor —mete su propia regla para
+          `[data-radix-select-viewport]`— porque da por hecho que en su lugar se
+          usan sus botones de subir y bajar. Sin ellos una lista larga se
+          desplazaba sin que nada lo indicara. Se devuelve la del sistema, que
+          es la misma que la de la página y la de cualquier otra lista.
+
+          Va en `style` y no en una clase porque la regla de Radix no está en
+          ninguna capa y las capas pierden contra lo que no lo está: una
+          utilidad de Tailwind no la gana. */}
+      <SelectPrimitive.Viewport className="p-1" style={{ scrollbarWidth: "thin" }}>
+        {children}
+      </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));

@@ -524,8 +524,20 @@
      Declarar los dos deja el mismo aspecto en ambos, y el color sale de los
      tokens, así que la barra sigue al tema. */
   html {
-    scrollbar-width: thin;
     scrollbar-color: var(--color-border-strong) transparent;
+  }
+
+  /* El grosor va en `*` y el color en `html` porque no se heredan igual:
+     `scrollbar-color` sí y `scrollbar-width` no. Declarando las dos en `html`,
+     la página quedaba con la barra fina y todo lo que desplaza por dentro —la
+     lista de un combobox, el cuerpo de un modal, la barra lateral— se quedaba
+     con la del sistema: mismo color, otro grosor.
+
+     El color se queda en `html` a propósito, para que una zona con su propio
+     tema pueda cambiarlo para todo lo que tenga dentro; puesto en `*` se
+     volvería a fijar en cada descendiente y no habría forma de heredarlo. */
+  * {
+    scrollbar-width: thin;
   }
 
   ::-webkit-scrollbar {
