@@ -146,7 +146,11 @@
      con su texto blanco; warning usa texto oscuro por la misma razón */
   --primary: oklch(0.55 0.19 262);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.968 0.004 265);
+  /* Superficie de trabajo: el lienzo sobre el que se apoyan las tarjetas. Cae
+     entre la barra de navegación (0.94) y la tarjeta (1.0), y esa es toda su
+     razón de ser —tres planos en orden—. Antes estaba en 0.968, tan cerca del
+     blanco que el marco de aplicación se leía como una sola superficie plana. */
+  --secondary: oklch(0.958 0.002 265);
   --secondary-foreground: oklch(0.37 0.02 265);
   --muted: oklch(0.965 0.004 265);
   /* Leído sobre --muted (0.965), el mínimo AA no admite subir de 0.525. */
@@ -279,7 +283,10 @@
      oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
   --primary: oklch(0.655 0.17 262);
   --primary-foreground: oklch(0.17 0.03 262);
-  --secondary: oklch(0.262 0.012 265);
+  /* El mismo orden que en claro, invertido: barra (0.196) por debajo del lienzo
+     y este por debajo de la tarjeta (0.216). En oscuro los tres pasos son más
+     cortos, porque a esta luminosidad la vista separa antes. */
+  --secondary: oklch(0.206 0.011 265);
   --secondary-foreground: oklch(0.93 0.005 265);
   --muted: oklch(0.262 0.012 265);
   --muted-foreground: oklch(0.685 0.014 265);

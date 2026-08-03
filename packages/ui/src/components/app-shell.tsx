@@ -121,13 +121,26 @@ function AppShell({
 
 export type AppShellHeaderProps = React.ComponentProps<"header">;
 
-/** Barra superior. Queda fuera del área que el cajón cubre, a propósito. */
+/**
+ * Barra superior. Queda fuera del área que el cajón cubre, a propósito.
+ *
+ * Va en oscuro, y no pintada de negro: `data-theme="dark"` redefine los tokens
+ * sobre el propio elemento, así que dentro de la cabecera `bg-background` es el
+ * fondo oscuro, `text-foreground` el texto claro y `bg-card` las superficies que
+ * se levantan de él. Es una isla con su tema, no un color suelto, y por eso
+ * sigue funcionando cuando la aplicación entera se pone en oscuro: allí la
+ * cabecera ya estaba en oscuro y no cambia nada.
+ *
+ * Sin filete inferior: con este contraste la línea sobra, y en oscuro sobre
+ * oscuro solo ensucia el borde.
+ */
 function AppShellHeader({ className, ...props }: AppShellHeaderProps) {
   return (
     <header
       data-slot="app-shell-header"
+      data-theme="dark"
       className={cn(
-        "flex h-14 shrink-0 items-center gap-3 border-b border-sidebar-border bg-sidebar px-4 text-sidebar-foreground",
+        "flex h-14 shrink-0 items-center gap-3 bg-background px-4 text-foreground",
         className,
       )}
       {...props}
@@ -150,8 +163,11 @@ function AppShellNavToggle({ className, children, ...props }: AppShellNavToggleP
       aria-label={etiqueta}
       aria-expanded={cajonAbierto}
       onClick={() => setCajonAbierto(!cajonAbierto)}
+      /* Vive dentro de la cabecera, que tiene su propio tema, así que usa los
+         tokens generales y no los de la barra lateral: ahí `--sidebar` resolvería
+         en oscuro y quedaría casi negro sobre casi negro. */
       className={cn(
-        "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-sidebar-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar md:hidden",
+        "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md bg-card text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden",
         className,
       )}
       {...props}
@@ -534,7 +550,11 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps) {
     <main
       data-slot="app-shell-main"
       inert={cajonAbierto}
-      className={cn("flex min-w-0 flex-1 flex-col overflow-y-auto bg-background", className)}
+      /* El lienzo, no el fondo de la página: va un punto por encima de la barra
+         de navegación y por debajo de las tarjetas que se apoyan en él. Con el
+         fondo general las tres superficies quedaban a menos de un 2% entre sí y
+         el marco se leía como una sola plancha. */
+      className={cn("flex min-w-0 flex-1 flex-col overflow-y-auto bg-secondary p-5", className)}
       {...props}
     >
       {children}

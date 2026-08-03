@@ -3,6 +3,7 @@ import {
   CreditCard,
   Home,
   Package,
+  Search,
   ShoppingCart,
   Store,
   Tag,
@@ -45,14 +46,36 @@ const AppShellDemo = () => {
   return (
     <div className="h-[560px] w-full overflow-hidden rounded-xl border border-border">
       <AppShell className="h-full">
-        <AppShellHeader>
-          <AppShellNavToggle />
-          <Text size="sm" weight="semibold">
-            Calumet
-          </Text>
-          <Badge tone="neutral" size="sm" className="ms-auto">
-            {ruta}
-          </Badge>
+        {/* Tres bandas para que el buscador quede centrado en la ventana: las
+            laterales valen 1fr, así que miden lo mismo y el centro no se
+            desplaza cuando el nombre crece. */}
+        <AppShellHeader className="grid grid-cols-[1fr_minmax(0,420px)_1fr] gap-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <AppShellNavToggle />
+            <Text size="lg" weight="bold" className="truncate">
+              Calumet
+            </Text>
+          </div>
+
+          {/* Las piezas de la cabecera usan `bg-card`. Bajo su tema oscuro eso
+              es la superficie que se levanta del fondo, sin un solo color
+              escrito a mano. */}
+          <div className="flex h-9 w-full items-center gap-2 rounded-md bg-card px-3 text-muted-foreground">
+            <Search className="size-4 shrink-0" aria-hidden="true" />
+            <span className="flex-1 truncate text-sm">Buscar</span>
+          </div>
+
+          <div className="flex min-w-0 items-center justify-end gap-3">
+            <Badge tone="neutral" size="sm">
+              {ruta}
+            </Badge>
+            <div className="flex h-9 items-center gap-2 rounded-md bg-card ps-3 pe-1">
+              <span className="hidden text-sm font-semibold md:inline">Juan D.</span>
+              <span className="flex size-7 items-center justify-center rounded-sm bg-primary text-2xs font-bold text-primary-foreground">
+                JD
+              </span>
+            </div>
+          </div>
         </AppShellHeader>
 
         <AppShellNav>
@@ -141,7 +164,7 @@ const AppShellDemo = () => {
           </ul>
         </AppShellNav>
 
-        <AppShellMain className="p-5">
+        <AppShellMain>
           <Text size="xl" weight="bold">
             {ruta}
           </Text>
