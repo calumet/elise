@@ -43,7 +43,7 @@ export const TableBody = React.forwardRef<
        aparte. `divide-y` hace exactamente eso —borde superior salvo en la
        primera—, pero aquí sí la queremos, que es la que hace de línea del
        encabezado. */
-    className={cn("border-t border-border divide-y divide-border", className)}
+    className={cn("border-t border-border divide-y divide-border-subtle", className)}
     {...props}
   />
 ));
@@ -69,7 +69,10 @@ export const TableRow = React.forwardRef<
   <tr
     data-slot="table-row"
     ref={ref}
-    className={cn("transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className)}
+    /* Apuntar una fila la deja del mismo tono que el encabezado, que es lo que
+       hace Polaris: un solo valor para «superficie que no es la del contenido».
+       Elegida baja un paso más, para que se distinga de la que solo se apunta. */
+    className={cn("transition-colors hover:bg-muted data-[state=selected]:bg-secondary", className)}
     {...props}
   />
 ));
@@ -83,7 +86,7 @@ export const TableHead = React.forwardRef<
     data-slot="table-head"
     ref={ref}
     className={cn(
-      "px-3 py-2 text-left align-middle text-xs font-medium text-muted-foreground",
+      "bg-muted px-1.5 py-2 text-left align-middle text-xs font-medium whitespace-nowrap text-muted-foreground first:ps-3 last:pe-3",
       className,
     )}
     {...props}
@@ -98,7 +101,10 @@ export const TableCell = React.forwardRef<
   <td
     data-slot="table-cell"
     ref={ref}
-    className={cn("px-3 py-1.5 align-middle text-sm text-foreground", className)}
+    className={cn(
+      "px-1.5 py-1.5 align-middle text-sm text-foreground first:ps-3 last:pe-3",
+      className,
+    )}
     {...props}
   />
 ));

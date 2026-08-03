@@ -1,4 +1,3 @@
-import { formatDate, formatDateRange } from "@calumet/elise-i18n/dates";
 import { DateField } from "@calumet/elise-ui/date-field";
 import { DatePicker, DateRangePicker } from "@calumet/elise-ui/date-picker";
 import { useState } from "react";
@@ -17,21 +16,11 @@ const DatePickersDemo = () => {
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="space-y-2">
         <p className="text-base font-semibold text-foreground">Date Picker</p>
-        <DatePicker
-          value={single}
-          onChange={setSingle}
-          formatLabel={(d?: Date) => (d ? formatDate(d) : "Selecciona una fecha")}
-        />
+        <DatePicker value={single} onChange={setSingle} />
       </div>
       <div className="space-y-2">
         <p className="text-base font-semibold text-foreground">Date Range Picker</p>
-        <DateRangePicker
-          value={range}
-          onChange={setRange}
-          formatLabel={(r) =>
-            r?.from && r?.to ? formatDateRange({ from: r.from, to: r.to }) : "Selecciona un rango"
-          }
-        />
+        <DateRangePicker value={range} onChange={setRange} />
       </div>
 
       <div className="space-y-2 sm:col-span-2">

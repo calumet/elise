@@ -35,7 +35,15 @@ const aFecha = (texto: string): Date | null => {
   return fecha;
 };
 
-const aTexto = (fecha: Date) =>
+/**
+ * Escribe una fecha local en `YYYY-MM-DD`.
+ *
+ * Es el formato que comparten los tres controles de fecha. Se exporta porque los
+ * selectores rotulan con él: con `toLocaleDateString` cada uno mostraba lo suyo
+ * según el idioma del navegador, y un rango quedaba en dos formatos distintos
+ * dentro de la misma frase.
+ */
+export const aTextoISO = (fecha: Date) =>
   [
     String(fecha.getFullYear()).padStart(4, "0"),
     String(fecha.getMonth() + 1).padStart(2, "0"),
@@ -178,13 +186,13 @@ export function DateField({
     }
     /* Se normaliza antes de confirmar, para que «2026-8-3» y «2026-08-03» no
        lleguen al consumidor como dos valores distintos. */
-    const normalizado = aTexto(fecha);
+    const normalizado = aTextoISO(fecha);
     if (normalizado !== texto) escribir(normalizado);
     onValueCommit?.(normalizado);
   };
 
   const elegirEnCalendario = (fecha?: Date) => {
-    const siguiente = fecha ? aTexto(fecha) : "";
+    const siguiente = fecha ? aTextoISO(fecha) : "";
     escribir(siguiente);
     onValueCommit?.(siguiente);
     setAbierto(false);

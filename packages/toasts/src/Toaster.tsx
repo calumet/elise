@@ -64,7 +64,11 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
           onOpenChange={(open: boolean) => {
             if (!open) dismiss(toastItem.id);
           }}
-          className="group relative flex w-full max-w-sm flex-col gap-2 rounded-sm border border-border bg-card p-4 pr-12 text-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
+          /* Invertido, como el de Polaris: el aviso llega encima de una pantalla
+             llena de tarjetas, y otra tarjeta blanca más se confunde con ellas.
+             Invertirlo lo despega sin recurrir a un color de estado, que aquí
+             significaría otra cosa. Radio de 8px y 12 de relleno. */
+          className="group relative flex w-full max-w-md flex-col gap-2 rounded-md bg-inverse p-3 pr-12 text-inverse-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
         >
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />
@@ -73,7 +77,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
                 <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle>
               ) : null}
               {toastItem.description ? (
-                <ToastDescription className="text-sm text-muted-foreground">
+                <ToastDescription className="text-sm text-inverse-foreground/75">
                   {toastItem.description}
                 </ToastDescription>
               ) : null}
@@ -82,7 +86,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="px-0 text-primary hover:underline"
+                  className="px-0 text-inverse-foreground underline-offset-2 hover:underline hover:bg-transparent"
                   onClick={toastItem.action}
                 >
                   {toastItem.actionLabel}
@@ -90,7 +94,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
               ) : null}
             </div>
             <ToastClose
-              className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+              className="absolute right-2 top-2 inline-flex size-7 items-center justify-center rounded-md text-inverse-foreground/70 transition hover:text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-foreground focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
               aria-label={closeLabel}
             >
               <X className="h-4 w-4" aria-hidden />

@@ -56,16 +56,24 @@ const AppShellDemo = () => {
             </Text>
           </div>
 
-          {/* Las piezas de la cabecera usan `bg-card`. Bajo su tema oscuro eso
-              es la superficie que se levanta del fondo, sin un solo color
-              escrito a mano. */}
-          <div className="flex h-9 w-full items-center gap-2 rounded-md bg-card px-3 text-muted-foreground">
+          {/* En Shopify esto es un botón que abre la búsqueda, no un campo, y por
+              eso lleva el atajo dentro. Las piezas de la cabecera usan `bg-card`
+              —la superficie que se levanta bajo su tema oscuro— más un borde:
+              contra un fondo casi negro, 0.044 de diferencia de luminosidad no
+              alcanzan a dibujar la caja, y lo que la define es el contorno. */}
+          <button
+            type="button"
+            className="flex h-9 w-full cursor-pointer items-center gap-2 rounded-xl border border-border bg-card px-3 text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
             <Search className="size-4 shrink-0" aria-hidden="true" />
-            <span className="flex-1 truncate text-sm">Buscar</span>
-          </div>
+            <span className="flex-1 truncate text-start text-sm">Buscar</span>
+            <kbd className="hidden rounded border border-border px-1.5 py-px font-mono text-2xs md:inline-block">
+              Ctrl K
+            </kbd>
+          </button>
 
           <div className="flex min-w-0 items-center justify-end gap-3">
-            <div className="flex h-9 items-center gap-2 rounded-md bg-card ps-3 pe-1">
+            <div className="flex h-9 items-center gap-2 rounded-xl border border-border bg-card ps-3 pe-1">
               <span className="hidden text-sm font-semibold md:inline">Juan D.</span>
               <span className="flex size-7 items-center justify-center rounded-sm bg-primary text-2xs font-bold text-primary-foreground">
                 JD

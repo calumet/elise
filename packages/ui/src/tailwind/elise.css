@@ -140,6 +140,13 @@
   --foreground: oklch(0.21 0.012 265);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.21 0.012 265);
+  /* Superficie invertida: lo que en el tema claro es casi negro y en el oscuro
+     casi blanco. Se define intercambiando fondo y texto, así que se voltea sola
+     al cambiar de tema y no hace falta declararla dos veces. La usan los avisos
+     que aparecen encima de todo, como los toasts: invertirlos es lo que los
+     separa de las tarjetas de la pantalla en vez de sumarles una más. */
+  --inverse: var(--foreground);
+  --inverse-foreground: var(--background);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.012 265);
   /* primary/destructive/success oscurecidos para cumplir WCAG AA (≥4.5:1)
@@ -161,7 +168,12 @@
   --destructive-foreground: oklch(1 0 0);
   /* border = divisores; border-strong = contorno de controles; input = campos.
      Son tres valores distintos porque un campo necesita más peso que un
-     divisor para leerse como editable. */
+     divisor para leerse como editable.
+     border-subtle es el cuarto y va por debajo: separa cosas de la misma
+     familia —las filas de una tabla— donde la línea solo tiene que dejar
+     contar, no dividir. Con el mismo tono que el resto, una tabla de veinte
+     filas se convierte en una reja. */
+  --border-subtle: oklch(0.94 0.004 265);
   --border: oklch(0.922 0.005 265);
   --border-strong: oklch(0.865 0.008 265);
   --input: oklch(0.878 0.007 265);
@@ -298,6 +310,7 @@
      contraste del texto. */
   --destructive: oklch(0.577 0.225 27);
   --destructive-foreground: oklch(1 0 0);
+  --border-subtle: oklch(0.26 0.012 265);
   --border: oklch(0.302 0.013 265);
   --border-strong: oklch(0.38 0.016 265);
   --input: oklch(0.36 0.015 265);
@@ -366,6 +379,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -379,6 +394,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-border-subtle: var(--border-subtle);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-input: var(--input);

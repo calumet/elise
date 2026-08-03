@@ -2,6 +2,7 @@ import { Calendar as CalendarIcon } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { Calendar } from "./calendar";
+import { aTextoISO } from "./date-field";
 import { CAJA_CAMPO } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
@@ -48,11 +49,7 @@ export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
 
   const isValidDate = value && !isNaN(value.getTime());
-  const label = formatLabel
-    ? formatLabel(value)
-    : isValidDate
-      ? value!.toLocaleDateString()
-      : placeholder;
+  const label = formatLabel ? formatLabel(value) : isValidDate ? aTextoISO(value!) : placeholder;
 
   return (
     <div data-slot="date-picker" className="w-full">
@@ -90,13 +87,13 @@ export function DateRangePicker({ value, onChange, formatLabel }: DateRangePicke
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
   const range: DateRangeValue = value ?? { from: undefined, to: undefined };
   const completo = Boolean(range?.from && range?.to);
-  /* Raya larga con espacios y no un guion: el guion pegado a dos fechas con
-     barras se lee como parte de la última. */
+  /* El mismo formato que `DateField`, y el mismo separador que Shopify usa para
+     un rango en `s-date-picker`: `YYYY-MM-DD--YYYY-MM-DD`. Un rango escrito con
+     dos formatos locales y un guion suelto no se puede ni leer ni teclear de
+     vuelta. */
   const label =
     formatLabel?.(range) ??
-    (completo
-      ? `${range.from!.toLocaleDateString()} – ${range.to!.toLocaleDateString()}`
-      : placeholder);
+    (completo ? `${aTextoISO(range.from!)}--${aTextoISO(range.to!)}` : placeholder);
 
   return (
     <div data-slot="date-range-picker" className="w-full">
