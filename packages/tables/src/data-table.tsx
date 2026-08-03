@@ -476,15 +476,18 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   const labelSelectPlaceholder = useElLabel("tables", "selectPlaceholder", "Select...");
   const labelNoOptions = useElLabel("tables", "noOptions", "No options found.");
   const labelClear = useElLabel("tables", "clear", "Clear");
+  const columnVar = { column: columnHeader.toLowerCase() };
   const labelSearchInColumn = useElLabel(
     "tables",
     "searchInColumn",
     `Search ${columnHeader.toLowerCase()}...`,
+    columnVar,
   );
   const labelSearch = useElLabel(
     "tables",
     "searchByColumn",
     `Buscar ${columnHeader.toLowerCase()}`,
+    columnVar,
   );
 
   const facetedUniqueValues = column.getFacetedUniqueValues();

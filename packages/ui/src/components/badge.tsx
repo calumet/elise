@@ -24,7 +24,7 @@ const sizeClasses: Record<NonNullable<BadgeProps["size"]>, string> = {
 
    La variante `outline` usa el color sólido para el borde pero el `-subtle-foreground`
    para el texto, ya que los sólidos están calibrados como relleno. Usados como
-   texto sobre la página no llegan a 4.5:1 (`warning` medido daba 2.18:1). */
+   texto sobre la página no llegan a 4.5:1 (`warning` mide 2.18:1). */
 const toneClasses: Record<
   NonNullable<BadgeProps["tone"]>,
   Record<NonNullable<BadgeProps["variant"]>, string>

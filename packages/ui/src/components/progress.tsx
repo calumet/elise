@@ -36,7 +36,7 @@ function Progress({ className, value = 0, max = 100, ...props }: ProgressProps) 
           "h-full w-full flex-1 bg-primary",
           indeterminado
             ? "w-1/3 animate-progress-indeterminate"
-            : "transition-transform duration-(--duration-normal) ease-out",
+            : "transition-transform duration-(--duration-base) ease-out",
         )}
         style={indeterminado ? undefined : { transform: `translateX(-${100 - porcentaje}%)` }}
       />

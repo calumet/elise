@@ -86,7 +86,7 @@ const BusquedaAsincrona = () => {
               <ComboboxSeparator />
               <ComboboxItem value="__nuevo" onSelect={() => setElegido("")}>
                 <Text size="sm" tone="primary">
-                  + Crear paquete nuevo
+                  Crear paquete nuevo
                 </Text>
               </ComboboxItem>
             </>

@@ -1,7 +1,7 @@
 /*
  * Tipografias de Elise, autoalojadas.
  *
- * Importalo *antes* de `elise.css`. Es un archivo aparte a proposito: si tu app
+ * Importalo *antes* de `elise.css`. Es un archivo aparte a propósito: si tu app
  * ya carga Geist por su cuenta (por ejemplo con `geist/font` en Next.js), no lo
  * importes y evitas descargar las fuentes dos veces. Los tokens `--font-*` de
  * `elise.css` resuelven igual, porque listan tanto el nombre que registra

@@ -101,8 +101,8 @@
 }
 
 :root {
-  /* El fondo de página se separa de las tarjetas. Con ambos en blanco puro una
-     Card solo se distinguía por su borde de 1px. */
+  /* El fondo de página se separa de las tarjetas. Con los dos en blanco puro,
+     una Card solo se distingue por su borde de 1px. */
   --background: oklch(0.984 0.002 265);
   --foreground: oklch(0.21 0.012 265);
   --card: oklch(1 0 0);
@@ -116,14 +116,15 @@
   --secondary: oklch(0.968 0.004 265);
   --secondary-foreground: oklch(0.37 0.02 265);
   --muted: oklch(0.965 0.004 265);
-  /* 0.548 daba 4.42:1 leido sobre --muted (0.965), bajo el minimo AA. */
+  /* Leído sobre --muted (0.965), el mínimo AA no admite subir de 0.525. */
   --muted-foreground: oklch(0.525 0.016 265);
   --accent: oklch(0.955 0.025 250);
   --accent-foreground: oklch(0.38 0.14 262);
   --destructive: oklch(0.577 0.225 27);
   --destructive-foreground: oklch(1 0 0);
   /* border = divisores; border-strong = contorno de controles; input = campos.
-     Los tres eran el mismo valor, por eso los campos se leían tan débiles. */
+     Son tres valores distintos porque un campo necesita más peso que un
+     divisor para leerse como editable. */
   --border: oklch(0.922 0.005 265);
   --border-strong: oklch(0.865 0.008 265);
   --input: oklch(0.878 0.007 265);
@@ -176,7 +177,7 @@
   --info-subtle-foreground: oklch(0.42 0.12 245);
 
   /* Cada familia lista primero el nombre que registra Fontsource ("… Variable")
-     y despues el nombre plano, para que resuelva tanto con
+     y después el nombre plano, para que resuelva tanto con
      `@calumet/elise-ui/tailwind/fonts.css` como si la app carga la fuente por
      su cuenta. Un nombre que nadie registra no falla de forma visible: la
      familia cae en la siguiente del stack y todo termina en la del sistema. */
@@ -190,7 +191,7 @@
     monospace;
 
   /* Radio base = radio de controles (8px). Las escalas derivadas se separan
-     ±2px en lugar de restar 4px, que dejaba `rounded-sm` en 2px. */
+     ±2px, de modo que el escalón más chico queda en 6px y no en 2px. */
   --radius: 0.5rem;
 
   --duration-fast: 140ms;
@@ -229,8 +230,8 @@
   /* popover se eleva por encima de card, no al mismo nivel */
   --popover: oklch(0.235 0.012 265);
   --popover-foreground: oklch(0.962 0.003 265);
-  /* primary sube a 0.655 porque el 0.55 del modo claro quedaba apagado sobre el
-     fondo oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
+  /* primary sube a 0.655 porque el 0.55 del modo claro se apaga sobre el fondo
+     oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
   --primary: oklch(0.655 0.17 262);
   --primary-foreground: oklch(0.17 0.03 262);
   --secondary: oklch(0.262 0.012 265);
