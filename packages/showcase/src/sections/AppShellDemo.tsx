@@ -1,10 +1,9 @@
 import {
   BarChart3,
-  Bell,
-  CircleHelp,
   CreditCard,
   Home,
   Package,
+  Search,
   Settings,
   ShoppingCart,
   Star,
@@ -15,10 +14,6 @@ import {
 import {
   AppShell,
   AppShellHeader,
-  AppShellHeaderAction,
-  AppShellHeaderActions,
-  AppShellHeaderBrand,
-  AppShellHeaderSearch,
   AppShellMain,
   AppShellNav,
   AppShellNavAction,
@@ -29,18 +24,9 @@ import {
   AppShellNavSubItem,
   AppShellNavSubList,
   AppShellNavToggle,
-  AppShellUserMenu,
 } from "@calumet/elise-ui/app-shell";
 import { Button } from "@calumet/elise-ui/button";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@calumet/elise-ui/command";
-import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropdown-menu";
+import { Kbd } from "@calumet/elise-ui/kbd";
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
@@ -61,11 +47,6 @@ const AppShellDemo = () => {
      ratón se va. */
   const [fijado, setFijado] = useState(false);
 
-  /* Lo de la cabecera también hace algo: sin esto serían controles con forma
-     de control y sin comportamiento, que es peor que no ponerlos. */
-  const [buscando, setBuscando] = useState(false);
-  const [aviso, setAviso] = useState<string | null>(null);
-
   const [guardando, setGuardando] = useState(false);
   const guardar = () => {
     setGuardando(true);
@@ -75,40 +56,42 @@ const AppShellDemo = () => {
   return (
     <div className="h-[560px] w-full overflow-hidden rounded-xl border border-border">
       <AppShell className="h-full">
-        <AppShellHeader>
-          <AppShellHeaderBrand>
+        {/* Tres bandas para que el buscador quede centrado en la ventana: las
+            laterales valen 1fr, así que miden lo mismo y el centro no se
+            desplaza cuando el nombre crece. */}
+        <AppShellHeader className="grid grid-cols-[1fr_minmax(0,420px)_1fr] gap-4">
+          <div className="flex min-w-0 items-center gap-3">
             <AppShellNavToggle />
             <Text size="lg" weight="bold" className="truncate">
               Calumet
             </Text>
-          </AppShellHeaderBrand>
+          </div>
 
-          <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={() => setBuscando(true)}>
-            Buscar
-          </AppShellHeaderSearch>
+          {/* Es un botón que abre la búsqueda y no un campo, y por eso lleva el
+              atajo dentro. Las piezas de la cabecera usan `bg-card`,
+              la superficie que se levanta bajo su tema oscuro, más un borde:
+              contra un fondo casi negro, 0.044 de diferencia de luminosidad no
+              alcanzan a dibujar la caja, y lo que la define es el contorno. */}
+          <button
+            type="button"
+            className="flex h-9 w-full cursor-pointer items-center gap-2 rounded-xl border border-border bg-card px-3 text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <Search className="size-4 shrink-0" aria-hidden="true" />
+            <span className="flex-1 truncate text-start text-sm">Buscar</span>
+            <span className="hidden items-center gap-1 md:inline-flex">
+              <Kbd>Ctrl</Kbd>
+              <Kbd>K</Kbd>
+            </span>
+          </button>
 
-          {/* Las acciones van antes del menú de la cuenta, que es el ancla de
-              la esquina: al revés bailaría de sitio en cada pantalla. */}
-          <AppShellHeaderActions>
-            <AppShellHeaderAction
-              label="Notificaciones"
-              icon={<Bell />}
-              onClick={() => setAviso("Notificaciones")}
-            />
-            <AppShellHeaderAction
-              label="Ayuda"
-              icon={<CircleHelp />}
-              onClick={() => setAviso("Ayuda")}
-            />
-            <AppShellUserMenu name="Juan D." detail="Calumet S.A.S." initials="JD">
-              <DropdownMenuItem onSelect={() => setAviso("Perfil")}>Perfil</DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>Ajustes</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => setAviso("Cerrar sesión")}>
-                Cerrar sesión
-              </DropdownMenuItem>
-            </AppShellUserMenu>
-          </AppShellHeaderActions>
+          <div className="flex min-w-0 items-center justify-end gap-3">
+            <div className="flex h-9 items-center gap-2 rounded-xl border border-border bg-card ps-3 pe-1">
+              <span className="hidden text-sm font-semibold md:inline">Juan D.</span>
+              <span className="flex size-7 items-center justify-center rounded-sm bg-primary text-2xs font-bold text-primary-foreground">
+                JD
+              </span>
+            </div>
+          </div>
         </AppShellHeader>
 
         <AppShellNav>
@@ -258,39 +241,7 @@ const AppShellDemo = () => {
             Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva su
             ancho y no empuja a los de al lado.
           </Text>
-          {aviso ? (
-            <Text size="sm" className="mt-4" data-testid="aviso-cabecera">
-              Última acción de la cabecera: <strong>{aviso}</strong>
-            </Text>
-          ) : null}
         </AppShellMain>
-
-        {/* Lo que abre el buscador de la cabecera: una paleta con su propio
-            campo dentro, que es la razón de que allá arriba sea un botón y no
-            un campo. */}
-        <CommandDialog open={buscando} onOpenChange={setBuscando}>
-          <CommandInput placeholder="Buscar pedidos, productos, clientes…" />
-          <CommandList>
-            <CommandEmpty>Sin resultados</CommandEmpty>
-            <CommandGroup heading="Ir a">
-              {[
-                ["Pedidos", "/pedidos"],
-                ["Productos", "/productos"],
-                ["Clientes", "/clientes"],
-              ].map(([texto, destino]) => (
-                <CommandItem
-                  key={destino}
-                  onSelect={() => {
-                    setRuta(destino);
-                    setBuscando(false);
-                  }}
-                >
-                  {texto}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </CommandDialog>
       </AppShell>
     </div>
   );
