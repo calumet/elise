@@ -641,11 +641,15 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   icon?: React.ReactNode;
 
   /**
-   * El icono de cuando está elegida, normalmente el mismo relleno.
+   * El icono de cuando está elegida: el mismo, con más peso.
    *
-   * Un icono de trazo y su versión rellena son la misma silueta con distinto
-   * peso, así que el cambio dice «esta» sin agregar nada nuevo que leer. Sin
-   * esto, `icon` sirve para los dos estados.
+   * La misma silueta más marcada dice «esta» sin agregar nada nuevo que leer.
+   * Cómo se consigue ese peso depende del juego de iconos: con uno que traiga
+   * pareja de trazo y relleno, la versión rellena; con uno de solo trazo, un
+   * trazo más grueso. Rellenar un icono dibujado para trazo no sirve, porque
+   * sus partes interiores se funden con el contorno en una mancha.
+   *
+   * Sin esto, `icon` sirve para los dos estados.
    */
   activeIcon?: React.ReactNode;
 

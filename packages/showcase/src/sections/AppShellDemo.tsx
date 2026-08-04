@@ -96,12 +96,13 @@ const AppShellDemo = () => {
 
         <AppShellNav>
           <ul className="list-none p-0">
-            {/* `activeIcon` es el mismo icono relleno: la misma silueta con más
-                peso dice «esta» sin agregar nada nuevo que leer. */}
+            {/* `activeIcon` es el mismo icono con más peso. Aquí es trazo más
+                grueso y no relleno, porque estos iconos están dibujados para
+                trazo: rellenarlos funde el tejado con la puerta. */}
             <AppShellNavItem
               href="/"
               icon={<Home />}
-              activeIcon={<Home fill="currentColor" />}
+              activeIcon={<Home strokeWidth={2.5} />}
               active={ruta === "/"}
               onClick={ir("/")}
             >
