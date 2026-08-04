@@ -473,17 +473,20 @@ function AppShellNavToggle({ className, children, ...props }: AppShellNavToggleP
       aria-label={etiqueta}
       aria-expanded={cajonAbierto}
       onClick={() => setCajonAbierto(!cajonAbierto)}
-      /* Vive dentro de la cabecera, que tiene su propio tema, así que usa los
+      /* Sin fondo propio: es un icono en la barra, como los demás, y el fondo
+         solo aparece al apuntarlo. Con `bg-card` fijo se dibujaba un cuadrado
+         alrededor que no lleva ningún otro control de la cabecera.
+         Vive dentro de la cabecera, que tiene su propio tema, así que usa los
          tokens generales y no los de la barra lateral: ahí `--sidebar` resolvería
          en oscuro y quedaría casi negro sobre casi negro. */
       className={cn(
-        "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md bg-card text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden",
+        "inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden",
         className,
       )}
       {...props}
     >
       {children ?? (
-        <svg viewBox="0 0 16 16" className="size-4" aria-hidden="true" focusable="false">
+        <svg viewBox="0 0 16 16" className="size-5" aria-hidden="true" focusable="false">
           <path
             d="M2 4h12M2 8h12M2 12h12"
             stroke="currentColor"
