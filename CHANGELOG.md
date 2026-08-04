@@ -119,6 +119,15 @@ la 1.0 es ahí donde van.
 - **El desplazamiento no era el mismo en toda la página.** La lista del
   `TimePicker` y `ScrollArea` dibujaban una barra propia que se escondía en
   reposo, mientras la página y los desplegables usan la nativa.
+- **Cinco componentes no cabían en una columna estrecha** y su contenido se
+  pintaba encima de lo de al lado. Los campos compuestos (`NumberField`,
+  `SearchField`, `TimePicker`) no bajaban de 305px, porque el ancho por defecto
+  de un `<input>` son veinte caracteres y ese era el mínimo de la caja entera.
+  El `SegmentedControl` pedía la suma de sus rótulos, y siendo la pieza más
+  ancha de una rejilla se llevaba consigo el ancho de todas las columnas; ahora
+  sus opciones encogen. El `OTPField` se envuelve, el `Stepper` horizontal se
+  desplaza, y la franja de paginar reparte en dos renglones antes de sacar el
+  «filas por página» fuera de la tabla.
 
 ## `@calumet/elise-tables` 0.2.0
 

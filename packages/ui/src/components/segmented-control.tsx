@@ -42,8 +42,9 @@ export const SegmentedControl = React.forwardRef<
     type="single"
     onValueChange={(valor) => valor && onValueChange?.(valor)}
     className={cn(
-      "inline-flex items-center gap-px rounded-md bg-muted p-0.5",
+      "inline-flex max-w-full items-center gap-px rounded-md bg-muted p-0.5",
       "[&>*:not(:first-child)]:rounded-s-none [&>*:not(:last-child)]:rounded-e-none",
+      "[&>*]:min-w-0 [&>*]:truncate",
       className,
     )}
     {...props}

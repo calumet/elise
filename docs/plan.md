@@ -243,8 +243,9 @@ componente, y por eso va aparte.
 
 - [x] Auditoría visual ejecutable, con su job en CI (ver
       [auditoría visual](auditoria-visual.md))
-- [ ] Tests unitarios. Con 77 archivos de componente y ninguno, cada cambio se
-      apoya en que alguien mire el navegador
+- [ ] Tests unitarios y de integración: aplazados, no pendientes. Calumet es un
+      grupo chico y mantenerlos cuesta más de lo que ahorra hoy. Se retoman
+      cuando el equipo dé para eso, como las gráficas
 - [ ] Accesibilidad automatizada (axe)
 - [ ] Regresión visual por captura, en claro y en oscuro
 - [ ] Varios temas de marca sobre `applyTheme`
@@ -255,6 +256,6 @@ componente, y por eso va aparte.
 
 ## Orden sugerido
 
-La fase 4 en su parte de tests va antes que los componentes que faltan de la
-fase 2. Un catálogo más grande sin tests es más superficie apoyada en revisión
-manual; los componentes que faltan se notan más pero quitan menos riesgo.
+Con los tests aplazados, lo que sostiene el catálogo es la auditoría visual, y
+por eso crece con lo que se encuentra: hoy barre tres anchos y compara cajas
+entre hermanos. Las fases siguen en su orden.

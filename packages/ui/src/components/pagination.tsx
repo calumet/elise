@@ -58,9 +58,9 @@ function Pagination({ className, variant = "default", end, children, ...props }:
       data-slot="pagination"
       data-variant={variant}
       className={cn(
-        "flex w-full items-center",
+        "flex w-full flex-wrap items-center",
         variant === "table"
-          ? "gap-3 border-t border-border bg-muted px-3 py-1.5"
+          ? "gap-x-3 gap-y-1 border-t border-border bg-muted px-3 py-1.5"
           : "justify-center",
         className,
       )}
@@ -70,7 +70,7 @@ function Pagination({ className, variant = "default", end, children, ...props }:
         <>
           <div className="flex-1" aria-hidden />
           {children}
-          <div className="flex min-w-0 flex-1 justify-end">{end}</div>
+          <div className="flex flex-1 justify-end">{end}</div>
         </>
       ) : (
         children

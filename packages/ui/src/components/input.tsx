@@ -44,9 +44,16 @@ export const CAJA_CAMPO =
 export const CAJA_CAMPO_COMPUESTA =
   "flex h-9 w-full items-center gap-1.5 rounded-md border border-input bg-background ps-3 pe-1 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-border-strong focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50";
 
-/** El `<input>` que va dentro de una caja compuesta: sin caja propia. */
+/**
+ * El `<input>` que va dentro de una caja compuesta: sin caja propia.
+ *
+ * `w-0` no es lo que mide, que eso lo pone `flex-1`: es lo que impide que el
+ * ancho por defecto del `<input>` (veinte caracteres, 191px) sea el mínimo del
+ * campo entero. Con él puesto, un campo compuesto no cabía en una columna de
+ * 294px por más `min-w-0` que se le pusiera por fuera.
+ */
 export const CAMPO_DESNUDO =
-  "min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed";
+  "w-0 min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed";
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", ...props }, ref) => (

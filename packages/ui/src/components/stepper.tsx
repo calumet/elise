@@ -34,7 +34,7 @@ function Stepper({ className, orientation = "horizontal", ...props }: StepperPro
         data-orientation={orientation}
         className={cn(
           "flex",
-          orientation === "horizontal" ? "flex-row items-start" : "flex-col",
+          orientation === "horizontal" ? "flex-row items-start overflow-x-auto" : "flex-col",
           className,
         )}
         {...props}

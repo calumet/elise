@@ -111,7 +111,7 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
         ref={ref}
         role="group"
         aria-label={groupLabel}
-        className={cn("flex items-center gap-2", className)}
+        className={cn("flex flex-wrap items-center gap-2", className)}
         {...props}
       >
         {Array.from({ length }).map((_, index) => (

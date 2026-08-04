@@ -8,6 +8,8 @@
  *   pnpm audit:visual                     # contra http://localhost:5173
  *   pnpm audit:visual -- --url=http://…   # contra otra URL
  *   pnpm audit:visual -- --abrir          # además abre cada disparador de panel
+ *   pnpm audit:visual -- --anchos=360     # un solo ancho, en vez del barrido
+ *   pnpm audit:visual -- --tema=oscuro    # claro | oscuro | ambos
  *
  * Sale con código 1 si hay fallos, para poder colgarlo de CI.
  */
@@ -25,6 +27,14 @@ const arg = (nombre, pordefecto) =>
 const URL = arg("url", "http://localhost:5173");
 const ABRIR_PANELES = args.includes("--abrir");
 const TEMA = arg("tema", "claro"); // claro | oscuro | ambos
+
+/* Lo que se rompe por responsive se rompe donde aprieta, así que auditar solo en
+   escritorio no ve nada. Los tres son el estrecho, el borde del breakpoint y el
+   ancho cómodo. */
+const ANCHOS = arg("anchos", "360,768,1280")
+  .split(",")
+  .map((n) => Number(n.trim()))
+  .filter((n) => Number.isFinite(n) && n > 0);
 
 /* Escalas del sistema. Si cambian en elise.css, cambian aca. */
 const RADIOS = [0, 2, 4, 5, 6, 8, 10, 12, 16];
@@ -62,6 +72,18 @@ const CHEQUEOS = [
     id: "solapamiento",
     titulo: "Controles superpuestos",
     porque: "Dos iconos en la misma esquina se pisan y solo se nota mirando de cerca.",
+  },
+  {
+    id: "hermanos",
+    titulo: "Hermanos de una fila que se pisan",
+    porque:
+      "Dos piezas de la misma fila ocupando el mismo sitio: una se quedo sin ancho y la otra se le monta encima.",
+  },
+  {
+    id: "desborde",
+    titulo: "Contenido que se sale de su contenedor",
+    porque:
+      "Una caja que se quedo en cero sigue pintando lo de dentro, encima de lo que tenga al lado.",
   },
   {
     id: "recorte",
@@ -197,6 +219,71 @@ const sonda = () => {
       if (seSolapan(a.getBoundingClientRect(), b.getBoundingClientRect())) {
         anota("solapamiento", b, `se pisa con ${ruta(a)}`);
       }
+    }
+  }
+
+  /* --- hermanos de una fila que se pisan, y contenido que se sale --- *
+   *
+   * Solaparse a propósito se declara de dos maneras, y las dos se respetan: un
+   * margen negativo (los avatares de un grupo, un `Bleed`) o salirse del flujo
+   * con `absolute`. Lo que no está declarado es lo que se anota. */
+  const declaraSolape = (el) => {
+    const cs = getComputedStyle(el);
+    if (cs.position === "absolute" || cs.position === "fixed") return true;
+    for (const lado of [cs.marginLeft, cs.marginRight, cs.marginTop, cs.marginBottom]) {
+      if (parseFloat(lado) < 0) return true;
+    }
+    return false;
+  };
+
+  const filas = todos.filter((el) => {
+    const cs = getComputedStyle(el);
+    if (cs.display !== "flex" && cs.display !== "grid") return false;
+    if (cs.display === "flex" && !cs.flexDirection.startsWith("row")) return false;
+    /* Una fila que envuelve reparte sus hijos en varios renglones, así que dos
+       de ellos compartiendo x es lo normal y no un defecto. */
+    if (cs.flexWrap === "wrap" || cs.flexWrap === "wrap-reverse") return false;
+    return el.children.length > 1;
+  });
+
+  for (const fila of filas) {
+    const hijos = [...fila.children].filter((h) => visible(h) && !declaraSolape(h));
+    for (let i = 0; i < hijos.length; i++) {
+      for (let j = i + 1; j < hijos.length; j++) {
+        const a = hijos[i].getBoundingClientRect();
+        const b = hijos[j].getBoundingClientRect();
+        const cruceX = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+        /* Los dos ejes: una rejilla apilada a una columna comparte la x de sus
+           hijos, y eso es lo que tiene que hacer. */
+        const cruceY = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+        if (cruceX > 1 && cruceY > 1) {
+          anota("hermanos", hijos[j], `${cruceX.toFixed(1)}px sobre ${ruta(hijos[i])}`);
+        }
+      }
+    }
+  }
+
+  /* Salirse de un contenedor que recorta es lo normal y muchas veces el punto:
+     el carril de un carrusel mide más que su ventana a propósito. */
+  const alguienRecorta = (el) => {
+    for (let n = el.parentElement; n && n !== document.body; n = n.parentElement) {
+      if (getComputedStyle(n).overflow !== "visible") return true;
+    }
+    return false;
+  };
+
+  for (const el of todos) {
+    const cs = getComputedStyle(el);
+    if (cs.overflow !== "visible") continue;
+    const caja = el.getBoundingClientRect();
+    if (caja.width === 0) continue;
+    if (alguienRecorta(el)) continue;
+    for (const hijo of el.children) {
+      if (!visible(hijo) || declaraSolape(hijo)) continue;
+      const h = hijo.getBoundingClientRect();
+      const fuera = Math.max(h.right - caja.right, caja.left - h.left);
+      /* Un umbral de 1px deja pasar el redondeo del subpíxel. */
+      if (fuera > 1) anota("desborde", hijo, `${fuera.toFixed(1)}px fuera de ${ruta(el)}`);
     }
   }
 
@@ -341,17 +428,24 @@ try {
   process.exit(2);
 }
 
-/* Las secciones son React.lazy, así que se recorre la página para montarlas. */
-await pagina.evaluate(async () => {
-  const paso = window.innerHeight;
-  for (let y = 0; y < document.body.scrollHeight; y += paso) {
-    window.scrollTo(0, y);
-    await new Promise((r) => setTimeout(r, 120));
-  }
-  window.scrollTo(0, 0);
-});
-await pagina.evaluate(() => document.fonts.ready);
-await pagina.waitForTimeout(1200);
+/* Las secciones son React.lazy, así que se recorre la página para montarlas. Se
+   repite en cada ancho: al cambiar el viewport el contenido cambia de alto y
+   medir antes de que se asiente da fallos fantasma. */
+const montarSecciones = async () => {
+  await pagina.evaluate(async () => {
+    const paso = window.innerHeight;
+    for (let y = 0; y < document.body.scrollHeight; y += paso) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 120));
+    }
+    window.scrollTo(0, 0);
+  });
+  await pagina.evaluate(() => document.fonts.ready);
+  await pagina.waitForTimeout(600);
+};
+
+await montarSecciones();
+await pagina.waitForTimeout(600);
 
 await pagina.evaluate(
   ([r, i, t]) => {
@@ -381,7 +475,7 @@ const congelarMovimiento = async () => {
   await pagina.waitForTimeout(150);
 };
 
-const auditarTema = async (nombre) => {
+const auditarAncho = async (nombre) => {
   await congelarMovimiento();
   await recolectar(nombre);
 
@@ -400,6 +494,14 @@ const auditarTema = async (nombre) => {
     } catch {
       /* un disparador que no abre no es asunto de esta auditoría */
     }
+  }
+};
+
+const auditarTema = async (tema) => {
+  for (const ancho of ANCHOS) {
+    await pagina.setViewportSize({ width: ancho, height: 900 });
+    await montarSecciones();
+    await auditarAncho(ANCHOS.length > 1 ? `${tema} @${ancho}px` : tema);
   }
 };
 
@@ -438,9 +540,16 @@ await navegador.close();
  * Informe
  * ------------------------------------------------------------------ */
 
-const unicos = [
-  ...new Map(todosLosFallos.map((f) => [`${f.chequeo}|${f.ruta}|${f.detalle}`, f])).values(),
-];
+/* Se queda con la primera vez que aparece cada fallo, que es el ancho más
+   estrecho donde se ve, no el último. */
+const unicos = [];
+const vistos = new Set();
+for (const f of todosLosFallos) {
+  const clave = `${f.chequeo}|${f.ruta}|${f.detalle}`;
+  if (vistos.has(clave)) continue;
+  vistos.add(clave);
+  unicos.push(f);
+}
 
 console.log(`\nAuditoria visual de ${URL}${ABRIR_PANELES ? " (con paneles)" : ""}\n`);
 
