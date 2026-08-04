@@ -85,7 +85,12 @@ pantalla resuelve su layout con Tailwind crudo y termina inventando su propia
 escala.
 
 - [x] `Box`, `BlockStack`, `InlineStack`, `Grid`, `Container`, `Bleed`, `Text`
-- [ ] `Link`, `Code`, `Kbd`
+- [x] `Link`, contra `s-link`: `tone` en `auto`, `neutral` y `critical`, más
+      `asChild` para envolver el enlace del router de turno. Va subrayado y no
+      solo teñido, y abrir en otra pestaña se pone su `rel` solo
+- [x] `Code` y `Kbd`. No hay referencia en Polaris, que no los tiene, así que
+      salen de los tokens de Elise. Son dos y no uno con variante porque nombrar
+      una tecla y citar un valor no son lo mismo: la tecla va en relieve
 
 `Heading` y `Center` estaban en el plan original y se descartaron. `Text` ya
 acepta `as="h2"` con el tamaño independiente de la semántica, y centrar es un

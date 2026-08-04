@@ -1,4 +1,7 @@
 import { Badge } from "@calumet/elise-ui/badge";
+import { Code } from "@calumet/elise-ui/code";
+import { Kbd } from "@calumet/elise-ui/kbd";
+import { Link } from "@calumet/elise-ui/link";
 import { Bleed } from "@calumet/elise-ui/bleed";
 import { Box } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
@@ -119,6 +122,36 @@ const PrimitivesDemo = () => (
             <Button size="sm">Aplicar</Button>
           </InlineStack>
         </InlineStack>
+      </Box>
+    </BlockStack>
+
+    <BlockStack gap={3}>
+      <Text size="sm" weight="semibold">
+        Link, Code y Kbd
+      </Text>
+      <Box padding={4} background="muted" radius="xl">
+        <BlockStack gap={3}>
+          <Text size="base">
+            Un <Link href="#primitivas">enlace normal</Link> va subrayado y en el color de marca. El{" "}
+            <Link href="#primitivas" tone="neutral">
+              neutro
+            </Link>{" "}
+            hereda el color de lo que lo rodea, para cuando teñirlo rompería el bloque. El{" "}
+            <Link href="#primitivas" tone="critical">
+              crítico
+            </Link>{" "}
+            lleva a algo que destruye. Abrir en{" "}
+            <Link href="https://polaris.shopify.com/" target="_blank">
+              otra pestaña
+            </Link>{" "}
+            añade su <Code>rel</Code> solo.
+          </Text>
+          <Text size="base">
+            <Code>Code</Code> marca un identificador dentro de la frase, como{" "}
+            <Code>listSlot=&quot;primary&quot;</Code>, y no se confunde con una tecla: para eso está{" "}
+            <Kbd>Ctrl</Kbd> <Kbd>K</Kbd>, que va en relieve.
+          </Text>
+        </BlockStack>
       </Box>
     </BlockStack>
   </BlockStack>

@@ -21,6 +21,7 @@ import {
   AppShellNavToggle,
 } from "@calumet/elise-ui/app-shell";
 import { Button } from "@calumet/elise-ui/button";
+import { Kbd } from "@calumet/elise-ui/kbd";
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
@@ -67,9 +68,10 @@ const AppShellDemo = () => {
           >
             <Search className="size-4 shrink-0" aria-hidden="true" />
             <span className="flex-1 truncate text-start text-sm">Buscar</span>
-            <kbd className="hidden rounded border border-border px-1.5 py-px font-mono text-2xs md:inline-block">
-              Ctrl K
-            </kbd>
+            <span className="hidden items-center gap-1 md:inline-flex">
+              <Kbd>Ctrl</Kbd>
+              <Kbd>K</Kbd>
+            </span>
           </button>
 
           <div className="flex min-w-0 items-center justify-end gap-3">
