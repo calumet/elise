@@ -177,6 +177,13 @@
   --fill-tertiary: oklch(0.94 0.004 265);
   --fill-tertiary-hover: oklch(0.87 0.006 265);
   --fill-tertiary-active: oklch(0.845 0.007 265);
+  /* Carril: el tramo sin llenar de un control que muestra un estado o un
+     recorrido, como el interruptor apagado o lo que le falta a un deslizador.
+     No es un fondo tenue sino parte del dibujo del control, así que necesita
+     3:1 contra la superficie: por debajo de eso el interruptor apagado se
+     queda en un pulgar flotando sin nada alrededor. Este valor es el más claro
+     que llega (3.12:1 sobre la tarjeta blanca). */
+  --track: oklch(0.66 0.008 265);
   --accent: oklch(0.955 0.025 250);
   --accent-foreground: oklch(0.38 0.14 262);
   --destructive: oklch(0.577 0.225 27);
@@ -364,6 +371,10 @@
   --fill-tertiary: oklch(0.29 0.013 265);
   --fill-tertiary-hover: oklch(0.355 0.015 265);
   --fill-tertiary-active: oklch(0.39 0.016 265);
+  /* El carril aclara en vez de oscurecer, por la misma razón que el bisel:
+     contra una tarjeta ya oscura no queda hacia dónde bajar. 3.61:1 sobre
+     ella. */
+  --track: oklch(0.55 0.014 265);
   --accent: oklch(0.33 0.09 262);
   --accent-foreground: oklch(0.89 0.06 255);
   /* Excepcion a la regla de aclarar en oscuro. Como destructive lleva texto
@@ -465,6 +476,7 @@
   --color-fill-tertiary: var(--fill-tertiary);
   --color-fill-tertiary-hover: var(--fill-tertiary-hover);
   --color-fill-tertiary-active: var(--fill-tertiary-active);
+  --color-track: var(--track);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);

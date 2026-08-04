@@ -75,16 +75,22 @@ const FormControlsDemo = () => {
       </div>
 
       <div className="space-y-4 rounded-sm border border-border bg-card p-4">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="switch-demo" className="text-base">
-            Switch
-          </Label>
-          <Switch
-            id="switch-demo"
-            checked={enabled}
-            onCheckedChange={(v) => setEnabled(v === true)}
-          />
-        </div>
+        <Switch
+          id="switch-demo"
+          label="Notificaciones push"
+          description="Se avisa en el navegador cuando entra un pedido."
+          checked={enabled}
+          onCheckedChange={setEnabled}
+        />
+        <Switch
+          label="Guardar borradores"
+          defaultChecked
+          name="autoguardado"
+          value="si"
+          required
+          error="Hay que dejarlo encendido para poder salir sin perder cambios."
+        />
+        <Switch label="Analítica de uso" disabled description="Lo decide el plan." />
         <div className="space-y-2">
           <Label htmlFor="slider-demo" className="text-base">
             Slider

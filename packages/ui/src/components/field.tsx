@@ -13,6 +13,61 @@ export type FieldControlProps = {
   "aria-required": true | undefined;
 };
 
+export type FieldIdsOptions = {
+  id?: string;
+  description?: React.ReactNode;
+  error?: React.ReactNode;
+  required?: boolean;
+};
+
+/**
+ * Los `id` de un campo y las props de accesibilidad ya calculadas.
+ *
+ * Vive fuera de `Field` porque no todos los campos ponen el rótulo encima: un
+ * control marcable lo lleva al lado, así que la maquetación cambia mientras el
+ * enlace entre control, ayuda y error es exactamente el mismo. Sin esto cada
+ * uno lo repetiría, y basta olvidar un `aria-describedby` para que el lector de
+ * pantalla anuncie el error suelto, sin decir de qué campo viene.
+ */
+export function useFieldIds({ id: idProp, description, error, required }: FieldIdsOptions) {
+  const generado = React.useId();
+  const id = idProp ?? generado;
+  const idDescripcion = `${id}-description`;
+  const idError = `${id}-error`;
+  const hayError = Boolean(error);
+
+  /* La ayuda sigue enlazada aunque haya error, para no perderla justo cuando
+     el usuario más la necesita. */
+  const describedBy =
+    [description ? idDescripcion : null, hayError ? idError : null].filter(Boolean).join(" ") ||
+    undefined;
+
+  const control: FieldControlProps = {
+    id,
+    "aria-describedby": describedBy,
+    "aria-invalid": hayError || undefined,
+    "aria-required": required || undefined,
+  };
+
+  return { id, idDescripcion, idError, hayError, control };
+}
+
+/** El asterisco de obligatorio, con su lectura para lectores de pantalla. */
+export function FieldRequiredMark() {
+  const requeridoLabel = useElLabel("ui", "required", "obligatorio");
+
+  return (
+    <>
+      {/* El sólido está calibrado como relleno; usado como texto no llega a
+          4.5:1 en oscuro. Va el `-subtle-foreground`, igual que en Badge. */}
+      <span aria-hidden="true" className="ml-0.5 text-destructive-subtle-foreground">
+        *
+      </span>
+      <span className="sr-only"> ({requeridoLabel})</span>
+    </>
+  );
+}
+
 export type FieldProps = Omit<React.ComponentProps<"div">, "children"> & {
   label: React.ReactNode;
 
@@ -76,19 +131,12 @@ function Field({
   children,
   ...props
 }: FieldProps) {
-  const generado = React.useId();
-  const id = idProp ?? generado;
-  const idDescripcion = `${id}-description`;
-  const idError = `${id}-error`;
-  const requeridoLabel = useElLabel("ui", "required", "obligatorio");
-
-  const hayError = Boolean(error);
-
-  /* La ayuda sigue enlazada aunque haya error, para no perderla justo cuando
-     el usuario más la necesita. */
-  const describedBy =
-    [description ? idDescripcion : null, hayError ? idError : null].filter(Boolean).join(" ") ||
-    undefined;
+  const { id, idDescripcion, idError, hayError, control } = useFieldIds({
+    id: idProp,
+    description,
+    error,
+    required,
+  });
 
   return (
     <div
@@ -103,24 +151,10 @@ function Field({
         className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
       >
         {label}
-        {required ? (
-          <>
-            {/* El sólido está calibrado como relleno; usado como texto no llega a
-                4.5:1 en oscuro. Va el `-subtle-foreground`, igual que en Badge. */}
-            <span aria-hidden="true" className="ml-0.5 text-destructive-subtle-foreground">
-              *
-            </span>
-            <span className="sr-only"> ({requeridoLabel})</span>
-          </>
-        ) : null}
+        {required ? <FieldRequiredMark /> : null}
       </label>
 
-      {children({
-        id,
-        "aria-describedby": describedBy,
-        "aria-invalid": hayError || undefined,
-        "aria-required": required || undefined,
-      })}
+      {children(control)}
 
       {description ? (
         <p
