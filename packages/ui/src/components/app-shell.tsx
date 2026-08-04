@@ -657,6 +657,11 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
    * teclado. Van fuera del enlace, porque un control dentro de otro no es
    * marcado válido y el teclado no sabría cuál está activando.
    *
+   * Se esperan `AppShellNavAction`. La caja la pone el componente y no quien lo
+   * usa, porque el contador ocupa este mismo sitio y los dos tienen que acabar
+   * en la misma vertical: con una caja libre, un botón de 20px con un icono de
+   * 14 dejaba el icono 3px por dentro del número.
+   *
    * Con acciones y contador a la vez, el contador se esconde mientras se
    * apunta: los dos a la vez no caben en 240px sin empujar el texto.
    */
@@ -732,10 +737,13 @@ function AppShellNavItem({
         ) : null}
         <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
         {count !== undefined && count !== null ? (
+          /* El `pe-0.5` son los 2px que la acción deja entre su caja de 20 y su
+             icono de 16. Sin ellos las dos cajas acaban en la misma vertical
+             pero lo que se ve, el número y el icono, no: el número sobresalía. */
           <span
             data-slot="app-shell-nav-item-count"
             className={cn(
-              "my-1 ms-2 flex h-5 flex-none items-center text-xs tabular-nums text-muted-foreground",
+              "my-1 ms-2 flex h-5 flex-none items-center pe-0.5 text-xs tabular-nums text-muted-foreground",
               actions && "group-hover/fila:invisible group-focus-within/fila:invisible",
             )}
           >
@@ -763,6 +771,31 @@ function AppShellNavItem({
      entrada suelta sigue siendo un elemento de la lista. */
   return grupo ? fila : <li className="list-none">{fila}</li>;
 }
+
+export type AppShellNavActionProps = React.ComponentProps<"button">;
+
+/**
+ * Una acción de las que aparecen al apuntar una fila: fijar, archivar, un menú.
+ *
+ * La caja es fija, de 20px con el icono en 16, y no la elige quien la usa. Es lo
+ * que hace que el icono acabe en la misma vertical que el contador, que ocupa
+ * este mismo sitio cuando la fila no está apuntada. Con la caja libre, cada
+ * pantalla ponía la suya y el icono quedaba unos píxeles por dentro del número.
+ */
+function AppShellNavAction({ className, ...props }: AppShellNavActionProps) {
+  return (
+    <button
+      type="button"
+      data-slot="app-shell-nav-action"
+      className={cn(
+        "inline-flex size-5 flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring [&_svg]:size-4",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+AppShellNavAction.displayName = "AppShellNavAction";
 
 export type AppShellMainProps = React.ComponentProps<"main">;
 
@@ -803,6 +836,7 @@ export {
   AppShellNavToggle,
   AppShellNavSection,
   AppShellNavGroup,
+  AppShellNavAction,
   AppShellNavItem,
   AppShellNavSubList,
   AppShellNavSubItem,

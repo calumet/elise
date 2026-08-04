@@ -16,6 +16,7 @@ import {
   AppShellHeader,
   AppShellMain,
   AppShellNav,
+  AppShellNavAction,
   AppShellNavFooter,
   AppShellNavGroup,
   AppShellNavItem,
@@ -117,14 +118,9 @@ const AppShellDemo = () => {
               icon={<Package />}
               count={148}
               actions={
-                <button
-                  type="button"
-                  aria-label="Fijar Productos"
-                  onClick={(e) => e.preventDefault()}
-                  className="inline-flex size-5 cursor-pointer items-center justify-center rounded-xs text-muted-foreground hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
-                >
-                  <Star className="size-3.5" aria-hidden="true" />
-                </button>
+                <AppShellNavAction aria-label="Fijar Productos" onClick={(e) => e.preventDefault()}>
+                  <Star aria-hidden="true" />
+                </AppShellNavAction>
               }
               active={ruta === "/productos"}
               onClick={ir("/productos")}
