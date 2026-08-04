@@ -1,5 +1,6 @@
-import { AlertCircle } from "@calumet/elise-icons";
 import * as React from "react";
+
+import { InlineError } from "./inline-error";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
@@ -118,20 +119,9 @@ function Field({
       ) : null}
 
       {hayError ? (
-        /* `role="alert"` para que el mensaje se anuncie al aparecer, sin esperar
-           a que el foco vuelva al campo.
-           El icono no se anuncia: repetiría lo que ya dicen `aria-invalid` en el
-           control y el propio mensaje. Está para que el error se distinga de la
-           ayuda de un vistazo, sin depender solo del color. */
-        <p
-          data-slot="field-error"
-          id={idError}
-          role="alert"
-          className="flex items-start gap-1 text-xs font-medium text-destructive-subtle-foreground"
-        >
-          <AlertCircle aria-hidden="true" className="mt-px size-3.5 shrink-0" />
-          <span className="min-w-0">{error}</span>
-        </p>
+        <InlineError data-slot="field-error" id={idError}>
+          {error}
+        </InlineError>
       ) : null}
     </div>
   );

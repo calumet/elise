@@ -1,6 +1,8 @@
 import * as FormPrimitive from "@radix-ui/react-form";
 import * as React from "react";
 
+import { InlineError } from "./inline-error";
+
 import { cn } from "@/lib/cn";
 
 export const Form = FormPrimitive.Root;
@@ -100,15 +102,24 @@ FormLabel.displayName = FormPrimitive.Label.displayName;
 export const FormControl = FormPrimitive.Control;
 
 export const FormMessage = React.forwardRef<
-  React.ComponentRef<typeof FormPrimitive.Message>,
+  /* Sale por `InlineError`, que es un `<p>`, no el `<span>` que pondría Radix
+     por su cuenta. */
+  HTMLParagraphElement,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
->(({ className, ...props }, ref) => (
-  <FormPrimitive.Message
-    data-slot="form-message"
-    ref={ref}
-    className={cn("text-xs text-destructive data-[state=delayed-open]:animate-in", className)}
-    {...props}
-  />
+>(({ className, children, ...props }, ref) => (
+  /* `asChild` para que el mensaje salga por `InlineError` y no por otra copia
+     del mismo marcado: el icono, el rojo y el `role` son los mismos que debajo
+     de un `Field`, y quien rellena un formulario no tiene por qué notar cuál de
+     los dos caminos lo pintó. */
+  <FormPrimitive.Message asChild {...props}>
+    <InlineError
+      data-slot="form-message"
+      ref={ref}
+      className={cn("data-[state=delayed-open]:animate-in", className)}
+    >
+      {children}
+    </InlineError>
+  </FormPrimitive.Message>
 ));
 FormMessage.displayName = FormPrimitive.Message.displayName;
 

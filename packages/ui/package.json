@@ -25,6 +25,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./inline-error": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./file-upload": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
