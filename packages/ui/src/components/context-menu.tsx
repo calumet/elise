@@ -33,7 +33,7 @@ export const ContextMenuContent = React.forwardRef<
       data-slot="context-menu-content"
       ref={ref}
       className={cn(
-        "z-50 min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+        "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
         canaletaIndicador,
         className,
       )}
@@ -164,7 +164,7 @@ export const ContextMenuSubContent = React.forwardRef<
     data-slot="context-menu-sub-content"
     ref={ref}
     className={cn(
-      "z-50 min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
       canaletaIndicador,
       className,
     )}

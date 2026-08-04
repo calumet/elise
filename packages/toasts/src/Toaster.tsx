@@ -103,7 +103,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
         </Toast>
       ))}
       <ToastViewport
-        className={`fixed z-50 flex max-h-screen flex-col gap-2 outline-none ${viewportPosition(position)}`}
+        className={`fixed z-toast flex max-h-screen flex-col gap-2 outline-none ${viewportPosition(position)}`}
       />
     </ToastProvider>
   );

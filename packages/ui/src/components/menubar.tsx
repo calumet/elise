@@ -73,7 +73,7 @@ export const MenubarContent = React.forwardRef<
         // Solo animación de entrada: una animación de salida mantiene montado el
         // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
         // de trigger con hover (mismo criterio que shadcn para Menubar).
-        "z-50 min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+        "z-popover min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
         canaletaIndicador,
         className,
       )}
@@ -212,7 +212,7 @@ export const MenubarSubContent = React.forwardRef<
     data-slot="menubar-sub-content"
     ref={ref}
     className={cn(
-      "z-50 min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
       canaletaIndicador,
       className,
     )}

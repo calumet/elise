@@ -219,7 +219,10 @@ function AppShellNav({ className, children, ...props }: AppShellNavProps) {
       <div
         inert={!cajonAbierto}
         data-slot="app-shell-nav-drawer"
-        className={cn("absolute inset-0 z-40 md:hidden", !cajonAbierto && "pointer-events-none")}
+        className={cn(
+          "absolute inset-0 z-overlay md:hidden",
+          !cajonAbierto && "pointer-events-none",
+        )}
       >
         <button
           type="button"

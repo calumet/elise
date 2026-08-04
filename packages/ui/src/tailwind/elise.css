@@ -272,6 +272,34 @@
   --duration-base: 200ms;
   --duration-slow: 320ms;
 
+  /* Orden de apilado, de abajo arriba. Existe para poder responder «qué queda
+     encima de qué» leyendo una sola lista, en vez de ir componente por
+     componente a ver quién escribió `z-50`. Escrito así, además, el navegador
+     lo cuenta: en devtools se lee `z-index: var(--z-modal)` y no un 50 suelto.
+
+     Los saltos son de diez para dejar sitio entre capas sin renumerar.
+
+     - sticky:  pegado dentro del flujo de la página, como la cabecera del marco
+                de aplicación o una barra lateral fija.
+     - overlay: el velo que atenúa lo de detrás de un modal.
+     - modal:   el modal en sí, por encima de su propio velo.
+     - popover: menús, selects y popovers. Van por encima del modal a propósito,
+                porque se abren desde dentro de uno y si no quedarían tapados.
+     - tooltip: por encima del popover que lo dispara.
+     - toast:   por encima de todo. Un aviso que llega mientras hay un modal
+                abierto tiene que verse igual.
+
+     Esto no cubre el apilado local, del tipo «levántame un pelo por encima de
+     mi vecino para que no me recorte el anillo de foco». Eso sigue siendo un
+     número suelto donde hace falta, porque no es una capa del sistema y
+     ponerle nombre solo lo haría parecer una. */
+  --z-sticky: 10;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-tooltip: 70;
+  --z-toast: 80;
+
   /* Elevación monótona: blur, spread negativo y opacidad crecen juntos, de modo
      que cada escalón se lee más alto que el anterior. */
   --shadow-2xs: 0 1px 1px -0.5px oklch(0.21 0.02 265 / 0.04);
@@ -511,6 +539,28 @@
   --shadow-surface: var(--shadow-surface);
   --shadow-surface-bevel: var(--shadow-surface-bevel);
   --shadow-bevel-inset: var(--shadow-bevel-inset);
+}
+
+/* Tailwind no tiene espacio de nombres de tema para z-index, así que las capas
+   se exponen como utilidades propias. Escritas así valen igual que cualquier
+   otra clase, sin la sintaxis de valor arbitrario. */
+@utility z-sticky {
+  z-index: var(--z-sticky);
+}
+@utility z-overlay {
+  z-index: var(--z-overlay);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-popover {
+  z-index: var(--z-popover);
+}
+@utility z-tooltip {
+  z-index: var(--z-tooltip);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
 }
 
 @layer base {

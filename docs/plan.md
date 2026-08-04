@@ -72,9 +72,11 @@ sin tocar ninguna API pública.
 - [x] Un solo sistema de foco en todo el catálogo
 - [x] Estados `hover` y `active` de los rellenos sólidos, sin derivarlos con alfa
 - [x] Superficies `-subtle` por estado, que reemplazan los fondos con alfa
-- [ ] Tokens de z-index. Hoy `z-50` está escrito a mano en dialog, sheet, toast,
-      popover y los tres menús, de modo que no hay forma de saber qué se apila
-      sobre qué sin leerlos todos
+- [x] Tokens de z-index, en seis capas con nombre: `sticky`, `overlay`, `modal`,
+      `popover`, `tooltip` y `toast`. `popover` va por encima de `modal` a
+      propósito, porque un select se abre desde dentro de uno. El apilado local
+      (levantar una celda para que no le recorten el anillo de foco) se queda
+      como número suelto: no es una capa del sistema
 
 ## Fase 1: primitivas
 

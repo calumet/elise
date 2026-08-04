@@ -18,7 +18,7 @@ export const ToastViewport = React.forwardRef<
     data-slot="toast-viewport"
     ref={ref}
     className={cn(
-      "fixed top-4 right-4 z-50 flex max-h-screen w-[380px] flex-col gap-2 outline-none",
+      "fixed top-4 right-4 z-toast flex max-h-screen w-[380px] flex-col gap-2 outline-none",
       className,
     )}
     {...props}
