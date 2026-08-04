@@ -744,7 +744,8 @@ function AppShellNavItem({
             data-slot="app-shell-nav-item-count"
             className={cn(
               "my-1 ms-2 flex h-5 flex-none items-center pe-0.5 text-xs tabular-nums text-muted-foreground",
-              actions && "group-hover/fila:invisible group-focus-within/fila:invisible",
+              actions &&
+                "group-hover/fila:invisible group-focus-within/fila:invisible group-has-[[aria-pressed=true]]/fila:invisible",
             )}
           >
             {count}
@@ -756,10 +757,13 @@ function AppShellNavItem({
         /* Va en `opacity` y no en `display`, porque lo que no se pinta tampoco
            se tabula: escondidas con `hidden` no habría forma de llegar a ellas
            sin ratón. Así siguen en el orden del teclado y se muestran solas al
-           recibir el foco. */
+           recibir el foco.
+           Una acción que quedó activada se queda a la vista aunque se retire el
+           ratón. Si no, fijar algo lo escondería justo al soltarlo y no habría
+           manera de ver qué está fijado sin ir fila por fila. */
         <span
           data-slot="app-shell-nav-item-actions"
-          className="pointer-events-none absolute inset-y-0 end-4 flex items-center gap-0.5 opacity-0 transition-opacity duration-(--duration-fast) ease-out group-hover/fila:pointer-events-auto group-hover/fila:opacity-100 group-focus-within/fila:pointer-events-auto group-focus-within/fila:opacity-100"
+          className="pointer-events-none absolute inset-y-0 end-4 flex items-center gap-0.5 opacity-0 transition-opacity duration-(--duration-fast) ease-out group-hover/fila:pointer-events-auto group-hover/fila:opacity-100 group-focus-within/fila:pointer-events-auto group-focus-within/fila:opacity-100 has-[[aria-pressed=true]]:pointer-events-auto has-[[aria-pressed=true]]:opacity-100"
         >
           {actions}
         </span>

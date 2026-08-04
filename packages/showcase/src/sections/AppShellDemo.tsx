@@ -42,6 +42,11 @@ const AppShellDemo = () => {
 
   const hijasDeClientes = ["/segmentos", "/companies"];
 
+  /* La estrella es un interruptor de verdad y no un adorno: se queda pulsada,
+     lo dice con `aria-pressed`, y por eso la fila la sigue mostrando cuando el
+     ratón se va. */
+  const [fijado, setFijado] = useState(false);
+
   const [guardando, setGuardando] = useState(false);
   const guardar = () => {
     setGuardando(true);
@@ -118,8 +123,13 @@ const AppShellDemo = () => {
               icon={<Package />}
               count={148}
               actions={
-                <AppShellNavAction aria-label="Fijar Productos" onClick={(e) => e.preventDefault()}>
-                  <Star aria-hidden="true" />
+                <AppShellNavAction
+                  aria-label={fijado ? "Dejar de fijar Productos" : "Fijar Productos"}
+                  aria-pressed={fijado}
+                  onClick={() => setFijado((f) => !f)}
+                  className={fijado ? "text-sidebar-foreground" : undefined}
+                >
+                  <Star aria-hidden="true" fill={fijado ? "currentColor" : "none"} />
                 </AppShellNavAction>
               }
               active={ruta === "/productos"}
