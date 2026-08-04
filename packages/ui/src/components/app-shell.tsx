@@ -266,12 +266,8 @@ export type AppShellHeaderSearchProps = Omit<React.ComponentProps<"button">, "on
  * ninguna parte, y por eso lleva el atajo dibujado: dice que hay otra manera de
  * llegar. Para un campo de búsqueda de verdad está `SearchField`.
  *
- * Mide 32px, como el resto de los controles de la barra.
- *
- * Donde no cabe se queda en la lupa sola, del ancho de una acción. Estirado a lo
- * que sobre acababa en veintipocos píxeles, que no es un buscador estrecho sino
- * un icono recortado. El rótulo no se va del árbol de accesibilidad, solo deja
- * de verse.
+ * Mide 32px, como el resto de los controles de la barra, y ocupa el ancho de su
+ * banda con un mínimo por debajo del cual no encoge.
  */
 function AppShellHeaderSearch({
   className,
@@ -289,16 +285,18 @@ function AppShellHeaderSearch({
          define es el contorno. */
       className={cn(
         "flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-card text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        /* `shrink-0` porque su banda es `min-w-0`: sin él, en pantalla estrecha
-           el botón encogía por debajo de su propio ancho y la lupa salía
-           recortada. */
-        "shrink-0 max-md:size-8 max-md:justify-center md:w-full md:px-3",
+        /* Ancho completo de su banda con un suelo, en vez de colapsar a la lupa
+           donde no cabe. La barra sigue leyéndose como buscador en pantalla
+           estrecha; lo que no se sostiene es dejarla estirarse hasta veintipocos
+           píxeles, que ya no es un buscador sino un icono recortado. Por debajo
+           del suelo lo que cede es el nombre de al lado, que se corta. */
+        "w-full min-w-30 shrink-0 px-3",
         className,
       )}
       {...props}
     >
       <Lupa />
-      <span className="min-w-0 flex-1 truncate text-start text-sm max-md:sr-only">{children}</span>
+      <span className="min-w-0 flex-1 truncate text-start text-sm">{children}</span>
       {shortcut?.length ? (
         <span className="hidden items-center gap-1 md:inline-flex">
           {shortcut.map((tecla) => (
