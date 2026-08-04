@@ -2,6 +2,7 @@ import { TriangleAlert, Info, CircleX, CircleHelp, CircleCheck } from "@calumet/
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogBody,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -66,21 +67,27 @@ export const AlertHost: React.FC = () => {
   return (
     <AlertDialog open onOpenChange={(open) => !open && handleClose(current.id)}>
       <AlertDialogContent>
-        <AlertDialogHeader className="flex flex-row items-start gap-3">
-          <div className="mt-0.5 flex h-9 w-9 aspect-square items-center justify-center">
+        {/* El título va en la banda de arriba y la pregunta en el cuerpo, que
+            es el reparto del diálogo normal. Antes iban los dos juntos con el
+            icono al lado, y al pasar el marco a tres zonas la descripción se
+            quedaba sobre la banda tenue en vez de sobre el papel. */}
+        {current.title ? (
+          <AlertDialogHeader>
+            <AlertDialogTitle>{current.title}</AlertDialogTitle>
+          </AlertDialogHeader>
+        ) : null}
+        {current.description ? (
+          <AlertDialogBody className="flex flex-row items-start gap-3">
             {React.createElement(variantIcon[current.variant], {
-              className: "h-6 w-6",
+              className: "size-5 shrink-0",
               style: { color: iconColor[current.variant] },
               "aria-hidden": true,
             })}
-          </div>
-          <div className="space-y-1">
-            {current.title ? <AlertDialogTitle>{current.title}</AlertDialogTitle> : null}
-            {current.description ? (
-              <AlertDialogDescription>{current.description}</AlertDialogDescription>
-            ) : null}
-          </div>
-        </AlertDialogHeader>
+            <AlertDialogDescription className="min-w-0">
+              {current.description}
+            </AlertDialogDescription>
+          </AlertDialogBody>
+        ) : null}
         <AlertDialogFooter>
           {showCancel ? (
             <AlertDialogCancel asChild>
