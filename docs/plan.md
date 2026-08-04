@@ -215,29 +215,29 @@ patrones que lo usan son los que se mudan.
 - [ ] PageHeader, página de tabla, wizard, ajustes, autenticación, estados de
       error
 
-### Lo que le falta al `AppShell`
+### Lo que le faltaba al `AppShell`
 
 De la auditoría contra el volcado del admin de Shopify. La calibración (guía,
-pesos, riel, radios, colores) ya está; lo que queda cambia la forma del
-componente, y por eso va aparte.
+pesos, riel, radios, colores) ya estaba; esto cambiaba la forma del componente,
+y por eso iba aparte.
 
-- [ ] La lista de hijas es hermana del `<li>` del padre y no va dentro, así que
-      un `<ul>` cuelga de otro `<ul>`. Se arregla con un `AppShellNavGroup` que
-      sea dueño del `<li>` y reciba la fila y la lista
-- [ ] La lista de hijas no se pliega. Shopify le pone `aria-expanded` y
-      `aria-controls` al padre y anima el panel en 100ms
-- [ ] `AppShellNav` monta el mismo `<nav>` dos veces, para escritorio y para el
-      cajón, así que cualquier `id` que se le pase sale duplicado. Y el landmark
-      no tiene nombre accesible
-- [ ] `AppShellMain` puede quedar inerte para siempre: el guardia de ancho solo
-      escucha el cambio de breakpoint y no mira el ancho al montar, de modo que
-      montar abierto por encima de 768px deja el contenido inalcanzable a la
-      vista
-- [ ] Faltan tres ranuras que Shopify sí tiene en la fila: contador, acciones
-      que aparecen al apuntar, e icono relleno para la entrada elegida
-- [ ] Falta la zona fija al pie de la navegación, donde Shopify pone Ajustes
-- [ ] El arte de la guía no se refleja en RTL: la posición sí usa propiedades
-      lógicas, pero el codo y la punta están dibujados de izquierda a derecha
+- [x] La lista de hijas era hermana del `<li>` del padre y no iba dentro, así
+      que un `<ul>` colgaba de otro `<ul>`. Lo resuelve `AppShellNavGroup`, que
+      es dueño del `<li>` y recibe la fila y la lista
+- [x] La lista de hijas no se plegaba. Ahora el padre lleva `aria-expanded` y
+      `aria-controls`, y el panel anima con `grid-template-rows` de `0fr` a
+      `1fr`, que no necesita saber cuánto mide
+- [x] `AppShellNav` montaba el mismo `<nav>` dos veces, para escritorio y para
+      el cajón, así que cualquier `id` salía duplicado. Ahora es uno y el
+      landmark lleva nombre
+- [x] `AppShellMain` podía quedar inerte para siempre: el guardia de ancho solo
+      escuchaba el cambio de breakpoint y no miraba el ancho al montar
+- [x] Las tres ranuras que Shopify sí tiene en la fila: contador, acciones que
+      aparecen al apuntar, e icono relleno para la entrada elegida
+- [x] La zona fija al pie de la navegación, donde Shopify pone Ajustes
+- [x] El arte de la guía no se reflejaba en RTL: la posición sí usaba
+      propiedades lógicas, pero el codo y la punta estaban dibujados de
+      izquierda a derecha
 
 ## Fase 4: el sistema alrededor del catálogo
 
