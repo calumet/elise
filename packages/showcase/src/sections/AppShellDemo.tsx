@@ -2,8 +2,10 @@ import {
   BarChart3,
   Bell,
   CircleHelp,
+  CircleUser,
   CreditCard,
   Home,
+  LogOut,
   Package,
   Settings,
   ShoppingCart,
@@ -103,10 +105,17 @@ const AppShellDemo = () => {
               onClick={() => setAviso("Ayuda")}
             />
             <AppShellUserMenu name="Juan D." detail="Calumet S.A.S." initials="JD">
-              <DropdownMenuItem onSelect={() => setAviso("Perfil")}>Perfil</DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>Ajustes</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setAviso("Perfil")}>
+                <CircleUser aria-hidden="true" />
+                Perfil
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
+                <Settings aria-hidden="true" />
+                Ajustes
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={() => setAviso("Cerrar sesión")}>
+                <LogOut aria-hidden="true" />
                 Cerrar sesión
               </DropdownMenuItem>
             </AppShellUserMenu>

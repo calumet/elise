@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { Avatar, AvatarFallback } from "./avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu";
 import { Kbd } from "./kbd";
 
@@ -433,12 +434,13 @@ function AppShellUserMenu({
         >
           <span className="hidden max-w-32 truncate text-sm font-semibold md:inline">{name}</span>
           <span className="sr-only md:hidden">{name}</span>
-          <span
-            aria-hidden="true"
-            className="flex size-6 flex-none items-center justify-center overflow-hidden rounded-sm bg-primary text-2xs font-bold text-primary-foreground"
-          >
-            {avatar ?? initials}
-          </span>
+          <Avatar size="xs" shape="square" className="border-0">
+            {avatar ?? (
+              <AvatarFallback className="bg-primary font-bold text-primary-foreground">
+                {initials}
+              </AvatarFallback>
+            )}
+          </Avatar>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
@@ -449,12 +451,13 @@ function AppShellUserMenu({
             Sin fondo, quién eres se leía como una opción del menú que resulta
             que no se puede pulsar. */}
         <div className="-mx-1 -mt-1 mb-1 flex items-center gap-2.5 rounded-t-[11px] border-b border-border bg-muted px-3 py-2.5">
-          <span
-            aria-hidden="true"
-            className="flex size-8 flex-none items-center justify-center overflow-hidden rounded-md bg-primary text-2xs font-bold text-primary-foreground"
-          >
-            {avatar ?? initials}
-          </span>
+          <Avatar size="sm" shape="square" className="border-0">
+            {avatar ?? (
+              <AvatarFallback className="bg-primary font-bold text-primary-foreground">
+                {initials}
+              </AvatarFallback>
+            )}
+          </Avatar>
           <span className="flex min-w-0 flex-col">
             <span className="truncate text-sm font-semibold text-foreground">{name}</span>
             {detail ? (
