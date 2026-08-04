@@ -37,6 +37,12 @@ menú desplegado.
 Si el entorno ya trae un Chromium, `CHROMIUM_PATH` evita que Playwright
 descargue el suyo.
 
+Son dos archivos porque son dos programas en dos runtimes.
+`scripts/audit-visual.mjs` es el conductor y corre en Node: abre el navegador,
+recorre temas y anchos e imprime el informe. `scripts/sonda-visual.js` es lo que
+mide, se inyecta en la página y corre dentro del navegador, con una función por
+chequeo.
+
 ## Que comprueba
 
 | Chequeo           | Que busca                                                                         |
