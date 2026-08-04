@@ -2,6 +2,7 @@ import { Badge } from "@calumet/elise-ui/badge";
 import { Bleed } from "@calumet/elise-ui/bleed";
 import { Box } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
+import { Chip } from "@calumet/elise-ui/chip";
 import { Code } from "@calumet/elise-ui/code";
 import { Grid } from "@calumet/elise-ui/grid";
 import { Kbd } from "@calumet/elise-ui/kbd";
@@ -122,6 +123,37 @@ const PrimitivesDemo = () => (
             <Button size="sm">Aplicar</Button>
           </InlineStack>
         </InlineStack>
+      </Box>
+    </BlockStack>
+
+    <BlockStack gap={3}>
+      <Text size="sm" weight="semibold">
+        Badge contra Chip
+      </Text>
+      <Box padding={4} background="muted" radius="xl">
+        <BlockStack gap={3}>
+          <InlineStack gap={2} className="flex-wrap items-center">
+            <Badge tone="success">Despachado</Badge>
+            <Badge tone="warning">Pendiente</Badge>
+            <Badge tone="danger">Vencido</Badge>
+            <Text size="sm" tone="muted">
+              lo afirma el sistema, con tono y sin quitar
+            </Text>
+          </InlineStack>
+          <InlineStack gap={2} className="flex-wrap items-center">
+            <Chip>frontend</Chip>
+            <Chip onRemove={() => {}}>diseño</Chip>
+            <Chip color="subdued" onRemove={() => {}}>
+              borrador
+            </Chip>
+            <Chip color="strong" onRemove={() => {}}>
+              urgente
+            </Chip>
+            <Text size="sm" tone="muted">
+              lo puso alguien, sin tono y se quita
+            </Text>
+          </InlineStack>
+        </BlockStack>
       </Box>
     </BlockStack>
 

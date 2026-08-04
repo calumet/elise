@@ -2,6 +2,7 @@ import { Check, ChevronsUpDown, X } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { Badge } from "./badge";
+import { Chip } from "./chip";
 import {
   Command,
   CommandEmpty,
@@ -618,7 +619,6 @@ function MultiComboboxField({
   const [internos, setInternos] = React.useState<string[]>(defaultValue ?? []);
   const controlado = valueProp !== undefined;
   const valores = controlado ? valueProp : internos;
-  const quitarLabel = useElLabel("ui", "remove", "Quitar");
 
   const cambiar = (siguiente: string[]) => {
     if (!controlado) setInternos(siguiente);
@@ -681,27 +681,17 @@ function MultiComboboxField({
           <ComboboxValue placeholder={placeholder} />
         ) : (
           <span ref={filaRef} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
+            {/* `removeAs="span"` porque el disparador ya es un `<button>` y
+                anidar otro sería HTML inválido. */}
             {visibles.map((o) => (
-              <Badge key={o.value} tone="neutral" size="sm" className="shrink-0 gap-1 pr-1">
+              <Chip
+                key={o.value}
+                accessibilityLabel={o.label}
+                removeAs="span"
+                onRemove={() => cambiar(valores.filter((v) => v !== o.value))}
+              >
                 {o.label}
-                {/* La X va como <span> con rol de botón, ya que anidarla como
-                    <button> dentro del disparador sería HTML inválido. El click
-                    se atiende igual y el disparador sigue siendo el control
-                    enfocable. */}
-                <span
-                  role="button"
-                  aria-label={`${quitarLabel} ${o.label}`}
-                  tabIndex={-1}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    cambiar(valores.filter((v) => v !== o.value));
-                  }}
-                  className="inline-flex size-4 cursor-pointer items-center justify-center rounded-full hover:bg-foreground/10"
-                >
-                  <X className="size-3" aria-hidden="true" />
-                </span>
-              </Badge>
+              </Chip>
             ))}
             {resto > 0 ? (
               <Badge tone="neutral" size="sm" variant="outline" className="shrink-0">
@@ -709,21 +699,18 @@ function MultiComboboxField({
               </Badge>
             ) : null}
 
-            {/* Fila de medición: lleva siempre todos los chips y el contador, a
+            {/* Fila de medición: lleva siempre todas las fichas y el contador, a
                 su ancho natural y fuera del flujo. De aquí salen los anchos que
-                deciden cuántos entran. */}
+                deciden cuántas entran. */}
             <span
               ref={medidorRef}
               aria-hidden="true"
               className="pointer-events-none absolute top-0 left-0 flex w-max items-center gap-1 opacity-0"
             >
               {elegidas.map((o) => (
-                <Badge key={o.value} tone="neutral" size="sm" className="gap-1 pr-1">
+                <Chip key={o.value} removeAs="presentation" onRemove={() => {}}>
                   {o.label}
-                  <span className="inline-flex size-4 items-center justify-center">
-                    <X className="size-3" aria-hidden="true" />
-                  </span>
-                </Badge>
+                </Chip>
               ))}
               <Badge tone="neutral" size="sm" variant="outline">
                 +{elegidas.length}

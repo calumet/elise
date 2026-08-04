@@ -225,6 +225,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./chip": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./collapsible": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

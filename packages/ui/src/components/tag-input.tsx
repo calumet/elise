@@ -1,11 +1,10 @@
-import { X } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { Chip } from "./chip";
 import { Field } from "./field";
 import { CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 
 import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 export type TagInputProps = {
   label: React.ReactNode;
@@ -76,8 +75,6 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
     },
     ref,
   ) => {
-    const quitar = useElLabel("ui", "removeTag", "Quitar");
-
     const [interno, setInterno] = React.useState(defaultValue);
     const [texto, setTexto] = React.useState("");
     const controlado = value !== undefined;
@@ -161,22 +158,14 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
             )}
           >
             {etiquetas.map((etiqueta) => (
-              <span
+              <Chip
                 key={etiqueta}
                 data-slot="tag-input-tag"
-                className="inline-flex h-6 max-w-full items-center gap-1 rounded-sm bg-muted ps-2 pe-1 text-sm text-foreground"
+                disabled={disabled}
+                onRemove={() => cambiar(etiquetas.filter((e) => e !== etiqueta))}
               >
-                <span className="truncate">{etiqueta}</span>
-                <button
-                  type="button"
-                  aria-label={`${quitar}: ${etiqueta}`}
-                  disabled={disabled}
-                  onClick={() => cambiar(etiquetas.filter((e) => e !== etiqueta))}
-                  className="inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none"
-                >
-                  <X className="size-3" aria-hidden />
-                </button>
-              </span>
+                {etiqueta}
+              </Chip>
             ))}
 
             <input

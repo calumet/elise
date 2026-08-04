@@ -13,6 +13,7 @@ export * from "./card";
 export * from "./carousel";
 export * from "./calendar";
 export * from "./checkbox";
+export * from "./chip";
 export * from "./collapsible";
 export * from "./combobox";
 export * from "./container";
