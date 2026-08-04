@@ -28,6 +28,26 @@ export const CAMPO_INVALIDO =
 export const CAJA_CAMPO =
   "flex h-9 w-full rounded-md border border-input hover:border-border-strong bg-background px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 
+/**
+ * La misma caja, pero para campos que llevan piezas dentro: un icono, un
+ * prefijo, un botón de paso, unas etiquetas.
+ *
+ * Cambia dos cosas respecto a `CAJA_CAMPO`. El anillo de foco reacciona a
+ * `focus-within` y no a `focus-visible`, porque quien recibe el foco es el
+ * `<input>` de dentro y no la caja. Y el relleno de la derecha es menor, para
+ * que un botón pegado al borde no quede hundido.
+ *
+ * El apagado mira al `<input>` y no a cualquier descendiente apagado. Con
+ * `has-disabled` a secas, un campo numérico en su tope apagaba el botón de sumar
+ * y con él se apagaba el campo entero, valor incluido.
+ */
+export const CAJA_CAMPO_COMPUESTA =
+  "flex h-9 w-full items-center gap-1.5 rounded-md border border-input bg-background ps-3 pe-1 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-border-strong focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50";
+
+/** El `<input>` que va dentro de una caja compuesta: sin caja propia. */
+export const CAMPO_DESNUDO =
+  "min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed";
+
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", ...props }, ref) => (
     <input

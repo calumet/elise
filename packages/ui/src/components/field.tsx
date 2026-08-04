@@ -24,6 +24,16 @@ export type FieldProps = Omit<React.ComponentProps<"div">, "children"> & {
 
   required?: boolean;
 
+  /**
+   * Esconde el rótulo a la vista sin quitarlo del árbol de accesibilidad. Es el
+   * `labelAccessibilityVisibility="exclusive"` de Shopify.
+   *
+   * No es lo mismo que no pasar rótulo: el control sigue teniendo nombre para un
+   * lector de pantalla. Se usa cuando lo que rodea al campo ya lo explica, como
+   * un buscador con su lupa dentro de una barra de herramientas.
+   */
+  labelHidden?: boolean;
+
   /** Fuerza el `id` del control. Por defecto se genera uno. */
   id?: string;
 
@@ -62,6 +72,7 @@ function Field({
   description,
   error,
   required,
+  labelHidden,
   id: idProp,
   children,
   ...props
@@ -87,7 +98,11 @@ function Field({
       className={cn("flex flex-col gap-1.5", className)}
       {...props}
     >
-      <label data-slot="field-label" htmlFor={id} className="text-sm font-semibold text-foreground">
+      <label
+        data-slot="field-label"
+        htmlFor={id}
+        className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
+      >
         {label}
         {required ? (
           <>

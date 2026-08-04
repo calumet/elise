@@ -118,8 +118,12 @@ caso de `Box` o de `InlineStack`.
       una esquina lo perdiera. La aritmética vive en `lib/color.ts`, separada
       para poder comprobarla contra valores conocidos
 - [ ] `Stat`, `Timeline`, `DescriptionList`, `AvatarGroup`, `Tree`
-- [ ] `TagInput`, `NumberField`, `SearchField`, `SegmentedControl`, `TimePicker`,
-      `Rating`
+- [x] `NumberField` y `SearchField`, contra `s-number-field` y `s-search-field`.
+      `SegmentedControl` sobre el grupo de alternar de Radix, con el patrón
+      segmentado de Polaris y sin poder quedarse sin valor. `TagInput`, `Rating`
+      y `TimePicker` no tienen referencia publicada.
+      `Field` gana `labelHidden`, que es el
+      `labelAccessibilityVisibility="exclusive"` de Shopify
 - [ ] Gráficas. Los tokens `--chart-*` existen desde antes y no hay componente
       que los consuma
 
