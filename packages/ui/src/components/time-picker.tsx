@@ -4,7 +4,6 @@ import * as React from "react";
 import { Field } from "./field";
 import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { ScrollArea } from "./scroll-area";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
@@ -167,36 +166,42 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(
                 </button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-32 p-1">
-                <ScrollArea className="h-56">
-                  <div role="listbox" aria-label={etiquetaLista} className="flex flex-col">
-                    {opciones.map((minutos) => {
-                      const texto = aTextoHora(minutos);
-                      const puesta = minutos === elegida;
-                      return (
-                        <button
-                          key={minutos}
-                          type="button"
-                          role="option"
-                          aria-selected={puesta}
-                          /* La elegida se enfoca al abrir, así que la lista no
+                {/* Barra nativa, la misma de la página y la de los desplegables.
+                    Con una dibujada aparte la lista traía su propia barra: se
+                    escondía en reposo y solo salía al apuntarla, así que en la
+                    misma pantalla había dos maneras distintas de desplazar. */}
+                <div
+                  role="listbox"
+                  aria-label={etiquetaLista}
+                  className="flex max-h-56 flex-col overflow-y-auto"
+                >
+                  {opciones.map((minutos) => {
+                    const texto = aTextoHora(minutos);
+                    const puesta = minutos === elegida;
+                    return (
+                      <button
+                        key={minutos}
+                        type="button"
+                        role="option"
+                        aria-selected={puesta}
+                        /* La elegida se enfoca al abrir, así que la lista no
                              arranca siempre en medianoche cuando ya hay hora. */
-                          autoFocus={puesta}
-                          onClick={() => {
-                            cambiar(texto);
-                            setEscrito(null);
-                            setAbierto(false);
-                          }}
-                          className={cn(
-                            "cursor-pointer rounded-sm px-2 py-1.5 text-start text-sm tabular-nums transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:bg-muted",
-                            puesta && "bg-accent text-accent-foreground",
-                          )}
-                        >
-                          {texto}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </ScrollArea>
+                        autoFocus={puesta}
+                        onClick={() => {
+                          cambiar(texto);
+                          setEscrito(null);
+                          setAbierto(false);
+                        }}
+                        className={cn(
+                          "cursor-pointer rounded-sm px-2 py-1.5 text-start text-sm tabular-nums transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:bg-muted",
+                          puesta && "bg-accent text-accent-foreground",
+                        )}
+                      >
+                        {texto}
+                      </button>
+                    );
+                  })}
+                </div>
               </PopoverContent>
             </Popover>
           </div>

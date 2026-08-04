@@ -231,8 +231,11 @@ export const TreeItem = React.forwardRef<HTMLLIElement, TreeItemProps>(
           /* El anillo se pinta en la fila y no en el `<li>`, que envuelve
              también a las ramas hijas. Va por hijo directo: con un selector de
              descendiente, enfocar un padre encendería además las filas de todo
-             lo que tenga abierto debajo. */
-          "flex flex-col outline-none [&:focus-visible>span:first-child]:ring-2 [&:focus-visible>span:first-child]:ring-ring",
+             lo que tenga abierto debajo.
+             La fila enfocada sube de capa porque el anillo sobresale 2px y las
+             filas van pegadas: el fondo de la de abajo se pinta después, por
+             orden de documento, y le comía ese borde al apuntarla. */
+          "flex flex-col outline-none [&:focus-visible>span:first-child]:z-10 [&:focus-visible>span:first-child]:ring-2 [&:focus-visible>span:first-child]:ring-ring",
           className,
         )}
         {...props}
@@ -243,7 +246,7 @@ export const TreeItem = React.forwardRef<HTMLLIElement, TreeItemProps>(
             if (esRama) ctx.alternar(id);
           }}
           className={cn(
-            "flex cursor-pointer items-center gap-1.5 rounded-md py-1 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted",
+            "relative flex cursor-pointer items-center gap-1.5 rounded-md py-1 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted",
             elegido && "bg-accent text-accent-foreground",
           )}
           style={{ paddingInlineStart: `${(profundidad - 1) * 16 + 4}px` }}
