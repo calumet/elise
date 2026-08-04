@@ -255,24 +255,6 @@ componente, y por eso va aparte.
 
 ## Orden sugerido
 
-**Las fases están numeradas por tema y no por turno.** Agrupan trabajo que se
-parece entre sí, no una cola. Que los tests aparezcan en la fase 4 no significa
-que vayan al final.
-
-De hecho van antes que lo que falta de las fases 2 y 3. Un catálogo más grande
-sin tests es más superficie apoyada en que alguien mire el navegador; los
-componentes que faltan se notan más pero quitan menos riesgo.
-
-Lo que pasó mientras se cerraba la fase 2 lo confirma. En una sola tanda
-cambiaron de forma incompatible las APIs de `Switch`, `Checkbox`, `RadioGroup`,
-`AlertDialog` y `ScrollArea`, y lo único que separó eso de romper algo fue medir
-a mano en un navegador. La auditoría visual atrapa desalineaciones, escalas y
-contraste, y de hecho atrapó un defecto real durante ese trabajo, pero no diría
-nada si `onCheckedChange` dejara de dispararse o si un `aria-describedby`
-apuntara al vacío.
-
-El otro candidato legítimo a ir primero son los siete arreglos del `AppShell`,
-porque dos de ellos no son forma sino defectos: el `<nav>` montado dos veces
-duplica cualquier `id` que se le pase, y `AppShellMain` puede quedar inerte para
-siempre si se monta abierto por encima de 768px. Si se toman primero, conviene
-que sea con los tests ya puestos, porque tocan estructura y foco.
+La fase 4 en su parte de tests va antes que los componentes que faltan de la
+fase 2. Un catálogo más grande sin tests es más superficie apoyada en revisión
+manual; los componentes que faltan se notan más pero quitan menos riesgo.
