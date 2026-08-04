@@ -207,8 +207,14 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps) 
          Con `auto` ninguna baja de su contenido, el centro se queda con lo que
          sobra, y como los dos lados piden lo mismo el buscador cae en el medio
          de la ventana. */
+      /* Por debajo del breakpoint no hay tres bandas sino una fila con un solo
+         hueco. Centrar el buscador en la ventana solo tiene sentido cuando
+         sobra ancho; en estrecho lo que se nota es el ritmo, y con la rejilla el
+         hueco entre bandas y el de dentro del grupo de acciones no eran el
+         mismo, así que la barra se leía a saltos. */
       className={cn(
-        "grid h-14 shrink-0 grid-cols-[1fr_minmax(0,420px)_1fr] items-center gap-4 bg-background px-4 text-foreground",
+        "flex h-14 shrink-0 items-center gap-2 bg-background px-4 text-foreground",
+        "md:grid md:grid-cols-[1fr_minmax(0,420px)_1fr] md:gap-4",
         className,
       )}
       {...props}
@@ -225,7 +231,12 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps) 
         {bandas.marca}
         {sueltos}
       </div>
-      <div data-slot="app-shell-header-center" className="flex min-w-0 items-center justify-center">
+      {/* En la fila estrecha es la banda que crece y se queda con lo que sobra;
+          dentro de la rejilla el `flex-1` no pinta nada y manda la pista. */}
+      <div
+        data-slot="app-shell-header-center"
+        className="flex min-w-0 flex-1 items-center justify-center"
+      >
         {bandas.buscador}
       </div>
       <div data-slot="app-shell-header-end" className="flex items-center justify-end gap-2">
