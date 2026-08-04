@@ -117,7 +117,12 @@ caso de `Box` o de `InlineStack`.
       en blanco el tono no existe, así que deducirlo del hex haría que pasar por
       una esquina lo perdiera. La aritmética vive en `lib/color.ts`, separada
       para poder comprobarla contra valores conocidos
-- [ ] `Stat`, `Timeline`, `DescriptionList`, `AvatarGroup`, `Tree`
+- [x] `Stat`, `Timeline`, `DescriptionList`, `AvatarGroup` y `Tree`.
+      `DescriptionList` sigue a la de Polaris React: `<dl>` de verdad, dos
+      columnas a partir de 490px y el filete entre pares, no por línea. `Tree`
+      lleva el patrón de árbol de ARIA entero, que es la razón de que exista
+      como componente en vez de resolverse con listas anidadas y un
+      `Collapsible` por rama. Los otros tres no tienen referencia publicada
 - [x] `NumberField` y `SearchField`, contra `s-number-field` y `s-search-field`.
       `SegmentedControl` sobre el grupo de alternar de Radix, con el patrón
       segmentado de Polaris y sin poder quedarse sin valor. `TagInput`, `Rating`

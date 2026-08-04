@@ -43,6 +43,7 @@ const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"
 const ContactForm = React.lazy(() => import("./sections/ContactForm"));
 const DataTableDemo = React.lazy(() => import("./sections/DataTableDemo"));
 const ColorPickerDemo = React.lazy(() => import("./sections/ColorPickerDemo"));
+const DisplayDemo = React.lazy(() => import("./sections/DisplayDemo"));
 const FormControlsExtraDemo = React.lazy(() => import("./sections/FormControlsExtraDemo"));
 const DatePickersDemo = React.lazy(() => import("./sections/DatePickersDemo"));
 const DialogsDemo = React.lazy(() => import("./sections/DialogsDemo"));
@@ -328,6 +329,12 @@ const App = () => (
           <SectionCard title="Command Palette">
             <LazySection>
               <CommandDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Stat, AvatarGroup, DescriptionList, Timeline y Tree">
+            <LazySection>
+              <DisplayDemo />
             </LazySection>
           </SectionCard>
 
