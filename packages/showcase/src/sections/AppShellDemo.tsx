@@ -4,7 +4,9 @@ import {
   Home,
   Package,
   Search,
+  Settings,
   ShoppingCart,
+  Star,
   Store,
   Tag,
   Users,
@@ -14,6 +16,8 @@ import {
   AppShellHeader,
   AppShellMain,
   AppShellNav,
+  AppShellNavFooter,
+  AppShellNavGroup,
   AppShellNavItem,
   AppShellNavSection,
   AppShellNavSubItem,
@@ -86,51 +90,77 @@ const AppShellDemo = () => {
 
         <AppShellNav>
           <ul className="list-none p-0">
-            <AppShellNavItem href="/" icon={<Home />} active={ruta === "/"} onClick={ir("/")}>
+            {/* `activeIcon` es el mismo icono relleno: la misma silueta con más
+                peso dice «esta» sin agregar nada nuevo que leer. */}
+            <AppShellNavItem
+              href="/"
+              icon={<Home />}
+              activeIcon={<Home fill="currentColor" />}
+              active={ruta === "/"}
+              onClick={ir("/")}
+            >
               Inicio
             </AppShellNavItem>
             <AppShellNavItem
               href="/pedidos"
               icon={<ShoppingCart />}
+              count={12}
               active={ruta === "/pedidos"}
               onClick={ir("/pedidos")}
             >
               Pedidos
             </AppShellNavItem>
+            {/* Con acciones y contador a la vez, el contador se esconde
+                mientras se apunta: los dos no caben sin empujar el texto. */}
             <AppShellNavItem
               href="/productos"
               icon={<Package />}
+              count={148}
+              actions={
+                <button
+                  type="button"
+                  aria-label="Fijar Productos"
+                  onClick={(e) => e.preventDefault()}
+                  className="inline-flex size-5 cursor-pointer items-center justify-center rounded-xs text-muted-foreground hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+                >
+                  <Star className="size-3.5" aria-hidden="true" />
+                </button>
+              }
               active={ruta === "/productos"}
               onClick={ir("/productos")}
             >
               Productos
             </AppShellNavItem>
 
-            <AppShellNavItem
-              href="/clientes"
-              icon={<Users />}
-              childActive={hijasDeClientes.includes(ruta)}
-              active={ruta === "/clientes"}
-              onClick={ir("/clientes")}
-            >
-              Clientes
-            </AppShellNavItem>
-            <AppShellNavSubList>
-              <AppShellNavSubItem
-                href="/segmentos"
-                active={ruta === "/segmentos"}
-                onClick={ir("/segmentos")}
+            {/* El grupo es dueño del `<li>`, así que la lista de hijas cuelga
+                de él y no queda como un `<ul>` dentro de otro `<ul>`. */}
+            <AppShellNavGroup defaultOpen>
+              <AppShellNavItem
+                href="/clientes"
+                icon={<Users />}
+                childActive={hijasDeClientes.includes(ruta)}
+                active={ruta === "/clientes"}
+                onClick={ir("/clientes")}
               >
-                Segmentos
-              </AppShellNavSubItem>
-              <AppShellNavSubItem
-                href="/companies"
-                active={ruta === "/companies"}
-                onClick={ir("/companies")}
-              >
-                Compañías
-              </AppShellNavSubItem>
-            </AppShellNavSubList>
+                Clientes
+              </AppShellNavItem>
+              <AppShellNavSubList>
+                <AppShellNavSubItem
+                  href="/segmentos"
+                  active={ruta === "/segmentos"}
+                  onClick={ir("/segmentos")}
+                >
+                  Segmentos
+                </AppShellNavSubItem>
+                <AppShellNavSubItem
+                  href="/companies"
+                  active={ruta === "/companies"}
+                  onClick={ir("/companies")}
+                >
+                  Compañías
+                </AppShellNavSubItem>
+              </AppShellNavSubList>
+            </AppShellNavGroup>
 
             <AppShellNavItem
               href="/descuentos"
@@ -168,6 +198,18 @@ const AppShellDemo = () => {
               </AppShellNavItem>
             </AppShellNavSection>
           </ul>
+
+          {/* Se queda abajo aunque la lista de arriba se desplace. */}
+          <AppShellNavFooter>
+            <AppShellNavItem
+              href="/ajustes"
+              icon={<Settings />}
+              active={ruta === "/ajustes"}
+              onClick={ir("/ajustes")}
+            >
+              Ajustes
+            </AppShellNavItem>
+          </AppShellNavFooter>
         </AppShellNav>
 
         <AppShellMain>

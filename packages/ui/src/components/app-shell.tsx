@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ *
@@ -10,6 +11,9 @@ import { useElLabel } from "@/lib/i18n";
 type AppShellContextValue = {
   cajonAbierto: boolean;
   setCajonAbierto: (abierto: boolean) => void;
+
+  /** Por debajo del breakpoint, que es donde el cajón existe. */
+  esMovil: boolean;
 };
 
 const AppShellContext = React.createContext<AppShellContextValue | null>(null);
@@ -58,6 +62,7 @@ function AppShell({
   const [interno, setInterno] = React.useState(defaultNavOpen);
   const controlado = navOpen !== undefined;
   const abierto = controlado ? navOpen : interno;
+  const esMovil = useIsMobile();
 
   const setCajonAbierto = React.useCallback(
     (siguiente: boolean) => {
@@ -68,27 +73,27 @@ function AppShell({
   );
 
   /* El cajón solo existe por debajo del breakpoint. Al pasar de ahí desaparece,
-     y si siguiera abierto dejaría el contenido inerte sin nada que lo tape. */
+     y si siguiera abierto dejaría el contenido inerte sin nada que lo tape.
+     Se mira el ancho de verdad y no solo su cambio: antes se escuchaba el
+     evento `change` de la media query, que no se dispara al montar, así que
+     montar con el cajón abierto por encima de 768px dejaba el contenido inerte
+     para siempre, inalcanzable y a la vista. */
+  React.useEffect(() => {
+    if (abierto && !esMovil) setCajonAbierto(false);
+  }, [abierto, esMovil, setCajonAbierto]);
+
   React.useEffect(() => {
     if (!abierto) return;
     const alTeclear = (e: KeyboardEvent) => {
       if (e.key === "Escape") setCajonAbierto(false);
     };
-    const ancho = window.matchMedia("(min-width: 48rem)");
-    const alEnsanchar = () => {
-      if (ancho.matches) setCajonAbierto(false);
-    };
     document.addEventListener("keydown", alTeclear);
-    ancho.addEventListener("change", alEnsanchar);
-    return () => {
-      document.removeEventListener("keydown", alTeclear);
-      ancho.removeEventListener("change", alEnsanchar);
-    };
+    return () => document.removeEventListener("keydown", alTeclear);
   }, [abierto, setCajonAbierto]);
 
   const ctx = React.useMemo(
-    () => ({ cajonAbierto: abierto, setCajonAbierto }),
-    [abierto, setCajonAbierto],
+    () => ({ cajonAbierto: abierto, setCajonAbierto, esMovil }),
+    [abierto, setCajonAbierto, esMovil],
   );
 
   const cabecera: React.ReactNode[] = [];
@@ -185,69 +190,113 @@ function AppShellNavToggle({ className, children, ...props }: AppShellNavToggleP
   );
 }
 
-export type AppShellNavProps = React.ComponentProps<"nav">;
+export type AppShellNavProps = React.ComponentProps<"nav"> & {
+  /**
+   * Nombre del landmark. Una página puede tener varios `<nav>` (el lateral, uno
+   * de migas, otro al pie) y sin nombre un lector de pantalla los lista todos
+   * como «navegación» sin poder distinguirlos.
+   */
+  label?: string;
+};
 
 /**
  * Navegación lateral. Por encima del breakpoint vive en el flujo; por debajo se
  * convierte en un cajón que entra desde el borde.
  *
+ * Es un solo `<nav>` y no uno por cada forma. Antes se montaba el mismo dos
+ * veces, uno para escritorio y otro dentro del cajón, así que cualquier `id`
+ * que se le pasara salía duplicado en el documento y había dos landmarks de
+ * navegación donde solo hay una. Lo que cambia entre las dos formas es
+ * posicionamiento, y para eso basta el breakpoint.
+ *
  * Queda montado aunque esté cerrado, ya que desmontarlo se lleva por delante la
- * animación de salida. `inert` lo saca del tabulador mientras no se ve.
+ * animación de salida. `inert` lo saca del tabulador mientras no se ve, y solo
+ * donde el cajón existe: por encima del breakpoint está siempre a la vista.
+ *
+ * El pie, si lo hay, se queda fijo abajo y solo se desplaza lo de en medio.
  */
-function AppShellNav({ className, children, ...props }: AppShellNavProps) {
-  const { cajonAbierto, setCajonAbierto } = useAppShell("AppShellNav");
+function AppShellNav({ className, children, label, ...props }: AppShellNavProps) {
+  const { cajonAbierto, setCajonAbierto, esMovil } = useAppShell("AppShellNav");
   const cerrar = useElLabel("ui", "closeNavigation", "Cerrar navegación");
+  const etiqueta = useElLabel("ui", "navigation", "Navegación");
 
-  const contenido = (
-    <nav
-      data-slot="app-shell-nav"
-      className={cn(
-        "flex w-60 shrink-0 flex-col overflow-y-auto border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </nav>
-  );
+  const pie: React.ReactNode[] = [];
+  const resto: React.ReactNode[] = [];
+  React.Children.forEach(children, (hijo) => {
+    const tipo = React.isValidElement(hijo) ? (hijo.type as { displayName?: string }) : null;
+    if (tipo?.displayName === "AppShellNavFooter") pie.push(hijo);
+    else resto.push(hijo);
+  });
 
   return (
     <>
-      <div className="hidden md:flex">{contenido}</div>
-
-      <div
-        inert={!cajonAbierto}
-        data-slot="app-shell-nav-drawer"
+      {/* El velo solo existe donde hay cajón. Va antes del `<nav>` en el
+          documento para que quede por debajo sin tener que apilarlos. */}
+      <button
+        type="button"
+        aria-label={cerrar}
+        tabIndex={cajonAbierto ? undefined : -1}
+        aria-hidden={cajonAbierto ? undefined : true}
+        onClick={() => setCajonAbierto(false)}
         className={cn(
-          "absolute inset-0 z-overlay md:hidden",
-          !cajonAbierto && "pointer-events-none",
+          "absolute inset-0 z-overlay cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out md:hidden",
+          cajonAbierto ? "opacity-100" : "pointer-events-none opacity-0",
         )}
+      />
+
+      <nav
+        data-slot="app-shell-nav"
+        aria-label={label ?? etiqueta}
+        inert={esMovil && !cajonAbierto}
+        onClick={(e) => {
+          /* Un clic en un enlace cierra el cajón; plegar un grupo, no. Solo
+             donde hay cajón: en escritorio no hay nada que cerrar. */
+          if (esMovil && (e.target as HTMLElement).closest("a")) setCajonAbierto(false);
+        }}
+        /* Lo del cajón va acotado a `max-md` y no compensado con `md:` encima.
+           Escrito al revés, el `rtl:` de la posición cerrada le ganaba al
+           `md:translate-x-0` que debía anularlo (los dos pesan igual y decide el
+           orden del fichero), y en escritorio RTL la barra se iba entera fuera
+           del marco. Por debajo del breakpoint no hay nada que anular. */
+        className={cn(
+          "flex w-60 shrink-0 flex-col overflow-hidden border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
+          "max-md:absolute max-md:inset-y-0 max-md:start-0 max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
+          cajonAbierto
+            ? "max-md:translate-x-0"
+            : "max-md:-translate-x-full max-md:rtl:translate-x-full",
+          className,
+        )}
+        {...props}
       >
-        <button
-          type="button"
-          aria-label={cerrar}
-          onClick={() => setCajonAbierto(false)}
-          className={cn(
-            "absolute inset-0 cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out",
-            cajonAbierto ? "opacity-100" : "opacity-0",
-          )}
-        />
-        <div
-          onClick={(e) => {
-            /* Un clic en un enlace cierra; plegar una sección, no. */
-            if ((e.target as HTMLElement).closest("a")) setCajonAbierto(false);
-          }}
-          className={cn(
-            "absolute inset-y-0 start-0 flex transition-transform duration-(--duration-slow) ease-out",
-            cajonAbierto ? "translate-x-0" : "-translate-x-full",
-          )}
-        >
-          {contenido}
-        </div>
-      </div>
+        <div className="min-h-0 flex-1 overflow-y-auto">{resto}</div>
+        {pie}
+      </nav>
     </>
   );
 }
+
+export type AppShellNavFooterProps = React.ComponentProps<"div">;
+
+/**
+ * Zona fija al pie de la navegación, donde va lo que no es una pantalla más:
+ * ajustes, la cuenta, cambiar de organización.
+ *
+ * Se queda abajo aunque la lista de arriba se desplace, que es la razón de que
+ * exista: metido en la lista, con veinte entradas por encima, habría que bajar
+ * a buscarlo.
+ */
+function AppShellNavFooter({ className, children, ...props }: AppShellNavFooterProps) {
+  return (
+    <div
+      data-slot="app-shell-nav-footer"
+      className={cn("mt-2 shrink-0 border-t border-sidebar-border pt-2", className)}
+      {...props}
+    >
+      <ul className="list-none">{children}</ul>
+    </div>
+  );
+}
+AppShellNavFooter.displayName = "AppShellNavFooter";
 
 export type AppShellNavSectionProps = Omit<React.ComponentProps<"li">, "title"> & {
   title: React.ReactNode;
@@ -365,6 +414,13 @@ const MUNON =
  *
  * La caja mide 21x28, la misma altura que una fila, y se ancla a 8px del borde
  * para que su vertical caiga sobre el centro del icono del padre.
+ *
+ * En RTL se refleja entera. La posición ya iba con propiedades lógicas, pero el
+ * dibujo no: el codo salía del centro hacia la derecha y la punta apuntaba
+ * hacia allá, de modo que en árabe o hebreo la rama nacía del lado equivocado y
+ * señalaba fuera de la barra. Reflejar la caja sobre su propio eje deja la
+ * vertical donde estaba, a 8px del inicio, porque está a la misma distancia de
+ * los dos costados.
  */
 function GuiaNav({ variante }: { variante: Guia | "munion" }) {
   const alApuntar = "opacity-0 transition-opacity duration-(--duration-fast) ease-out";
@@ -377,7 +433,7 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
       fill="none"
       aria-hidden="true"
       focusable="false"
-      className="pointer-events-none absolute top-0 start-2"
+      className="pointer-events-none absolute top-0 start-2 rtl:-scale-x-100"
     >
       {variante === "linea" ? <path d={VERTICAL} className="fill-sidebar-guide" /> : null}
       {variante === "puntero" ? (
@@ -415,6 +471,76 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
     </svg>
   );
 }
+
+/* ------------------------------------------------------------------ *
+ * Grupo: una entrada con hijas
+ * ------------------------------------------------------------------ */
+
+type GrupoContextValue = {
+  idLista: string;
+  abierto: boolean;
+  alternar: () => void;
+};
+
+const GrupoContext = React.createContext<GrupoContextValue | null>(null);
+
+export type AppShellNavGroupProps = Omit<React.ComponentProps<"li">, "onToggle"> & {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
+
+/**
+ * Una entrada de navegación con sus hijas.
+ *
+ * Existe por el marcado: dentro de un `<ul>` solo pueden ir `<li>`, así que la
+ * lista de hijas tiene que colgar del `<li>` del padre y no ser su hermana.
+ * Escritas sueltas, la entrada emitía su `<li>` y la lista quedaba al lado,
+ * dejando un `<ul>` colgando directamente de otro `<ul>`. El grupo es el dueño
+ * del `<li>` y recibe las dos cosas.
+ *
+ * De paso es quien puede plegar: le pone `aria-expanded` y `aria-controls` a la
+ * fila del padre, que es lo que dice que esa fila manda sobre esa lista.
+ *
+ * ```tsx
+ * <AppShellNavGroup defaultOpen>
+ *   <AppShellNavItem icon={<Caja />} href="/pedidos" childActive>Pedidos</AppShellNavItem>
+ *   <AppShellNavSubList>
+ *     <AppShellNavSubItem href="/pedidos/abiertos" active>Abiertos</AppShellNavSubItem>
+ *   </AppShellNavSubList>
+ * </AppShellNavGroup>
+ * ```
+ */
+function AppShellNavGroup({
+  className,
+  children,
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  ...props
+}: AppShellNavGroupProps) {
+  const idLista = React.useId();
+  const [interno, setInterno] = React.useState(defaultOpen);
+  const controlado = open !== undefined;
+  const abierto = controlado ? open : interno;
+
+  const alternar = React.useCallback(() => {
+    const siguiente = !abierto;
+    if (!controlado) setInterno(siguiente);
+    onOpenChange?.(siguiente);
+  }, [abierto, controlado, onOpenChange]);
+
+  const ctx = React.useMemo(() => ({ idLista, abierto, alternar }), [idLista, abierto, alternar]);
+
+  return (
+    <GrupoContext.Provider value={ctx}>
+      <li data-slot="app-shell-nav-group" className={cn("list-none", className)} {...props}>
+        {children}
+      </li>
+    </GrupoContext.Provider>
+  );
+}
+AppShellNavGroup.displayName = "AppShellNavGroup";
 
 export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
@@ -459,13 +585,24 @@ export type AppShellNavSubListProps = React.ComponentProps<"ul">;
  * sobre la activa. Las de debajo no llevan nada, porque la rama ya terminó.
  *
  * Sin hija activa no hay a dónde llegar, así que no se dibuja ninguna vertical.
+ *
+ * Dentro de un `AppShellNavGroup` se pliega, y ahí toma el `id` al que apunta
+ * el `aria-controls` de la fila del padre. El plegado va con `grid-template-rows`
+ * y no con una altura fija, que es lo único que anima sin tener que medir antes
+ * cuántas hijas hay.
  */
 function AppShellNavSubList({ className, children, ...props }: AppShellNavSubListProps) {
+  const grupo = React.useContext(GrupoContext);
   const hijas = React.Children.toArray(children).filter(React.isValidElement);
   const activa = hijas.findIndex((h) => (h.props as AppShellNavSubItemProps).active === true);
 
-  return (
-    <ul data-slot="app-shell-nav-sub-list" className={cn("mb-2 list-none", className)} {...props}>
+  const lista = (
+    <ul
+      data-slot="app-shell-nav-sub-list"
+      id={grupo?.idLista}
+      className={cn(grupo ? "list-none" : "mb-2 list-none", className)}
+      {...props}
+    >
       {hijas.map((h, i) => {
         const guia: Guia =
           activa === -1 || i > activa ? "ninguna" : i === activa ? "puntero" : "linea";
@@ -476,11 +613,54 @@ function AppShellNavSubList({ className, children, ...props }: AppShellNavSubLis
       })}
     </ul>
   );
+
+  if (!grupo) return lista;
+
+  return (
+    <div
+      /* Recortar no basta: plegada, la lista seguía en el tabulador y en el
+         árbol de accesibilidad, así que se llegaba a enlaces invisibles y
+         `aria-expanded="false"` prometía algo que no era. `inert` la saca de
+         los dos sin desmontarla, que es lo que deja que la salida se anime. */
+      inert={!grupo.abierto}
+      className={cn(
+        "mb-2 grid transition-[grid-template-rows] duration-(--duration-fast) ease-out motion-reduce:transition-none",
+        grupo.abierto ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+      )}
+    >
+      {/* El `overflow-hidden` es lo que hace que la fila de 0fr recorte en vez
+          de desbordar, y va aquí y no en la rejilla para que las hijas sigan
+          pudiendo dibujar su guía fuera de su propia caja. */}
+      <div className="overflow-hidden">{lista}</div>
+    </div>
+  );
 }
 
 export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
   icon?: React.ReactNode;
+
+  /**
+   * El icono de cuando está elegida, normalmente el mismo relleno.
+   *
+   * Un icono de trazo y su versión rellena son la misma silueta con distinto
+   * peso, así que el cambio dice «esta» sin agregar nada nuevo que leer. Sin
+   * esto, `icon` sirve para los dos estados.
+   */
+  activeIcon?: React.ReactNode;
+
+  /** Número al final de la fila: sin leer, pendientes, lo que haya. */
+  count?: React.ReactNode;
+
+  /**
+   * Acciones que aparecen al apuntar la fila o al llegar a ellas con el
+   * teclado. Van fuera del enlace, porque un control dentro de otro no es
+   * marcado válido y el teclado no sabría cuál está activando.
+   *
+   * Con acciones y contador a la vez, el contador se esconde mientras se
+   * apunta: los dos a la vez no caben en 240px sin empujar el texto.
+   */
+  actions?: React.ReactNode;
 
   /**
    * De esta entrada cuelga una lista con una hija activa.
@@ -494,20 +674,40 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   childActive?: boolean;
 };
 
-/** Entrada de navegacion. `active` la marca con `aria-current="page"`. */
+/**
+ * Entrada de navegacion. `active` la marca con `aria-current="page"`.
+ *
+ * Dentro de un `AppShellNavGroup` no emite su propio `<li>`, porque el dueño es
+ * el grupo, y toma el `aria-expanded` y el `aria-controls` de la lista que
+ * cuelga de ella. Pulsarla despliega además de llevar a su sitio: es lo mismo
+ * que hace falta las dos veces, ver lo que hay dentro.
+ */
 function AppShellNavItem({
   className,
   active,
   icon,
+  activeIcon,
+  count,
+  actions,
   childActive,
   children,
+  onClick,
   ...props
 }: AppShellNavItemProps) {
-  return (
-    <li className="list-none px-3">
+  const grupo = React.useContext(GrupoContext);
+  const glifo = active ? (activeIcon ?? icon) : icon;
+
+  const fila = (
+    <div className="group/fila relative px-3">
       <a
         data-slot="app-shell-nav-item"
         aria-current={active ? "page" : undefined}
+        aria-expanded={grupo ? grupo.abierto : undefined}
+        aria-controls={grupo ? grupo.idLista : undefined}
+        onClick={(e) => {
+          grupo?.alternar();
+          onClick?.(e);
+        }}
         className={cn(
           FILA,
           /* El peso no cambia al elegirla: la de primer nivel se marca solo con
@@ -522,18 +722,46 @@ function AppShellNavItem({
         {...props}
       >
         {childActive ? <GuiaNav variante="munion" /> : null}
-        {icon ? (
+        {glifo ? (
           <span
             aria-hidden="true"
             className="my-1 me-2 flex size-5 flex-none items-center justify-center [&_svg]:size-4"
           >
-            {icon}
+            {glifo}
           </span>
         ) : null}
         <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
+        {count !== undefined && count !== null ? (
+          <span
+            data-slot="app-shell-nav-item-count"
+            className={cn(
+              "my-1 ms-2 flex h-5 flex-none items-center text-xs tabular-nums text-muted-foreground",
+              actions && "group-hover/fila:invisible group-focus-within/fila:invisible",
+            )}
+          >
+            {count}
+          </span>
+        ) : null}
       </a>
-    </li>
+
+      {actions ? (
+        /* Va en `opacity` y no en `display`, porque lo que no se pinta tampoco
+           se tabula: escondidas con `hidden` no habría forma de llegar a ellas
+           sin ratón. Así siguen en el orden del teclado y se muestran solas al
+           recibir el foco. */
+        <span
+          data-slot="app-shell-nav-item-actions"
+          className="pointer-events-none absolute inset-y-0 end-4 flex items-center gap-0.5 opacity-0 transition-opacity duration-(--duration-fast) ease-out group-hover/fila:pointer-events-auto group-hover/fila:opacity-100 group-focus-within/fila:pointer-events-auto group-focus-within/fila:opacity-100"
+        >
+          {actions}
+        </span>
+      ) : null}
+    </div>
   );
+
+  /* Dentro de un grupo el `<li>` ya lo puso el grupo. Fuera, lo pone aquí: una
+     entrada suelta sigue siendo un elemento de la lista. */
+  return grupo ? fila : <li className="list-none">{fila}</li>;
 }
 
 export type AppShellMainProps = React.ComponentProps<"main">;
@@ -544,14 +772,17 @@ export type AppShellMainProps = React.ComponentProps<"main">;
  * Con el cajón abierto queda detrás del velo, así que sale del tabulador y del
  * árbol de accesibilidad. La cabecera se queda alcanzable a propósito, que ahí
  * vive el botón que cierra.
+ *
+ * Solo se vuelve inerte donde el cajón existe. Por encima del breakpoint no hay
+ * velo que lo tape, así que dejarlo inerte lo haría inalcanzable a plena vista.
  */
 function AppShellMain({ className, children, ...props }: AppShellMainProps) {
-  const { cajonAbierto } = useAppShell("AppShellMain");
+  const { cajonAbierto, esMovil } = useAppShell("AppShellMain");
 
   return (
     <main
       data-slot="app-shell-main"
-      inert={cajonAbierto}
+      inert={cajonAbierto && esMovil}
       /* El lienzo, no el fondo de la página: va un punto por encima de la barra
          de navegación y por debajo de las tarjetas que se apoyan en él. Con el
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
@@ -568,8 +799,10 @@ export {
   AppShell,
   AppShellHeader,
   AppShellNav,
+  AppShellNavFooter,
   AppShellNavToggle,
   AppShellNavSection,
+  AppShellNavGroup,
   AppShellNavItem,
   AppShellNavSubList,
   AppShellNavSubItem,
