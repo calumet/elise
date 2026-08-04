@@ -1,8 +1,27 @@
 import * as React from "react";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+import { Kbd } from "./kbd";
+
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
+
+/* Los iconos propios de la barra se dibujan aquí y no se toman del catálogo,
+   igual que el de plegar y el caret de sección: son parte del chasis, no
+   contenido que quien la use elija, y así el marco no arrastra una dependencia
+   de iconos para tres trazos. */
+const Lupa = () => (
+  <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true" focusable="false">
+    <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M10.2 10.2L13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
 
 /* ------------------------------------------------------------------ *
  * Marco
@@ -137,21 +156,286 @@ export type AppShellHeaderProps = React.ComponentProps<"header">;
  *
  * Sin filete inferior: con este contraste la línea sobra, y en oscuro sobre
  * oscuro solo ensucia el borde.
+ *
+ * Reparte sus tres bandas por sí misma, buscando `AppShellHeaderBrand`,
+ * `AppShellHeaderSearch` y `AppShellHeaderActions` entre sus hijos, así que el
+ * orden en que se escriban da igual. Antes era una fila vacía y cada pantalla
+ * se inventaba la rejilla, el buscador y la ficha de usuario; a la segunda
+ * pantalla ya no se parecían.
+ *
+ * Las dos bandas de los lados valen `1fr`, de modo que miden lo mismo y el
+ * buscador queda centrado en la ventana aunque el nombre crezca. Con el
+ * buscador simplemente estirado, su centro se movería con lo que haya a los
+ * costados.
+ *
+ * ```tsx
+ * <AppShellHeader>
+ *   <AppShellHeaderBrand>
+ *     <AppShellNavToggle />
+ *     <Text size="lg" weight="bold">Calumet</Text>
+ *   </AppShellHeaderBrand>
+ *   <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={abrirBuscador}>
+ *     Buscar
+ *   </AppShellHeaderSearch>
+ *   <AppShellHeaderActions>
+ *     <AppShellHeaderAction label="Notificaciones" icon={<Campana />} onClick={…} />
+ *     <AppShellUserMenu name="Juan D." initials="JD">…</AppShellUserMenu>
+ *   </AppShellHeaderActions>
+ * </AppShellHeader>
+ * ```
  */
-function AppShellHeader({ className, ...props }: AppShellHeaderProps) {
+function AppShellHeader({ className, children, ...props }: AppShellHeaderProps) {
+  const bandas: Record<string, React.ReactNode[]> = { marca: [], buscador: [], acciones: [] };
+  const sueltos: React.ReactNode[] = [];
+
+  React.Children.forEach(children, (hijo) => {
+    const tipo = React.isValidElement(hijo) ? (hijo.type as { displayName?: string }) : null;
+    if (tipo?.displayName === "AppShellHeaderBrand") bandas.marca.push(hijo);
+    else if (tipo?.displayName === "AppShellHeaderSearch") bandas.buscador.push(hijo);
+    else if (tipo?.displayName === "AppShellHeaderActions") bandas.acciones.push(hijo);
+    else sueltos.push(hijo);
+  });
+
   return (
     <header
       data-slot="app-shell-header"
       data-theme="dark"
+      /* Los lados van en `1fr`, que es `minmax(auto,1fr)`, y no en
+         `minmax(0,1fr)`. Con mínimo cero el centro gana: es una pista de tamaño
+         fijo y se reparte antes que las `fr`, así que se llevaba el ancho entero
+         y las dos bandas colapsaban a cero con su contenido desbordando fuera.
+         Con `auto` ninguna baja de su contenido, el centro se queda con lo que
+         sobra, y como los dos lados piden lo mismo el buscador cae en el medio
+         de la ventana. */
       className={cn(
-        "flex h-14 shrink-0 items-center gap-3 bg-background px-4 text-foreground",
+        "grid h-14 shrink-0 grid-cols-[1fr_minmax(0,420px)_1fr] items-center gap-4 bg-background px-4 text-foreground",
         className,
       )}
+      {...props}
+    >
+      {/* Las bandas se pintan siempre, aunque vayan vacías: son las que
+          sostienen la rejilla. Sin la del medio, el buscador de otra pantalla
+          caería en otra columna. */}
+      {/* Las de los lados no llevan `min-w-0`, y es a propósito: ponerlo anula
+          el mínimo automático de su pista, y entonces el centro, que es de
+          tamaño fijo y se reparte antes que las `fr`, se lleva el ancho entero
+          y las deja en cero con su contenido desbordando fuera de la barra.
+          Quien encoge es el texto de dentro, no la banda. */}
+      <div data-slot="app-shell-header-start" className="flex items-center gap-3">
+        {bandas.marca}
+        {sueltos}
+      </div>
+      <div data-slot="app-shell-header-center" className="flex min-w-0 items-center justify-center">
+        {bandas.buscador}
+      </div>
+      <div data-slot="app-shell-header-end" className="flex items-center justify-end gap-2">
+        {bandas.acciones}
+      </div>
+    </header>
+  );
+}
+AppShellHeader.displayName = "AppShellHeader";
+
+export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
+
+/** Banda de inicio: el botón del cajón, el logo, el nombre. */
+function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps) {
+  return (
+    <div
+      data-slot="app-shell-header-brand"
+      className={cn("flex min-w-0 items-center gap-3", className)}
       {...props}
     />
   );
 }
-AppShellHeader.displayName = "AppShellHeader";
+AppShellHeaderBrand.displayName = "AppShellHeaderBrand";
+
+export type AppShellHeaderSearchProps = Omit<React.ComponentProps<"button">, "onClick"> & {
+  /** El atajo que lo abre, tecla por tecla. Solo se dibuja donde hay sitio. */
+  shortcut?: string[];
+
+  /** Obligatorio: un buscador que no abre nada es un adorno con forma de campo. */
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+/**
+ * El disparador de la búsqueda.
+ *
+ * Es un botón y no un campo, aunque lo parezca. Lo que abre es una paleta de
+ * comandos con su propio campo dentro, así que escribir aquí no llevaría a
+ * ninguna parte, y por eso lleva el atajo dibujado: dice que hay otra manera de
+ * llegar. Para un campo de búsqueda de verdad está `SearchField`.
+ *
+ * Mide 32px, como el resto de los controles de la barra.
+ *
+ * Donde no cabe se queda en la lupa sola, del ancho de una acción. Estirado a lo
+ * que sobre acababa en veintipocos píxeles, que no es un buscador estrecho sino
+ * un icono recortado. El rótulo no se va del árbol de accesibilidad, solo deja
+ * de verse.
+ */
+function AppShellHeaderSearch({
+  className,
+  children,
+  shortcut,
+  ...props
+}: AppShellHeaderSearchProps) {
+  return (
+    <button
+      type="button"
+      data-slot="app-shell-header-search"
+      /* Las piezas de la cabecera usan `bg-card`, la superficie que se levanta
+         bajo su tema oscuro, más un borde: contra un fondo casi negro, 0.044 de
+         diferencia de luminosidad no alcanzan a dibujar la caja, y lo que la
+         define es el contorno. */
+      className={cn(
+        "flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-card text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        /* `shrink-0` porque su banda es `min-w-0`: sin él, en pantalla estrecha
+           el botón encogía por debajo de su propio ancho y la lupa salía
+           recortada. */
+        "shrink-0 max-md:size-8 max-md:justify-center md:w-full md:px-3",
+        className,
+      )}
+      {...props}
+    >
+      <Lupa />
+      <span className="min-w-0 flex-1 truncate text-start text-sm max-md:sr-only">{children}</span>
+      {shortcut?.length ? (
+        <span className="hidden items-center gap-1 md:inline-flex">
+          {shortcut.map((tecla) => (
+            <Kbd key={tecla}>{tecla}</Kbd>
+          ))}
+        </span>
+      ) : null}
+    </button>
+  );
+}
+AppShellHeaderSearch.displayName = "AppShellHeaderSearch";
+
+export type AppShellHeaderActionsProps = React.ComponentProps<"div">;
+
+/**
+ * Banda del final: las acciones sueltas y, al final de todas, el menú de la
+ * cuenta.
+ *
+ * Ese orden importa. El menú de la cuenta es el ancla de la esquina y no se
+ * mueve de pantalla a pantalla; las acciones cambian según dónde estés, así que
+ * si fueran las últimas, el menú bailaría de sitio cada vez.
+ */
+function AppShellHeaderActions({ className, ...props }: AppShellHeaderActionsProps) {
+  return (
+    <div
+      data-slot="app-shell-header-actions"
+      className={cn("flex min-w-0 items-center gap-1", className)}
+      {...props}
+    />
+  );
+}
+AppShellHeaderActions.displayName = "AppShellHeaderActions";
+
+export type AppShellHeaderActionProps = Omit<React.ComponentProps<"button">, "children"> & {
+  /** Nombre del control. Obligatorio: solo se ve el icono. */
+  label: string;
+
+  icon: React.ReactNode;
+};
+
+/**
+ * Una acción de la cabecera: notificaciones, ayuda, lo que acompañe.
+ *
+ * Solo icono, así que el nombre va en `label` y no es opcional: sin él un lector
+ * de pantalla anuncia «botón» y nada más.
+ *
+ * La caja la pone el componente, de 32px con el icono en 20, para que varias
+ * seguidas queden a la misma altura que el buscador y que el menú de la cuenta.
+ */
+function AppShellHeaderAction({ className, label, icon, ...props }: AppShellHeaderActionProps) {
+  return (
+    <button
+      type="button"
+      data-slot="app-shell-header-action"
+      aria-label={label}
+      className={cn(
+        "inline-flex size-8 flex-none cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-5",
+        className,
+      )}
+      {...props}
+    >
+      {icon}
+    </button>
+  );
+}
+AppShellHeaderAction.displayName = "AppShellHeaderAction";
+
+export type AppShellUserMenuProps = {
+  /** Nombre de quien entró. Se esconde donde no cabe, pero sigue anunciándose. */
+  name: string;
+
+  /** Debajo del nombre dentro del menú: la organización, el correo, el rol. */
+  detail?: string;
+
+  /** Dos letras, cuando no hay foto. */
+  initials?: string;
+
+  /** Una foto, que sustituye a las iniciales. */
+  avatar?: React.ReactNode;
+
+  className?: string;
+
+  /** Lo que se despliega: `DropdownMenuItem` y compañía. */
+  children: React.ReactNode;
+};
+
+/**
+ * La cuenta, al final de la cabecera.
+ *
+ * Es un menú de verdad y no una ficha decorativa. Dibujada con borde y fondo
+ * pide que la pulses, así que si no despliega nada el aspecto miente.
+ *
+ * El nombre desaparece donde no cabe pero no se quita del árbol de
+ * accesibilidad: en una pantalla estrecha se ven dos iniciales, que no dicen de
+ * quién es la sesión.
+ */
+function AppShellUserMenu({
+  name,
+  detail,
+  initials,
+  avatar,
+  className,
+  children,
+}: AppShellUserMenuProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          data-slot="app-shell-user-menu"
+          className={cn(
+            "flex h-8 flex-none cursor-pointer items-center gap-2 rounded-md border border-border bg-card ps-2.5 pe-1 text-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+            className,
+          )}
+        >
+          <span className="hidden max-w-32 truncate text-sm font-semibold md:inline">{name}</span>
+          <span className="sr-only md:hidden">{name}</span>
+          <span
+            aria-hidden="true"
+            className="flex size-6 flex-none items-center justify-center overflow-hidden rounded-sm bg-primary text-2xs font-bold text-primary-foreground"
+          >
+            {avatar ?? initials}
+          </span>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-56">
+        <div className="flex flex-col gap-0.5 px-3 py-2">
+          <span className="truncate text-sm font-semibold text-foreground">{name}</span>
+          {detail ? <span className="truncate text-xs text-muted-foreground">{detail}</span> : null}
+        </div>
+        <DropdownMenuSeparator />
+        {children}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+AppShellUserMenu.displayName = "AppShellUserMenu";
 
 export type AppShellNavToggleProps = React.ComponentProps<"button">;
 
@@ -839,6 +1123,11 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps) {
 export {
   AppShell,
   AppShellHeader,
+  AppShellHeaderBrand,
+  AppShellHeaderSearch,
+  AppShellHeaderActions,
+  AppShellHeaderAction,
+  AppShellUserMenu,
   AppShellNav,
   AppShellNavFooter,
   AppShellNavToggle,
