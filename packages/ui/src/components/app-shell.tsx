@@ -1,11 +1,6 @@
 import * as React from "react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu";
 import { Kbd } from "./kbd";
 
 import { cn } from "@/lib/cn";
@@ -447,11 +442,26 @@ function AppShellUserMenu({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
-        <div className="flex flex-col gap-0.5 px-3 py-2">
-          <span className="truncate text-sm font-semibold text-foreground">{name}</span>
-          {detail ? <span className="truncate text-xs text-muted-foreground">{detail}</span> : null}
+        {/* La cabecera es una franja y no una entrada más: fondo tenue, de
+            borde a borde y hasta las esquinas de arriba. Los márgenes negativos
+            cancelan el relleno del menú, y el radio es el suyo menos el píxel
+            del borde, que si no la esquina teñida asoma por fuera de la curva.
+            Sin fondo, quién eres se leía como una opción del menú que resulta
+            que no se puede pulsar. */}
+        <div className="-mx-1 -mt-1 mb-1 flex items-center gap-2.5 rounded-t-[11px] border-b border-border bg-muted px-3 py-2.5">
+          <span
+            aria-hidden="true"
+            className="flex size-8 flex-none items-center justify-center overflow-hidden rounded-md bg-primary text-2xs font-bold text-primary-foreground"
+          >
+            {avatar ?? initials}
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="truncate text-sm font-semibold text-foreground">{name}</span>
+            {detail ? (
+              <span className="truncate text-xs text-muted-foreground">{detail}</span>
+            ) : null}
+          </span>
         </div>
-        <DropdownMenuSeparator />
         {children}
       </DropdownMenuContent>
     </DropdownMenu>
