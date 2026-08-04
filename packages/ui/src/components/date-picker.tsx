@@ -58,8 +58,8 @@ export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
           <DisparadorFecha etiqueta={label} vacio={!isValidDate} />
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-          {/* Rótulo de mes, no desplegables: Polaris navega con las flechas y
-              deja el encabezado como título. Quien necesite saltar años puede
+          {/* Rótulo de mes, no desplegables: se navega con las flechas y el
+              encabezado se queda como título. Quien necesite saltar años puede
               montar `Calendar` con `captionLayout="dropdown"`. */}
           <Calendar
             mode="single"
@@ -87,10 +87,10 @@ export function DateRangePicker({ value, onChange, formatLabel }: DateRangePicke
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
   const range: DateRangeValue = value ?? { from: undefined, to: undefined };
   const completo = Boolean(range?.from && range?.to);
-  /* El mismo formato que `DateField`, y el mismo separador que Shopify usa para
-     un rango en `s-date-picker`: `YYYY-MM-DD--YYYY-MM-DD`. Un rango escrito con
-     dos formatos locales y un guion suelto no se puede ni leer ni teclear de
-     vuelta. */
+  /* El mismo formato que `DateField`, con doble guion entre las dos fechas:
+     `YYYY-MM-DD--YYYY-MM-DD`. Un rango escrito con dos formatos locales y un
+     guion suelto no se puede ni leer ni teclear de vuelta, porque el separador
+     se confunde con el de la propia fecha. */
   const label =
     formatLabel?.(range) ??
     (completo ? `${aTextoISO(range.from!)}--${aTextoISO(range.to!)}` : placeholder);

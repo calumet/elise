@@ -25,8 +25,7 @@ export type FieldProps = Omit<React.ComponentProps<"div">, "children"> & {
   required?: boolean;
 
   /**
-   * Esconde el rótulo a la vista sin quitarlo del árbol de accesibilidad. Es el
-   * `labelAccessibilityVisibility="exclusive"` de Shopify.
+   * Esconde el rótulo a la vista sin quitarlo del árbol de accesibilidad.
    *
    * No es lo mismo que no pasar rótulo: el control sigue teniendo nombre para un
    * lector de pantalla. Se usa cuando lo que rodea al campo ya lo explica, como

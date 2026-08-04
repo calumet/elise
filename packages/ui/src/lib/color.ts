@@ -88,8 +88,8 @@ const FUNCION = /^(rgba?|hsla?)\(([^)]*)\)$/i;
 
 /**
  * Lee hex de 3, 4, 6 y 8 dígitos, `rgb()`, `rgba()`, `hsl()` y `hsla()`, con
- * coma o con espacio y con la barra del alfa moderno. Es el mismo juego de
- * formatos que acepta `s-color-picker`.
+ * coma o con espacio y con la barra del alfa moderno. Es lo que se copia de una
+ * hoja de estilos o de una guía de marca sin tener que convertirlo antes.
  *
  * Devuelve `null` si no lo entiende, para que quien llame decida: el campo hex
  * lo usa para no pisar lo que se está escribiendo a medias.
@@ -148,7 +148,7 @@ const dosDigitos = (n: number) =>
     .toString(16)
     .padStart(2, "0");
 
-/** Siempre hex: de 6, o de 8 cuando el selector admite alfa. Como `s-color-picker`. */
+/** Siempre hex: de 6, o de 8 cuando el selector admite alfa. */
 export const aHex = ({ hsv, alfa }: Color, conAlfa: boolean) => {
   const { r, g, b } = hsvARgb(hsv);
   const base = `#${dosDigitos(r)}${dosDigitos(g)}${dosDigitos(b)}`;

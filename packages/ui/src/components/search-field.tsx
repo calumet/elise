@@ -11,8 +11,7 @@ export type SearchFieldProps = {
   label: React.ReactNode;
 
   /**
-   * Esconde el rótulo sin quitarlo del árbol de accesibilidad. Es el
-   * `labelAccessibilityVisibility="exclusive"` de Shopify, y hace falta a
+   * Esconde el rótulo sin quitarlo del árbol de accesibilidad. Hace falta a
    * menudo: un buscador dentro de una barra de herramientas se explica solo con
    * la lupa, pero sin rótulo un lector de pantalla no sabría qué se busca.
    */
@@ -40,7 +39,7 @@ export type SearchFieldProps = {
 };
 
 /**
- * Campo de búsqueda, contra `s-search-field`.
+ * Campo de búsqueda.
  *
  * Lupa al principio y aspa al final en cuanto hay algo escrito. El aspa está
  * porque vaciar un buscador es la acción más frecuente que hay sobre él, y

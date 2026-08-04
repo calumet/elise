@@ -1,13 +1,13 @@
 import { Avatar, AvatarFallback } from "@calumet/elise-ui/avatar";
 import { AvatarGroup } from "@calumet/elise-ui/avatar-group";
+import { Badge } from "@calumet/elise-ui/badge";
 import {
   DescriptionList,
   DescriptionListDescription,
   DescriptionListTerm,
 } from "@calumet/elise-ui/description-list";
-import { Badge } from "@calumet/elise-ui/badge";
-import { Stat } from "@calumet/elise-ui/stat";
 import { BlockStack } from "@calumet/elise-ui/stack";
+import { Stat } from "@calumet/elise-ui/stat";
 import { Text } from "@calumet/elise-ui/text";
 import { Timeline, TimelineItem } from "@calumet/elise-ui/timeline";
 import { Tree, TreeItem } from "@calumet/elise-ui/tree";

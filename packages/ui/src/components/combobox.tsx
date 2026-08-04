@@ -386,9 +386,8 @@ export type ComboboxItemProps = Omit<
  *
  * El check va al final de la fila y solo existe cuando el item está elegido, en
  * vez de reservarle una columna al inicio. Así todas las filas (opciones,
- * acciones, elegidas o no) arrancan en la misma x, que es como lo resuelve
- * Polaris en su `TextOption`. Con el check al inicio, cualquier fila sin el
- * queda corrida el ancho del icono.
+ * acciones, elegidas o no) arrancan en la misma x. Con el check al inicio,
+ * cualquier fila sin él queda corrida el ancho del icono.
  */
 function ComboboxItem({
   className,

@@ -9,11 +9,10 @@ import { cn } from "@/lib/cn";
 /**
  * Calendario.
  *
- * Sigue la retícula del `DatePicker` de Polaris: celda de 32px con radio de 8,
- * número en 12px y encabezado de día tenue. Los días de los meses vecinos no se
- * pintan (Polaris deja la celda vacía) porque son fechas de otro mes ofrecidas
- * como si fueran de este, y el único sitio donde se distinguen es en un gris
- * que también usan las deshabilitadas.
+ * La retícula es de celda de 32px con radio de 8, número en 12px y encabezado de
+ * día tenue. Los días de los meses vecinos no se pintan, se deja la celda vacía:
+ * son fechas de otro mes ofrecidas como si fueran de este, y el único sitio
+ * donde se distinguirían es un gris que también usan las deshabilitadas.
  *
  * Al apuntar un día se rellena como si ya estuviera elegido: el estado de foco
  * y el de selección son el mismo dibujo, así que apuntar es la vista previa de

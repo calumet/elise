@@ -14,10 +14,9 @@ import { useElLabel } from "@/lib/i18n";
  * Caja de un control de paginar: cuadrada, del alto de una fila de tabla, con
  * relleno plano y sin borde ni bisel.
  *
- * No usa `Button` porque no es un botón del catálogo: en Polaris estos llevan
- * `border: none` y `box-shadow: none` forzados sobre la variante terciaria, o
- * sea que de `Button` solo aprovecharían el foco. Pasarlos por ahí obligaría a
- * deshacer casi todo lo que `Button` pone.
+ * No usa `Button` porque no es un botón del catálogo: de `Button` solo
+ * aprovecharía el foco, y pasarlo por ahí obligaría a deshacer con `border:
+ * none` y `box-shadow: none` casi todo lo demás que pone.
  */
 const CAJA =
   "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-fill-tertiary-hover active:bg-fill-tertiary-active focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background aria-disabled:pointer-events-none aria-disabled:text-border-strong disabled:pointer-events-none disabled:text-border-strong";
@@ -25,9 +24,9 @@ const CAJA =
 export type PaginationProps = React.ComponentProps<"nav"> & {
   /**
    * `table` la convierte en la franja del pie de una tabla: filete arriba,
-   * banda tenue y todo centrado. Es el sitio donde vive la paginación en
-   * Polaris, y por eso no es un componente aparte: la misma pieza cambia de
-   * envoltorio según dónde se apoye.
+   * banda tenue y todo centrado. No es un componente aparte porque paginar es
+   * lo mismo dentro que fuera de una tabla: la misma pieza cambia de envoltorio
+   * según dónde se apoye.
    */
   variant?: "default" | "table";
 

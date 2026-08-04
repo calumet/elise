@@ -203,9 +203,9 @@ function DataTableContent<TData, TValue>({
   }, [table]);
 
   /* La barra de filtros, la franja de paginar y el aviso de carga los pone
-     `Table` por su cuenta: son la ranura `filters` y los atributos `paginate` y
-     `loading` de `s-table`. Antes esto armaba su propia tarjeta con la misma
-     `SUPERFICIE`, y eran dos sitios donde arreglar lo mismo. */
+     `Table` por su cuenta, con `filters`, `paginate` y `loading`. Antes esto
+     armaba su propia tarjeta con la misma `SUPERFICIE`, y eran dos sitios donde
+     arreglar lo mismo. */
   const barraDeFiltros = (
     <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3">
       <div className="flex flex-wrap gap-3 items-end">

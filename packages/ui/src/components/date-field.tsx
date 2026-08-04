@@ -97,10 +97,9 @@ export type DateFieldProps = {
 /**
  * Campo de fecha: se puede escribir o elegir en el calendario.
  *
- * Sigue a `s-date-field` de Shopify, que no es un calendario suelto sino un
- * campo con calendario emergente, y por eso trae rótulo, ayuda y error. Para el
- * calendario a secas está `Calendar`, y para un disparador sin campo,
- * `DatePicker`.
+ * No es un calendario suelto sino un campo con calendario emergente, y por eso
+ * trae rótulo, ayuda y error. Para el calendario a secas está `Calendar`, y para
+ * un disparador sin campo, `DatePicker`.
  *
  * El valor viaja como `YYYY-MM-DD` y no como `Date`: una fecha de calendario no
  * tiene hora ni zona, y en cuanto se guarda un `Date` alguien acaba comparando

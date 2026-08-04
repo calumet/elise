@@ -22,7 +22,7 @@ import { cn } from "@/lib/cn";
  * que el encabezado, que lleva fondo opaco, se comía su tramo de bisel: el
  * contorno salía marcado a los lados del cuerpo y liso a los del encabezado. La
  * capa va por encima del contenido y el contorno queda igual en todo el
- * perímetro, que es como Polaris resuelve el suyo.
+ * perímetro.
  *
  * La tarjeta de la tabla de datos lo reutiliza para que los dos marcos se lean
  * iguales.
@@ -64,10 +64,9 @@ const TablaCtx = React.createContext<{
   cargando: false,
 });
 
-/* Lo que se apaga mientras carga. 0.35 es la opacidad a la que equivale
-   `--p-color-text-disabled` de Polaris leído sobre blanco: su texto inhabilitado
-   sale en 181 partiendo de 48, o sea (255-181)/(255-48). Una tabla con la que no
-   se puede interactuar es contenido inhabilitado, así que se apaga hasta ahí. */
+/* Lo que se apaga mientras carga. Una tabla con la que no se puede interactuar
+   es contenido inhabilitado, y 0.35 es la opacidad a la que el texto llega al
+   gris con el que se pinta lo inhabilitado: sobre blanco, 48 acaba en 181. */
 const APAGADO = "opacity-35 transition-opacity duration-(--duration-fast) ease-out";
 
 /** Índice de la columna en la que cae una celda, puesto por su fila. */
@@ -76,7 +75,8 @@ const ColumnaCtx = React.createContext(0);
 const esNumerica = (format: ColumnFormat | undefined) =>
   format === "numeric" || format === "currency";
 
-/* El corte de Polaris para pasar de tabla a lista: 30.625em. */
+/* El corte para pasar de tabla a lista. Por debajo de esto, tres columnas ya
+   no caben sin apretar el texto hasta partirlo por letras. */
 const ANCHO_MINIMO_DE_TABLA = 490;
 
 const primero = <P,>(nodos: React.ReactNode, tipo: unknown) =>
@@ -89,9 +89,8 @@ const primero = <P,>(nodos: React.ReactNode, tipo: unknown) =>
  * columna. La lista los necesita: sin ellos no hay forma de saber cuál es el
  * dato principal de una fila ni con qué rótulo sale un valor suelto.
  *
- * Se lee del árbol y no de un prop aparte para que el marcado sea el mismo que
- * el de `s-table`: la información ya está escrita una vez en el encabezado y
- * repetirla en cada celda es lo que se quiere evitar.
+ * Se lee del árbol y no de un prop aparte porque la información ya está escrita
+ * una vez en el encabezado: repetirla en un prop es lo que se quiere evitar.
  */
 const recogerColumnas = (hijos: React.ReactNode): Columna[] => {
   const encabezado = primero<{ children?: React.ReactNode }>(hijos, TableHeader);
@@ -150,7 +149,7 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
    *
    * - `table`: siempre tabla.
    * - `list`: siempre lista.
-   * - `auto`: tabla mientras quepa y lista cuando no. Es el de `s-table`.
+   * - `auto`: tabla mientras quepa y lista cuando no. Es el de por omisión.
    */
   variant?: "auto" | "list" | "table";
 
@@ -162,10 +161,9 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   onNextPage?: () => void;
 
   /**
-   * Saltar a la primera y a la última. `s-table` solo tiene anterior y
-   * siguiente, así que estos dos pasos solo aparecen si les das manejador: una
+   * Saltar a la primera y a la última. Solo aparecen si les das manejador: una
    * tabla que sepa cuántas páginas hay puede ofrecerlos, y una que vaya con
-   * cursor, que no lo sabe, se queda con los dos de siempre.
+   * cursor, que no lo sabe, se queda con anterior y siguiente.
    */
   onFirstPage?: () => void;
   onLastPage?: () => void;
@@ -208,9 +206,8 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
  *
  * Trae su propio marco: contorno, radio y recorte. El contorno no es un borde
  * plano sino un bisel, con el filo de abajo más pesado que el de arriba, más una
- * sombra de 1px, que es como Polaris apoya sus superficies: con un borde
- * uniforme el plano no tiene arriba ni abajo y la tabla se lee recortada en el
- * lienzo en vez de puesta sobre él. La banda del encabezado llega
+ * sombra de 1px: con un borde uniforme el plano no tiene arriba ni abajo, y la
+ * tabla se lee recortada en el lienzo en vez de puesta sobre él. La banda del encabezado llega
  * hasta el borde, así que sin recorte sus esquinas cuadradas se salen por
  * encima de cualquier contorno redondeado que la envuelva, y quien la usa no
  * tiene por qué saberlo. Dentro de una tarjeta que ya lo pone, `bare` lo
@@ -338,10 +335,9 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       </div>
     ) : null;
 
-    /* Cargando, `s-table` apaga las filas y deja la tabla sin responder. No baja
-       ningún cartel: eso es lo que hace `IndexTable` de Polaris React, que es
-       otro componente, y traérselo aquí tapaba la banda del encabezado con algo
-       que en la referencia no existe.
+    /* Cargando, las filas se apagan y la tabla deja de responder. No baja ningún
+       cartel: uno a lo ancho tapa la banda del encabezado, y entonces lo que se
+       ve no es un aviso que llega sino una cabecera que se borró.
 
        El encabezado no se apaga. Es el rótulo de las columnas, no dato que esté
        cambiando, y dejarlo firme es lo que mantiene la tabla legible mientras
@@ -420,8 +416,8 @@ export const TableBody = React.forwardRef<
   /* `divide-y` pone el filete debajo de cada fila menos de la última, así que
      la tabla no cierra con una raya suelta contra el borde del marco. La línea
      bajo el encabezado la pone este `border-t`, y va un tono más firme que los
-     separadores: en Polaris el de la primera fila usa `--p-color-border` y el
-     de entre filas `border-secondary`, que es más claro. */
+     separadores: cierra la banda del encabezado, mientras que los de entre filas
+     solo tienen que dejar contar. */
   const filetes = cn("border-t border-border divide-y divide-border-subtle", cargando && APAGADO);
 
   if (modo === "list") {
@@ -624,9 +620,9 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
           else if (ref) ref.current = nodo;
         }}
         onClick={pulsar}
-        /* Apuntar una fila la deja del mismo tono que el encabezado, que es lo que
-           hace Polaris: un solo valor para «superficie que no es la del contenido».
-           Elegida baja un paso más, para que se distinga de la que solo se apunta.
+        /* Apuntar una fila la deja del mismo tono que el encabezado: un solo valor
+           para «superficie que no es la del contenido». Elegida baja un paso más,
+           para que se distinga de la que solo se apunta.
 
            El color del filete se repite aquí aunque ya lo ponga `divide-y` en el
            cuerpo, porque `divide-*` no alcanza a la última fila: su regla es

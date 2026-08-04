@@ -31,8 +31,7 @@ export type AppShellProps = React.ComponentProps<"div"> & {
  * Marco de aplicación: cabecera fija arriba, navegación a un lado y el área
  * donde entra cada pantalla.
  *
- * Sigue la estructura del `Frame` de Polaris, con una diferencia deliberada: el
- * cajón y su velo cuelgan de la fila de contenido y no de la ventana, de modo
+ * El cajón y su velo cuelgan de la fila de contenido y no de la ventana, de modo
  * que la cabecera sigue a la vista y alcanzable mientras la navegación está
  * abierta. Por eso el cajón no es un `Sheet`, que es de posición fija.
  *
@@ -264,9 +263,9 @@ export type AppShellNavSectionProps = Omit<React.ComponentProps<"li">, "title"> 
 /**
  * Grupo de entradas con su rótulo.
  *
- * El rótulo no pliega el grupo. En un marco de aplicación las secciones se ven
- * enteras, y el caret que Shopify pone al lado es un acceso a otra pantalla, no
- * un disclosure: por eso apunta siempre en la misma dirección.
+ * El rótulo no pliega el grupo: en un marco de aplicación las secciones se ven
+ * enteras. El caret que puede llevar al lado es un acceso a otra pantalla y no
+ * un disclosure, y por eso apunta siempre en la misma dirección.
  */
 function AppShellNavSection({
   className,

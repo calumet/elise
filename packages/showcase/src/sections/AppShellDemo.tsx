@@ -57,8 +57,8 @@ const AppShellDemo = () => {
             </Text>
           </div>
 
-          {/* En Shopify esto es un botón que abre la búsqueda, no un campo, y por
-              eso lleva el atajo dentro. Las piezas de la cabecera usan `bg-card`,
+          {/* Es un botón que abre la búsqueda y no un campo, y por eso lleva el
+              atajo dentro. Las piezas de la cabecera usan `bg-card`,
               la superficie que se levanta bajo su tema oscuro, más un borde:
               contra un fondo casi negro, 0.044 de diferencia de luminosidad no
               alcanzan a dibujar la caja, y lo que la define es el contorno. */}

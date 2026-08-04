@@ -27,10 +27,10 @@ export type ColorPickerProps = Omit<
   /** Envía el color con el formulario, en un campo oculto. */
   name?: string;
 
-  /** En cada paso del arrastre. Es el `input` de `s-color-picker`. */
+  /** En cada paso del arrastre, mientras se arrastra. */
   onValueChange?: (hex: string) => void;
 
-  /** Al soltar. Es el `change` de `s-color-picker`. */
+  /** Al soltar, una sola vez. */
   onValueCommit?: (hex: string) => void;
 };
 
@@ -47,11 +47,7 @@ export type ColorPickerProps = Omit<
  * verdad, con su teclado y su valor anunciado.
  *
  * Emite siempre hex, de 6 o de 8 con `alpha`, aunque le entre `rgb()` o `hsl()`.
- * Es el contrato de `s-color-picker`.
- *
- * No hay medidas publicadas: el manifiesto de Shopify no expone `cssProperties`
- * ni `cssParts` para ninguno de sus componentes, así que la geometría sale de la
- * escala de Elise.
+ * Una sola salida evita que cada consumidor tenga que normalizar lo que reciba.
  */
 export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (

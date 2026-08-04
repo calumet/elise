@@ -37,7 +37,7 @@ const ColorPickerDemo = () => {
         <Text size="sm" tone="muted">
           Escribe en el campo <Code>rgb(255 0 0 / 50%)</Code>, <Code>hsl(120 100% 50%)</Code> o{" "}
           <Code>#f008</Code>: los lee todos y siempre devuelve hex, de 6 o de 8 con{" "}
-          <Code>alpha</Code>. Es el contrato de <Code>s-color-picker</Code>.
+          <Code>alpha</Code>.
         </Text>
         <Text size="sm" tone="muted">
           El área lleva teclado: flechas de una en una y con mayúsculas de diez en diez. Las dos

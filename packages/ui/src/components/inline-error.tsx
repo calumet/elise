@@ -8,17 +8,16 @@ export type InlineErrorProps = React.ComponentProps<"p">;
 /**
  * El mensaje de error de un campo.
  *
- * Lleva icono además de color, que es lo que hace `InlineError` en Polaris. El
- * color por sí solo no distingue nada para quien no separa el rojo del gris, y
- * debajo de un campo hay dos textos pequeños seguidos —la ayuda y el error— que
- * si no solo se diferencian por eso.
+ * Lleva icono además de color. El color por sí solo no distingue nada para
+ * quien no separa el rojo del gris, y debajo de un campo hay dos textos
+ * pequeños seguidos, la ayuda y el error, que si no solo se diferencian por
+ * eso.
  *
  * El icono no se anuncia: repetiría lo que ya dicen `aria-invalid` en el control
  * y el propio mensaje. Está para que el error se vea de un vistazo.
  *
- * El rojo es el oscuro y no el de relleno. Polaris usa `text-critical`, que es
- * casi medio tono más oscuro que su rojo de fondo, por lo mismo: un texto de
- * 12px en el rojo saturado se lee peor sobre blanco de lo que parece.
+ * El rojo es el oscuro y no el de relleno, casi medio tono por debajo: un texto
+ * de 12px en el rojo saturado se lee peor sobre blanco de lo que parece.
  *
  * Sin mensaje no dibuja nada, para poder escribirlo sin condicional alrededor.
  */

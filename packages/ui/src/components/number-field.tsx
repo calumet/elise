@@ -52,8 +52,8 @@ const decimalesDe = (paso: number) => {
 const limitar = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
 /**
- * Campo numérico, contra `s-number-field`: `min`, `max`, `step`, prefijo,
- * sufijo y el teclado que sale en un móvil.
+ * Campo numérico: `min`, `max`, `step`, prefijo, sufijo y el teclado que sale
+ * en un móvil.
  *
  * El `<input>` es de texto y no de tipo `number`. Uno de tipo `number` cambia el
  * valor al girar la rueda del ratón sobre él, aunque quien lo hace esté

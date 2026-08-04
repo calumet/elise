@@ -45,9 +45,9 @@
   --text-3xl--line-height: 2.25rem;
   --text-3xl--letter-spacing: -0.026em;
 
-  /* Pesos desplazados 50 puntos por encima de los redondos, como hace Polaris.
-     A 12–14px, que es donde vive casi todo el chrome, 400 se lee lavado y 600
-     se lee duro; el medio punto corrige el peso óptico sin cambiar de grado.
+  /* Pesos desplazados 50 puntos por encima de los redondos. A 12–14px, que es
+     donde vive casi todo el chrome, 400 se lee lavado y 600 se lee duro; el
+     medio punto corrige el peso óptico sin cambiar de grado.
      Solo existe con fuente variable: con una estática el navegador redondea y
      se pierde la corrección. Geist Variable cubre el eje entero. */
   --font-weight-normal: 450;
@@ -160,18 +160,20 @@
   --secondary: oklch(0.958 0.002 265);
   --secondary-foreground: oklch(0.37 0.02 265);
   /* Superficie de «lo que no es contenido»: encabezado de tabla, fila apuntada,
-     botón apuntado. Polaris usa un solo valor para las tres (bg-surface-hover y
-     bg-surface-secondary son el mismo #F7F7F7) y este es ese valor. Estaba en
-     0.965, cinco niveles más oscuro, y con el bisel de la tarjeta encima el
-     contorno se leía más pesado al costado del encabezado que al del cuerpo. */
+     botón apuntado. Los tres comparten un solo valor a propósito: son el mismo
+     gesto, así que separarlos solo introduciría escalones que nadie sabría
+     justificar. Estaba en 0.965, cinco niveles más oscuro, y con el bisel de la
+     tarjeta encima el contorno se leía más pesado al costado del encabezado que
+     al del cuerpo. */
   --muted: oklch(0.976 0.004 265);
   /* El techo AA lo marca --secondary (0.539), que es el fondo más oscuro donde
      se lee este color; sobre --muted queda margen de sobra. */
   --muted-foreground: oklch(0.525 0.016 265);
   /* Relleno terciario: un gris plano, sin borde ni bisel, para controles que
      acompañan a otra cosa en vez de pedir la acción por su cuenta, como los
-     botones de paginar al pie de una tabla. En Polaris es la familia `bg-fill-tertiary`
-     y son los mismos valores: 235 en reposo, 212 al apuntar, 204 al pulsar. */
+     botones de paginar al pie de una tabla. Los tres pasos son cortos y
+     regulares (235, 212, 204 en sRGB) porque el control ya se distingue por
+     estar donde está; el estado solo tiene que confirmarse, no anunciarse. */
   --fill-tertiary: oklch(0.94 0.004 265);
   --fill-tertiary-hover: oklch(0.87 0.006 265);
   --fill-tertiary-active: oklch(0.845 0.007 265);
@@ -199,8 +201,7 @@
   /* La barra es más oscura que el lienzo y la entrada elegida es más clara que
      la barra, no al revés. Es lo que separa una navegación de una columna de
      enlaces: el riel se lee como chasis y lo elegido como una pastilla que se
-     levanta de él. Los tres valores salen de Polaris (nav-bg, nav-bg-surface-
-     hover, nav-bg-surface-selected). */
+     levanta de él. */
   --sidebar: oklch(0.94 0.003 265);
   --sidebar-foreground: oklch(0.21 0.012 265);
   --sidebar-primary: oklch(0.55 0.19 262);
@@ -321,16 +322,16 @@
      fondo. */
   --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16);
   --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
-  /* Contorno de superficie apoyada, a la manera de Polaris: en vez de un borde
-     plano del mismo tono en los cuatro lados, un bisel donde el filo de abajo
-     pesa más que el de arriba, y una sombra de 1px por fuera. Es lo que hace que
+  /* Contorno de superficie apoyada: en vez de un borde plano del mismo tono en
+     los cuatro lados, un bisel donde el filo de abajo pesa más que el de
+     arriba, y una sombra de 1px por fuera. Es lo que hace que
      una tarjeta se lea puesta sobre el lienzo y no recortada en él; con un borde
      uniforme el plano no tiene arriba ni abajo.
      Van en dos tokens porque se pintan en sitios distintos. Una sombra interior
      queda por debajo del fondo de cualquier descendiente, así que sobre una
      tabla el encabezado, que sí tiene fondo, se comía su tramo de bisel y el
-     contorno salía distinto arriba que abajo. El bisel se dibuja encima del
-     contenido, en una capa aparte, que es como lo resuelve Polaris. */
+     contorno salía distinto arriba que abajo. Por eso el bisel se dibuja encima
+     del contenido, en una capa aparte. */
   --shadow-surface: 0 1px 0 0 oklch(0.21 0.02 265 / 0.07);
   --shadow-surface-bevel:
     inset 1px 0 0 0 oklch(0 0 0 / 0.13), inset -1px 0 0 0 oklch(0 0 0 / 0.13),
@@ -357,10 +358,9 @@
   --secondary-foreground: oklch(0.93 0.005 265);
   --muted: oklch(0.262 0.012 265);
   --muted-foreground: oklch(0.685 0.014 265);
-  /* Polaris solo define el reposo de esta familia en oscuro, así que los otros
-     dos salen de trasladar los saltos del tema claro (0.07 y 0.145 y 0.175 por
-     encima de la superficie) al de aquí. Quedan entre --muted y
-     --border-strong, que es donde tienen que caer. */
+  /* Los tres salen de trasladar aquí los saltos del tema claro: 0.07, 0.145 y
+     0.175 por encima de la superficie. Quedan entre --muted y --border-strong,
+     que es donde tienen que caer. */
   --fill-tertiary: oklch(0.29 0.013 265);
   --fill-tertiary-hover: oklch(0.355 0.015 265);
   --fill-tertiary-active: oklch(0.39 0.016 265);
@@ -438,10 +438,9 @@
   --shadow-bevel-inset: inset 0 2px 4px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(0 0 0 / 0.25);
   /* En oscuro los cuatro filos aclaran, el de arriba el doble que los otros
      tres. No es que la luz cambie de sitio: sobre un lienzo casi negro un filo
-     oscuro no dibuja nada, y la tarjeta se quedaría sin contorno por abajo. Son
-     los mismos valores de Polaris, #CCC al 8% y al 16%; el borde ya no depende
-     de por dónde caiga la luz sino de que haya con qué separar la superficie
-     del fondo. */
+     oscuro no dibuja nada, y la tarjeta se quedaría sin contorno por abajo. Un
+     mismo gris al 8% y al 16% basta; el borde ya no depende de por dónde caiga
+     la luz sino de que haya con qué separar la superficie del fondo. */
   --shadow-surface: 0 1px 0 0 oklch(0 0 0 / 0.4);
   --shadow-surface-bevel:
     inset 1px 0 0 0 oklch(0.845 0 0 / 0.08), inset -1px 0 0 0 oklch(0.845 0 0 / 0.08),
@@ -602,10 +601,10 @@
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
     letter-spacing: var(--text-base--letter-spacing);
-    /* La escala de pesos de Polaris arranca en 450, no en 400. Sin esta línea
-       el token existía y la utilidad `font-normal` lo daba, pero todo lo que no
-       llevara clase de peso (el texto de una celda, un párrafo suelto) se
-       quedaba en el 400 del navegador, medio paso por debajo del resto. */
+    /* La escala de pesos arranca en 450, no en 400. Sin esta línea el token
+       existía y la utilidad `font-normal` lo daba, pero todo lo que no llevara
+       clase de peso (el texto de una celda, un párrafo suelto) se quedaba en el
+       400 del navegador, medio paso por debajo del resto. */
     font-weight: var(--font-weight-normal);
     -webkit-font-smoothing: antialiased;
   }

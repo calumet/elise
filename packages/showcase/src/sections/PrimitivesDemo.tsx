@@ -141,7 +141,7 @@ const PrimitivesDemo = () => (
               crítico
             </Link>{" "}
             lleva a algo que destruye. Abrir en{" "}
-            <Link href="https://polaris.shopify.com/" target="_blank">
+            <Link href="https://developer.mozilla.org/es/docs/Web/HTML/Element/a" target="_blank">
               otra pestaña
             </Link>{" "}
             añade su <Code>rel</Code> solo.

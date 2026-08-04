@@ -14,9 +14,9 @@ export type AlertProps = React.ComponentProps<"div"> & {
   onDismiss?: () => void;
 };
 
-/* Dos formas, como en Polaris. Sin encabezado el bloque es una superficie
-   sutil de una sola pieza, que es lo que cabe dentro de una tarjeta sin pelearse
-   con ella. Con encabezado se convierte en tarjeta propia: barra del tono
+/* Dos formas. Sin encabezado el bloque es una superficie sutil de una sola
+   pieza, que es lo que cabe dentro de una tarjeta sin pelearse con ella. Con
+   encabezado se convierte en tarjeta propia: barra del tono
    arriba y cuerpo en blanco, que es como se anuncia algo a nivel de página.
    La superficie sutil va sin borde, porque el color del fondo ya separa el
    bloque y un borde en el mismo tono agrega ruido. */
@@ -54,8 +54,8 @@ const BOTON_CERRAR =
  * Con un `AlertTitle` toma la forma de anuncio de página: tarjeta con una barra
  * del tono arriba (icono, título y cierre) y el cuerpo en blanco debajo. Sin
  * título se queda en un bloque de una sola pieza en superficie sutil, que es lo
- * que cabe dentro de una tarjeta sin competir con ella. Las dos formas existen
- * en Polaris y se eligen por lo mismo: cuánto tiene que pesar el aviso.
+ * que cabe dentro de una tarjeta sin competir con ella. Entre una y otra se
+ * elige por lo mismo: cuánto tiene que pesar el aviso.
  *
  * `danger` y `warning` se anuncian con `role="alert"` (interrumpe al lector de
  * pantalla); `info` y `success` con `role="status"` (espera a que termine).

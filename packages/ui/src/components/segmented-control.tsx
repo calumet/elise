@@ -23,7 +23,7 @@ export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
  * Se lee como una sola pieza partida y no como botones sueltos, que es lo que lo
  * separa de un grupo de alternar: aquí las opciones son las caras de una misma
  * pregunta. De ahí que las esquinas interiores se cuadren y solo redondeen las
- * de los extremos, igual que en el grupo segmentado de Polaris.
+ * de los extremos.
  *
  * Nunca se queda sin valor. El grupo de Radix admite apagar la opción activa
  * volviéndola a pulsar, y aquí eso deja la pregunta sin responder sin que nadie

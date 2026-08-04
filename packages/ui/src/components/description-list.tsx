@@ -18,8 +18,9 @@ const DentroDeListaApretada = React.createContext(false);
  * sin saber cuál explica a cuál.
  *
  * Estrecha se apila y ancha se parte en dos columnas, la del término a un cuarto
- * del ancho, que es el reparto de Polaris. El corte está en 490px, el mismo con
- * el que la tabla pasa a lista.
+ * del ancho: el término suele ser una o dos palabras y el valor una frase, así
+ * que repartir a la mitad dejaría la primera columna medio vacía. El corte está
+ * en 490px, el mismo con el que la tabla pasa a lista.
  *
  * Mide su propio hueco y no la ventana: la misma lista puede ir a lo ancho de
  * una página o dentro de una tarjeta estrecha, y lo que decide es cuánto sitio

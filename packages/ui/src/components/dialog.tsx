@@ -26,7 +26,8 @@ export const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-/* Los tres anchos de Polaris. `md` es el de por defecto y el que sirve para casi
+/* Tres anchos y no más, para que dos diálogos seguidos no midan cada uno lo
+   suyo. `md` es el de por defecto y el que sirve para casi
    todo; `sm` es para confirmar algo de una frase, donde 620px de ancho para dos
    botones se lee como si faltara contenido; `lg` para lo que lleva una tabla o
    un formulario de varias columnas dentro. */

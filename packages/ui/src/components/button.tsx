@@ -91,11 +91,10 @@ export const buttonVariants = ({
   size?: ButtonProps["size"];
 } = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
-/* Un escalón por debajo de lo que traía Elise, acercándose a Polaris, que a
-   partir de 768px baja a 28/28/32, sin llegar del todo: el resto del catálogo
-   escribe a 14px y un botón de 28px al lado de ese texto se lee como un
-   control secundario. `icon` iguala a `md` para que una barra de acciones
-   mezcle ambos sin desnivelarse. */
+/* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
+   chrome de escritorio denso: el resto del catálogo escribe a 14px y un botón
+   de 28px al lado de ese texto se lee como un control secundario. `icon` iguala
+   a `md` para que una barra de acciones mezcle ambos sin desnivelarse. */
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   sm: "h-8 px-3 text-sm",
   md: "h-9 px-4 text-base",

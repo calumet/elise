@@ -64,8 +64,8 @@ export const Toaster = ({ position = "top-right" }: ToasterProps) => {
           onOpenChange={(open: boolean) => {
             if (!open) dismiss(toastItem.id);
           }}
-          /* Invertido, como el de Polaris: el aviso llega encima de una pantalla
-             llena de tarjetas, y otra tarjeta blanca más se confunde con ellas.
+          /* Invertido: el aviso llega encima de una pantalla llena de tarjetas,
+             y otra tarjeta blanca más se confunde con ellas.
              Invertirlo lo despega sin recurrir a un color de estado, que aquí
              significaría otra cosa. Radio de 8px y 12 de relleno. */
           className="group relative flex w-full max-w-md flex-col gap-2 rounded-md bg-inverse p-3 pr-12 text-inverse-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
