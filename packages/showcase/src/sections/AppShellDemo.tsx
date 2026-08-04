@@ -65,9 +65,13 @@ const AppShellDemo = () => {
             bandas quedaban en cero y su contenido se salía por encima del
             buscador. Quien encoge es el texto de dentro, que ya se corta. */}
         <AppShellHeader className="grid grid-cols-[1fr_minmax(0,420px)_1fr] gap-4">
+          {/* El nombre se va donde no cabe y queda solo la hamburguesa. En una
+              pantalla estrecha la marca es lo que menos falta hace: quien abrió
+              la aplicación ya sabe en cuál está, y esos 78px son la diferencia
+              entre un buscador que se usa y uno de 68px. */}
           <div className="flex items-center gap-3">
             <AppShellNavToggle />
-            <Text size="lg" weight="bold" className="truncate">
+            <Text size="lg" weight="bold" className="truncate max-md:hidden">
               Calumet
             </Text>
           </div>
@@ -89,8 +93,10 @@ const AppShellDemo = () => {
             </span>
           </button>
 
+          {/* Sin el nombre al lado, la caja con borde alrededor de dos letras
+              no dibuja nada: en estrecho se queda el avatar solo. */}
           <div className="flex items-center justify-end gap-3">
-            <div className="flex h-9 items-center gap-2 rounded-xl border border-border bg-card ps-3 pe-1">
+            <div className="flex h-9 items-center gap-2 rounded-xl border border-border bg-card ps-3 pe-1 max-md:border-transparent max-md:bg-transparent max-md:px-0">
               <span className="hidden text-sm font-semibold md:inline">Juan D.</span>
               <span className="flex size-7 items-center justify-center rounded-sm bg-primary text-2xs font-bold text-primary-foreground">
                 JD
