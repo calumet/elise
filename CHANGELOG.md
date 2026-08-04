@@ -3,11 +3,10 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## Sin publicar
+## `@calumet/elise-ui` 0.4.0
 
-La versión en `package.json` sigue en 0.3.0. Esto es lo acumulado desde
-entonces, y al publicarlo pasa a 0.4.0: por debajo de la 1.0 los cambios que
-rompen suben la minor.
+Sube la minor y no la patch porque hay cinco cambios que rompen: por debajo de
+la 1.0 es ahí donde van.
 
 ### Rompe
 
@@ -120,6 +119,34 @@ rompen suben la minor.
 - **El desplazamiento no era el mismo en toda la página.** La lista del
   `TimePicker` y `ScrollArea` dibujaban una barra propia que se escondía en
   reposo, mientras la página y los desplegables usan la nativa.
+
+## `@calumet/elise-tables` 0.2.0
+
+Ninguna prop cambia; lo que cambia es lo que se ve, y por eso sube la minor.
+
+- **`DataTable` deja de armar su propia tarjeta.** Pasa por `variant`, `paginate`
+  y `loading` de `Table`, que antes duplicaba con su propio marco y su propia
+  franja de paginación. Dos tablas seguidas ya no se ven de sistemas distintos.
+- **El «filas por página» se muda dentro del pie**, junto a los pasos, en vez de
+  quedar suelto encima de la tabla.
+- Requiere `@calumet/elise-ui` 0.4.
+
+## `@calumet/elise-alerts` 0.2.0
+
+`openAlert`, `closeAlert` y `AlertHost` no cambian de firma.
+
+- **El diálogo toma las tres zonas de `AlertDialog`**: el título en la banda de
+  arriba y la pregunta, con su icono, en el cuerpo. Antes iban los dos juntos.
+- Se estrecha, porque el ancho por defecto de `AlertDialog` baja a 380px.
+- Requiere `@calumet/elise-ui` 0.4.
+
+## `@calumet/elise-toasts` 0.2.0
+
+- **El aviso va invertido.** Llega encima de una pantalla llena de tarjetas, y
+  otra tarjeta blanca más se confunde con ellas; invertirlo lo despega sin
+  recurrir a un color de estado, que ahí significaría otra cosa. Cambian también
+  el radio, el relleno y el ancho máximo.
+- Requiere `@calumet/elise-ui` 0.4.
 
 ## `@calumet/elise-ui` 0.3.0
 
