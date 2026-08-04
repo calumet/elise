@@ -329,7 +329,11 @@ function AppShellHeaderActions({ className, ...props }: AppShellHeaderActionsPro
   return (
     <div
       data-slot="app-shell-header-actions"
-      className={cn("flex min-w-0 items-center gap-1", className)}
+      /* El mismo hueco que separa las bandas, para que la barra lleve un solo
+         ritmo: con las acciones a 4px y todo lo demás a 16, el grupo del final
+         se leía apretado contra el resto. Se encoge donde no hay sitio, que es
+         donde esos píxeles se los quita al buscador. */
+      className={cn("flex min-w-0 items-center gap-2 md:gap-4", className)}
       {...props}
     />
   );
