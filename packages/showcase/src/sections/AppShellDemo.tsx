@@ -58,9 +58,14 @@ const AppShellDemo = () => {
       <AppShell className="h-full">
         {/* Tres bandas para que el buscador quede centrado en la ventana: las
             laterales valen 1fr, así que miden lo mismo y el centro no se
-            desplaza cuando el nombre crece. */}
+            desplaza cuando el nombre crece.
+            Las laterales no llevan `min-w-0`. Ponerlo anula el mínimo
+            automático de su pista, y entonces el centro, que es de tamaño fijo
+            y se reparte antes que las `fr`, se lleva el ancho entero: las dos
+            bandas quedaban en cero y su contenido se salía por encima del
+            buscador. Quien encoge es el texto de dentro, que ya se corta. */}
         <AppShellHeader className="grid grid-cols-[1fr_minmax(0,420px)_1fr] gap-4">
-          <div className="flex min-w-0 items-center gap-3">
+          <div className="flex items-center gap-3">
             <AppShellNavToggle />
             <Text size="lg" weight="bold" className="truncate">
               Calumet
@@ -84,7 +89,7 @@ const AppShellDemo = () => {
             </span>
           </button>
 
-          <div className="flex min-w-0 items-center justify-end gap-3">
+          <div className="flex items-center justify-end gap-3">
             <div className="flex h-9 items-center gap-2 rounded-xl border border-border bg-card ps-3 pe-1">
               <span className="hidden text-sm font-semibold md:inline">Juan D.</span>
               <span className="flex size-7 items-center justify-center rounded-sm bg-primary text-2xs font-bold text-primary-foreground">
