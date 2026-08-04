@@ -23,6 +23,7 @@ export * from "./empty-state";
 export * from "./field";
 export * from "./inline-error";
 export * from "./code";
+export * from "./color-picker";
 export * from "./kbd";
 export * from "./link";
 export * from "./file-upload";

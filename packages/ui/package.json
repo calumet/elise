@@ -35,6 +35,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./color-picker": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./kbd": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

@@ -108,13 +108,15 @@ caso de `Box` o de `InlineStack`.
       `listSlot` y `format` por columna, `paginate`, `loading`, `clickDelegate`
       y la ranura `filters`. `DataTable` no arma tarjeta propia: pasa por estas
       tres últimas, que antes duplicaba
-- [ ] `ColorPicker`. Hoy no hay ninguna forma de elegir un color. El contrato de
-      referencia es el de `s-color-picker`: acepta HSL, HSLA, RGB, RGBA y hex de
-      3, 4, 6 y 8 dígitos, y emite siempre hex: de 6, o de 8 con `alpha`.
-      Necesita área de saturación y brillo, barra de tono, barra de alfa
-      opcional y campo hex. No hay medidas publicadas: el manifiesto de Shopify
-      no expone `cssProperties` ni `cssParts` para ninguno de sus componentes,
-      así que la geometría se decide aquí
+- [x] `ColorPicker`, contra `s-color-picker`: lee HSL, HSLA, RGB, RGBA y hex de
+      3, 4, 6 y 8, y emite siempre hex, de 6 o de 8 con `alpha`. Área de
+      saturación y brillo, barra de tono, barra de alfa opcional y campo hex.
+      La geometría sale de la escala de Elise, porque el manifiesto de Shopify
+      no expone `cssProperties` ni `cssParts` para ninguno de sus componentes.
+      El modelo interno es HSV y el tono se guarda aparte del color: en negro y
+      en blanco el tono no existe, así que deducirlo del hex haría que pasar por
+      una esquina lo perdiera. La aritmética vive en `lib/color.ts`, separada
+      para poder comprobarla contra valores conocidos
 - [ ] `Stat`, `Timeline`, `DescriptionList`, `AvatarGroup`, `Tree`
 - [ ] `TagInput`, `NumberField`, `SearchField`, `SegmentedControl`, `TimePicker`,
       `Rating`

@@ -563,6 +563,31 @@
   z-index: var(--z-toast);
 }
 
+/* El tablero que se ve por debajo de lo translúcido, en el selector de color y
+   en cualquier muestra con alfa. Va en gradientes y no en una imagen: se tiñe
+   con el token del borde, así que sigue al tema, y no hay archivo que cargar. */
+@utility ajedrez {
+  background-image:
+    linear-gradient(
+      45deg,
+      var(--color-border) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--color-border) 75%
+    ),
+    linear-gradient(
+      45deg,
+      var(--color-border) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--color-border) 75%
+    );
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    4px 4px;
+}
+
 @layer base {
   *,
   *::before,
