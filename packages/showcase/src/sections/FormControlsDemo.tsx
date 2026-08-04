@@ -19,59 +19,58 @@ const FormControlsDemo = () => {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="space-y-3 rounded-sm border border-border bg-card p-4">
-        <Label className="text-sm font-semibold">Opciones</Label>
-        {/* El rótulo se enlaza con `htmlFor`, porque la opción es un button y
-            no un input suelto dentro del label. */}
-        <RadioGroup defaultValue="opt1">
-          <div className="flex items-center gap-2">
-            <RadioGroupItem value="opt1" id="opt1" />
-            <Label htmlFor="opt1" className="text-base font-normal">
-              Opción 1
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <RadioGroupItem value="opt2" id="opt2" />
-            <Label htmlFor="opt2" className="text-base font-normal">
-              Opción 2
-            </Label>
-          </div>
+        {/* El rótulo, la ayuda y el error son del grupo: la pregunta se hace
+            una vez y las opciones son las respuestas. Cada una puede llevar su
+            propia ayuda para lo que cambia de una a otra. */}
+        <RadioGroup
+          label="Forma de envío"
+          defaultValue="opt1"
+          description="El costo se calcula al confirmar el pedido."
+        >
+          <RadioGroupItem value="opt1" label="Estándar" description="Llega en tres días." />
+          <RadioGroupItem value="opt2" label="Exprés" description="Llega mañana." />
+          <RadioGroupItem value="opt3" label="Recoger en tienda" disabled />
+        </RadioGroup>
+
+        <RadioGroup label="Facturación" error="Elige a nombre de quién va la factura." required>
+          <RadioGroupItem value="yo" label="A mi nombre" />
+          <RadioGroupItem value="empresa" label="A nombre de una empresa" invalid />
         </RadioGroup>
       </div>
 
       <div className="space-y-3 rounded-sm border border-border bg-card p-4">
         <Label className="text-sm font-semibold">Casilla de tres estados</Label>
-        <div className="flex items-center gap-2">
-          <Checkbox
-            id="todas"
-            checked={
-              marcadas.length === TEMAS.length
-                ? true
-                : marcadas.length === 0
-                  ? false
-                  : "indeterminate"
-            }
-            onCheckedChange={(v) => setMarcadas(v === true ? [...TEMAS] : [])}
-          />
-          <Label htmlFor="todas" className="text-base">
-            Todas
-          </Label>
-        </div>
-        <div className="space-y-2 pl-6">
+        <Checkbox
+          id="todas"
+          label="Todas"
+          checked={
+            marcadas.length === TEMAS.length
+              ? true
+              : marcadas.length === 0
+                ? false
+                : "indeterminate"
+          }
+          onCheckedChange={(v) => setMarcadas(v === true ? [...TEMAS] : [])}
+        />
+        <div className="space-y-2 ps-7">
           {TEMAS.map((t) => (
-            <div key={t} className="flex items-center gap-2">
-              <Checkbox
-                id={t}
-                checked={marcadas.includes(t)}
-                onCheckedChange={(v) =>
-                  setMarcadas((prev) => (v === true ? [...prev, t] : prev.filter((x) => x !== t)))
-                }
-              />
-              <Label htmlFor={t} className="text-base font-normal">
-                {t}
-              </Label>
-            </div>
+            <Checkbox
+              key={t}
+              id={t}
+              label={t}
+              checked={marcadas.includes(t)}
+              onCheckedChange={(v) =>
+                setMarcadas((prev) => (v === true ? [...prev, t] : prev.filter((x) => x !== t)))
+              }
+            />
           ))}
         </div>
+        <Checkbox
+          label="Recibir novedades"
+          description="Un correo al mes, nada más."
+          error="Hay que aceptar antes de continuar."
+          required
+        />
       </div>
 
       <div className="space-y-4 rounded-sm border border-border bg-card p-4">

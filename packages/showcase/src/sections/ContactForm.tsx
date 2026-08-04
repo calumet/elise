@@ -65,16 +65,16 @@ const ContactForm = () => {
         <FormDescription>Detalla tu solicitud para que podamos ayudarte.</FormDescription>
         {formState.errors.message && <FormMessage>{formState.errors.message.message}</FormMessage>}
       </FormField>
+      {/* La casilla ya trae rótulo y error, así que no le hace falta ni un
+          `FormLabel` al lado ni un `FormMessage` debajo. */}
       <FormField name="agree">
-        <div className="flex items-center gap-2 space-y-0">
-          <Checkbox
-            id="agree"
-            checked={watch("agree")}
-            onCheckedChange={(v) => setValue("agree", v === true, { shouldValidate: true })}
-          />
-          <FormLabel htmlFor="agree">Acepto los términos y políticas.</FormLabel>
-        </div>
-        {formState.errors.agree && <FormMessage>{formState.errors.agree.message}</FormMessage>}
+        <Checkbox
+          id="agree"
+          label="Acepto los términos y políticas."
+          checked={watch("agree")}
+          onCheckedChange={(v) => setValue("agree", v === true, { shouldValidate: true })}
+          error={formState.errors.agree?.message}
+        />
       </FormField>
       {success && <p className="text-sm text-success">{success}</p>}
       <FormSubmit asChild>
