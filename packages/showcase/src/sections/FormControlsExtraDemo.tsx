@@ -40,13 +40,17 @@ const FormControlsExtraDemo = () => {
           description="El aspa aparece en cuanto hay algo escrito."
         />
         <TimePicker
-          label="Hora de recogida"
+          label="Hora del recordatorio"
           value={hora}
           onValueChange={setHora}
+          description="Sin límites: el día entero, de 00:00 a 23:30. Y se puede escribir una hora que no esté en la lista, como 14:07."
+        />
+        <TimePicker
+          label="Hora de recogida"
+          defaultValue="09:30"
           min="08:00"
           max="20:00"
-          step={30}
-          description="Se puede escribir una hora que no esté en la lista, como 14:07."
+          description="La misma pieza acotada con min y max a la franja de atención."
         />
       </BlockStack>
 
