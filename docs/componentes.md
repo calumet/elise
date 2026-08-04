@@ -1,8 +1,12 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 58 componentes, la mayoría construidos sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 78 subrutas, la mayoría construidas sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guía de inicio](guia-inicio.md).
+
+> `@calumet/elise-ui/theme` no es un componente de catálogo sino la raíz que
+> reparte el tema (`ThemeProvider`, `useTheme`, `applyTheme`). Está en
+> [Temas](temas.md).
 
 > Los cambios que rompen compatibilidad entre versiones están en el
 > [CHANGELOG](../CHANGELOG.md).
@@ -34,9 +38,22 @@ system debería evitar.
 | Container               | `@calumet/elise-ui/container` | Ancho máximo + centrado + gutter responsive     |
 | Bleed                   | `@calumet/elise-ui/bleed`     | Rompe el padding del contenedor padre           |
 | Text                    | `@calumet/elise-ui/text`      | Primitiva tipográfica                           |
+| Link                    | `@calumet/elise-ui/link`      | Enlace, con `tone` y `rel` automático           |
+| Code                    | `@calumet/elise-ui/code`      | Un identificador dentro de la frase             |
+| Kbd                     | `@calumet/elise-ui/kbd`       | Una tecla, en relieve                           |
 
-Todas aceptan `as` para elegir la etiqueta HTML, y `className` al final para
-escapar del sistema cuando hace falta.
+Las de layout aceptan `as` para elegir la etiqueta HTML, y todas admiten
+`className` al final para escapar del sistema cuando hace falta.
+
+`Code` y `Kbd` son dos y no uno con variante porque nombrar una tecla y citar un
+valor no son lo mismo: la tecla va en relieve y se lee como algo que se pulsa. Un
+atajo de varias teclas son varios `Kbd`, ya que meter dos en una sola caja dibuja
+una tecla que no existe.
+
+`Link` va subrayado y no solo teñido, porque el color por sí solo no distingue
+nada para quien no lo separa del texto de alrededor, y dentro de un párrafo no
+hay forma de saber dónde acaba lo pulsable. Con `target="_blank"` se pone su
+`rel` solo.
 
 > **Por que los valores son un conjunto cerrado.** Las props no aceptan valores
 > arbitrarios (`padding={4}`, no `padding="17px"`). Además de mantener la
@@ -164,38 +181,99 @@ pequeño sin dejar de ser un `h2` para el lector de pantalla.
 
 ### Formularios
 
-| Componente                                                    | Import                             | Radix / Externo                                                               |
-| ------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| Field                                                         | `@calumet/elise-ui/field`          | —                                                                             |
-| Form, FormField, FormLabel, FormControl, FormMessage, FormRow | `@calumet/elise-ui/form`           | [Form](https://www.radix-ui.com/primitives/docs/components/form)              |
-| Input                                                         | `@calumet/elise-ui/input`          | —                                                                             |
-| Textarea                                                      | `@calumet/elise-ui/textarea`       | —                                                                             |
-| Label                                                         | `@calumet/elise-ui/label`          | [Label](https://www.radix-ui.com/primitives/docs/components/label)            |
-| Checkbox                                                      | `@calumet/elise-ui/checkbox`       | [Checkbox](https://www.radix-ui.com/primitives/docs/components/checkbox)      |
-| RadioGroup, RadioGroupItem                                    | `@calumet/elise-ui/radio-group`    | [RadioGroup](https://www.radix-ui.com/primitives/docs/components/radio-group) |
-| Select, SelectTrigger, SelectValue, SelectContent, SelectItem | `@calumet/elise-ui/select`         | [Select](https://www.radix-ui.com/primitives/docs/components/select)          |
-| Switch                                                        | `@calumet/elise-ui/switch`         | [Switch](https://www.radix-ui.com/primitives/docs/components/switch)          |
-| Slider                                                        | `@calumet/elise-ui/slider`         | [Slider](https://www.radix-ui.com/primitives/docs/components/slider)          |
-| OTPField                                                      | `@calumet/elise-ui/otp-field`      | —                                                                             |
-| PasswordField                                                 | `@calumet/elise-ui/password-field` | —                                                                             |
-| Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
-| MultiCombobox, MultiComboboxField                             | `@calumet/elise-ui/combobox`       | Popover + [cmdk](https://cmdk.paco.me/)                                       |
-| FileUpload, FileUploadList, FileUploadItem                    | `@calumet/elise-ui/file-upload`    | —                                                                             |
-| Stepper, StepperItem, StepperTitle, StepperDescription        | `@calumet/elise-ui/stepper`        | —                                                                             |
+| Componente                                                    | Import                                | Radix / Externo                                                                 |
+| ------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------- |
+| Field                                                         | `@calumet/elise-ui/field`             | —                                                                               |
+| Form, FormField, FormLabel, FormControl, FormMessage, FormRow | `@calumet/elise-ui/form`              | [Form](https://www.radix-ui.com/primitives/docs/components/form)                |
+| Input                                                         | `@calumet/elise-ui/input`             | —                                                                               |
+| Textarea                                                      | `@calumet/elise-ui/textarea`          | —                                                                               |
+| Label                                                         | `@calumet/elise-ui/label`             | [Label](https://www.radix-ui.com/primitives/docs/components/label)              |
+| Checkbox                                                      | `@calumet/elise-ui/checkbox`          | [Checkbox](https://www.radix-ui.com/primitives/docs/components/checkbox)        |
+| RadioGroup, RadioGroupItem                                    | `@calumet/elise-ui/radio-group`       | [RadioGroup](https://www.radix-ui.com/primitives/docs/components/radio-group)   |
+| InlineError                                                   | `@calumet/elise-ui/inline-error`      | —                                                                               |
+| DateField                                                     | `@calumet/elise-ui/date-field`        | [react-day-picker](https://react-day-picker.js.org/)                            |
+| TimePicker                                                    | `@calumet/elise-ui/time-picker`       | —                                                                               |
+| NumberField                                                   | `@calumet/elise-ui/number-field`      | —                                                                               |
+| SearchField                                                   | `@calumet/elise-ui/search-field`      | —                                                                               |
+| TagInput                                                      | `@calumet/elise-ui/tag-input`         | —                                                                               |
+| Rating                                                        | `@calumet/elise-ui/rating`            | —                                                                               |
+| SegmentedControl, SegmentedControlItem                        | `@calumet/elise-ui/segmented-control` | [ToggleGroup](https://www.radix-ui.com/primitives/docs/components/toggle-group) |
+| ColorPicker                                                   | `@calumet/elise-ui/color-picker`      | —                                                                               |
+| Select, SelectTrigger, SelectValue, SelectContent, SelectItem | `@calumet/elise-ui/select`            | [Select](https://www.radix-ui.com/primitives/docs/components/select)            |
+| Switch                                                        | `@calumet/elise-ui/switch`            | [Switch](https://www.radix-ui.com/primitives/docs/components/switch)            |
+| Slider                                                        | `@calumet/elise-ui/slider`            | [Slider](https://www.radix-ui.com/primitives/docs/components/slider)            |
+| OTPField                                                      | `@calumet/elise-ui/otp-field`         | —                                                                               |
+| PasswordField                                                 | `@calumet/elise-ui/password-field`    | —                                                                               |
+| Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
+| MultiCombobox, MultiComboboxField                             | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
+| FileUpload, FileUploadList, FileUploadItem                    | `@calumet/elise-ui/file-upload`       | —                                                                               |
+| Stepper, StepperItem, StepperTitle, StepperDescription        | `@calumet/elise-ui/stepper`           | —                                                                               |
 
 `Checkbox`, `RadioGroupItem` y `Switch` son un `button` con su rol ARIA, no un
-`input`. El rótulo se enlaza con `id` y `htmlFor`, dado que envolverlos en un
-`<label>` no los activa.
+`input`, así que envolverlos en un `<label>` no los activaría. Por eso los tres
+son campos y no controles sueltos: traen su propio rótulo al lado, más ayuda y
+error, con el enlace ya resuelto. `label` es obligatorio, y `labelHidden` lo
+esconde a la vista sin quitarlo del árbol de accesibilidad, para cuando lo que
+rodea al control ya lo explica (una columna de tabla, una barra de herramientas).
 
 ```tsx
-<div className="flex items-center gap-2">
-  <Checkbox id="acepta" />
-  <Label htmlFor="acepta">Acepto los términos</Label>
-</div>
+<Checkbox
+  label="Acepto los términos"
+  description="Puedes revocarlo cuando quieras"
+  error={errores.acepta}
+  required
+/>
 ```
 
 `Checkbox` acepta `checked="indeterminate"` para el caso de una casilla maestra
 con solo parte de sus hijas marcadas.
+
+En los radios el reparto es distinto y va por niveles: el rótulo, la ayuda y el
+error son del **grupo**, porque la pregunta se hace una vez y las opciones son
+las respuestas; un error como «elige una forma de envío» no pertenece a ninguna
+opción. Cada opción sí lleva su propia ayuda, para lo que cambia de una a otra, y
+puede señalarse con `invalid` como la que dispara el error del grupo.
+
+```tsx
+<RadioGroup label="Forma de envío" error={errores.envio} required>
+  <RadioGroupItem value="estandar" label="Estándar" description="Llega en tres días" />
+  <RadioGroupItem value="expres" label="Exprés" description="Llega mañana" />
+</RadioGroup>
+```
+
+`InlineError` es el mensaje de error suelto, el mismo que usan `Field` y los tres
+controles marcables. Lleva icono además de color, ya que el color por sí solo no
+distingue nada para quien no separa el rojo del gris, y debajo de un campo hay
+dos textos pequeños seguidos (la ayuda y el error) que si no solo se
+diferenciarían por eso.
+
+#### Los seis campos compuestos
+
+`NumberField`, `SearchField`, `TagInput`, `Rating`, `TimePicker` y `DateField`
+comparten la misma capa de campo que `Field`: `label`, `labelHidden`,
+`description`, `error` y `required`.
+
+- **`NumberField`.** `min`, `max`, `step`, prefijo y sufijo. Las flechas del
+  teclado suben y bajan.
+- **`SearchField`.** Lupa al principio y aspa al final en cuanto hay algo
+  escrito. El `input` es de tipo `search`, así que Escape lo vacía.
+- **`TagInput`.** Intro o coma cierra una etiqueta; Retroceso con el campo vacío
+  quita la última. Cada etiqueta es un `Chip`.
+- **`Rating`.** Se puntúa con las flechas. Con `readOnly` sale del tabulador.
+- **`TimePicker`.** Campo que se escribe más una lista de horas. En 24 horas y
+  `HH:MM`, el mismo criterio que `DateField` con las fechas: un formato que se
+  ordena solo y no cambia con el idioma del navegador.
+- **`DateField`.** Campo de fecha con calendario emergente. El valor viaja como
+  `YYYY-MM-DD` y no como `Date`, porque una fecha de calendario no tiene hora ni
+  zona, y en cuanto se guarda un `Date` alguien acaba perdiendo un día al cruzar
+  la medianoche. Para el calendario a secas está `Calendar`; para un disparador
+  sin campo, `DatePicker`.
+
+`SegmentedControl` es para unas pocas opciones que se excluyen, siempre con una
+puesta. Se lee como una sola pieza partida y no como botones sueltos, que es lo
+que lo separa de un grupo de alternar: aquí las opciones son las caras de una
+misma pregunta. Nunca se queda sin valor, así que volver a pulsar la activa no la
+apaga.
 
 #### Field
 
@@ -476,8 +554,27 @@ estado con texto para lectores de pantalla.
 | Skeleton                                                                               | `@calumet/elise-ui/skeleton`     | —                                                                               |
 | Alert, AlertTitle, AlertDescription                                                    | `@calumet/elise-ui/alert`        | —                                                                               |
 | Badge                                                                                  | `@calumet/elise-ui/badge`        | —                                                                               |
+| Chip                                                                                   | `@calumet/elise-ui/chip`         | —                                                                               |
 | Spinner                                                                                | `@calumet/elise-ui/spinner`      | —                                                                               |
 | EmptyState, EmptyStateMedia, EmptyStateTitle, EmptyStateDescription, EmptyStateActions | `@calumet/elise-ui/empty-state`  | —                                                                               |
+
+#### Badge vs Chip
+
+Se parecen de lejos y no son lo mismo.
+
+|          | `Badge`                         | `Chip`                   |
+| -------- | ------------------------------- | ------------------------ |
+| qué dice | un estado que el sistema afirma | un dato que alguien puso |
+| color    | `tone` semántico                | `color` sin semántica    |
+| se quita | no                              | con `onRemove`           |
+
+Un badge dice «este pedido está despachado»; un chip dice «filtraste por
+_frontend_». Por eso el chip no lleva tono: teñir de rojo un filtro que el
+usuario escribió no significaría nada. Y por eso su tipografía es la del texto y
+no la de una etiqueta, ya que lo que va dentro es contenido que se lee, no un
+rótulo que se ojea.
+
+No existe un `Tag`. Lo que se suele llamar así es este chip.
 
 #### Alert vs AlertDialog
 
@@ -587,12 +684,13 @@ término buscado en vez de decir solo "Sin resultados".
 
 ### Media
 
-| Componente                                                              | Import                          | Radix / Externo                                                      |
-| ----------------------------------------------------------------------- | ------------------------------- | -------------------------------------------------------------------- |
-| Avatar, AvatarImage, AvatarFallback                                     | `@calumet/elise-ui/avatar`      | [Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) |
-| Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext | `@calumet/elise-ui/carousel`    | [Embla Carousel](https://www.embla-carousel.com/)                    |
-| Calendar                                                                | `@calumet/elise-ui/calendar`    | [react-day-picker](https://react-day-picker.js.org/)                 |
-| DatePicker, DateRangePicker                                             | `@calumet/elise-ui/date-picker` | [react-day-picker](https://react-day-picker.js.org/)                 |
+| Componente                                                              | Import                           | Radix / Externo                                                      |
+| ----------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------- |
+| Avatar, AvatarImage, AvatarFallback                                     | `@calumet/elise-ui/avatar`       | [Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) |
+| AvatarGroup                                                             | `@calumet/elise-ui/avatar-group` | —                                                                    |
+| Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext | `@calumet/elise-ui/carousel`     | [Embla Carousel](https://www.embla-carousel.com/)                    |
+| Calendar                                                                | `@calumet/elise-ui/calendar`     | [react-day-picker](https://react-day-picker.js.org/)                 |
+| DatePicker, DateRangePicker                                             | `@calumet/elise-ui/date-picker`  | [react-day-picker](https://react-day-picker.js.org/)                 |
 
 ### Acciones
 
@@ -610,11 +708,213 @@ término buscado en vez de decir solo "Sin resultados".
 
 ### Datos
 
-| Componente                                                    | Import                    | Radix |
-| ------------------------------------------------------------- | ------------------------- | ----- |
-| Table, TableHeader, TableBody, TableRow, TableHead, TableCell | `@calumet/elise-ui/table` | —     |
+| Componente                                                    | Import                               | Radix |
+| ------------------------------------------------------------- | ------------------------------------ | ----- |
+| Table, TableHeader, TableBody, TableRow, TableHead, TableCell | `@calumet/elise-ui/table`            | —     |
+| Stat, StatLabel, StatValue, StatChange                        | `@calumet/elise-ui/stat`             | —     |
+| DescriptionList, DescriptionListItem                          | `@calumet/elise-ui/description-list` | —     |
+| Timeline, TimelineItem                                        | `@calumet/elise-ui/timeline`         | —     |
+| Tree, TreeItem                                                | `@calumet/elise-ui/tree`             | —     |
+
+`DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
+relación entre el rótulo y su valor está en el marcado y un lector de pantalla
+puede recorrerla por términos. Estrecha se apila y ancha se parte en dos
+columnas; mide su propio hueco y no la ventana, ya que la misma lista puede ir a
+lo ancho de una página o dentro de una tarjeta.
+
+`Tree` lleva el patrón de árbol de ARIA entero, y esa es la razón de que exista
+como componente en vez de resolverse con listas anidadas y un `Collapsible` por
+rama: anuncia el nivel y cuántos hermanos hay, y el teclado se mueve como se
+espera de un árbol (arriba y abajo recorren lo que se ve, derecha abre o entra,
+izquierda cierra o sube al padre). El foco entra una sola vez y desde ahí se mueve
+con las flechas, porque con un `tabIndex` por nodo, tabular por un árbol de
+cincuenta hojas serían cincuenta paradas.
 
 > Para tablas con funcionalidad avanzada (filtros, paginación, ordenamiento, exportación), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).
+
+#### Table
+
+`Table` no es solo el marcado de una tabla: arma la tarjeta entera, con su
+contorno, su encabezado fijo y su pie de paginación. `DataTable` de
+`@calumet/elise-tables` se apoya en ella y no monta la suya.
+
+| Prop            | Tipo                          | Default  | Descripción                               |
+| --------------- | ----------------------------- | -------- | ----------------------------------------- |
+| `variant`       | `"auto" \| "table" \| "list"` | `"auto"` | Cómo se dibuja cuando el ancho aprieta    |
+| `listSlot`      | por columna                   | —        | Dónde cae esa columna en el modo lista    |
+| `format`        | por columna                   | —        | Alineación y formato de la celda          |
+| `paginate`      | `boolean`                     | `false`  | Enciende la franja del pie                |
+| `loading`       | `boolean`                     | `false`  | Atenúa las filas mientras llega la página |
+| `clickDelegate` | en `TableRow`                 | —        | Toda la fila lleva a un sitio             |
+| `filters`       | `ReactNode`                   | —        | Ranura sobre la tabla                     |
+
+**Los tres modos.** `auto` es tabla mientras quepa y lista cuando no, midiendo su
+propio hueco y no la ventana, porque la misma tabla puede ir a lo ancho de una
+página o dentro de una tarjeta estrecha. El corte está en 490px. En modo lista
+cada fila deja de ser una rejilla de celdas y pasa a ser un bloque, y `listSlot`
+dice qué papel juega cada columna ahí.
+
+**Paginación.** La franja del pie es un `Pagination` con `variant="table"`: se
+reparte en tres bandas para que los pasos queden centrados aunque los extremos
+midan distinto. Lo que va a los lados (el «filas por página», el recuento) entra
+por `paginationEnd`.
+
+**`loading`.** Atenúa las filas en vez de taparlas con un panel: la tabla que ya
+estaba sigue leyéndose mientras llega la siguiente página, que es lo que hace
+falta cuando se cambia de página y no cuando se carga por primera vez.
+
+#### ColorPicker
+
+Área de saturación y brillo, barra de tono, barra de alfa opcional y campo hex.
+
+| Prop            | Tipo                      | Default | Descripción                                 |
+| --------------- | ------------------------- | ------- | ------------------------------------------- |
+| `value`         | `string`                  | —       | Hex de 6 o de 8                             |
+| `defaultValue`  | `string`                  | —       | Sin controlar                               |
+| `onValueChange` | `(value: string) => void` | —       | En cada paso del arrastre                   |
+| `onValueCommit` | `(value: string) => void` | —       | Al soltar                                   |
+| `alpha`         | `boolean`                 | `false` | Añade la barra de opacidad y emite hex de 8 |
+| `name`          | `string`                  | —       | Para enviarlo en un formulario              |
+
+Lee HSL, HSLA, RGB, RGBA y hex de 3, 4, 6 y 8, que es lo que se copia de una hoja
+de estilos o de una guía de marca sin tener que convertirlo antes. Siempre emite
+hex, de 6 o de 8 con `alpha`, para que quien lo reciba no tenga que aceptar cinco
+formatos.
+
+Por dentro el modelo es HSV y no HSL, porque el área de dos ejes es literalmente
+saturación por brillo. El tono se guarda aparte del color y no se deduce del hex:
+en negro puro y en blanco puro el tono no existe, así que arrastrar hasta una
+esquina y volver lo perdería y el selector saltaría al rojo solo.
+
+La aritmética vive en `lib/color.ts`, separada del componente para poder
+comprobarla contra valores conocidos.
+
+## Marco de aplicación
+
+La pieza que contiene a las demás: cabecera arriba, navegación al lado y el área
+donde entra cada pantalla. No es un componente suelto sino un chasis con estado y
+partes componibles, y por eso vive en su propia categoría.
+
+| Componente                                             | Import                        | Radix |
+| ------------------------------------------------------ | ----------------------------- | ----- |
+| AppShell, AppShellHeader, AppShellNav, AppShellMain, … | `@calumet/elise-ui/app-shell` | —     |
+
+```tsx
+import {
+  AppShell,
+  AppShellHeader,
+  AppShellHeaderBrand,
+  AppShellHeaderSearch,
+  AppShellHeaderActions,
+  AppShellHeaderAction,
+  AppShellUserMenu,
+  AppShellNav,
+  AppShellNavToggle,
+  AppShellNavGroup,
+  AppShellNavItem,
+  AppShellNavSubList,
+  AppShellNavSubItem,
+  AppShellNavFooter,
+  AppShellMain,
+} from "@calumet/elise-ui/app-shell";
+
+<AppShell>
+  <AppShellHeader>
+    <AppShellNavToggle />
+    <AppShellHeaderBrand>
+      <Text size="lg" weight="bold">Calumet</Text>
+    </AppShellHeaderBrand>
+    <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={abrirBuscador}>
+      Buscar
+    </AppShellHeaderSearch>
+    <AppShellHeaderActions>
+      <AppShellHeaderAction label="Notificaciones" icon={<Campana />} onClick={…} />
+      <AppShellUserMenu name="Juan D." detail="Calumet S.A.S." initials="JD">
+        <DropdownMenuItem>Perfil</DropdownMenuItem>
+      </AppShellUserMenu>
+    </AppShellHeaderActions>
+  </AppShellHeader>
+
+  <AppShellNav>
+    <ul className="list-none p-0">
+      <AppShellNavItem href="/" icon={<Casa />} count={12} active>Inicio</AppShellNavItem>
+      <AppShellNavGroup defaultOpen>
+        <AppShellNavItem href="/clientes" icon={<Gente />} childActive>Clientes</AppShellNavItem>
+        <AppShellNavSubList>
+          <AppShellNavSubItem href="/segmentos" active>Segmentos</AppShellNavSubItem>
+        </AppShellNavSubList>
+      </AppShellNavGroup>
+    </ul>
+    <AppShellNavFooter>
+      <AppShellNavItem href="/ajustes" icon={<Rueda />}>Ajustes</AppShellNavItem>
+    </AppShellNavFooter>
+  </AppShellNav>
+
+  <AppShellMain>{children}</AppShellMain>
+</AppShell>;
+```
+
+### Las partes
+
+| Parte                   | Qué es                                                    |
+| ----------------------- | --------------------------------------------------------- |
+| `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho |
+| `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola           |
+| `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                        |
+| `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                |
+| `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta      |
+| `AppShellHeaderAction`  | Una acción de solo icono                                  |
+| `AppShellUserMenu`      | La cuenta, sobre `DropdownMenu`                           |
+| `AppShellNavToggle`     | Abre y cierra el cajón. Solo donde la barra está plegada  |
+| `AppShellNav`           | La navegación lateral                                     |
+| `AppShellNavSection`    | Grupo de entradas con su rótulo                           |
+| `AppShellNavGroup`      | Una entrada con hijas, plegable                           |
+| `AppShellNavItem`       | Una entrada                                               |
+| `AppShellNavAction`     | Acción que aparece al apuntar una entrada                 |
+| `AppShellNavSubList`    | La lista de hijas, con su guía                            |
+| `AppShellNavSubItem`    | Una hija                                                  |
+| `AppShellNavFooter`     | Zona fija al pie de la navegación                         |
+| `AppShellMain`          | El área de contenido                                      |
+
+### Cómo se comporta
+
+**El cajón cuelga de la fila de contenido y no de la ventana**, de modo que la
+cabecera sigue a la vista y alcanzable mientras la navegación está abierta. Por
+eso el cajón no es un `Sheet`, que es de posición fija.
+
+**Un solo `<nav>`.** Lo que cambia entre escritorio y cajón es posicionamiento, y
+para eso basta el breakpoint. Montarlo dos veces duplicaría cualquier `id` y
+dejaría dos landmarks de navegación donde solo hay una. Lleva nombre accesible,
+que sin él un lector de pantalla los lista todos como «navegación» sin poder
+distinguirlos.
+
+**`AppShellMain` solo se vuelve inerte donde el cajón existe.** Por encima del
+breakpoint no hay velo que lo tape, así que dejarlo inerte lo haría inalcanzable
+a plena vista.
+
+**Las entradas con hijas van en `AppShellNavGroup`**, que es el dueño del `<li>`.
+Dentro de un `<ul>` solo pueden ir `<li>`, así que la lista de hijas tiene que
+colgar del `<li>` del padre y no ser su hermana. El grupo también es quien puede
+plegar: le pone `aria-expanded` y `aria-controls` a la fila del padre, y la lista
+plegada va `inert`, porque recortarla no basta y se llegaría a enlaces invisibles.
+
+**La guía de continuidad** baja desde el icono del padre y dobla en codo sobre la
+hija activa; por debajo de ella ya no sigue. Un borde izquierdo plano diría «estas
+van juntas», y el codo además dice cuál se está viendo. Se refleja en RTL.
+
+### Cabecera: las tres bandas
+
+Las dos bandas de los lados valen `1fr`, de modo que miden lo mismo y el buscador
+queda centrado en la ventana aunque el nombre crezca.
+
+> **No les pongas `min-w-0`.** Anula el mínimo automático de su pista, y entonces
+> el centro, que es de tamaño fijo, se reparte antes que las `fr` y se lleva el
+> ancho entero: las bandas quedan en cero y su contenido se sale por encima del
+> buscador. Quien encoge es el texto de dentro, que ya se corta.
+
+Por debajo del breakpoint deja de haber tres bandas y pasa a ser una fila con un
+solo hueco, con el buscador como lo que crece. Centrar el buscador solo tiene
+sentido cuando sobra ancho; en estrecho lo que se nota es el ritmo.
 
 ## Ejemplo: Button
 
