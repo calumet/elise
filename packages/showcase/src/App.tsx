@@ -65,6 +65,7 @@ const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"
 const SectionDemo = React.lazy(() => import("./sections/SectionDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
 const ToastDemo = React.lazy(() => import("./sections/ToastDemo"));
+const VaciosDemo = React.lazy(() => import("./sections/VaciosDemo"));
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -297,6 +298,12 @@ const App = () => (
           <SectionCard title="CheckboxGroup, ButtonGroup y List">
             <LazySection>
               <GruposDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Los dos vacios de un listado">
+            <LazySection>
+              <VaciosDemo />
             </LazySection>
           </SectionCard>
 

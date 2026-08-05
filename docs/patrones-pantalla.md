@@ -85,10 +85,9 @@ preservar. Con filtros puestos que no devuelven nada, el aviso va dentro del
 marco y debajo de la barra de filtros, ya que la salida es quitar el filtro y
 para eso tiene que seguir a la vista.
 
-El segundo caso todavía no se puede escribir con el catálogo. `Table` no expone
-una ranura para ocupar el sitio de las filas conservando la barra, así que hoy
-se resuelve montando la tabla sin filas y poniendo el aviso debajo, con el
-filtro a la vista pero fuera del marco.
+El segundo caso va en la ranura `empty` de `Table`, que ocupa el sitio de las
+filas y deja la barra en pie. Con esa ranura puesta la franja de paginar
+desaparece, ya que sin filas no hay páginas.
 
 **La tabla decide entre tabla y lista.** `Table` con `variant="auto"` pasa a
 lista por debajo de 490px, donde tres columnas ya no caben sin partir el texto
