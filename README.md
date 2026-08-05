@@ -124,6 +124,7 @@ Consulta la documentación completa en [`./docs`](docs/):
 - [Arquitectura](docs/arquitectura.md)
 - [Temas](docs/temas.md)
 - [Componentes](docs/componentes.md)
+- [Bloques](docs/bloques.md)
 - [Utilidades](docs/utilidades.md)
 - [Internacionalización (i18n)](docs/i18n.md)
 - [Linter y formato](docs/linter.md)

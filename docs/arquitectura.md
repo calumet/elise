@@ -111,6 +111,9 @@ pantalla a otra, para que cada aplicación no la vuelva a inventar.
 con estado y partes componibles, no una pantalla. Lo que se muda cuando haga
 falta son los patrones que lo usan.
 
+`Page`, `TablePage`, `Wizard`, `SettingsSection`, `AuthPage` y `ErrorPage`. Ver
+[Bloques](bloques.md).
+
 - **Peer dependencies**: React 19, `@calumet/elise-ui`, `@calumet/elise-icons`
 
 ### @calumet/elise-i18n
