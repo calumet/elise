@@ -52,6 +52,7 @@ const FeedbackDemo = React.lazy(() => import("./sections/FeedbackDemo"));
 const FieldDemo = React.lazy(() => import("./sections/FieldDemo"));
 const AppShellDemo = React.lazy(() => import("./sections/AppShellDemo"));
 const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
+const GruposDemo = React.lazy(() => import("./sections/GruposDemo"));
 const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
 const LoginCard = React.lazy(() => import("./sections/LoginCard"));
 const ImageDemo = React.lazy(() => import("./sections/ImageDemo"));
@@ -290,6 +291,12 @@ const App = () => (
           <SectionCard title="Section: el grupo con su rotulo">
             <LazySection>
               <SectionDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="CheckboxGroup, ButtonGroup y List">
+            <LazySection>
+              <GruposDemo />
             </LazySection>
           </SectionCard>
 
