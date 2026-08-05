@@ -251,6 +251,13 @@ y por eso iba aparte.
 - [ ] Varios temas de marca sobre `applyTheme`
 - [ ] Sitio de documentación con playground
 - [ ] CLI con `add` y `eject`
+- [x] Reglas de interfaz y patrones, escritas en el repositorio y no por enlace
+      (ver [Reglas de interfaz](reglas-ui.md),
+      [Patrones de pantalla](patrones-pantalla.md) y
+      [Patrones de bloque](patrones-bloque.md)). Salen de los catorce patterns
+      del admin de Shopify y de las 59 etiquetas `s-*`, quedándose con lo que
+      le sirve a Calumet
+- [ ] Un ejemplo ejecutable por patrón en la vitrina
 - [ ] Documentación legible por agentes (`llms.txt`, JSDoc con pistas de
       composición)
 
