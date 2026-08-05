@@ -204,16 +204,15 @@ mismo divergen a la primera corrección que solo toca a una.
 
 ## Fase 3: `packages/blocks`
 
-La tercera capa. El paquete está reservado en `arquitectura.md` y no existe en
-disco.
+La tercera capa.
 
 `AppShell` vive por ahora en `elise-ui`, no aquí: es un componente con estado y
 partes componibles, no una pantalla armada. Cuando exista el paquete, los
 patrones que lo usan son los que se mudan.
 
-- [ ] Crear el paquete
-- [ ] PageHeader, página de tabla, wizard, ajustes, autenticación, estados de
-      error
+- [x] Crear el paquete
+- [x] `Page` y `PageHeader`, la página de tabla, el asistente, los ajustes, la
+      autenticación y los estados de error (ver [Bloques](bloques.md))
 
 ### Lo que le faltaba al `AppShell`
 

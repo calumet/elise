@@ -3,6 +3,32 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.1.0
+
+La tercera capa, que estaba reservada en `arquitectura.md` y no existía en
+disco. Pantallas armadas sobre el catálogo; no trae componentes nuevos, arma
+los que ya hay en la disposición que se repite de una pantalla a otra. Ver
+[Bloques](docs/bloques.md).
+
+- **`Page` y `PageHeader`.** Cabecera con vuelta atrás, título, estado al lado
+  del título, subtítulo y las dos clases de acción, más una columna de apoyo de
+  320px que por debajo de 1024px se apila. Los anchos salen de `Container`.
+- **`TablePage`.** La pantalla de listado, con los dos estados vacíos: no hay
+  nada todavía y el filtro no devuelve nada.
+- **`Wizard`.** Asistente por pasos, con el indicador, el paso puesto y la
+  navegación al pie.
+- **`SettingsSection` y `SettingsGroup`.** Grupos de ajustes con la explicación
+  en su propia columna.
+- **`AuthPage`.** Entrar, registrarse y recuperar la contraseña.
+- **`ErrorPage`.** 404, 403, 500 y las zonas que no cargan.
+
+## `@calumet/elise-ui` 0.5.0
+
+- **`Table` gana `empty`.** Lo que se ve cuando no hay ni una fila, en el lugar
+  de la tabla y dejando la barra de filtros en pie, que es de donde se sale de
+  un filtro que no devuelve nada. Con el cartel puesto no se pinta la franja de
+  paginar.
+
 ## `@calumet/elise-ui` 0.4.0
 
 Sube la minor y no la patch porque hay cinco cambios que rompen: por debajo de
