@@ -1,15 +1,21 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { SUPERFICIE } from "@/lib/superficie";
 
-function Card({ className, ...props }: React.ComponentProps<"div">) {
+/* La `ref` se ensancha a `HTMLElement` porque con `as` la tarjeta puede salir
+   como cualquier etiqueta, y atarla al `<div>` le mentiría a quien la use como
+   `<section>`. */
+export type CardProps = Omit<React.ComponentProps<"div">, "ref"> & {
+  as?: React.ElementType;
+  ref?: React.Ref<HTMLElement>;
+};
+
+function Card({ className, as: Comp = "div", ...props }: CardProps) {
   return (
-    <div
+    <Comp
       data-slot="card"
-      className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border border-border py-6 shadow-sm",
-        className,
-      )}
+      className={cn(SUPERFICIE, "flex flex-col gap-6 py-6 text-card-foreground", className)}
       {...props}
     />
   );
@@ -28,9 +34,15 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+/* `as` para cuando el título de la tarjeta es además el encabezado de una
+   región, que ahí tiene que ser un `<h2>` y no un `<div>`. */
+function CardTitle({
+  className,
+  as: Comp = "div",
+  ...props
+}: React.ComponentProps<"div"> & { as?: React.ElementType }) {
   return (
-    <div
+    <Comp
       data-slot="card-title"
       className={cn("leading-none font-semibold", className)}
       {...props}

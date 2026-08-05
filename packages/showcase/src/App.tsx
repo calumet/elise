@@ -61,6 +61,7 @@ const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
 const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
+const SectionDemo = React.lazy(() => import("./sections/SectionDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
 const ToastDemo = React.lazy(() => import("./sections/ToastDemo"));
 
@@ -283,6 +284,12 @@ const App = () => (
           <SectionCard title="Image y Thumbnail">
             <LazySection>
               <ImageDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Section: el grupo con su rotulo">
+            <LazySection>
+              <SectionDemo />
             </LazySection>
           </SectionCard>
 

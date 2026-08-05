@@ -340,6 +340,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./section": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./select": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
