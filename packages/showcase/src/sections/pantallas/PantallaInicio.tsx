@@ -53,6 +53,15 @@ const PLANTILLAS = [
   { id: "digital", nombre: "Producto digital", color: "#b45309" },
 ];
 
+const INTEGRACIONES = [
+  {
+    nombre: "Facturación",
+    detalle: "Emití facturas al confirmar cada pedido.",
+    color: "#4f46e5",
+  },
+  { nombre: "Envíos", detalle: "Cotizá y despachá sin salir del panel.", color: "#0f766e" },
+];
+
 const NOVEDADES = [
   {
     fecha: "21 de enero de 2026",
@@ -111,7 +120,7 @@ const PantallaInicio = () => {
             <ButtonGroup>
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon-sm"
                 aria-label={abierta ? "Plegar la guía" : "Desplegar la guía"}
                 onClick={() => setAbierta((a) => !a)}
               >
@@ -123,7 +132,7 @@ const PantallaInicio = () => {
               </Button>
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon-sm"
                 aria-label="Descartar la guía"
                 onClick={() => setVisible({ ...visible, guia: false })}
               >
@@ -152,7 +161,7 @@ const PantallaInicio = () => {
                     />
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon-sm"
                       aria-label={`Ver el detalle de «${paso.titulo}»`}
                       onClick={() => setAbierto((a) => (a === paso.id ? null : paso.id))}
                     >
@@ -252,7 +261,7 @@ const PantallaInicio = () => {
             </div>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon-sm"
               aria-label="Descartar el anuncio"
               onClick={() => setVisible({ ...visible, anuncio: false })}
             >
@@ -320,31 +329,34 @@ const PantallaInicio = () => {
 
       <Section heading="Integraciones recomendadas">
         <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
-          {[
-            { nombre: "Facturación", detalle: "Emití facturas al confirmar cada pedido." },
-            { nombre: "Envíos", detalle: "Cotizá y despachá sin salir del panel." },
-          ].map((app) => (
-            <Clickable
+          {INTEGRACIONES.map((app) => (
+            /* La descarga es un botón aparte y no va dentro del `Clickable`:
+               un `<button>` dentro de un `<a>` es marcado inválido, y el foco
+               por teclado no sabe a cuál de los dos entra. */
+            <div
               key={app.nombre}
-              href="#pantallas"
-              border
-              radius="lg"
-              padding={4}
-              accessibilityLabel={`Instalar ${app.nombre}`}
-              className="flex items-start gap-4"
+              className="flex items-start gap-3 rounded-lg border border-border p-3"
             >
-              <Thumbnail size="sm" src={muestra("", "#334155", 40, 40)} alt="" />
-              <div className="flex min-w-0 flex-col gap-0.5">
+              <Thumbnail size="sm" src={muestra("", app.color, 40, 40)} alt="" />
+              <Clickable
+                href="#pantallas"
+                accessibilityLabel={`Ver ${app.nombre}`}
+                radius="md"
+                padding={1}
+                className="-m-1 flex min-w-0 flex-1 flex-col gap-0.5"
+              >
                 <Text size="sm" weight="semibold">
                   {app.nombre}
                 </Text>
-                <Text size="xs" tone="muted">
+                <Text size="sm" tone="muted">
                   Gratis
                 </Text>
                 <Text size="sm">{app.detalle}</Text>
-              </div>
-              <Download className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-            </Clickable>
+              </Clickable>
+              <Button size="icon-sm" variant="outline" aria-label={`Instalar ${app.nombre}`}>
+                <Download className="size-4" aria-hidden />
+              </Button>
+            </div>
           ))}
         </div>
       </Section>

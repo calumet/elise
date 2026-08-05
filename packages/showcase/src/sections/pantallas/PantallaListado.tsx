@@ -73,6 +73,10 @@ const PantallaListado = () => {
           Productos
         </Text>
         <ButtonGroup>
+          {/* El primero es del demo, para poder ver el catálogo vacío. */}
+          <Button size="sm" variant="ghost" onClick={() => setVacio((v) => !v)}>
+            {vacio ? "Devolver los productos" : "Vaciar el catálogo"}
+          </Button>
           <Button size="sm" variant="outline">
             Exportar
           </Button>
@@ -82,16 +86,6 @@ const PantallaListado = () => {
           <Button size="sm">Crear producto</Button>
         </ButtonGroup>
       </header>
-
-      <div className="flex flex-wrap items-center gap-2">
-        <Button size="sm" variant="ghost" onClick={() => setVacio((v) => !v)}>
-          {vacio ? "Devolver los productos" : "Vaciar el catálogo"}
-        </Button>
-        <Text size="sm" tone="muted">
-          Vacío, el cartel ocupa el lugar de la tabla. Con un filtro que no encuentra nada, va
-          dentro del marco y la barra se queda en pie.
-        </Text>
-      </div>
 
       {vacio ? (
         <Section accessibilityLabel="Sin productos">

@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "solid" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg" | "icon";
+  size?: "sm" | "md" | "lg" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
   asChild?: boolean;
@@ -93,13 +93,16 @@ export const buttonVariants = ({
 
 /* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
    chrome de escritorio denso: el resto del catálogo escribe a 14px y un botón
-   de 28px al lado de ese texto se lee como un control secundario. `icon` iguala
-   a `md` para que una barra de acciones mezcle ambos sin desnivelarse. */
+   de 28px al lado de ese texto se lee como un control secundario.
+   Los dos cuadrados igualan el alto de `md` y de `sm`, para que una barra que
+   mezcle rótulos e iconos no se desnivele. Un icono solo dentro de un botón con
+   relleno de texto queda descentrado y la caja se lee corrida. */
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   sm: "h-8 px-3 text-sm",
   md: "h-9 px-4 text-base",
   lg: "h-10 px-5 text-base",
   icon: "size-9",
+  "icon-sm": "size-8",
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

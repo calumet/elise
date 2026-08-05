@@ -132,7 +132,11 @@ const PantallaFicha = () => (
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end">
-                        <Button size="sm" variant="ghost" aria-label={`Quitar ${variante.nombre}`}>
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          aria-label={`Quitar ${variante.nombre}`}
+                        >
                           <X className="size-4" aria-hidden />
                         </Button>
                       </div>

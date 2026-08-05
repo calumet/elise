@@ -109,55 +109,70 @@ const PantallaAjustes = () => (
       </div>
     </Section>
 
-    <Section heading="Preferencias" padding="none">
-      {SUBPANTALLAS.map((destino, n) => (
-        <div key={destino.titulo}>
-          {n > 0 ? <Separator /> : null}
-          <Clickable
-            href={destino.href}
-            padding={3}
-            accessibilityLabel={`Abrir ${destino.titulo}`}
-            className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3"
-          >
-            <destino.icono className="size-5 text-muted-foreground" aria-hidden />
-            <div className="flex min-w-0 flex-col">
-              <Text size="sm" weight="semibold">
-                {destino.titulo}
-              </Text>
-              <Text size="sm" tone="muted">
-                {destino.detalle}
-              </Text>
-            </div>
-            <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
-          </Clickable>
-        </div>
-      ))}
+    {/* Las filas van en una caja con borde dentro de la sección, no pegadas a
+        su filo: la sección conserva su relleno y el filete entre filas queda
+        por dentro del borde. */}
+    <Section heading="Preferencias">
+      <div className="overflow-hidden rounded-lg border border-border">
+        {SUBPANTALLAS.map((destino, n) => (
+          <div key={destino.titulo}>
+            {n > 0 ? (
+              <div className="px-3">
+                <Separator />
+              </div>
+            ) : null}
+            <Clickable
+              href={destino.href}
+              padding={3}
+              accessibilityLabel={`Abrir ${destino.titulo}`}
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3"
+            >
+              <destino.icono className="size-5 text-muted-foreground" aria-hidden />
+              <div className="flex min-w-0 flex-col">
+                <Text size="sm" weight="semibold">
+                  {destino.titulo}
+                </Text>
+                <Text size="sm" tone="muted">
+                  {destino.detalle}
+                </Text>
+              </div>
+              <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
+            </Clickable>
+          </div>
+        ))}
+      </div>
     </Section>
 
     {/* Lo que destruye va al final y en su propia sección. */}
-    <Section heading="Herramientas" padding="none">
-      {HERRAMIENTAS.map((herramienta, n) => (
-        <div key={herramienta.titulo}>
-          {n > 0 ? <Separator /> : null}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3">
-            <div className="flex min-w-60 flex-1 flex-col">
-              <Text size="sm" weight="semibold">
-                {herramienta.titulo}
-              </Text>
-              <Text size="sm" tone="muted">
-                {herramienta.detalle}
-              </Text>
+    <Section heading="Herramientas">
+      <div className="overflow-hidden rounded-lg border border-border">
+        {HERRAMIENTAS.map((herramienta, n) => (
+          <div key={herramienta.titulo}>
+            {n > 0 ? (
+              <div className="px-3">
+                <Separator />
+              </div>
+            ) : null}
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3">
+              <div className="flex min-w-0 flex-1 basis-60 flex-col">
+                <Text size="sm" weight="semibold">
+                  {herramienta.titulo}
+                </Text>
+                <Text size="sm" tone="muted">
+                  {herramienta.detalle}
+                </Text>
+              </div>
+              <Button
+                size="sm"
+                variant={herramienta.destructiva ? "solid" : "outline"}
+                tone={herramienta.destructiva ? "danger" : undefined}
+              >
+                {herramienta.accion}
+              </Button>
             </div>
-            <Button
-              size="sm"
-              variant={herramienta.destructiva ? "solid" : "outline"}
-              tone={herramienta.destructiva ? "danger" : undefined}
-            >
-              {herramienta.accion}
-            </Button>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </Section>
   </Container>
 );

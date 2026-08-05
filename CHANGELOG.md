@@ -3,6 +3,42 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.5.0
+
+### Rompe
+
+- **La tarjeta pasa a 16px de relleno**, con 16px entre su cabecera y su cuerpo.
+  Antes eran 24 en los tres sitios. Alcanza a `Card`, `Section` y a todo lo que
+  se apoye en ellos. Una pantalla que compensara el relleno viejo con márgenes
+  propios queda apretada.
+
+### Agrega
+
+- **`Clickable`.** Una caja entera que se pulsa, con lo mismo que acepta `Box`.
+  Con `href` sale un `<a>` y sin él un `<button>`.
+- **`Image` y `Thumbnail`.** La imagen exige `alt`, difiere la carga y reserva
+  el hueco con `aspectRatio`. La miniatura es cuadrada en 24, 40, 60 y 80.
+- **`Section`.** Un grupo con rótulo, como `<section>` con nombre accesible.
+  Es el envoltorio opinado sobre `Card`.
+- **`CheckboxGroup`.** El rótulo, la ayuda y el error de un grupo de casillas.
+- **`ButtonGroup`**, con `attached` para juntar los botones en una pieza.
+- **`List` y `ListItem`**, con marcador y sangría propios.
+- **`Table` gana `empty`**, lo que ocupa el sitio de las filas cuando no hay
+  ninguna. La barra de filtros se queda en pie y la franja de paginar no se
+  pinta.
+- **`Button` gana `size="icon-sm"`**, el cuadrado de 32px que iguala el alto de
+  `sm`.
+- **`Card` y `CardTitle` ganan `as`**, para que una tarjeta pueda salir como
+  `<section>` con su `<h2>`.
+
+### Arregla
+
+- **La tarjeta y la tabla tenían contornos distintos.** La tabla usaba el bisel
+  de cuatro capas y la tarjeta un borde plano con `shadow-sm`. Las dos comparten
+  ahora `SUPERFICIE`, que se muda a `lib`.
+- **El cuerpo del `Alert` partía las frases.** Era una columna flex, así que un
+  texto con un enlace dentro salía en un renglón por trozo.
+
 ## `@calumet/elise-ui` 0.4.0
 
 Sube la minor y no la patch porque hay cinco cambios que rompen: por debajo de
