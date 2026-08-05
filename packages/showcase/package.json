@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@calumet/elise-alerts": "workspace:*",
-    "@calumet/elise-blocks": "workspace:*",
     "@calumet/elise-forms": "workspace:*",
     "@calumet/elise-i18n": "workspace:*",
     "@calumet/elise-icons": "workspace:*",

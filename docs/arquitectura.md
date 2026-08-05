@@ -22,8 +22,8 @@ elise/
 │   ├── i18n/         @calumet/elise-i18n      Internacionalizacion (Intl)
 │   ├── icons/        @calumet/elise-icons     Iconos (Lucide)
 │   ├── linter/       @calumet/elise-linter    Config ESLint + Prettier
-│   ├── blocks/       @calumet/elise-blocks    Pantallas armadas
-│   └── showcase/     showcase                 App demo
+│   ├── showcase/     showcase                 App demo
+│   └── blocks/       (futuro)                 Bloques prefabricados
 ├── package.json                                Scripts globales
 ├── pnpm-workspace.yaml                         Config workspaces
 ├── tsconfig.base.json                          TypeScript base compartido
@@ -48,9 +48,6 @@ elise/
 @calumet/elise-alerts  ──── @calumet/elise-ui ──────┤
                        └── @calumet/elise-icons     │
                                                     │
-@calumet/elise-blocks  ──── @calumet/elise-ui ──────┤
-                       └── @calumet/elise-icons     │
-                                                    │
 @calumet/elise-i18n    (independiente; solo React)  │
                                                     │
 showcase ──────── @calumet/elise-ui ────────────────┤
@@ -58,7 +55,6 @@ showcase ──────── @calumet/elise-ui ─────────�
               ├── @calumet/elise-tables             │
               ├── @calumet/elise-toasts             │
               ├── @calumet/elise-alerts             │
-              ├── @calumet/elise-blocks             │
               ├── @calumet/elise-i18n               │
               └── @calumet/elise-icons ─────────────┘
 ```
@@ -98,21 +94,6 @@ Sistema de notificaciones tipo toast basado en event bus, con componente `Toaste
 ### @calumet/elise-alerts
 
 Sistema de alertas modales basado en event bus, con componente `AlertHost` y API funcional `openAlert()` / `closeAlert()`.
-
-- **Peer dependencies**: React 19, `@calumet/elise-ui`, `@calumet/elise-icons`
-
-### @calumet/elise-blocks
-
-La tercera capa: pantallas armadas sobre el catálogo. Un bloque no agrega
-componentes nuevos, arma los que ya hay en la disposición que se repite de una
-pantalla a otra, para que cada aplicación no la vuelva a inventar.
-
-`AppShell` no vive acá aunque sea el marco de una aplicación: es un componente
-con estado y partes componibles, no una pantalla. Lo que se muda cuando haga
-falta son los patrones que lo usan.
-
-`Page`, `TablePage`, `Wizard`, `SettingsSection`, `AuthPage` y `ErrorPage`. Ver
-[Bloques](bloques.md).
 
 - **Peer dependencies**: React 19, `@calumet/elise-ui`, `@calumet/elise-icons`
 
