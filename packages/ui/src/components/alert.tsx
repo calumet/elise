@@ -113,7 +113,11 @@ function Alert({ className, tone = "info", icon, onDismiss, children, ...props }
           {cierre}
         </div>
         {cuerpo.length > 0 ? (
-          <div data-slot="alert-body" className="flex min-w-0 flex-col gap-1 px-4 py-3">
+          /* El cuerpo va en flujo normal y separa sus bloques con margen, no
+             como columna flex. En flex, una frase con un enlace dentro se parte
+             en un renglón por trozo, que es lo que hace cualquier aviso que
+             remate en «mirá la documentación». */
+          <div data-slot="alert-body" className="min-w-0 px-4 py-3 [&>*+*]:mt-1">
             {cuerpo}
           </div>
         ) : null}

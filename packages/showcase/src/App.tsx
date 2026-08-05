@@ -59,6 +59,10 @@ const ImageDemo = React.lazy(() => import("./sections/ImageDemo"));
 const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
 const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
 const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
+const PantallaInicio = React.lazy(() => import("./sections/pantallas/PantallaInicio"));
+const PantallaListado = React.lazy(() => import("./sections/pantallas/PantallaListado"));
+const PantallaFicha = React.lazy(() => import("./sections/pantallas/PantallaFicha"));
+const PantallaAjustes = React.lazy(() => import("./sections/pantallas/PantallaAjustes"));
 const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
@@ -304,6 +308,30 @@ const App = () => (
           <SectionCard title="Los dos vacios de un listado">
             <LazySection>
               <VaciosDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de inicio">
+            <LazySection>
+              <PantallaInicio />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de listado">
+            <LazySection>
+              <PantallaListado />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de ficha">
+            <LazySection>
+              <PantallaFicha />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de ajustes">
+            <LazySection>
+              <PantallaAjustes />
             </LazySection>
           </SectionCard>
 
