@@ -57,6 +57,7 @@ const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
 const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
 const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
 const PageDemo = React.lazy(() => import("./sections/PageDemo"));
+const TablePageDemo = React.lazy(() => import("./sections/TablePageDemo"));
 const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
@@ -276,6 +277,12 @@ const App = () => (
           <SectionCard title="Page: la pantalla armada">
             <LazySection>
               <PageDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="TablePage: la pantalla de listado">
+            <LazySection>
+              <TablePageDemo />
             </LazySection>
           </SectionCard>
 
