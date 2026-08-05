@@ -43,6 +43,7 @@ export * from "./file-upload";
 export * from "./form";
 export * from "./grid";
 export * from "./hover-card";
+export * from "./image";
 export * from "./input";
 export * from "./label";
 export * from "./menubar";

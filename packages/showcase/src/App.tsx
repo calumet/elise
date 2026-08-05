@@ -54,6 +54,7 @@ const AppShellDemo = React.lazy(() => import("./sections/AppShellDemo"));
 const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
 const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
 const LoginCard = React.lazy(() => import("./sections/LoginCard"));
+const ImageDemo = React.lazy(() => import("./sections/ImageDemo"));
 const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
 const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
 const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
@@ -276,6 +277,12 @@ const App = () => (
           <SectionCard title="Clickable: la caja entera que se pulsa">
             <LazySection>
               <ClickableDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Image y Thumbnail">
+            <LazySection>
+              <ImageDemo />
             </LazySection>
           </SectionCard>
 
