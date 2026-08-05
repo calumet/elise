@@ -38,8 +38,16 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
     const isControlled = valueProp !== undefined;
     const value = (isControlled ? valueProp : internalValue)?.slice(0, length) ?? "";
 
+    /* El foco se mueve en el mismo tick en que se pide el cambio de estado, así
+       que `onFocus` corre antes del siguiente render y el `value` de su clausura
+       ya está vencido. Todo handler que reaccione a un foco programático tiene
+       que leer el valor de este ref. */
+    const valueRef = React.useRef(value);
+    valueRef.current = value;
+
     const setValue = (next: string) => {
       const normalized = next.slice(0, length);
+      valueRef.current = normalized;
       if (!isControlled) {
         setInternalValue(normalized);
       }
@@ -72,7 +80,7 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
     // Redirige el foco a la primera casilla vacía y selecciona el contenido,
     // de modo que escribir sobre una casilla llena la sobrescriba.
     const handleFocus = (index: number) => (event: React.FocusEvent<HTMLInputElement>) => {
-      const firstEmpty = Math.min(value.length, length - 1);
+      const firstEmpty = Math.min(valueRef.current.length, length - 1);
       if (index > firstEmpty) {
         // Diferido: re-enfocar dentro del propio evento focus es revertido
         // por el navegador al completar la operación de foco original.
@@ -99,10 +107,11 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
 
     return (
       <div
+        data-slot="otp-field"
         ref={ref}
         role="group"
         aria-label={groupLabel}
-        className={cn("flex items-center gap-2", className)}
+        className={cn("flex flex-wrap items-center gap-2", className)}
         {...props}
       >
         {Array.from({ length }).map((_, index) => (
@@ -121,7 +130,7 @@ export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
             onFocus={handleFocus(index)}
             onKeyDown={handleKeyDown(index)}
             className={cn(
-              "flex h-11 w-11 items-center justify-center rounded-md border border-border bg-background text-center text-lg font-semibold text-foreground outline-none transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-11 w-11 items-center justify-center rounded-md border border-border bg-background text-center text-lg font-semibold text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
               inputClassName,
             )}
           />

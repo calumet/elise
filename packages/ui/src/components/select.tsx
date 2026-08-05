@@ -2,6 +2,8 @@ import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
+import { CAMPO_INVALIDO } from "./input";
+
 import { cn } from "@/lib/cn";
 
 export const Select = SelectPrimitive.Root;
@@ -13,9 +15,11 @@ export const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
+    data-slot="select-trigger"
     ref={ref}
     className={cn(
-      "flex h-10 w-full items-center justify-between rounded-sm border border-border bg-background px-3 py-2 text-base text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground",
+      "flex h-9 w-full items-center justify-between rounded-md border border-input hover:border-border-strong bg-background px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground",
+      CAMPO_INVALIDO,
       className,
     )}
     {...props}
@@ -34,16 +38,28 @@ export const SelectContent = React.forwardRef<
 >(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
+      data-slot="select-content"
       ref={ref}
       position={position}
       className={cn(
-        "z-50 min-w-32 max-h-(--radix-select-content-available-height) overflow-hidden rounded-sm border border-border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+        "z-popover min-w-32 max-h-(--radix-select-content-available-height) overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
         position === "popper" && "translate-y-1",
         className,
       )}
       {...props}
     >
-      <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
+      {/* Radix esconde la barra del visor, con su propia regla para
+          `[data-radix-select-viewport]`, porque da por hecho que en su lugar se
+          usan sus botones de subir y bajar. Sin ellos una lista larga se
+          desplazaba sin que nada lo indicara. Se devuelve la del sistema, que
+          es la misma que la de la página y la de cualquier otra lista.
+
+          Va en `style` y no en una clase porque la regla de Radix no está en
+          ninguna capa y las capas pierden contra lo que no lo está: una
+          utilidad de Tailwind no la gana. */}
+      <SelectPrimitive.Viewport className="p-1" style={{ scrollbarWidth: "thin" }}>
+        {children}
+      </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
@@ -54,6 +70,7 @@ export const SelectLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
+    data-slot="select-label"
     ref={ref}
     className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)}
     {...props}
@@ -66,9 +83,10 @@ export const SelectItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
+    data-slot="select-item"
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base outline-none transition data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-foreground",
+      "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
       className,
     )}
     {...props}
@@ -95,6 +113,7 @@ export const SelectSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
+    data-slot="select-separator"
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border", className)}
     {...props}

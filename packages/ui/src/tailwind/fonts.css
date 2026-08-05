@@ -1,0 +1,19 @@
+/*
+ * Tipografias de Elise, autoalojadas.
+ *
+ * Importalo *antes* de `elise.css`. Es un archivo aparte a propósito: si tu app
+ * ya carga Geist por su cuenta (por ejemplo con `geist/font` en Next.js), no lo
+ * importes y evitas descargar las fuentes dos veces. Los tokens `--font-*` de
+ * `elise.css` resuelven igual, porque listan tanto el nombre que registra
+ * Fontsource ("Geist Variable") como el nombre plano ("Geist").
+ *
+ * Son fuentes variables: un solo archivo por familia cubre todo el rango de
+ * pesos, en lugar de una peticion por peso.
+ *
+ * Sin este import, Elise cae en la fuente del sistema (`ui-sans-serif`) y se ve
+ * distinto en cada sistema operativo.
+ */
+
+@import "@fontsource-variable/geist/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+@import "@fontsource-variable/source-serif-4/index.css";

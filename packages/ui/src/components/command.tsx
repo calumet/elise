@@ -11,7 +11,10 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden bg-popover text-popover-foreground",
+        /* Con `rounded-[inherit]` el fondo sigue el radio del contenedor que lo
+           envuelve. Sin eso pinta un rectángulo recto que desborda las esquinas
+           redondeadas de un Popover o un Dialog. */
+        "flex h-full w-full flex-col overflow-hidden rounded-[inherit] bg-popover text-popover-foreground",
         className,
       )}
       {...props}
@@ -48,20 +51,27 @@ function CommandDialog({
   );
 }
 
-function CommandInput({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Input>) {
+export type CommandInputProps = React.ComponentProps<typeof CommandPrimitive.Input> & {
+  /** Clases del envoltorio. `className` va al `input`, no al contenedor. */
+  wrapperClassName?: string;
+
+  /** Sustituye el icono de búsqueda. `null` lo quita. */
+  icon?: React.ReactNode;
+};
+
+function CommandInput({ className, wrapperClassName, icon, ...props }: CommandInputProps) {
   return (
     <div
       data-slot="command-input-wrapper"
-      className="flex h-11 items-center gap-2 border-b border-border px-3"
+      className={cn("flex h-11 items-center gap-2 border-b border-border px-3", wrapperClassName)}
     >
-      <Search className="size-4 shrink-0 text-muted-foreground" />
+      {icon === null
+        ? null
+        : (icon ?? <Search className="size-4 shrink-0 text-muted-foreground" />)}
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          "placeholder:text-muted-foreground flex h-11 w-full bg-transparent py-3 text-base outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          "placeholder:text-muted-foreground flex h-full w-full bg-transparent text-base outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         {...props}
@@ -80,11 +90,14 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
   );
 }
 
-function CommandEmpty({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
+function CommandEmpty({
+  className,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Empty>) {
   return (
     <CommandPrimitive.Empty
       data-slot="command-empty"
-      className="py-6 text-center text-base text-muted-foreground"
+      className={cn("py-6 text-center text-base text-muted-foreground", className)}
       {...props}
     />
   );
@@ -124,7 +137,7 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3! py-2 text-base outline-hidden data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-muted data-[selected=true]:text-foreground [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3! py-1.5 text-base outline-hidden data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-muted data-[selected=true]:text-foreground [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}

@@ -6,8 +6,58 @@
 
 @theme {
   /* Escala de espaciado global (debe vivir en @theme, no en :root,
-     para que Tailwind la conozca en build) */
-  --spacing: 0.22rem;
+     para que Tailwind la conozca en build). 0.25rem mantiene la escala
+     en píxeles enteros: h-9 = 36px, size-4 = 16px. */
+  --spacing: 0.25rem;
+
+  /* Escala tipográfica propia. Cada tamaño empaqueta su interlineado y su
+     tracking, que se aprieta progresivamente al crecer el tamaño por corrección
+     óptica. El chrome de la UI vive en --text-sm / --text-base. */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-2xs--line-height: 1rem;
+  --text-2xs--letter-spacing: 0.01em;
+
+  --text-xs: 0.75rem; /* 12px */
+  --text-xs--line-height: 1rem;
+  --text-xs--letter-spacing: 0.005em;
+
+  --text-sm: 0.8125rem; /* 13px */
+  --text-sm--line-height: 1.25rem;
+  --text-sm--letter-spacing: -0.006em;
+
+  --text-base: 0.875rem; /* 14px */
+  --text-base--line-height: 1.25rem;
+  --text-base--letter-spacing: -0.01em;
+
+  --text-lg: 1rem; /* 16px */
+  --text-lg--line-height: 1.5rem;
+  --text-lg--letter-spacing: -0.014em;
+
+  --text-xl: 1.25rem; /* 20px */
+  --text-xl--line-height: 1.75rem;
+  --text-xl--letter-spacing: -0.018em;
+
+  --text-2xl: 1.5rem; /* 24px */
+  --text-2xl--line-height: 2rem;
+  --text-2xl--letter-spacing: -0.022em;
+
+  --text-3xl: 1.875rem; /* 30px */
+  --text-3xl--line-height: 2.25rem;
+  --text-3xl--letter-spacing: -0.026em;
+
+  /* Pesos desplazados 50 puntos por encima de los redondos. A 12–14px, que es
+     donde vive casi todo el chrome, 400 se lee lavado y 600 se lee duro; el
+     medio punto corrige el peso óptico sin cambiar de grado.
+     Solo existe con fuente variable: con una estática el navegador redondea y
+     se pierde la corrección. Geist Variable cubre el eje entero. */
+  --font-weight-normal: 450;
+  --font-weight-medium: 550;
+  --font-weight-semibold: 650;
+
+  /* Curvas de salida propias, porque la de Tailwind por defecto es demasiado
+     suave para transiciones de UI cortas. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Animación de salida por swipe de los toasts (Radix Toast) */
   --animate-swipe-out: swipe-out 150ms ease-out;
@@ -20,119 +70,399 @@
       transform: translateX(calc(100% + 1rem));
     }
   }
+
+  /* Apertura y cierre del Accordion. La altura la publica el primitivo en
+     `--radix-accordion-content-height` una vez medido el contenido, porque
+     `height: auto` no es animable. */
+  --animate-accordion-down: accordion-down 200ms var(--ease-out);
+  --animate-accordion-up: accordion-up 200ms var(--ease-out);
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  /* Apertura y cierre del Collapsible. Mismo mecanismo que el Accordion: la
+     altura medida la publica el primitivo, porque `height: auto` no es
+     animable. */
+  --animate-collapsible-down: collapsible-down 200ms var(--ease-out);
+  --animate-collapsible-up: collapsible-up 200ms var(--ease-out);
+
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes collapsible-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  /* Progress sin valor conocido. La barra mide un tercio del carril y lo
+     recorre entera, de lado a lado. */
+  --animate-progress-indeterminate: progress-indeterminate 1.4s var(--ease-in-out) infinite;
+
+  @keyframes progress-indeterminate {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.32 0 0);
+  /* El fondo de página se separa de las tarjetas. Con los dos en blanco puro,
+     una Card solo se distingue por su borde de 1px. */
+  --background: oklch(0.984 0.002 265);
+  --foreground: oklch(0.21 0.012 265);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.32 0 0);
+  --card-foreground: oklch(0.21 0.012 265);
+  /* Superficie invertida: lo que en el tema claro es casi negro y en el oscuro
+     casi blanco. Se define intercambiando fondo y texto, así que se voltea sola
+     al cambiar de tema y no hace falta declararla dos veces. La usan los avisos
+     que aparecen encima de todo, como los toasts: invertirlos es lo que los
+     separa de las tarjetas de la pantalla en vez de sumarles una más. */
+  --inverse: var(--foreground);
+  --inverse-foreground: var(--background);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.32 0 0);
+  --popover-foreground: oklch(0.21 0.012 265);
   /* primary/destructive/success oscurecidos para cumplir WCAG AA (≥4.5:1)
      con su texto blanco; warning usa texto oscuro por la misma razón */
-  --primary: oklch(0.55 0.19 259.76);
+  --primary: oklch(0.55 0.19 262);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.45 0.03 257.68);
-  --muted: oklch(0.98 0 0);
-  --muted-foreground: oklch(0.55 0.02 264.41);
-  --accent: oklch(0.95 0.03 233.56);
-  --accent-foreground: oklch(0.38 0.14 265.59);
+  /* Superficie de trabajo: el lienzo sobre el que se apoyan las tarjetas. Cae
+     entre la barra de navegación (0.94) y la tarjeta (1.0), y esa es toda su
+     razón de ser: tres planos en orden. Antes estaba en 0.968, tan cerca del
+     blanco que el marco de aplicación se leía como una sola superficie plana. */
+  --secondary: oklch(0.958 0.002 265);
+  --secondary-foreground: oklch(0.37 0.02 265);
+  /* Superficie de «lo que no es contenido»: encabezado de tabla, fila apuntada,
+     botón apuntado. Los tres comparten un solo valor a propósito: son el mismo
+     gesto, así que separarlos solo introduciría escalones que nadie sabría
+     justificar. Estaba en 0.965, cinco niveles más oscuro, y con el bisel de la
+     tarjeta encima el contorno se leía más pesado al costado del encabezado que
+     al del cuerpo. */
+  --muted: oklch(0.976 0.004 265);
+  /* El techo AA lo marca --secondary (0.539), que es el fondo más oscuro donde
+     se lee este color; sobre --muted queda margen de sobra. */
+  --muted-foreground: oklch(0.525 0.016 265);
+  /* Relleno terciario: un gris plano, sin borde ni bisel, para controles que
+     acompañan a otra cosa en vez de pedir la acción por su cuenta, como los
+     botones de paginar al pie de una tabla. Los tres pasos son cortos y
+     regulares (235, 212, 204 en sRGB) porque el control ya se distingue por
+     estar donde está; el estado solo tiene que confirmarse, no anunciarse. */
+  --fill-tertiary: oklch(0.94 0.004 265);
+  --fill-tertiary-hover: oklch(0.87 0.006 265);
+  --fill-tertiary-active: oklch(0.845 0.007 265);
+  /* Carril: el tramo sin llenar de un control que muestra un estado o un
+     recorrido, como el interruptor apagado o lo que le falta a un deslizador.
+     No es un fondo tenue sino parte del dibujo del control, así que necesita
+     3:1 contra la superficie: por debajo de eso el interruptor apagado se
+     queda en un pulgar flotando sin nada alrededor. Este valor es el más claro
+     que llega (3.12:1 sobre la tarjeta blanca). */
+  --track: oklch(0.66 0.008 265);
+  --accent: oklch(0.955 0.025 250);
+  --accent-foreground: oklch(0.38 0.14 262);
   --destructive: oklch(0.577 0.225 27);
-  --border: oklch(0.93 0.01 261.82);
-  --input: oklch(0.93 0.01 261.82);
-  --ring: oklch(0.55 0.19 259.76);
+  --destructive-foreground: oklch(1 0 0);
+  /* border = divisores; border-strong = contorno de controles; input = campos.
+     Son tres valores distintos porque un campo necesita más peso que un
+     divisor para leerse como editable.
+     border-subtle es el cuarto y va por debajo: separa cosas de la misma
+     familia, como las filas de una tabla, donde la línea solo tiene que dejar
+     contar, no dividir. Con el mismo tono que el resto, una tabla de veinte
+     filas se convierte en una reja. */
+  --border-subtle: oklch(0.94 0.004 265);
+  --border: oklch(0.922 0.005 265);
+  --border-strong: oklch(0.865 0.008 265);
+  --input: oklch(0.878 0.007 265);
+  --ring: oklch(0.55 0.19 262);
   --chart-1: oklch(0.62 0.19 259.76);
   --chart-2: oklch(0.55 0.22 262.96);
   --chart-3: oklch(0.49 0.22 264.43);
   --chart-4: oklch(0.42 0.18 265.55);
   --chart-5: oklch(0.38 0.14 265.59);
-  --sidebar: oklch(0.98 0 0);
-  --sidebar-foreground: oklch(0.14 0 0);
-  --sidebar-primary: oklch(0.2 0 0);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.2 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.71 0 0);
-  --success: oklch(0.52 0.15 145);
+  /* La barra es más oscura que el lienzo y la entrada elegida es más clara que
+     la barra, no al revés. Es lo que separa una navegación de una columna de
+     enlaces: el riel se lee como chasis y lo elegido como una pastilla que se
+     levanta de él. */
+  --sidebar: oklch(0.94 0.003 265);
+  --sidebar-foreground: oklch(0.21 0.012 265);
+  --sidebar-primary: oklch(0.55 0.19 262);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-hover: oklch(0.958 0.002 265);
+  --sidebar-accent: oklch(0.985 0.001 265);
+  --sidebar-accent-foreground: oklch(0.21 0.012 265);
+  --sidebar-border: oklch(0.894 0.003 265);
+  /* Guía de continuidad de la navegación. Va entre el borde y el texto tenue:
+     tiene que leerse como trazo sin competir con la etiqueta. */
+  --sidebar-guide: oklch(0.773 0 0);
+  /* El codo que se asoma al apuntar una entrada. Contrasta menos que la guía
+     firme, que es lo que lo hace leer como anticipo y no como estado. */
+  --sidebar-guide-hover: oklch(0.845 0 0);
+  --sidebar-ring: oklch(0.55 0.19 262);
+  --success: oklch(0.52 0.15 152);
   --success-foreground: oklch(1 0 0);
   --warning: oklch(0.75 0.15 75);
   --warning-foreground: oklch(0.25 0 0);
-  --destructive-foreground: oklch(1 0 0);
+  --info: oklch(0.55 0.15 240);
+  --info-foreground: oklch(1 0 0);
 
+  /* Estados de los rellenos sólidos. No se derivan con alfa (`bg-primary/90`),
+     que compone el color contra el fondo y mueve el relleno *hacia* la página,
+     con lo que el hover baja el contraste. Estos tokens se alejan del fondo:
+     en claro oscurecen y en oscuro aclaran. */
+  --primary-hover: oklch(0.5 0.19 262);
+  --primary-active: oklch(0.455 0.18 262);
+  --destructive-hover: oklch(0.53 0.22 27);
+  --destructive-active: oklch(0.485 0.205 27);
+  --success-hover: oklch(0.475 0.145 152);
+  --success-active: oklch(0.43 0.135 152);
+  --warning-hover: oklch(0.71 0.15 75);
+  --warning-active: oklch(0.67 0.145 75);
+  --info-hover: oklch(0.5 0.15 240);
+  --info-active: oklch(0.455 0.145 240);
+
+  /* Superficies sutiles de estado. Reemplazan los `bg-success/10` y
+     `bg-warning/20`, ya que el alfa sobre fondo oscuro se enloda y un token
+     sólido no. */
+  --success-subtle: oklch(0.962 0.032 152);
+  --success-subtle-foreground: oklch(0.4 0.11 152);
+  --warning-subtle: oklch(0.965 0.045 85);
+  --warning-subtle-foreground: oklch(0.45 0.1 70);
+  --destructive-subtle: oklch(0.962 0.03 25);
+  --destructive-subtle-foreground: oklch(0.45 0.17 27);
+  --info-subtle: oklch(0.962 0.028 240);
+  --info-subtle-foreground: oklch(0.42 0.12 245);
+
+  /* Cada familia lista primero el nombre que registra Fontsource ("… Variable")
+     y después el nombre plano, para que resuelva tanto con
+     `@calumet/elise-ui/tailwind/fonts.css` como si la app carga la fuente por
+     su cuenta. Un nombre que nadie registra no falla de forma visible: la
+     familia cae en la siguiente del stack y todo termina en la del sistema. */
   --font-sans:
-    "Geist", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: Source Serif 4, serif;
-  --font-mono: JetBrains Mono, monospace;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
+  --font-mono:
+    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
 
-  --radius: 0.375rem;
+  /* Radio base = radio de controles (8px). Las escalas derivadas se separan
+     ±2px, de modo que el escalón más chico queda en 6px y no en 2px. */
+  --radius: 0.5rem;
 
-  --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
-  --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
-  --shadow-sm: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
-  --shadow: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
-  --shadow-md: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 2px 4px -1px oklch(0 0 0 / 0.1);
-  --shadow-lg: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 4px 6px -1px oklch(0 0 0 / 0.1);
-  --shadow-xl: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 8px 10px -1px oklch(0 0 0 / 0.1);
-  --shadow-2xl: 0 1px 3px 0px oklch(0 0 0 / 0.25);
+  --duration-fast: 140ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* Orden de apilado, de abajo arriba. Existe para poder responder «qué queda
+     encima de qué» leyendo una sola lista, en vez de ir componente por
+     componente a ver quién escribió `z-50`. Escrito así, además, el navegador
+     lo cuenta: en devtools se lee `z-index: var(--z-modal)` y no un 50 suelto.
+
+     Los saltos son de diez para dejar sitio entre capas sin renumerar.
+
+     - sticky:  pegado dentro del flujo de la página, como la cabecera del marco
+                de aplicación o una barra lateral fija.
+     - overlay: el velo que atenúa lo de detrás de un modal.
+     - modal:   el modal en sí, por encima de su propio velo.
+     - popover: menús, selects y popovers. Van por encima del modal a propósito,
+                porque se abren desde dentro de uno y si no quedarían tapados.
+     - tooltip: por encima del popover que lo dispara.
+     - toast:   por encima de todo. Un aviso que llega mientras hay un modal
+                abierto tiene que verse igual.
+
+     Esto no cubre el apilado local, del tipo «levántame un pelo por encima de
+     mi vecino para que no me recorte el anillo de foco». Eso sigue siendo un
+     número suelto donde hace falta, porque no es una capa del sistema y
+     ponerle nombre solo lo haría parecer una. */
+  --z-sticky: 10;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-tooltip: 70;
+  --z-toast: 80;
+
+  /* Elevación monótona: blur, spread negativo y opacidad crecen juntos, de modo
+     que cada escalón se lee más alto que el anterior. */
+  --shadow-2xs: 0 1px 1px -0.5px oklch(0.21 0.02 265 / 0.04);
+  --shadow-xs: 0 1px 2px -1px oklch(0.21 0.02 265 / 0.06);
+  --shadow-sm:
+    0 1px 2px -1px oklch(0.21 0.02 265 / 0.1), 0 2px 6px -2px oklch(0.21 0.02 265 / 0.09);
+  --shadow: 0 2px 4px -2px oklch(0.21 0.02 265 / 0.1), 0 4px 8px -2px oklch(0.21 0.02 265 / 0.1);
+  --shadow-md:
+    0 2px 4px -2px oklch(0.21 0.02 265 / 0.1), 0 6px 12px -3px oklch(0.21 0.02 265 / 0.12);
+  --shadow-lg:
+    0 4px 8px -3px oklch(0.21 0.02 265 / 0.12), 0 14px 28px -8px oklch(0.21 0.02 265 / 0.16);
+  --shadow-xl:
+    0 8px 16px -4px oklch(0.21 0.02 265 / 0.14), 0 24px 44px -12px oklch(0.21 0.02 265 / 0.2);
+  --shadow-2xl:
+    0 12px 24px -6px oklch(0.21 0.02 265 / 0.16), 0 36px 64px -16px oklch(0.21 0.02 265 / 0.26);
+  /* Bisel para rellenos sólidos: borde inferior oscuro + highlight superior.
+     Hace que un botón se lea como objeto y no como un rectángulo. El estado
+     presionado invierte el bisel hacia adentro, en vez de solo oscurecer el
+     fondo. */
+  --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16);
+  --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
+  /* Contorno de superficie apoyada: en vez de un borde plano del mismo tono en
+     los cuatro lados, un bisel donde el filo de abajo pesa más que el de
+     arriba, y una sombra de 1px por fuera. Es lo que hace que
+     una tarjeta se lea puesta sobre el lienzo y no recortada en él; con un borde
+     uniforme el plano no tiene arriba ni abajo.
+     Van en dos tokens porque se pintan en sitios distintos. Una sombra interior
+     queda por debajo del fondo de cualquier descendiente, así que sobre una
+     tabla el encabezado, que sí tiene fondo, se comía su tramo de bisel y el
+     contorno salía distinto arriba que abajo. Por eso el bisel se dibuja encima
+     del contenido, en una capa aparte. */
+  --shadow-surface: 0 1px 0 0 oklch(0.21 0.02 265 / 0.07);
+  --shadow-surface-bevel:
+    inset 1px 0 0 0 oklch(0 0 0 / 0.13), inset -1px 0 0 0 oklch(0 0 0 / 0.13),
+    inset 0 -1px 0 0 oklch(0 0 0 / 0.17), inset 0 1px 0 0 oklch(0.845 0 0 / 0.5);
 }
 
 .dark,
 [data-theme="dark"] {
-  --background: oklch(0.2 0 0);
-  --foreground: oklch(0.92 0 0);
-  --card: oklch(0.27 0 0);
-  --card-foreground: oklch(0.92 0 0);
-  --popover: oklch(0.27 0 0);
-  --popover-foreground: oklch(0.92 0 0);
-  --primary: oklch(0.55 0.19 259.76);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.27 0 0);
-  --secondary-foreground: oklch(0.92 0 0);
-  --muted: oklch(0.27 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.38 0.14 265.59);
-  --accent-foreground: oklch(0.88 0.06 254.63);
+  --background: oklch(0.172 0.008 265);
+  --foreground: oklch(0.962 0.003 265);
+  --card: oklch(0.216 0.011 265);
+  --card-foreground: oklch(0.962 0.003 265);
+  /* popover se eleva por encima de card, no al mismo nivel */
+  --popover: oklch(0.235 0.012 265);
+  --popover-foreground: oklch(0.962 0.003 265);
+  /* primary sube a 0.655 porque el 0.55 del modo claro se apaga sobre el fondo
+     oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
+  --primary: oklch(0.655 0.17 262);
+  --primary-foreground: oklch(0.17 0.03 262);
+  /* El mismo orden que en claro, invertido: barra (0.196) por debajo del lienzo
+     y este por debajo de la tarjeta (0.216). En oscuro los tres pasos son más
+     cortos, porque a esta luminosidad la vista separa antes. */
+  --secondary: oklch(0.206 0.011 265);
+  --secondary-foreground: oklch(0.93 0.005 265);
+  --muted: oklch(0.262 0.012 265);
+  --muted-foreground: oklch(0.685 0.014 265);
+  /* Los tres salen de trasladar aquí los saltos del tema claro: 0.07, 0.145 y
+     0.175 por encima de la superficie. Quedan entre --muted y --border-strong,
+     que es donde tienen que caer. */
+  --fill-tertiary: oklch(0.29 0.013 265);
+  --fill-tertiary-hover: oklch(0.355 0.015 265);
+  --fill-tertiary-active: oklch(0.39 0.016 265);
+  /* El carril aclara en vez de oscurecer, por la misma razón que el bisel:
+     contra una tarjeta ya oscura no queda hacia dónde bajar. 3.61:1 sobre
+     ella. */
+  --track: oklch(0.55 0.014 265);
+  --accent: oklch(0.33 0.09 262);
+  --accent-foreground: oklch(0.89 0.06 255);
+  /* Excepcion a la regla de aclarar en oscuro. Como destructive lleva texto
+     blanco, aclararlo lo baja de 4.5:1. Se queda en 0.577 y sus estados
+     oscurecen, que igual lo separa del fondo (0.172) y de paso sube el
+     contraste del texto. */
   --destructive: oklch(0.577 0.225 27);
-  --border: oklch(0.37 0 0);
-  --input: oklch(0.37 0 0);
-  --ring: oklch(0.55 0.19 259.76);
+  --destructive-foreground: oklch(1 0 0);
+  --border-subtle: oklch(0.26 0.012 265);
+  --border: oklch(0.302 0.013 265);
+  --border-strong: oklch(0.38 0.016 265);
+  --input: oklch(0.36 0.015 265);
+  --ring: oklch(0.655 0.17 262);
   --chart-1: oklch(0.71 0.14 254.69);
   --chart-2: oklch(0.62 0.19 259.76);
   --chart-3: oklch(0.55 0.22 262.96);
   --chart-4: oklch(0.49 0.22 264.43);
   --chart-5: oklch(0.42 0.18 265.55);
-  --sidebar: oklch(0.21 0.01 285.56);
-  --sidebar-foreground: oklch(0.99 0 0);
-  --sidebar-primary: oklch(0.49 0.24 264.41);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.27 0.01 285.81);
-  --sidebar-accent-foreground: oklch(0.99 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.55 0.02 285.76);
-  --success: oklch(0.52 0.15 145);
-  --success-foreground: oklch(1 0 0);
-  --warning: oklch(0.75 0.15 75);
-  --warning-foreground: oklch(0.25 0 0);
-  --destructive-foreground: oklch(1 0 0);
+  --sidebar: oklch(0.196 0.01 265);
+  --sidebar-foreground: oklch(0.945 0.004 265);
+  --sidebar-primary: oklch(0.655 0.17 262);
+  --sidebar-primary-foreground: oklch(0.17 0.03 262);
+  --sidebar-hover: oklch(0.235 0.012 265);
+  --sidebar-accent: oklch(0.268 0.013 265);
+  --sidebar-accent-foreground: oklch(0.945 0.004 265);
+  --sidebar-border: oklch(0.302 0.013 265);
+  --sidebar-guide: oklch(0.44 0.014 265);
+  /* En oscuro el anticipo también contrasta menos, y eso lo acerca al fondo en
+     vez de alejarlo: por eso baja de luminosidad en lugar de subir. */
+  --sidebar-guide-hover: oklch(0.355 0.013 265);
+  --sidebar-ring: oklch(0.655 0.17 262);
+  --success: oklch(0.68 0.15 152);
+  --success-foreground: oklch(0.16 0.03 152);
+  --warning: oklch(0.8 0.14 75);
+  --warning-foreground: oklch(0.22 0.04 75);
+  --info: oklch(0.68 0.14 240);
+  --info-foreground: oklch(0.16 0.03 240);
 
-  --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
-  --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
-  --shadow-sm: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
-  --shadow: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
-  --shadow-md: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 2px 4px -1px oklch(0 0 0 / 0.1);
-  --shadow-lg: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 4px 6px -1px oklch(0 0 0 / 0.1);
-  --shadow-xl: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 8px 10px -1px oklch(0 0 0 / 0.1);
-  --shadow-2xl: 0 1px 3px 0px oklch(0 0 0 / 0.25);
+  /* En oscuro el hover aclara, ya que alejarse del fondo sube el contraste. */
+  --primary-hover: oklch(0.705 0.165 262);
+  --primary-active: oklch(0.75 0.15 262);
+  --destructive-hover: oklch(0.53 0.22 27);
+  --destructive-active: oklch(0.485 0.205 27);
+  --success-hover: oklch(0.73 0.145 152);
+  --success-active: oklch(0.775 0.135 152);
+  --warning-hover: oklch(0.845 0.135 75);
+  --warning-active: oklch(0.885 0.12 75);
+  --info-hover: oklch(0.73 0.135 240);
+  --info-active: oklch(0.775 0.125 240);
+
+  --success-subtle: oklch(0.28 0.05 152);
+  --success-subtle-foreground: oklch(0.86 0.12 152);
+  --warning-subtle: oklch(0.3 0.05 75);
+  --warning-subtle-foreground: oklch(0.88 0.11 82);
+  --destructive-subtle: oklch(0.285 0.06 27);
+  --destructive-subtle-foreground: oklch(0.85 0.11 27);
+  --info-subtle: oklch(0.285 0.055 240);
+  --info-subtle-foreground: oklch(0.85 0.1 240);
+
+  /* El modo oscuro lleva sombras propias. Negro al 10% sobre un fondo
+     oklch(0.17) es invisible. Además suman un highlight inset en el borde
+     superior. */
+  --shadow-2xs: 0 1px 1px -0.5px oklch(0 0 0 / 0.3);
+  --shadow-xs: 0 1px 2px -1px oklch(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 2px -1px oklch(0 0 0 / 0.5), 0 2px 6px -2px oklch(0 0 0 / 0.45);
+  --shadow: 0 2px 4px -2px oklch(0 0 0 / 0.5), 0 4px 10px -3px oklch(0 0 0 / 0.5);
+  --shadow-md: 0 2px 4px -2px oklch(0 0 0 / 0.5), 0 6px 14px -3px oklch(0 0 0 / 0.55);
+  --shadow-lg: 0 4px 10px -3px oklch(0 0 0 / 0.55), 0 14px 30px -8px oklch(0 0 0 / 0.6);
+  --shadow-xl: 0 8px 18px -4px oklch(0 0 0 / 0.6), 0 24px 48px -12px oklch(0 0 0 / 0.65);
+  --shadow-2xl: 0 12px 26px -6px oklch(0 0 0 / 0.65), 0 36px 68px -16px oklch(0 0 0 / 0.72);
+  --shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 0.16), inset 0 -1px 0 oklch(0 0 0 / 0.3);
+  --shadow-bevel-inset: inset 0 2px 4px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(0 0 0 / 0.25);
+  /* En oscuro los cuatro filos aclaran, el de arriba el doble que los otros
+     tres. No es que la luz cambie de sitio: sobre un lienzo casi negro un filo
+     oscuro no dibuja nada, y la tarjeta se quedaría sin contorno por abajo. Un
+     mismo gris al 8% y al 16% basta; el borde ya no depende de por dónde caiga
+     la luz sino de que haya con qué separar la superficie del fondo. */
+  --shadow-surface: 0 1px 0 0 oklch(0 0 0 / 0.4);
+  --shadow-surface-bevel:
+    inset 1px 0 0 0 oklch(0.845 0 0 / 0.08), inset -1px 0 0 0 oklch(0.845 0 0 / 0.08),
+    inset 0 -1px 0 0 oklch(0.845 0 0 / 0.08), inset 0 1px 0 0 oklch(0.845 0 0 / 0.16);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -143,10 +473,16 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-fill-tertiary: var(--fill-tertiary);
+  --color-fill-tertiary-hover: var(--fill-tertiary-hover);
+  --color-fill-tertiary-active: var(--fill-tertiary-active);
+  --color-track: var(--track);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-border-subtle: var(--border-subtle);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
@@ -158,23 +494,48 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-hover: var(--sidebar-hover);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-guide: var(--sidebar-guide);
+  --color-sidebar-guide-hover: var(--sidebar-guide-hover);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-destructive-hover: var(--destructive-hover);
+  --color-destructive-active: var(--destructive-active);
+  --color-success-hover: var(--success-hover);
+  --color-success-active: var(--success-active);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-active: var(--warning-active);
+  --color-info-hover: var(--info-hover);
+  --color-info-active: var(--info-active);
+
+  --color-success-subtle: var(--success-subtle);
+  --color-success-subtle-foreground: var(--success-subtle-foreground);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-warning-subtle-foreground: var(--warning-subtle-foreground);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-destructive-subtle-foreground: var(--destructive-subtle-foreground);
+  --color-info-subtle: var(--info-subtle);
+  --color-info-subtle-foreground: var(--info-subtle-foreground);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 
   --shadow-2xs: var(--shadow-2xs);
@@ -185,6 +546,57 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+  --shadow-bevel: var(--shadow-bevel);
+  --shadow-surface: var(--shadow-surface);
+  --shadow-surface-bevel: var(--shadow-surface-bevel);
+  --shadow-bevel-inset: var(--shadow-bevel-inset);
+}
+
+/* Tailwind no tiene espacio de nombres de tema para z-index, así que las capas
+   se exponen como utilidades propias. Escritas así valen igual que cualquier
+   otra clase, sin la sintaxis de valor arbitrario. */
+@utility z-sticky {
+  z-index: var(--z-sticky);
+}
+@utility z-overlay {
+  z-index: var(--z-overlay);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-popover {
+  z-index: var(--z-popover);
+}
+@utility z-tooltip {
+  z-index: var(--z-tooltip);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
+}
+
+/* El tablero que se ve por debajo de lo translúcido, en el selector de color y
+   en cualquier muestra con alfa. Va en gradientes y no en una imagen: se tiñe
+   con el token del borde, así que sigue al tema, y no hay archivo que cargar. */
+@utility ajedrez {
+  background-image:
+    linear-gradient(
+      45deg,
+      var(--color-border) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--color-border) 75%
+    ),
+    linear-gradient(
+      45deg,
+      var(--color-border) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--color-border) 75%
+    );
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    4px 4px;
 }
 
 @layer base {
@@ -198,11 +610,78 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    letter-spacing: var(--text-base--letter-spacing);
+    /* La escala de pesos arranca en 450, no en 400. Sin esta línea el token
+       existía y la utilidad `font-normal` lo daba, pero todo lo que no llevara
+       clase de peso (el texto de una celda, un párrafo suelto) se quedaba en el
+       400 del navegador, medio paso por debajo del resto. */
+    font-weight: var(--font-weight-normal);
     -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
     background-color: var(--color-accent);
     color: var(--color-accent-foreground);
+  }
+
+  /* Barras de desplazamiento del sistema, en los dos motores que las exponen de
+     forma distinta. `scrollbar-*` es el estándar y lo entienden Firefox y
+     Chromium moderno; `::-webkit-scrollbar` cubre a los WebKit que todavía no.
+     Declarar los dos deja el mismo aspecto en ambos, y el color sale de los
+     tokens, así que la barra sigue al tema. */
+  html {
+    scrollbar-color: var(--color-border-strong) transparent;
+  }
+
+  /* El grosor va en `*` y el color en `html` porque no se heredan igual:
+     `scrollbar-color` sí y `scrollbar-width` no. Declarando las dos en `html`,
+     la página quedaba con la barra fina y todo lo que desplaza por dentro (la
+     lista de un combobox, el cuerpo de un modal, la barra lateral) se quedaba
+     con la del sistema: mismo color, otro grosor.
+
+     El color se queda en `html` a propósito, para que una zona con su propio
+     tema pueda cambiarlo para todo lo que tenga dentro; puesto en `*` se
+     volvería a fijar en cada descendiente y no habría forma de heredarlo. */
+  * {
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-strong);
+    border: 2px solid transparent;
+    border-radius: var(--radius-full, 9999px);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-muted-foreground);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Neutraliza el movimiento decorativo, salvo `[data-motion="essential"]`. Un
+     indicador de carga que no gira deja de comunicar que algo esta pasando. */
+  @media (prefers-reduced-motion: reduce) {
+    *:not([data-motion="essential"]),
+    *:not([data-motion="essential"])::before,
+    *:not([data-motion="essential"])::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

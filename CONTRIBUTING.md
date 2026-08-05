@@ -36,7 +36,7 @@ elise/
   docs/           # Documentación del proyecto
 ```
 
-Cada utilidad de frontend vive en su propio paquete (`elise-forms`, `elise-tables`, etc.) para que los consumidores externos instalen solo lo que necesiten. Ver criterios de fragmentación en [`docs/arquitectura.md`](docs/arquitectura.md#criterios-de-fragmentacion-de-paquetes).
+Cada utilidad de frontend vive en su propio paquete (`elise-forms`, `elise-tables`, etc.) para que los consumidores externos instalen solo lo que necesiten. Ver criterios de fragmentación en [`docs/arquitectura.md`](docs/arquitectura.md#criterios-de-fragmentación-de-paquetes).
 
 ## Flujo de Desarrollo
 
@@ -59,6 +59,11 @@ pnpm dev
 # Watch para todos los paquetes + showcase en paralelo
 pnpm dev:showcase
 ```
+
+`dev:showcase` construye las librerías antes de levantar los watchers. El
+showcase importa por subpath (`@calumet/elise-ui/dialog`) y cada subpath apunta
+a `dist`, así que sin un build previo Vite arranca antes de que tsup lo escriba
+y falla al resolver el primer import.
 
 ### Probar Cambios
 
@@ -90,19 +95,26 @@ Hoy conviven dos generaciones de componentes (los más antiguos usan
 React 19). **La convención canónica para componentes nuevos es la segunda**;
 los antiguos se migran de forma oportunista cuando se toquen por otra razón.
 
+El `data-slot` queda fuera de esa migración perezosa y lo llevan las dos
+generaciones, ya que un atributo presente en unos componentes y ausente en
+otros no se puede usar para nada.
+
 Para todo componente nuevo:
 
 - Función plana tipada con `React.ComponentProps<...>`; con React 19 (peer
   mínimo del paquete) `ref` llega como prop normal, no se necesita
   `forwardRef` ni `displayName`.
 - Atributo `data-slot="<nombre>"` en cada sub-componente, para poder
-  estilizarlos desde el exterior (`has-data-[slot=...]`).
+  estilizarlos desde el exterior (`has-data-[slot=...]`). El nombre es el del
+  componente en kebab-case (`OTPField` da `otp-field`) y va sobre el elemento
+  que recibe el `className`, que es la superficie que se estiliza. En un
+  `DialogContent` eso es el `Content` y no el `Portal` que lo envuelve; en un
+  `Checkbox`, el `<label>` visible y no el `<input>` `sr-only`.
 - Solo tokens semánticos del tema (`bg-primary`, `text-muted-foreground`,
   `border-border`, …); nunca colores literales ni de la paleta de Tailwind.
   Si falta un token (p. ej. un `*-foreground`), se agrega a `elise.css`,
   `themes/index.ts` y al `@theme inline`, no se improvisa con otro token.
-- Foco visible con la convención `focus-visible:ring-2 focus-visible:ring-ring
-  focus-visible:ring-offset-2 focus-visible:ring-offset-background`.
+- Foco visible con la convención `focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`.
 - Textos visibles o de accesibilidad mediante el puente i18n:
   `useElLabel("ui", "<clave>", "<fallback en español>")` (ver
   `src/lib/i18n.ts`). Nunca strings hardcodeados.
@@ -114,10 +126,6 @@ accesibilidad no triviales (menús, diálogos, tooltips, tabs, sliders…) se
 usa el primitive de Radix. Una implementación propia solo se justifica para
 casos simples, y debe documentar explícitamente qué partes de la API de
 Radix no soporta (modo controlado, `asChild`, atributos `data-state`, etc.).
-Componentes actualmente hand-rolled que no alcanzan paridad con Radix:
-accordion, checkbox, radio-group, switch, toggle, toggle-group, progress y
-separator — tenlo en cuenta antes de asumir que aceptan la API completa del
-primitive equivalente.
 
 ### Formateo automático
 
@@ -148,7 +156,7 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
 2. Actualiza documentación si aplica.
 3. Si agregas un componente nuevo a `elise-ui`, agrégalo al barrel export en `packages/ui/src/components/index.ts`.
 4. Si agregas una utilidad a un paquete existente (`elise-forms`, `elise-tables`, etc.), documéntala en `docs/utilidades.md`.
-5. Si propones un paquete nuevo, valida primero contra los [criterios de fragmentación](docs/arquitectura.md#criterios-de-fragmentacion-de-paquetes).
+5. Si propones un paquete nuevo, valida primero contra los [criterios de fragmentación](docs/arquitectura.md#criterios-de-fragmentación-de-paquetes).
 6. Referencia issues relacionados.
 
 ## Versionado y Publicación

@@ -36,18 +36,27 @@ import { messages } from "./i18n";
 const AccordionCollapsibleDemo = React.lazy(() => import("./sections/AccordionCollapsibleDemo"));
 const CarouselDemo = React.lazy(() => import("./sections/CarouselDemo"));
 const AlertDialogStandalone = React.lazy(() => import("./sections/AlertDialogStandalone"));
+const CatalogoDemo = React.lazy(() => import("./sections/CatalogoDemo"));
+const ComboboxDemo = React.lazy(() => import("./sections/ComboboxDemo"));
 const CommandDemo = React.lazy(() => import("./sections/CommandDemo"));
 const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"));
 const ContactForm = React.lazy(() => import("./sections/ContactForm"));
 const DataTableDemo = React.lazy(() => import("./sections/DataTableDemo"));
+const ColorPickerDemo = React.lazy(() => import("./sections/ColorPickerDemo"));
+const DisplayDemo = React.lazy(() => import("./sections/DisplayDemo"));
+const FormControlsExtraDemo = React.lazy(() => import("./sections/FormControlsExtraDemo"));
 const DatePickersDemo = React.lazy(() => import("./sections/DatePickersDemo"));
 const DialogsDemo = React.lazy(() => import("./sections/DialogsDemo"));
+const FeedbackDemo = React.lazy(() => import("./sections/FeedbackDemo"));
+const FieldDemo = React.lazy(() => import("./sections/FieldDemo"));
+const AppShellDemo = React.lazy(() => import("./sections/AppShellDemo"));
 const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
 const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
 const LoginCard = React.lazy(() => import("./sections/LoginCard"));
 const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
 const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
 const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
+const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
@@ -74,7 +83,7 @@ const ThemeToggle = () => {
 const AppHeader = () => {
   const { t } = useTranslation("app");
   return (
-    <header className="flex items-start justify-between gap-4">
+    <header className="flex flex-wrap items-start justify-between gap-4">
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">
           {t("title", { fallback: "Elise UI Showcase" })}
@@ -120,9 +129,7 @@ const App = () => (
                   <NavigationMenuLink asChild>
                     <a href="#hello">
                       <h3 className="text-sm font-semibold">Hello World</h3>
-                      <p className="text-xs text-muted-foreground">
-                        Primer componente de ejemplo.
-                      </p>
+                      <p className="text-xs text-muted-foreground">Primer componente de ejemplo.</p>
                     </a>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
@@ -259,6 +266,42 @@ const App = () => (
             </LazySection>
           </SectionCard>
 
+          <SectionCard title="AppShell: marco de aplicacion">
+            <LazySection>
+              <AppShellDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Field: rotulo, error y accesibilidad enlazada">
+            <LazySection>
+              <FieldDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="MultiSelect, FileUpload y Stepper">
+            <LazySection>
+              <CatalogoDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Combobox: select con busqueda">
+            <LazySection>
+              <ComboboxDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Primitivas: Box, Stack, Grid, Bleed y Text">
+            <LazySection>
+              <PrimitivesDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Badge, Alert, Spinner y Empty State">
+            <LazySection>
+              <FeedbackDemo />
+            </LazySection>
+          </SectionCard>
+
           <SectionCard title="Menubar, Context Menu y Select">
             <LazySection>
               <MenusSelectDemo />
@@ -286,6 +329,24 @@ const App = () => (
           <SectionCard title="Command Palette">
             <LazySection>
               <CommandDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Stat, AvatarGroup, DescriptionList, Timeline y Tree">
+            <LazySection>
+              <DisplayDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Number, Search, Segmented, Tags, Rating y Time">
+            <LazySection>
+              <FormControlsExtraDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Color Picker">
+            <LazySection>
+              <ColorPickerDemo />
             </LazySection>
           </SectionCard>
 

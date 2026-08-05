@@ -9,7 +9,7 @@ scope del monorepo es más amplio que un design system estricto.
 
 ## Monorepo
 
-Elise esta organizado como un monorepo gestionado con [pnpm workspaces](https://pnpm.io/workspaces). Todos los paquetes residen en `packages/` y se referencian entre si con el protocolo `workspace:*`.
+Elise está organizado como un monorepo gestionado con [pnpm workspaces](https://pnpm.io/workspaces). Todos los paquetes residen en `packages/` y se referencian entre sí con el protocolo `workspace:*`.
 
 ```
 elise/
@@ -63,11 +63,11 @@ showcase ──────── @calumet/elise-ui ─────────�
 
 ### @calumet/elise-ui
 
-Libreria principal de componentes. Construida sobre [Radix UI Primitives](https://www.radix-ui.com/primitives) para accesibilidad y estilizada con [Tailwind CSS v4](https://tailwindcss.com/).
+Librería principal de componentes. Construida sobre [Radix UI Primitives](https://www.radix-ui.com/primitives) para accesibilidad y estilizada con [Tailwind CSS v4](https://tailwindcss.com/).
 
-- **45 componentes** exportados individualmente y via barrel
+- **58 componentes** exportados individualmente y vía barrel
 - **Sistema de temas** con ThemeProvider (light/dark)
-- **Tokens CSS** semanticos (e.g., `--primary`, `--background`) mapeados a utilidades de Tailwind
+- **Tokens CSS** semánticos (e.g., `--primary`, `--background`) mapeados a utilidades de Tailwind
 - **Peer dependencies**: React 19, React DOM 19
 
 ### @calumet/elise-forms
@@ -104,18 +104,18 @@ requiere React como peer-dependency. El barrel raíz expone `I18nProvider`,
 `useTranslation`, `useLocale`, `buildMessages` y `buildLazyLoader`. Para más
 detalles ver [docs/i18n.md](i18n.md).
 
-| Sub-modulo  | Descripcion                                                             | Dependencia externa                                                                                                         |
+| Sub-módulo  | Descripción                                                             | Dependencia externa                                                                                                         |
 | ----------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `./dates`   | `formatDate`, `formatDateRange`, `useDateRange` (formateo con `Intl`)   | [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) |
 | `./numbers` | `formatNumber`, `formatCurrency`, `formatPercent` (formateo con `Intl`) | [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)     |
 
 ### @calumet/elise-icons
 
-Wrapper de re-exportacion sobre [`lucide-react`](https://lucide.dev/icons/). Centraliza la dependencia de iconos para que los consumidores solo necesiten importar desde `@calumet/elise-icons`.
+Wrapper de re-exportación sobre [`lucide-react`](https://lucide.dev/icons/). Centraliza la dependencia de iconos para que los consumidores solo necesiten importar desde `@calumet/elise-icons`.
 
 ### @calumet/elise-linter
 
-Configuracion compartida de herramientas de calidad de codigo:
+Configuración compartida de herramientas de calidad de código:
 
 - **ESLint** (flat config): tres presets combinables — `base`, `react`, `tailwind`
 - **Prettier**: 100 caracteres, 2 espacios, trailing commas, LF
@@ -124,7 +124,7 @@ Configuracion compartida de herramientas de calidad de codigo:
 
 Ver setup completo en [Linter y formato](linter.md).
 
-## Criterios de fragmentacion de paquetes
+## Criterios de fragmentación de paquetes
 
 Elise sigue una filosofía de **un paquete por dominio**. Cada feature de
 frontend que arrastra una peer-dep o un ecosistema distinto (formularios,
@@ -143,11 +143,11 @@ Reglas:
 - Evitar paquetes "agregadores" que solo re-exportan: añaden mantenimiento sin
   beneficio para el consumidor.
 
-## Patrones de diseno
+## Patrones de diseño
 
 ### Compound components
 
-Los componentes complejos se exportan como multiples sub-componentes composables:
+Los componentes complejos se exportan como múltiples sub-componentes composables:
 
 ```tsx
 import {
@@ -169,7 +169,7 @@ import {
 </Card>;
 ```
 
-Este patron proviene de [Radix UI](https://www.radix-ui.com/primitives/docs/overview/introduction) y permite componer la UI de forma flexible y accesible.
+Este patrón proviene de [Radix UI](https://www.radix-ui.com/primitives/docs/overview/introduction) y permite componer la UI de forma flexible y accesible.
 
 ### forwardRef
 
@@ -185,7 +185,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 ### Utilidad `cn()`
 
-Funcion que combina [`clsx`](https://github.com/lukeed/clsx) + [`tailwind-merge`](https://github.com/dcastil/tailwind-merge) para concatenar clases CSS sin conflictos:
+Función que combina [`clsx`](https://github.com/lukeed/clsx) + [`tailwind-merge`](https://github.com/dcastil/tailwind-merge) para concatenar clases CSS sin conflictos:
 
 ```tsx
 import { cn } from "@/lib/cn";
@@ -194,7 +194,7 @@ cn("px-4 py-2", condition && "bg-primary", className);
 // Resuelve conflictos de Tailwind automaticamente
 ```
 
-### Patron `asChild` (Radix)
+### Patrón `asChild` (Radix)
 
 Muchos componentes soportan la prop `asChild` de Radix, que permite renderizar el componente como un hijo personalizado en lugar del elemento por defecto:
 
@@ -207,14 +207,14 @@ import { Button } from "@calumet/elise-ui/button";
 </Button>;
 ```
 
-Consulta la [documentacion de Radix sobre asChild](https://www.radix-ui.com/primitives/docs/guides/composition) para mas detalles.
+Consulta la [documentación de Radix sobre asChild](https://www.radix-ui.com/primitives/docs/guides/composition) para más detalles.
 
 ## Sistema de build
 
-Todos los paquetes de libreria usan [tsup](https://tsup.egoist.dev/) como bundler:
+Todos los paquetes de librería usan [tsup](https://tsup.egoist.dev/) como bundler:
 
 - **Formatos de salida**: ESM (`.mjs`) + CommonJS (`.cjs`)
-- **Declaraciones TypeScript**: generadas automaticamente (`.d.ts`)
+- **Declaraciones TypeScript**: generadas automáticamente (`.d.ts`)
 - **Source maps**: habilitados
 - **Orden de build**: `icons → ui → i18n → forms → tables → toasts → alerts → showcase`
 
@@ -223,12 +223,12 @@ La app de showcase usa [Vite](https://vite.dev/) con:
 - `@vitejs/plugin-react` para React/JSX
 - `@tailwindcss/vite` para procesar Tailwind CSS v4 sin PostCSS
 
-Para detalles de setup en apps consumidoras, ver [Guia de inicio](guia-inicio.md) y la
-[documentacion oficial de Tailwind](https://tailwindcss.com/docs/installation/framework-guides/vite).
+Para detalles de setup en apps consumidoras, ver [Guía de inicio](guia-inicio.md) y la
+[documentación oficial de Tailwind](https://tailwindcss.com/docs/installation/framework-guides/vite).
 
 ## TypeScript
 
-Configuracion base compartida en `tsconfig.base.json`:
+Configuración base compartida en `tsconfig.base.json`:
 
 - **Target**: ES2020
 - **Module**: ESNext
@@ -236,7 +236,7 @@ Configuracion base compartida en `tsconfig.base.json`:
 - **JSX**: react-jsx
 - **Module resolution**: Bundler
 
-Cada paquete extiende la configuracion base y agrega sus propios paths y configuraciones especificas.
+Cada paquete extiende la configuración base y agrega sus propios paths y configuraciones específicas.
 
 ---
 

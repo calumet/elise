@@ -30,8 +30,18 @@ if (!globalScope[CONTEXT_KEY]) {
 
 const SharedI18nContext = globalScope[CONTEXT_KEY]!;
 
-export const useElLabel = (namespace: string, key: string, fallback: string): string => {
+/**
+ * `vars` sustituye los marcadores `{nombre}` de la cadena traducida. Una clave
+ * cuya traducción los lleve necesita recibirlas, dado que el `fallback` solo
+ * entra en juego cuando no hay Provider montado.
+ */
+export const useElLabel = (
+  namespace: string,
+  key: string,
+  fallback: string,
+  vars?: Record<string, string | number>,
+): string => {
   const ctx = React.useContext(SharedI18nContext);
   if (!ctx) return fallback;
-  return ctx.translate(namespace, key, { fallback });
+  return ctx.translate(namespace, key, { fallback, ...vars });
 };

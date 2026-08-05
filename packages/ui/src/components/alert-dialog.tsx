@@ -1,6 +1,17 @@
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import * as React from "react";
 
+import {
+  ANCHOS_DIALOGO,
+  CABECERA_DIALOGO,
+  CUERPO_DIALOGO,
+  DESCRIPCION_DIALOGO,
+  PANEL_DIALOGO,
+  PIE_DIALOGO,
+  TITULO_DIALOGO,
+  VELO_DIALOGO,
+} from "./dialog";
+
 import { cn } from "@/lib/cn";
 
 export const AlertDialog = AlertDialogPrimitive.Root;
@@ -14,28 +25,41 @@ export const AlertDialogOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
+    data-slot="alert-dialog-overlay"
     ref={ref}
-    className={cn(
-      "fixed inset-0 z-50 bg-black/50 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
-      className,
-    )}
+    className={cn(VELO_DIALOGO, className)}
     {...props}
   />
 ));
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 
+/**
+ * El panel de un diálogo que hay que responder.
+ *
+ * Lleva el mismo marco que `Dialog` y no uno propio: cabecera y pie sobre banda
+ * tenue, cuerpo en blanco y el mismo relleno de 16 en las tres zonas. Un modal
+ * es un modal, y que el de confirmar tuviera su caja aparte solo servía para
+ * que dos ventanas seguidas se vieran distintas sin motivo.
+ *
+ * Lo que sí cambia es el ancho por defecto, que es el estrecho: aquí caben un
+ * título, una frase y dos botones, y los 620px del normal dejan la frase
+ * perdida a lo ancho.
+ *
+ * No hay aspa. Es lo que separa a este de `Dialog`: no se descarta mirando
+ * hacia otro lado, se responde.
+ */
 export const AlertDialogContent = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
+    size?: keyof typeof ANCHOS_DIALOGO;
+  }
+>(({ className, size = "sm", ...props }, ref) => (
   <AlertDialogPortal>
     <AlertDialogOverlay />
     <AlertDialogPrimitive.Content
+      data-slot="alert-dialog-content"
       ref={ref}
-      className={cn(
-        "fixed left-1/2 top-1/2 z-50 w-[min(90vw,480px)] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-border bg-background p-6 shadow-lg outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-        className,
-      )}
+      className={cn(PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
       {...props}
     />
   </AlertDialogPortal>
@@ -46,17 +70,30 @@ export const AlertDialogHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col gap-2 text-left", className)} {...props} />
+  <div data-slot="alert-dialog-header" className={cn(CABECERA_DIALOGO, className)} {...props} />
 );
 AlertDialogHeader.displayName = "AlertDialogHeader";
+
+/**
+ * El cuerpo: la pregunta y lo que haga falta para responderla.
+ *
+ * Es lo único que se desplaza, igual que en `Dialog`, así que una confirmación
+ * con una lista larga de lo que se va a borrar no empuja los botones fuera de
+ * la pantalla.
+ */
+export const AlertDialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div data-slot="alert-dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
+);
+AlertDialogBody.displayName = "AlertDialogBody";
 
 export const AlertDialogTitle = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Title
+    data-slot="alert-dialog-title"
     ref={ref}
-    className={cn("text-lg font-semibold tracking-tight", className)}
+    className={cn(TITULO_DIALOGO, className)}
     {...props}
   />
 ));
@@ -67,8 +104,9 @@ export const AlertDialogDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
+    data-slot="alert-dialog-description"
     ref={ref}
-    className={cn("text-sm text-muted-foreground leading-relaxed", className)}
+    className={cn(DESCRIPCION_DIALOGO, className)}
     {...props}
   />
 ));
@@ -78,9 +116,6 @@ export const AlertDialogFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("mt-4 flex flex-col-reverse sm:flex-row gap-2 sm:justify-end", className)}
-    {...props}
-  />
+  <div data-slot="alert-dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
 );
 AlertDialogFooter.displayName = "AlertDialogFooter";

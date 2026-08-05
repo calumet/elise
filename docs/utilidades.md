@@ -31,7 +31,7 @@ import { formatDate, useDateRange } from "@calumet/elise-i18n/dates";
 
 ## Forms - `useZodForm()`
 
-Hook que integra [react-hook-form](https://react-hook-form.com/) con [Zod](https://zod.dev/) para validacion de formularios con inferencia de tipos automatica.
+Hook que integra [react-hook-form](https://react-hook-form.com/) con [Zod](https://zod.dev/) para validación de formularios con inferencia de tipos automática.
 
 ### Uso basico
 
@@ -91,21 +91,21 @@ function useZodForm<TSchema extends z.ZodType<FieldValues, FieldValues>>(
 
 > El hook separa `z.input<TSchema>` (valores que entran al form, antes de coerciones) de `z.output<TSchema>` (valores que salen de `handleSubmit`, después de validar y transformar). Esto te da tipos correctos cuando el schema usa `z.coerce.*`, `transform`, defaults, etc.
 
-- `schema`: Esquema Zod que define la estructura y validacion del formulario
-- `options`: Todas las opciones de `useForm` de react-hook-form **excepto** `resolver` (que se configura automaticamente)
+- `schema`: Esquema Zod que define la estructura y validación del formulario
+- `options`: Todas las opciones de `useForm` de react-hook-form **excepto** `resolver` (que se configura automáticamente)
 - Retorna: Objeto `UseFormReturn` de react-hook-form con tipos inferidos del schema
 
-> **Dependencias externas**: Consulta la documentacion de [Zod](https://zod.dev/) para definir schemas y [react-hook-form](https://react-hook-form.com/) para el manejo del formulario.
+> **Dependencias externas**: Consulta la documentación de [Zod](https://zod.dev/) para definir schemas y [react-hook-form](https://react-hook-form.com/) para el manejo del formulario.
 
 ---
 
 ## Toasts - Notificaciones
 
-Sistema de notificaciones no-bloqueantes basado en un event bus interno. No requiere hooks ni contexto — puedes disparar toasts desde cualquier parte del codigo.
+Sistema de notificaciones no-bloqueantes basado en un event bus interno. No requiere hooks ni contexto — puedes disparar toasts desde cualquier parte del código.
 
 ### Setup
 
-Agrega `<Toaster />` una sola vez en el root de tu aplicacion:
+Agrega `<Toaster />` una sola vez en el root de tu aplicación:
 
 ```tsx
 import { Toaster } from "@calumet/elise-toasts";
@@ -154,7 +154,7 @@ dismiss(id);
 | ------------------ | --------------------- | --------------- |
 | `"info"` (default) | Info circulo          | `--primary`     |
 | `"success"`        | Check circulo         | `--success`     |
-| `"alert"`          | Triangulo exclamacion | `--warning`     |
+| `"alert"`          | Triángulo exclamación | `--warning`     |
 | `"error"`          | Cruz circulo          | `--destructive` |
 
 ### API `toast()`
@@ -173,7 +173,7 @@ type ToastOptions = {
 
 ### Posiciones del Toaster
 
-| Valor                   | Ubicacion             |
+| Valor                   | Ubicación             |
 | ----------------------- | --------------------- |
 | `"top-right"` (default) | Arriba a la derecha   |
 | `"top-left"`            | Arriba a la izquierda |
@@ -188,7 +188,7 @@ Sistema de alertas/confirmaciones modales basado en event bus, similar a toasts 
 
 ### Setup
 
-Agrega `<AlertHost />` una sola vez en el root de tu aplicacion:
+Agrega `<AlertHost />` una sola vez en el root de tu aplicación:
 
 ```tsx
 import { AlertHost } from "@calumet/elise-alerts";
@@ -238,11 +238,11 @@ openAlert({
 
 | Variante            | Icono                  | Color           | Comportamiento                                           |
 | ------------------- | ---------------------- | --------------- | -------------------------------------------------------- |
-| `"alert"` (default) | Triangulo exclamacion  | `--warning`     | Muestra boton cancelar si hay `onCancel` o `cancelLabel` |
-| `"info"`            | Info circulo           | `--primary`     | Solo boton "Aceptar"                                     |
-| `"error"`           | Cruz circulo           | `--destructive` | Solo boton "Aceptar"                                     |
-| `"confirm"`         | Signo de interrogacion | `--primary`     | Siempre muestra "Confirmar" + "Cancelar"                 |
-| `"success"`         | Check circulo          | `--success`     | Solo boton "Aceptar"                                     |
+| `"alert"` (default) | Triángulo exclamación  | `--warning`     | Muestra botón cancelar si hay `onCancel` o `cancelLabel` |
+| `"info"`            | Info circulo           | `--primary`     | Solo botón "Aceptar"                                     |
+| `"error"`           | Cruz circulo           | `--destructive` | Solo botón "Aceptar"                                     |
+| `"confirm"`         | Signo de interrogación | `--primary`     | Siempre muestra "Confirmar" + "Cancelar"                 |
+| `"success"`         | Check circulo          | `--success`     | Solo botón "Aceptar"                                     |
 
 ### API `openAlert()`
 
@@ -263,7 +263,7 @@ type AlertOptions = {
 
 ## Tables - DataTable
 
-Componente de tabla avanzada con filtros, ordenamiento, paginacion y exportacion. Construido sobre [TanStack React Table v8](https://tanstack.com/table/latest).
+Componente de tabla avanzada con filtros, ordenamiento, paginación y exportación. Construido sobre [TanStack React Table v8](https://tanstack.com/table/latest).
 
 ### Uso basico
 
@@ -294,7 +294,7 @@ function MiTabla() {
 
 ### Con filtros
 
-Los filtros se configuran via `meta.filterVariant` en la definicion de columnas:
+Los filtros se configuran vía `meta.filterVariant` en la definición de columnas:
 
 ```tsx
 const columns: ColumnDef<Persona>[] = [
@@ -326,15 +326,15 @@ const columns: ColumnDef<Persona>[] = [
 ];
 ```
 
-| filterVariant | Descripcion                          | Control                                     |
+| filterVariant | Descripción                          | Control                                     |
 | ------------- | ------------------------------------ | ------------------------------------------- |
-| `"text"`      | Busqueda de texto libre              | Input con icono de lupa                     |
-| `"select"`    | Seleccion multiple de valores unicos | Popover con Command (busqueda + checkboxes) |
-| `"range"`     | Rango numerico min/max               | Dos inputs numericos                        |
+| `"text"`      | Búsqueda de texto libre              | Input con icono de lupa                     |
+| `"select"`    | Selección múltiple de valores únicos | Popover con Command (búsqueda + checkboxes) |
+| `"range"`     | Rango numérico min/max               | Dos inputs numéricos                        |
 | `"date"`      | Fecha individual                     | DatePicker                                  |
 | `"daterange"` | Rango de fechas                      | DateRangePicker                             |
 
-### Con exportacion y refresh
+### Con exportación y refresh
 
 ```tsx
 function MiTabla() {
@@ -356,18 +356,18 @@ function MiTabla() {
 
 ### Props
 
-| Prop              | Tipo                             | Default           | Descripcion                              |
+| Prop              | Tipo                             | Default           | Descripción                              |
 | ----------------- | -------------------------------- | ----------------- | ---------------------------------------- |
-| `columns`         | `ColumnDef<TData>[]`             | _requerido_       | Definicion de columnas (TanStack)        |
+| `columns`         | `ColumnDef<TData>[]`             | _requerido_       | Definición de columnas (TanStack)        |
 | `data`            | `TData[]`                        | _requerido_       | Datos a mostrar                          |
-| `name`            | `string`                         | —                 | Nombre para archivos de exportacion      |
+| `name`            | `string`                         | —                 | Nombre para archivos de exportación      |
 | `isLoading`       | `boolean`                        | —                 | Muestra mensaje de carga si no hay datos |
-| `exportTo`        | `boolean`                        | —                 | Habilita exportacion CSV/JSON            |
-| `refresh`         | `() => void \| Promise<unknown>` | —                 | Callback para boton de refresh           |
-| `pageSizeOptions` | `number[]`                       | `[5, 10, 25, 50]` | Opciones de tamano de pagina             |
-| `initialPageSize` | `number`                         | —                 | Tamano de pagina inicial                 |
+| `exportTo`        | `boolean`                        | —                 | Habilita exportación CSV/JSON            |
+| `refresh`         | `() => void \| Promise<unknown>` | —                 | Callback para botón de refresh           |
+| `pageSizeOptions` | `number[]`                       | `[5, 10, 25, 50]` | Opciones de tamaño de página             |
+| `initialPageSize` | `number`                         | —                 | Tamaño de página inicial                 |
 
-> **Dependencia externa**: La definicion de columnas (`ColumnDef`) y toda la API de tablas viene de [TanStack React Table v8](https://tanstack.com/table/latest/docs/introduction). Consulta su documentacion para guias de columnas, celdas personalizadas y features avanzados.
+> **Dependencia externa**: La definición de columnas (`ColumnDef`) y toda la API de tablas viene de [TanStack React Table v8](https://tanstack.com/table/latest/docs/introduction). Consulta su documentación para guías de columnas, celdas personalizadas y features avanzados.
 
 ---
 
@@ -382,7 +382,7 @@ import { Search, ChevronDown, X } from "@calumet/elise-icons";
 <ChevronDown className="size-4 text-muted-foreground" />
 ```
 
-> Consulta la [galeria de Lucide](https://lucide.dev/icons/) para ver todos los iconos disponibles con sus nombres de importacion.
+> Consulta la [galería de Lucide](https://lucide.dev/icons/) para ver todos los iconos disponibles con sus nombres de importación.
 
 ---
 

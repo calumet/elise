@@ -10,16 +10,49 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogPortal = DialogPrimitive.Portal;
 export const DialogClose = DialogPrimitive.Close;
 
+/* El marco entero vive en constantes porque `AlertDialog` cuelga de otro
+   primitivo de Radix: no puede reutilizar estos componentes, solo sus clases.
+   Sin esto los dos se separan a la primera corrección, que es exactamente lo
+   que había pasado: este acabó con tres bandas y relleno de 16 y el otro con
+   una caja suelta de 24 y otro radio. */
+
+export const VELO_DIALOGO =
+  "fixed inset-0 z-overlay bg-black/50 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in";
+
+export const PANEL_DIALOGO =
+  "fixed left-1/2 top-1/2 z-modal flex max-h-[min(90vh,40rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95";
+
+/* Las tres zonas llevan el mismo relleno de 16 en los cuatro lados. Antes eran
+   20 a los costados y 16 arriba y abajo, y esos 4px de más eran los únicos de
+   todo el diálogo que no salían de la escala. */
+export const CABECERA_DIALOGO =
+  "flex shrink-0 flex-col gap-1 border-b border-border bg-muted p-4 text-left";
+export const CUERPO_DIALOGO = "min-h-0 flex-1 overflow-y-auto p-4";
+export const PIE_DIALOGO =
+  "flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted p-4 sm:flex-row sm:justify-end";
+
+export const TITULO_DIALOGO = "text-lg font-semibold tracking-tight";
+export const DESCRIPCION_DIALOGO = "text-base text-muted-foreground leading-relaxed";
+
+/* Tres anchos y no más, para que dos diálogos seguidos no midan cada uno lo
+   suyo. `md` es el de por defecto y el que sirve para casi
+   todo; `sm` es para confirmar algo de una frase, donde 620px de ancho para dos
+   botones se lee como si faltara contenido; `lg` para lo que lleva una tabla o
+   un formulario de varias columnas dentro. */
+export const ANCHOS_DIALOGO = {
+  sm: "w-[min(90vw,380px)]",
+  md: "w-[min(90vw,620px)]",
+  lg: "w-[min(90vw,980px)]",
+} as const;
+
 export const DialogOverlay = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
+    data-slot="dialog-overlay"
     ref={ref}
-    className={cn(
-      "fixed inset-0 z-50 bg-black/50 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
-      className,
-    )}
+    className={cn(VELO_DIALOGO, className)}
     {...props}
   />
 ));
@@ -27,23 +60,24 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 export const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { showCloseButton?: boolean }
->(({ className, children, showCloseButton = true, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    showCloseButton?: boolean;
+    size?: keyof typeof ANCHOS_DIALOGO;
+  }
+>(({ className, children, showCloseButton = true, size = "md", ...props }, ref) => {
   const closeLabel = useElLabel("ui", "close", "Cerrar");
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
+        data-slot="dialog-content"
         ref={ref}
-        className={cn(
-          "fixed left-1/2 top-1/2 z-50 w-[min(90vw,480px)] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-border bg-background p-6 shadow-lg outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          className,
-        )}
+        className={cn(PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
         {...props}
       >
         {showCloseButton ? (
-          <DialogClose className="absolute right-3 top-2 inline-flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-            <X aria-hidden />
+          <DialogClose className="absolute right-3 top-2 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+            <X className="size-4" aria-hidden />
             <span className="sr-only">{closeLabel}</span>
           </DialogClose>
         ) : null}
@@ -54,18 +88,35 @@ export const DialogContent = React.forwardRef<
 });
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
+/* Cabecera y pie van sobre una banda tenue y el cuerpo en blanco. Es lo que
+   separa las tres zonas sin una regla por cada una, y hace que al desplazar un
+   cuerpo largo el título y las acciones sigan leyéndose como marco y no como
+   contenido que se fue quedando arriba. */
 export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col gap-2 text-left", className)} {...props} />
+  /* El `pe-12` es el hueco del aspa, que va posicionada encima. `AlertDialog`
+     no lo lleva porque no tiene aspa: hay que responderlo. */
+  <div data-slot="dialog-header" className={cn(CABECERA_DIALOGO, "pe-12", className)} {...props} />
 );
 DialogHeader.displayName = "DialogHeader";
+
+/**
+ * El cuerpo del diálogo. Es lo único que se desplaza: la cabecera y el pie se
+ * quedan fijos, así que con un formulario largo las acciones no hay que ir a
+ * buscarlas al final.
+ */
+export const DialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div data-slot="dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
+);
+DialogBody.displayName = "DialogBody";
 
 export const DialogTitle = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
+    data-slot="dialog-title"
     ref={ref}
-    className={cn("text-lg font-semibold tracking-tight", className)}
+    className={cn(TITULO_DIALOGO, className)}
     {...props}
   />
 ));
@@ -76,9 +127,23 @@ export const DialogDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
+    data-slot="dialog-description"
     ref={ref}
-    className={cn("text-base text-muted-foreground leading-relaxed", className)}
+    className={cn(DESCRIPCION_DIALOGO, className)}
     {...props}
   />
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
+
+/**
+ * Pie con las acciones. La primaria va a la derecha del todo y las secundarias a
+ * su izquierda, que es el orden en el que se lee una salida: primero las salidas
+ * alternativas y al final la que continúa.
+ *
+ * En pantallas estrechas se apilan y la primaria queda arriba, porque ahí la
+ * lectura es de arriba abajo y el final de la fila deja de significar «último».
+ */
+export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div data-slot="dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
+);
+DialogFooter.displayName = "DialogFooter";

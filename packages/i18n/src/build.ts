@@ -39,7 +39,7 @@ const defaultParsePath: ParsePathFn = (path) => {
   const basename = path.split("/").pop();
   if (!basename) return null;
   const parts = basename.split(".");
-  if (parts.length < 2) return null; // sin extension
+  if (parts.length < 2) return null; // sin extensión
   parts.pop(); // descartar ext
   if (parts.length === 1) return { locale: parts[0] };
   if (parts.length === 2) return { namespace: parts[0], locale: parts[1] };

@@ -1,0 +1,5 @@
+# Generados: los reescribe su herramienta y reformatearlos los desincroniza
+# en el siguiente install o build.
+pnpm-lock.yaml
+dist/
+node_modules/

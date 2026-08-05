@@ -13,17 +13,21 @@ export const Slider = React.forwardRef<
   const thumbCount = Array.isArray(values) ? values.length : 1;
   return (
     <SliderPrimitive.Root
+      data-slot="slider"
       ref={ref}
       className={cn("relative flex w-full touch-none select-none items-center", className)}
       {...props}
     >
-      <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-muted">
+      {/* El carril lleva `bg-track` y no un fondo tenue: lo que aún no está
+          recorrido es parte del dibujo del control, y con un gris de superficie
+          el deslizador sin llenar desaparecía contra la tarjeta. */}
+      <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-track">
         <SliderPrimitive.Range className="absolute h-full bg-primary" />
       </SliderPrimitive.Track>
       {Array.from({ length: thumbCount }).map((_, index) => (
         <SliderPrimitive.Thumb
           key={index}
-          className="block h-4 w-4 rounded-full bg-background shadow-sm ring-1 ring-border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+          className="block h-4 w-4 rounded-full bg-background shadow-sm ring-1 ring-border transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>

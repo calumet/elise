@@ -1,0 +1,59 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Formato
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+  # La auditoria visual necesita el showcase corriendo y un Chromium, asi que va
+  # en un job aparte: si falla, no bloquea el merge por una diferencia de render
+  # entre el runner y una maquina local.
+  auditoria-visual:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+
+      - name: Levantar el showcase
+        run: |
+          pnpm --filter showcase preview --port 5173 &
+          timeout 60 bash -c 'until curl -sf http://localhost:5173 >/dev/null; do sleep 1; done'
+
+      - name: Auditar
+        run: node scripts/audit-visual.mjs -- --tema=ambos --abrir

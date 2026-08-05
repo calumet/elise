@@ -48,6 +48,7 @@ function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  keyboardShortcut = true,
   className,
   style,
   children,
@@ -56,6 +57,13 @@ function SidebarProvider({
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+
+  /**
+   * Atajo Ctrl+B / Cmd+B para plegar la barra. Se engancha en `window` y llama a
+   * `preventDefault`, así que un marco que no use el plegado lo apaga con
+   * `false` y devuelve la combinación al navegador.
+   */
+  keyboardShortcut?: boolean;
 }) {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
@@ -86,6 +94,7 @@ function SidebarProvider({
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
+    if (!keyboardShortcut) return;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
@@ -95,7 +104,7 @@ function SidebarProvider({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggleSidebar]);
+  }, [toggleSidebar, keyboardShortcut]);
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
@@ -153,7 +162,11 @@ function Sidebar({
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   const sidebarLabel = useElLabel("ui", "sidebar", "Barra lateral");
-  const sidebarDescription = useElLabel("ui", "sidebarDescription", "Muestra la barra lateral móvil.");
+  const sidebarDescription = useElLabel(
+    "ui",
+    "sidebarDescription",
+    "Muestra la barra lateral móvil.",
+  );
 
   if (collapsible === "none") {
     return (
@@ -219,7 +232,7 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed inset-y-0 z-sticky hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",

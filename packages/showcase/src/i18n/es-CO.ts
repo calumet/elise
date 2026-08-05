@@ -37,6 +37,8 @@ export default {
     sidebar: "Barra lateral",
     sidebarDescription: "Muestra la barra lateral móvil.",
     selectDate: "Seleccionar fecha",
+    openCalendar: "Abrir calendario",
+    dateFormat: "AAAA-MM-DD",
     togglePassword: "Mostrar u ocultar contraseña",
     otpGroup: "Código de verificación",
     otpDigit: "Dígito",

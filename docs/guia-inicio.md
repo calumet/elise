@@ -1,4 +1,4 @@
-# Guia de inicio
+# Guía de inicio
 
 ## Requisitos previos
 
@@ -6,7 +6,7 @@
 - **pnpm** >= 10 ([instalar pnpm](https://pnpm.io/installation))
 - **React** >= 19 y **React DOM** >= 19
 
-## Instalacion
+## Instalación
 
 ### Setup recomendado (Vite + React)
 
@@ -49,6 +49,10 @@ export default defineConfig({
 4. En tu CSS principal (por ejemplo `src/index.css`), importa Tailwind y los estilos de Elise:
 
 ```css
+/* Tipografias autoalojadas (Geist, JetBrains Mono, Source Serif 4).
+   Va primero, antes de Tailwind. */
+@import "@calumet/elise-ui/tailwind/fonts.css";
+
 @import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
 
@@ -60,6 +64,16 @@ export default defineConfig({
 @source "../node_modules/@calumet/elise-alerts/dist";
 ```
 
+> **No te saltees `fonts.css`.** Sin el, `--font-sans` cae en la fuente del
+> sistema y tu app se ve distinta en macOS, Windows y Linux. Las tres familias
+> vienen incluidas en `@calumet/elise-ui` como fuentes variables: un archivo por
+> familia cubre todo el rango de pesos.
+>
+> Es un import aparte para que puedas omitirlo si tu app ya carga Geist por su
+> cuenta (por ejemplo con `geist/font` en Next.js) y no quieras descargarla dos
+> veces. Los tokens `--font-*` resuelven igual en ese caso: listan tanto
+> `"Geist Variable"` (el nombre que registra Fontsource) como `"Geist"`.
+
 5. Verifica que tu app levanta correctamente:
 
 ```bash
@@ -68,11 +82,11 @@ pnpm dev
 
 ### Referencias oficiales de Tailwind
 
-- Documentacion general: https://tailwindcss.com/docs
-- Guia de instalacion: https://tailwindcss.com/docs/installation
-- Integracion con Vite: https://tailwindcss.com/docs/installation/framework-guides/vite
+- Documentación general: https://tailwindcss.com/docs
+- Guía de instalación: https://tailwindcss.com/docs/installation
+- Integración con Vite: https://tailwindcss.com/docs/installation/framework-guides/vite
 
-> Si Tailwind cambia algun paso en nuevas versiones, toma como fuente de verdad su documentacion oficial.
+> Si Tailwind cambia algún paso en nuevas versiones, toma como fuente de verdad su documentación oficial.
 
 ### Desarrollo del monorepo Elise
 
@@ -85,7 +99,7 @@ pnpm dev:showcase  # Levanta todos los paquetes + app demo en localhost:5173
 
 ## Configurar el ThemeProvider
 
-Envuelve tu aplicacion con `ThemeProvider` para habilitar el sistema de temas:
+Envuelve tu aplicación con `ThemeProvider` para habilitar el sistema de temas:
 
 ```tsx
 import { ThemeProvider } from "@calumet/elise-ui";
@@ -101,9 +115,9 @@ function App() {
 
 ### Props del ThemeProvider
 
-| Prop           | Tipo                      | Default         | Descripcion                                         |
+| Prop           | Tipo                      | Default         | Descripción                                         |
 | -------------- | ------------------------- | --------------- | --------------------------------------------------- |
-| `attribute`    | `"class" \| "data-theme"` | `"class"`       | Metodo para aplicar el tema al DOM                  |
+| `attribute`    | `"class" \| "data-theme"` | `"class"`       | Método para aplicar el tema al DOM                  |
 | `storageKey`   | `string`                  | `"elise-theme"` | Clave de localStorage para persistir la preferencia |
 | `defaultTheme` | `"light" \| "dark"`       | `"light"`       | Tema inicial si no hay preferencia guardada         |
 | `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema ignorando la preferencia del usuario |
@@ -138,7 +152,7 @@ function App() {
 
 ## Estructura de imports
 
-Elise soporta dos estilos de importacion:
+Elise soporta dos estilos de importación:
 
 ```tsx
 // Import directo por componente (recomendado)
@@ -149,7 +163,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@calumet/elise-ui/dialog";
 import { Button, Dialog, DialogContent } from "@calumet/elise-ui";
 ```
 
-Para utilidades, usa los sub-modulos:
+Para utilidades, usa los sub-módulos:
 
 ```tsx
 import { useZodForm, z } from "@calumet/elise-forms";
@@ -165,7 +179,7 @@ Para iconos:
 import { Search, ChevronDown } from "@calumet/elise-icons";
 ```
 
-> Los iconos disponibles son los de [Lucide](https://lucide.dev/icons/). Consulta su galeria para ver todos los iconos disponibles.
+> Los iconos disponibles son los de [Lucide](https://lucide.dev/icons/). Consulta su galería para ver todos los iconos disponibles.
 
 ## Linter y formato
 

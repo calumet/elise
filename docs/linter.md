@@ -1,8 +1,8 @@
 # Linter y Formato
 
-`@calumet/elise-linter` centraliza la configuracion de ESLint y Prettier para proyectos TypeScript.
+`@calumet/elise-linter` centraliza la configuración de ESLint y Prettier para proyectos TypeScript.
 
-## Instalacion
+## Instalación
 
 Instala las herramientas base en tu proyecto:
 
@@ -12,7 +12,7 @@ pnpm add -D @calumet/elise-linter eslint prettier typescript
 
 ## ESLint (flat config)
 
-### Opcion 1: Base (Node, scripts, librerias sin React)
+### Opción 1: Base (Node, scripts, librerías sin React)
 
 ```js
 // eslint.config.js
@@ -21,7 +21,7 @@ import { configs } from "@calumet/elise-linter";
 export default [...configs.base];
 ```
 
-### Opcion 2: React (sin reglas Tailwind)
+### Opción 2: React (sin reglas Tailwind)
 
 ```js
 // eslint.config.js
@@ -30,9 +30,9 @@ import { configs } from "@calumet/elise-linter";
 export default [...configs.react];
 ```
 
-### Opcion 3: React + Tailwind
+### Opción 3: React + Tailwind
 
-Para usar `configs.tailwind`, instala tambien las dependencias de Tailwind lint:
+Para usar `configs.tailwind`, instala también las dependencias de Tailwind lint:
 
 ```bash
 pnpm add -D tailwindcss eslint-plugin-better-tailwindcss
@@ -85,4 +85,4 @@ pnpm add -D tailwindcss eslint-plugin-better-tailwindcss
 
 ---
 
-Volver a: [Guia de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Referencias](referencias.md)
+Volver a: [Guía de inicio](guia-inicio.md) | [Arquitectura](arquitectura.md) | [Referencias](referencias.md)

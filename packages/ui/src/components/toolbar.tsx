@@ -8,9 +8,10 @@ export const Toolbar = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>
 >(({ className, ...props }, ref) => (
   <ToolbarPrimitive.Root
+    data-slot="toolbar"
     ref={ref}
     className={cn(
-      "flex flex-wrap items-center gap-2 rounded-sm border border-border bg-card p-2",
+      "flex flex-wrap items-center gap-2 rounded-md border border-border bg-card p-2",
       className,
     )}
     {...props}
@@ -23,9 +24,10 @@ export const ToolbarButton = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>
 >(({ className, ...props }, ref) => (
   <ToolbarPrimitive.Button
+    data-slot="toolbar-button"
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center rounded-sm bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+      "inline-flex items-center justify-center rounded-md bg-background px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
       className,
     )}
     {...props}
@@ -40,6 +42,7 @@ export const ToolbarSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <ToolbarPrimitive.Separator
+    data-slot="toolbar-separator"
     ref={ref}
     className={cn("mx-1 h-6 w-px bg-border", className)}
     {...props}

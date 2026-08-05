@@ -1,57 +1,51 @@
+import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export const ToggleGroupContext = React.createContext({
-  name: "",
-  type: "multiple" as "single" | "multiple",
-});
+/* Un Toggle suelto y una opción de ToggleGroup son el mismo control, así que
+   comparten las clases. */
+export const clasesToggle =
+  "inline-flex cursor-pointer select-none items-center justify-center gap-2 rounded-md border border-border-strong bg-background px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out hover:bg-muted data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-bevel focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 
-export type ToggleGroupProps = React.ComponentPropsWithoutRef<"div"> & {
-  type?: "single" | "multiple";
-};
+/* Le dice a un `Toggle` que está dentro de un grupo. Sin esto tendría que
+   adivinarlo, y un Toggle suelto dentro de un ToggleGroup no participaría ni
+   del valor del grupo ni de su foco. */
+export const DentroDeToggleGroup = React.createContext(false);
 
-export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
-  ({ className, type = "multiple", children, ...props }, ref) => {
-    const name = React.useId();
-    return (
-      <ToggleGroupContext value={{ name, type }}>
-        <div ref={ref} role="group" className={cn("flex gap-1", className)} {...props}>
-          {children}
-        </div>
-      </ToggleGroupContext>
-    );
-  },
-);
-ToggleGroup.displayName = "ToggleGroup";
+export type ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive.Root>;
+export type ToggleGroupItemProps = React.ComponentProps<typeof ToggleGroupPrimitive.Item>;
 
-export type ToggleGroupItemProps = Omit<React.ComponentPropsWithoutRef<"label">, "htmlFor"> & {
-  value: string;
-  defaultChecked?: boolean;
-};
-
-export const ToggleGroupItem = React.forwardRef<HTMLLabelElement, ToggleGroupItemProps>(
-  ({ className, value, children, defaultChecked, ...props }, ref) => {
-    const { name, type } = React.useContext(ToggleGroupContext);
-    return (
-      <label
-        ref={ref}
-        className={cn(
-          "inline-flex cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-base font-semibold text-foreground transition hover:bg-muted has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:outline-none has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
-          className,
-        )}
+/**
+ * Grupo de botones de dos estados.
+ *
+ * `type="single"` deja una sola opción encendida y `type="multiple"` admite
+ * varias. El grupo es dueño del valor, con `value` y `onValueChange` o con
+ * `defaultValue`.
+ *
+ * El foco entra una vez al grupo y las flechas recorren las opciones, igual que
+ * en `RadioGroup`.
+ */
+function ToggleGroup({ className, ...props }: ToggleGroupProps) {
+  return (
+    <DentroDeToggleGroup.Provider value={true}>
+      <ToggleGroupPrimitive.Root
+        data-slot="toggle-group"
+        className={cn("flex gap-1", className)}
         {...props}
-      >
-        <input
-          type={type === "single" ? "radio" : "checkbox"}
-          name={name}
-          value={value}
-          defaultChecked={defaultChecked}
-          className="sr-only"
-        />
-        {children}
-      </label>
-    );
-  },
-);
-ToggleGroupItem.displayName = "ToggleGroupItem";
+      />
+    </DentroDeToggleGroup.Provider>
+  );
+}
+
+function ToggleGroupItem({ className, ...props }: ToggleGroupItemProps) {
+  return (
+    <ToggleGroupPrimitive.Item
+      data-slot="toggle-group-item"
+      className={cn(clasesToggle, className)}
+      {...props}
+    />
+  );
+}
+
+export { ToggleGroup, ToggleGroupItem };

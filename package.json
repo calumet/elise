@@ -6,12 +6,14 @@
   "description": "Plataforma frontend de Calumet: design system (Radix + Tailwind) y utilidades de frontend.",
   "scripts": {
     "dev": "pnpm --filter @calumet/elise-ui dev",
-    "dev:showcase": "pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-forms\" --filter \"@calumet/elise-tables\" --filter \"@calumet/elise-toasts\" --filter \"@calumet/elise-alerts\" --filter \"@calumet/elise-i18n\" --filter \"showcase\" dev",
+    "build:libs": "pnpm -r --filter \"@calumet/elise-*\" build",
+    "dev:showcase": "pnpm build:libs && pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-forms\" --filter \"@calumet/elise-tables\" --filter \"@calumet/elise-toasts\" --filter \"@calumet/elise-alerts\" --filter \"@calumet/elise-i18n\" --filter \"showcase\" dev",
     "build": "pnpm -r build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "audit:visual": "node scripts/audit-visual.mjs -- --tema=ambos",
     "clean": "pnpm -r clean",
     "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks"
   },
@@ -19,6 +21,7 @@
     "@calumet/elise-linter": "workspace:*",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
+    "playwright": "^1.56.1",
     "prettier": "^3.7.3",
     "typescript": "^5.6.3"
   },

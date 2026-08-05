@@ -11,11 +11,12 @@ export const HoverCardContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
 >(({ className, align = "center", sideOffset = 8, ...props }, ref) => (
   <HoverCardPrimitive.Content
+    data-slot="hover-card-content"
     ref={ref}
     align={align}
     sideOffset={sideOffset}
     className={cn(
-      "z-50 w-80 rounded-sm border border-border bg-popover p-4 text-foreground shadow-lg outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "z-popover w-80 rounded-xl border border-border bg-popover p-4 text-foreground shadow-lg outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
     {...props}

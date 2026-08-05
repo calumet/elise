@@ -1,6 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
+import { Spinner } from "./spinner";
+
 import { cn } from "@/lib/cn";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -9,16 +11,46 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   tone?: "success" | "warning" | "danger";
 
   asChild?: boolean;
+
+  /**
+   * Anuncia con `aria-busy` que la acción está corriendo, deshabilita el
+   * control (evitar el envío repetido es su motivo de existir) y tapa el
+   * contenido con un indicador centrado.
+   *
+   * El rótulo no se quita: se vuelve transparente. Así el botón no cambia de
+   * ancho al empezar a cargar, y quien navegue por lector de pantalla sigue
+   * sabiendo qué acción está en curso.
+   */
+  loading?: boolean;
 };
 
+/* El foco sigue la convención única del design system (ver CONTRIBUTING.md).
+   El peso es `medium`: a estos tamaños el grado de arriba engorda el rótulo lo
+   bastante como para que un botón secundario pese más que el texto que lo
+   rodea. */
 const baseClasses =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-semibold tracking-tight rounded-sm border border-transparent overflow-hidden transition-colors duration-200 outline-offset-4 hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-ring focus-visible:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:border-border";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background";
 
+/* El apagado es un cambio de tokens, no una capa de opacidad encima: sumar las
+   dos apaga dos veces y el rótulo baja de contraste más de lo que se pretendía.
+   El fondo lo pone cada variante, porque `ghost` no tiene ninguno que apagar y
+   dárselo al deshabilitarlo le inventa una caja que nunca tuvo. */
+const disabledClasses =
+  "disabled:cursor-not-allowed disabled:text-muted-foreground disabled:shadow-none";
+
+/* Los rellenos sólidos llevan bisel, que al presionar se invierte hacia adentro
+   en lugar de solo oscurecer el fondo. Las variantes outline/ghost se apoyan en
+   las superficies sutiles y no derivan el fondo con opacidad.
+   `data-[state=open]` acompaña a `active` porque con `asChild` este botón es el
+   disparador de un menú o un popover, y al soltar el ratón se quedaría plano
+   mientras la superficie sigue abierta. */
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  solid: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80",
+  solid:
+    "bg-primary text-primary-foreground shadow-bevel hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   outline:
-    "border border-border text-foreground hover:bg-muted active:border-border active:bg-muted",
-  ghost: "text-foreground hover:bg-muted active:bg-muted",
+    "border border-border-strong text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset data-[state=open]:bg-muted data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
+  ghost:
+    "text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset data-[state=open]:bg-muted data-[state=open]:shadow-bevel-inset",
 };
 
 const toneOverrides: Record<
@@ -26,20 +58,28 @@ const toneOverrides: Record<
   Record<NonNullable<ButtonProps["variant"]>, string>
 > = {
   success: {
-    solid: "bg-success text-success-foreground hover:bg-success/90 active:bg-success/80",
-    outline: "border-success text-success hover:bg-success/10 active:bg-success/20",
-    ghost: "text-success hover:bg-success/10 active:bg-success/20",
+    solid:
+      "bg-success text-success-foreground shadow-bevel hover:bg-success-hover active:bg-success-active active:shadow-bevel-inset",
+    outline:
+      "border-success text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
+    ghost:
+      "text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
   },
   warning: {
-    solid: "bg-warning text-warning-foreground hover:bg-warning/90 active:bg-warning/80",
-    outline: "border-warning text-warning hover:bg-warning/10 active:bg-warning/20",
-    ghost: "text-warning hover:bg-warning/10 active:bg-warning/20",
+    solid:
+      "bg-warning text-warning-foreground shadow-bevel hover:bg-warning-hover active:bg-warning-active active:shadow-bevel-inset",
+    outline:
+      "border-warning text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
+    ghost:
+      "text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
   },
   danger: {
     solid:
-      "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
-    outline: "border-destructive text-destructive hover:bg-destructive/10 active:bg-destructive/20",
-    ghost: "text-destructive hover:bg-destructive/10 active:bg-destructive/20",
+      "bg-destructive text-destructive-foreground shadow-bevel hover:bg-destructive-hover active:bg-destructive-active active:shadow-bevel-inset",
+    outline:
+      "border-destructive text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
+    ghost:
+      "text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
   },
 };
 
@@ -49,31 +89,76 @@ export const buttonVariants = ({
 }: {
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-} = {}) => cn(baseClasses, variantClasses[variant], sizeClasses[size]);
+} = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
+/* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
+   chrome de escritorio denso: el resto del catálogo escribe a 14px y un botón
+   de 28px al lado de ese texto se lee como un control secundario. `icon` iguala
+   a `md` para que una barra de acciones mezcle ambos sin desnivelarse. */
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-10 px-4 text-base",
-  lg: "h-11 px-5 text-base",
+  sm: "h-8 px-3 text-sm",
+  md: "h-9 px-4 text-base",
+  lg: "h-10 px-5 text-base",
   icon: "size-9",
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "solid", size = "md", tone, asChild = false, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = "solid",
+      size = "md",
+      tone,
+      asChild = false,
+      loading = false,
+      disabled,
+      type,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : "button";
     const toneClass = tone ? toneOverrides[tone][variant] : undefined;
+    /* Con `asChild` el contenido pasa intacto: `Slot` admite un solo hijo, así
+       que envolverlo rompería la composición. Ahí el estado lo anuncia
+       `aria-busy` y el hijo pinta lo que quiera. */
+    const cargando = loading && !asChild;
+    /* El default de HTML para `type` es "submit", así que un Button dentro de un
+       form lo enviaba aunque solo llevara onClick. Quien envíe tiene que pedir
+       `type="submit"` explícitamente. Con `asChild` no se fuerza nada, porque el
+       hijo puede ser un <a> y `type` no le corresponde. */
     return (
       <Comp
+        data-slot="button"
         ref={ref}
+        type={asChild ? type : (type ?? "button")}
+        disabled={disabled || cargando || undefined}
+        data-loading={loading ? "" : undefined}
+        aria-busy={loading || undefined}
         className={cn(
           baseClasses,
+          disabledClasses,
           variantClasses[variant],
           toneClass,
           sizeClasses[size],
           className,
         )}
         {...props}
-      />
+      >
+        {cargando ? (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center justify-center text-muted-foreground"
+          >
+            <Spinner />
+          </span>
+        ) : null}
+        {/* `contents` saca la envoltura del layout, de modo que el hueco y la
+            separación entre los hijos siguen siendo los del botón sin cargar; lo
+            único que aporta es el color que los apaga. */}
+        {cargando ? <span className="contents text-transparent">{children}</span> : children}
+      </Comp>
     );
   },
 );

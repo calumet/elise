@@ -37,6 +37,8 @@ export default {
     sidebar: "Sidebar",
     sidebarDescription: "Displays the mobile sidebar.",
     selectDate: "Select date",
+    openCalendar: "Open calendar",
+    dateFormat: "YYYY-MM-DD",
     togglePassword: "Show or hide password",
     otpGroup: "Verification code",
     otpDigit: "Digit",

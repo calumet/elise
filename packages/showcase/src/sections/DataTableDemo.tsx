@@ -42,13 +42,13 @@ const DataTableDemo = () => {
           const value = getValue<Project["status"]>();
           const toneClass =
             value === "Stable"
-              ? "bg-success/15 text-success border-success/30"
+              ? "bg-success-subtle text-success-subtle-foreground"
               : value === "Draft"
-                ? "bg-warning/15 text-warning border-warning/30"
-                : "bg-destructive/15 text-destructive border-destructive/30";
+                ? "bg-warning-subtle text-warning-subtle-foreground"
+                : "bg-destructive-subtle text-destructive-subtle-foreground";
           return (
             <span
-              className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-xs font-semibold ${toneClass}`}
+              className={`inline-flex items-center rounded-full px-2 py-0.5 text-2xs font-semibold ${toneClass}`}
             >
               {value}
             </span>
