@@ -67,7 +67,7 @@ const PantallaFicha = () => (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
       <div className="flex min-w-0 flex-col gap-5">
         <Section heading="Información del producto">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <Field label="Nombre" description="Es el nombre que ven tus clientes al navegar.">
               {(props) => <Input {...props} defaultValue="Café Andes" />}
             </Field>
@@ -87,7 +87,7 @@ const PantallaFicha = () => (
         </Section>
 
         <Section heading="Variantes">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <SearchField
                 label="Buscar variantes"
@@ -149,7 +149,7 @@ const PantallaFicha = () => (
         </Section>
 
         <Section heading="Ajustes del producto">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <Field label="Molienda">
               {(props) => (
                 <Select defaultValue="grano">

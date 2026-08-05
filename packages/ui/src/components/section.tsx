@@ -52,7 +52,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
         data-slot="section"
         aria-labelledby={heading ? idDelRotulo : undefined}
         aria-label={heading ? undefined : accessibilityLabel}
-        className={cn(sinRelleno && "gap-4 py-0", className)}
+        className={cn(sinRelleno && "py-0", className)}
         {...props}
       >
         {heading || actions ? (

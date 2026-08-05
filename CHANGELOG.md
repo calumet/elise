@@ -7,10 +7,12 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Rompe
 
-- **La tarjeta pasa a 16px de relleno y 8px entre su cabecera y su cuerpo.**
-  Antes eran 24 y 24. Alcanza a `Card`, `Section` y a todo lo que se apoye en
-  ellos. Una pantalla que compensara el relleno viejo con márgenes propios
-  queda apretada.
+- **La tarjeta pasa a 16px de relleno y 12px entre su cabecera y su cuerpo.**
+  Antes eran 24 y 24. Los 12px son los que `FormRow`, `RadioGroup` y
+  `CheckboxGroup` ya usan entre campos, así que una tarjeta de formulario queda
+  con un solo ritmo vertical. Alcanza a `Card`, `Section` y a todo lo que se
+  apoye en ellos. Una pantalla que compensara el relleno viejo con márgenes
+  propios queda apretada.
 
 ### Agrega
 
@@ -41,6 +43,9 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 - **La cabecera de la tarjeta dejaba una fila vacía.** Declaraba dos filas
   siempre, así que una tarjeta con título y sin descripción sumaba el hueco de
   la fila que no existía debajo del rótulo.
+- **`Section` con `padding="none"` reescribía el hueco de la tarjeta.** Fijaba
+  el suyo en 16px, y con eso una sección sin relleno separaba distinto que una
+  con relleno.
 
 ## `@calumet/elise-ui` 0.4.0
 

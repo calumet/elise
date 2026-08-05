@@ -66,7 +66,7 @@ const PantallaAjustes = () => (
     </header>
 
     <Section heading="Información de la tienda">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         <Field label="Nombre de la tienda">
           {(props) => <Input {...props} defaultValue="Calumet Café" />}
         </Field>
@@ -85,7 +85,7 @@ const PantallaAjustes = () => (
     </Section>
 
     <Section heading="Notificaciones">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         <Field label="Cada cuánto te avisamos">
           {(props) => (
             <Select defaultValue="inmediato">

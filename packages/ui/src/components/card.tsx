@@ -15,7 +15,7 @@ function Card({ className, as: Comp = "div", ...props }: CardProps) {
   return (
     <Comp
       data-slot="card"
-      className={cn(SUPERFICIE, "flex flex-col gap-2 py-4 text-card-foreground", className)}
+      className={cn(SUPERFICIE, "flex flex-col gap-3 py-4 text-card-foreground", className)}
       {...props}
     />
   );
