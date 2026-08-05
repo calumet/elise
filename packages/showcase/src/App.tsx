@@ -38,6 +38,7 @@ const CarouselDemo = React.lazy(() => import("./sections/CarouselDemo"));
 const AlertDialogStandalone = React.lazy(() => import("./sections/AlertDialogStandalone"));
 const CatalogoDemo = React.lazy(() => import("./sections/CatalogoDemo"));
 const ComboboxDemo = React.lazy(() => import("./sections/ComboboxDemo"));
+const ClickableDemo = React.lazy(() => import("./sections/ClickableDemo"));
 const CommandDemo = React.lazy(() => import("./sections/CommandDemo"));
 const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"));
 const ContactForm = React.lazy(() => import("./sections/ContactForm"));
@@ -269,6 +270,12 @@ const App = () => (
           <SectionCard title="AppShell: marco de aplicacion">
             <LazySection>
               <AppShellDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Clickable: la caja entera que se pulsa">
+            <LazySection>
+              <ClickableDemo />
             </LazySection>
           </SectionCard>
 

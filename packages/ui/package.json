@@ -230,6 +230,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./clickable": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./collapsible": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

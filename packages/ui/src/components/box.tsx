@@ -93,6 +93,45 @@ const shadowClasses: Record<NonNullable<BoxProps["shadow"]>, string> = {
   xl: "shadow-xl",
 };
 
+/** Las propiedades visuales de una caja, sin lo que la hace un `<div>`. */
+export type CajaProps = Pick<
+  BoxProps,
+  | "padding"
+  | "paddingX"
+  | "paddingY"
+  | "background"
+  | "border"
+  | "radius"
+  | "shadow"
+  | "overflowHidden"
+>;
+
+/**
+ * Traduce esas propiedades a clases. Existe suelto para que otra cosa que sea
+ * una caja pero no un `<div>`, como `Clickable`, no vuelva a escribir los mapas
+ * y se le vaya la escala por su lado.
+ */
+export const clasesDeCaja = ({
+  padding,
+  paddingX,
+  paddingY,
+  background = "none",
+  border,
+  radius,
+  shadow,
+  overflowHidden,
+}: CajaProps) =>
+  cn(
+    padding !== undefined && paddingClasses[padding],
+    paddingX !== undefined && paddingXClasses[paddingX],
+    paddingY !== undefined && paddingYClasses[paddingY],
+    backgroundClasses[background],
+    border && (border === "strong" ? "border border-border-strong" : "border border-border"),
+    radius && radiusClasses[radius],
+    shadow && shadowClasses[shadow],
+    overflowHidden && "overflow-hidden",
+  );
+
 /**
  * Contenedor genérico. Solo expone las propiedades que el sistema controla
  * (espaciado, superficie, borde, radio y elevación) y siempre a través de
@@ -104,7 +143,7 @@ function Box({
   padding,
   paddingX,
   paddingY,
-  background = "none",
+  background,
   border,
   radius,
   shadow,
@@ -115,14 +154,16 @@ function Box({
     <Comp
       data-slot="box"
       className={cn(
-        padding !== undefined && paddingClasses[padding],
-        paddingX !== undefined && paddingXClasses[paddingX],
-        paddingY !== undefined && paddingYClasses[paddingY],
-        backgroundClasses[background],
-        border && (border === "strong" ? "border border-border-strong" : "border border-border"),
-        radius && radiusClasses[radius],
-        shadow && shadowClasses[shadow],
-        overflowHidden && "overflow-hidden",
+        clasesDeCaja({
+          padding,
+          paddingX,
+          paddingY,
+          background,
+          border,
+          radius,
+          shadow,
+          overflowHidden,
+        }),
         className,
       )}
       {...props}
