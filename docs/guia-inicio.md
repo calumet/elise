@@ -62,7 +62,6 @@ export default defineConfig({
 @source "../node_modules/@calumet/elise-tables/dist";
 @source "../node_modules/@calumet/elise-toasts/dist";
 @source "../node_modules/@calumet/elise-alerts/dist";
-@source "../node_modules/@calumet/elise-blocks/dist";
 ```
 
 > **No te saltees `fonts.css`.** Sin el, `--font-sans` cae en la fuente del

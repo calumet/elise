@@ -11,7 +11,6 @@ Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind C
 | [`@calumet/elise-tables`](packages/tables) | `DataTable` con filtros, ordenamiento, paginación y export (TanStack React Table) |
 | [`@calumet/elise-toasts`](packages/toasts) | Sistema de toasts (event bus + `Toaster`)                                         |
 | [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                              |
-| [`@calumet/elise-blocks`](packages/blocks) | Pantallas armadas: `Page`, `TablePage`, `Wizard`, ajustes, autenticación, errores |
 | [`@calumet/elise-i18n`](packages/i18n)     | Internacionalización: `I18nProvider`, hooks y formateo `Intl` (dates, numbers)    |
 | [`@calumet/elise-icons`](packages/icons)   | Re-export de [Lucide Icons](https://lucide.dev/icons/)                            |
 | [`@calumet/elise-linter`](packages/linter) | Configuración compartida de ESLint y Prettier                                     |
@@ -29,29 +28,22 @@ Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind C
 git clone https://github.com/calumet/elise.git
 cd elise
 pnpm install
-pnpm build:libs
 ```
-
-El segundo paso no es opcional. El showcase importa los paquetes por su nombre
-(`@calumet/elise-ui`), y esos nombres resuelven contra `dist/`, que no está en
-git. Sin construirlos, Vite corta con «Failed to resolve import». Lo mismo pasa
-al traerse una rama que agrega un paquete nuevo: hay que volver a instalar para
-que aparezca el enlace del workspace, y volver a construir.
 
 ## Scripts
 
-| Comando             | Descripción                                                                                    |
-| ------------------- | ---------------------------------------------------------------------------------------------- |
-| `pnpm dev`          | Modo desarrollo de `@calumet/elise-ui` (watch + dts)                                           |
-| `pnpm build:libs`   | Build de los paquetes de librería, sin el showcase                                             |
-| `pnpm dev:showcase` | Build de librerías y luego desarrollo paralelo de todo + showcase                              |
-| `pnpm build`        | Build de producción (icons → ui → i18n → forms → tables → toasts → alerts → blocks → showcase) |
-| `pnpm lint`         | Verificar ESLint                                                                               |
-| `pnpm lint:fix`     | Corregir problemas de ESLint                                                                   |
-| `pnpm format`       | Formatear con Prettier                                                                         |
-| `pnpm format:check` | Verificar formato                                                                              |
-| `pnpm audit:visual` | Auditoría visual del showcase en Chromium (ver [docs](docs/auditoria-visual.md))               |
-| `pnpm clean`        | Limpiar carpetas dist                                                                          |
+| Comando             | Descripción                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `pnpm dev`          | Modo desarrollo de `@calumet/elise-ui` (watch + dts)                                  |
+| `pnpm build:libs`   | Build de los paquetes de librería, sin el showcase                                    |
+| `pnpm dev:showcase` | Build de librerías y luego desarrollo paralelo de todo + showcase                     |
+| `pnpm build`        | Build de producción (icons → ui → i18n → forms → tables → toasts → alerts → showcase) |
+| `pnpm lint`         | Verificar ESLint                                                                      |
+| `pnpm lint:fix`     | Corregir problemas de ESLint                                                          |
+| `pnpm format`       | Formatear con Prettier                                                                |
+| `pnpm format:check` | Verificar formato                                                                     |
+| `pnpm audit:visual` | Auditoría visual del showcase en Chromium (ver [docs](docs/auditoria-visual.md))      |
+| `pnpm clean`        | Limpiar carpetas dist                                                                 |
 
 ## Estructura del proyecto
 
@@ -66,8 +58,8 @@ elise/
 │   ├── i18n/         # Internacionalización (Intl)
 │   ├── icons/        # Iconos (Lucide)
 │   ├── linter/       # Config ESLint + Prettier
-│   ├── blocks/       # Pantallas armadas sobre el catálogo
-│   └── showcase/     # App demo (Vite + React 19)
+│   ├── showcase/     # App demo (Vite + React 19)
+│   └── blocks/       # (reservado para uso futuro)
 ├── package.json
 ├── pnpm-workspace.yaml
 ├── tsconfig.base.json
@@ -122,11 +114,7 @@ export default defineConfig({
 @source '../node_modules/@calumet/elise-tables/dist';
 @source '../node_modules/@calumet/elise-toasts/dist';
 @source '../node_modules/@calumet/elise-alerts/dist';
-@source '../node_modules/@calumet/elise-blocks/dist';
 ```
-
-Una línea `@source` por paquete que uses. Tailwind escanea esas carpetas al
-arrancar, así que un paquete que falte ahí compila pero sale sin estilos.
 
 ## Documentación
 
@@ -136,7 +124,6 @@ Consulta la documentación completa en [`./docs`](docs/):
 - [Arquitectura](docs/arquitectura.md)
 - [Temas](docs/temas.md)
 - [Componentes](docs/componentes.md)
-- [Bloques](docs/bloques.md)
 - [Utilidades](docs/utilidades.md)
 - [Internacionalización (i18n)](docs/i18n.md)
 - [Linter y formato](docs/linter.md)
