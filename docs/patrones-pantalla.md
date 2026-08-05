@@ -1,19 +1,19 @@
 # Patrones de pantalla
 
-Una pantalla de Calumet se arma con seis disposiciones. Cada una resuelve un
-trabajo distinto y se reconoce por lo que el usuario viene a hacer.
+Un panel de administración tiene cuatro clases de pantalla. Cada una se
+reconoce por lo que el usuario viene a hacer, y todo lo demás que aparece en
+ella es un bloque de [Patrones de bloque](patrones-bloque.md).
 
-Ninguna es un componente. Son composiciones del catálogo, y por eso se
-documentan acá en vez de exportarse. Un componente-pantalla obliga a discutir
-props para cada variante que aparece; una composición se copia y se ajusta.
+Ninguna de las cuatro es un componente. Son composiciones del catálogo, y por
+eso se documentan acá en vez de exportarse. Un componente-pantalla obliga a
+discutir props para cada variante que aparece; una composición se copia y se
+ajusta.
 
-Las reglas transversales están en [Reglas de interfaz](reglas-ui.md). Los
-bloques que van dentro de estas pantallas, en
-[Patrones de bloque](patrones-bloque.md).
+Las reglas transversales están en [Reglas de interfaz](reglas-ui.md).
 
 ## 1. El marco común
 
-Las seis comparten el mismo esqueleto.
+Las cuatro comparten el mismo esqueleto.
 
 ```tsx
 <AppShellMain>
@@ -33,7 +33,7 @@ Las seis comparten el mismo esqueleto.
       </ButtonGroup>
     </header>
 
-    {/* el contenido de la pantalla */}
+    {/* las secciones de la pantalla */}
   </Container>
 </AppShellMain>
 ```
@@ -46,34 +46,63 @@ Las seis comparten el mismo esqueleto.
 | `flex-wrap` y `gap-y`  | Sin envolver, tres botones piden 302px y a 360px de pantalla se salen de la banda de 228px |
 | `min-w-0` en el título | Sin él, un título largo empuja las acciones fuera del contenedor                           |
 
-## 2. Listado
+El contenido de las cuatro se reparte en `Section`, una por grupo. Una pantalla
+que ponga contenido suelto entre secciones pierde el ritmo vertical y deja
+huérfano lo que no está en ninguna.
 
-Lo que el usuario viene a hacer es encontrar un registro entre muchos.
+## 2. Inicio
 
-| Parte      | Componente                                        |
-| ---------- | ------------------------------------------------- |
-| Filtros    | `Table` con la ranura `filters`                   |
-| Filas      | `Table`, o `DataTable` si hay orden y exportación |
-| Paginación | `Table` con `paginate`                            |
-| Sin datos  | `EmptyState` dentro del marco                     |
+El usuario viene a enterarse del estado general y a seguir a otra pantalla.
 
-**Los dos vacíos son distintos.** Un listado sin nada creado todavía lleva la
-acción que crea el primero. Un listado con filtros que no devuelven nada lleva
-la acción que los quita. Con un solo cartel, quien filtró cree que perdió los
-datos.
+| Parte                | Bloque                                                                    |
+| -------------------- | ------------------------------------------------------------------------- |
+| Algo que atender ya  | `Alert` descartable, encima de todas las secciones                        |
+| Números del negocio  | [Tarjeta de métricas](patrones-bloque.md#5-tarjeta-de-métricas)           |
+| Qué falta configurar | [Guía de puesta en marcha](patrones-bloque.md#8-guía-de-puesta-en-marcha) |
+| Algo que ofrecer     | [Tarjeta de anuncio](patrones-bloque.md#6-tarjeta-de-anuncio)             |
+| Ayuda                | [Pie de ayuda](patrones-bloque.md#9-pie-de-ayuda)                         |
 
-**El cartel va dentro del marco de la tabla**, debajo de la barra de filtros.
-Puesto fuera, el aviso dice que no hay resultados mientras el filtro que los
-esconde queda arriba y sin explicación.
+**Es la única pantalla sin título propio.** El nombre de la aplicación ya está
+en la barra, y repetirlo como encabezado gasta el primer renglón.
 
-## 3. Ficha
+**El aviso va arriba y se puede descartar.** Un aviso permanente en el inicio
+deja de leerse a la tercera visita.
 
-Lo que el usuario viene a hacer es leer o editar un registro concreto.
+## 3. Listado
+
+El usuario viene a encontrar un registro entre muchos.
+
+| Parte               | Bloque                                                                                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Los registros       | [Tabla de índice](patrones-bloque.md#2-tabla-de-índice), o [Lista de recursos](patrones-bloque.md#3-lista-de-recursos) |
+| Sin ninguno         | [Estado vacío](patrones-bloque.md#1-estado-vacío) en lugar de la tabla                                                 |
+| Acción de crear     | En la cabecera de la pantalla, sólida                                                                                  |
+| Importar y exportar | En la cabecera, en `outline`                                                                                           |
+
+**Los dos vacíos van en sitios distintos.** Sin ningún registro creado, el
+estado vacío ocupa el lugar de la tabla entera, porque no hay filtros que
+preservar. Con filtros puestos que no devuelven nada, el aviso va dentro del
+marco y debajo de la barra de filtros, ya que la salida es quitar el filtro y
+para eso tiene que seguir a la vista.
+
+El segundo caso todavía no se puede escribir con el catálogo. `Table` no expone
+una ranura para ocupar el sitio de las filas conservando la barra, así que hoy
+se resuelve montando la tabla sin filas y poniendo el aviso debajo, con el
+filtro a la vista pero fuera del marco.
+
+**La tabla decide entre tabla y lista.** `Table` con `variant="auto"` pasa a
+lista por debajo de 490px, donde tres columnas ya no caben sin partir el texto
+por letras.
+
+## 4. Ficha
+
+El usuario viene a leer o editar un registro concreto.
 
 | Parte             | Componente                                  |
 | ----------------- | ------------------------------------------- |
 | Vuelta al listado | `Link` con `ChevronLeft`, encima del título |
 | Estado            | `Badge`, al lado del título                 |
+| Acciones          | Duplicar y eliminar en la cabecera          |
 | Contenido         | Varias `Section`, una por grupo de campos   |
 | Datos de apoyo    | Columna al lado, con `DescriptionList`      |
 
@@ -86,16 +115,19 @@ La columna de apoyo mide 320px y se apila por debajo de 1024px:
 `minmax(0,1fr)` en la pista principal, ya que una pista `1fr` no baja de su
 contenido y una tabla ancha empuja la columna de apoyo fuera de la pantalla.
 
-## 4. Ajustes
+**Eliminar pasa por `AlertDialog`.** Destruye un registro y no hay deshacer.
 
-Lo que el usuario viene a hacer es cambiar algo que ya estaba configurado.
+## 5. Ajustes
 
-| Parte                 | Componente                                   |
-| --------------------- | -------------------------------------------- |
-| Cada grupo            | `Section` con su `heading`                   |
-| Explicación del grupo | Un `Text` con `tone="muted"` dentro          |
-| Controles             | `Field`, `Switch`, `CheckboxGroup`, `Select` |
-| Ir a un subajuste     | `Clickable` con `href` y `ChevronRight`      |
+El usuario viene a cambiar algo que ya estaba configurado.
+
+| Parte                 | Componente                                                        |
+| --------------------- | ----------------------------------------------------------------- |
+| Cada grupo            | `Section` con su `heading`                                        |
+| Explicación del grupo | Un `Text` con `tone="muted"` dentro                               |
+| Controles             | `Field`, `Switch`, `CheckboxGroup`, `Select`                      |
+| Ir a un subajuste     | [Menú de subpantallas](patrones-bloque.md#4-menú-de-subpantallas) |
+| Acciones destructivas | Su propia sección, al final                                       |
 
 **El ancho baja a `sm`.** Una pantalla de ajustes es una columna de
 formularios, y a los 1152px de `lg` los campos quedan más anchos que cualquier
@@ -105,61 +137,6 @@ que usa la referencia, 662px.
 **Un interruptor no necesita botón de guardar.** El resto de los controles sí,
 y el botón vive al pie de la pantalla, no dentro de cada grupo.
 
-## 5. Menú de subpantallas
-
-Lo que el usuario viene a hacer es elegir a dónde ir. La pantalla no tiene
-contenido propio.
-
-| Parte              | Componente                                           |
-| ------------------ | ---------------------------------------------------- |
-| Cada destino       | `Clickable` con `href`                               |
-| Dentro de cada uno | Icono, título, una línea de detalle y `ChevronRight` |
-| Entre destinos     | `Separator`                                          |
-| El conjunto        | Una `Section` con `padding="none"`                   |
-
-```tsx
-<Section heading="Configuración" padding="none">
-  {destinos.map((destino, n) => (
-    <div key={destino.href}>
-      {n > 0 ? <Separator /> : null}
-      <Clickable href={destino.href} padding={3} accessibilityLabel={`Abrir ${destino.titulo}`}>
-        …
-      </Clickable>
-    </div>
-  ))}
-</Section>
-```
-
-El `accessibilityLabel` hace falta porque dentro van un título y un párrafo, y
-anunciarlo entero da un nombre largo que no dice a dónde lleva.
-
-## 6. Lista de recursos
-
-Lo que el usuario viene a hacer es reconocer registros por algo que no es texto
-tabulado, como una foto o un avatar.
-
-| Parte            | Componente                                               |
-| ---------------- | -------------------------------------------------------- |
-| Cada fila        | `Clickable` dentro de una `Section` con `padding="none"` |
-| Identidad visual | `Thumbnail` o `Avatar`                                   |
-| Estado           | `Badge`                                                  |
-| Filtros          | `SearchField` y `Select` sobre la lista                  |
-
-Un listado de productos con foto se lee mejor así que en una tabla, porque la
-columna de la imagen ocupa más que las tres de texto juntas. Con más de cuatro
-datos por registro, la tabla del patrón de listado gana.
-
-## 7. Inicio
-
-Lo que el usuario viene a hacer es enterarse del estado general y seguir a otra
-pantalla.
-
-| Parte                | Bloque                                                                    |
-| -------------------- | ------------------------------------------------------------------------- |
-| Números del negocio  | [Tarjeta de métricas](patrones-bloque.md#2-tarjeta-de-métricas)           |
-| Qué falta configurar | [Guía de puesta en marcha](patrones-bloque.md#5-guía-de-puesta-en-marcha) |
-| Algo que anunciar    | [Tarjeta de anuncio](patrones-bloque.md#3-tarjeta-de-anuncio)             |
-| Ayuda                | [Pie de ayuda](patrones-bloque.md#6-pie-de-ayuda)                         |
-
-El inicio es la única pantalla que se arma casi entera con bloques. Cada uno
-tiene su propia regla en el documento de bloques.
+**Lo que destruye va al final y aparte.** Restablecer o borrar la cuenta en la
+misma sección que el nombre de la tienda invita a pulsarlo mientras se edita
+otra cosa.

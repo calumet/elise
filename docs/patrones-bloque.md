@@ -1,9 +1,10 @@
 # Patrones de bloque
 
-Un bloque ocupa una parte de la pantalla y se combina con otros. Los siete que
-siguen cubren lo que aparece en un panel de administración de Calumet.
+Un bloque ocupa una `Section` dentro de una pantalla y se combina con otros.
+Los diez que siguen cubren lo que aparece en un panel de administración de
+Calumet.
 
-Las pantallas que los contienen están en
+Las cuatro pantallas que los contienen están en
 [Patrones de pantalla](patrones-pantalla.md). Las reglas transversales, en
 [Reglas de interfaz](reglas-ui.md).
 
@@ -25,12 +26,78 @@ saber qué hacer, y la pantalla se lee como rota.
 «Sin resultados» a secas obliga a deducir de qué se trata.
 
 Cuando el vacío viene de un filtro, el título nombra el término buscado y la
-acción quita el filtro. Los dos casos están en
-[Listado](patrones-pantalla.md#2-listado).
+acción quita el filtro. Dónde va cada uno de los dos casos está en
+[Listado](patrones-pantalla.md#3-listado).
 
-## 2. Tarjeta de métricas
+## 2. Tabla de índice
 
-Muestra tres o cuatro números del negocio, cada uno con su variación.
+Los registros en filas, con selección múltiple y acciones en lote.
+
+| Parte            | Componente                                         |
+| ---------------- | -------------------------------------------------- |
+| El conjunto      | `Section` con `padding="none"`                     |
+| Buscador y orden | `Table` con la ranura `filters`                    |
+| Selección        | `Checkbox` en la primera celda de cada fila        |
+| Fila que navega  | `Table` con `clickDelegate` apuntando a la casilla |
+| Miniatura        | `Thumbnail` dentro de un `Clickable`               |
+| Estado           | `Badge`                                            |
+| Paginación       | `Table` con `paginate`                             |
+
+**La fila entera activa su casilla.** `clickDelegate` recibe el `id` de la
+casilla, de modo que pulsar cualquier parte de la fila la marca sin obligar a
+apuntar a un cuadrado de 16px.
+
+**El conjunto va con `padding="none"`.** La tabla llega al borde de la sección
+y no quedan dos marcos concéntricos.
+
+## 3. Lista de recursos
+
+Los registros en filas, reconocibles por algo que no es texto tabulado.
+
+| Parte            | Componente                                 |
+| ---------------- | ------------------------------------------ |
+| El conjunto      | `Section` con `padding="none"`             |
+| Filtros          | `SearchField` y un `Popover` con etiquetas |
+| Filtros puestos  | `Chip` con `onRemove`                      |
+| Cada fila        | `Clickable` con `href`                     |
+| Identidad visual | `Avatar` o `Thumbnail`                     |
+| Cuántos hay      | Un `Checkbox` con el recuento como rótulo  |
+
+Se separa de la tabla de índice en qué hace reconocible al registro. Una lista
+de clientes con avatar se lee mejor así, porque la columna de la imagen ocupa
+más que las tres de texto juntas. Con más de cuatro datos por registro, la
+tabla gana.
+
+## 4. Menú de subpantallas
+
+Una sección que solo lleva a otras pantallas, sin contenido propio.
+
+| Parte              | Componente                                           |
+| ------------------ | ---------------------------------------------------- |
+| El conjunto        | `Section` con `padding="none"`                       |
+| Cada destino       | `Clickable` con `href`                               |
+| Dentro de cada uno | Icono, título, una línea de detalle y `ChevronRight` |
+| Entre destinos     | `Separator`                                          |
+
+```tsx
+<Section heading="Configuración" padding="none">
+  {destinos.map((destino, n) => (
+    <div key={destino.href}>
+      {n > 0 ? <Separator /> : null}
+      <Clickable href={destino.href} padding={3} accessibilityLabel={`Abrir ${destino.titulo}`}>
+        …
+      </Clickable>
+    </div>
+  ))}
+</Section>
+```
+
+El `accessibilityLabel` hace falta porque dentro van un título y un párrafo, y
+anunciarlo entero da un nombre largo que no dice a dónde lleva.
+
+## 5. Tarjeta de métricas
+
+Tres o cuatro números del negocio, cada uno con su variación.
 
 | Parte          | Componente                              |
 | -------------- | --------------------------------------- |
@@ -50,7 +117,7 @@ dato que no puede investigar.
 Por debajo de 400px de ancho de contenedor, las métricas pasan a una columna y
 los separadores verticales se quitan.
 
-## 3. Tarjeta de anuncio
+## 6. Tarjeta de anuncio
 
 Ofrece algo que el usuario todavía no usa, con una ilustración al lado.
 
@@ -66,7 +133,7 @@ el usuario deja de mirarlos.
 **Se puede descartar.** Un anuncio que vuelve en cada visita después de que el
 usuario lo ignoró tres veces es ruido.
 
-## 4. Tarjeta de contenido
+## 7. Tarjeta de contenido
 
 Presenta una pieza de contenido con su imagen, como un vídeo o un artículo.
 
@@ -83,9 +150,9 @@ lleva su propio relleno para no quedar pegado al filo.
 Se separa de la tarjeta de anuncio en el propósito. Esta muestra contenido que
 el usuario pidió ver; la de anuncio ofrece algo que no pidió.
 
-## 5. Guía de puesta en marcha
+## 8. Guía de puesta en marcha
 
-Lista los pasos que faltan para dejar la aplicación lista, con su progreso.
+Los pasos que faltan para dejar la aplicación lista, con su progreso.
 
 | Parte           | Componente                                   |
 | --------------- | -------------------------------------------- |
@@ -101,7 +168,7 @@ mano miente sobre el estado real de la configuración.
 **Desaparece al terminar.** Una guía completa que sigue ocupando el inicio
 gasta el sitio de algo que sí cambia.
 
-## 6. Pie de ayuda
+## 9. Pie de ayuda
 
 Una línea al final de la pantalla que lleva a la documentación.
 
@@ -117,7 +184,7 @@ lector de pantalla que recorre solo los enlaces anuncia una lista de «acá».
 **Uno por pantalla, al final.** Repartir enlaces de ayuda por el medio compite
 con el contenido.
 
-## 7. Conexión de cuenta
+## 10. Conexión de cuenta
 
 Muestra si hay una cuenta externa conectada y deja conectarla o desconectarla.
 
