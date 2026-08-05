@@ -7,10 +7,10 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Rompe
 
-- **La tarjeta pasa a 16px de relleno**, con 16px entre su cabecera y su cuerpo.
-  Antes eran 24 en los tres sitios. Alcanza a `Card`, `Section` y a todo lo que
-  se apoye en ellos. Una pantalla que compensara el relleno viejo con márgenes
-  propios queda apretada.
+- **La tarjeta pasa a 16px de relleno y 8px entre su cabecera y su cuerpo.**
+  Antes eran 24 y 24. Alcanza a `Card`, `Section` y a todo lo que se apoye en
+  ellos. Una pantalla que compensara el relleno viejo con márgenes propios
+  queda apretada.
 
 ### Agrega
 
@@ -38,6 +38,9 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   ahora `SUPERFICIE`, que se muda a `lib`.
 - **El cuerpo del `Alert` partía las frases.** Era una columna flex, así que un
   texto con un enlace dentro salía en un renglón por trozo.
+- **La cabecera de la tarjeta dejaba una fila vacía.** Declaraba dos filas
+  siempre, así que una tarjeta con título y sin descripción sumaba el hueco de
+  la fila que no existía debajo del rótulo.
 
 ## `@calumet/elise-ui` 0.4.0
 
