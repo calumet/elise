@@ -15,12 +15,15 @@
     "format:check": "prettier --check .",
     "audit:visual": "node scripts/audit-visual.mjs -- --tema=ambos",
     "clean": "pnpm -r clean",
-    "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks"
+    "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks",
+    "check:versiones": "node scripts/verificar-versiones.mjs",
+    "jsr:check": "node scripts/verificar-versiones.mjs && jsr publish --dry-run --allow-dirty"
   },
   "devDependencies": {
     "@calumet/elise-linter": "workspace:*",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
+    "jsr": "^0.14.3",
     "playwright": "^1.56.1",
     "prettier": "^3.7.3",
     "typescript": "^5.6.3"
