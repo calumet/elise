@@ -38,6 +38,7 @@ const CarouselDemo = React.lazy(() => import("./sections/CarouselDemo"));
 const AlertDialogStandalone = React.lazy(() => import("./sections/AlertDialogStandalone"));
 const CatalogoDemo = React.lazy(() => import("./sections/CatalogoDemo"));
 const ComboboxDemo = React.lazy(() => import("./sections/ComboboxDemo"));
+const ClickableDemo = React.lazy(() => import("./sections/ClickableDemo"));
 const CommandDemo = React.lazy(() => import("./sections/CommandDemo"));
 const ComponentsSampler = React.lazy(() => import("./sections/ComponentsSampler"));
 const ContactForm = React.lazy(() => import("./sections/ContactForm"));
@@ -51,16 +52,24 @@ const FeedbackDemo = React.lazy(() => import("./sections/FeedbackDemo"));
 const FieldDemo = React.lazy(() => import("./sections/FieldDemo"));
 const AppShellDemo = React.lazy(() => import("./sections/AppShellDemo"));
 const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
+const GruposDemo = React.lazy(() => import("./sections/GruposDemo"));
 const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
 const LoginCard = React.lazy(() => import("./sections/LoginCard"));
+const ImageDemo = React.lazy(() => import("./sections/ImageDemo"));
 const MediaCardDemo = React.lazy(() => import("./sections/MediaCardDemo"));
 const MenusHoverDemo = React.lazy(() => import("./sections/MenusHoverDemo"));
 const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
+const PantallaInicio = React.lazy(() => import("./sections/pantallas/PantallaInicio"));
+const PantallaListado = React.lazy(() => import("./sections/pantallas/PantallaListado"));
+const PantallaFicha = React.lazy(() => import("./sections/pantallas/PantallaFicha"));
+const PantallaAjustes = React.lazy(() => import("./sections/pantallas/PantallaAjustes"));
 const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
+const SectionDemo = React.lazy(() => import("./sections/SectionDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
 const ToastDemo = React.lazy(() => import("./sections/ToastDemo"));
+const VaciosDemo = React.lazy(() => import("./sections/VaciosDemo"));
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -269,6 +278,60 @@ const App = () => (
           <SectionCard title="AppShell: marco de aplicacion">
             <LazySection>
               <AppShellDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Clickable: la caja entera que se pulsa">
+            <LazySection>
+              <ClickableDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Image y Thumbnail">
+            <LazySection>
+              <ImageDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Section: el grupo con su rotulo">
+            <LazySection>
+              <SectionDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="CheckboxGroup, ButtonGroup y List">
+            <LazySection>
+              <GruposDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Los dos vacios de un listado">
+            <LazySection>
+              <VaciosDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de inicio">
+            <LazySection>
+              <PantallaInicio />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de listado">
+            <LazySection>
+              <PantallaListado />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de ficha">
+            <LazySection>
+              <PantallaFicha />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Pantalla de ajustes">
+            <LazySection>
+              <PantallaAjustes />
             </LazySection>
           </SectionCard>
 

@@ -11,6 +11,9 @@
 > Los cambios que rompen compatibilidad entre versiones están en el
 > [CHANGELOG](../CHANGELOG.md).
 
+> Para elegir entre dos componentes parecidos, o para saber quién es dueño de
+> una medida, ver [Reglas de interfaz](reglas-ui.md).
+
 ## Importación
 
 ```tsx

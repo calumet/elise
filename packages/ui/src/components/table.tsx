@@ -12,23 +12,9 @@ import {
 } from "./pagination";
 
 import { cn } from "@/lib/cn";
+import { SUPERFICIE } from "@/lib/superficie";
 
-/**
- * Contorno de superficie: la sombra de 1px por fuera y el bisel por dentro, con
- * el bisel en una capa aparte, un `::after`, en vez de como sombra interior del
- * propio marco.
- *
- * Una sombra interior se pinta por debajo del fondo de los descendientes, así
- * que el encabezado, que lleva fondo opaco, se comía su tramo de bisel: el
- * contorno salía marcado a los lados del cuerpo y liso a los del encabezado. La
- * capa va por encima del contenido y el contorno queda igual en todo el
- * perímetro.
- *
- * La tarjeta de la tabla de datos lo reutiliza para que los dos marcos se lean
- * iguales.
- */
-export const SUPERFICIE =
-  "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
+export { SUPERFICIE };
 
 /**
  * Papel que juega una columna cuando la tabla se lee como lista.
@@ -199,6 +185,19 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
 
   /** Lo que dice el aviso mientras carga. */
   loadingLabel?: React.ReactNode;
+
+  /**
+   * Lo que ocupa el sitio de las filas cuando no hay ninguna. La barra de
+   * filtros se queda en pie, que es de donde se sale de un filtro que no
+   * devuelve nada; puesto debajo del marco, el aviso dice «no hay resultados»
+   * mientras el filtro que los esconde queda arriba y sin explicación.
+   *
+   * La franja de paginar no se pinta, ya que sin filas no hay páginas.
+   *
+   * Para la tabla de algo que todavía no se creó, el estado vacío va en lugar
+   * de la tabla entera y no acá dentro.
+   */
+  empty?: React.ReactNode;
 };
 
 /**
@@ -245,6 +244,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       filters,
       loading = false,
       loadingLabel,
+      empty,
       children,
       ...props
     },
@@ -292,38 +292,41 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
         </table>
       );
 
-    const franja = paginate ? (
-      <Pagination
-        variant="table"
-        className={cn("rounded-b-[inherit]", loading && APAGADO)}
-        end={paginationEnd}
-        inert={loading || undefined}
-      >
-        <PaginationContent>
-          {onFirstPage ? (
+    const vacia = empty !== undefined && empty !== null;
+
+    const franja =
+      paginate && !vacia ? (
+        <Pagination
+          variant="table"
+          className={cn("rounded-b-[inherit]", loading && APAGADO)}
+          end={paginationEnd}
+          inert={loading || undefined}
+        >
+          <PaginationContent>
+            {onFirstPage ? (
+              <PaginationItem>
+                <PaginationFirst disabled={!hasPreviousPage} onClick={onFirstPage} />
+              </PaginationItem>
+            ) : null}
             <PaginationItem>
-              <PaginationFirst disabled={!hasPreviousPage} onClick={onFirstPage} />
+              <PaginationPrevious disabled={!hasPreviousPage} onClick={onPreviousPage} />
             </PaginationItem>
-          ) : null}
-          <PaginationItem>
-            <PaginationPrevious disabled={!hasPreviousPage} onClick={onPreviousPage} />
-          </PaginationItem>
-          {paginationLabel ? (
+            {paginationLabel ? (
+              <PaginationItem>
+                <PaginationLabel>{paginationLabel}</PaginationLabel>
+              </PaginationItem>
+            ) : null}
             <PaginationItem>
-              <PaginationLabel>{paginationLabel}</PaginationLabel>
+              <PaginationNext disabled={!hasNextPage} onClick={onNextPage} />
             </PaginationItem>
-          ) : null}
-          <PaginationItem>
-            <PaginationNext disabled={!hasNextPage} onClick={onNextPage} />
-          </PaginationItem>
-          {onLastPage ? (
-            <PaginationItem>
-              <PaginationLast disabled={!hasNextPage} onClick={onLastPage} />
-            </PaginationItem>
-          ) : null}
-        </PaginationContent>
-      </Pagination>
-    ) : null;
+            {onLastPage ? (
+              <PaginationItem>
+                <PaginationLast disabled={!hasNextPage} onClick={onLastPage} />
+              </PaginationItem>
+            ) : null}
+          </PaginationContent>
+        </Pagination>
+      ) : null;
 
     const barra = filters ? (
       <div
@@ -342,7 +345,11 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
        El encabezado no se apaga. Es el rótulo de las columnas, no dato que esté
        cambiando, y dejarlo firme es lo que mantiene la tabla legible mientras
        llega la página siguiente. */
-    const zona = (
+    const zona = vacia ? (
+      <div data-slot="table-empty" className={cn("w-full", loading && APAGADO)}>
+        {empty}
+      </div>
+    ) : (
       <div className="relative overflow-hidden rounded-[inherit]">
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
           {cuerpo}
