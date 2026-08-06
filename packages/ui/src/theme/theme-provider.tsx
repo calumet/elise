@@ -59,7 +59,7 @@ export const ThemeProvider = ({
   storageKey = "elise-theme",
   defaultTheme = "light",
   forcedTheme,
-}: ThemeProviderProps) => {
+}: ThemeProviderProps): React.JSX.Element => {
   const [theme, setThemeState] = React.useState<Theme>(() => {
     const initial = forcedTheme ?? readStoredTheme(storageKey) ?? defaultTheme;
     if (isBrowser) {
@@ -94,7 +94,7 @@ export const ThemeProvider = ({
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
-export const useTheme = () => {
+export const useTheme = (): ThemeContextValue => {
   const ctx = React.useContext(ThemeContext);
   if (!ctx) {
     throw new Error("useTheme debe usarse dentro de ThemeProvider");

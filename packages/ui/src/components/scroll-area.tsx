@@ -26,12 +26,12 @@ export type ScrollAreaProps = React.ComponentProps<"div">;
  * <ScrollArea className="h-40 rounded-sm border border-border">…</ScrollArea>
  * ```
  */
-export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
-  ({ className, children, ...props }, ref) => (
-    <div data-slot="scroll-area" ref={ref} className={cn("overflow-auto", className)} {...props}>
-      {children}
-    </div>
-  ),
-);
+export const ScrollArea: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ScrollAreaProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, ScrollAreaProps>(({ className, children, ...props }, ref) => (
+  <div data-slot="scroll-area" ref={ref} className={cn("overflow-auto", className)} {...props}>
+    {children}
+  </div>
+));
 
 ScrollArea.displayName = "ScrollArea";

@@ -20,7 +20,10 @@ export const AlertDialogPortal = AlertDialogPrimitive.Portal;
 export const AlertDialogAction = AlertDialogPrimitive.Action;
 export const AlertDialogCancel = AlertDialogPrimitive.Cancel;
 
-export const AlertDialogOverlay = React.forwardRef<
+export const AlertDialogOverlay: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>> &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Overlay>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
@@ -48,7 +51,14 @@ AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
  * No hay aspa. Es lo que separa a este de `Dialog`: no se descarta mirando
  * hacia otro lado, se responde.
  */
-export const AlertDialogContent = React.forwardRef<
+export const AlertDialogContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<
+    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
+      size?: keyof typeof ANCHOS_DIALOGO;
+    }
+  > &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
     size?: keyof typeof ANCHOS_DIALOGO;
@@ -69,7 +79,7 @@ AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 export const AlertDialogHeader = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-header" className={cn(CABECERA_DIALOGO, className)} {...props} />
 );
 AlertDialogHeader.displayName = "AlertDialogHeader";
@@ -81,12 +91,18 @@ AlertDialogHeader.displayName = "AlertDialogHeader";
  * con una lista larga de lo que se va a borrar no empuja los botones fuera de
  * la pantalla.
  */
-export const AlertDialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export const AlertDialogBody = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
 );
 AlertDialogBody.displayName = "AlertDialogBody";
 
-export const AlertDialogTitle = React.forwardRef<
+export const AlertDialogTitle: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>> &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Title>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
@@ -99,7 +115,10 @@ export const AlertDialogTitle = React.forwardRef<
 ));
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 
-export const AlertDialogDescription = React.forwardRef<
+export const AlertDialogDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>> &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Description>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
@@ -115,7 +134,7 @@ AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayNam
 export const AlertDialogFooter = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
 );
 AlertDialogFooter.displayName = "AlertDialogFooter";

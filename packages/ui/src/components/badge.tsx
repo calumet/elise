@@ -65,7 +65,7 @@ export const badgeVariants = ({
   tone = "neutral",
   variant = "subtle",
   size = "md",
-}: Pick<BadgeProps, "tone" | "variant" | "size"> = {}) =>
+}: Pick<BadgeProps, "tone" | "variant" | "size"> = {}): string =>
   cn(baseClasses, toneClasses[tone][variant], sizeClasses[size]);
 
 function Badge({
@@ -75,7 +75,7 @@ function Badge({
   size = "md",
   asChild = false,
   ...props
-}: BadgeProps) {
+}: BadgeProps): React.JSX.Element {
   const Comp = asChild ? Slot : "span";
   return (
     <Comp

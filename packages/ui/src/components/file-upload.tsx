@@ -37,7 +37,7 @@ export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
   hint?: string;
 };
 
-const formatearTamano = (bytes: number) => {
+const formatearTamano = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
@@ -78,7 +78,7 @@ function FileUpload({
   label,
   hint,
   ...props
-}: FileUploadProps) {
+}: FileUploadProps): React.JSX.Element {
   const [arrastrando, setArrastrando] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const contador = React.useRef(0);
@@ -170,7 +170,7 @@ function FileUpload({
   );
 }
 
-function FileUploadList({ className, ...props }: React.ComponentProps<"ul">) {
+function FileUploadList({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul data-slot="file-upload-list" className={cn("flex flex-col gap-2", className)} {...props} />
   );
@@ -184,7 +184,13 @@ export type FileUploadItemProps = Omit<React.ComponentProps<"li">, "onRemove"> &
   onRemove?: () => void;
 };
 
-function FileUploadItem({ className, name, size, onRemove, ...props }: FileUploadItemProps) {
+function FileUploadItem({
+  className,
+  name,
+  size,
+  onRemove,
+  ...props
+}: FileUploadItemProps): React.JSX.Element {
   const quitarLabel = useElLabel("ui", "remove", "Quitar");
   return (
     <li

@@ -49,7 +49,9 @@ export type ColorPickerProps = Omit<
  * Emite siempre hex, de 6 o de 8 con `alpha`, aunque le entre `rgb()` o `hsl()`.
  * Una sola salida evita que cada consumidor tenga que normalizar lo que reciba.
  */
-export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
+export const ColorPicker: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ColorPickerProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (
     {
       className,

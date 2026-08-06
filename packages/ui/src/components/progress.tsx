@@ -14,7 +14,7 @@ export type ProgressProps = React.ComponentProps<typeof ProgressPrimitive.Root>;
  *
  * Para una espera sin barra está `Spinner`.
  */
-function Progress({ className, value = 0, max = 100, ...props }: ProgressProps) {
+function Progress({ className, value = 0, max = 100, ...props }: ProgressProps): React.JSX.Element {
   const indeterminado = value === null || value === undefined;
   const porcentaje = indeterminado ? 0 : (Math.min(Math.max(value, 0), max) / max) * 100;
 

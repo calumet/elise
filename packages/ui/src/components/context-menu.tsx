@@ -24,7 +24,10 @@ export const ContextMenuPortal = ContextMenuPrimitive.Portal;
 export const ContextMenuSub = ContextMenuPrimitive.Sub;
 export const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup;
 
-export const ContextMenuContent = React.forwardRef<
+export const ContextMenuContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>
 >(({ className, ...props }, ref) => (
@@ -43,7 +46,10 @@ export const ContextMenuContent = React.forwardRef<
 ));
 ContextMenuContent.displayName = ContextMenuPrimitive.Content.displayName;
 
-export const ContextMenuItem = React.forwardRef<
+export const ContextMenuItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item>
 >(({ className, ...props }, ref) => (
@@ -56,7 +62,10 @@ export const ContextMenuItem = React.forwardRef<
 ));
 ContextMenuItem.displayName = ContextMenuPrimitive.Item.displayName;
 
-export const ContextMenuCheckboxItem = React.forwardRef<
+export const ContextMenuCheckboxItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.CheckboxItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
@@ -86,7 +95,10 @@ export const ContextMenuCheckboxItem = React.forwardRef<
 ));
 ContextMenuCheckboxItem.displayName = ContextMenuPrimitive.CheckboxItem.displayName;
 
-export const ContextMenuRadioItem = React.forwardRef<
+export const ContextMenuRadioItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.RadioItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
@@ -106,7 +118,10 @@ export const ContextMenuRadioItem = React.forwardRef<
 ));
 ContextMenuRadioItem.displayName = ContextMenuPrimitive.RadioItem.displayName;
 
-export const ContextMenuLabel = React.forwardRef<
+export const ContextMenuLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -119,7 +134,10 @@ export const ContextMenuLabel = React.forwardRef<
 ));
 ContextMenuLabel.displayName = ContextMenuPrimitive.Label.displayName;
 
-export const ContextMenuSeparator = React.forwardRef<
+export const ContextMenuSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -132,7 +150,10 @@ export const ContextMenuSeparator = React.forwardRef<
 ));
 ContextMenuSeparator.displayName = ContextMenuPrimitive.Separator.displayName;
 
-export const ContextMenuSubTrigger = React.forwardRef<
+export const ContextMenuSubTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.SubTrigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
@@ -156,7 +177,10 @@ export const ContextMenuSubTrigger = React.forwardRef<
 ));
 ContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName;
 
-export const ContextMenuSubContent = React.forwardRef<
+export const ContextMenuSubContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent>> &
+    React.RefAttributes<React.ComponentRef<typeof ContextMenuPrimitive.SubContent>>
+> = React.forwardRef<
   React.ComponentRef<typeof ContextMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (

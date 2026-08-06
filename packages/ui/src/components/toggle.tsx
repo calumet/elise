@@ -20,7 +20,7 @@ export type ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root> & {
  * `pressed` u `onPressedChange` funciona suelto, y en ese caso lleva su propio
  * estado.
  */
-function Toggle({ className, value, ...props }: ToggleProps) {
+function Toggle({ className, value, ...props }: ToggleProps): React.JSX.Element {
   const enGrupo = React.useContext(DentroDeToggleGroup);
 
   if (enGrupo) {

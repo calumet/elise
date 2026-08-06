@@ -3,7 +3,10 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export const Toolbar = React.forwardRef<
+export const Toolbar: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>> &
+    React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Root>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToolbarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>
 >(({ className, ...props }, ref) => (
@@ -19,7 +22,10 @@ export const Toolbar = React.forwardRef<
 ));
 Toolbar.displayName = ToolbarPrimitive.Root.displayName;
 
-export const ToolbarButton = React.forwardRef<
+export const ToolbarButton: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>> &
+    React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Button>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToolbarPrimitive.Button>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>
 >(({ className, ...props }, ref) => (
@@ -37,7 +43,10 @@ ToolbarButton.displayName = ToolbarPrimitive.Button.displayName;
 
 export const ToolbarToggleGroup = ToolbarPrimitive.ToggleGroup;
 export const ToolbarToggleItem = ToolbarPrimitive.ToggleItem;
-export const ToolbarSeparator = React.forwardRef<
+export const ToolbarSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToolbarPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>
 >(({ className, ...props }, ref) => (

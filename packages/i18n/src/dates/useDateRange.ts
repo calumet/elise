@@ -6,7 +6,13 @@ type UseDateRangeOptions = {
   initial?: DateRange;
 };
 
-export const useDateRange = ({ initial }: UseDateRangeOptions = {}) => {
+export const useDateRange = ({ initial }: UseDateRangeOptions = {}): {
+  range: DateRange | undefined;
+  setRange: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+  setFrom: (from?: Date) => void;
+  setTo: (to?: Date) => void;
+  reset: () => void;
+} => {
   const [range, setRange] = useState<DateRange | undefined>(initial);
 
   const setFrom = (from?: Date) => setRange((curr) => ({ ...curr, from }));

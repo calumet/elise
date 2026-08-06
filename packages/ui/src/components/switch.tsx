@@ -82,7 +82,7 @@ function Switch({
   checked,
   defaultChecked,
   onCheckedChange,
-}: SwitchProps) {
+}: SwitchProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

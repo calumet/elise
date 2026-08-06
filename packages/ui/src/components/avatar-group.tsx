@@ -42,7 +42,9 @@ type ConClase = React.ReactElement<{ className?: string; style?: React.CSSProper
  * El resumen no es un avatar más: es texto con el número de los que no se ven.
  * Ponerle cara a «y otros cinco» inventaría una persona que no existe.
  */
-export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
+export const AvatarGroup: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<AvatarGroupProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
   ({ className, children, max = 4, size = "md", ...props }, ref) => {
     const plantilla = useElLabel("ui", "avatarGroupMore", "y {count} más");
 

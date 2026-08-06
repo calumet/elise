@@ -53,7 +53,9 @@ const radios: Record<NonNullable<BoxProps["radius"]>, string> = {
  * código fuente en build y nunca genera una clase armada por interpolación, así
  * que un `aspect-[3/2]` construido con el valor de una prop no existiría.
  */
-export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
+export const Image: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ImageProps> & React.RefAttributes<HTMLImageElement>
+> = React.forwardRef<HTMLImageElement, ImageProps>(
   (
     {
       className,
@@ -116,7 +118,9 @@ const tamanos: Record<NonNullable<ThumbnailProps["size"]>, string> = {
  * cuadrado. Lo que se pone en fila son miniaturas de tamaños distintos, y con
  * el radio escalando la columna se lee desparejada.
  */
-export const Thumbnail = React.forwardRef<HTMLImageElement, ThumbnailProps>(
+export const Thumbnail: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ThumbnailProps> & React.RefAttributes<HTMLImageElement>
+> = React.forwardRef<HTMLImageElement, ThumbnailProps>(
   ({ className, size = "sm", ...props }, ref) => (
     <Image
       data-slot="thumbnail"

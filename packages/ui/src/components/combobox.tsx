@@ -85,7 +85,7 @@ function Combobox({
   onOpenChange,
   closeOnSelect = true,
   children,
-}: ComboboxProps) {
+}: ComboboxProps): React.JSX.Element {
   const [valorInterno, setValorInterno] = React.useState(defaultValue ?? "");
   const [abiertoInterno, setAbiertoInterno] = React.useState(defaultOpen ?? false);
 
@@ -148,7 +148,7 @@ function MultiCombobox({
   onOpenChange,
   closeOnSelect = false,
   children,
-}: MultiComboboxProps) {
+}: MultiComboboxProps): React.JSX.Element {
   const [valoresInternos, setValoresInternos] = React.useState<string[]>(defaultValue ?? []);
   const [abiertoInterno, setAbiertoInterno] = React.useState(defaultOpen ?? false);
 
@@ -213,7 +213,7 @@ function ComboboxTrigger({
   children,
   disabled,
   ...props
-}: ComboboxTriggerProps) {
+}: ComboboxTriggerProps): React.JSX.Element {
   const { abierto } = useCombobox("ComboboxTrigger");
   const limpiarLabel = useElLabel("ui", "clear", "Limpiar seleccion");
   const mostrarLimpiar = Boolean(onClear) && !disabled;
@@ -269,7 +269,12 @@ export type ComboboxValueProps = React.ComponentProps<"span"> & {
  * dueño de su estado y pasa el texto; `ComboboxField` lo resuelve desde sus
  * `options`.
  */
-function ComboboxValue({ className, placeholder, children, ...props }: ComboboxValueProps) {
+function ComboboxValue({
+  className,
+  placeholder,
+  children,
+  ...props
+}: ComboboxValueProps): React.JSX.Element {
   const phDefecto = useElLabel("ui", "comboboxPlaceholder", "Seleccionar…");
   const vacio = children === undefined || children === null || children === "";
   return (
@@ -295,7 +300,7 @@ function ComboboxContent({
   align = "start",
   shouldFilter,
   ...props
-}: ComboboxContentProps) {
+}: ComboboxContentProps): React.JSX.Element {
   return (
     <PopoverContent
       align={align}
@@ -313,7 +318,7 @@ function ComboboxInput({
   className,
   placeholder,
   ...props
-}: React.ComponentProps<typeof CommandInput>) {
+}: React.ComponentProps<typeof CommandInput>): React.JSX.Element {
   const phDefecto = useElLabel("ui", "comboboxSearch", "Buscar…");
   return (
     <CommandInput
@@ -326,11 +331,17 @@ function ComboboxInput({
   );
 }
 
-function ComboboxList({ className, ...props }: React.ComponentProps<typeof CommandList>) {
+function ComboboxList({
+  className,
+  ...props
+}: React.ComponentProps<typeof CommandList>): React.JSX.Element {
   return <CommandList data-slot="combobox-list" className={className} {...props} />;
 }
 
-function ComboboxEmpty({ children, ...props }: React.ComponentProps<typeof CommandEmpty>) {
+function ComboboxEmpty({
+  children,
+  ...props
+}: React.ComponentProps<typeof CommandEmpty>): React.JSX.Element {
   const porDefecto = useElLabel("ui", "comboboxEmpty", "Sin resultados");
   return (
     <CommandEmpty data-slot="combobox-empty" {...props}>
@@ -339,18 +350,20 @@ function ComboboxEmpty({ children, ...props }: React.ComponentProps<typeof Comma
   );
 }
 
-function ComboboxGroup(props: React.ComponentProps<typeof CommandGroup>) {
+function ComboboxGroup(props: React.ComponentProps<typeof CommandGroup>): React.JSX.Element {
   return <CommandGroup data-slot="combobox-group" {...props} />;
 }
 
-function ComboboxSeparator(props: React.ComponentProps<typeof CommandSeparator>) {
+function ComboboxSeparator(
+  props: React.ComponentProps<typeof CommandSeparator>,
+): React.JSX.Element {
   return <CommandSeparator data-slot="combobox-separator" {...props} />;
 }
 
 export type ComboboxLoadingProps = React.ComponentProps<"div"> & { label?: string };
 
 /** Fila de carga, para listas que se piden al servidor mientras se escribe. */
-function ComboboxLoading({ className, label, ...props }: ComboboxLoadingProps) {
+function ComboboxLoading({ className, label, ...props }: ComboboxLoadingProps): React.JSX.Element {
   const porDefecto = useElLabel("ui", "loading", "Cargando");
   return (
     <div
@@ -398,7 +411,7 @@ function ComboboxItem({
   onSelect,
   children,
   ...props
-}: ComboboxItemProps) {
+}: ComboboxItemProps): React.JSX.Element {
   const { valores, elegir } = useCombobox("ComboboxItem");
   const elegido = valores.includes(value);
 
@@ -493,7 +506,7 @@ function ComboboxField({
   contentClassName,
   align = "start",
   ...props
-}: ComboboxFieldProps) {
+}: ComboboxFieldProps): React.JSX.Element {
   const [interno, setInterno] = React.useState(defaultValue ?? "");
   const controlado = valueProp !== undefined;
   const value = controlado ? valueProp : interno;
@@ -615,7 +628,7 @@ function MultiComboboxField({
   contentClassName,
   align = "start",
   ...props
-}: MultiComboboxFieldProps) {
+}: MultiComboboxFieldProps): React.JSX.Element {
   const [internos, setInternos] = React.useState<string[]>(defaultValue ?? []);
   const controlado = valueProp !== undefined;
   const valores = controlado ? valueProp : internos;

@@ -21,7 +21,7 @@ const aMinutos = (texto: string): number | null => {
 };
 
 /** Escribe minutos desde medianoche en `HH:MM`. */
-export const aTextoHora = (minutos: number) =>
+export const aTextoHora = (minutos: number): string =>
   `${String(Math.floor(minutos / 60)).padStart(2, "0")}:${String(minutos % 60).padStart(2, "0")}`;
 
 export type TimePickerProps = {
@@ -72,7 +72,9 @@ export type TimePickerProps = {
  * Se valida al salir del campo y no mientras se escribe: quien va por «09:» no
  * ha escrito nada malo todavía, solo no ha terminado.
  */
-export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(
+export const TimePicker: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TimePickerProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, TimePickerProps>(
   (
     {
       label,

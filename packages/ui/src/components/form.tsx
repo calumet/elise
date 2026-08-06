@@ -54,7 +54,9 @@ const lgColClasses: Record<GridColCount, string> = {
   6: "lg:grid-cols-6",
 };
 
-export const FormRow = React.forwardRef<HTMLDivElement, FormRowProps>(
+export const FormRow: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<FormRowProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, FormRowProps>(
   ({ className, cols = 1, smCols = 2, mdCols, lgCols, ...props }, ref) => (
     <div
       data-slot="form-row"
@@ -73,7 +75,10 @@ export const FormRow = React.forwardRef<HTMLDivElement, FormRowProps>(
 );
 FormRow.displayName = "FormRow";
 
-export const FormField = React.forwardRef<
+export const FormField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Field>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Field>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>
 >(({ className, ...props }, ref) => (
@@ -86,7 +91,10 @@ export const FormField = React.forwardRef<
 ));
 FormField.displayName = FormPrimitive.Field.displayName;
 
-export const FormLabel = React.forwardRef<
+export const FormLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -101,7 +109,10 @@ FormLabel.displayName = FormPrimitive.Label.displayName;
 
 export const FormControl = FormPrimitive.Control;
 
-export const FormMessage = React.forwardRef<
+export const FormMessage: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>> &
+    React.RefAttributes<HTMLParagraphElement>
+> = React.forwardRef<
   /* Sale por `InlineError`, que es un `<p>`, no el `<span>` que pondría Radix
      por su cuenta. */
   HTMLParagraphElement,
@@ -123,7 +134,10 @@ export const FormMessage = React.forwardRef<
 ));
 FormMessage.displayName = FormPrimitive.Message.displayName;
 
-export const FormDescription = React.forwardRef<
+export const FormDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Message>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Message>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
 >(({ className, ...props }, ref) => (
@@ -136,7 +150,10 @@ export const FormDescription = React.forwardRef<
 ));
 FormDescription.displayName = "FormDescription";
 
-export const FormSubmit = React.forwardRef<
+export const FormSubmit: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Submit>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Submit>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>
 >(({ className, ...props }, ref) => (

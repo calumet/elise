@@ -30,7 +30,7 @@ function Container({
   size = "lg",
   gutter = true,
   ...props
-}: ContainerProps) {
+}: ContainerProps): React.JSX.Element {
   return (
     <Comp
       data-slot="container"

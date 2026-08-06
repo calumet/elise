@@ -65,7 +65,9 @@ const colores: Record<NonNullable<ChipProps["color"]>, string> = {
  * <Chip onRemove={() => quitar(valor)}>{valor}</Chip>
  * ```
  */
-export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
+export const Chip: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ChipProps> & React.RefAttributes<HTMLSpanElement>
+> = React.forwardRef<HTMLSpanElement, ChipProps>(
   (
     {
       className,

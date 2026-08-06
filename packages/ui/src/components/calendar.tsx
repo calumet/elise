@@ -42,7 +42,7 @@ function Calendar({
    * Sin él se usa el del navegador.
    */
   locale?: string;
-}) {
+}): React.JSX.Element {
   const defaultClassNames = getDefaultClassNames();
 
   /* `react-day-picker` trae el inglés incrustado, así que sin esto un mes se
@@ -206,7 +206,7 @@ function CalendarDayButton({
   day,
   modifiers,
   ...props
-}: React.ComponentProps<typeof DayButton>) {
+}: React.ComponentProps<typeof DayButton>): React.JSX.Element {
   const defaultClassNames = getDefaultClassNames();
 
   const ref = React.useRef<HTMLButtonElement>(null);

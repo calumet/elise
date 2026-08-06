@@ -23,23 +23,23 @@ const genId = () =>
     ? crypto.randomUUID()
     : Math.random().toString(36);
 
-export const toast = (options: ToastOptions) => {
+export const toast = (options: ToastOptions): string => {
   const id = options.id ?? genId();
   const payload: ToastEvent = { duration: 4000, variant: "info", ...options, id };
   toastListeners.forEach((listener) => listener(payload));
   return id;
 };
 
-export const dismiss = (id?: string) => {
+export const dismiss = (id?: string): void => {
   dismissListeners.forEach((listener) => listener(id));
 };
 
-export const onToast = (listener: ToastListener) => {
+export const onToast = (listener: ToastListener): (() => boolean) => {
   toastListeners.add(listener);
   return () => toastListeners.delete(listener);
 };
 
-export const onDismiss = (listener: DismissListener) => {
+export const onDismiss = (listener: DismissListener): (() => boolean) => {
   dismissListeners.add(listener);
   return () => dismissListeners.delete(listener);
 };

@@ -21,7 +21,9 @@ export type InlineErrorProps = React.ComponentProps<"p">;
  *
  * Sin mensaje no dibuja nada, para poder escribirlo sin condicional alrededor.
  */
-export const InlineError = React.forwardRef<HTMLParagraphElement, InlineErrorProps>(
+export const InlineError: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<InlineErrorProps> & React.RefAttributes<HTMLParagraphElement>
+> = React.forwardRef<HTMLParagraphElement, InlineErrorProps>(
   ({ className, children, ...props }, ref) => {
     if (children === null || children === undefined || children === false) return null;
 

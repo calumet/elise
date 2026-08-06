@@ -60,7 +60,14 @@ const BOTON_CERRAR =
  * `danger` y `warning` se anuncian con `role="alert"` (interrumpe al lector de
  * pantalla); `info` y `success` con `role="status"` (espera a que termine).
  */
-function Alert({ className, tone = "info", icon, onDismiss, children, ...props }: AlertProps) {
+function Alert({
+  className,
+  tone = "info",
+  icon,
+  onDismiss,
+  children,
+  ...props
+}: AlertProps): React.JSX.Element {
   const dismissLabel = useElLabel("ui", "dismiss", "Descartar");
   const ToneIcon = toneIcons[tone];
   const showIcon = icon !== null;
@@ -146,7 +153,7 @@ function Alert({ className, tone = "info", icon, onDismiss, children, ...props }
   );
 }
 
-function AlertTitle({ className, ...props }: React.ComponentProps<"p">) {
+function AlertTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="alert-title"
@@ -158,7 +165,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"p">) {
 /* `Alert` lo busca por nombre para subirlo a la barra del tono. */
 AlertTitle.displayName = "AlertTitle";
 
-function AlertDescription({ className, ...props }: React.ComponentProps<"div">) {
+function AlertDescription({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="alert-description"

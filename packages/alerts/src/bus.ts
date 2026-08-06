@@ -24,7 +24,7 @@ const genId = () =>
     ? crypto.randomUUID()
     : Math.random().toString(36);
 
-export const openAlert = (options: AlertOptions) => {
+export const openAlert = (options: AlertOptions): string => {
   const id = options.id ?? genId();
   const payload: AlertEvent = {
     variant: "alert",
@@ -37,16 +37,16 @@ export const openAlert = (options: AlertOptions) => {
   return id;
 };
 
-export const closeAlert = (id?: string) => {
+export const closeAlert = (id?: string): void => {
   closeListeners.forEach((listener) => listener(id));
 };
 
-export const onAlert = (listener: AlertListener) => {
+export const onAlert = (listener: AlertListener): (() => boolean) => {
   alertListeners.add(listener);
   return () => alertListeners.delete(listener);
 };
 
-export const onCloseAlert = (listener: CloseListener) => {
+export const onCloseAlert = (listener: CloseListener): (() => boolean) => {
   closeListeners.add(listener);
   return () => closeListeners.delete(listener);
 };

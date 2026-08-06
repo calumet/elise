@@ -49,7 +49,9 @@ export type SearchFieldProps = {
  * ofrecer las búsquedas anteriores. Lo que no hereda es el aspa nativa de
  * WebKit, que se quita: aparecía además de esta y en otro sitio.
  */
-export const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
+export const SearchField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SearchFieldProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, SearchFieldProps>(
   (
     {
       label,

@@ -43,7 +43,9 @@ const tonos: Record<NonNullable<LinkProps["tone"]>, string> = {
  * recibe `window.opener` y puede reescribir la de origen; es un descuido que no
  * tiene por qué recordar quien escribe el enlace.
  */
-export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+export const Link: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<LinkProps> & React.RefAttributes<HTMLAnchorElement>
+> = React.forwardRef<HTMLAnchorElement, LinkProps>(
   ({ className, tone = "auto", asChild = false, target, rel, ...props }, ref) => {
     const Componente = asChild ? Slot : "a";
 

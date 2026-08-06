@@ -53,7 +53,7 @@ function CheckboxGroup({
   id: idProp,
   className,
   children,
-}: CheckboxGroupProps) {
+}: CheckboxGroupProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

@@ -28,7 +28,10 @@ export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
-export const DropdownMenuContent = React.forwardRef<
+export const DropdownMenuContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 6, align = "start", ...props }, ref) => (
@@ -49,7 +52,10 @@ export const DropdownMenuContent = React.forwardRef<
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
-export const DropdownMenuItem = React.forwardRef<
+export const DropdownMenuItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
 >(({ className, ...props }, ref) => (
@@ -62,7 +68,10 @@ export const DropdownMenuItem = React.forwardRef<
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
-export const DropdownMenuCheckboxItem = React.forwardRef<
+export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
@@ -92,7 +101,10 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
 ));
 DropdownMenuCheckboxItem.displayName = DropdownMenuPrimitive.CheckboxItem.displayName;
 
-export const DropdownMenuRadioItem = React.forwardRef<
+export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
@@ -112,7 +124,10 @@ export const DropdownMenuRadioItem = React.forwardRef<
 ));
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
-export const DropdownMenuLabel = React.forwardRef<
+export const DropdownMenuLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -125,7 +140,10 @@ export const DropdownMenuLabel = React.forwardRef<
 ));
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
 
-export const DropdownMenuSeparator = React.forwardRef<
+export const DropdownMenuSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -138,7 +156,10 @@ export const DropdownMenuSeparator = React.forwardRef<
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-export const DropdownMenuSubTrigger = React.forwardRef<
+export const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
@@ -162,7 +183,10 @@ export const DropdownMenuSubTrigger = React.forwardRef<
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
 
-export const DropdownMenuSubContent = React.forwardRef<
+export const DropdownMenuSubContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (

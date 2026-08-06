@@ -44,7 +44,9 @@ const tamanos: Record<NonNullable<RatingProps["size"]>, string> = {
  * al mostrar promedios, no al puntuar, y ahí ya sirve `readOnly` con el número
  * al lado.
  */
-export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
+export const Rating: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<RatingProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, RatingProps>(
   (
     {
       className,

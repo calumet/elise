@@ -25,7 +25,11 @@ export type StepperProps = React.ComponentProps<"ol"> & {
  * El estado de cada paso lo decide quien lo usa, con `status`. El componente no
  * lo deduce de un índice, porque un flujo real salta pasos y vuelve atrás.
  */
-function Stepper({ className, orientation = "horizontal", ...props }: StepperProps) {
+function Stepper({
+  className,
+  orientation = "horizontal",
+  ...props
+}: StepperProps): React.JSX.Element {
   const ctx = React.useMemo(() => ({ orientation }), [orientation]);
   return (
     <StepperContext.Provider value={ctx}>
@@ -72,7 +76,7 @@ function StepperItem({
   last,
   children,
   ...props
-}: StepperItemProps) {
+}: StepperItemProps): React.JSX.Element {
   const { orientation } = React.useContext(StepperContext);
   const completado = useElLabel("ui", "stepComplete", "Completado");
   const actual = useElLabel("ui", "stepCurrent", "Paso actual");
@@ -130,7 +134,7 @@ function StepperItem({
   );
 }
 
-function StepperTitle({ className, ...props }: React.ComponentProps<"p">) {
+function StepperTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="stepper-title"
@@ -144,7 +148,7 @@ function StepperTitle({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function StepperDescription({ className, ...props }: React.ComponentProps<"p">) {
+function StepperDescription({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="stepper-description"

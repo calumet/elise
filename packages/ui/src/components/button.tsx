@@ -89,7 +89,7 @@ export const buttonVariants = ({
 }: {
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-} = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
+} = {}): string => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
 /* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
    chrome de escritorio denso: el resto del catálogo escribe a 14px y un botón
@@ -105,7 +105,9 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
+> = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,

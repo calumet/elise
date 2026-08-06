@@ -62,7 +62,7 @@ function BlockStack({
   align,
   justify,
   ...props
-}: BlockStackProps) {
+}: BlockStackProps): React.JSX.Element {
   return (
     <Comp
       data-slot="block-stack"
@@ -87,7 +87,7 @@ function InlineStack({
   justify,
   wrap = true,
   ...props
-}: InlineStackProps) {
+}: InlineStackProps): React.JSX.Element {
   return (
     <Comp
       data-slot="inline-stack"

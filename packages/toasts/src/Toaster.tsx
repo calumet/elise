@@ -40,7 +40,7 @@ const viewportPosition = (position: Position) => {
   }
 };
 
-export const Toaster = ({ position = "top-right" }: ToasterProps) => {
+export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Element => {
   const [toasts, setToasts] = React.useState<ToastEvent[]>([]);
   const closeLabel = useElLabel("toasts", "close", "Cerrar");
 

@@ -15,7 +15,9 @@ export type OTPFieldProps = {
   "value" | "defaultValue" | "onChange" | "type" | "maxLength"
 >;
 
-export const OTPField = React.forwardRef<HTMLDivElement, OTPFieldProps>(
+export const OTPField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<OTPFieldProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, OTPFieldProps>(
   (
     {
       length = 6,

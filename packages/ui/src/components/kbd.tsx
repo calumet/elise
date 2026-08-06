@@ -18,7 +18,9 @@ export type KbdProps = React.ComponentProps<"kbd">;
  * `min-w-5` para que las de una sola letra no salgan más estrechas que las
  * demás y el atajo quede desparejo.
  */
-export const Kbd = React.forwardRef<HTMLElement, KbdProps>(({ className, ...props }, ref) => (
+export const Kbd: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<KbdProps> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, KbdProps>(({ className, ...props }, ref) => (
   <kbd
     data-slot="kbd"
     ref={ref}

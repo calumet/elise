@@ -55,7 +55,9 @@ export type ClickableProps = CajaProps &
  * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
  * sigue navegando.
  */
-export const Clickable = React.forwardRef<HTMLElement, ClickableProps>(
+export const Clickable: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ClickableProps> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, ClickableProps>(
   (
     {
       className,

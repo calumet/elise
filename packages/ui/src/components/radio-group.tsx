@@ -67,7 +67,7 @@ function RadioGroup({
   defaultValue,
   onValueChange,
   children,
-}: RadioGroupProps) {
+}: RadioGroupProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,
@@ -169,7 +169,7 @@ function RadioGroupItem({
   disabled,
   id: idProp,
   className,
-}: RadioGroupItemProps) {
+}: RadioGroupItemProps): React.JSX.Element {
   const grupo = React.useContext(GrupoCtx);
   const generado = React.useId();
   const id = idProp ?? generado;

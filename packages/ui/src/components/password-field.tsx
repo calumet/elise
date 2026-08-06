@@ -9,7 +9,9 @@ export type PasswordFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement
   toggleAriaLabel?: string;
 };
 
-export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
+export const PasswordField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<PasswordFieldProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
   ({ className, toggleAriaLabel, ...props }, ref) => {
     const [visible, setVisible] = React.useState(false);
     const defaultToggleLabel = useElLabel("ui", "togglePassword", "Mostrar u ocultar contraseña");

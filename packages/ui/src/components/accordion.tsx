@@ -17,7 +17,7 @@ export type AccordionContentProps = React.ComponentProps<typeof AccordionPrimiti
  *
  * Admite modo controlado con `value` y `onValueChange`.
  */
-function Accordion({ className, ...props }: AccordionProps) {
+function Accordion({ className, ...props }: AccordionProps): React.JSX.Element {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
@@ -27,7 +27,7 @@ function Accordion({ className, ...props }: AccordionProps) {
   );
 }
 
-function AccordionItem({ className, ...props }: AccordionItemProps) {
+function AccordionItem({ className, ...props }: AccordionItemProps): React.JSX.Element {
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
@@ -41,7 +41,11 @@ function AccordionItem({ className, ...props }: AccordionItemProps) {
  * El disparador va envuelto en el encabezado que pide el primitivo, para que la
  * jerarquía de la página no se rompa al recorrerla por encabezados.
  */
-function AccordionTrigger({ className, children, ...props }: AccordionTriggerProps) {
+function AccordionTrigger({
+  className,
+  children,
+  ...props
+}: AccordionTriggerProps): React.JSX.Element {
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
@@ -68,7 +72,11 @@ function AccordionTrigger({ className, children, ...props }: AccordionTriggerPro
  * porque animar el alto de un elemento que además tiene padding vertical deja
  * el texto apretándose durante la transición.
  */
-function AccordionContent({ className, children, ...props }: AccordionContentProps) {
+function AccordionContent({
+  className,
+  children,
+  ...props
+}: AccordionContentProps): React.JSX.Element {
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"

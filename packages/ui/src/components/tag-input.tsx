@@ -54,7 +54,9 @@ export type TagInputProps = {
  * Repetidas no entran. Un campo de etiquetas describe un conjunto, y la segunda
  * copia de una etiqueta no añade nada mientras ensucia la lista.
  */
-export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
+export const TagInput: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TagInputProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, TagInputProps>(
   (
     {
       label,

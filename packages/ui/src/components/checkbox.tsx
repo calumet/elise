@@ -75,7 +75,7 @@ function Checkbox({
   checked,
   defaultChecked,
   onCheckedChange,
-}: CheckboxProps) {
+}: CheckboxProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

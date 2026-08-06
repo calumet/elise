@@ -45,7 +45,10 @@ export const ANCHOS_DIALOGO = {
   lg: "w-[min(90vw,980px)]",
 } as const;
 
-export const DialogOverlay = React.forwardRef<
+export const DialogOverlay: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>> &
+    React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Overlay>>
+> = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
@@ -58,7 +61,15 @@ export const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-export const DialogContent = React.forwardRef<
+export const DialogContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+      showCloseButton?: boolean;
+      size?: keyof typeof ANCHOS_DIALOGO;
+    }
+  > &
+    React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
@@ -92,7 +103,10 @@ DialogContent.displayName = DialogPrimitive.Content.displayName;
    separa las tres zonas sin una regla por cada una, y hace que al desplazar un
    cuerpo largo el título y las acciones sigan leyéndose como marco y no como
    contenido que se fue quedando arriba. */
-export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export const DialogHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   /* El `pe-12` es el hueco del aspa, que va posicionada encima. `AlertDialog`
      no lo lleva porque no tiene aspa: hay que responderlo. */
   <div data-slot="dialog-header" className={cn(CABECERA_DIALOGO, "pe-12", className)} {...props} />
@@ -104,12 +118,18 @@ DialogHeader.displayName = "DialogHeader";
  * quedan fijos, así que con un formulario largo las acciones no hay que ir a
  * buscarlas al final.
  */
-export const DialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export const DialogBody = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
 );
 DialogBody.displayName = "DialogBody";
 
-export const DialogTitle = React.forwardRef<
+export const DialogTitle: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>> &
+    React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Title>>
+> = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
@@ -122,7 +142,10 @@ export const DialogTitle = React.forwardRef<
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
-export const DialogDescription = React.forwardRef<
+export const DialogDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>> &
+    React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Description>>
+> = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
@@ -143,7 +166,10 @@ DialogDescription.displayName = DialogPrimitive.Description.displayName;
  * En pantallas estrechas se apilan y la primaria queda arriba, porque ahí la
  * lectura es de arriba abajo y el final de la fila deja de significar «último».
  */
-export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export const DialogFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
 );
 DialogFooter.displayName = "DialogFooter";

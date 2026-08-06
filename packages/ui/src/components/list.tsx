@@ -20,7 +20,7 @@ export type ListProps = React.HTMLAttributes<HTMLElement> & {
  * El marcador va por fuera del texto, no dentro. Con `list-inside`, una entrada
  * de dos renglones alinea el segundo con el punto y no con la primera letra.
  */
-function List({ className, variant = "bulleted", ...props }: ListProps) {
+function List({ className, variant = "bulleted", ...props }: ListProps): React.JSX.Element {
   const Comp: React.ElementType = variant === "numbered" ? "ol" : "ul";
 
   return (
@@ -37,7 +37,7 @@ function List({ className, variant = "bulleted", ...props }: ListProps) {
   );
 }
 
-function ListItem({ className, ...props }: React.ComponentProps<"li">) {
+function ListItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element {
   return <li data-slot="list-item" className={cn("ps-1", className)} {...props} />;
 }
 

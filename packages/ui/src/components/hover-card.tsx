@@ -6,7 +6,10 @@ import { cn } from "@/lib/cn";
 export const HoverCard = HoverCardPrimitive.Root;
 export const HoverCardTrigger = HoverCardPrimitive.Trigger;
 
-export const HoverCardContent = React.forwardRef<
+export const HoverCardContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof HoverCardPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof HoverCardPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
 >(({ className, align = "center", sideOffset = 8, ...props }, ref) => (

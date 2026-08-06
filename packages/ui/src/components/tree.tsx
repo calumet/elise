@@ -40,7 +40,9 @@ export type TreeProps = Omit<React.ComponentProps<"ul">, "onSelect"> & {
  * flechas. Con un `tabIndex` por nodo, tabular por un árbol de cincuenta hojas
  * son cincuenta paradas antes de salir de él.
  */
-export const Tree = React.forwardRef<HTMLUListElement, TreeProps>(
+export const Tree: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TreeProps> & React.RefAttributes<HTMLUListElement>
+> = React.forwardRef<HTMLUListElement, TreeProps>(
   (
     {
       className,
@@ -137,7 +139,9 @@ const visibles = (raiz: HTMLElement | null) =>
       )
     : [];
 
-export const TreeItem = React.forwardRef<HTMLLIElement, TreeItemProps>(
+export const TreeItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TreeItemProps> & React.RefAttributes<HTMLLIElement>
+> = React.forwardRef<HTMLLIElement, TreeItemProps>(
   ({ className, id, label, icon, children, ...props }, ref) => {
     const ctx = React.useContext(TreeCtx);
     const profundidad = React.useContext(ProfundidadCtx);
