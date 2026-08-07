@@ -49,7 +49,13 @@ export type PaginationProps = React.ComponentProps<"nav"> & {
   end?: React.ReactNode;
 };
 
-function Pagination({ className, variant = "default", end, children, ...props }: PaginationProps) {
+function Pagination({
+  className,
+  variant = "default",
+  end,
+  children,
+  ...props
+}: PaginationProps): React.JSX.Element {
   const label = useElLabel("ui", "pagination", "Paginación");
   return (
     <nav
@@ -84,7 +90,7 @@ function Pagination({ className, variant = "default", end, children, ...props }:
  * sola pieza partida por una raya, no como botones sueltos. De ahí que las
  * esquinas interiores se cuadren y solo redondeen las de los extremos.
  */
-function PaginationContent({ className, ...props }: React.ComponentProps<"ul">) {
+function PaginationContent({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul
       data-slot="pagination-content"
@@ -98,7 +104,7 @@ function PaginationContent({ className, ...props }: React.ComponentProps<"ul">) 
   );
 }
 
-function PaginationItem({ className, ...props }: React.ComponentProps<"li">) {
+function PaginationItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element {
   return <li data-slot="pagination-item" className={cn("flex", className)} {...props} />;
 }
 
@@ -111,7 +117,7 @@ export type PaginationLinkProps = React.ComponentProps<"a"> & {
  * relleno es lo que dice dónde estás, sin sumar un borde que competiría con el
  * de la franja.
  */
-function PaginationLink({ className, isActive, ...props }: PaginationLinkProps) {
+function PaginationLink({ className, isActive, ...props }: PaginationLinkProps): React.JSX.Element {
   return (
     <a
       aria-current={isActive ? "page" : undefined}
@@ -129,14 +135,16 @@ export type PaginationButtonProps = React.ComponentProps<"button">;
  * Un paso: anterior, siguiente, primera, última. Van siempre rellenos, porque
  * son la acción de la franja y no una página entre otras.
  */
-const PaginationStep = React.forwardRef<HTMLButtonElement, PaginationButtonProps>(
+const PaginationStep: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<PaginationButtonProps> & React.RefAttributes<HTMLButtonElement>
+> = React.forwardRef<HTMLButtonElement, PaginationButtonProps>(
   ({ className, type = "button", ...props }, ref) => (
     <button ref={ref} type={type} className={cn(CAJA, "bg-fill-tertiary", className)} {...props} />
   ),
 );
 PaginationStep.displayName = "PaginationStep";
 
-function PaginationPrevious({ className, ...props }: PaginationButtonProps) {
+function PaginationPrevious({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "previousPage", "Ir a la página anterior");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
@@ -145,7 +153,7 @@ function PaginationPrevious({ className, ...props }: PaginationButtonProps) {
   );
 }
 
-function PaginationNext({ className, ...props }: PaginationButtonProps) {
+function PaginationNext({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "nextPage", "Ir a la página siguiente");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
@@ -154,7 +162,7 @@ function PaginationNext({ className, ...props }: PaginationButtonProps) {
   );
 }
 
-function PaginationFirst({ className, ...props }: PaginationButtonProps) {
+function PaginationFirst({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "firstPage", "Ir a la primera página");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
@@ -163,7 +171,7 @@ function PaginationFirst({ className, ...props }: PaginationButtonProps) {
   );
 }
 
-function PaginationLast({ className, ...props }: PaginationButtonProps) {
+function PaginationLast({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "lastPage", "Ir a la última página");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
@@ -177,7 +185,7 @@ function PaginationLast({ className, ...props }: PaginationButtonProps) {
  * no al lado porque es lo que separa los dos controles; fuera, los dos botones
  * quedarían pegados y el rótulo suelto en un extremo.
  */
-function PaginationLabel({ className, ...props }: React.ComponentProps<"span">) {
+function PaginationLabel({ className, ...props }: React.ComponentProps<"span">): React.JSX.Element {
   return (
     <span
       data-slot="pagination-label"
@@ -188,7 +196,10 @@ function PaginationLabel({ className, ...props }: React.ComponentProps<"span">) 
   );
 }
 
-function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span">) {
+function PaginationEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<"span">): React.JSX.Element {
   return (
     <span
       aria-hidden

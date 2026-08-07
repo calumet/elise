@@ -27,6 +27,13 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # Cubre lo que el build no ve: que la versión de los dos manifiestos
+      # coincida, y que el fuente siga cumpliendo las reglas de tipos de JSR.
+      # Sin esto el desajuste solo se nota cuando alguien busca en jsr.io una
+      # versión que nunca llegó.
+      - name: Publicación en JSR
+        run: pnpm jsr:check
+
       - name: Build
         run: pnpm build
 

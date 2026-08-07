@@ -29,7 +29,13 @@ export type FieldIdsOptions = {
  * uno lo repetiría, y basta olvidar un `aria-describedby` para que el lector de
  * pantalla anuncie el error suelto, sin decir de qué campo viene.
  */
-export function useFieldIds({ id: idProp, description, error, required }: FieldIdsOptions) {
+export function useFieldIds({ id: idProp, description, error, required }: FieldIdsOptions): {
+  id: string;
+  idDescripcion: string;
+  idError: string;
+  hayError: boolean;
+  control: FieldControlProps;
+} {
   const generado = React.useId();
   const id = idProp ?? generado;
   const idDescripcion = `${id}-description`;
@@ -53,7 +59,7 @@ export function useFieldIds({ id: idProp, description, error, required }: FieldI
 }
 
 /** El asterisco de obligatorio, con su lectura para lectores de pantalla. */
-export function FieldRequiredMark() {
+export function FieldRequiredMark(): React.JSX.Element {
   const requeridoLabel = useElLabel("ui", "required", "obligatorio");
 
   return (
@@ -130,7 +136,7 @@ function Field({
   id: idProp,
   children,
   ...props
-}: FieldProps) {
+}: FieldProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

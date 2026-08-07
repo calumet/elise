@@ -44,7 +44,7 @@ type DatePickerProps = {
   formatLabel?: (date?: Date) => string;
 };
 
-export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
+export function DatePicker({ value, onChange, formatLabel }: DatePickerProps): React.JSX.Element {
   const [open, setOpen] = React.useState(false);
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
 
@@ -83,7 +83,11 @@ type DateRangePickerProps = {
   formatLabel?: (range?: DateRangeValue) => string;
 };
 
-export function DateRangePicker({ value, onChange, formatLabel }: DateRangePickerProps) {
+export function DateRangePicker({
+  value,
+  onChange,
+  formatLabel,
+}: DateRangePickerProps): React.JSX.Element {
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
   const range: DateRangeValue = value ?? { from: undefined, to: undefined };
   const completo = Boolean(range?.from && range?.to);

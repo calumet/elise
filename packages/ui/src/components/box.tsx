@@ -120,7 +120,7 @@ export const clasesDeCaja = ({
   radius,
   shadow,
   overflowHidden,
-}: CajaProps) =>
+}: CajaProps): string =>
   cn(
     padding !== undefined && paddingClasses[padding],
     paddingX !== undefined && paddingXClasses[paddingX],
@@ -149,7 +149,7 @@ function Box({
   shadow,
   overflowHidden,
   ...props
-}: BoxProps) {
+}: BoxProps): React.JSX.Element {
   return (
     <Comp
       data-slot="box"

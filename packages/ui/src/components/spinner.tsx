@@ -24,7 +24,7 @@ const sizeClasses: Record<NonNullable<SpinnerProps["size"]>, string> = {
  * `prefers-reduced-motion`, porque un spinner detenido no comunica que algo
  * sigue en curso.
  */
-function Spinner({ className, size = "md", label, ...props }: SpinnerProps) {
+function Spinner({ className, size = "md", label, ...props }: SpinnerProps): React.JSX.Element {
   const fallback = useElLabel("ui", "loading", "Cargando");
   const text = label ?? fallback;
   return (

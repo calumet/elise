@@ -33,16 +33,16 @@ const tonos: Record<NonNullable<TimelineItemProps["tone"]>, string> = {
  * sucesos hay y por cuál va, que es la mitad de lo que aporta una línea de
  * tiempo; con `<div>` habría que decirlo a mano en cada uno.
  */
-export const Timeline = React.forwardRef<HTMLOListElement, TimelineProps>(
-  ({ className, ...props }, ref) => (
-    <ol
-      data-slot="timeline"
-      ref={ref}
-      className={cn("m-0 flex list-none flex-col p-0", className)}
-      {...props}
-    />
-  ),
-);
+export const Timeline: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TimelineProps> & React.RefAttributes<HTMLOListElement>
+> = React.forwardRef<HTMLOListElement, TimelineProps>(({ className, ...props }, ref) => (
+  <ol
+    data-slot="timeline"
+    ref={ref}
+    className={cn("m-0 flex list-none flex-col p-0", className)}
+    {...props}
+  />
+));
 Timeline.displayName = "Timeline";
 
 /**
@@ -56,7 +56,9 @@ Timeline.displayName = "Timeline";
  * el marcado a propósito: es decoración, y leerla antes que el suceso no aporta
  * nada.
  */
-export const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
+export const TimelineItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TimelineItemProps> & React.RefAttributes<HTMLLIElement>
+> = React.forwardRef<HTMLLIElement, TimelineItemProps>(
   ({ className, time, title, tone = "neutral", marker, children, ...props }, ref) => (
     <li
       data-slot="timeline-item"

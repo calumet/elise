@@ -87,6 +87,11 @@ La configuración de ESLint y Prettier está centralizada en `@calumet/elise-lin
 - Sigue el estilo de código existente.
 - Usa la utilidad `cn()` para concatenar clases de Tailwind.
 - Prefija parámetros no usados con `_`.
+- **Escribe el tipo de todo lo que exportes**: el retorno de cada función y el
+  tipo de cada constante. JSR publica el fuente y analiza los tipos sin correr
+  `tsc`, así que lo inferido no le sirve. Nada de `declare module` ni
+  `declare global`. `pnpm jsr:check` lo verifica; ver
+  [docs/publicar-jsr.md](docs/publicar-jsr.md).
 
 ### Convención de componentes en `elise-ui`
 
@@ -161,9 +166,14 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
 
 ## Versionado y Publicación
 
-- Los paquetes se publican bajo el scope `@calumet/elise-*`.
+- Los paquetes se publican bajo el scope `@calumet/elise-*`, en GitHub Packages
+  y en [JSR](https://jsr.io/@calumet) a la vez. Ver
+  [docs/publicar-jsr.md](docs/publicar-jsr.md).
 - No republiques una versión existente.
-- Para cualquier cambio publicable, incrementa versión en su `package.json` antes de publicar.
+- Para cualquier cambio publicable, incrementa la versión **en el `package.json`
+  y en el `deno.json`** del paquete antes de publicar. Si se desincronizan, JSR
+  se queda en la versión vieja sin avisar; `pnpm check:versiones` lo detecta y
+  CI lo corre.
 - Política de versionado:
   - `patch` para correcciones (`0.1.0 -> 0.1.1`)
   - `minor` para features retrocompatibles (`0.1.x -> 0.2.0`)

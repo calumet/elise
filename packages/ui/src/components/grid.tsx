@@ -84,7 +84,7 @@ function Grid({
   gap = 4,
   align,
   ...props
-}: GridProps) {
+}: GridProps): React.JSX.Element {
   return (
     <Comp
       data-slot="grid"

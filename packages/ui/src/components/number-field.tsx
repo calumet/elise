@@ -65,7 +65,9 @@ const limitar = (n: number, min: number, max: number) => Math.min(max, Math.max(
  * lugar: el teclado lo usa quien ya está escribiendo en el campo, y los botones
  * quien llegó con el ratón y no va a moverlo.
  */
-export const NumberField = React.forwardRef<HTMLInputElement, NumberFieldProps>(
+export const NumberField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<NumberFieldProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, NumberFieldProps>(
   (
     {
       label,

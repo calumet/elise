@@ -33,7 +33,7 @@ function ButtonGroup({
   accessibilityLabel,
   role,
   ...props
-}: ButtonGroupProps) {
+}: ButtonGroupProps): React.JSX.Element {
   return (
     <div
       data-slot="button-group"

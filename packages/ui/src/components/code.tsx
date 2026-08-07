@@ -21,7 +21,9 @@ export type CodeProps = React.ComponentProps<"code">;
  * Para un bloque de varias líneas esto no sirve: eso es un `<pre>`, que necesita
  * conservar los saltos y poder desplazarse.
  */
-export const Code = React.forwardRef<HTMLElement, CodeProps>(({ className, ...props }, ref) => (
+export const Code: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<CodeProps> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, CodeProps>(({ className, ...props }, ref) => (
   <code
     data-slot="code"
     ref={ref}

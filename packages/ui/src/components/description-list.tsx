@@ -7,7 +7,7 @@ export type DescriptionListProps = React.ComponentProps<"dl"> & {
   gap?: "loose" | "tight";
 };
 
-const DentroDeListaApretada = React.createContext(false);
+const DentroDeListaApretada: React.Context<boolean> = React.createContext(false);
 
 /**
  * Lista de pares: un término y lo que vale.
@@ -30,7 +30,9 @@ const DentroDeListaApretada = React.createContext(false);
  * El filete va entre pares y no debajo de cada línea. Con una raya por línea, el
  * término y su valor se leerían como dos filas distintas en vez de como una.
  */
-export const DescriptionList = React.forwardRef<HTMLDListElement, DescriptionListProps>(
+export const DescriptionList: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<DescriptionListProps> & React.RefAttributes<HTMLDListElement>
+> = React.forwardRef<HTMLDListElement, DescriptionListProps>(
   ({ className, gap = "loose", ...props }, ref) => (
     <DentroDeListaApretada.Provider value={gap === "tight"}>
       <div className="@container w-full">
@@ -57,44 +59,44 @@ DescriptionList.displayName = "DescriptionList";
  * término y su valor, cada uno el trozo que le toca. Apilada solo lo lleva el
  * término, que es el que abre el par.
  */
-export const DescriptionListTerm = React.forwardRef<HTMLElement, React.ComponentProps<"dt">>(
-  ({ className, ...props }, ref) => {
-    const apretada = React.useContext(DentroDeListaApretada);
-    return (
-      <dt
-        data-slot="description-list-term"
-        ref={ref}
-        className={cn(
-          "font-semibold text-foreground",
-          "[&:not(:first-child)]:border-t [&:not(:first-child)]:border-border-subtle",
-          apretada
-            ? "pt-2 pb-1 @min-[490px]:py-2 @min-[490px]:pe-2"
-            : "pt-4 pb-2 @min-[490px]:py-4 @min-[490px]:pe-4",
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
-);
+export const DescriptionListTerm: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"dt">> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, React.ComponentProps<"dt">>(({ className, ...props }, ref) => {
+  const apretada = React.useContext(DentroDeListaApretada);
+  return (
+    <dt
+      data-slot="description-list-term"
+      ref={ref}
+      className={cn(
+        "font-semibold text-foreground",
+        "[&:not(:first-child)]:border-t [&:not(:first-child)]:border-border-subtle",
+        apretada
+          ? "pt-2 pb-1 @min-[490px]:py-2 @min-[490px]:pe-2"
+          : "pt-4 pb-2 @min-[490px]:py-4 @min-[490px]:pe-4",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 DescriptionListTerm.displayName = "DescriptionListTerm";
 
-export const DescriptionListDescription = React.forwardRef<HTMLElement, React.ComponentProps<"dd">>(
-  ({ className, ...props }, ref) => {
-    const apretada = React.useContext(DentroDeListaApretada);
-    return (
-      <dd
-        data-slot="description-list-description"
-        ref={ref}
-        className={cn(
-          "m-0 text-foreground",
-          "@min-[490px]:[&:not(:nth-child(2))]:border-t @min-[490px]:[&:not(:nth-child(2))]:border-border-subtle",
-          apretada ? "pb-2 @min-[490px]:py-2" : "pb-4 @min-[490px]:py-4",
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
-);
+export const DescriptionListDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"dd">> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, React.ComponentProps<"dd">>(({ className, ...props }, ref) => {
+  const apretada = React.useContext(DentroDeListaApretada);
+  return (
+    <dd
+      data-slot="description-list-description"
+      ref={ref}
+      className={cn(
+        "m-0 text-foreground",
+        "@min-[490px]:[&:not(:nth-child(2))]:border-t @min-[490px]:[&:not(:nth-child(2))]:border-border-subtle",
+        apretada ? "pb-2 @min-[490px]:py-2" : "pb-4 @min-[490px]:py-4",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 DescriptionListDescription.displayName = "DescriptionListDescription";

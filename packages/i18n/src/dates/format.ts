@@ -10,12 +10,12 @@ const defaultOptions: Intl.DateTimeFormatOptions = {
   day: "numeric",
 };
 
-export const formatDate = (date: Date, options?: DateFormatOptions) => {
+export const formatDate = (date: Date, options?: DateFormatOptions): string => {
   const { locale, ...fmt } = options || {};
   return new Intl.DateTimeFormat(locale, { ...defaultOptions, ...fmt }).format(date);
 };
 
-export const formatDateRange = (range: DateRange, options?: DateFormatOptions) => {
+export const formatDateRange = (range: DateRange, options?: DateFormatOptions): string => {
   if (range.from && range.to) {
     return `${formatDate(range.from, options)} – ${formatDate(range.to, options)}`;
   }

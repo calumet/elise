@@ -30,6 +30,40 @@ cd elise
 pnpm install
 ```
 
+## Consumir los paquetes
+
+Los paquetes se publican en dos registros a la vez, desde el mismo commit.
+
+Desde [JSR](https://jsr.io/@calumet), que sirve el TypeScript sin compilar:
+
+```bash
+pnpm add jsr:@calumet/elise-ui
+```
+
+Desde GitHub Packages, que sirve el build de tsup:
+
+```bash
+pnpm add @calumet/elise-ui
+```
+
+Para lo segundo hace falta un `.npmrc` que apunte el scope al registro de
+GitHub, y un token con permiso `read:packages`:
+
+```
+@calumet:registry=https://npm.pkg.github.com
+```
+
+Las dos vías exponen la misma API de TypeScript, con una diferencia: **las hojas
+de estilo solo tienen subpath en GitHub Packages**. JSR todavía no deja exportar
+archivos que no sean JavaScript o TypeScript
+([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)), así que
+`@calumet/elise-ui/tailwind/elise.css` no resuelve ahí. El archivo sí viaja
+dentro del paquete, y desde JSR se importa por su ruta en `node_modules`:
+
+```css
+@import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
+```
+
 ## Scripts
 
 | Comando             | Descripción                                                                           |
@@ -43,6 +77,7 @@ pnpm install
 | `pnpm format`       | Formatear con Prettier                                                                |
 | `pnpm format:check` | Verificar formato                                                                     |
 | `pnpm audit:visual` | Auditoría visual del showcase en Chromium (ver [docs](docs/auditoria-visual.md))      |
+| `pnpm jsr:check`    | Simular la publicación en JSR de todo el workspace (ver [docs](docs/publicar-jsr.md)) |
 | `pnpm clean`        | Limpiar carpetas dist                                                                 |
 
 ## Estructura del proyecto

@@ -146,7 +146,10 @@ export const defaultDarkTheme: EliseTheme = {
   infoSubtleForeground: "oklch(0.85 0.1 240)",
 };
 
-export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.documentElement) => {
+export const applyTheme = (
+  theme: EliseTheme,
+  element: HTMLElement = document.documentElement,
+): void => {
   element.style.setProperty("--background", theme.background);
   element.style.setProperty("--foreground", theme.foreground);
   element.style.setProperty("--card", theme.card);

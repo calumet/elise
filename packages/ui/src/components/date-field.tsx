@@ -43,7 +43,7 @@ const aFecha = (texto: string): Date | null => {
  * según el idioma del navegador, y un rango quedaba en dos formatos distintos
  * dentro de la misma frase.
  */
-export const aTextoISO = (fecha: Date) =>
+export const aTextoISO = (fecha: Date): string =>
   [
     String(fecha.getFullYear()).padStart(4, "0"),
     String(fecha.getMonth() + 1).padStart(2, "0"),
@@ -138,7 +138,7 @@ export function DateField({
   min,
   max,
   isDateDisabled,
-}: DateFieldProps) {
+}: DateFieldProps): React.JSX.Element {
   const controlado = value !== undefined;
   const [interno, setInterno] = React.useState(defaultValue);
   const texto = controlado ? value : interno;

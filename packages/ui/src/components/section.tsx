@@ -37,7 +37,9 @@ export type SectionProps = Omit<React.ComponentProps<"section">, "title"> & {
  * una región, y eso es lo que permite saltar de grupo en grupo sin recorrer
  * todo el contenido.
  */
-export const Section = React.forwardRef<HTMLElement, SectionProps>(
+export const Section: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SectionProps> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, SectionProps>(
   (
     { className, heading, accessibilityLabel, padding = "base", actions, children, ...props },
     ref,

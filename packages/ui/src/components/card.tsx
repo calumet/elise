@@ -11,7 +11,7 @@ export type CardProps = Omit<React.ComponentProps<"div">, "ref"> & {
   ref?: React.Ref<HTMLElement>;
 };
 
-function Card({ className, as: Comp = "div", ...props }: CardProps) {
+function Card({ className, as: Comp = "div", ...props }: CardProps): React.JSX.Element {
   return (
     <Comp
       data-slot="card"
@@ -21,7 +21,7 @@ function Card({ className, as: Comp = "div", ...props }: CardProps) {
   );
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+function CardHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-header"
@@ -43,7 +43,7 @@ function CardTitle({
   className,
   as: Comp = "div",
   ...props
-}: React.ComponentProps<"div"> & { as?: React.ElementType }) {
+}: React.ComponentProps<"div"> & { as?: React.ElementType }): React.JSX.Element {
   return (
     <Comp
       data-slot="card-title"
@@ -53,7 +53,7 @@ function CardTitle({
   );
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+function CardDescription({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-description"
@@ -63,7 +63,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+function CardAction({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-action"
@@ -73,11 +73,11 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+function CardContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return <div data-slot="card-content" className={cn("px-4", className)} {...props} />;
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+function CardFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-footer"

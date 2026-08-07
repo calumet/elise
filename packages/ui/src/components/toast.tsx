@@ -10,7 +10,10 @@ export type ToastActionElement = React.ReactElement<typeof ToastPrimitive.Action
 
 export const ToastProvider = ToastPrimitive.Provider;
 
-export const ToastViewport = React.forwardRef<
+export const ToastViewport: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>> &
+    React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Viewport>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>
 >(({ className, ...props }, ref) => (
@@ -26,7 +29,10 @@ export const ToastViewport = React.forwardRef<
 ));
 ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
-export const Toast = React.forwardRef<React.ComponentRef<typeof ToastPrimitive.Root>, ToastProps>(
+export const Toast: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ToastProps> &
+    React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Root>>
+> = React.forwardRef<React.ComponentRef<typeof ToastPrimitive.Root>, ToastProps>(
   ({ className, ...props }, ref) => (
     <ToastPrimitive.Root
       data-slot="toast"
@@ -41,7 +47,10 @@ export const Toast = React.forwardRef<React.ComponentRef<typeof ToastPrimitive.R
 );
 Toast.displayName = ToastPrimitive.Root.displayName;
 
-export const ToastTitle = React.forwardRef<
+export const ToastTitle: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Title>> &
+    React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Title>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Title>
 >(({ className, ...props }, ref) => (
@@ -54,7 +63,10 @@ export const ToastTitle = React.forwardRef<
 ));
 ToastTitle.displayName = ToastPrimitive.Title.displayName;
 
-export const ToastDescription = React.forwardRef<
+export const ToastDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>> &
+    React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Description>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
 >(({ className, ...props }, ref) => (
@@ -67,7 +79,10 @@ export const ToastDescription = React.forwardRef<
 ));
 ToastDescription.displayName = ToastPrimitive.Description.displayName;
 
-export const ToastClose = React.forwardRef<
+export const ToastClose: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Close>> &
+    React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Close>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Close>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Close>
 >(({ className, ...props }, ref) => {
@@ -89,7 +104,10 @@ export const ToastClose = React.forwardRef<
 });
 ToastClose.displayName = ToastPrimitive.Close.displayName;
 
-export const ToastAction = React.forwardRef<
+export const ToastAction: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Action>> &
+    React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Action>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Action>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Action>
 >(({ className, ...props }, ref) => (

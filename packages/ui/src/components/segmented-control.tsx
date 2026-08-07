@@ -32,27 +32,32 @@ export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
  * Para elegir varias cosas a la vez esto no vale: eso es `ToggleGroup` con
  * `type="multiple"`.
  */
-export const SegmentedControl = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
-  SegmentedControlProps
->(({ className, onValueChange, ...props }, ref) => (
-  <ToggleGroupPrimitive.Root
-    data-slot="segmented-control"
-    ref={ref}
-    type="single"
-    onValueChange={(valor) => valor && onValueChange?.(valor)}
-    className={cn(
-      "inline-flex max-w-full items-center gap-px rounded-md bg-muted p-0.5",
-      "[&>*:not(:first-child)]:rounded-s-none [&>*:not(:last-child)]:rounded-e-none",
-      "[&>*]:min-w-0 [&>*]:truncate",
-      className,
-    )}
-    {...props}
-  />
-));
+export const SegmentedControl: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SegmentedControlProps> &
+    React.RefAttributes<React.ComponentRef<typeof ToggleGroupPrimitive.Root>>
+> = React.forwardRef<React.ComponentRef<typeof ToggleGroupPrimitive.Root>, SegmentedControlProps>(
+  ({ className, onValueChange, ...props }, ref) => (
+    <ToggleGroupPrimitive.Root
+      data-slot="segmented-control"
+      ref={ref}
+      type="single"
+      onValueChange={(valor) => valor && onValueChange?.(valor)}
+      className={cn(
+        "inline-flex max-w-full items-center gap-px rounded-md bg-muted p-0.5",
+        "[&>*:not(:first-child)]:rounded-s-none [&>*:not(:last-child)]:rounded-e-none",
+        "[&>*]:min-w-0 [&>*]:truncate",
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
 SegmentedControl.displayName = "SegmentedControl";
 
-export const SegmentedControlItem = React.forwardRef<
+export const SegmentedControlItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SegmentedControlItemProps> &
+    React.RefAttributes<React.ComponentRef<typeof ToggleGroupPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   SegmentedControlItemProps
 >(({ className, ...props }, ref) => (

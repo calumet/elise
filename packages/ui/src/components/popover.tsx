@@ -11,7 +11,10 @@ export const PopoverTrigger = PopoverPrimitive.Trigger;
    pulsar el campo para seguir escribiendo lo cerraría. */
 export const PopoverAnchor = PopoverPrimitive.Anchor;
 
-export const PopoverContent = React.forwardRef<
+export const PopoverContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof PopoverPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = "center", sideOffset = 8, ...props }, ref) => (

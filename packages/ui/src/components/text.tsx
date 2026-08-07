@@ -82,7 +82,7 @@ function Text({
   lines,
   balance,
   ...props
-}: TextProps) {
+}: TextProps): React.JSX.Element {
   return (
     <Comp
       data-slot="text"

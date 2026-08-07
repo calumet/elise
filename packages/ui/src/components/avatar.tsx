@@ -30,25 +30,30 @@ const cuadrados: Record<NonNullable<AvatarProps["size"]>, string> = {
   lg: "rounded-xl",
 };
 
-export const Avatar = React.forwardRef<
-  React.ComponentRef<typeof AvatarPrimitive.Root>,
-  AvatarProps
->(({ className, size = "md", shape = "circle", ...props }, ref) => (
-  <AvatarPrimitive.Root
-    data-slot="avatar"
-    ref={ref}
-    className={cn(
-      "relative flex shrink-0 overflow-hidden border border-border bg-muted",
-      tamanos[size],
-      shape === "circle" ? "rounded-full" : cuadrados[size],
-      className,
-    )}
-    {...props}
-  />
-));
+export const Avatar: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<AvatarProps> &
+    React.RefAttributes<React.ComponentRef<typeof AvatarPrimitive.Root>>
+> = React.forwardRef<React.ComponentRef<typeof AvatarPrimitive.Root>, AvatarProps>(
+  ({ className, size = "md", shape = "circle", ...props }, ref) => (
+    <AvatarPrimitive.Root
+      data-slot="avatar"
+      ref={ref}
+      className={cn(
+        "relative flex shrink-0 overflow-hidden border border-border bg-muted",
+        tamanos[size],
+        shape === "circle" ? "rounded-full" : cuadrados[size],
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
-export const AvatarImage = React.forwardRef<
+export const AvatarImage: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>> &
+    React.RefAttributes<React.ComponentRef<typeof AvatarPrimitive.Image>>
+> = React.forwardRef<
   React.ComponentRef<typeof AvatarPrimitive.Image>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
 >(({ className, ...props }, ref) => (
@@ -61,7 +66,10 @@ export const AvatarImage = React.forwardRef<
 ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
-export const AvatarFallback = React.forwardRef<
+export const AvatarFallback: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>> &
+    React.RefAttributes<React.ComponentRef<typeof AvatarPrimitive.Fallback>>
+> = React.forwardRef<
   React.ComponentRef<typeof AvatarPrimitive.Fallback>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
 >(({ className, ...props }, ref) => (

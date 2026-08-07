@@ -51,7 +51,9 @@ const flechas = { up: ArrowUp, down: ArrowDown, flat: Minus };
  * distinguen para todo el mundo, y aquí la diferencia entre los dos es justo lo
  * que hay que leer.
  */
-export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
+export const Stat: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<StatProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, StatProps>(
   ({ className, label, value, change, trend = "flat", description, ...props }, ref) => {
     const Flecha = flechas[trend];
 

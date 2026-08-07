@@ -18,7 +18,10 @@ const baseItem =
 const canaletaIndicador =
   "[&:has([data-slot=menubar-checkbox-item],[data-slot=menubar-radio-item])_[data-slot=menubar-item]]:pl-7 [&:has([data-slot=menubar-checkbox-item],[data-slot=menubar-radio-item])_[data-slot=menubar-sub-trigger]]:pl-7";
 
-export const Menubar = React.forwardRef<
+export const Menubar: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Root>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
 >(({ className, ...props }, ref) => (
@@ -36,7 +39,10 @@ Menubar.displayName = MenubarPrimitive.Root.displayName;
 export const MenubarMenu: typeof MenubarPrimitive.Menu = MenubarPrimitive.Menu;
 export const MenubarGroup: typeof MenubarPrimitive.Group = MenubarPrimitive.Group;
 export const MenubarPortal: typeof MenubarPrimitive.Portal = MenubarPrimitive.Portal;
-export const MenubarTrigger = React.forwardRef<
+export const MenubarTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Trigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
@@ -58,7 +64,10 @@ export const MenubarTrigger = React.forwardRef<
 ));
 MenubarTrigger.displayName = MenubarPrimitive.Trigger.displayName;
 
-export const MenubarContent = React.forwardRef<
+export const MenubarContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>
 >(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => (
@@ -83,7 +92,10 @@ export const MenubarContent = React.forwardRef<
 ));
 MenubarContent.displayName = MenubarPrimitive.Content.displayName;
 
-export const MenubarItem = React.forwardRef<
+export const MenubarItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item>
 >(({ className, ...props }, ref) => (
@@ -96,7 +108,10 @@ export const MenubarItem = React.forwardRef<
 ));
 MenubarItem.displayName = MenubarPrimitive.Item.displayName;
 
-export const MenubarCheckboxItem = React.forwardRef<
+export const MenubarCheckboxItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.CheckboxItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
@@ -132,7 +147,10 @@ MenubarCheckboxItem.displayName = MenubarPrimitive.CheckboxItem.displayName;
 
 export const MenubarRadioGroup = MenubarPrimitive.RadioGroup;
 
-export const MenubarRadioItem = React.forwardRef<
+export const MenubarRadioItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.RadioItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
@@ -152,7 +170,10 @@ export const MenubarRadioItem = React.forwardRef<
 ));
 MenubarRadioItem.displayName = MenubarPrimitive.RadioItem.displayName;
 
-export const MenubarLabel = React.forwardRef<
+export const MenubarLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -165,7 +186,10 @@ export const MenubarLabel = React.forwardRef<
 ));
 MenubarLabel.displayName = MenubarPrimitive.Label.displayName;
 
-export const MenubarSeparator = React.forwardRef<
+export const MenubarSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -180,7 +204,10 @@ MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName;
 
 export const MenubarSub = MenubarPrimitive.Sub;
 
-export const MenubarSubTrigger = React.forwardRef<
+export const MenubarSubTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubTrigger>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.SubTrigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
@@ -204,7 +231,10 @@ export const MenubarSubTrigger = React.forwardRef<
 ));
 MenubarSubTrigger.displayName = MenubarPrimitive.SubTrigger.displayName;
 
-export const MenubarSubContent = React.forwardRef<
+export const MenubarSubContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubContent>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.SubContent>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubContent>
 >(({ className, ...props }, ref) => (

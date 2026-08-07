@@ -95,7 +95,16 @@ const bottomClasses: Record<SpaceScale, string> = {
  * El valor tiene que coincidir con el padding del padre; si no, el contenido se
  * desborda.
  */
-function Bleed({ className, as: Comp = "div", all, x, y, top, bottom, ...props }: BleedProps) {
+function Bleed({
+  className,
+  as: Comp = "div",
+  all,
+  x,
+  y,
+  top,
+  bottom,
+  ...props
+}: BleedProps): React.JSX.Element {
   return (
     <Comp
       data-slot="bleed"

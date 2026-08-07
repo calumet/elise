@@ -19,7 +19,7 @@ const sizeClasses: Record<NonNullable<EmptyStateProps["size"]>, string> = {
  * Para "no hay resultados" de una búsqueda, el título debería nombrar el
  * término buscado, no decir solo "Sin resultados".
  */
-function EmptyState({ className, size = "md", ...props }: EmptyStateProps) {
+function EmptyState({ className, size = "md", ...props }: EmptyStateProps): React.JSX.Element {
   return (
     <div
       data-slot="empty-state"
@@ -33,7 +33,7 @@ function EmptyState({ className, size = "md", ...props }: EmptyStateProps) {
   );
 }
 
-function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">) {
+function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="empty-state-media"
@@ -47,7 +47,7 @@ function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">) {
+function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="empty-state-title"
@@ -57,7 +57,10 @@ function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function EmptyStateDescription({ className, ...props }: React.ComponentProps<"p">) {
+function EmptyStateDescription({
+  className,
+  ...props
+}: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="empty-state-description"
@@ -67,7 +70,10 @@ function EmptyStateDescription({ className, ...props }: React.ComponentProps<"p"
   );
 }
 
-function EmptyStateActions({ className, ...props }: React.ComponentProps<"div">) {
+function EmptyStateActions({
+  className,
+  ...props
+}: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="empty-state-actions"

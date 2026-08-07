@@ -20,7 +20,7 @@ function Separator({
   orientation = "horizontal",
   decorative = true,
   ...props
-}: SeparatorProps) {
+}: SeparatorProps): React.JSX.Element {
   return (
     <SeparatorPrimitive.Root
       data-slot="separator"
