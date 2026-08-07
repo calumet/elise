@@ -1,3 +1,5 @@
+// @ts-self-types="./index.d.ts"
+
 import { createRequire } from "node:module";
 
 import typescriptPlugin from "@typescript-eslint/eslint-plugin";

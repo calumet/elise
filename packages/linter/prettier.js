@@ -1,3 +1,5 @@
+// @ts-self-types="./prettier.d.ts"
+
 export default {
   semi: true,
   singleQuote: false,

@@ -1,2 +1,7 @@
-export { formatNumber, formatCurrency, formatPercent } from "./format";
-export type { NumberFormatOptions } from "./format";
+/**
+ * Formateo de números, moneda y porcentaje con `Intl.NumberFormat`.
+ *
+ * @module
+ */
+
+export * from "./format";

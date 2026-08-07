@@ -77,6 +77,11 @@ export type MetaDeColumna = {
    módulo desde fuera -- así que el `meta` viaja en este `ColumnDef` propio, que
    es el que el paquete ya reexportaba, y las funciones de filtro se pasan por
    referencia en vez de por el nombre que registraba `FilterFns`. */
+/**
+ * El `ColumnDef` de TanStack con el `meta` que lee {@link DataTable} ya tipado.
+ * Importalo desde acá y no desde `@tanstack/react-table`, o el `meta` queda sin
+ * tipo.
+ */
 export type ColumnDef<TData, TValue = unknown> = ColumnDefBase<TData, TValue> & {
   meta?: MetaDeColumna;
 };
@@ -86,14 +91,22 @@ export type ColumnDef<TData, TValue = unknown> = ColumnDefBase<TData, TValue> & 
 const metaDe = (columnDef: { meta?: unknown }): MetaDeColumna =>
   (columnDef.meta ?? {}) as MetaDeColumna;
 
+/** Props de {@link DataTable}. */
 interface DataTableProps<TData, TValue> {
+  /** Nombre del archivo que se baja al exportar. */
   name?: string;
+  /** Las columnas. Su `meta.filterVariant` decide qué filtros aparecen. */
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  /** Tapa el cuerpo con el indicador de carga. */
   isLoading?: boolean;
+  /** Muestra los botones de exportar a CSV y a JSON. */
   exportTo?: boolean;
+  /** Si viene, se dibuja el botón de recargar y se llama al pulsarlo. */
   refresh?: () => void | Promise<unknown>;
+  /** Opciones del selector de filas por página. */
   pageSizeOptions?: number[];
+  /** Filas por página al montar. Se suma a `pageSizeOptions` si no estaba. */
   initialPageSize?: number;
 }
 
@@ -614,6 +627,21 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   );
 }
 
+/**
+ * Tabla con barra de filtros, orden por columna, paginado y exportación.
+ *
+ * Los filtros salen del `meta.filterVariant` de cada columna: una columna sin
+ * él no aparece en la barra. Las opciones de un filtro `select` se arman con
+ * los valores presentes en los datos.
+ *
+ * ```tsx
+ * const columns: ColumnDef<Proyecto>[] = [
+ *   { accessorKey: "name", header: "Proyecto", meta: { filterVariant: "text" } },
+ * ];
+ *
+ * <DataTable name="proyectos" columns={columns} data={filas} exportTo />;
+ * ```
+ */
 export function DataTable<TData, TValue>({
   name,
   columns,

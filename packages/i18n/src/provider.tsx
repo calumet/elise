@@ -29,6 +29,13 @@ const lookup = (
   return messages[locale]?.[namespace]?.[key];
 };
 
+/**
+ * Pone las traducciones en contexto.
+ *
+ * Con el prop `locale` queda controlado y avisa los cambios por
+ * `onLocaleChange`. Sin él maneja el locale por dentro, partiendo de
+ * `defaultLocale`.
+ */
 export const I18nProvider: React.FC<I18nProviderProps> = ({
   children,
   locale: controlledLocale,

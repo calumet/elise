@@ -6,6 +6,10 @@ type UseDateRangeOptions = {
   initial?: DateRange;
 };
 
+/**
+ * Estado para un rango de fechas. Además de `range` y `setRange` devuelve
+ * `setFrom` y `setTo`, para mover un extremo sin rearmar el objeto.
+ */
 export const useDateRange = ({ initial }: UseDateRangeOptions = {}): {
   range: DateRange | undefined;
   setRange: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
