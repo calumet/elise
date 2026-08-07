@@ -6,9 +6,18 @@ on:
     branches:
       - master
 
+# `site` depende de `@calumet/suamox-*`, que vive en GitHub Packages. Ese
+# registro pide token aunque el paquete sea publico, asi que los jobs necesitan
+# permiso de lectura y `NODE_AUTH_TOKEN`. Los `@calumet/elise-*` no lo pedian
+# porque son `workspace:*` y nunca se descargan.
 jobs:
   verify:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -18,6 +27,8 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@calumet"
 
       - run: pnpm install --frozen-lockfile
 
@@ -36,6 +47,11 @@ jobs:
   auditoria-visual:
     runs-on: ubuntu-latest
     continue-on-error: true
+    permissions:
+      contents: read
+      packages: read
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -45,6 +61,8 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@calumet"
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
