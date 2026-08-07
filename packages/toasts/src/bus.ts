@@ -1,9 +1,12 @@
 export type ToastVariant = "info" | "alert" | "error" | "success";
 
+/* El titular y la línea de abajo son obligatorios. El icono va en un disco de
+   28px y cada renglón de texto mide 20, así que con una sola línea al lado el
+   disco queda por debajo del titular en vez de a su altura. */
 export type ToastOptions = {
   id?: string;
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   actionLabel?: string;
   action?: () => void;
   duration?: number;

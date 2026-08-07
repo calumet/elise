@@ -129,13 +129,6 @@ la propiedad va en `style` cuando el valor es libre.
 **Un segundo juego de anchos.** Una pantalla que declara `max-w-5xl` deja de
 coincidir con las demás en cuanto alguien toca la escala.
 
-**Un color de estado sobre la superficie invertida.** `--primary`, `--success`,
-`--warning` y `--destructive` están calibrados contra el fondo del tema, y
-`bg-inverse` es el fondo contrario: en claro salen oscuros sobre oscuro y en
-oscuro claros sobre claro. Lo que va encima toma `currentColor`. Si el estado
-tiene que distinguirse por color, se repinta la superficie entera con un par de
-relleno, que ya viene emparejado con su texto.
-
 **Referencias a otros sistemas de diseño en el código.** Un comentario se
 sostiene por lo que explica. De dónde salió cada decisión está en
 [el plan](plan.md).

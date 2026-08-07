@@ -49,20 +49,20 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ## `@calumet/elise-toasts` 0.3.0
 
-`toast()`, `dismiss()` y `Toaster` no cambian de firma. Cambia lo que se ve.
+### Rompe
 
-- **El icono deja de teñirse con el color de la variante.** Los colores de
-  estado están calibrados contra el fondo del tema, y el aviso es la superficie
-  contraria: en claro salían oscuros sobre oscuro y en oscuro claros sobre
-  claro. Medido contra el disco que llevaban detrás, el de éxito daba 3.09:1 en
-  claro y el de advertencia 1.57:1 en oscuro. Ahora toman el color del texto
-  del aviso, 17:1 en los dos temas.
-- **Desaparece el disco teñido detrás del icono.** Era un 15% del color de
-  estado, que sobre la superficie invertida se quedaba en 1.09:1 y no se veía.
-- **El error repinta la superficie.** Es la variante que tiene que distinguirse
-  por color, y el relleno destructivo ya trae su texto emparejado, 4.85:1.
-  Encima de ese relleno el detalle y el botón de cerrar dejan de atenuarse:
-  al 75% de opacidad caían a 3.2:1.
+- **`title` y `description` pasan a ser obligatorios en `toast()`.** El icono va
+  en un disco de 28px y cada renglón de texto mide 20, así que un aviso de una
+  sola línea dejaba el disco por debajo del titular. Un `toast({ title })` a
+  secas deja de compilar.
+
+  ```ts
+  // antes
+  toast({ title: "Guardado" });
+
+  // ahora
+  toast({ title: "Guardado", description: "Cambios sincronizados." });
+  ```
 
 No necesita nada nuevo de `@calumet/elise-ui`.
 

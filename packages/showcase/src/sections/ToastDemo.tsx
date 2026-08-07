@@ -55,10 +55,6 @@ const ToastDemo = () => {
       >
         Toast éxito
       </Button>
-
-      <Button variant="outline" onClick={() => toast({ title: "Guardado", variant: "success" })}>
-        Toast sin descripción
-      </Button>
     </div>
   );
 };
