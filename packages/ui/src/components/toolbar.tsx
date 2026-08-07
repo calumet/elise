@@ -1,8 +1,15 @@
+/**
+ * Barra de acciones, que se recorre entera con las flechas y ocupa una sola parada de tabulación.
+ *
+ * @module
+ */
+
 import * as ToolbarPrimitive from "@radix-ui/react-toolbar";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Barra de acciones, que se recorre entera con las flechas y ocupa una sola parada de tabulación. */
 export const Toolbar: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>> &
     React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Root>>
@@ -22,6 +29,7 @@ export const Toolbar: React.ForwardRefExoticComponent<
 ));
 Toolbar.displayName = ToolbarPrimitive.Root.displayName;
 
+/** Una acción de la barra. */
 export const ToolbarButton: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>> &
     React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Button>>
@@ -41,8 +49,11 @@ export const ToolbarButton: React.ForwardRefExoticComponent<
 ));
 ToolbarButton.displayName = ToolbarPrimitive.Button.displayName;
 
+/** Un grupo de conmutadores dentro de la barra. */
 export const ToolbarToggleGroup = ToolbarPrimitive.ToggleGroup;
+/** Un conmutador del grupo. */
 export const ToolbarToggleItem = ToolbarPrimitive.ToggleItem;
+/** La línea que separa dos grupos de acciones. */
 export const ToolbarSeparator: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>> &
     React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Separator>>

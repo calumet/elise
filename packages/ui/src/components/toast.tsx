@@ -1,3 +1,9 @@
+/**
+ * Un aviso.
+ *
+ * @module
+ */
+
 import { X } from "@calumet/elise-icons";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import * as React from "react";
@@ -5,11 +11,15 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link Toast}. */
 export type ToastProps = React.ComponentPropsWithoutRef<typeof ToastPrimitive.Root>;
+/** El tipo del elemento que se pasa como acción de un toast. */
 export type ToastActionElement = React.ReactElement<typeof ToastPrimitive.Action>;
 
+/** Reparte a los toasts de abajo la duración y el comportamiento del foco. */
 export const ToastProvider = ToastPrimitive.Provider;
 
+/** La esquina donde se apilan los toasts. */
 export const ToastViewport: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>> &
     React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Viewport>>
@@ -29,6 +39,7 @@ export const ToastViewport: React.ForwardRefExoticComponent<
 ));
 ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
+/** Un aviso. */
 export const Toast: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ToastProps> &
     React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Root>>
@@ -47,6 +58,7 @@ export const Toast: React.ForwardRefExoticComponent<
 );
 Toast.displayName = ToastPrimitive.Root.displayName;
 
+/** El título del aviso. */
 export const ToastTitle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Title>> &
     React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Title>>
@@ -63,6 +75,7 @@ export const ToastTitle: React.ForwardRefExoticComponent<
 ));
 ToastTitle.displayName = ToastPrimitive.Title.displayName;
 
+/** El detalle del aviso. */
 export const ToastDescription: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>> &
     React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Description>>
@@ -79,6 +92,7 @@ export const ToastDescription: React.ForwardRefExoticComponent<
 ));
 ToastDescription.displayName = ToastPrimitive.Description.displayName;
 
+/** El botón que lo descarta. */
 export const ToastClose: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Close>> &
     React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Close>>
@@ -104,6 +118,7 @@ export const ToastClose: React.ForwardRefExoticComponent<
 });
 ToastClose.displayName = ToastPrimitive.Close.displayName;
 
+/** La acción del aviso, por ejemplo deshacer. */
 export const ToastAction: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToastPrimitive.Action>> &
     React.RefAttributes<React.ComponentRef<typeof ToastPrimitive.Action>>

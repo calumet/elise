@@ -1,8 +1,15 @@
+/**
+ * Etiqueta de estado, no interactiva. `tone` dice qué estado, y `variant` cuánto pesa: `subtle` para una lista larga, `solid` para lo que tiene que saltar.
+ *
+ * @module
+ */
+
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Badge}. */
 export type BadgeProps = React.ComponentProps<"span"> & {
   tone?: "neutral" | "brand" | "success" | "warning" | "danger" | "info";
   variant?: "subtle" | "solid" | "outline";
@@ -61,6 +68,7 @@ const toneClasses: Record<
   },
 };
 
+/** Devuelve las clases de un `Badge`, para reusar su aspecto en un elemento que no lo es. */
 export const badgeVariants = ({
   tone = "neutral",
   variant = "subtle",
@@ -68,6 +76,7 @@ export const badgeVariants = ({
 }: Pick<BadgeProps, "tone" | "variant" | "size"> = {}): string =>
   cn(baseClasses, toneClasses[tone][variant], sizeClasses[size]);
 
+/** Etiqueta de estado, no interactiva. `tone` dice qué estado, y `variant` cuánto pesa: `subtle` para una lista larga, `solid` para lo que tiene que saltar. */
 function Badge({
   className,
   tone = "neutral",

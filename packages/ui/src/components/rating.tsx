@@ -1,9 +1,30 @@
+/**
+ * Puntuación con estrellas.
+ *
+ * Cuando se puede puntuar es un grupo de radios de verdad, uno por estrella: eso
+ * le da el recorrido con flechas, el nombre para el formulario y el anuncio de
+ * «3 de 5» sin inventar nada. Un montón de botones con `aria-label` daría lo
+ * mismo a la vista y nada de eso.
+ *
+ * En `readOnly` deja de ser un control y pasa a ser una imagen con texto
+ * alternativo. Es lo que corresponde: la puntuación media de un producto no es
+ * algo con lo que se pueda interactuar, y dejarla enfocable manda al teclado por
+ * cinco paradas que no llevan a ningún sitio.
+ *
+ * Solo estrellas enteras. La media estrella se ve mucho pero solo tiene sentido
+ * al mostrar promedios, no al puntuar, y ahí ya sirve `readOnly` con el número
+ * al lado.
+ *
+ * @module
+ */
+
 import { Star } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link Rating}. */
 export type RatingProps = Omit<React.ComponentProps<"div">, "onChange" | "defaultValue"> & {
   value?: number;
   defaultValue?: number;

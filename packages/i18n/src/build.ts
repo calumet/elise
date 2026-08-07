@@ -25,6 +25,7 @@ export type ParseResult =
 
 export type ParsePathFn = (path: string) => ParseResult | null;
 
+/** Opciones de `buildMessages` y `buildLazyLoader`. */
 export type BuildOptions = {
   /**
    * Parser opcional para extraer namespace y locale de un path. El default
@@ -100,6 +101,7 @@ export const buildMessages = (modules: EagerGlobModules, options?: BuildOptions)
   return result;
 };
 
+/** Lo que devuelve `buildLazyLoader` para cargar traducciones bajo demanda. */
 export type LazyLoader = {
   /** Locales detectadas en el glob. */
   availableLocales: Locale[];

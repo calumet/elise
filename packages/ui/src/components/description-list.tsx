@@ -1,7 +1,32 @@
+/**
+ * Lista de pares: un término y lo que vale.
+ *
+ * Es `<dl>` de verdad, con sus `<dt>` y `<dd>`, y no dos columnas de `<div>`.
+ * La relación entre el rótulo y su valor está en el marcado, así que un lector
+ * de pantalla puede recorrerla por términos en vez de leer veinte textos sueltos
+ * sin saber cuál explica a cuál.
+ *
+ * Estrecha se apila y ancha se parte en dos columnas, la del término a un cuarto
+ * del ancho: el término suele ser una o dos palabras y el valor una frase, así
+ * que repartir a la mitad dejaría la primera columna medio vacía. El corte está
+ * en 490px, el mismo con el que la tabla pasa a lista.
+ *
+ * Mide su propio hueco y no la ventana: la misma lista puede ir a lo ancho de
+ * una página o dentro de una tarjeta estrecha, y lo que decide es cuánto sitio
+ * tiene, no cuánto tiene la pantalla. De ahí el `<div>` de fuera, que es lo que
+ * se mide.
+ *
+ * El filete va entre pares y no debajo de cada línea. Con una raya por línea, el
+ * término y su valor se leerían como dos filas distintas en vez de como una.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link DescriptionList}. */
 export type DescriptionListProps = React.ComponentProps<"dl"> & {
   /** `tight` aprieta el aire vertical a la mitad. */
   gap?: "loose" | "tight";
@@ -81,6 +106,7 @@ export const DescriptionListTerm: React.ForwardRefExoticComponent<
 });
 DescriptionListTerm.displayName = "DescriptionListTerm";
 
+/** El valor de un par: el `<dd>`. */
 export const DescriptionListDescription: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"dd">> & React.RefAttributes<HTMLElement>
 > = React.forwardRef<HTMLElement, React.ComponentProps<"dd">>(({ className, ...props }, ref) => {

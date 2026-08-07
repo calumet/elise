@@ -1,9 +1,21 @@
+/**
+ * Sucesos en orden.
+ *
+ * Es una lista ordenada de verdad. Un lector de pantalla anuncia cuántos
+ * sucesos hay y por cuál va, que es la mitad de lo que aporta una línea de
+ * tiempo; con `<div>` habría que decirlo a mano en cada uno.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Timeline}. */
 export type TimelineProps = React.ComponentProps<"ol">;
 
+/** Props de {@link TimelineItem}. */
 export type TimelineItemProps = Omit<React.ComponentProps<"li">, "title"> & {
   /** Cuándo pasó. Va arriba y pequeño, como antetítulo. */
   time?: React.ReactNode;

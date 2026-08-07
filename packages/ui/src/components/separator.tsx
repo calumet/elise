@@ -1,8 +1,22 @@
+/**
+ * Divisor entre bloques de contenido.
+ *
+ * Por defecto es decorativo y no se anuncia. Con `decorative={false}` pasa a ser
+ * un `separator` con su orientación, para cuando la línea de verdad divide dos
+ * regiones y el lector de pantalla tiene que decirlo.
+ *
+ * El grosor sale de `data-orientation`, que lo pone el primitivo, así que
+ * cambiar la orientación no obliga a tocar las clases.
+ *
+ * @module
+ */
+
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Separator}. */
 export type SeparatorProps = React.ComponentProps<typeof SeparatorPrimitive.Root>;
 
 /**

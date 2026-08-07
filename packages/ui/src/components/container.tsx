@@ -1,7 +1,16 @@
+/**
+ * Centra el contenido y le pone un ancho máximo. Evita que cada pantalla
+ * invente su propio `max-w-*` y que las líneas de texto queden demasiado largas
+ * para leerse.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Container}. */
 export type ContainerProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 

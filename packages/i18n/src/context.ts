@@ -23,4 +23,8 @@ if (!globalScope[CONTEXT_KEY]) {
   globalScope[CONTEXT_KEY] = React.createContext<I18nContextValue | null>(null);
 }
 
+/**
+ * El contexto que llena `I18nProvider`. Vale `null` fuera del provider, y de
+ * ahí que los hooks tengan un camino sin traducciones.
+ */
 export const I18nContext = globalScope[CONTEXT_KEY]!;

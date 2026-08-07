@@ -1,3 +1,9 @@
+/**
+ * Carrusel con arrastre y recorrido por teclado, sobre Embla.
+ *
+ * @module
+ */
+
 import { ChevronLeft, ChevronRight } from "@calumet/elise-icons";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import * as React from "react";
@@ -7,6 +13,7 @@ import { Button } from "./button";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** La API de Embla que expone el carrusel por `setApi`, para controlarlo desde afuera. */
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];
@@ -40,6 +47,7 @@ function useCarousel() {
   return context;
 }
 
+/** Carrusel con arrastre y recorrido por teclado, sobre Embla. */
 function Carousel({
   orientation = "horizontal",
   opts,
@@ -130,6 +138,7 @@ function Carousel({
   );
 }
 
+/** La pista que se desplaza. */
 function CarouselContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   const { carouselRef, orientation } = useCarousel();
 
@@ -143,6 +152,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">): 
   );
 }
 
+/** Una diapositiva. */
 function CarouselItem({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   const { orientation } = useCarousel();
 
@@ -161,6 +171,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">): Rea
   );
 }
 
+/** El control que retrocede una diapositiva. */
 function CarouselPrevious({
   className,
   variant = "outline",
@@ -192,6 +203,7 @@ function CarouselPrevious({
   );
 }
 
+/** El control que avanza una diapositiva. */
 function CarouselNext({
   className,
   variant = "outline",

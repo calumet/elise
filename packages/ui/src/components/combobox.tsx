@@ -1,3 +1,29 @@
+/**
+ * Raíz del combobox. Sostiene el valor y el estado de apertura, y monta el
+ * `Popover`. No pinta nada por su cuenta; lo visible sale de las partes que se
+ * componen adentro.
+ *
+ * ```tsx
+ * <Combobox value={v} onValueChange={setV}>
+ *   <ComboboxTrigger>
+ *     <ComboboxValue placeholder="Elegir…">{etiqueta}</ComboboxValue>
+ *   </ComboboxTrigger>
+ *   <ComboboxContent>
+ *     <ComboboxInput />
+ *     <ComboboxList>
+ *       <ComboboxEmpty>Sin resultados</ComboboxEmpty>
+ *       <ComboboxItem value="co">Colombia</ComboboxItem>
+ *     </ComboboxList>
+ *   </ComboboxContent>
+ * </Combobox>
+ * ```
+ *
+ * Para el caso común de un array de opciones existe `ComboboxField`, construido
+ * sobre estas mismas partes.
+ *
+ * @module
+ */
+
 import { Check, ChevronsUpDown, X } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -38,6 +64,7 @@ const useCombobox = (parte: string) => {
   return ctx;
 };
 
+/** Props de {@link Combobox}. */
 export type ComboboxProps = {
   value?: string;
   defaultValue?: string;
@@ -125,6 +152,7 @@ function Combobox({
   );
 }
 
+/** Props de {@link MultiCombobox}. */
 export type MultiComboboxProps = Omit<ComboboxProps, "value" | "defaultValue" | "onValueChange"> & {
   value?: string[];
   defaultValue?: string[];
@@ -191,6 +219,7 @@ function MultiCombobox({
   );
 }
 
+/** Props de {@link ComboboxTrigger}. */
 export type ComboboxTriggerProps = React.ComponentProps<"button"> & {
   size?: "sm" | "md" | "lg";
 
@@ -206,6 +235,7 @@ const triggerSizes: Record<NonNullable<ComboboxTriggerProps["size"]>, string> = 
   lg: "h-10 px-4 text-base",
 };
 
+/** El control que abre la lista, con el valor elegido adentro. */
 function ComboboxTrigger({
   className,
   size = "md",
@@ -257,6 +287,7 @@ function ComboboxTrigger({
   );
 }
 
+/** Props de {@link ComboboxValue}. */
 export type ComboboxValueProps = React.ComponentProps<"span"> & {
   placeholder?: string;
 };
@@ -289,11 +320,13 @@ function ComboboxValue({
   );
 }
 
+/** Props de {@link ComboboxContent}. */
 export type ComboboxContentProps = React.ComponentProps<typeof PopoverContent> & {
   /** Desactiva el filtrado de cmdk, para listas que ya filtra el servidor. */
   shouldFilter?: boolean;
 };
 
+/** El panel con el campo de búsqueda y la lista. */
 function ComboboxContent({
   className,
   children,
@@ -314,6 +347,7 @@ function ComboboxContent({
   );
 }
 
+/** El campo que filtra las opciones mientras se escribe. */
 function ComboboxInput({
   className,
   placeholder,
@@ -331,6 +365,7 @@ function ComboboxInput({
   );
 }
 
+/** La lista de opciones que sobrevivieron al filtro. */
 function ComboboxList({
   className,
   ...props
@@ -338,6 +373,7 @@ function ComboboxList({
   return <CommandList data-slot="combobox-list" className={className} {...props} />;
 }
 
+/** Lo que se muestra cuando el filtro no deja ninguna opción. */
 function ComboboxEmpty({
   children,
   ...props
@@ -350,16 +386,19 @@ function ComboboxEmpty({
   );
 }
 
+/** Agrupa opciones afines bajo un título. */
 function ComboboxGroup(props: React.ComponentProps<typeof CommandGroup>): React.JSX.Element {
   return <CommandGroup data-slot="combobox-group" {...props} />;
 }
 
+/** La línea que separa dos grupos. */
 function ComboboxSeparator(
   props: React.ComponentProps<typeof CommandSeparator>,
 ): React.JSX.Element {
   return <CommandSeparator data-slot="combobox-separator" {...props} />;
 }
 
+/** Props de {@link ComboboxLoading}. */
 export type ComboboxLoadingProps = React.ComponentProps<"div"> & { label?: string };
 
 /** Fila de carga, para listas que se piden al servidor mientras se escribe. */
@@ -380,6 +419,7 @@ function ComboboxLoading({ className, label, ...props }: ComboboxLoadingProps): 
   );
 }
 
+/** Props de {@link ComboboxItem}. */
 export type ComboboxItemProps = Omit<
   React.ComponentProps<typeof CommandItem>,
   "onSelect" | "value"
@@ -443,6 +483,7 @@ function ComboboxItem({
  * Envoltorio para el caso común
  * ------------------------------------------------------------------ */
 
+/** Una opción. Su `value` es contra lo que corre el filtro. */
 export type ComboboxOption = {
   value: string;
   label: string;
@@ -459,6 +500,7 @@ export type ComboboxOption = {
   group?: string;
 };
 
+/** Props de {@link ComboboxField}. */
 export type ComboboxFieldProps = {
   options: ComboboxOption[];
 
@@ -574,6 +616,7 @@ function ComboboxField({
   );
 }
 
+/** Props de {@link MultiComboboxField}. */
 export type MultiComboboxFieldProps = Omit<
   ComboboxFieldProps,
   "value" | "defaultValue" | "onValueChange" | "clearable"

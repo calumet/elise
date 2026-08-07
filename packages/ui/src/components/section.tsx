@@ -1,9 +1,28 @@
+/**
+ * Un grupo de contenido con su rótulo: la unidad con la que se arma una
+ * pantalla larga.
+ *
+ * Es el envoltorio opinado sobre `Card`, que sigue siendo el primitivo
+ * componible. La diferencia importa: una pantalla de ajustes con ocho grupos
+ * escribe ocho veces la tarjeta, su cabecera y su título, y a la tercera hay
+ * uno con el título en otro tamaño. Con el rótulo como prop no queda dónde
+ * desviarse. Quien necesite pie, descripción o una cabecera partida compone
+ * `Card` a mano, que para eso está.
+ *
+ * Sale como `<section>` y no como `<div>`: con nombre accesible se convierte en
+ * una región, y eso es lo que permite saltar de grupo en grupo sin recorrer
+ * todo el contenido.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "./card";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Section}. */
 export type SectionProps = Omit<React.ComponentProps<"section">, "title"> & {
   /** El rótulo del grupo. Sale como encabezado y nombra la región. */
   heading?: React.ReactNode;

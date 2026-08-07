@@ -1,9 +1,22 @@
+/**
+ * Indicador de progreso por pasos.
+ *
+ * Se renderiza como `<ol>`, ya que el orden es la información que el componente
+ * transmite y un lector de pantalla debe poder anunciar "paso 2 de 4".
+ *
+ * El estado de cada paso lo decide quien lo usa, con `status`. El componente no
+ * lo deduce de un índice, porque un flujo real salta pasos y vuelve atrás.
+ *
+ * @module
+ */
+
 import { Check } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** En qué punto está un paso. */
 export type StepStatus = "complete" | "current" | "upcoming";
 
 type StepperContextValue = {
@@ -12,6 +25,7 @@ type StepperContextValue = {
 
 const StepperContext = React.createContext<StepperContextValue>({ orientation: "horizontal" });
 
+/** Props de {@link Stepper}. */
 export type StepperProps = React.ComponentProps<"ol"> & {
   orientation?: "horizontal" | "vertical";
 };
@@ -47,6 +61,7 @@ function Stepper({
   );
 }
 
+/** Props de {@link StepperItem}. */
 export type StepperItemProps = React.ComponentProps<"li"> & {
   status?: StepStatus;
 
@@ -69,6 +84,7 @@ const lineaPorEstado: Record<StepStatus, string> = {
   upcoming: "bg-border-strong",
 };
 
+/** Un paso. Su `status` decide si se dibuja hecho, en curso o pendiente. */
 function StepperItem({
   className,
   status = "upcoming",
@@ -134,6 +150,7 @@ function StepperItem({
   );
 }
 
+/** El título del paso. */
 function StepperTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
@@ -148,6 +165,7 @@ function StepperTitle({ className, ...props }: React.ComponentProps<"p">): React
   );
 }
 
+/** El detalle del paso. */
 function StepperDescription({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p

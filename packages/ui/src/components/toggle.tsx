@@ -1,3 +1,16 @@
+/**
+ * Botón de dos estados.
+ *
+ * Es un `button` con `aria-pressed`, que es como se anuncia un botón que queda
+ * hundido.
+ *
+ * Dentro de un `ToggleGroup` se comporta como una opción del grupo. Con
+ * `pressed` u `onPressedChange` funciona suelto, y en ese caso lleva su propio
+ * estado.
+ *
+ * @module
+ */
+
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import * as React from "react";
 
@@ -5,6 +18,7 @@ import { DentroDeToggleGroup, ToggleGroupItem, clasesToggle } from "./toggle-gro
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Toggle}. */
 export type ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root> & {
   /** Solo dentro de un `ToggleGroup`, donde identifica la opción. */
   value?: string;

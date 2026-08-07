@@ -1,3 +1,31 @@
+/**
+ * Tabla.
+ *
+ * Trae su propio marco: contorno, radio y recorte. El contorno no es un borde
+ * plano sino un bisel, con el filo de abajo más pesado que el de arriba, más una
+ * sombra de 1px: con un borde uniforme el plano no tiene arriba ni abajo, y la
+ * tabla se lee recortada en el lienzo en vez de puesta sobre él. La banda del encabezado llega
+ * hasta el borde, así que sin recorte sus esquinas cuadradas se salen por
+ * encima de cualquier contorno redondeado que la envuelva, y quien la usa no
+ * tiene por qué saberlo. Dentro de una tarjeta que ya lo pone, `bare` lo
+ * quita.
+ *
+ * El marco es un `<div>` aparte y no el propio `<table>` porque también hace de
+ * carril de desplazamiento: una tabla que no cabe se desliza dentro del marco
+ * en vez de estirar la página.
+ *
+ * Son dos `<div>` y no uno porque el que desplaza no puede ser el mismo que
+ * lleva el contorno: la capa del bisel se iría con el contenido y al arrastrar
+ * la tabla el filo se saldría del marco.
+ *
+ * Estrecha se lee como lista, no como tabla apretada. Cambia el marcado de
+ * verdad, `<ul>` y `<li>` en vez de `<table>`, en lugar de tumbar la tabla con
+ * `display`, que deja el contenido bien pero le quita a un lector de pantalla
+ * las relaciones de fila y columna sin poner nada en su lugar.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import {
@@ -14,6 +42,7 @@ import {
 import { cn } from "@/lib/cn";
 import { SUPERFICIE } from "@/lib/superficie";
 
+/** Las clases de la superficie que comparten `Card` y `Table`, para que las dos cajas del sistema no se separen. */
 export { SUPERFICIE };
 
 /**
@@ -120,6 +149,7 @@ const repartirRanuras = (columnas: Columna[]): ListSlot[] => {
   return ranuras.map((ranura) => ranura ?? "labeled");
 };
 
+/** Props de {@link Table}. */
 export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   /**
    * Quita el marco propio para meter la tabla dentro de una tarjeta que ya lo
@@ -395,6 +425,7 @@ export const Table: React.ForwardRefExoticComponent<
 );
 Table.displayName = "Table";
 
+/** El `<thead>`. */
 export const TableHeader: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.HTMLAttributes<HTMLTableSectionElement>> &
     React.RefAttributes<HTMLTableSectionElement>
@@ -419,6 +450,7 @@ export const TableHeader: React.ForwardRefExoticComponent<
 );
 TableHeader.displayName = "TableHeader";
 
+/** El `<tbody>`. */
 export const TableBody: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.HTMLAttributes<HTMLTableSectionElement>> &
     React.RefAttributes<HTMLTableSectionElement>
@@ -447,6 +479,7 @@ export const TableBody: React.ForwardRefExoticComponent<
 );
 TableBody.displayName = "TableBody";
 
+/** El `<tfoot>`, para totales. */
 export const TableFooter: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.HTMLAttributes<HTMLTableSectionElement>> &
     React.RefAttributes<HTMLTableSectionElement>
@@ -556,6 +589,7 @@ const FilaDeLista = React.forwardRef<
 });
 FilaDeLista.displayName = "FilaDeLista";
 
+/** Props de {@link TableRow}. */
 export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
   /**
    * `id` de un elemento interactivo de dentro de la fila. Pulsar la fila lo
@@ -591,6 +625,7 @@ const usarDelegado = (clickDelegate: string | undefined) => {
   return { fila, alPulsar };
 };
 
+/** Una fila. */
 export const TableRow: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TableRowProps> & React.RefAttributes<HTMLTableRowElement>
 > = React.forwardRef<HTMLTableRowElement, TableRowProps>(
@@ -667,6 +702,7 @@ export const TableRow: React.ForwardRefExoticComponent<
 );
 TableRow.displayName = "TableRow";
 
+/** Props de {@link TableHead}. */
 export type TableHeadProps = React.ThHTMLAttributes<HTMLTableCellElement> & {
   /** Papel de la columna cuando la tabla se lee como lista. */
   listSlot?: ListSlot;
@@ -675,6 +711,7 @@ export type TableHeadProps = React.ThHTMLAttributes<HTMLTableCellElement> & {
   format?: ColumnFormat;
 };
 
+/** Una celda de encabezado. */
 export const TableHead: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TableHeadProps> & React.RefAttributes<HTMLTableCellElement>
 > = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
@@ -696,6 +733,7 @@ export const TableHead: React.ForwardRefExoticComponent<
 );
 TableHead.displayName = "TableHead";
 
+/** Una celda de datos. */
 export const TableCell: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.TdHTMLAttributes<HTMLTableCellElement>> &
     React.RefAttributes<HTMLTableCellElement>
@@ -720,6 +758,7 @@ export const TableCell: React.ForwardRefExoticComponent<
 );
 TableCell.displayName = "TableCell";
 
+/** El `<caption>`, que describe la tabla para quien la lee con lector de pantalla. */
 export const TableCaption: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.HTMLAttributes<HTMLTableCaptionElement>> &
     React.RefAttributes<HTMLTableCaptionElement>

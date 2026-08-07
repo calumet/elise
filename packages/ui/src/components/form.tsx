@@ -1,3 +1,9 @@
+/**
+ * Raíz del formulario. Reparte el estado de validación a los campos.
+ *
+ * @module
+ */
+
 import * as FormPrimitive from "@radix-ui/react-form";
 import * as React from "react";
 
@@ -5,6 +11,7 @@ import { InlineError } from "./inline-error";
 
 import { cn } from "@/lib/cn";
 
+/** Raíz del formulario. Reparte el estado de validación a los campos. */
 export const Form = FormPrimitive.Root;
 
 type GridColCount = 1 | 2 | 3 | 4 | 5 | 6;
@@ -54,6 +61,7 @@ const lgColClasses: Record<GridColCount, string> = {
   6: "lg:grid-cols-6",
 };
 
+/** Una fila de campos, con las columnas que pidas por breakpoint. */
 export const FormRow: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<FormRowProps> & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef<HTMLDivElement, FormRowProps>(
@@ -75,6 +83,7 @@ export const FormRow: React.ForwardRefExoticComponent<
 );
 FormRow.displayName = "FormRow";
 
+/** Un campo. Enlaza solo el rótulo, el control y el mensaje de error. */
 export const FormField: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>> &
     React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Field>>
@@ -91,6 +100,7 @@ export const FormField: React.ForwardRefExoticComponent<
 ));
 FormField.displayName = FormPrimitive.Field.displayName;
 
+/** El rótulo del campo. */
 export const FormLabel: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>> &
     React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Label>>
@@ -107,8 +117,10 @@ export const FormLabel: React.ForwardRefExoticComponent<
 ));
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
+/** Envuelve al control para que reciba los `id` y los `aria` del campo. */
 export const FormControl = FormPrimitive.Control;
 
+/** El error del campo. Sale por `InlineError`, así que es un `<p>` y no el `<span>` de Radix. */
 export const FormMessage: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>> &
     React.RefAttributes<HTMLParagraphElement>
@@ -134,6 +146,7 @@ export const FormMessage: React.ForwardRefExoticComponent<
 ));
 FormMessage.displayName = FormPrimitive.Message.displayName;
 
+/** La ayuda del campo, debajo del control. */
 export const FormDescription: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>> &
     React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Message>>
@@ -150,6 +163,7 @@ export const FormDescription: React.ForwardRefExoticComponent<
 ));
 FormDescription.displayName = "FormDescription";
 
+/** El botón que envía. Queda deshabilitado mientras la validación no pase. */
 export const FormSubmit: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>> &
     React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Submit>>

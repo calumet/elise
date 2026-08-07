@@ -1,7 +1,19 @@
+/**
+ * Primitiva tipográfica. Cada `size` trae su interlineado y su tracking
+ * emparejados desde los tokens, así que no hay que combinar `text-*` con
+ * `leading-*` y `tracking-*` a mano.
+ *
+ * `as` y `size` son independientes: un `h2` puede verse pequeño sin dejar de
+ * ser un `h2` para el lector de pantalla.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Text}. */
 export type TextProps = React.ComponentProps<"p"> & {
   /** Etiqueta HTML a renderizar. El tamaño es independiente de la semántica. */
   as?: React.ElementType;

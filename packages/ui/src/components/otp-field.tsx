@@ -1,8 +1,15 @@
+/**
+ * Campo para un código de un solo uso, con una casilla por dígito.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link OTPField}. */
 export type OTPFieldProps = {
   length?: number;
   value?: string;
@@ -15,6 +22,7 @@ export type OTPFieldProps = {
   "value" | "defaultValue" | "onChange" | "type" | "maxLength"
 >;
 
+/** Campo para un código de un solo uso, con una casilla por dígito. `onComplete` avisa cuando se llenaron todas. */
 export const OTPField: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<OTPFieldProps> & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef<HTMLDivElement, OTPFieldProps>(

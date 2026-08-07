@@ -1,12 +1,27 @@
+/**
+ * Secciones plegables.
+ *
+ * `type="single"` deja una abierta a la vez, y con `collapsible` esa una puede
+ * cerrarse. `type="multiple"` permite varias.
+ *
+ * Admite modo controlado con `value` y `onValueChange`.
+ *
+ * @module
+ */
+
 import { ChevronDown } from "@calumet/elise-icons";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Accordion}. */
 export type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;
+/** Props de {@link AccordionItem}. */
 export type AccordionItemProps = React.ComponentProps<typeof AccordionPrimitive.Item>;
+/** Props de {@link AccordionTrigger}. */
 export type AccordionTriggerProps = React.ComponentProps<typeof AccordionPrimitive.Trigger>;
+/** Props de {@link AccordionContent}. */
 export type AccordionContentProps = React.ComponentProps<typeof AccordionPrimitive.Content>;
 
 /**
@@ -27,6 +42,7 @@ function Accordion({ className, ...props }: AccordionProps): React.JSX.Element {
   );
 }
 
+/** Una sección plegable del acordeón. */
 function AccordionItem({ className, ...props }: AccordionItemProps): React.JSX.Element {
   return (
     <AccordionPrimitive.Item

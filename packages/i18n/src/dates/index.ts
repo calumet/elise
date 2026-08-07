@@ -1,3 +1,9 @@
-export { formatDate, formatDateRange } from "./format";
-export type { DateRange, DateFormatOptions, Locale } from "./format";
-export { useDateRange } from "./useDateRange";
+/**
+ * Formateo de fechas y rangos con `Intl.DateTimeFormat`, más el estado para un
+ * rango con los dos extremos.
+ *
+ * @module
+ */
+
+export * from "./format";
+export * from "./useDateRange";

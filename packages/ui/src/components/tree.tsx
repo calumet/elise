@@ -1,3 +1,20 @@
+/**
+ * Árbol: una jerarquía que se abre y se cierra.
+ *
+ * Lleva el patrón de árbol de ARIA entero, y esa es la razón de que exista como
+ * componente en vez de resolverse con listas anidadas y un `Collapsible` por
+ * rama. Un lector de pantalla anuncia el nivel, cuántos hermanos hay y por cuál
+ * va, y el teclado se mueve como se espera de un árbol y no como de una lista:
+ * arriba y abajo recorren lo que se ve, derecha abre o entra, izquierda cierra o
+ * sube al padre, Inicio y Fin van a los extremos.
+ *
+ * El foco entra una sola vez al árbol y desde ahí se mueve por dentro con las
+ * flechas. Con un `tabIndex` por nodo, tabular por un árbol de cincuenta hojas
+ * son cincuenta paradas antes de salir de él.
+ *
+ * @module
+ */
+
 import { ChevronRight } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -14,6 +31,7 @@ type Contexto = {
 const TreeCtx = React.createContext<Contexto | null>(null);
 const ProfundidadCtx = React.createContext(1);
 
+/** Props de {@link Tree}. */
 export type TreeProps = Omit<React.ComponentProps<"ul">, "onSelect"> & {
   /** Ramas abiertas, por `id`. */
   expanded?: string[];
@@ -118,6 +136,7 @@ export const Tree: React.ForwardRefExoticComponent<
 );
 Tree.displayName = "Tree";
 
+/** Props de {@link TreeItem}. */
 export type TreeItemProps = Omit<React.ComponentProps<"li">, "onSelect" | "id"> & {
   /** Único dentro del árbol. Es con lo que se abre y se elige. */
   id: string;
@@ -139,6 +158,7 @@ const visibles = (raiz: HTMLElement | null) =>
       )
     : [];
 
+/** Un nodo del árbol. Se pliega solo si tiene hijos. */
 export const TreeItem: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TreeItemProps> & React.RefAttributes<HTMLLIElement>
 > = React.forwardRef<HTMLLIElement, TreeItemProps>(

@@ -1,3 +1,9 @@
+/**
+ * Raíz de la paleta de comandos. Filtra y recorre con el teclado.
+ *
+ * @module
+ */
+
 import { Search } from "@calumet/elise-icons";
 import { Command as CommandPrimitive } from "cmdk";
 import * as React from "react";
@@ -6,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 import { cn } from "@/lib/cn";
 
+/** Raíz de la paleta de comandos. Filtra y recorre con el teclado. */
 function Command({
   className,
   ...props
@@ -25,6 +32,7 @@ function Command({
   );
 }
 
+/** La paleta dentro de un modal, que es como se abre con un atajo global. */
 function CommandDialog({
   title = "Command Palette",
   description = "Search for a command to run...",
@@ -54,6 +62,7 @@ function CommandDialog({
   );
 }
 
+/** Props de {@link CommandInput}. */
 export type CommandInputProps = React.ComponentProps<typeof CommandPrimitive.Input> & {
   /** Clases del envoltorio. `className` va al `input`, no al contenedor. */
   wrapperClassName?: string;
@@ -62,6 +71,7 @@ export type CommandInputProps = React.ComponentProps<typeof CommandPrimitive.Inp
   icon?: React.ReactNode;
 };
 
+/** El campo de búsqueda. */
 function CommandInput({
   className,
   wrapperClassName,
@@ -88,6 +98,7 @@ function CommandInput({
   );
 }
 
+/** La lista de resultados, que desplaza sola. */
 function CommandList({
   className,
   ...props
@@ -101,6 +112,7 @@ function CommandList({
   );
 }
 
+/** Lo que se muestra cuando la búsqueda no encuentra nada. */
 function CommandEmpty({
   className,
   ...props
@@ -114,6 +126,7 @@ function CommandEmpty({
   );
 }
 
+/** Agrupa comandos afines bajo un título. */
 function CommandGroup({
   className,
   ...props
@@ -130,6 +143,7 @@ function CommandGroup({
   );
 }
 
+/** La línea que separa dos grupos. */
 function CommandSeparator({
   className,
   ...props
@@ -143,6 +157,7 @@ function CommandSeparator({
   );
 }
 
+/** Un comando. */
 function CommandItem({
   className,
   ...props
@@ -159,6 +174,7 @@ function CommandItem({
   );
 }
 
+/** El atajo de teclado del comando, alineado a la derecha. */
 function CommandShortcut({ className, ...props }: React.ComponentProps<"span">): React.JSX.Element {
   return (
     <span

@@ -1,3 +1,20 @@
+/**
+ * Grupo de opciones excluyentes.
+ *
+ * El rótulo, la ayuda y el error son del grupo y no de cada opción, que es lo
+ * que lo distingue de una pila de casillas: la pregunta se hace una vez y las
+ * opciones son las respuestas. Un error como «elige una forma de envío» no
+ * pertenece a ninguna de ellas en particular.
+ *
+ * El grupo es dueño del valor, con `value` y `onValueChange` en modo controlado
+ * y `defaultValue` en el no controlado.
+ *
+ * El foco entra una vez al grupo y las flechas recorren las opciones, de modo
+ * que tabular salta al control siguiente y no a la opción siguiente.
+ *
+ * @module
+ */
+
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import * as React from "react";
 
@@ -12,6 +29,7 @@ import { cn } from "@/lib/cn";
    sabría encontrar. */
 const GrupoCtx = React.createContext<{ idError: string; hayError: boolean } | null>(null);
 
+/** Props de {@link RadioGroup}. */
 export type RadioGroupProps = {
   /** Rótulo del grupo entero. Hace de leyenda. */
   label: React.ReactNode;
@@ -133,6 +151,7 @@ function RadioGroup({
   );
 }
 
+/** Props de {@link RadioGroupItem}. */
 export type RadioGroupItemProps = {
   value: string;
 

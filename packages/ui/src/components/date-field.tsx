@@ -1,3 +1,31 @@
+/**
+ * Campo de fecha: se puede escribir o elegir en el calendario.
+ *
+ * No es un calendario suelto sino un campo con calendario emergente, y por eso
+ * trae rótulo, ayuda y error. Para el calendario a secas está `Calendar`, y para
+ * un disparador sin campo, `DatePicker`.
+ *
+ * El valor viaja como `YYYY-MM-DD` y no como `Date`: una fecha de calendario no
+ * tiene hora ni zona, y en cuanto se guarda un `Date` alguien acaba comparando
+ * instantes y perdiendo un día al cruzar la medianoche.
+ *
+ * Lo escrito no se valida en cada tecla. Mientras se teclea, «3 de ago» pasa por
+ * todos los estados intermedios inválidos, y avisar de cada uno convierte el
+ * campo en una alarma. Se comprueba al salir, que es cuando quien escribe da por
+ * terminada la fecha.
+ *
+ * ```tsx
+ * <DateField
+ *   label="Fecha de entrega"
+ *   value={fecha}
+ *   onValueChange={setFecha}
+ *   min="2026-01-01"
+ * />
+ * ```
+ *
+ * @module
+ */
+
 import { Calendar as CalendarIcon } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -50,6 +78,7 @@ export const aTextoISO = (fecha: Date): string =>
     String(fecha.getDate()).padStart(2, "0"),
   ].join("-");
 
+/** Props de {@link DateField}. */
 export type DateFieldProps = {
   label: React.ReactNode;
 

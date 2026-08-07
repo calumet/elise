@@ -1,3 +1,9 @@
+/**
+ * Raíz del modal. Guarda si está abierto, y admite `open` con `onOpenChange` para controlarlo desde afuera.
+ *
+ * @module
+ */
+
 import { X } from "@calumet/elise-icons";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
@@ -5,9 +11,13 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Raíz del modal. Guarda si está abierto, y admite `open` con `onOpenChange` para controlarlo desde afuera. */
 export const Dialog = DialogPrimitive.Root;
+/** El control que abre el modal. */
 export const DialogTrigger = DialogPrimitive.Trigger;
+/** Monta el modal al final del `body`, fuera del recorte de cualquier ancestro. */
 export const DialogPortal = DialogPrimitive.Portal;
+/** Cierra el modal. Envolvé con él cualquier botón del pie. */
 export const DialogClose = DialogPrimitive.Close;
 
 /* El marco entero vive en constantes porque `AlertDialog` cuelga de otro
@@ -16,22 +26,29 @@ export const DialogClose = DialogPrimitive.Close;
    que había pasado: este acabó con tres bandas y relleno de 16 y el otro con
    una caja suelta de 24 y otro radio. */
 
+/** Las clases del velo. Están sueltas para que Sheet y AlertDialog usen exactamente el mismo. */
 export const VELO_DIALOGO =
   "fixed inset-0 z-overlay bg-black/50 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in";
 
+/** Las clases del panel centrado, con su animación de entrada y de salida. */
 export const PANEL_DIALOGO =
   "fixed left-1/2 top-1/2 z-modal flex max-h-[min(90vh,40rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95";
 
 /* Las tres zonas llevan el mismo relleno de 16 en los cuatro lados. Antes eran
    20 a los costados y 16 arriba y abajo, y esos 4px de más eran los únicos de
    todo el diálogo que no salían de la escala. */
+/** Las clases de la cabecera, con el relleno común a las tres zonas. */
 export const CABECERA_DIALOGO =
   "flex shrink-0 flex-col gap-1 border-b border-border bg-muted p-4 text-left";
+/** Las clases del cuerpo, que es la única zona que desplaza. */
 export const CUERPO_DIALOGO = "min-h-0 flex-1 overflow-y-auto p-4";
+/** Las clases del pie, donde van las acciones. */
 export const PIE_DIALOGO =
   "flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted p-4 sm:flex-row sm:justify-end";
 
+/** Las clases del título. */
 export const TITULO_DIALOGO = "text-lg font-semibold tracking-tight";
+/** Las clases de la descripción. */
 export const DESCRIPCION_DIALOGO = "text-base text-muted-foreground leading-relaxed";
 
 /* Tres anchos y no más, para que dos diálogos seguidos no midan cada uno lo
@@ -39,12 +56,14 @@ export const DESCRIPCION_DIALOGO = "text-base text-muted-foreground leading-rela
    todo; `sm` es para confirmar algo de una frase, donde 620px de ancho para dos
    botones se lee como si faltara contenido; `lg` para lo que lleva una tabla o
    un formulario de varias columnas dentro. */
+/** Los tres anchos del panel, cada uno acotado al 90% del viewport. */
 export const ANCHOS_DIALOGO = {
   sm: "w-[min(90vw,380px)]",
   md: "w-[min(90vw,620px)]",
   lg: "w-[min(90vw,980px)]",
 } as const;
 
+/** El velo que tapa la página detrás del modal. */
 export const DialogOverlay: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>> &
     React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Overlay>>
@@ -61,6 +80,7 @@ export const DialogOverlay: React.ForwardRefExoticComponent<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+/** El panel del modal, con su cabecera, su cuerpo y su pie. `size` elige el ancho. */
 export const DialogContent: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
@@ -103,6 +123,7 @@ DialogContent.displayName = DialogPrimitive.Content.displayName;
    separa las tres zonas sin una regla por cada una, y hace que al desplazar un
    cuerpo largo el título y las acciones sigan leyéndose como marco y no como
    contenido que se fue quedando arriba. */
+/** La cabecera fija: el título, la descripción y el botón de cerrar. */
 export const DialogHeader = ({
   className,
   ...props
@@ -126,6 +147,7 @@ export const DialogBody = ({
 );
 DialogBody.displayName = "DialogBody";
 
+/** El título del modal. Es lo que anuncia el lector de pantalla al abrirlo. */
 export const DialogTitle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>> &
     React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Title>>
@@ -142,6 +164,7 @@ export const DialogTitle: React.ForwardRefExoticComponent<
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
+/** La bajada del título, enlazada al panel por `aria-describedby`. */
 export const DialogDescription: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>> &
     React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Description>>

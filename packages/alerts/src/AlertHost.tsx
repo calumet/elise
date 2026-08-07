@@ -32,6 +32,13 @@ const iconColor = {
   success: "var(--success)",
 };
 
+/**
+ * Escucha el bus y dibuja las alertas. Se monta una sola vez, en la raíz de la
+ * app; sin él, `openAlert` no muestra nada.
+ *
+ * Mantiene una cola y muestra de a una: si llegan varias mientras hay una
+ * abierta, esperan su turno en lugar de apilarse en pantalla.
+ */
 export const AlertHost: React.FC = () => {
   const [queue, setQueue] = React.useState<AlertEvent[]>([]);
   const current = queue[0];

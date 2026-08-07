@@ -1,3 +1,15 @@
+/**
+ * Área para soltar o elegir archivos.
+ *
+ * Reporta siempre las dos listas (aceptados y rechazados, con el motivo) en vez
+ * de descartar en silencio lo que no pasa, porque un archivo que desaparece sin
+ * explicación deja al usuario sin saber qué corregir.
+ *
+ * No guarda los archivos ni los muestra. Para eso está `FileUploadList`.
+ *
+ * @module
+ */
+
 import { File as FileIcon, Upload, X } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -10,6 +22,7 @@ export type RejectedFile = {
   reason: "type" | "size" | "custom";
 };
 
+/** Props de {@link FileUpload}. */
 export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
   /** Filtro nativo: `"image/*"`, `".pdf,.docx"`. */
   accept?: string;
@@ -37,6 +50,7 @@ export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
   hint?: string;
 };
 
+/** Formatea un tamaño en bytes a la unidad que le queda cómoda, por ejemplo `"1,2 MB"`. */
 const formatearTamano = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
@@ -170,12 +184,14 @@ function FileUpload({
   );
 }
 
+/** La lista de archivos ya elegidos. */
 function FileUploadList({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul data-slot="file-upload-list" className={cn("flex flex-col gap-2", className)} {...props} />
   );
 }
 
+/** Props de {@link FileUploadItem}. */
 export type FileUploadItemProps = Omit<React.ComponentProps<"li">, "onRemove"> & {
   name: string;
   size?: number;
@@ -184,6 +200,7 @@ export type FileUploadItemProps = Omit<React.ComponentProps<"li">, "onRemove"> &
   onRemove?: () => void;
 };
 
+/** Un archivo de la lista, con su tamaño y el botón de quitarlo. */
 function FileUploadItem({
   className,
   name,
