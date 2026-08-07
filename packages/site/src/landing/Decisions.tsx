@@ -170,7 +170,13 @@ export function Decisions() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => toast({ title: t("imperative.saved"), variant: "success" })}
+              onClick={() =>
+                toast({
+                  title: t("imperative.saved"),
+                  description: t("imperative.savedBody"),
+                  variant: "success",
+                })
+              }
             >
               {t("imperative.notify")}
             </Button>

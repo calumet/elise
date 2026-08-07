@@ -106,6 +106,9 @@ export default {
     "app.status.approved": "Aprobado",
     "app.status.draft": "Borrador",
     "app.toast": "Trabajo TG-0242 radicado",
+    "app.toastBody": "Queda en revisión de la dirección de escuela.",
+    "app.bell": "Sin novedades",
+    "app.bellBody": "No tenés notificaciones pendientes.",
   },
 
   decisions: {
@@ -130,6 +133,7 @@ export default {
     "form.stack": "react-hook-form + Zod",
     "imperative.title": "Los avisos y las confirmaciones se llaman como funciones",
     "imperative.saved": "Guardado",
+    "imperative.savedBody": "Los cambios quedaron sincronizados.",
     "imperative.notify": "Mostrar aviso",
     "imperative.confirm": "Pedir confirmación",
     "imperative.ask": "¿Eliminar el trabajo?",

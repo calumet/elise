@@ -217,7 +217,9 @@ export function AppPreview() {
               <AppShellHeaderAction
                 label={t("app.notifications")}
                 icon={<Bell />}
-                onClick={() => toast({ title: t("app.toast"), variant: "info" })}
+                onClick={() =>
+                  toast({ title: t("app.bell"), description: t("app.bellBody"), variant: "info" })
+                }
               />
               <AppShellUserMenu name="Ana Ruiz" detail={t("app.org")} initials="AR">
                 <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
@@ -332,7 +334,7 @@ export function AppPreview() {
                 onClick={() =>
                   toast({
                     title: t("app.toast"),
-                    description: t("app.subtitle"),
+                    description: t("app.toastBody"),
                     variant: "info",
                   })
                 }

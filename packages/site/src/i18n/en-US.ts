@@ -104,6 +104,9 @@ export default {
     "app.status.approved": "Approved",
     "app.status.draft": "Draft",
     "app.toast": "Thesis TG-0242 filed",
+    "app.toastBody": "It now goes to the school office for review.",
+    "app.bell": "Nothing new",
+    "app.bellBody": "You have no pending notifications.",
   },
 
   decisions: {
@@ -128,6 +131,7 @@ export default {
     "form.stack": "react-hook-form + Zod",
     "imperative.title": "Notices and confirmations are called like functions",
     "imperative.saved": "Saved",
+    "imperative.savedBody": "Your changes are in sync.",
     "imperative.notify": "Show a notice",
     "imperative.confirm": "Ask to confirm",
     "imperative.ask": "Delete this thesis?",
