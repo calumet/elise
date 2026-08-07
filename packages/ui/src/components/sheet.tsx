@@ -1,3 +1,9 @@
+/**
+ * Raíz del panel lateral. Guarda si está abierto.
+ *
+ * @module
+ */
+
 import { X } from "@calumet/elise-icons";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
@@ -5,16 +11,19 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Raíz del panel lateral. Guarda si está abierto. */
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>): React.JSX.Element {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
+/** El control que abre el panel. */
 function SheetTrigger({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Trigger>): React.JSX.Element {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
+/** Cierra el panel. */
 function SheetClose({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Close>): React.JSX.Element {
@@ -41,6 +50,7 @@ function SheetOverlay({
   );
 }
 
+/** El panel, anclado al borde que diga `side`. */
 function SheetContent({
   className,
   children,
@@ -79,6 +89,7 @@ function SheetContent({
   );
 }
 
+/** La cabecera fija del panel. */
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -89,6 +100,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">): Reac
   );
 }
 
+/** El pie fijo, donde van las acciones. */
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -99,6 +111,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">): Reac
   );
 }
 
+/** El título del panel, que anuncia el lector de pantalla al abrirlo. */
 function SheetTitle({
   className,
   ...props
@@ -112,6 +125,7 @@ function SheetTitle({
   );
 }
 
+/** La bajada del título. */
 function SheetDescription({
   className,
   ...props

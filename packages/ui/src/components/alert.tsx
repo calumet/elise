@@ -1,9 +1,26 @@
+/**
+ * Mensaje en línea, no modal. Para interrumpir al usuario con una decisión usa
+ * `AlertDialog`.
+ *
+ * Con un `AlertTitle` toma la forma de anuncio de página: tarjeta con una barra
+ * del tono arriba (icono, título y cierre) y el cuerpo en blanco debajo. Sin
+ * título se queda en un bloque de una sola pieza en superficie sutil, que es lo
+ * que cabe dentro de una tarjeta sin competir con ella. Entre una y otra se
+ * elige por lo mismo: cuánto tiene que pesar el aviso.
+ *
+ * `danger` y `warning` se anuncian con `role="alert"` (interrumpe al lector de
+ * pantalla); `info` y `success` con `role="status"` (espera a que termine).
+ *
+ * @module
+ */
+
 import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link Alert}. */
 export type AlertProps = React.ComponentProps<"div"> & {
   tone?: "info" | "success" | "warning" | "danger";
 
@@ -153,6 +170,7 @@ function Alert({
   );
 }
 
+/** El título del aviso. Su presencia es lo que convierte al `Alert` en anuncio de página. */
 function AlertTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
@@ -165,6 +183,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"p">): React.J
 /* `Alert` lo busca por nombre para subirlo a la barra del tono. */
 AlertTitle.displayName = "AlertTitle";
 
+/** El detalle del aviso. */
 function AlertDescription({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div

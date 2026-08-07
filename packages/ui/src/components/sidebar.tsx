@@ -1,3 +1,9 @@
+/**
+ * La barra en sí. En móvil se convierte en un `Sheet`, y `collapsible` decide cómo se pliega en escritorio.
+ *
+ * @module
+ */
+
 "use client";
 
 import { PanelLeft as PanelLeftIcon } from "@calumet/elise-icons";
@@ -36,6 +42,7 @@ type SidebarContextProps = {
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
 
+/** Da el estado de la barra y `toggleSidebar`. Tira error fuera de `SidebarProvider`. */
 function useSidebar(): SidebarContextProps {
   const context = React.useContext(SidebarContext);
   if (!context) {
@@ -45,6 +52,7 @@ function useSidebar(): SidebarContextProps {
   return context;
 }
 
+/** Reparte el estado de la barra y persiste si está plegada en una cookie. Engancha Ctrl+B, que se apaga con `keyboardShortcut={false}`. */
 function SidebarProvider({
   defaultOpen = true,
   open: openProp,
@@ -149,6 +157,7 @@ function SidebarProvider({
   );
 }
 
+/** La barra en sí. En móvil se convierte en un `Sheet`, y `collapsible` decide cómo se pliega en escritorio. */
 function Sidebar({
   side = "left",
   variant = "sidebar",
@@ -257,6 +266,7 @@ function Sidebar({
   );
 }
 
+/** El botón que pliega y despliega la barra. */
 function SidebarTrigger({
   className,
   onClick,
@@ -284,6 +294,7 @@ function SidebarTrigger({
   );
 }
 
+/** La franja del borde que también pliega la barra, para agarrarla sin apuntar al botón. */
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">): React.JSX.Element {
   const { toggleSidebar } = useSidebar();
   const toggleLabel = useElLabel("ui", "toggleSidebar", "Alternar barra lateral");
@@ -310,6 +321,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">): R
   );
 }
 
+/** El `<main>` de al lado, que es quien se corre cuando la barra cambia de ancho. */
 function SidebarInset({ className, ...props }: React.ComponentProps<"main">): React.JSX.Element {
   return (
     <main
@@ -324,6 +336,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">): Re
   );
 }
 
+/** Un campo de búsqueda con las medidas de la barra. */
 function SidebarInput({
   className,
   ...props
@@ -338,6 +351,7 @@ function SidebarInput({
   );
 }
 
+/** La zona fija de arriba, donde suele ir la marca. */
 function SidebarHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -349,6 +363,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">): Re
   );
 }
 
+/** La zona fija de abajo, donde suele ir el usuario. */
 function SidebarFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -360,6 +375,7 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<"div">): Re
   );
 }
 
+/** La línea que separa dos zonas de la barra. */
 function SidebarSeparator({
   className,
   ...props
@@ -374,6 +390,7 @@ function SidebarSeparator({
   );
 }
 
+/** La zona del medio, que es la única que desplaza. */
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -388,6 +405,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">): R
   );
 }
 
+/** Un bloque de navegación con su título y sus enlaces. */
 function SidebarGroup({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -399,6 +417,7 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<"div">): Rea
   );
 }
 
+/** El título del bloque. Se desvanece cuando la barra queda en modo icono. */
 function SidebarGroupLabel({
   className,
   asChild = false,
@@ -420,6 +439,7 @@ function SidebarGroupLabel({
   );
 }
 
+/** La acción del bloque, arriba a la derecha del título. */
 function SidebarGroupAction({
   className,
   asChild = false,
@@ -443,6 +463,7 @@ function SidebarGroupAction({
   );
 }
 
+/** Los enlaces del bloque. */
 function SidebarGroupContent({
   className,
   ...props
@@ -457,6 +478,7 @@ function SidebarGroupContent({
   );
 }
 
+/** La lista de enlaces. */
 function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul
@@ -468,6 +490,7 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">): React
   );
 }
 
+/** Una entrada de la lista. */
 function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element {
   return (
     <li
@@ -517,6 +540,7 @@ const sidebarMenuButtonVariants: (
   },
 );
 
+/** El enlace en sí. Marcá el actual con `isActive`, y con `tooltip` sigue siendo legible en modo icono. */
 function SidebarMenuButton({
   asChild = false,
   isActive = false,
@@ -567,6 +591,7 @@ function SidebarMenuButton({
   );
 }
 
+/** Una acción al final de la entrada, por ejemplo el menú de tres puntos. */
 function SidebarMenuAction({
   className,
   asChild = false,
@@ -599,6 +624,7 @@ function SidebarMenuAction({
   );
 }
 
+/** Un contador al final de la entrada. No recibe puntero, así que no le roba el clic al enlace. */
 function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -618,6 +644,7 @@ function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">):
   );
 }
 
+/** El hueco de una entrada mientras carga, con ancho variable para que no parezca una grilla. */
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
@@ -651,6 +678,7 @@ function SidebarMenuSkeleton({
   );
 }
 
+/** La lista anidada de una entrada. */
 function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul
@@ -666,6 +694,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">): Re
   );
 }
 
+/** Una entrada de la lista anidada. */
 function SidebarMenuSubItem({
   className,
   ...props
@@ -680,6 +709,7 @@ function SidebarMenuSubItem({
   );
 }
 
+/** El enlace de la lista anidada. */
 function SidebarMenuSubButton({
   asChild = false,
   size = "md",

@@ -1,10 +1,18 @@
+/**
+ * Elige un valor de un rango arrastrando.
+ *
+ * @module
+ */
+
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Slider}. */
 export type SliderProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>;
 
+/** Elige un valor de un rango arrastrando, o con las flechas del teclado. */
 export const Slider: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<SliderProps> &
     React.RefAttributes<React.ComponentRef<typeof SliderPrimitive.Root>>

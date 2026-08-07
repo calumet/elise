@@ -1,3 +1,9 @@
+/**
+ * Raíz del selector. Guarda el valor elegido.
+ *
+ * @module
+ */
+
 import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
@@ -6,10 +12,14 @@ import { CAMPO_INVALIDO } from "./input";
 
 import { cn } from "@/lib/cn";
 
+/** Raíz del selector. Guarda el valor elegido. */
 export const Select = SelectPrimitive.Root;
+/** Agrupa opciones afines, con `SelectLabel` como título. */
 export const SelectGroup = SelectPrimitive.Group;
+/** Muestra la opción elegida dentro del disparador, o el `placeholder` si no hay ninguna. */
 export const SelectValue = SelectPrimitive.Value;
 
+/** El control que abre la lista. */
 export const SelectTrigger: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Trigger>>
@@ -35,6 +45,7 @@ export const SelectTrigger: React.ForwardRefExoticComponent<
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
+/** El panel con las opciones. */
 export const SelectContent: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Content>>
@@ -71,6 +82,7 @@ export const SelectContent: React.ForwardRefExoticComponent<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
+/** Título de un grupo. No se puede elegir. */
 export const SelectLabel: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Label>>
@@ -87,6 +99,7 @@ export const SelectLabel: React.ForwardRefExoticComponent<
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
+/** Una opción. */
 export const SelectItem: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Item>>
@@ -120,6 +133,7 @@ export const SelectItem: React.ForwardRefExoticComponent<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
+/** La línea que separa dos grupos. */
 export const SelectSeparator: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Separator>>

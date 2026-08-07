@@ -1,11 +1,19 @@
+/**
+ * Campo de texto de varias líneas.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { CAMPO_INVALIDO } from "./input";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Textarea}. */
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
+/** Campo de texto de varias líneas. */
 export const Textarea: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TextareaProps> & React.RefAttributes<HTMLTextAreaElement>
 > = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => (

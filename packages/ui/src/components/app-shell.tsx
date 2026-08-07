@@ -1,3 +1,26 @@
+/**
+ * Marco de aplicación: cabecera fija arriba, navegación a un lado y el área
+ * donde entra cada pantalla.
+ *
+ * El cajón y su velo cuelgan de la fila de contenido y no de la ventana, de modo
+ * que la cabecera sigue a la vista y alcanzable mientras la navegación está
+ * abierta. Por eso el cajón no es un `Sheet`, que es de posición fija.
+ *
+ * ```tsx
+ * <AppShell>
+ *   <AppShellHeader>…</AppShellHeader>
+ *   <AppShellNav>
+ *     <AppShellNavSection title="Gestión">
+ *       <AppShellNavItem href="/alumnos" active>Alumnos</AppShellNavItem>
+ *     </AppShellNavSection>
+ *   </AppShellNav>
+ *   <AppShellMain>{children}</AppShellMain>
+ * </AppShell>
+ * ```
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { Avatar, AvatarFallback } from "./avatar";
@@ -39,6 +62,7 @@ const useAppShell = (parte: string) => {
   return ctx;
 };
 
+/** Props de {@link AppShell}. */
 export type AppShellProps = React.ComponentProps<"div"> & {
   /** Cajón de navegación abierto, en el ancho donde la barra se oculta. */
   navOpen?: boolean;
@@ -138,6 +162,7 @@ function AppShell({
   );
 }
 
+/** Props de {@link AppShellHeader}. */
 export type AppShellHeaderProps = React.ComponentProps<"header">;
 
 /**
@@ -243,6 +268,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
 }
 AppShellHeader.displayName = "AppShellHeader";
 
+/** Props de {@link AppShellHeaderBrand}. */
 export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
 
 /**
@@ -264,6 +290,7 @@ function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps):
 }
 AppShellHeaderBrand.displayName = "AppShellHeaderBrand";
 
+/** Props de {@link AppShellHeaderSearch}. */
 export type AppShellHeaderSearchProps = Omit<React.ComponentProps<"button">, "onClick"> & {
   /** El atajo que lo abre, tecla por tecla. Solo se dibuja donde hay sitio. */
   shortcut?: string[];
@@ -322,6 +349,7 @@ function AppShellHeaderSearch({
 }
 AppShellHeaderSearch.displayName = "AppShellHeaderSearch";
 
+/** Props de {@link AppShellHeaderActions}. */
 export type AppShellHeaderActionsProps = React.ComponentProps<"div">;
 
 /**
@@ -350,6 +378,7 @@ function AppShellHeaderActions({
 }
 AppShellHeaderActions.displayName = "AppShellHeaderActions";
 
+/** Props de {@link AppShellHeaderAction}. */
 export type AppShellHeaderActionProps = Omit<React.ComponentProps<"button">, "children"> & {
   /** Nombre del control. Obligatorio: solo se ve el icono. */
   label: string;
@@ -389,6 +418,7 @@ function AppShellHeaderAction({
 }
 AppShellHeaderAction.displayName = "AppShellHeaderAction";
 
+/** Props de {@link AppShellUserMenu}. */
 export type AppShellUserMenuProps = {
   /** Nombre de quien entró. Se esconde donde no cabe, pero sigue anunciándose. */
   name: string;
@@ -480,6 +510,7 @@ function AppShellUserMenu({
 }
 AppShellUserMenu.displayName = "AppShellUserMenu";
 
+/** Props de {@link AppShellNavToggle}. */
 export type AppShellNavToggleProps = React.ComponentProps<"button">;
 
 /** Abre y cierra el cajón. Solo se ve donde la navegación está plegada. */
@@ -524,6 +555,7 @@ function AppShellNavToggle({
   );
 }
 
+/** Props de {@link AppShellNav}. */
 export type AppShellNavProps = React.ComponentProps<"nav"> & {
   /**
    * Nombre del landmark. Una página puede tener varios `<nav>` (el lateral, uno
@@ -614,6 +646,7 @@ function AppShellNav({
   );
 }
 
+/** Props de {@link AppShellNavFooter}. */
 export type AppShellNavFooterProps = React.ComponentProps<"div">;
 
 /**
@@ -641,6 +674,7 @@ function AppShellNavFooter({
 }
 AppShellNavFooter.displayName = "AppShellNavFooter";
 
+/** Props de {@link AppShellNavSection}. */
 export type AppShellNavSectionProps = Omit<React.ComponentProps<"li">, "title"> & {
   title: React.ReactNode;
 
@@ -827,6 +861,7 @@ type GrupoContextValue = {
 
 const GrupoContext = React.createContext<GrupoContextValue | null>(null);
 
+/** Props de {@link AppShellNavGroup}. */
 export type AppShellNavGroupProps = Omit<React.ComponentProps<"li">, "onToggle"> & {
   open?: boolean;
   defaultOpen?: boolean;
@@ -885,6 +920,7 @@ function AppShellNavGroup({
 }
 AppShellNavGroup.displayName = "AppShellNavGroup";
 
+/** Props de {@link AppShellNavSubItem}. */
 export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
 };
@@ -925,6 +961,7 @@ function AppShellNavSubItem({
   );
 }
 
+/** Props de {@link AppShellNavSubList}. */
 export type AppShellNavSubListProps = React.ComponentProps<"ul">;
 
 /**
@@ -988,6 +1025,7 @@ function AppShellNavSubList({
   );
 }
 
+/** Props de {@link AppShellNavItem}. */
 export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
   icon?: React.ReactNode;
@@ -1132,6 +1170,7 @@ function AppShellNavItem({
   return grupo ? fila : <li className="list-none">{fila}</li>;
 }
 
+/** Props de {@link AppShellNavAction}. */
 export type AppShellNavActionProps = React.ComponentProps<"button">;
 
 /**
@@ -1157,6 +1196,7 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
 }
 AppShellNavAction.displayName = "AppShellNavAction";
 
+/** Props de {@link AppShellMain}. */
 export type AppShellMainProps = React.ComponentProps<"main">;
 
 /**

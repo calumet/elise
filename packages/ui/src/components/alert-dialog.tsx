@@ -1,3 +1,9 @@
+/**
+ * Raíz de la alerta modal. A diferencia de `Dialog`, no se cierra con Escape ni al pulsar fuera: exige una respuesta.
+ *
+ * @module
+ */
+
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import * as React from "react";
 
@@ -14,12 +20,18 @@ import {
 
 import { cn } from "@/lib/cn";
 
+/** Raíz de la alerta modal. A diferencia de `Dialog`, no se cierra con Escape ni al pulsar fuera: exige una respuesta. */
 export const AlertDialog = AlertDialogPrimitive.Root;
+/** El control que abre la alerta. */
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+/** Monta la alerta al final del `body`. */
 export const AlertDialogPortal = AlertDialogPrimitive.Portal;
+/** El botón que confirma y cierra. */
 export const AlertDialogAction = AlertDialogPrimitive.Action;
+/** El botón que descarta y cierra. */
 export const AlertDialogCancel = AlertDialogPrimitive.Cancel;
 
+/** El velo que tapa la página detrás de la alerta. */
 export const AlertDialogOverlay: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>> &
     React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Overlay>>
@@ -76,6 +88,7 @@ export const AlertDialogContent: React.ForwardRefExoticComponent<
 ));
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
+/** La cabecera: el título y la descripción. */
 export const AlertDialogHeader = ({
   className,
   ...props
@@ -99,6 +112,7 @@ export const AlertDialogBody = ({
 );
 AlertDialogBody.displayName = "AlertDialogBody";
 
+/** El título, que es lo que anuncia el lector de pantalla al abrir. */
 export const AlertDialogTitle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>> &
     React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Title>>
@@ -115,6 +129,7 @@ export const AlertDialogTitle: React.ForwardRefExoticComponent<
 ));
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 
+/** Qué va a pasar si se confirma. Es lo que vuelve informada a la respuesta. */
 export const AlertDialogDescription: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>> &
     React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Description>>
@@ -131,6 +146,7 @@ export const AlertDialogDescription: React.ForwardRefExoticComponent<
 ));
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
 
+/** El pie con los dos botones, apilados en pantallas angostas. */
 export const AlertDialogFooter = ({
   className,
   ...props

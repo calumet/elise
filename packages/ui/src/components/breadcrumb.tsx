@@ -1,13 +1,21 @@
+/**
+ * La ruta de migas, dentro de un `<nav>` rotulado.
+ *
+ * @module
+ */
+
 import { ChevronRight, Ellipsis as MoreHorizontal } from "@calumet/elise-icons";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** La ruta de migas, dentro de un `<nav>` rotulado. */
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">): React.JSX.Element {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
 }
 
+/** La lista de tramos. */
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">): React.JSX.Element {
   return (
     <ol
@@ -21,6 +29,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">): Re
   );
 }
 
+/** Un tramo. */
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element {
   return (
     <li
@@ -31,6 +40,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">): Re
   );
 }
 
+/** El enlace de un tramo. */
 function BreadcrumbLink({
   asChild,
   className,
@@ -49,6 +59,7 @@ function BreadcrumbLink({
   );
 }
 
+/** El tramo actual, que no es enlace y lleva `aria-current`. */
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">): React.JSX.Element {
   return (
     <span
@@ -62,6 +73,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">): 
   );
 }
 
+/** El separador entre tramos. Se oculta del lector de pantalla. */
 function BreadcrumbSeparator({
   children,
   className,
@@ -80,6 +92,7 @@ function BreadcrumbSeparator({
   );
 }
 
+/** Los puntos suspensivos que reemplazan a los tramos del medio cuando la ruta es larga. */
 function BreadcrumbEllipsis({
   className,
   ...props

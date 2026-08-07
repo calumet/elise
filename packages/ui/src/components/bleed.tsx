@@ -1,9 +1,21 @@
+/**
+ * Rompe el padding del contenedor padre con margen negativo. Sirve para que un
+ * elemento llegue al borde de una Card sin tener que sacarle el padding a la
+ * Card entera: una imagen a sangre, una tabla a todo el ancho, un separador.
+ *
+ * El valor tiene que coincidir con el padding del padre; si no, el contenido se
+ * desborda.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import type { SpaceScale } from "./box";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Bleed}. */
 export type BleedProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 

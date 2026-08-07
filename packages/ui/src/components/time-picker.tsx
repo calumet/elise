@@ -1,3 +1,21 @@
+/**
+ * Selector de hora: un campo que se escribe y una lista de horas que se elige.
+ *
+ * En 24 horas y `HH:MM`, el mismo criterio que `DateField` con las fechas: un
+ * formato que se ordena solo y no cambia con el idioma del navegador. Con
+ * `hh:mm a.m.` una hora escrita en una máquina y leída en otra podía significar
+ * dos cosas.
+ *
+ * El campo se puede escribir además de elegir. La lista es cómoda para «las
+ * nueve y media» y pésima para «las 14:07», y a `step` de quince minutos esa
+ * hora no está en la lista siquiera.
+ *
+ * Se valida al salir del campo y no mientras se escribe: quien va por «09:» no
+ * ha escrito nada malo todavía, solo no ha terminado.
+ *
+ * @module
+ */
+
 import { Clock } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -24,6 +42,7 @@ const aMinutos = (texto: string): number | null => {
 export const aTextoHora = (minutos: number): string =>
   `${String(Math.floor(minutos / 60)).padStart(2, "0")}:${String(minutos % 60).padStart(2, "0")}`;
 
+/** Props de {@link TimePicker}. */
 export type TimePickerProps = {
   label: React.ReactNode;
 

@@ -1,9 +1,25 @@
+/**
+ * Imagen.
+ *
+ * Existe como componente y no como `<img>` pelado por tres cosas que se olvidan
+ * una y otra vez: el texto alternativo, que acá es obligatorio; la carga
+ * diferida, que va puesta salvo que se pida lo contrario; y la proporción, que
+ * reserva el hueco y evita el salto de maquetación al cargar.
+ *
+ * La proporción va como estilo y no como clase a propósito. Tailwind escanea el
+ * código fuente en build y nunca genera una clase armada por interpolación, así
+ * que un `aspect-[3/2]` construido con el valor de una prop no existiría.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import type { BoxProps } from "./box";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Image}. */
 export type ImageProps = Omit<React.ComponentProps<"img">, "width" | "height"> & {
   /**
    * Obligatorio, y vacío para la imagen que no aporta nada. Es la diferencia
@@ -91,6 +107,7 @@ export const Image: React.ForwardRefExoticComponent<
 );
 Image.displayName = "Image";
 
+/** Props de {@link Thumbnail}. */
 export type ThumbnailProps = Omit<ImageProps, "aspectRatio" | "fill" | "radius"> & {
   size?: "xs" | "sm" | "md" | "lg";
 };

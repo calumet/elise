@@ -1,3 +1,28 @@
+/**
+ * Envoltorio de campo: rótulo, control, ayuda y error, con el enlace de
+ * accesibilidad resuelto.
+ *
+ * El control se pasa como función y no como hijo directo para que aplicar
+ * `aria-describedby` y `aria-invalid` sea obligatorio. Con un hijo normal es
+ * fácil escribir el mensaje de error sin enlazarlo, y entonces el lector de
+ * pantalla lo anuncia suelto, sin asociarlo al campo que lo produjo.
+ *
+ * ```tsx
+ * <Field label="Correo" error={errors.email?.message} required>
+ *   {(control) => <Input type="email" {...control} {...register("email")} />}
+ * </Field>
+ * ```
+ *
+ * No sabe nada de react-hook-form ni de Radix Form: recibe `error` ya resuelto,
+ * así que sirve con `useZodForm`, con estado propio o sin librería.
+ *
+ * Para formularios que validan con la API nativa del navegador está `Form` y su
+ * familia, montada sobre Radix Form. Las dos no se mezclan en un mismo campo,
+ * porque cada una quiere ser dueña de su estado.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { InlineError } from "./inline-error";
@@ -13,6 +38,7 @@ export type FieldControlProps = {
   "aria-required": true | undefined;
 };
 
+/** Lo que recibe el generador de identificadores de un campo, para enlazar rótulo, ayuda y error. */
 export type FieldIdsOptions = {
   id?: string;
   description?: React.ReactNode;
@@ -74,6 +100,7 @@ export function FieldRequiredMark(): React.JSX.Element {
   );
 }
 
+/** Props de {@link Field}. */
 export type FieldProps = Omit<React.ComponentProps<"div">, "children"> & {
   label: React.ReactNode;
 

@@ -1,3 +1,21 @@
+/**
+ * Selector de color.
+ *
+ * Cuatro piezas, que son las que hacen falta para llegar a un color concreto sin
+ * saber de números: el área de saturación y brillo, la barra de tono, la de
+ * opacidad cuando se admite, y el campo hex.
+ *
+ * El campo hex no es un extra: es la única de las cuatro que permite escribir un
+ * valor exacto y la única que sirve con lector de pantalla, porque un área de
+ * dos ejes no tiene equivalente en ARIA. Las dos barras sí son deslizadores de
+ * verdad, con su teclado y su valor anunciado.
+ *
+ * Emite siempre hex, de 6 o de 8 con `alpha`, aunque le entre `rgb()` o `hsl()`.
+ * Una sola salida evita que cada consumidor tenga que normalizar lo que reciba.
+ *
+ * @module
+ */
+
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
@@ -11,6 +29,7 @@ const CARRIL = "relative h-3 w-full grow overflow-hidden rounded-full";
 const PULGAR =
   "block size-4 rounded-full border-2 border-white bg-transparent shadow-md ring-1 ring-black/25 transition-[box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
+/** Props de {@link ColorPicker}. */
 export type ColorPickerProps = Omit<
   React.HTMLAttributes<HTMLDivElement>,
   "onChange" | "defaultValue"

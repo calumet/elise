@@ -1,3 +1,9 @@
+/**
+ * El botón del sistema, con sus variantes, sus tonos y su estado de carga.
+ *
+ * @module
+ */
+
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
@@ -5,6 +11,7 @@ import { Spinner } from "./spinner";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg" | "icon" | "icon-sm";
@@ -83,6 +90,7 @@ const toneOverrides: Record<
   },
 };
 
+/** Devuelve las clases de un `Button`, para reusar su aspecto en un enlace o en cualquier otro elemento. */
 export const buttonVariants = ({
   variant = "solid",
   size = "md",
@@ -105,6 +113,7 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
+/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. */
 export const Button: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, ButtonProps>(

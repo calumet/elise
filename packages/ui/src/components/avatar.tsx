@@ -1,8 +1,15 @@
+/**
+ * El contenedor circular de la foto o de las iniciales.
+ *
+ * @module
+ */
+
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Avatar}. */
 export type AvatarProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
   size?: "xs" | "sm" | "md" | "lg";
 
@@ -30,6 +37,7 @@ const cuadrados: Record<NonNullable<AvatarProps["size"]>, string> = {
   lg: "rounded-xl",
 };
 
+/** El contenedor circular de la foto o de las iniciales. */
 export const Avatar: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<AvatarProps> &
     React.RefAttributes<React.ComponentRef<typeof AvatarPrimitive.Root>>
@@ -50,6 +58,7 @@ export const Avatar: React.ForwardRefExoticComponent<
 );
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
+/** La foto. Si no carga, deja lugar al `AvatarFallback`. */
 export const AvatarImage: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>> &
     React.RefAttributes<React.ComponentRef<typeof AvatarPrimitive.Image>>
@@ -66,6 +75,7 @@ export const AvatarImage: React.ForwardRefExoticComponent<
 ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
+/** Lo que se muestra sin foto: las iniciales o un icono. */
 export const AvatarFallback: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>> &
     React.RefAttributes<React.ComponentRef<typeof AvatarPrimitive.Fallback>>

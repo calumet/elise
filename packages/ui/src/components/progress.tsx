@@ -1,8 +1,21 @@
+/**
+ * Barra de progreso.
+ *
+ * `value={null}` la deja indeterminada, para cuando se sabe que algo está en
+ * curso pero no cuánto falta. En ese estado el primitivo retira `aria-valuenow`
+ * en lugar de anunciar un cero que sería mentira, y la barra recorre el carril.
+ *
+ * Para una espera sin barra está `Spinner`.
+ *
+ * @module
+ */
+
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Progress}. */
 export type ProgressProps = React.ComponentProps<typeof ProgressPrimitive.Root>;
 
 /**

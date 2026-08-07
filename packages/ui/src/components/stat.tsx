@@ -1,8 +1,27 @@
+/**
+ * Una cifra con su rótulo y, si hace falta, cuánto cambió.
+ *
+ * El orden es rótulo, cifra, cambio. La cifra es lo que se busca al mirar un
+ * panel, así que va suelta y en grande, y el rótulo encima y pequeño para
+ * saber de qué es sin tener que leerlo entero.
+ *
+ * El sentido del cambio no sale del signo sino de `trend`, que lo dice quien
+ * usa el componente. Menos devoluciones es un menos que está bien, y pintarlo
+ * de rojo por llevar signo negativo diría lo contrario de lo que pasa.
+ *
+ * La flecha acompaña al color por lo mismo de siempre: verde y rojo no se
+ * distinguen para todo el mundo, y aquí la diferencia entre los dos es justo lo
+ * que hay que leer.
+ *
+ * @module
+ */
+
 import { ArrowDown, ArrowUp, Minus } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Stat}. */
 export type StatProps = Omit<React.ComponentProps<"div">, "title"> & {
   /** Qué se está midiendo. */
   label: React.ReactNode;

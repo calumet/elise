@@ -1,7 +1,19 @@
+/**
+ * Estado vacío para listas, tablas y paneles sin contenido. Es un contenedor
+ * compuesto: `EmptyStateMedia`, `EmptyStateTitle`, `EmptyStateDescription` y
+ * `EmptyStateActions` se combinan según haga falta.
+ *
+ * Para "no hay resultados" de una búsqueda, el título debería nombrar el
+ * término buscado, no decir solo "Sin resultados".
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link EmptyState}. */
 export type EmptyStateProps = React.ComponentProps<"div"> & {
   size?: "sm" | "md";
 };
@@ -33,6 +45,7 @@ function EmptyState({ className, size = "md", ...props }: EmptyStateProps): Reac
   );
 }
 
+/** El icono o la ilustración del estado vacío. */
 function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
@@ -47,6 +60,7 @@ function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">): 
   );
 }
 
+/** Qué falta, en una línea. */
 function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
@@ -57,6 +71,7 @@ function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">): Re
   );
 }
 
+/** Por qué está vacío y qué se puede hacer. */
 function EmptyStateDescription({
   className,
   ...props
@@ -70,6 +85,7 @@ function EmptyStateDescription({
   );
 }
 
+/** Las acciones que sacan del estado vacío. */
 function EmptyStateActions({
   className,
   ...props

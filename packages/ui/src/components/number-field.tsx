@@ -1,3 +1,20 @@
+/**
+ * Campo numérico: `min`, `max`, `step`, prefijo, sufijo y el teclado que sale
+ * en un móvil.
+ *
+ * El `<input>` es de texto y no de tipo `number`. Uno de tipo `number` cambia el
+ * valor al girar la rueda del ratón sobre él, aunque quien lo hace esté
+ * desplazando la página, y cuando lo que se escribe no es un número devuelve
+ * cadena vacía sin decir cuál era: no hay forma de corregir lo que se tecleó.
+ * `inputMode` da el teclado numérico igual, que es lo único que se quería.
+ *
+ * Los dos botones de paso están además de las flechas del teclado, no en su
+ * lugar: el teclado lo usa quien ya está escribiendo en el campo, y los botones
+ * quien llegó con el ratón y no va a moverlo.
+ *
+ * @module
+ */
+
 import { Minus, Plus } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -7,6 +24,7 @@ import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link NumberField}. */
 export type NumberFieldProps = {
   label: React.ReactNode;
 

@@ -1,8 +1,15 @@
+/**
+ * Raíz de las pestañas. Guarda cuál está activa, y admite `value` con `onValueChange` para controlarlo.
+ *
+ * @module
+ */
+
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Raíz de las pestañas. Guarda cuál está activa, y admite `value` con `onValueChange` para controlarlo. */
 function Tabs({
   className,
   ...props
@@ -10,6 +17,7 @@ function Tabs({
   return <TabsPrimitive.Root data-slot="tabs" className={cn(className)} {...props} />;
 }
 
+/** La fila de pestañas. Recorre con las flechas del teclado. */
 function TabsList({
   className,
   ...props
@@ -26,6 +34,7 @@ function TabsList({
   );
 }
 
+/** Una pestaña. */
 function TabsTrigger({
   className,
   ...props
@@ -42,6 +51,7 @@ function TabsTrigger({
   );
 }
 
+/** El panel de una pestaña, enlazado a su disparador. */
 function TabsContent({
   className,
   ...props

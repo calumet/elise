@@ -1,8 +1,26 @@
+/**
+ * Enlace.
+ *
+ * Va subrayado y no solo en color: el color por sí solo no distingue nada para
+ * quien no lo separa del texto de alrededor, y dentro de un párrafo no hay
+ * forma de saber dónde acaba lo pulsable si el subrayado no lo marca.
+ *
+ * Es `inline` a propósito, no `inline-block`: partido entre dos renglones tiene
+ * que seguir el flujo del texto en vez de saltar entero a la línea siguiente.
+ *
+ * Abrir en otra pestaña añade `rel` por su cuenta. Sin él, la página nueva
+ * recibe `window.opener` y puede reescribir la de origen; es un descuido que no
+ * tiene por qué recordar quien escribe el enlace.
+ *
+ * @module
+ */
+
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Link}. */
 export type LinkProps = React.ComponentProps<"a"> & {
   /**
    * Para qué es el enlace, no de qué color va.

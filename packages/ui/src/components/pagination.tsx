@@ -1,3 +1,9 @@
+/**
+ * La franja de paginado, dentro de un `<nav>` rotulado.
+ *
+ * @module
+ */
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -21,6 +27,7 @@ import { useElLabel } from "@/lib/i18n";
 const CAJA =
   "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-fill-tertiary-hover active:bg-fill-tertiary-active focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background aria-disabled:pointer-events-none aria-disabled:text-border-strong disabled:pointer-events-none disabled:text-border-strong";
 
+/** Props de {@link Pagination}. */
 export type PaginationProps = React.ComponentProps<"nav"> & {
   /**
    * `table` la convierte en la franja del pie de una tabla: filete arriba,
@@ -49,6 +56,7 @@ export type PaginationProps = React.ComponentProps<"nav"> & {
   end?: React.ReactNode;
 };
 
+/** La franja de paginado, dentro de un `<nav>` rotulado. */
 function Pagination({
   className,
   variant = "default",
@@ -104,10 +112,12 @@ function PaginationContent({ className, ...props }: React.ComponentProps<"ul">):
   );
 }
 
+/** Un número de página. */
 function PaginationItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element {
   return <li data-slot="pagination-item" className={cn("flex", className)} {...props} />;
 }
 
+/** Props de {@link PaginationLink}. */
 export type PaginationLinkProps = React.ComponentProps<"a"> & {
   isActive?: boolean;
 };
@@ -129,6 +139,7 @@ function PaginationLink({ className, isActive, ...props }: PaginationLinkProps):
   );
 }
 
+/** Props de los pasos de la franja: anterior, siguiente, primera y última. */
 export type PaginationButtonProps = React.ComponentProps<"button">;
 
 /**
@@ -144,6 +155,7 @@ const PaginationStep: React.ForwardRefExoticComponent<
 );
 PaginationStep.displayName = "PaginationStep";
 
+/** Ir a la página anterior. */
 function PaginationPrevious({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "previousPage", "Ir a la página anterior");
   return (
@@ -153,6 +165,7 @@ function PaginationPrevious({ className, ...props }: PaginationButtonProps): Rea
   );
 }
 
+/** Ir a la página siguiente. */
 function PaginationNext({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "nextPage", "Ir a la página siguiente");
   return (
@@ -162,6 +175,7 @@ function PaginationNext({ className, ...props }: PaginationButtonProps): React.J
   );
 }
 
+/** Ir a la primera página. */
 function PaginationFirst({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "firstPage", "Ir a la primera página");
   return (
@@ -171,6 +185,7 @@ function PaginationFirst({ className, ...props }: PaginationButtonProps): React.
   );
 }
 
+/** Ir a la última página. */
 function PaginationLast({ className, ...props }: PaginationButtonProps): React.JSX.Element {
   const ariaLabel = useElLabel("ui", "lastPage", "Ir a la última página");
   return (
@@ -196,6 +211,7 @@ function PaginationLabel({ className, ...props }: React.ComponentProps<"span">):
   );
 }
 
+/** Los puntos suspensivos que reemplazan al tramo de páginas que no se muestra. */
 function PaginationEllipsis({
   className,
   ...props
