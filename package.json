@@ -8,6 +8,7 @@
     "dev": "pnpm --filter @calumet/elise-ui dev",
     "build:libs": "pnpm -r --filter \"@calumet/elise-*\" build",
     "dev:showcase": "pnpm build:libs && pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-forms\" --filter \"@calumet/elise-tables\" --filter \"@calumet/elise-toasts\" --filter \"@calumet/elise-alerts\" --filter \"@calumet/elise-i18n\" --filter \"showcase\" dev",
+    "dev:site": "pnpm build:libs && pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-i18n\" --filter \"site\" dev",
     "build": "pnpm -r build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
