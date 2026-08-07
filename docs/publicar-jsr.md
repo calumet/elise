@@ -80,3 +80,30 @@ sola vez:
 
 Y en el repositorio: agregar el paquete a `workspace` en el `deno.json` de la
 raíz, y darle su propio `deno.json`.
+
+## El score
+
+JSR puntúa cada paquete sobre 17 y usa el número para ordenar las búsquedas. El
+desglose de cada uno está en su pestaña _Score_, y también en
+`https://api.jsr.io/scopes/calumet/packages/<paquete>/score`.
+
+Casi todo el peso lo tiene la documentación: 5 puntos por documentar los
+símbolos exportados, otros 5 por no usar slow types, 1 por el doc de módulo de
+cada entrypoint y 3 por el README con ejemplo. Eso sale del código, así que lo
+cuida `pnpm jsr:check`.
+
+Los 2 que faltan son ajustes del sitio, la descripción y la compatibilidad de
+runtime, y no tienen campo en el `deno.json`:
+
+```bash
+export JSR_TOKEN=...          # https://jsr.io/account/tokens
+pnpm jsr:ajustes              # muestra qué cambiaría
+pnpm jsr:ajustes -- --aplicar
+```
+
+La descripción sale del `package.json` de cada paquete, para no mantenerla en
+dos lados. Los runtimes se marcan por lo que el código necesita: los siete
+paquetes de React van con navegador, Deno, Node y Bun, y `elise-linter` sin
+navegador porque importa `node:module`.
+
+El score se recalcula al publicar una versión, no al cambiar el código.
