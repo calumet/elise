@@ -6,11 +6,6 @@ export type ToastOptions = {
   /** Identificador propio. Sin esto se genera uno. */
   id?: string;
   title: string;
-  /**
-   * Obligatoria, igual que el titular. El icono va en un disco de 28px y cada
-   * renglón de texto mide 20, así que con una sola línea al lado el disco queda
-   * por debajo del titular en vez de a su altura.
-   */
   description: string;
   /** Rótulo del botón de acción. Sin él no se dibuja el botón. */
   actionLabel?: string;

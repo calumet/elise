@@ -148,9 +148,8 @@ const id = toast({ title: "Cargando", description: "Trayendo los datos." });
 dismiss(id);
 ```
 
-El titulo y la descripcion son obligatorios. El icono va en un disco de 28px y
-cada renglon de texto mide 20, asi que un aviso de una sola linea deja el disco
-por debajo del titular.
+El titulo y la descripcion son obligatorios: con una sola linea de texto al
+lado, el icono queda por debajo del titular.
 
 ### Variantes
 
