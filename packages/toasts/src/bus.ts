@@ -5,8 +5,8 @@ export type ToastVariant = "info" | "alert" | "error" | "success";
 export type ToastOptions = {
   /** Identificador propio. Sin esto se genera uno. */
   id?: string;
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   /** Rótulo del botón de acción. Sin él no se dibuja el botón. */
   actionLabel?: string;
   action?: () => void;
@@ -36,7 +36,7 @@ const genId = () =>
  * árbol de React, siempre que haya un `Toaster` montado escuchando.
  *
  * ```ts
- * toast({ variant: "success", title: "Guardado" });
+ * toast({ variant: "success", title: "Guardado", description: "Ya está sincronizado." });
  * ```
  */
 export const toast = (options: ToastOptions): string => {

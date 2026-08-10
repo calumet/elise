@@ -65,6 +65,25 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   el suyo en 16px, y con eso una sección sin relleno separaba distinto que una
   con relleno.
 
+## `@calumet/elise-toasts` 0.3.0
+
+### Rompe
+
+- **`title` y `description` pasan a ser obligatorios en `toast()`.** El icono va
+  en un disco de 28px y cada renglón de texto mide 20, así que un aviso de una
+  sola línea dejaba el disco por debajo del titular. Un `toast({ title })` a
+  secas deja de compilar.
+
+  ```ts
+  // antes
+  toast({ title: "Guardado" });
+
+  // ahora
+  toast({ title: "Guardado", description: "Cambios sincronizados." });
+  ```
+
+No necesita nada nuevo de `@calumet/elise-ui`.
+
 ## `@calumet/elise-ui` 0.4.0
 
 Sube la minor y no la patch porque hay cinco cambios que rompen: por debajo de

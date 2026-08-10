@@ -79,14 +79,10 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />
             <div className="flex-1 space-y-1">
-              {toastItem.title ? (
-                <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle>
-              ) : null}
-              {toastItem.description ? (
-                <ToastDescription className="text-sm text-inverse-foreground/75">
-                  {toastItem.description}
-                </ToastDescription>
-              ) : null}
+              <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle>
+              <ToastDescription className="text-sm text-inverse-foreground/75">
+                {toastItem.description}
+              </ToastDescription>
               {toastItem.actionLabel && toastItem.action ? (
                 <Button
                   type="button"

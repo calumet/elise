@@ -141,12 +141,15 @@ toast({
 });
 
 // Con duracion personalizada (ms)
-toast({ title: "Procesando...", duration: 8000 });
+toast({ title: "Procesando", description: "Estamos con tu pedido.", duration: 8000 });
 
 // Cerrar un toast especifico
-const id = toast({ title: "Cargando..." });
+const id = toast({ title: "Cargando", description: "Trayendo los datos." });
 dismiss(id);
 ```
+
+El titulo y la descripcion son obligatorios: con una sola linea de texto al
+lado, el icono queda por debajo del titular.
 
 ### Variantes
 
@@ -162,8 +165,8 @@ dismiss(id);
 ```typescript
 type ToastOptions = {
   id?: string; // ID personalizado (auto-generado si se omite)
-  title?: string; // Titulo del toast
-  description?: string; // Descripcion/cuerpo
+  title: string; // Titulo del toast
+  description: string; // Descripcion/cuerpo
   variant?: "info" | "alert" | "error" | "success"; // Default: "info"
   duration?: number; // Duracion en ms (default: 4000)
   actionLabel?: string; // Texto del boton de accion
