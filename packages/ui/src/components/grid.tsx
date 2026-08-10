@@ -1,3 +1,11 @@
+/**
+ * Rejilla de columnas, mobile-first (el ancho más chico manda por defecto).
+ * `columns` aplica desde ahí y `smColumns` / `mdColumns` / `lgColumns` lo van
+ * sobrescribiendo hacia arriba.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import type { SpaceScale } from "./box";
@@ -5,8 +13,10 @@ import { gapClasses } from "./stack";
 
 import { cn } from "@/lib/cn";
 
+/** Las columnas que admite `Grid`. */
 export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 12;
 
+/** Props de {@link Grid}. */
 export type GridProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 
@@ -84,7 +94,7 @@ function Grid({
   gap = 4,
   align,
   ...props
-}: GridProps) {
+}: GridProps): React.JSX.Element {
   return (
     <Comp
       data-slot="grid"

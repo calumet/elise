@@ -1,0 +1,13 @@
+{
+  "name": "@calumet/elise-i18n",
+  "version": "0.2.2",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./dates": "./src/dates/index.ts",
+    "./numbers": "./src/numbers/index.ts"
+  },
+  "publish": {
+    "include": ["src/**/*.ts", "src/**/*.tsx", "package.json", "README.md"]
+  }
+}

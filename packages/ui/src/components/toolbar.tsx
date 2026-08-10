@@ -1,9 +1,19 @@
+/**
+ * Barra de acciones, que se recorre entera con las flechas y ocupa una sola parada de tabulación.
+ *
+ * @module
+ */
+
 import * as ToolbarPrimitive from "@radix-ui/react-toolbar";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export const Toolbar = React.forwardRef<
+/** Barra de acciones, que se recorre entera con las flechas y ocupa una sola parada de tabulación. */
+export const Toolbar: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>> &
+    React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Root>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToolbarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Root>
 >(({ className, ...props }, ref) => (
@@ -19,7 +29,11 @@ export const Toolbar = React.forwardRef<
 ));
 Toolbar.displayName = ToolbarPrimitive.Root.displayName;
 
-export const ToolbarButton = React.forwardRef<
+/** Una acción de la barra. */
+export const ToolbarButton: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>> &
+    React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Button>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToolbarPrimitive.Button>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Button>
 >(({ className, ...props }, ref) => (
@@ -35,9 +49,15 @@ export const ToolbarButton = React.forwardRef<
 ));
 ToolbarButton.displayName = ToolbarPrimitive.Button.displayName;
 
+/** Un grupo de conmutadores dentro de la barra. */
 export const ToolbarToggleGroup = ToolbarPrimitive.ToggleGroup;
+/** Un conmutador del grupo. */
 export const ToolbarToggleItem = ToolbarPrimitive.ToggleItem;
-export const ToolbarSeparator = React.forwardRef<
+/** La línea que separa dos grupos de acciones. */
+export const ToolbarSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof ToolbarPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToolbarPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>
 >(({ className, ...props }, ref) => (

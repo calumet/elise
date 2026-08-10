@@ -1,3 +1,9 @@
+/**
+ * Raíz de la alerta modal. A diferencia de `Dialog`, no se cierra con Escape ni al pulsar fuera: exige una respuesta.
+ *
+ * @module
+ */
+
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import * as React from "react";
 
@@ -14,13 +20,22 @@ import {
 
 import { cn } from "@/lib/cn";
 
+/** Raíz de la alerta modal. A diferencia de `Dialog`, no se cierra con Escape ni al pulsar fuera: exige una respuesta. */
 export const AlertDialog = AlertDialogPrimitive.Root;
+/** El control que abre la alerta. */
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+/** Monta la alerta al final del `body`. */
 export const AlertDialogPortal = AlertDialogPrimitive.Portal;
+/** El botón que confirma y cierra. */
 export const AlertDialogAction = AlertDialogPrimitive.Action;
+/** El botón que descarta y cierra. */
 export const AlertDialogCancel = AlertDialogPrimitive.Cancel;
 
-export const AlertDialogOverlay = React.forwardRef<
+/** El velo que tapa la página detrás de la alerta. */
+export const AlertDialogOverlay: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>> &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Overlay>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
@@ -48,7 +63,14 @@ AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
  * No hay aspa. Es lo que separa a este de `Dialog`: no se descarta mirando
  * hacia otro lado, se responde.
  */
-export const AlertDialogContent = React.forwardRef<
+export const AlertDialogContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<
+    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
+      size?: keyof typeof ANCHOS_DIALOGO;
+    }
+  > &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
     size?: keyof typeof ANCHOS_DIALOGO;
@@ -66,10 +88,11 @@ export const AlertDialogContent = React.forwardRef<
 ));
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
+/** La cabecera: el título y la descripción. */
 export const AlertDialogHeader = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-header" className={cn(CABECERA_DIALOGO, className)} {...props} />
 );
 AlertDialogHeader.displayName = "AlertDialogHeader";
@@ -81,12 +104,19 @@ AlertDialogHeader.displayName = "AlertDialogHeader";
  * con una lista larga de lo que se va a borrar no empuja los botones fuera de
  * la pantalla.
  */
-export const AlertDialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export const AlertDialogBody = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
 );
 AlertDialogBody.displayName = "AlertDialogBody";
 
-export const AlertDialogTitle = React.forwardRef<
+/** El título, que es lo que anuncia el lector de pantalla al abrir. */
+export const AlertDialogTitle: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>> &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Title>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
@@ -99,7 +129,11 @@ export const AlertDialogTitle = React.forwardRef<
 ));
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 
-export const AlertDialogDescription = React.forwardRef<
+/** Qué va a pasar si se confirma. Es lo que vuelve informada a la respuesta. */
+export const AlertDialogDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>> &
+    React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Description>>
+> = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
@@ -112,10 +146,11 @@ export const AlertDialogDescription = React.forwardRef<
 ));
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
 
+/** El pie con los dos botones, apilados en pantallas angostas. */
 export const AlertDialogFooter = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
 );
 AlertDialogFooter.displayName = "AlertDialogFooter";

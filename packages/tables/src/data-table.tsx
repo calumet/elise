@@ -46,8 +46,9 @@ import {
 } from "@calumet/elise-ui/table";
 import {
   type Column,
-  type ColumnDef,
+  type ColumnDef as ColumnDefBase,
   type ColumnFiltersState,
+  type FilterFn,
   flexRender,
   getCoreRowModel,
   getFacetedMinMaxValues,
@@ -56,7 +57,6 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type RowData,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -65,31 +65,48 @@ import React, { Fragment, useCallback, useId, useMemo } from "react";
 import { cn, dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters";
 import { useElLabel } from "./i18n";
 
-declare module "@tanstack/react-table" {
-  // Los generics deben coincidir con los de @tanstack/react-table (mismo
-  // nombre, count y bounds) para que el declaration merging produzca un .d.ts
-  // válido. tsup descarta @ts-expect-error en el emit, así que tenemos que
-  // declarar la firma correcta en vez de silenciarla.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: "text" | "range" | "select" | "date" | "daterange";
-    className?: string;
-  }
+/** Ajustes de columna que lee `DataTable`, en el `meta` de cada columna. */
+export type MetaDeColumna = {
+  /** Control que se dibuja en la barra de filtros. Sin esto no hay filtro. */
+  filterVariant?: "text" | "range" | "select" | "date" | "daterange";
+  className?: string;
+};
 
-  interface FilterFns {
-    dateRange: typeof dateRangeFilterFn;
-    multiSelect: typeof multiSelectFilterFn;
-  }
-}
+/* Esto antes ampliaba `ColumnMeta` y `FilterFns` de TanStack con `declare
+   module`. JSR rechaza las ampliaciones globales -- cambian los tipos de un
+   módulo desde fuera -- así que el `meta` viaja en este `ColumnDef` propio, que
+   es el que el paquete ya reexportaba, y las funciones de filtro se pasan por
+   referencia en vez de por el nombre que registraba `FilterFns`. */
+/**
+ * El `ColumnDef` de TanStack con el `meta` que lee {@link DataTable} ya tipado.
+ * Importalo desde acá y no desde `@tanstack/react-table`, o el `meta` queda sin
+ * tipo.
+ */
+export type ColumnDef<TData, TValue = unknown> = ColumnDefBase<TData, TValue> & {
+  meta?: MetaDeColumna;
+};
 
+/* Dentro del componente las columnas vuelven tipadas por TanStack, que no sabe
+   de `MetaDeColumna`. */
+const metaDe = (columnDef: { meta?: unknown }): MetaDeColumna =>
+  (columnDef.meta ?? {}) as MetaDeColumna;
+
+/** Props de {@link DataTable}. */
 interface DataTableProps<TData, TValue> {
+  /** Nombre del archivo que se baja al exportar. */
   name?: string;
+  /** Las columnas. Su `meta.filterVariant` decide qué filtros aparecen. */
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  /** Tapa el cuerpo con el indicador de carga. */
   isLoading?: boolean;
+  /** Muestra los botones de exportar a CSV y a JSON. */
   exportTo?: boolean;
+  /** Si viene, se dibuja el botón de recargar y se llama al pulsarlo. */
   refresh?: () => void | Promise<unknown>;
+  /** Opciones del selector de filas por página. */
   pageSizeOptions?: number[];
+  /** Filas por página al montar. Se suma a `pageSizeOptions` si no estaba. */
   initialPageSize?: number;
 }
 
@@ -134,13 +151,13 @@ function DataTableContent<TData, TValue>({
       if (column.meta?.filterVariant === "select") {
         return {
           ...column,
-          filterFn: "multiSelect" as const,
+          filterFn: multiSelectFilterFn as FilterFn<TData>,
         };
       }
       if (column.meta?.filterVariant === "daterange") {
         return {
           ...column,
-          filterFn: "dateRange" as const,
+          filterFn: dateRangeFilterFn as FilterFn<TData>,
         };
       }
       return column;
@@ -159,10 +176,6 @@ function DataTableContent<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    filterFns: {
-      dateRange: dateRangeFilterFn,
-      multiSelect: multiSelectFilterFn,
-    },
     state: {
       sorting,
       columnFilters,
@@ -210,7 +223,7 @@ function DataTableContent<TData, TValue>({
     <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3">
       <div className="flex flex-wrap gap-3 items-end">
         {table.getAllColumns().map((column) => {
-          if (!column.columnDef.meta?.filterVariant) return null;
+          if (!metaDe(column.columnDef).filterVariant) return null;
 
           return (
             <div className="w-45" key={column.id}>
@@ -324,7 +337,7 @@ function DataTableContent<TData, TValue>({
                       className={
                         header.column.id === "actions"
                           ? "w-0 text-center"
-                          : (header.column.columnDef.meta?.className ?? "")
+                          : (metaDe(header.column.columnDef).className ?? "")
                       }
                     >
                       {header.isPlaceholder ? null : (
@@ -400,7 +413,7 @@ function DataTableContent<TData, TValue>({
 function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   const id = useId();
   const columnFilterValue = column.getFilterValue();
-  const { filterVariant } = column.columnDef.meta ?? {};
+  const { filterVariant } = metaDe(column.columnDef);
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
   const [selectOpen, setSelectOpen] = React.useState(false);
 
@@ -614,6 +627,21 @@ function Filter<TData>({ column }: { column: Column<TData, unknown> }) {
   );
 }
 
+/**
+ * Tabla con barra de filtros, orden por columna, paginado y exportación.
+ *
+ * Los filtros salen del `meta.filterVariant` de cada columna: una columna sin
+ * él no aparece en la barra. Las opciones de un filtro `select` se arman con
+ * los valores presentes en los datos.
+ *
+ * ```tsx
+ * const columns: ColumnDef<Proyecto>[] = [
+ *   { accessorKey: "name", header: "Proyecto", meta: { filterVariant: "text" } },
+ * ];
+ *
+ * <DataTable name="proyectos" columns={columns} data={filas} exportTo />;
+ * ```
+ */
 export function DataTable<TData, TValue>({
   name,
   columns,
@@ -623,7 +651,7 @@ export function DataTable<TData, TValue>({
   refresh,
   pageSizeOptions,
   initialPageSize,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>): React.JSX.Element {
   return (
     <DataTableContent
       name={name}
@@ -638,4 +666,4 @@ export function DataTable<TData, TValue>({
   );
 }
 
-export type { DataTableProps, ColumnDef };
+export type { DataTableProps };

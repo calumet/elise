@@ -1,3 +1,9 @@
+/**
+ * La superficie de contenido del sistema: borde, radio y fondo de tarjeta.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
@@ -6,12 +12,14 @@ import { SUPERFICIE } from "@/lib/superficie";
 /* La `ref` se ensancha a `HTMLElement` porque con `as` la tarjeta puede salir
    como cualquier etiqueta, y atarla al `<div>` le mentiría a quien la use como
    `<section>`. */
+/** Props de {@link Card}. */
 export type CardProps = Omit<React.ComponentProps<"div">, "ref"> & {
   as?: React.ElementType;
   ref?: React.Ref<HTMLElement>;
 };
 
-function Card({ className, as: Comp = "div", ...props }: CardProps) {
+/** La superficie de contenido del sistema: borde, radio y fondo de tarjeta. */
+function Card({ className, as: Comp = "div", ...props }: CardProps): React.JSX.Element {
   return (
     <Comp
       data-slot="card"
@@ -21,7 +29,8 @@ function Card({ className, as: Comp = "div", ...props }: CardProps) {
   );
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+/** La cabecera, con el título, la descripción y la acción. */
+function CardHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-header"
@@ -39,11 +48,12 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
 
 /* `as` para cuando el título de la tarjeta es además el encabezado de una
    región, que ahí tiene que ser un `<h2>` y no un `<div>`. */
+/** El título de la tarjeta. */
 function CardTitle({
   className,
   as: Comp = "div",
   ...props
-}: React.ComponentProps<"div"> & { as?: React.ElementType }) {
+}: React.ComponentProps<"div"> & { as?: React.ElementType }): React.JSX.Element {
   return (
     <Comp
       data-slot="card-title"
@@ -53,7 +63,8 @@ function CardTitle({
   );
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+/** La bajada del título. */
+function CardDescription({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-description"
@@ -63,7 +74,8 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+/** La acción de la cabecera, alineada a la derecha del título. */
+function CardAction({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-action"
@@ -73,11 +85,13 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+/** El cuerpo de la tarjeta. */
+function CardContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return <div data-slot="card-content" className={cn("px-4", className)} {...props} />;
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+/** El pie, donde van las acciones. */
+function CardFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="card-footer"

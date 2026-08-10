@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.5.1
+
+### Corrige
+
+- **`Button` con `asChild` fallaba siempre al renderizar.** El estado de carga
+  emitía dos hijos, el hueco del spinner y el contenido, con un `null` en medio
+  cuando no había carga. `Slot` de Radix cuenta ese `null` como un hijo más y su
+  `Children.only` rechaza el conjunto, así que cualquier `<Button asChild>`
+  reventaba. Nadie lo usaba dentro del repo, así que el camino no se había
+  ejecutado nunca. Ahora las dos capas van dentro de una sola expresión y, sin
+  carga, el hijo pasa solo.
+
+- **Los iconos dentro de `Button` no llevaban tamaño acotado.** Los de Lucide
+  vienen a 24px y al lado de un rótulo de 13–14px se leen como otra jerarquía.
+  Se agrega la regla que ya llevaban `Badge`, `Alert`, `DropdownMenu`, `Command`
+  y `Sidebar`: `[&_svg:not([class*='size-'])]:size-4`. El `:not` deja pasar un
+  tamaño explícito para quien lo necesite.
+
 ## `@calumet/elise-ui` 0.5.0
 
 ### Rompe

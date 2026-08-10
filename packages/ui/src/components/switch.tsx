@@ -1,3 +1,33 @@
+/**
+ * Interruptor de encendido y apagado.
+ *
+ * Se distingue de `Checkbox` en que aplica el cambio al momento, sin esperar a
+ * que se envíe un formulario. Si el cambio necesita confirmación, la casilla es
+ * el control correcto.
+ *
+ * Es un campo, no un control suelto: lleva su rótulo al lado y admite ayuda y
+ * error, con el enlace de accesibilidad ya resuelto. Antes había que ponerle un
+ * `Label` externo a mano, y con eso cada sitio inventaba su propia fila y nadie
+ * enlazaba la ayuda.
+ *
+ * El rótulo va al lado y no encima, al contrario que en `Field`: el control ya
+ * ocupa el inicio de la línea, así que un rótulo arriba dejaría un renglón con
+ * un interruptor solo y sin nada que lo explique a su altura. El rótulo, la
+ * ayuda y el error viven en una columna a la derecha del control, de modo que
+ * los tres empiezan en la misma x y la ayuda se lee colgando del rótulo y no
+ * del interruptor.
+ *
+ * El carril va plano, sin bisel: es un canal por el que corre el pulgar, no una
+ * cara que se hunda al pulsarla. El bisel lo llevan los rellenos que hacen de
+ * botón, y aquí hacía que la pastilla entera pareciera pulsable.
+ *
+ * Acepta modo controlado con `checked` y no controlado con `defaultChecked`.
+ * Con `name` el primitivo emite un input oculto, de modo que un formulario
+ * nativo lo envía igual.
+ *
+ * @module
+ */
+
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import * as React from "react";
 
@@ -6,6 +36,7 @@ import { InlineError } from "./inline-error";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Switch}. */
 export type SwitchProps = {
   /** Contenido del rótulo, al lado del interruptor. */
   label: React.ReactNode;
@@ -82,7 +113,7 @@ function Switch({
   checked,
   defaultChecked,
   onCheckedChange,
-}: SwitchProps) {
+}: SwitchProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

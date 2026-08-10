@@ -1,10 +1,20 @@
+/**
+ * Raíz del menú de navegación, para la barra principal de un sitio.
+ *
+ * @module
+ */
+
 import { ChevronDown } from "@calumet/elise-icons";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-export const NavigationMenu = React.forwardRef<
+/** Raíz del menú de navegación, para la barra principal de un sitio. */
+export const NavigationMenu: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Root>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
 >(({ className, ...props }, ref) => (
@@ -17,7 +27,11 @@ export const NavigationMenu = React.forwardRef<
 ));
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName;
 
-export const NavigationMenuList = React.forwardRef<
+/** La fila de secciones. */
+export const NavigationMenuList: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.List>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>
 >(({ className, ...props }, ref) => (
@@ -33,9 +47,14 @@ export const NavigationMenuList = React.forwardRef<
 ));
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;
 
+/** Una sección del menú. */
 export const NavigationMenuItem = NavigationMenuPrimitive.Item;
 
-export const NavigationMenuTrigger = React.forwardRef<
+/** El control que despliega el panel de una sección. */
+export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
@@ -57,7 +76,11 @@ export const NavigationMenuTrigger = React.forwardRef<
 ));
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName;
 
-export const NavigationMenuContent = React.forwardRef<
+/** El panel de una sección. */
+export const NavigationMenuContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>
 >(({ className, ...props }, ref) => (
@@ -73,7 +96,11 @@ export const NavigationMenuContent = React.forwardRef<
 ));
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
-export const NavigationMenuLink = React.forwardRef<
+/** Un enlace del menú. Marcá el actual con `active`. */
+export const NavigationMenuLink: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Link>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Link>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>
 >(({ className, ...props }, ref) => (
@@ -89,7 +116,11 @@ export const NavigationMenuLink = React.forwardRef<
 ));
 NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 
-export const NavigationMenuViewport = React.forwardRef<
+/** El contenedor donde se dibujan los paneles, y que se anima al cambiar de sección. */
+export const NavigationMenuViewport: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Viewport>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
 >(({ className, ...props }, ref) => (
@@ -105,7 +136,11 @@ export const NavigationMenuViewport = React.forwardRef<
 ));
 NavigationMenuViewport.displayName = NavigationMenuPrimitive.Viewport.displayName;
 
-export const NavigationMenuIndicator = React.forwardRef<
+/** La flecha que apunta a la sección abierta. */
+export const NavigationMenuIndicator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Indicator>>
+> = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Indicator>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator>
 >(({ className, ...props }, ref) => (

@@ -1,3 +1,9 @@
+/**
+ * Raíz del formulario. Reparte el estado de validación a los campos.
+ *
+ * @module
+ */
+
 import * as FormPrimitive from "@radix-ui/react-form";
 import * as React from "react";
 
@@ -5,6 +11,7 @@ import { InlineError } from "./inline-error";
 
 import { cn } from "@/lib/cn";
 
+/** Raíz del formulario. Reparte el estado de validación a los campos. */
 export const Form = FormPrimitive.Root;
 
 type GridColCount = 1 | 2 | 3 | 4 | 5 | 6;
@@ -54,7 +61,10 @@ const lgColClasses: Record<GridColCount, string> = {
   6: "lg:grid-cols-6",
 };
 
-export const FormRow = React.forwardRef<HTMLDivElement, FormRowProps>(
+/** Una fila de campos, con las columnas que pidas por breakpoint. */
+export const FormRow: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<FormRowProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, FormRowProps>(
   ({ className, cols = 1, smCols = 2, mdCols, lgCols, ...props }, ref) => (
     <div
       data-slot="form-row"
@@ -73,7 +83,11 @@ export const FormRow = React.forwardRef<HTMLDivElement, FormRowProps>(
 );
 FormRow.displayName = "FormRow";
 
-export const FormField = React.forwardRef<
+/** Un campo. Enlaza solo el rótulo, el control y el mensaje de error. */
+export const FormField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Field>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Field>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>
 >(({ className, ...props }, ref) => (
@@ -86,7 +100,11 @@ export const FormField = React.forwardRef<
 ));
 FormField.displayName = FormPrimitive.Field.displayName;
 
-export const FormLabel = React.forwardRef<
+/** El rótulo del campo. */
+export const FormLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -99,9 +117,14 @@ export const FormLabel = React.forwardRef<
 ));
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
+/** Envuelve al control para que reciba los `id` y los `aria` del campo. */
 export const FormControl = FormPrimitive.Control;
 
-export const FormMessage = React.forwardRef<
+/** El error del campo. Sale por `InlineError`, así que es un `<p>` y no el `<span>` de Radix. */
+export const FormMessage: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>> &
+    React.RefAttributes<HTMLParagraphElement>
+> = React.forwardRef<
   /* Sale por `InlineError`, que es un `<p>`, no el `<span>` que pondría Radix
      por su cuenta. */
   HTMLParagraphElement,
@@ -123,7 +146,11 @@ export const FormMessage = React.forwardRef<
 ));
 FormMessage.displayName = FormPrimitive.Message.displayName;
 
-export const FormDescription = React.forwardRef<
+/** La ayuda del campo, debajo del control. */
+export const FormDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Message>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Message>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
 >(({ className, ...props }, ref) => (
@@ -136,7 +163,11 @@ export const FormDescription = React.forwardRef<
 ));
 FormDescription.displayName = "FormDescription";
 
-export const FormSubmit = React.forwardRef<
+/** El botón que envía. Queda deshabilitado mientras la validación no pase. */
+export const FormSubmit: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>> &
+    React.RefAttributes<React.ComponentRef<typeof FormPrimitive.Submit>>
+> = React.forwardRef<
   React.ComponentRef<typeof FormPrimitive.Submit>,
   React.ComponentPropsWithoutRef<typeof FormPrimitive.Submit>
 >(({ className, ...props }, ref) => (

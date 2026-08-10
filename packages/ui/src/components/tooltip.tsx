@@ -1,29 +1,43 @@
+/**
+ * Raíz del tooltip.
+ *
+ * @module
+ */
+
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Reparte a los tooltips de abajo la demora compartida, para que abrir uno y moverse al siguiente no espere de nuevo. */
 function TooltipProvider({
   delayDuration = 250,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+}: React.ComponentProps<typeof TooltipPrimitive.Provider>): React.JSX.Element {
   return <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />;
 }
 
-function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
+/** Raíz del tooltip. */
+function Tooltip({
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Root>): React.JSX.Element {
   return <TooltipPrimitive.Root {...props} />;
 }
 
-function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
+/** El elemento que lo muestra al recibir foco o al pasarle el mouse. */
+function TooltipTrigger({
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Trigger>): React.JSX.Element {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 
+/** El globo con el texto. Va corto: no recibe foco y no puede contener controles. */
 function TooltipContent({
   className,
   sideOffset = 8,
   children,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: React.ComponentProps<typeof TooltipPrimitive.Content>): React.JSX.Element {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content

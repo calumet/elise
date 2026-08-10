@@ -1,3 +1,9 @@
+/**
+ * Raíz del selector. Guarda el valor elegido.
+ *
+ * @module
+ */
+
 import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
@@ -6,11 +12,18 @@ import { CAMPO_INVALIDO } from "./input";
 
 import { cn } from "@/lib/cn";
 
+/** Raíz del selector. Guarda el valor elegido. */
 export const Select = SelectPrimitive.Root;
+/** Agrupa opciones afines, con `SelectLabel` como título. */
 export const SelectGroup = SelectPrimitive.Group;
+/** Muestra la opción elegida dentro del disparador, o el `placeholder` si no hay ninguna. */
 export const SelectValue = SelectPrimitive.Value;
 
-export const SelectTrigger = React.forwardRef<
+/** El control que abre la lista. */
+export const SelectTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>> &
+    React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Trigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
@@ -32,7 +45,11 @@ export const SelectTrigger = React.forwardRef<
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-export const SelectContent = React.forwardRef<
+/** El panel con las opciones. */
+export const SelectContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = "popper", ...props }, ref) => (
@@ -65,7 +82,11 @@ export const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-export const SelectLabel = React.forwardRef<
+/** Título de un grupo. No se puede elegir. */
+export const SelectLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -78,7 +99,11 @@ export const SelectLabel = React.forwardRef<
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
-export const SelectItem = React.forwardRef<
+/** Una opción. */
+export const SelectItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => (
@@ -108,7 +133,11 @@ export const SelectItem = React.forwardRef<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-export const SelectSeparator = React.forwardRef<
+/** La línea que separa dos grupos. */
+export const SelectSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (

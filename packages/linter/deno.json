@@ -1,0 +1,19 @@
+{
+  "name": "@calumet/elise-linter",
+  "version": "0.1.6",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./prettier": "./prettier.js"
+  },
+  "publish": {
+    "include": [
+      "index.js",
+      "index.d.ts",
+      "prettier.js",
+      "prettier.d.ts",
+      "package.json",
+      "README.md"
+    ]
+  }
+}

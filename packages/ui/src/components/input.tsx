@@ -1,7 +1,14 @@
+/**
+ * Campo de texto de una línea. Con `aria-invalid` se enciende la marca de error, que es el mismo atributo que ya pone `Field`.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Input}. */
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 /**
@@ -55,7 +62,10 @@ export const CAJA_CAMPO_COMPUESTA =
 export const CAMPO_DESNUDO =
   "w-0 min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed";
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+/** Campo de texto de una línea. Con `aria-invalid` se enciende la marca de error, que es el mismo atributo que ya pone `Field`. */
+export const Input: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<InputProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", ...props }, ref) => (
     <input
       data-slot="input"

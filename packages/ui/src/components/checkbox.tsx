@@ -1,3 +1,25 @@
+/**
+ * Casilla de verificación.
+ *
+ * Es un campo, no un control suelto: lleva su rótulo al lado y admite ayuda y
+ * error, con el enlace de accesibilidad ya resuelto. El rótulo, la ayuda y el
+ * error van en una columna a la derecha, así que los tres empiezan en la misma
+ * x y la ayuda cuelga del rótulo y no de la casilla.
+ *
+ * Se distingue de `Switch` en que no aplica nada al momento: la casilla dice
+ * qué se va a enviar y el cambio ocurre al enviar. Para algo que surte efecto
+ * al tocarlo, el interruptor.
+ *
+ * `checked` admite `"indeterminate"` además de los dos booleanos, que es el
+ * estado de una casilla maestra cuando solo parte de sus hijas está marcada.
+ * Ese tercer estado no existe en un `input` nativo salvo por propiedad del DOM.
+ *
+ * Con `name` el primitivo emite un input oculto, de modo que un formulario
+ * nativo la envía igual.
+ *
+ * @module
+ */
+
 import { Check, Minus } from "@calumet/elise-icons";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as React from "react";
@@ -7,6 +29,7 @@ import { InlineError } from "./inline-error";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Checkbox}. */
 export type CheckboxProps = {
   /** Contenido del rótulo, al lado de la casilla. */
   label: React.ReactNode;
@@ -75,7 +98,7 @@ function Checkbox({
   checked,
   defaultChecked,
   onCheckedChange,
-}: CheckboxProps) {
+}: CheckboxProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

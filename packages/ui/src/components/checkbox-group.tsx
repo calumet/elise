@@ -1,3 +1,23 @@
+/**
+ * Grupo de opciones que se pueden elegir a la vez.
+ *
+ * Es a `Checkbox` lo que `RadioGroup` es a un radio: el rótulo, la ayuda y el
+ * error son del grupo y no de cada casilla, porque la pregunta se hace una vez
+ * y las opciones son las respuestas. Un error como «elige al menos un aviso» no
+ * pertenece a ninguna casilla en particular.
+ *
+ * No es dueño del valor. Cada casilla lleva el suyo, que es lo que separa esto
+ * de un grupo de radios: no hay una respuesta, hay tantas como casillas, y
+ * centralizarlas obligaría a inventar un formato de lista que el formulario ya
+ * resuelve por `name`.
+ *
+ * Sale como `role="group"` y no como `<fieldset>`: la leyenda de un fieldset se
+ * coloca sobre el borde y hay que deshacerlo entero para que se vea como el
+ * resto de los campos.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { FieldRequiredMark, useFieldIds } from "./field";
@@ -5,6 +25,7 @@ import { InlineError } from "./inline-error";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link CheckboxGroup}. */
 export type CheckboxGroupProps = {
   /** Rótulo del grupo entero. Hace de leyenda. */
   label: React.ReactNode;
@@ -53,7 +74,7 @@ function CheckboxGroup({
   id: idProp,
   className,
   children,
-}: CheckboxGroupProps) {
+}: CheckboxGroupProps): React.JSX.Element {
   const { id, idDescripcion, idError, hayError, control } = useFieldIds({
     id: idProp,
     description,

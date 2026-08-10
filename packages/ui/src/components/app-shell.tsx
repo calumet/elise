@@ -1,3 +1,26 @@
+/**
+ * Marco de aplicación: cabecera fija arriba, navegación a un lado y el área
+ * donde entra cada pantalla.
+ *
+ * El cajón y su velo cuelgan de la fila de contenido y no de la ventana, de modo
+ * que la cabecera sigue a la vista y alcanzable mientras la navegación está
+ * abierta. Por eso el cajón no es un `Sheet`, que es de posición fija.
+ *
+ * ```tsx
+ * <AppShell>
+ *   <AppShellHeader>…</AppShellHeader>
+ *   <AppShellNav>
+ *     <AppShellNavSection title="Gestión">
+ *       <AppShellNavItem href="/alumnos" active>Alumnos</AppShellNavItem>
+ *     </AppShellNavSection>
+ *   </AppShellNav>
+ *   <AppShellMain>{children}</AppShellMain>
+ * </AppShell>
+ * ```
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { Avatar, AvatarFallback } from "./avatar";
@@ -39,6 +62,7 @@ const useAppShell = (parte: string) => {
   return ctx;
 };
 
+/** Props de {@link AppShell}. */
 export type AppShellProps = React.ComponentProps<"div"> & {
   /** Cajón de navegación abierto, en el ancho donde la barra se oculta. */
   navOpen?: boolean;
@@ -73,7 +97,7 @@ function AppShell({
   onNavOpenChange,
   children,
   ...props
-}: AppShellProps) {
+}: AppShellProps): React.JSX.Element {
   const [interno, setInterno] = React.useState(defaultNavOpen);
   const controlado = navOpen !== undefined;
   const abierto = controlado ? navOpen : interno;
@@ -138,6 +162,7 @@ function AppShell({
   );
 }
 
+/** Props de {@link AppShellHeader}. */
 export type AppShellHeaderProps = React.ComponentProps<"header">;
 
 /**
@@ -180,7 +205,7 @@ export type AppShellHeaderProps = React.ComponentProps<"header">;
  * </AppShellHeader>
  * ```
  */
-function AppShellHeader({ className, children, ...props }: AppShellHeaderProps) {
+function AppShellHeader({ className, children, ...props }: AppShellHeaderProps): React.JSX.Element {
   const bandas: Record<string, React.ReactNode[]> = { marca: [], buscador: [], acciones: [] };
   const sueltos: React.ReactNode[] = [];
 
@@ -243,6 +268,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps) 
 }
 AppShellHeader.displayName = "AppShellHeader";
 
+/** Props de {@link AppShellHeaderBrand}. */
 export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
 
 /**
@@ -253,7 +279,7 @@ export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
  * menos falta hace, quien abrió la aplicación ya sabe en cuál está, y ese sitio
  * es la diferencia entre un buscador que se usa y uno de sesenta píxeles.
  */
-function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps) {
+function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps): React.JSX.Element {
   return (
     <div
       data-slot="app-shell-header-brand"
@@ -264,6 +290,7 @@ function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps) 
 }
 AppShellHeaderBrand.displayName = "AppShellHeaderBrand";
 
+/** Props de {@link AppShellHeaderSearch}. */
 export type AppShellHeaderSearchProps = Omit<React.ComponentProps<"button">, "onClick"> & {
   /** El atajo que lo abre, tecla por tecla. Solo se dibuja donde hay sitio. */
   shortcut?: string[];
@@ -292,7 +319,7 @@ function AppShellHeaderSearch({
   children,
   shortcut,
   ...props
-}: AppShellHeaderSearchProps) {
+}: AppShellHeaderSearchProps): React.JSX.Element {
   return (
     <button
       type="button"
@@ -322,6 +349,7 @@ function AppShellHeaderSearch({
 }
 AppShellHeaderSearch.displayName = "AppShellHeaderSearch";
 
+/** Props de {@link AppShellHeaderActions}. */
 export type AppShellHeaderActionsProps = React.ComponentProps<"div">;
 
 /**
@@ -332,7 +360,10 @@ export type AppShellHeaderActionsProps = React.ComponentProps<"div">;
  * mueve de pantalla a pantalla; las acciones cambian según dónde estés, así que
  * si fueran las últimas, el menú bailaría de sitio cada vez.
  */
-function AppShellHeaderActions({ className, ...props }: AppShellHeaderActionsProps) {
+function AppShellHeaderActions({
+  className,
+  ...props
+}: AppShellHeaderActionsProps): React.JSX.Element {
   return (
     <div
       data-slot="app-shell-header-actions"
@@ -347,6 +378,7 @@ function AppShellHeaderActions({ className, ...props }: AppShellHeaderActionsPro
 }
 AppShellHeaderActions.displayName = "AppShellHeaderActions";
 
+/** Props de {@link AppShellHeaderAction}. */
 export type AppShellHeaderActionProps = Omit<React.ComponentProps<"button">, "children"> & {
   /** Nombre del control. Obligatorio: solo se ve el icono. */
   label: string;
@@ -363,7 +395,12 @@ export type AppShellHeaderActionProps = Omit<React.ComponentProps<"button">, "ch
  * La caja la pone el componente, de 32px con el icono en 20, para que varias
  * seguidas queden a la misma altura que el buscador y que el menú de la cuenta.
  */
-function AppShellHeaderAction({ className, label, icon, ...props }: AppShellHeaderActionProps) {
+function AppShellHeaderAction({
+  className,
+  label,
+  icon,
+  ...props
+}: AppShellHeaderActionProps): React.JSX.Element {
   return (
     <button
       type="button"
@@ -381,6 +418,7 @@ function AppShellHeaderAction({ className, label, icon, ...props }: AppShellHead
 }
 AppShellHeaderAction.displayName = "AppShellHeaderAction";
 
+/** Props de {@link AppShellUserMenu}. */
 export type AppShellUserMenuProps = {
   /** Nombre de quien entró. Se esconde donde no cabe, pero sigue anunciándose. */
   name: string;
@@ -417,7 +455,7 @@ function AppShellUserMenu({
   avatar,
   className,
   children,
-}: AppShellUserMenuProps) {
+}: AppShellUserMenuProps): React.JSX.Element {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -472,10 +510,15 @@ function AppShellUserMenu({
 }
 AppShellUserMenu.displayName = "AppShellUserMenu";
 
+/** Props de {@link AppShellNavToggle}. */
 export type AppShellNavToggleProps = React.ComponentProps<"button">;
 
 /** Abre y cierra el cajón. Solo se ve donde la navegación está plegada. */
-function AppShellNavToggle({ className, children, ...props }: AppShellNavToggleProps) {
+function AppShellNavToggle({
+  className,
+  children,
+  ...props
+}: AppShellNavToggleProps): React.JSX.Element {
   const { cajonAbierto, setCajonAbierto } = useAppShell("AppShellNavToggle");
   const etiqueta = useElLabel("ui", "toggleNavigation", "Alternar navegación");
 
@@ -512,6 +555,7 @@ function AppShellNavToggle({ className, children, ...props }: AppShellNavToggleP
   );
 }
 
+/** Props de {@link AppShellNav}. */
 export type AppShellNavProps = React.ComponentProps<"nav"> & {
   /**
    * Nombre del landmark. Una página puede tener varios `<nav>` (el lateral, uno
@@ -537,7 +581,12 @@ export type AppShellNavProps = React.ComponentProps<"nav"> & {
  *
  * El pie, si lo hay, se queda fijo abajo y solo se desplaza lo de en medio.
  */
-function AppShellNav({ className, children, label, ...props }: AppShellNavProps) {
+function AppShellNav({
+  className,
+  children,
+  label,
+  ...props
+}: AppShellNavProps): React.JSX.Element {
   const { cajonAbierto, setCajonAbierto, esMovil } = useAppShell("AppShellNav");
   const cerrar = useElLabel("ui", "closeNavigation", "Cerrar navegación");
   const etiqueta = useElLabel("ui", "navigation", "Navegación");
@@ -597,6 +646,7 @@ function AppShellNav({ className, children, label, ...props }: AppShellNavProps)
   );
 }
 
+/** Props de {@link AppShellNavFooter}. */
 export type AppShellNavFooterProps = React.ComponentProps<"div">;
 
 /**
@@ -607,7 +657,11 @@ export type AppShellNavFooterProps = React.ComponentProps<"div">;
  * exista: metido en la lista, con veinte entradas por encima, habría que bajar
  * a buscarlo.
  */
-function AppShellNavFooter({ className, children, ...props }: AppShellNavFooterProps) {
+function AppShellNavFooter({
+  className,
+  children,
+  ...props
+}: AppShellNavFooterProps): React.JSX.Element {
   return (
     <div
       data-slot="app-shell-nav-footer"
@@ -620,6 +674,7 @@ function AppShellNavFooter({ className, children, ...props }: AppShellNavFooterP
 }
 AppShellNavFooter.displayName = "AppShellNavFooter";
 
+/** Props de {@link AppShellNavSection}. */
 export type AppShellNavSectionProps = Omit<React.ComponentProps<"li">, "title"> & {
   title: React.ReactNode;
 
@@ -644,7 +699,7 @@ function AppShellNavSection({
   onAction,
   children,
   ...props
-}: AppShellNavSectionProps) {
+}: AppShellNavSectionProps): React.JSX.Element {
   /* Un punto por debajo del resto de la barra y en tono tenue: el rótulo
      ordena, no compite con las entradas que agrupa. El margen sube a 6px para
      que la fila siga midiendo 28px con un interlineado de 16. */
@@ -806,6 +861,7 @@ type GrupoContextValue = {
 
 const GrupoContext = React.createContext<GrupoContextValue | null>(null);
 
+/** Props de {@link AppShellNavGroup}. */
 export type AppShellNavGroupProps = Omit<React.ComponentProps<"li">, "onToggle"> & {
   open?: boolean;
   defaultOpen?: boolean;
@@ -840,7 +896,7 @@ function AppShellNavGroup({
   defaultOpen = false,
   onOpenChange,
   ...props
-}: AppShellNavGroupProps) {
+}: AppShellNavGroupProps): React.JSX.Element {
   const idLista = React.useId();
   const [interno, setInterno] = React.useState(defaultOpen);
   const controlado = open !== undefined;
@@ -864,6 +920,7 @@ function AppShellNavGroup({
 }
 AppShellNavGroup.displayName = "AppShellNavGroup";
 
+/** Props de {@link AppShellNavSubItem}. */
 export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
 };
@@ -872,7 +929,12 @@ export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
  * Hija de una entrada. La sangria de 36px alinea su texto con el del padre, que
  * arranca despues del icono. La guia la reparte `AppShellNavSubList`.
  */
-function AppShellNavSubItem({ className, active, children, ...props }: AppShellNavSubItemProps) {
+function AppShellNavSubItem({
+  className,
+  active,
+  children,
+  ...props
+}: AppShellNavSubItemProps): React.JSX.Element {
   const { "data-guia": guia = "ninguna", ...resto } = props as AppShellNavSubItemProps & {
     "data-guia"?: Guia;
   };
@@ -899,6 +961,7 @@ function AppShellNavSubItem({ className, active, children, ...props }: AppShellN
   );
 }
 
+/** Props de {@link AppShellNavSubList}. */
 export type AppShellNavSubListProps = React.ComponentProps<"ul">;
 
 /**
@@ -913,7 +976,11 @@ export type AppShellNavSubListProps = React.ComponentProps<"ul">;
  * y no con una altura fija, que es lo único que anima sin tener que medir antes
  * cuántas hijas hay.
  */
-function AppShellNavSubList({ className, children, ...props }: AppShellNavSubListProps) {
+function AppShellNavSubList({
+  className,
+  children,
+  ...props
+}: AppShellNavSubListProps): React.JSX.Element {
   const grupo = React.useContext(GrupoContext);
   const hijas = React.Children.toArray(children).filter(React.isValidElement);
   const activa = hijas.findIndex((h) => (h.props as AppShellNavSubItemProps).active === true);
@@ -958,6 +1025,7 @@ function AppShellNavSubList({ className, children, ...props }: AppShellNavSubLis
   );
 }
 
+/** Props de {@link AppShellNavItem}. */
 export type AppShellNavItemProps = React.ComponentProps<"a"> & {
   active?: boolean;
   icon?: React.ReactNode;
@@ -1024,7 +1092,7 @@ function AppShellNavItem({
   children,
   onClick,
   ...props
-}: AppShellNavItemProps) {
+}: AppShellNavItemProps): React.JSX.Element {
   const grupo = React.useContext(GrupoContext);
   const glifo = active ? (activeIcon ?? icon) : icon;
 
@@ -1102,6 +1170,7 @@ function AppShellNavItem({
   return grupo ? fila : <li className="list-none">{fila}</li>;
 }
 
+/** Props de {@link AppShellNavAction}. */
 export type AppShellNavActionProps = React.ComponentProps<"button">;
 
 /**
@@ -1112,7 +1181,7 @@ export type AppShellNavActionProps = React.ComponentProps<"button">;
  * este mismo sitio cuando la fila no está apuntada. Con la caja libre, cada
  * pantalla ponía la suya y el icono quedaba unos píxeles por dentro del número.
  */
-function AppShellNavAction({ className, ...props }: AppShellNavActionProps) {
+function AppShellNavAction({ className, ...props }: AppShellNavActionProps): React.JSX.Element {
   return (
     <button
       type="button"
@@ -1127,6 +1196,7 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps) {
 }
 AppShellNavAction.displayName = "AppShellNavAction";
 
+/** Props de {@link AppShellMain}. */
 export type AppShellMainProps = React.ComponentProps<"main">;
 
 /**
@@ -1139,7 +1209,7 @@ export type AppShellMainProps = React.ComponentProps<"main">;
  * Solo se vuelve inerte donde el cajón existe. Por encima del breakpoint no hay
  * velo que lo tape, así que dejarlo inerte lo haría inalcanzable a plena vista.
  */
-function AppShellMain({ className, children, ...props }: AppShellMainProps) {
+function AppShellMain({ className, children, ...props }: AppShellMainProps): React.JSX.Element {
   const { cajonAbierto, esMovil } = useAppShell("AppShellMain");
 
   return (

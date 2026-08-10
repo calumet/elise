@@ -1,8 +1,28 @@
+/**
+ * Control segmentado: unas pocas opciones que se excluyen, siempre con una
+ * puesta.
+ *
+ * Se lee como una sola pieza partida y no como botones sueltos, que es lo que lo
+ * separa de un grupo de alternar: aquí las opciones son las caras de una misma
+ * pregunta. De ahí que las esquinas interiores se cuadren y solo redondeen las
+ * de los extremos.
+ *
+ * Nunca se queda sin valor. El grupo de Radix admite apagar la opción activa
+ * volviéndola a pulsar, y aquí eso deja la pregunta sin responder sin que nadie
+ * lo haya pedido, así que se ignora.
+ *
+ * Para elegir varias cosas a la vez esto no vale: eso es `ToggleGroup` con
+ * `type="multiple"`.
+ *
+ * @module
+ */
+
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link SegmentedControl}. */
 export type SegmentedControlProps = Omit<
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>,
   "type" | "onValueChange" | "value" | "defaultValue"
@@ -12,6 +32,7 @@ export type SegmentedControlProps = Omit<
   onValueChange?: (value: string) => void;
 };
 
+/** Props de {@link SegmentedControlItem}. */
 export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
   typeof ToggleGroupPrimitive.Item
 >;
@@ -32,27 +53,33 @@ export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
  * Para elegir varias cosas a la vez esto no vale: eso es `ToggleGroup` con
  * `type="multiple"`.
  */
-export const SegmentedControl = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
-  SegmentedControlProps
->(({ className, onValueChange, ...props }, ref) => (
-  <ToggleGroupPrimitive.Root
-    data-slot="segmented-control"
-    ref={ref}
-    type="single"
-    onValueChange={(valor) => valor && onValueChange?.(valor)}
-    className={cn(
-      "inline-flex max-w-full items-center gap-px rounded-md bg-muted p-0.5",
-      "[&>*:not(:first-child)]:rounded-s-none [&>*:not(:last-child)]:rounded-e-none",
-      "[&>*]:min-w-0 [&>*]:truncate",
-      className,
-    )}
-    {...props}
-  />
-));
+export const SegmentedControl: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SegmentedControlProps> &
+    React.RefAttributes<React.ComponentRef<typeof ToggleGroupPrimitive.Root>>
+> = React.forwardRef<React.ComponentRef<typeof ToggleGroupPrimitive.Root>, SegmentedControlProps>(
+  ({ className, onValueChange, ...props }, ref) => (
+    <ToggleGroupPrimitive.Root
+      data-slot="segmented-control"
+      ref={ref}
+      type="single"
+      onValueChange={(valor) => valor && onValueChange?.(valor)}
+      className={cn(
+        "inline-flex max-w-full items-center gap-px rounded-md bg-muted p-0.5",
+        "[&>*:not(:first-child)]:rounded-s-none [&>*:not(:last-child)]:rounded-e-none",
+        "[&>*]:min-w-0 [&>*]:truncate",
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
 SegmentedControl.displayName = "SegmentedControl";
 
-export const SegmentedControlItem = React.forwardRef<
+/** Una opción del control segmentado. */
+export const SegmentedControlItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SegmentedControlItemProps> &
+    React.RefAttributes<React.ComponentRef<typeof ToggleGroupPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   SegmentedControlItemProps
 >(({ className, ...props }, ref) => (

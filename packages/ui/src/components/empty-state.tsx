@@ -1,7 +1,19 @@
+/**
+ * Estado vacío para listas, tablas y paneles sin contenido. Es un contenedor
+ * compuesto: `EmptyStateMedia`, `EmptyStateTitle`, `EmptyStateDescription` y
+ * `EmptyStateActions` se combinan según haga falta.
+ *
+ * Para "no hay resultados" de una búsqueda, el título debería nombrar el
+ * término buscado, no decir solo "Sin resultados".
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link EmptyState}. */
 export type EmptyStateProps = React.ComponentProps<"div"> & {
   size?: "sm" | "md";
 };
@@ -19,7 +31,7 @@ const sizeClasses: Record<NonNullable<EmptyStateProps["size"]>, string> = {
  * Para "no hay resultados" de una búsqueda, el título debería nombrar el
  * término buscado, no decir solo "Sin resultados".
  */
-function EmptyState({ className, size = "md", ...props }: EmptyStateProps) {
+function EmptyState({ className, size = "md", ...props }: EmptyStateProps): React.JSX.Element {
   return (
     <div
       data-slot="empty-state"
@@ -33,7 +45,8 @@ function EmptyState({ className, size = "md", ...props }: EmptyStateProps) {
   );
 }
 
-function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">) {
+/** El icono o la ilustración del estado vacío. */
+function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="empty-state-media"
@@ -47,7 +60,8 @@ function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">) {
+/** Qué falta, en una línea. */
+function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="empty-state-title"
@@ -57,7 +71,11 @@ function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function EmptyStateDescription({ className, ...props }: React.ComponentProps<"p">) {
+/** Por qué está vacío y qué se puede hacer. */
+function EmptyStateDescription({
+  className,
+  ...props
+}: React.ComponentProps<"p">): React.JSX.Element {
   return (
     <p
       data-slot="empty-state-description"
@@ -67,7 +85,11 @@ function EmptyStateDescription({ className, ...props }: React.ComponentProps<"p"
   );
 }
 
-function EmptyStateActions({ className, ...props }: React.ComponentProps<"div">) {
+/** Las acciones que sacan del estado vacío. */
+function EmptyStateActions({
+  className,
+  ...props
+}: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="empty-state-actions"

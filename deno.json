@@ -1,0 +1,22 @@
+{
+  "workspace": [
+    "./packages/alerts",
+    "./packages/forms",
+    "./packages/i18n",
+    "./packages/icons",
+    "./packages/linter",
+    "./packages/tables",
+    "./packages/toasts",
+    "./packages/ui"
+  ],
+  "imports": {
+    "react": "npm:react@^19.0.0",
+    "react-dom": "npm:react-dom@^19.0.0",
+    "eslint": "npm:eslint@^9.0.0",
+    "prettier": "npm:prettier@^3.0.0"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
+}

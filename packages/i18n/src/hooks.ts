@@ -5,6 +5,7 @@ import type { Locale, TranslateFn } from "./types";
 
 const DEFAULT_NAMESPACE = "default";
 
+/** Lo que devuelve `useTranslation`. */
 export type UseTranslationReturn = {
   t: TranslateFn;
   locale: Locale;
@@ -37,6 +38,7 @@ export const useTranslation = (namespace: string = DEFAULT_NAMESPACE): UseTransl
   };
 };
 
+/** Lo que devuelve `useLocale`. */
 export type UseLocaleReturn = {
   locale: Locale;
   setLocale: (locale: Locale) => void;

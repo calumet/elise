@@ -1,3 +1,11 @@
+/**
+ * Contenedor genérico. Solo expone las propiedades que el sistema controla
+ * (espaciado, superficie, borde, radio y elevación) y siempre a través de
+ * tokens, sin aceptar valores arbitrarios. Para cualquier otra cosa, `className`.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
@@ -5,6 +13,7 @@ import { cn } from "@/lib/cn";
 /** Escala de espaciado compartida por Box, los Stack y Grid. */
 export type SpaceScale = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
 
+/** Props de {@link Box}. */
 export type BoxProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 
@@ -23,6 +32,7 @@ export type BoxProps = React.ComponentProps<"div"> & {
 
 /* Cada valor de la escala aparece literal en su propio mapa, porque Tailwind no
    detecta las clases construidas por interpolación. */
+/** El relleno de los cuatro lados, por escalón de la escala de espaciado. */
 export const paddingClasses: Record<SpaceScale, string> = {
   0: "p-0",
   1: "p-1",
@@ -37,6 +47,7 @@ export const paddingClasses: Record<SpaceScale, string> = {
   16: "p-16",
 };
 
+/** El relleno de los costados, por escalón. */
 export const paddingXClasses: Record<SpaceScale, string> = {
   0: "px-0",
   1: "px-1",
@@ -51,6 +62,7 @@ export const paddingXClasses: Record<SpaceScale, string> = {
   16: "px-16",
 };
 
+/** El relleno de arriba y abajo, por escalón. */
 export const paddingYClasses: Record<SpaceScale, string> = {
   0: "py-0",
   1: "py-1",
@@ -120,7 +132,7 @@ export const clasesDeCaja = ({
   radius,
   shadow,
   overflowHidden,
-}: CajaProps) =>
+}: CajaProps): string =>
   cn(
     padding !== undefined && paddingClasses[padding],
     paddingX !== undefined && paddingXClasses[paddingX],
@@ -149,7 +161,7 @@ function Box({
   shadow,
   overflowHidden,
   ...props
-}: BoxProps) {
+}: BoxProps): React.JSX.Element {
   return (
     <Comp
       data-slot="box"

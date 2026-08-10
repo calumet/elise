@@ -1,3 +1,9 @@
+/**
+ * Raíz del panel lateral. Guarda si está abierto.
+ *
+ * @module
+ */
+
 import { X } from "@calumet/elise-icons";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
@@ -5,15 +11,22 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
+/** Raíz del panel lateral. Guarda si está abierto. */
+function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>): React.JSX.Element {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
-function SheetTrigger({ ...props }: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
+/** El control que abre el panel. */
+function SheetTrigger({
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Trigger>): React.JSX.Element {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
-function SheetClose({ ...props }: React.ComponentProps<typeof SheetPrimitive.Close>) {
+/** Cierra el panel. */
+function SheetClose({
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Close>): React.JSX.Element {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
@@ -37,6 +50,7 @@ function SheetOverlay({
   );
 }
 
+/** El panel, anclado al borde que diga `side`. */
 function SheetContent({
   className,
   children,
@@ -44,7 +58,7 @@ function SheetContent({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
-}) {
+}): React.JSX.Element {
   const closeLabel = useElLabel("ui", "close", "Cerrar");
   return (
     <SheetPortal>
@@ -75,7 +89,8 @@ function SheetContent({
   );
 }
 
-function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
+/** La cabecera fija del panel. */
+function SheetHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sheet-header"
@@ -85,7 +100,8 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
+/** El pie fijo, donde van las acciones. */
+function SheetFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sheet-footer"
@@ -95,7 +111,11 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
+/** El título del panel, que anuncia el lector de pantalla al abrirlo. */
+function SheetTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Title>): React.JSX.Element {
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
@@ -105,10 +125,11 @@ function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPr
   );
 }
 
+/** La bajada del título. */
 function SheetDescription({
   className,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Description>) {
+}: React.ComponentProps<typeof SheetPrimitive.Description>): React.JSX.Element {
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"

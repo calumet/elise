@@ -1,7 +1,15 @@
+/**
+ * Alterna entre claro y oscuro. Según `attribute` usa la clase `.elise-dark` o `data-theme="dark"`, y guarda la preferencia en `localStorage`.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
+/** Los dos temas entre los que se alterna. */
 type Theme = "light" | "dark";
 
+/** Props de {@link ThemeProvider}. */
 type ThemeProviderProps = {
   children: React.ReactNode;
   /**
@@ -53,13 +61,14 @@ const readStoredTheme = (storageKey?: string): Theme | null => {
   return stored === "dark" || stored === "light" ? stored : null;
 };
 
+/** Alterna entre claro y oscuro. Según `attribute` usa la clase `.elise-dark` o `data-theme="dark"`, y guarda la preferencia en `localStorage`. */
 export const ThemeProvider = ({
   children,
   attribute = "class",
   storageKey = "elise-theme",
   defaultTheme = "light",
   forcedTheme,
-}: ThemeProviderProps) => {
+}: ThemeProviderProps): React.JSX.Element => {
   const [theme, setThemeState] = React.useState<Theme>(() => {
     const initial = forcedTheme ?? readStoredTheme(storageKey) ?? defaultTheme;
     if (isBrowser) {
@@ -94,7 +103,8 @@ export const ThemeProvider = ({
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
-export const useTheme = () => {
+/** Da el tema activo y `setTheme`. Tira error fuera de `ThemeProvider`. */
+export const useTheme = (): ThemeContextValue => {
   const ctx = React.useContext(ThemeContext);
   if (!ctx) {
     throw new Error("useTheme debe usarse dentro de ThemeProvider");

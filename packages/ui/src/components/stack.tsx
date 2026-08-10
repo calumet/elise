@@ -1,3 +1,9 @@
+/**
+ * Apilado en el eje de bloque o en línea, con la escala de espaciado del sistema.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import type { SpaceScale } from "./box";
@@ -11,13 +17,16 @@ type StackBase = React.ComponentProps<"div"> & {
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly";
 };
 
+/** Props de {@link BlockStack}. */
 export type BlockStackProps = StackBase;
 
+/** Props de {@link InlineStack}. */
 export type InlineStackProps = StackBase & {
   /** Permite que los hijos bajen de línea cuando no entran. */
   wrap?: boolean;
 };
 
+/** El hueco entre hijos, por escalón de la escala de espaciado. */
 export const gapClasses: Record<SpaceScale, string> = {
   0: "gap-0",
   1: "gap-1",
@@ -62,7 +71,7 @@ function BlockStack({
   align,
   justify,
   ...props
-}: BlockStackProps) {
+}: BlockStackProps): React.JSX.Element {
   return (
     <Comp
       data-slot="block-stack"
@@ -87,7 +96,7 @@ function InlineStack({
   justify,
   wrap = true,
   ...props
-}: InlineStackProps) {
+}: InlineStackProps): React.JSX.Element {
   return (
     <Comp
       data-slot="inline-stack"

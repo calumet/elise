@@ -1,13 +1,27 @@
+/**
+ * Raíz de las pestañas. Guarda cuál está activa, y admite `value` con `onValueChange` para controlarlo.
+ *
+ * @module
+ */
+
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {
+/** Raíz de las pestañas. Guarda cuál está activa, y admite `value` con `onValueChange` para controlarlo. */
+function Tabs({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Root>): React.JSX.Element {
   return <TabsPrimitive.Root data-slot="tabs" className={cn(className)} {...props} />;
 }
 
-function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
+/** La fila de pestañas. Recorre con las flechas del teclado. */
+function TabsList({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.List>): React.JSX.Element {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
@@ -20,7 +34,11 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
   );
 }
 
-function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+/** Una pestaña. */
+function TabsTrigger({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>): React.JSX.Element {
   return (
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
@@ -33,7 +51,11 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
   );
 }
 
-function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
+/** El panel de una pestaña, enlazado a su disparador. */
+function TabsContent({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Content>): React.JSX.Element {
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"

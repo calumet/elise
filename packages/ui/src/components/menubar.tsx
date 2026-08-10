@@ -1,3 +1,9 @@
+/**
+ * Raíz de la barra de menús. Guarda qué está abierto; no dibuja nada por sí sola.
+ *
+ * @module
+ */
+
 import { Circle, ChevronDown } from "@calumet/elise-icons";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import * as React from "react";
@@ -18,7 +24,11 @@ const baseItem =
 const canaletaIndicador =
   "[&:has([data-slot=menubar-checkbox-item],[data-slot=menubar-radio-item])_[data-slot=menubar-item]]:pl-7 [&:has([data-slot=menubar-checkbox-item],[data-slot=menubar-radio-item])_[data-slot=menubar-sub-trigger]]:pl-7";
 
-export const Menubar = React.forwardRef<
+/** Raíz de la barra de menús. Guarda qué está abierto; no dibuja nada por sí sola. */
+export const Menubar: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Root>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
 >(({ className, ...props }, ref) => (
@@ -33,10 +43,17 @@ export const Menubar = React.forwardRef<
   />
 ));
 Menubar.displayName = MenubarPrimitive.Root.displayName;
+/** Un menú de la barra, con su disparador y su panel. */
 export const MenubarMenu: typeof MenubarPrimitive.Menu = MenubarPrimitive.Menu;
+/** Agrupa opciones afines. Con `MenubarLabel` encima, les pone título. */
 export const MenubarGroup: typeof MenubarPrimitive.Group = MenubarPrimitive.Group;
+/** Monta el panel al final del `body`, para que no lo recorte ningún ancestro. */
 export const MenubarPortal: typeof MenubarPrimitive.Portal = MenubarPrimitive.Portal;
-export const MenubarTrigger = React.forwardRef<
+/** El control que abre la barra de menús. */
+export const MenubarTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Trigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
@@ -58,7 +75,11 @@ export const MenubarTrigger = React.forwardRef<
 ));
 MenubarTrigger.displayName = MenubarPrimitive.Trigger.displayName;
 
-export const MenubarContent = React.forwardRef<
+/** El panel con las opciones. */
+export const MenubarContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>
 >(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => (
@@ -83,7 +104,11 @@ export const MenubarContent = React.forwardRef<
 ));
 MenubarContent.displayName = MenubarPrimitive.Content.displayName;
 
-export const MenubarItem = React.forwardRef<
+/** Una opción. `inset` la alinea con las que llevan casilla. */
+export const MenubarItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item>
 >(({ className, ...props }, ref) => (
@@ -96,7 +121,11 @@ export const MenubarItem = React.forwardRef<
 ));
 MenubarItem.displayName = MenubarPrimitive.Item.displayName;
 
-export const MenubarCheckboxItem = React.forwardRef<
+/** Opción con casilla, para un ajuste que se prende y se apaga. */
+export const MenubarCheckboxItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.CheckboxItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
@@ -130,9 +159,14 @@ export const MenubarCheckboxItem = React.forwardRef<
 ));
 MenubarCheckboxItem.displayName = MenubarPrimitive.CheckboxItem.displayName;
 
+/** Agrupa opciones excluyentes y guarda cuál está elegida. */
 export const MenubarRadioGroup = MenubarPrimitive.RadioGroup;
 
-export const MenubarRadioItem = React.forwardRef<
+/** Una opción excluyente dentro de un `MenubarRadioGroup`. */
+export const MenubarRadioItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.RadioItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
@@ -152,7 +186,11 @@ export const MenubarRadioItem = React.forwardRef<
 ));
 MenubarRadioItem.displayName = MenubarPrimitive.RadioItem.displayName;
 
-export const MenubarLabel = React.forwardRef<
+/** Título de un grupo. No se puede elegir ni recibe foco. */
+export const MenubarLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -165,7 +203,11 @@ export const MenubarLabel = React.forwardRef<
 ));
 MenubarLabel.displayName = MenubarPrimitive.Label.displayName;
 
-export const MenubarSeparator = React.forwardRef<
+/** La línea que separa dos grupos de opciones. */
+export const MenubarSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -178,9 +220,14 @@ export const MenubarSeparator = React.forwardRef<
 ));
 MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName;
 
+/** Un submenú. Guarda si está abierto. */
 export const MenubarSub = MenubarPrimitive.Sub;
 
-export const MenubarSubTrigger = React.forwardRef<
+/** La opción que abre el submenú, con la flecha a la derecha. */
+export const MenubarSubTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubTrigger>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.SubTrigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
@@ -204,7 +251,11 @@ export const MenubarSubTrigger = React.forwardRef<
 ));
 MenubarSubTrigger.displayName = MenubarPrimitive.SubTrigger.displayName;
 
-export const MenubarSubContent = React.forwardRef<
+/** El panel del submenú. */
+export const MenubarSubContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubContent>> &
+    React.RefAttributes<React.ComponentRef<typeof MenubarPrimitive.SubContent>>
+> = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubContent>
 >(({ className, ...props }, ref) => (

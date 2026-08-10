@@ -1,7 +1,21 @@
+/**
+ * Una fila de botones relacionados.
+ *
+ * Existe por el hueco de siempre: sin ella cada pantalla escribe su `flex` con
+ * el hueco que le parece, y dos filas de acciones seguidas acaban separadas por
+ * distancias distintas.
+ *
+ * Se envuelve donde no cabe, así que en pantalla estrecha los botones bajan de
+ * renglón en vez de salirse.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link ButtonGroup}. */
 export type ButtonGroupProps = React.ComponentProps<"div"> & {
   /**
    * Junta los botones en una sola pieza, con las esquinas interiores
@@ -33,7 +47,7 @@ function ButtonGroup({
   accessibilityLabel,
   role,
   ...props
-}: ButtonGroupProps) {
+}: ButtonGroupProps): React.JSX.Element {
   return (
     <div
       data-slot="button-group"

@@ -15,7 +15,9 @@ import { useElLabel } from "./i18n";
 
 type Position = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
+/** Props de {@link Toaster}. */
 export type ToasterProps = {
+  /** Esquina donde se apilan los toasts. Por defecto `"top-right"`. */
   position?: Position;
 };
 
@@ -40,7 +42,11 @@ const viewportPosition = (position: Position) => {
   }
 };
 
-export const Toaster = ({ position = "top-right" }: ToasterProps) => {
+/**
+ * Escucha el bus y dibuja los toasts. Se monta una sola vez, en la raíz de la
+ * app; sin él, `toast()` no muestra nada.
+ */
+export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Element => {
   const [toasts, setToasts] = React.useState<ToastEvent[]>([]);
   const closeLabel = useElLabel("toasts", "close", "Cerrar");
 

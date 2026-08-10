@@ -1,3 +1,21 @@
+/**
+ * Campo de etiquetas: lo que se escribe se convierte en fichas que se pueden
+ * quitar de una en una.
+ *
+ * Las fichas van dentro de la caja y no debajo, porque son el valor del campo y
+ * no un resumen de él: fuera, borrar una parecería una acción sobre otra cosa.
+ *
+ * Retroceso con el campo vacío quita la última. Es lo que hace todo campo de
+ * etiquetas y lo que la gente prueba primero, pero no es la única forma: cada
+ * ficha lleva su propio botón, que es el que llega por teclado y por lector de
+ * pantalla.
+ *
+ * Repetidas no entran. Un campo de etiquetas describe un conjunto, y la segunda
+ * copia de una etiqueta no añade nada mientras ensucia la lista.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { Chip } from "./chip";
@@ -6,6 +24,7 @@ import { CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link TagInput}. */
 export type TagInputProps = {
   label: React.ReactNode;
 
@@ -54,7 +73,9 @@ export type TagInputProps = {
  * Repetidas no entran. Un campo de etiquetas describe un conjunto, y la segunda
  * copia de una etiqueta no añade nada mientras ensucia la lista.
  */
-export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
+export const TagInput: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<TagInputProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, TagInputProps>(
   (
     {
       label,

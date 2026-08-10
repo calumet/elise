@@ -1,3 +1,16 @@
+/**
+ * Grupo de botones de dos estados.
+ *
+ * `type="single"` deja una sola opción encendida y `type="multiple"` admite
+ * varias. El grupo es dueño del valor, con `value` y `onValueChange` o con
+ * `defaultValue`.
+ *
+ * El foco entra una vez al grupo y las flechas recorren las opciones, igual que
+ * en `RadioGroup`.
+ *
+ * @module
+ */
+
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import * as React from "react";
 
@@ -5,15 +18,19 @@ import { cn } from "@/lib/cn";
 
 /* Un Toggle suelto y una opción de ToggleGroup son el mismo control, así que
    comparten las clases. */
+/** Las clases del conmutador. Están sueltas porque `Toggle` y `ToggleGroupItem` tienen que verse igual. */
 export const clasesToggle =
   "inline-flex cursor-pointer select-none items-center justify-center gap-2 rounded-md border border-border-strong bg-background px-3 py-2 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out hover:bg-muted data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-bevel focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 
 /* Le dice a un `Toggle` que está dentro de un grupo. Sin esto tendría que
    adivinarlo, y un Toggle suelto dentro de un ToggleGroup no participaría ni
    del valor del grupo ni de su foco. */
-export const DentroDeToggleGroup = React.createContext(false);
+/** Le avisa a un `Toggle` que está dentro de un grupo. Sin esto, un `Toggle` suelto adentro no compartiría el borde ni el estado. */
+export const DentroDeToggleGroup: React.Context<boolean> = React.createContext(false);
 
+/** Props de {@link ToggleGroup}. */
 export type ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive.Root>;
+/** Props de {@link ToggleGroupItem}. */
 export type ToggleGroupItemProps = React.ComponentProps<typeof ToggleGroupPrimitive.Item>;
 
 /**
@@ -26,7 +43,7 @@ export type ToggleGroupItemProps = React.ComponentProps<typeof ToggleGroupPrimit
  * El foco entra una vez al grupo y las flechas recorren las opciones, igual que
  * en `RadioGroup`.
  */
-function ToggleGroup({ className, ...props }: ToggleGroupProps) {
+function ToggleGroup({ className, ...props }: ToggleGroupProps): React.JSX.Element {
   return (
     <DentroDeToggleGroup.Provider value={true}>
       <ToggleGroupPrimitive.Root
@@ -38,7 +55,8 @@ function ToggleGroup({ className, ...props }: ToggleGroupProps) {
   );
 }
 
-function ToggleGroupItem({ className, ...props }: ToggleGroupItemProps) {
+/** Un conmutador del grupo. */
+function ToggleGroupItem({ className, ...props }: ToggleGroupItemProps): React.JSX.Element {
   return (
     <ToggleGroupPrimitive.Item
       data-slot="toggle-group-item"

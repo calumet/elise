@@ -29,3 +29,30 @@ jobs:
       - run: pnpm -r --filter "@calumet/elise-*" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # JSR publica el fuente TypeScript, no el build, así que este job no compila.
+  # `id-token: write` es toda la autenticación: JSR valida el token OIDC contra
+  # el repositorio enlazado en la configuración de cada paquete, y no hay ningún
+  # secreto que rotar. `jsr publish` lee el workspace de deno.json y sube los
+  # ocho paquetes en una sola pasada, saltándose los que ya tengan publicada esa
+  # versión -- por eso puede correr en cada push a master sin tropezar.
+  publish-jsr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      # Deno resuelve las dependencias contra node_modules (byonm), así que sin
+      # instalar no encuentra ni react ni los primitivos de Radix.
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec jsr publish

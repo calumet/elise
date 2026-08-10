@@ -1,8 +1,28 @@
+/**
+ * El mensaje de error de un campo.
+ *
+ * Lleva icono además de color. El color por sí solo no distingue nada para
+ * quien no separa el rojo del gris, y debajo de un campo hay dos textos
+ * pequeños seguidos, la ayuda y el error, que si no solo se diferencian por
+ * eso.
+ *
+ * El icono no se anuncia: repetiría lo que ya dicen `aria-invalid` en el control
+ * y el propio mensaje. Está para que el error se vea de un vistazo.
+ *
+ * El rojo es el oscuro y no el de relleno, casi medio tono por debajo: un texto
+ * de 12px en el rojo saturado se lee peor sobre blanco de lo que parece.
+ *
+ * Sin mensaje no dibuja nada, para poder escribirlo sin condicional alrededor.
+ *
+ * @module
+ */
+
 import { AlertCircle } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link InlineError}. */
 export type InlineErrorProps = React.ComponentProps<"p">;
 
 /**
@@ -21,7 +41,9 @@ export type InlineErrorProps = React.ComponentProps<"p">;
  *
  * Sin mensaje no dibuja nada, para poder escribirlo sin condicional alrededor.
  */
-export const InlineError = React.forwardRef<HTMLParagraphElement, InlineErrorProps>(
+export const InlineError: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<InlineErrorProps> & React.RefAttributes<HTMLParagraphElement>
+> = React.forwardRef<HTMLParagraphElement, InlineErrorProps>(
   ({ className, children, ...props }, ref) => {
     if (children === null || children === undefined || children === false) return null;
 

@@ -1,3 +1,4 @@
+/** Los colores de un tema, uno por variable CSS del sistema. */
 export type EliseTheme = {
   background: string;
   foreground: string;
@@ -50,6 +51,7 @@ export type EliseTheme = {
   infoSubtleForeground?: string;
 };
 
+/** El tema claro por defecto. */
 export const defaultLightTheme: EliseTheme = {
   background: "oklch(0.984 0.002 265)",
   foreground: "oklch(0.21 0.012 265)",
@@ -98,6 +100,7 @@ export const defaultLightTheme: EliseTheme = {
   infoSubtleForeground: "oklch(0.42 0.12 245)",
 };
 
+/** El tema oscuro por defecto. */
 export const defaultDarkTheme: EliseTheme = {
   background: "oklch(0.172 0.008 265)",
   foreground: "oklch(0.962 0.003 265)",
@@ -146,7 +149,11 @@ export const defaultDarkTheme: EliseTheme = {
   infoSubtleForeground: "oklch(0.85 0.1 240)",
 };
 
-export const applyTheme = (theme: EliseTheme, element: HTMLElement = document.documentElement) => {
+/** Escribe un tema como variables CSS sobre un elemento, que por defecto es el `<html>`. */
+export const applyTheme = (
+  theme: EliseTheme,
+  element: HTMLElement = document.documentElement,
+): void => {
   element.style.setProperty("--background", theme.background);
   element.style.setProperty("--foreground", theme.foreground);
   element.style.setProperty("--card", theme.card);

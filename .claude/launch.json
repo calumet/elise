@@ -6,6 +6,18 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev:showcase"],
       "port": 5173
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev:site"],
+      "port": 5174
+    },
+    {
+      "name": "site-prod",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "site", "preview"],
+      "port": 5175
     }
   ]
 }

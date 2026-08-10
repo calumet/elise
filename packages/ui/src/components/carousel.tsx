@@ -1,3 +1,9 @@
+/**
+ * Carrusel con arrastre y recorrido por teclado, sobre Embla.
+ *
+ * @module
+ */
+
 import { ChevronLeft, ChevronRight } from "@calumet/elise-icons";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import * as React from "react";
@@ -7,6 +13,7 @@ import { Button } from "./button";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** La API de Embla que expone el carrusel por `setApi`, para controlarlo desde afuera. */
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];
@@ -40,6 +47,7 @@ function useCarousel() {
   return context;
 }
 
+/** Carrusel con arrastre y recorrido por teclado, sobre Embla. */
 function Carousel({
   orientation = "horizontal",
   opts,
@@ -48,7 +56,7 @@ function Carousel({
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> & CarouselProps) {
+}: React.ComponentProps<"div"> & CarouselProps): React.JSX.Element {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -130,7 +138,8 @@ function Carousel({
   );
 }
 
-function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
+/** La pista que se desplaza. */
+function CarouselContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   const { carouselRef, orientation } = useCarousel();
 
   return (
@@ -143,7 +152,8 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
+/** Una diapositiva. */
+function CarouselItem({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   const { orientation } = useCarousel();
 
   return (
@@ -161,12 +171,13 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
+/** El control que retrocede una diapositiva. */
 function CarouselPrevious({
   className,
   variant = "outline",
   size = "icon",
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: React.ComponentProps<typeof Button>): React.JSX.Element {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
   const label = useElLabel("ui", "previousSlide", "Diapositiva anterior");
 
@@ -192,12 +203,13 @@ function CarouselPrevious({
   );
 }
 
+/** El control que avanza una diapositiva. */
 function CarouselNext({
   className,
   variant = "outline",
   size = "icon",
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: React.ComponentProps<typeof Button>): React.JSX.Element {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
   const label = useElLabel("ui", "nextSlide", "Diapositiva siguiente");
 

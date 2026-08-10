@@ -1,3 +1,9 @@
+/**
+ * Campo de contraseña con el botón que la muestra y la oculta.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { CAMPO_INVALIDO } from "./input";
@@ -5,11 +11,15 @@ import { CAMPO_INVALIDO } from "./input";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link PasswordField}. */
 export type PasswordFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & {
   toggleAriaLabel?: string;
 };
 
-export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
+/** Campo de contraseña con el botón que la muestra y la oculta. */
+export const PasswordField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<PasswordFieldProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
   ({ className, toggleAriaLabel, ...props }, ref) => {
     const [visible, setVisible] = React.useState(false);
     const defaultToggleLabel = useElLabel("ui", "togglePassword", "Mostrar u ocultar contraseña");

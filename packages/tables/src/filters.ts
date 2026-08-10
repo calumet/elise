@@ -2,10 +2,18 @@ import { type FilterFn } from "@tanstack/react-table";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export function cn(...inputs: ClassValue[]) {
+/** Concatena clases de Tailwind resolviendo las que se pisan entre sí. */
+export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Formatea un importe como moneda con `Intl.NumberFormat`, siempre con dos
+ * decimales.
+ *
+ * @param currency Código ISO de la moneda. Por defecto `"USD"`.
+ * @param locale Por defecto `"en-US"`.
+ */
 export function toCurrency(
   amount: number,
   currency: string = "USD",
@@ -19,6 +27,11 @@ export function toCurrency(
   }).format(amount);
 }
 
+/**
+ * Filtro de rango de fechas. El valor son dos fechas ISO, y cualquiera de las
+ * dos puede venir vacía para acotar por un solo extremo. Descarta las filas sin
+ * valor o con una fecha que no se puede parsear.
+ */
 export const dateRangeFilterFn: FilterFn<unknown> = (row, columnId, value: [string, string]) => {
   if (!value || value.length !== 2) return true;
   const [from, to] = value;
@@ -51,6 +64,10 @@ export const dateRangeFilterFn: FilterFn<unknown> = (row, columnId, value: [stri
 };
 dateRangeFilterFn.autoRemove = (val: [string, string]) => !val || (val[0] === "" && val[1] === "");
 
+/**
+ * Filtro de selección múltiple. El valor es la lista de opciones elegidas, y
+ * la fila pasa si su valor, convertido a texto, está entre ellas.
+ */
 export const multiSelectFilterFn: FilterFn<unknown> = (row, columnId, value: string[]) => {
   if (!value || value.length === 0) return true;
 
@@ -62,7 +79,11 @@ export const multiSelectFilterFn: FilterFn<unknown> = (row, columnId, value: str
 };
 multiSelectFilterFn.autoRemove = (val: string[]) => !val || val.length === 0;
 
-export function getCurrentFullMonthRange() {
+/**
+ * Devuelve el primer y el último instante del mes actual en ISO, listos para
+ * usar como valor de un filtro `daterange`.
+ */
+export function getCurrentFullMonthRange(): string[] {
   const now = new Date();
 
   const start = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
@@ -80,6 +101,10 @@ const triggerDownload = (blob: Blob, fileName: string) => {
   setTimeout(() => URL.revokeObjectURL(href), 0);
 };
 
+/**
+ * Baja los datos como CSV, escapando comas, comillas y saltos de línea. El
+ * nombre del archivo lleva la fecha. Devuelve `false` si no hay datos.
+ */
 export function exportToCSV(data: Record<string, string>[], name: string): boolean {
   if (!data || data.length === 0) {
     return false;
@@ -107,6 +132,10 @@ export function exportToCSV(data: Record<string, string>[], name: string): boole
   return true;
 }
 
+/**
+ * Baja los datos como JSON indentado. El nombre del archivo lleva la fecha.
+ * Devuelve `false` si no hay datos.
+ */
 export function exportToJSON(data: Record<string, string>[], name: string): boolean {
   if (!data || data.length === 0) {
     return false;

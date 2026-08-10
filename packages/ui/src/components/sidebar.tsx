@@ -1,8 +1,15 @@
+/**
+ * La barra en sí. En móvil se convierte en un `Sheet`, y `collapsible` decide cómo se pliega en escritorio.
+ *
+ * @module
+ */
+
 "use client";
 
 import { PanelLeft as PanelLeftIcon } from "@calumet/elise-icons";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import type { ClassValue } from "clsx";
 import * as React from "react";
 
 import { Button } from "./button";
@@ -35,7 +42,8 @@ type SidebarContextProps = {
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
 
-function useSidebar() {
+/** Da el estado de la barra y `toggleSidebar`. Tira error fuera de `SidebarProvider`. */
+function useSidebar(): SidebarContextProps {
   const context = React.useContext(SidebarContext);
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider.");
@@ -44,6 +52,7 @@ function useSidebar() {
   return context;
 }
 
+/** Reparte el estado de la barra y persiste si está plegada en una cookie. Engancha Ctrl+B, que se apaga con `keyboardShortcut={false}`. */
 function SidebarProvider({
   defaultOpen = true,
   open: openProp,
@@ -64,7 +73,7 @@ function SidebarProvider({
    * `false` y devuelve la combinación al navegador.
    */
   keyboardShortcut?: boolean;
-}) {
+}): React.JSX.Element {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
 
@@ -148,6 +157,7 @@ function SidebarProvider({
   );
 }
 
+/** La barra en sí. En móvil se convierte en un `Sheet`, y `collapsible` decide cómo se pliega en escritorio. */
 function Sidebar({
   side = "left",
   variant = "sidebar",
@@ -159,7 +169,7 @@ function Sidebar({
   side?: "left" | "right";
   variant?: "sidebar" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
-}) {
+}): React.JSX.Element {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   const sidebarLabel = useElLabel("ui", "sidebar", "Barra lateral");
   const sidebarDescription = useElLabel(
@@ -256,7 +266,12 @@ function Sidebar({
   );
 }
 
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+/** El botón que pliega y despliega la barra. */
+function SidebarTrigger({
+  className,
+  onClick,
+  ...props
+}: React.ComponentProps<typeof Button>): React.JSX.Element {
   const { toggleSidebar } = useSidebar();
   const toggleLabel = useElLabel("ui", "toggleSidebar", "Alternar barra lateral");
 
@@ -279,7 +294,8 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
   );
 }
 
-function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
+/** La franja del borde que también pliega la barra, para agarrarla sin apuntar al botón. */
+function SidebarRail({ className, ...props }: React.ComponentProps<"button">): React.JSX.Element {
   const { toggleSidebar } = useSidebar();
   const toggleLabel = useElLabel("ui", "toggleSidebar", "Alternar barra lateral");
 
@@ -305,7 +321,8 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   );
 }
 
-function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
+/** El `<main>` de al lado, que es quien se corre cuando la barra cambia de ancho. */
+function SidebarInset({ className, ...props }: React.ComponentProps<"main">): React.JSX.Element {
   return (
     <main
       data-slot="sidebar-inset"
@@ -319,7 +336,11 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
   );
 }
 
-function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input>) {
+/** Un campo de búsqueda con las medidas de la barra. */
+function SidebarInput({
+  className,
+  ...props
+}: React.ComponentProps<typeof Input>): React.JSX.Element {
   return (
     <Input
       data-slot="sidebar-input"
@@ -330,7 +351,8 @@ function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input
   );
 }
 
-function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
+/** La zona fija de arriba, donde suele ir la marca. */
+function SidebarHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sidebar-header"
@@ -341,7 +363,8 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
+/** La zona fija de abajo, donde suele ir el usuario. */
+function SidebarFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sidebar-footer"
@@ -352,7 +375,11 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
+/** La línea que separa dos zonas de la barra. */
+function SidebarSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof Separator>): React.JSX.Element {
   return (
     <Separator
       data-slot="sidebar-separator"
@@ -363,7 +390,8 @@ function SidebarSeparator({ className, ...props }: React.ComponentProps<typeof S
   );
 }
 
-function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
+/** La zona del medio, que es la única que desplaza. */
+function SidebarContent({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sidebar-content"
@@ -377,7 +405,8 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
+/** Un bloque de navegación con su título y sus enlaces. */
+function SidebarGroup({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sidebar-group"
@@ -388,11 +417,12 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
+/** El título del bloque. Se desvanece cuando la barra queda en modo icono. */
 function SidebarGroupLabel({
   className,
   asChild = false,
   ...props
-}: React.ComponentProps<"div"> & { asChild?: boolean }) {
+}: React.ComponentProps<"div"> & { asChild?: boolean }): React.JSX.Element {
   const Comp = asChild ? Slot : "div";
 
   return (
@@ -409,11 +439,12 @@ function SidebarGroupLabel({
   );
 }
 
+/** La acción del bloque, arriba a la derecha del título. */
 function SidebarGroupAction({
   className,
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> & { asChild?: boolean }) {
+}: React.ComponentProps<"button"> & { asChild?: boolean }): React.JSX.Element {
   const Comp = asChild ? Slot : "button";
 
   return (
@@ -432,7 +463,11 @@ function SidebarGroupAction({
   );
 }
 
-function SidebarGroupContent({ className, ...props }: React.ComponentProps<"div">) {
+/** Los enlaces del bloque. */
+function SidebarGroupContent({
+  className,
+  ...props
+}: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sidebar-group-content"
@@ -443,7 +478,8 @@ function SidebarGroupContent({ className, ...props }: React.ComponentProps<"div"
   );
 }
 
-function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
+/** La lista de enlaces. */
+function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul
       data-slot="sidebar-menu"
@@ -454,7 +490,8 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
   );
 }
 
-function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
+/** Una entrada de la lista. */
+function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element {
   return (
     <li
       data-slot="sidebar-menu-item"
@@ -465,7 +502,23 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
   );
 }
 
-const sidebarMenuButtonVariants = cva(
+/* `SidebarMenuButton` expone `VariantProps<typeof sidebarMenuButtonVariants>`,
+   así que la firma de cva forma parte de la API pública y JSR la pide escrita.
+   Los tipos que la describen viven en `class-variance-authority/types`, un
+   subpath sin entrada de runtime que Deno no resuelve al publicar, así que el
+   contrato va copiado: `class` y `className` son mutuamente excluyentes, y de
+   ahí las tres ramas. `VariantProps` descarta ambas y deja las variantes. */
+type PropsDeClase =
+  | { class: ClassValue; className?: never }
+  | { class?: never; className: ClassValue }
+  | { class?: never; className?: never };
+
+const sidebarMenuButtonVariants: (
+  props?: {
+    variant?: "default" | "outline";
+    size?: "default" | "sm" | "lg";
+  } & PropsDeClase,
+) => string = cva(
   "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
@@ -487,6 +540,7 @@ const sidebarMenuButtonVariants = cva(
   },
 );
 
+/** El enlace en sí. Marcá el actual con `isActive`, y con `tooltip` sigue siendo legible en modo icono. */
 function SidebarMenuButton({
   asChild = false,
   isActive = false,
@@ -499,7 +553,7 @@ function SidebarMenuButton({
   asChild?: boolean;
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
-} & VariantProps<typeof sidebarMenuButtonVariants>) {
+} & VariantProps<typeof sidebarMenuButtonVariants>): React.JSX.Element {
   const Comp = asChild ? Slot : "button";
   const { isMobile, state } = useSidebar();
 
@@ -537,6 +591,7 @@ function SidebarMenuButton({
   );
 }
 
+/** Una acción al final de la entrada, por ejemplo el menú de tres puntos. */
 function SidebarMenuAction({
   className,
   asChild = false,
@@ -545,7 +600,7 @@ function SidebarMenuAction({
 }: React.ComponentProps<"button"> & {
   asChild?: boolean;
   showOnHover?: boolean;
-}) {
+}): React.JSX.Element {
   const Comp = asChild ? Slot : "button";
 
   return (
@@ -569,7 +624,8 @@ function SidebarMenuAction({
   );
 }
 
-function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">) {
+/** Un contador al final de la entrada. No recibe puntero, así que no le roba el clic al enlace. */
+function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
   return (
     <div
       data-slot="sidebar-menu-badge"
@@ -588,13 +644,14 @@ function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">) 
   );
 }
 
+/** El hueco de una entrada mientras carga, con ancho variable para que no parezca una grilla. */
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
   ...props
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
-}) {
+}): React.JSX.Element {
   // Random width between 50 to 90%.
   const width = React.useMemo(() => {
     return `${Math.floor(Math.random() * 40) + 50}%`;
@@ -621,7 +678,8 @@ function SidebarMenuSkeleton({
   );
 }
 
-function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
+/** La lista anidada de una entrada. */
+function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">): React.JSX.Element {
   return (
     <ul
       data-slot="sidebar-menu-sub"
@@ -636,7 +694,11 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
   );
 }
 
-function SidebarMenuSubItem({ className, ...props }: React.ComponentProps<"li">) {
+/** Una entrada de la lista anidada. */
+function SidebarMenuSubItem({
+  className,
+  ...props
+}: React.ComponentProps<"li">): React.JSX.Element {
   return (
     <li
       data-slot="sidebar-menu-sub-item"
@@ -647,6 +709,7 @@ function SidebarMenuSubItem({ className, ...props }: React.ComponentProps<"li">)
   );
 }
 
+/** El enlace de la lista anidada. */
 function SidebarMenuSubButton({
   asChild = false,
   size = "md",
@@ -657,7 +720,7 @@ function SidebarMenuSubButton({
   asChild?: boolean;
   size?: "sm" | "md";
   isActive?: boolean;
-}) {
+}): React.JSX.Element {
   const Comp = asChild ? Slot : "a";
 
   return (

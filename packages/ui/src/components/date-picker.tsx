@@ -1,3 +1,9 @@
+/**
+ * Elige una fecha, con el calendario dentro de un popover.
+ *
+ * @module
+ */
+
 import { Calendar as CalendarIcon } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -44,7 +50,8 @@ type DatePickerProps = {
   formatLabel?: (date?: Date) => string;
 };
 
-export function DatePicker({ value, onChange, formatLabel }: DatePickerProps) {
+/** Elige una fecha, con el calendario dentro de un popover. */
+export function DatePicker({ value, onChange, formatLabel }: DatePickerProps): React.JSX.Element {
   const [open, setOpen] = React.useState(false);
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
 
@@ -83,7 +90,12 @@ type DateRangePickerProps = {
   formatLabel?: (range?: DateRangeValue) => string;
 };
 
-export function DateRangePicker({ value, onChange, formatLabel }: DateRangePickerProps) {
+/** Elige un rango de fechas, con los dos meses a la vista. */
+export function DateRangePicker({
+  value,
+  onChange,
+  formatLabel,
+}: DateRangePickerProps): React.JSX.Element {
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
   const range: DateRangeValue = value ?? { from: undefined, to: undefined };
   const completo = Boolean(range?.from && range?.to);

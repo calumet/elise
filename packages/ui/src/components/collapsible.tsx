@@ -1,11 +1,22 @@
+/**
+ * Raíz del plegable. Guarda si está abierto.
+ *
+ * @module
+ */
+
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Raíz del plegable. Guarda si está abierto. */
 export const Collapsible = CollapsiblePrimitive.Root;
 
-export const CollapsibleTrigger = React.forwardRef<
+/** El control que pliega y despliega. */
+export const CollapsibleTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>> &
+    React.RefAttributes<React.ComponentRef<typeof CollapsiblePrimitive.Trigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>
 >(({ className, ...props }, ref) => (
@@ -18,7 +29,11 @@ export const CollapsibleTrigger = React.forwardRef<
 ));
 CollapsibleTrigger.displayName = CollapsiblePrimitive.Trigger.displayName;
 
-export const CollapsibleContent = React.forwardRef<
+/** El contenido que se pliega, animado en altura. */
+export const CollapsibleContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof CollapsiblePrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof CollapsiblePrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>
 >(({ className, ...props }, ref) => (

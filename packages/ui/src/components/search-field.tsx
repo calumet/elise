@@ -1,3 +1,17 @@
+/**
+ * Campo de búsqueda.
+ *
+ * Lupa al principio y aspa al final en cuanto hay algo escrito. El aspa está
+ * porque vaciar un buscador es la acción más frecuente que hay sobre él, y
+ * seleccionar todo y borrar cuesta dos gestos donde este cuesta uno.
+ *
+ * El `<input>` es de tipo `search`, así que Escape lo vacía y el navegador puede
+ * ofrecer las búsquedas anteriores. Lo que no hereda es el aspa nativa de
+ * WebKit, que se quita: aparecía además de esta y en otro sitio.
+ *
+ * @module
+ */
+
 import { Search, X } from "@calumet/elise-icons";
 import * as React from "react";
 
@@ -7,6 +21,7 @@ import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link SearchField}. */
 export type SearchFieldProps = {
   label: React.ReactNode;
 
@@ -49,7 +64,9 @@ export type SearchFieldProps = {
  * ofrecer las búsquedas anteriores. Lo que no hereda es el aspa nativa de
  * WebKit, que se quita: aparecía además de esta y en otro sitio.
  */
-export const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
+export const SearchField: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SearchFieldProps> & React.RefAttributes<HTMLInputElement>
+> = React.forwardRef<HTMLInputElement, SearchFieldProps>(
   (
     {
       label,

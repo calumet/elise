@@ -1,37 +1,47 @@
+/**
+ * Elige un valor de un rango arrastrando.
+ *
+ * @module
+ */
+
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Slider}. */
 export type SliderProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>;
 
-export const Slider = React.forwardRef<
-  React.ComponentRef<typeof SliderPrimitive.Root>,
-  SliderProps
->(({ className, ...props }, ref) => {
-  const values = props.value ?? props.defaultValue;
-  const thumbCount = Array.isArray(values) ? values.length : 1;
-  return (
-    <SliderPrimitive.Root
-      data-slot="slider"
-      ref={ref}
-      className={cn("relative flex w-full touch-none select-none items-center", className)}
-      {...props}
-    >
-      {/* El carril lleva `bg-track` y no un fondo tenue: lo que aún no está
+/** Elige un valor de un rango arrastrando, o con las flechas del teclado. */
+export const Slider: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SliderProps> &
+    React.RefAttributes<React.ComponentRef<typeof SliderPrimitive.Root>>
+> = React.forwardRef<React.ComponentRef<typeof SliderPrimitive.Root>, SliderProps>(
+  ({ className, ...props }, ref) => {
+    const values = props.value ?? props.defaultValue;
+    const thumbCount = Array.isArray(values) ? values.length : 1;
+    return (
+      <SliderPrimitive.Root
+        data-slot="slider"
+        ref={ref}
+        className={cn("relative flex w-full touch-none select-none items-center", className)}
+        {...props}
+      >
+        {/* El carril lleva `bg-track` y no un fondo tenue: lo que aún no está
           recorrido es parte del dibujo del control, y con un gris de superficie
           el deslizador sin llenar desaparecía contra la tarjeta. */}
-      <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-track">
-        <SliderPrimitive.Range className="absolute h-full bg-primary" />
-      </SliderPrimitive.Track>
-      {Array.from({ length: thumbCount }).map((_, index) => (
-        <SliderPrimitive.Thumb
-          key={index}
-          className="block h-4 w-4 rounded-full bg-background shadow-sm ring-1 ring-border transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-        />
-      ))}
-    </SliderPrimitive.Root>
-  );
-});
+        <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-track">
+          <SliderPrimitive.Range className="absolute h-full bg-primary" />
+        </SliderPrimitive.Track>
+        {Array.from({ length: thumbCount }).map((_, index) => (
+          <SliderPrimitive.Thumb
+            key={index}
+            className="block h-4 w-4 rounded-full bg-background shadow-sm ring-1 ring-border transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+          />
+        ))}
+      </SliderPrimitive.Root>
+    );
+  },
+);
 
 Slider.displayName = SliderPrimitive.Root.displayName;

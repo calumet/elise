@@ -1,3 +1,9 @@
+/**
+ * Raíz de el menú desplegable. Guarda qué está abierto; no dibuja nada por sí sola.
+ *
+ * @module
+ */
+
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
 
@@ -21,14 +27,24 @@ const baseItem =
 const canaletaIndicador =
   "[&:has([data-slot=dropdown-menu-checkbox-item],[data-slot=dropdown-menu-radio-item])_[data-slot=dropdown-menu-item]]:pl-7 [&:has([data-slot=dropdown-menu-checkbox-item],[data-slot=dropdown-menu-radio-item])_[data-slot=dropdown-menu-sub-trigger]]:pl-7";
 
+/** Raíz de el menú desplegable. Guarda qué está abierto; no dibuja nada por sí sola. */
 export const DropdownMenu = DropdownMenuPrimitive.Root;
+/** El control que abre el menú desplegable. */
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+/** Agrupa opciones afines. Con `DropdownMenuLabel` encima, les pone título. */
 export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
+/** Monta el panel al final del `body`, para que no lo recorte ningún ancestro. */
 export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
+/** Un submenú. Guarda si está abierto. */
 export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
+/** Agrupa opciones excluyentes y guarda cuál está elegida. */
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
-export const DropdownMenuContent = React.forwardRef<
+/** El panel con las opciones. */
+export const DropdownMenuContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Content>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 6, align = "start", ...props }, ref) => (
@@ -49,7 +65,11 @@ export const DropdownMenuContent = React.forwardRef<
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
-export const DropdownMenuItem = React.forwardRef<
+/** Una opción. `inset` la alinea con las que llevan casilla. */
+export const DropdownMenuItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Item>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
 >(({ className, ...props }, ref) => (
@@ -62,7 +82,11 @@ export const DropdownMenuItem = React.forwardRef<
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
-export const DropdownMenuCheckboxItem = React.forwardRef<
+/** Opción con casilla, para un ajuste que se prende y se apaga. */
+export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
@@ -92,7 +116,11 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
 ));
 DropdownMenuCheckboxItem.displayName = DropdownMenuPrimitive.CheckboxItem.displayName;
 
-export const DropdownMenuRadioItem = React.forwardRef<
+/** Una opción excluyente dentro de un `DropdownMenuRadioGroup`. */
+export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
@@ -112,7 +140,11 @@ export const DropdownMenuRadioItem = React.forwardRef<
 ));
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
-export const DropdownMenuLabel = React.forwardRef<
+/** Título de un grupo. No se puede elegir ni recibe foco. */
+export const DropdownMenuLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Label>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -125,7 +157,11 @@ export const DropdownMenuLabel = React.forwardRef<
 ));
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
 
-export const DropdownMenuSeparator = React.forwardRef<
+/** La línea que separa dos grupos de opciones. */
+export const DropdownMenuSeparator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Separator>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -138,7 +174,11 @@ export const DropdownMenuSeparator = React.forwardRef<
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-export const DropdownMenuSubTrigger = React.forwardRef<
+/** La opción que abre el submenú, con la flecha a la derecha. */
+export const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger>
 >(({ className, children, ...props }, ref) => (
@@ -162,7 +202,11 @@ export const DropdownMenuSubTrigger = React.forwardRef<
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
 
-export const DropdownMenuSubContent = React.forwardRef<
+/** El panel del submenú. */
+export const DropdownMenuSubContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>> &
+    React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>>
+> = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (

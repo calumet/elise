@@ -1,9 +1,29 @@
+/**
+ * Ficha: un dato que alguien puso y normalmente puede quitar.
+ *
+ * No es un `Badge`, aunque se parezcan de lejos. El badge es un estado que el
+ * sistema afirma («despachado», «vencido»), va con tono semántico y no se
+ * quita. La ficha es contenido: una etiqueta escrita, un filtro aplicado, un
+ * valor elegido de una lista.
+ *
+ * De ahí sale su tipografía, que es la del texto y no la de una etiqueta:
+ * 13px en peso normal y color de contenido, contra los 11px en semibold y
+ * color tenue del badge. Lo que va dentro se lee, no se ojea.
+ *
+ * ```tsx
+ * <Chip onRemove={() => quitar(valor)}>{valor}</Chip>
+ * ```
+ *
+ * @module
+ */
+
 import { X } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link Chip}. */
 export type ChipProps = Omit<React.ComponentProps<"span">, "color"> & {
   /**
    * Cuánto pesa la ficha. No hay tono semántico a propósito: un chip no es un
@@ -65,7 +85,9 @@ const colores: Record<NonNullable<ChipProps["color"]>, string> = {
  * <Chip onRemove={() => quitar(valor)}>{valor}</Chip>
  * ```
  */
-export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
+export const Chip: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ChipProps> & React.RefAttributes<HTMLSpanElement>
+> = React.forwardRef<HTMLSpanElement, ChipProps>(
   (
     {
       className,

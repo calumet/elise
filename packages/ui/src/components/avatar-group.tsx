@@ -1,8 +1,27 @@
+/**
+ * Varios avatares solapados.
+ *
+ * El solape dice que son un grupo y no una lista, y de paso mete unos cuantos en
+ * el ancho de dos. El primero va delante y los demás se meten por debajo, que es
+ * el orden natural de lectura: al revés, el último tapa al primero y el ojo
+ * empieza por el final. Eso obliga a numerar el apilado a mano, porque por orden
+ * de documento pasaría justo lo contrario.
+ *
+ * Cada avatar lleva un aro del color del fondo. Sin él, dos avatares del mismo
+ * tono se funden en una mancha en cuanto se tocan.
+ *
+ * El resumen no es un avatar más: es texto con el número de los que no se ven.
+ * Ponerle cara a «y otros cinco» inventaría una persona que no existe.
+ *
+ * @module
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/** Props de {@link AvatarGroup}. */
 export type AvatarGroupProps = React.ComponentProps<"div"> & {
   /**
    * Cuántos se ven. El resto se resume en una ficha con el número.
@@ -42,7 +61,9 @@ type ConClase = React.ReactElement<{ className?: string; style?: React.CSSProper
  * El resumen no es un avatar más: es texto con el número de los que no se ven.
  * Ponerle cara a «y otros cinco» inventaría una persona que no existe.
  */
-export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
+export const AvatarGroup: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<AvatarGroupProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
   ({ className, children, max = 4, size = "md", ...props }, ref) => {
     const plantilla = useElLabel("ui", "avatarGroupMore", "y {count} más");
 

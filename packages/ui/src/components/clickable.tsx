@@ -1,3 +1,24 @@
+/**
+ * Una caja entera que se pulsa: la fila de ajustes que lleva a su pantalla, la
+ * tarjeta de una métrica que abre su informe, el bloque de un recurso.
+ *
+ * Es lo que evita el arreglo de siempre, que es poner el `onClick` en un `div`
+ * y dejarlo sin foco ni teclado, o envolver todo en un `Button` y pasarse el
+ * resto del rato deshaciéndole el aspecto. Acepta lo mismo que `Box` y decide
+ * el elemento por sí sola: con `href` es un enlace y sin él un botón, que es la
+ * diferencia entre navegar y hacer algo.
+ *
+ * El realce al apuntar va sobre el relleno terciario y no sobre el fondo que le
+ * hayan puesto, así que una caja con superficie propia y otra transparente
+ * responden igual.
+ *
+ * Apagado, un enlace no tiene `disabled`, de modo que se marca con
+ * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
+ * sigue navegando.
+ *
+ * @module
+ */
+
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
@@ -9,6 +30,7 @@ import { cn } from "@/lib/cn";
    componente puede salir como `<a>` o como `<button>`, y el tipo común es lo
    único que encaja en los dos sin que un `onCopy` de uno choque con el del
    otro. */
+/** Props de {@link Clickable}. */
 export type ClickableProps = CajaProps &
   React.HTMLAttributes<HTMLElement> & {
     /** Con `href` sale un `<a>`; sin él, un `<button>`. */
@@ -55,7 +77,9 @@ export type ClickableProps = CajaProps &
  * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
  * sigue navegando.
  */
-export const Clickable = React.forwardRef<HTMLElement, ClickableProps>(
+export const Clickable: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ClickableProps> & React.RefAttributes<HTMLElement>
+> = React.forwardRef<HTMLElement, ClickableProps>(
   (
     {
       className,

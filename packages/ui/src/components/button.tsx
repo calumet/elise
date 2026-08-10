@@ -1,3 +1,9 @@
+/**
+ * El botón del sistema, con sus variantes, sus tonos y su estado de carga.
+ *
+ * @module
+ */
+
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
@@ -5,6 +11,7 @@ import { Spinner } from "./spinner";
 
 import { cn } from "@/lib/cn";
 
+/** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg" | "icon" | "icon-sm";
@@ -28,8 +35,12 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
    El peso es `medium`: a estos tamaños el grado de arriba engorda el rótulo lo
    bastante como para que un botón secundario pese más que el texto que lo
    rodea. */
+/* El icono lo acota el botón, igual que en Badge, Alert, DropdownMenu, Command y
+   Sidebar: los de Lucide vienen a 24px y al lado de un rótulo de 13–14px se leen
+   como otra jerarquía. `:not([class*='size-'])` deja la puerta abierta a quien
+   necesite otro tamaño sin pelearse con la especificidad. */
 const baseClasses =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 /* El apagado es un cambio de tokens, no una capa de opacidad encima: sumar las
    dos apaga dos veces y el rótulo baja de contraste más de lo que se pretendía.
@@ -83,13 +94,14 @@ const toneOverrides: Record<
   },
 };
 
+/** Devuelve las clases de un `Button`, para reusar su aspecto en un enlace o en cualquier otro elemento. */
 export const buttonVariants = ({
   variant = "solid",
   size = "md",
 }: {
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-} = {}) => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
+} = {}): string => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
 
 /* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
    chrome de escritorio denso: el resto del catálogo escribe a 14px y un botón
@@ -105,7 +117,10 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. */
+export const Button: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
+> = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
@@ -149,18 +164,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
+        {/* Las dos capas del estado de carga van dentro de una sola expresión:
+            `Slot` cuenta un `null` suelto como un hijo más, y con `asChild` eso
+            rompe su `Children.only`. */}
         {cargando ? (
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 flex items-center justify-center text-muted-foreground"
-          >
-            <Spinner />
-          </span>
-        ) : null}
-        {/* `contents` saca la envoltura del layout, de modo que el hueco y la
-            separación entre los hijos siguen siendo los del botón sin cargar; lo
-            único que aporta es el color que los apaga. */}
-        {cargando ? <span className="contents text-transparent">{children}</span> : children}
+          <>
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 flex items-center justify-center text-muted-foreground"
+            >
+              <Spinner />
+            </span>
+            {/* `contents` saca la envoltura del layout, de modo que el hueco y la
+                separación entre los hijos siguen siendo los del botón sin cargar;
+                lo único que aporta es el color que los apaga. */}
+            <span className="contents text-transparent">{children}</span>
+          </>
+        ) : (
+          children
+        )}
       </Comp>
     );
   },

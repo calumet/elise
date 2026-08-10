@@ -1,3 +1,9 @@
+/**
+ * El calendario que usan por dentro los selectores de fecha.
+ *
+ * @module
+ */
+
 import { ChevronDown, ChevronLeft, ChevronRight } from "@calumet/elise-icons";
 import * as React from "react";
 import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
@@ -24,6 +30,7 @@ import { cn } from "@/lib/cn";
    cada miembro, la unión sobrevive. */
 type SinLocale<T> = T extends unknown ? Omit<T, "locale"> : never;
 
+/** El calendario, sobre react-day-picker. Es lo que dibujan por dentro `DatePicker` y `DateRangePicker`. */
 function Calendar({
   className,
   classNames,
@@ -42,7 +49,7 @@ function Calendar({
    * Sin él se usa el del navegador.
    */
   locale?: string;
-}) {
+}): React.JSX.Element {
   const defaultClassNames = getDefaultClassNames();
 
   /* `react-day-picker` trae el inglés incrustado, así que sin esto un mes se
@@ -201,12 +208,13 @@ function Calendar({
   );
 }
 
+/** El botón de un día. Se exporta para poder reemplazarlo desde afuera. */
 function CalendarDayButton({
   className,
   day,
   modifiers,
   ...props
-}: React.ComponentProps<typeof DayButton>) {
+}: React.ComponentProps<typeof DayButton>): React.JSX.Element {
   const defaultClassNames = getDefaultClassNames();
 
   const ref = React.useRef<HTMLButtonElement>(null);
