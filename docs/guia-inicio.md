@@ -10,29 +10,61 @@
 
 ### Setup recomendado (Vite + React)
 
-1. Instala los paquetes de Elise:
+1. Elegí el registro. Los paquetes se publican en los dos desde el mismo commit,
+   con la misma API. Lo que cambia es de dónde salen y cómo se importa el CSS.
 
-```bash
-# Base: UI + iconos
-pnpm add @calumet/elise-ui @calumet/elise-icons
+   Desde [JSR](https://jsr.io/@calumet), que no pide token:
 
-# Añade los paquetes de utilidades que necesites
-pnpm add @calumet/elise-forms     # useZodForm (RHF + Zod)
-pnpm add @calumet/elise-tables    # DataTable (TanStack)
-pnpm add @calumet/elise-toasts    # Sistema de toasts
-pnpm add @calumet/elise-alerts    # Sistema de alertas modales
-pnpm add @calumet/elise-i18n      # Formateo localizado (Intl)
-```
+   ```bash
+   pnpm add jsr:@calumet/elise-ui jsr:@calumet/elise-icons
+   ```
 
-> Cada paquete de utilidades es opcional. Instala solo los que vayas a usar.
+   Desde GitHub Packages, que pide un `.npmrc` con el scope apuntado y un token
+   con permiso `read:packages`:
 
-2. Instala Tailwind CSS v4 y su plugin oficial para Vite:
+   ```
+   @calumet:registry=https://npm.pkg.github.com
+   ```
+
+   ```bash
+   pnpm add @calumet/elise-ui @calumet/elise-icons
+   ```
+
+   El resto de los paquetes son opcionales, y llevan el mismo prefijo `jsr:` o
+   ninguno según el registro que hayas elegido:
+
+   ```bash
+   pnpm add @calumet/elise-forms     # useZodForm (RHF + Zod)
+   pnpm add @calumet/elise-tables    # DataTable (TanStack)
+   pnpm add @calumet/elise-toasts    # Sistema de toasts
+   pnpm add @calumet/elise-alerts    # Sistema de alertas modales
+   pnpm add @calumet/elise-i18n      # Formateo localizado (Intl)
+   ```
+
+2. **Instalando desde JSR, agregá lo que piden las hojas de estilo.** JSR arma
+   la lista de dependencias recorriendo los imports del código, y las de un
+   `.css` no aparecen ahí, así que no las declara y hay que ponerlas a mano.
+   Desde GitHub Packages esto no hace falta: son dependencias del paquete y se
+   instalan solas.
+
+   ```bash
+   pnpm add -D tw-animate-css                    # lo pide elise.css
+   pnpm add -D @fontsource-variable/geist \
+               @fontsource-variable/jetbrains-mono \
+               @fontsource-variable/source-serif-4   # los pide fonts.css
+   ```
+
+   Sin `tw-animate-css` el build corta con
+   `Can't resolve 'tw-animate-css'`. Las tres fuentes solo hacen falta si
+   importás `fonts.css`.
+
+3. Instala Tailwind CSS v4 y su plugin oficial para Vite:
 
 ```bash
 pnpm add -D tailwindcss @tailwindcss/vite
 ```
 
-3. Configura `vite.config.ts`:
+4. Configura `vite.config.ts`:
 
 ```ts
 import { defineConfig } from "vite";
@@ -46,7 +78,10 @@ export default defineConfig({
 
 > Con Vite no necesitas `postcss` ni `@tailwindcss/postcss`.
 
-4. En tu CSS principal (por ejemplo `src/index.css`), importa Tailwind y los estilos de Elise:
+5. En tu CSS principal (por ejemplo `src/index.css`), importa Tailwind y los
+   estilos de Elise. **Las rutas cambian según el registro.**
+
+Desde GitHub Packages las hojas tienen subpath propio:
 
 ```css
 /* Tipografias autoalojadas (Geist, JetBrains Mono, Source Serif 4).
@@ -64,6 +99,35 @@ export default defineConfig({
 @source "../node_modules/@calumet/elise-alerts/dist";
 ```
 
+Desde JSR no, porque JSR todavía no deja exportar archivos que no sean
+JavaScript o TypeScript ([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)).
+Las hojas viajan igual dentro del paquete y se importan por su ruta:
+
+```css
+@import "../node_modules/@calumet/elise-ui/src/tailwind/fonts.css";
+
+@import "tailwindcss";
+@import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
+
+@source "../node_modules/@calumet/elise-ui/jsr";
+/* Solo incluye los que uses */
+@source "../node_modules/@calumet/elise-tables/jsr";
+@source "../node_modules/@calumet/elise-toasts/jsr";
+@source "../node_modules/@calumet/elise-alerts/jsr";
+```
+
+Las dos carpetas son distintas a propósito:
+
+| Ruta   | Qué hay                      | Quién la usa                     |
+| ------ | ---------------------------- | -------------------------------- |
+| `src`  | Las hojas de estilo          | El `@import` de Tailwind         |
+| `jsr`  | El código ya compilado       | El `@source`, para hallar clases |
+| `dist` | El bundle de GitHub Packages | El `@source` en esa vía          |
+
+Apuntar el `@source` a `src` instalando desde JSR deja la app sin estilos: ahí
+solo están los `.css`, y las clases que Tailwind tiene que encontrar están en
+`jsr`.
+
 > **No te saltees `fonts.css`.** Sin el, `--font-sans` cae en la fuente del
 > sistema y tu app se ve distinta en macOS, Windows y Linux. Las tres familias
 > vienen incluidas en `@calumet/elise-ui` como fuentes variables: un archivo por
@@ -74,7 +138,14 @@ export default defineConfig({
 > veces. Los tokens `--font-*` resuelven igual en ese caso: listan tanto
 > `"Geist Variable"` (el nombre que registra Fontsource) como `"Geist"`.
 
-5. Verifica que tu app levanta correctamente:
+6. **No dejes que el CSS de la plantilla pise al sistema.** El `src/index.css`
+   que trae Vite estiliza `#root` con un ancho fijo, `text-align: center` y un
+   `border-inline`, y eso le pone un límite horizontal al `AppShell`, centra los
+   menús de la barra y dibuja bordes que no cuadran con nada. `elise.css` ya se
+   encarga de la caja, el fondo, el color, la tipografía y las barras de
+   desplazamiento, así que lo único que tu hoja necesita es `body { margin: 0 }`.
+
+7. Verifica que tu app levanta correctamente:
 
 ```bash
 pnpm dev
