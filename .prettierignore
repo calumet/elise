@@ -2,4 +2,5 @@
 # en el siguiente install o build.
 pnpm-lock.yaml
 dist/
+jsr/
 node_modules/

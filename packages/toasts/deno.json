@@ -1,9 +1,17 @@
 {
   "name": "@calumet/elise-toasts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
-  "exports": "./src/index.ts",
+  "exports": "./jsr/index.js",
   "publish": {
-    "include": ["src/**/*.ts", "src/**/*.tsx", "package.json", "README.md"]
+    "include": [
+      "jsr/**/*.js",
+      "jsr/**/*.d.ts",
+      "package.json",
+      "README.md"
+    ],
+    "exclude": [
+      "!jsr"
+    ]
   }
 }

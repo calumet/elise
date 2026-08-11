@@ -55,4 +55,10 @@ jobs:
       # instalar no encuentra ni react ni los primitivos de Radix.
       - run: pnpm install --frozen-lockfile
 
+      # JSR no transpila los .tsx al armar el tarball de npm, y los deja crudos
+      # con los especificadores `npm:` sin resolver, de modo que el paquete no
+      # se puede importar desde Vite ni desde Node. Por eso lo que se publica es
+      # la salida de tsc, que ya no tiene JSX.
+      - run: pnpm --filter "@calumet/elise-*" build
+
       - run: pnpm exec jsr publish
