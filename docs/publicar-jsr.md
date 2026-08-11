@@ -1,11 +1,41 @@
 # Publicar en JSR
 
 Los paquetes se publican en dos registros desde el mismo commit: GitHub Packages
-recibe el build de tsup, y [JSR](https://jsr.io/@calumet) recibe el fuente
-TypeScript sin compilar. Los dos jobs viven en
+recibe el bundle de tsup, y [JSR](https://jsr.io/@calumet) recibe la salida de
+`tsc`, un módulo por archivo. Los dos jobs viven en
 [`.github/workflows/publish.yml`](../.github/workflows/publish.yml) y corren en
 cada push a `master`; cada registro se salta las versiones que ya tiene, así que
 publicar es subir el `version` del paquete y mergear.
+
+## Por qué se publica compilado y no el fuente
+
+JSR prefiere que se publique TypeScript sin compilar, y así estaba al principio.
+No funciona con JSX: al armar el tarball para npm, JSR transpila cada `.ts` a
+`.js` pero **deja los `.tsx` crudos, con los especificadores `npm:` sin
+resolver**. Quien instale ese paquete desde Vite recibe
+
+```
+Failed to resolve import "npm:@radix-ui/react-slot@^1.1.1"
+```
+
+Es un agujero conocido de la capa de compatibilidad
+([jsr-io/jsr#24](https://github.com/jsr-io/jsr/issues/24)) y no depende de cómo
+esté configurado el paquete. Se comprueba bajando el tarball de cualquier
+paquete de JSR con JSX: `@basis/react` tiene 19 `.tsx` y los 19 rotos, y las dos
+librerías de componentes React que reservaron nombre, `@ariakit/react` y
+`@ark-ui/react`, nunca publicaron una versión. Los que sí funcionan y puntúan 100
+no tienen JSX: `@preact-icons` escribe sus 833 iconos llamando a `h()`.
+
+Por eso cada paquete compila con `tsc` a `jsr/`, un `.js` y un `.d.ts` por
+archivo. La estructura de módulos se conserva, así que JSR sigue viendo un
+entrypoint por componente con sus docs; el JSX ya viene resuelto a `_jsx()`, así
+que la transformación de especificadores funciona; y los tipos viajan en los
+`.d.ts`, atados a su `.js` por el pragma `@ts-self-types` que pone
+[`scripts/preparar-jsr.mjs`](../scripts/preparar-jsr.mjs). Deno no resuelve
+declaraciones por convención de nombre, de ahí el pragma.
+
+La consecuencia práctica: **el build tiene que correr antes que `jsr publish`**,
+y por eso `pnpm jsr:check` va después de `pnpm build` en CI.
 
 ## Cómo está armado
 

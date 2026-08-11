@@ -38,15 +38,15 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      # Cubre lo que el build no ve: que la versión de los dos manifiestos
-      # coincida, y que el fuente siga cumpliendo las reglas de tipos de JSR.
-      # Sin esto el desajuste solo se nota cuando alguien busca en jsr.io una
-      # versión que nunca llegó.
-      - name: Publicación en JSR
-        run: pnpm jsr:check
-
       - name: Build
         run: pnpm build
+
+      # Va después del build porque lo que se publica en JSR ahora es la salida
+      # compilada, no el fuente. Cubre además que la versión coincida entre los
+      # dos manifiestos: un desajuste solo se nota cuando alguien busca en
+      # jsr.io una versión que nunca llegó.
+      - name: Publicación en JSR
+        run: pnpm jsr:check
 
   # La auditoria visual necesita el showcase corriendo y un Chromium, asi que va
   # en un job aparte: si falla, no bloquea el merge por una diferencia de render

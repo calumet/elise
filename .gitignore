@@ -7,3 +7,6 @@ dist
 packages/showcase/node_modules
 packages/showcase/dist
 packages/showcase/.vite
+
+# Salida del build para JSR
+jsr
