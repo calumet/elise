@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-i18n",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": false,
   "description": "Internacionalización (provider + hooks) y formateo localizado (Intl) para Elise.",
   "repository": {
@@ -35,10 +35,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts",
+    "build": "tsup --dts && pnpm build:jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/preparar-jsr.mjs jsr",
     "dev": "tsup --watch --dts",
     "lint": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist jsr"
   },
   "dependencies": {},
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-ui",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": false,
   "description": "Design system personalizado basado en Radix primitives y Tailwind CSS.",
   "repository": {
@@ -450,9 +450,10 @@
   ],
   "scripts": {
     "dev": "tsup --watch --dts",
-    "build": "tsup --dts",
+    "build": "tsup --dts && pnpm build:jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/preparar-jsr.mjs jsr",
     "lint": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist jsr"
   },
   "keywords": [
     "design-system",

@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-alerts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "description": "Sistema de alertas modales basado en event bus para Elise.",
   "repository": {
@@ -25,10 +25,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts",
+    "build": "tsup --dts && pnpm build:jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/preparar-jsr.mjs jsr",
     "dev": "tsup --watch --dts",
     "lint": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist jsr"
   },
   "dependencies": {
     "@calumet/elise-icons": "workspace:*",
