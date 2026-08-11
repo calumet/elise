@@ -27,8 +27,11 @@ Instalando desde JSR esos subpaths no existen, porque JSR todavía no permite ex
 
 ```css
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
-@source '../node_modules/@calumet/elise-ui/src';
+@source '../node_modules/@calumet/elise-ui/jsr';
 ```
+
+Las hojas quedan en `src` porque viajan tal cual, y las clases que Tailwind
+tiene que encontrar están en `jsr`, que es lo que se publica compilado.
 
 ## Uso
 

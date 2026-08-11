@@ -1,9 +1,10 @@
 {
   "name": "@calumet/elise-alerts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "MIT",
-  "exports": "./src/index.ts",
+  "exports": "./jsr/index.js",
   "publish": {
-    "include": ["src/**/*.ts", "src/**/*.tsx", "package.json", "README.md"]
+    "include": ["jsr/**/*.js", "jsr/**/*.d.ts", "package.json", "README.md"],
+    "exclude": ["!jsr"]
   }
 }
