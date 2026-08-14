@@ -3,6 +3,50 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.7.0
+
+Sube la minor porque hay dos cambios que rompen: por debajo de la 1.0 es ahí
+donde van.
+
+### Rompe
+
+- **`Input` deja de aceptar el `size` nativo del HTML.** Ahora `size` es el paso
+  de la escala y no el ancho en caracteres. Quien usara el atributo tiene que
+  pasar a `className` con el ancho que quiera, que además es lo que ya hacía
+  falta: `CAMPO_DESNUDO` existe justamente para anular el ancho por defecto de
+  veinte caracteres que el atributo impone.
+
+- **`Sheet` toma las tres zonas de `Dialog`.** Cabecera y pie sobre banda tenue
+  con su filete, cuerpo en blanco. El panel pierde el hueco de 16px que separaba
+  sus partes y pasa de `bg-background` a `bg-card`, que es la superficie sobre
+  la que esas zonas están calibradas. Un panel que arme su cuerpo a mano se ve
+  distinto hasta que se mude a `SheetBody`.
+  Cierra [#27](https://github.com/calumet/elise/issues/27).
+
+### Agrega
+
+- **`Input` y `SelectTrigger` aceptan `size`**, con la misma escala que
+  `ComboboxTrigger` y `Button`. Un campo y un botón `sm` en la misma barra de
+  herramientas medían 36 contra 32; ahora los cuatro controles miden lo mismo en
+  los cuatro pasos, medido: 32, 36, 40 y 44.
+  Cierra [#23](https://github.com/calumet/elise/issues/23).
+
+- **La escala gana el paso táctil, `xl`,** 44px, que es el mínimo de área de
+  toque y al que no llegaba ninguno de los otros tres. Sale en los cuatro
+  controles, `Button` incluido.
+
+- **`SheetBody`.** El cuerpo desplazable del panel, que antes armaba cada
+  pantalla.
+
+- **`TAMANOS_CAMPO` y `TamanoCampo`**, exportados desde `input`. Es la escala,
+  en un solo sitio, y de ahí la toman `SelectTrigger` y `ComboboxTrigger`.
+
+### Corrige
+
+- **`SelectTrigger` tenía su propia copia de la caja de campo.** Repetía el
+  literal en vez de usar `CAJA_CAMPO`, que es de donde salen el borde, el radio,
+  el foco y el apagado del resto de los campos.
+
 ## `@calumet/elise-ui` 0.6.2, `elise-toasts` 0.3.2, `elise-alerts` 0.2.3 y `elise-tables` 0.2.3
 
 ### Corrige

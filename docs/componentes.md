@@ -172,15 +172,15 @@ pequeño sin dejar de ser un `h2` para el lector de pantalla.
 
 ### Layout
 
-| Componente                                                                      | Import                           | Radix                                                                           |
-| ------------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------- |
-| Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter           | `@calumet/elise-ui/card`         | —                                                                               |
-| Separator                                                                       | `@calumet/elise-ui/separator`    | [Separator](https://www.radix-ui.com/primitives/docs/components/separator)      |
-| AspectRatio                                                                     | `@calumet/elise-ui/aspect-ratio` | [AspectRatio](https://www.radix-ui.com/primitives/docs/components/aspect-ratio) |
-| Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator | `@calumet/elise-ui/breadcrumb`   | —                                                                               |
-| Sidebar, SidebarProvider, SidebarTrigger, SidebarContent, ...                   | `@calumet/elise-ui/sidebar`      | —                                                                               |
-| Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription    | `@calumet/elise-ui/sheet`        | [Dialog](https://www.radix-ui.com/primitives/docs/components/dialog)            |
-| ScrollArea, ScrollBar                                                           | `@calumet/elise-ui/scroll-area`  | [ScrollArea](https://www.radix-ui.com/primitives/docs/components/scroll-area)   |
+| Componente                                                                                           | Import                           | Radix                                                                           |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------- |
+| Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter                                | `@calumet/elise-ui/card`         | —                                                                               |
+| Separator                                                                                            | `@calumet/elise-ui/separator`    | [Separator](https://www.radix-ui.com/primitives/docs/components/separator)      |
+| AspectRatio                                                                                          | `@calumet/elise-ui/aspect-ratio` | [AspectRatio](https://www.radix-ui.com/primitives/docs/components/aspect-ratio) |
+| Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator                      | `@calumet/elise-ui/breadcrumb`   | —                                                                               |
+| Sidebar, SidebarProvider, SidebarTrigger, SidebarContent, ...                                        | `@calumet/elise-ui/sidebar`      | —                                                                               |
+| Sheet, SheetTrigger, SheetContent, SheetHeader, SheetBody, SheetFooter, SheetTitle, SheetDescription | `@calumet/elise-ui/sheet`        | [Dialog](https://www.radix-ui.com/primitives/docs/components/dialog)            |
+| ScrollArea, ScrollBar                                                                                | `@calumet/elise-ui/scroll-area`  | [ScrollArea](https://www.radix-ui.com/primitives/docs/components/scroll-area)   |
 
 ### Formularios
 
@@ -249,6 +249,24 @@ controles marcables. Lleva icono además de color, ya que el color por sí solo 
 distingue nada para quien no separa el rojo del gris, y debajo de un campo hay
 dos textos pequeños seguidos (la ayuda y el error) que si no solo se
 diferenciarían por eso.
+
+#### La escala de los campos
+
+`Input`, `SelectTrigger`, `ComboboxTrigger` y `Button` comparten cuatro pasos,
+para que una fila que los mezcle cuadre de alto sin que nadie ajuste nada por
+fuera.
+
+| `size` | Alto | Texto | Cuándo                                      |
+| ------ | ---- | ----- | ------------------------------------------- |
+| `sm`   | 32px | 13px  | Barra de herramientas, filtros de una tabla |
+| `md`   | 36px | 14px  | Formularios, que es casi todo. Por defecto  |
+| `lg`   | 40px | 14px  | Un campo solo que pide protagonismo         |
+| `xl`   | 44px | 14px  | Táctil: es el mínimo de área de toque       |
+
+El alto y el texto son los mismos en los cuatro controles; el relleno a los
+costados no, porque la caja de un botón la marca el rótulo y la de un campo el
+valor que se escribe dentro. La escala vive en `TAMANOS_CAMPO`, dentro de
+`input`, y de ahí la toman los otros.
 
 #### Los seis campos compuestos
 
@@ -706,6 +724,30 @@ término buscado en vez de decir solo "Sin resultados".
 | Popover, PopoverTrigger, PopoverContent                                            | `@calumet/elise-ui/popover`    | [Popover](https://www.radix-ui.com/primitives/docs/components/popover)      |
 | HoverCard, HoverCardTrigger, HoverCardContent                                      | `@calumet/elise-ui/hover-card` | [HoverCard](https://www.radix-ui.com/primitives/docs/components/hover-card) |
 | Tooltip, TooltipProvider, TooltipTrigger, TooltipContent                           | `@calumet/elise-ui/tooltip`    | [Tooltip](https://www.radix-ui.com/primitives/docs/components/tooltip)      |
+
+#### Las tres zonas
+
+`Dialog`, `AlertDialog` y `Sheet` reparten su contenido igual: cabecera y pie
+fijos sobre banda tenue con su filete, y cuerpo en blanco que es lo único que se
+desplaza. Con un formulario largo, el título y las acciones no hay que ir a
+buscarlos al final.
+
+```tsx
+<SheetContent>
+  <SheetHeader>
+    <SheetTitle>Filtros</SheetTitle>
+  </SheetHeader>
+  <SheetBody>…</SheetBody>
+  <SheetFooter>
+    <Button>Aplicar</Button>
+  </SheetFooter>
+</SheetContent>
+```
+
+Las clases salen de `CABECERA_DIALOGO`, `CUERPO_DIALOGO` y `PIE_DIALOGO`, que
+`dialog` exporta sueltas para que las tres superficies usen exactamente las
+mismas. Un panel o un diálogo sin su zona de cuerpo pierde el desplazamiento y
+las tres zonas se leen como contenido que se quedó arriba y abajo.
 
 ### Media
 

@@ -139,16 +139,34 @@
       const pos = getComputedStyle(el).position;
       return pos !== "absolute" && pos !== "fixed";
     };
-    const controles = [...document.querySelectorAll("button, [role='button']")]
+    /* Un panel flotante se apoya encima de la página a propósito, así que sus
+       botones pisan lo que haya debajo sin que eso sea un defecto. Se comparan
+       solo los controles que cuelgan del mismo antecesor posicionado, de modo
+       que dentro del panel el chequeo sigue midiendo lo de siempre. */
+    const capa = (el) => {
+      for (let n = el.parentElement; n && n !== document.body; n = n.parentElement) {
+        const pos = getComputedStyle(n).position;
+        if (pos === "absolute" || pos === "fixed") return n;
+      }
+      return null;
+    };
+    const porCapa = new Map();
+    for (const el of [...document.querySelectorAll("button, [role='button']")]
       .filter(visible)
-      .filter(enFlujo);
-    for (let i = 0; i < controles.length; i++) {
-      for (let j = i + 1; j < controles.length; j++) {
-        const a = controles[i];
-        const b = controles[j];
-        if (a.contains(b) || b.contains(a)) continue;
-        if (seSolapan(a.getBoundingClientRect(), b.getBoundingClientRect())) {
-          anota("solapamiento", b, `se pisa con ${ruta(a)}`);
+      .filter(enFlujo)) {
+      const clave = capa(el);
+      if (!porCapa.has(clave)) porCapa.set(clave, []);
+      porCapa.get(clave).push(el);
+    }
+    for (const controles of porCapa.values()) {
+      for (let i = 0; i < controles.length; i++) {
+        for (let j = i + 1; j < controles.length; j++) {
+          const a = controles[i];
+          const b = controles[j];
+          if (a.contains(b) || b.contains(a)) continue;
+          if (seSolapan(a.getBoundingClientRect(), b.getBoundingClientRect())) {
+            anota("solapamiento", b, `se pisa con ${ruta(a)}`);
+          }
         }
       }
     }

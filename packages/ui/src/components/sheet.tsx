@@ -8,6 +8,14 @@ import { X } from "@calumet/elise-icons";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 
+import {
+  CABECERA_DIALOGO,
+  CUERPO_DIALOGO,
+  DESCRIPCION_DIALOGO,
+  PIE_DIALOGO,
+  TITULO_DIALOGO,
+} from "./dialog";
+
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
@@ -66,7 +74,10 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "bg-background fixed z-modal flex flex-col gap-4 shadow-xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-300",
+          /* Sin hueco entre las zonas y sobre la superficie de tarjeta, que es
+             lo que hace el panel del diálogo: los filetes de la cabecera y del
+             pie son lo que las separa, y el cuerpo no trae fondo propio. */
+          "fixed z-modal flex flex-col overflow-hidden bg-card text-card-foreground shadow-xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-300",
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
           side === "left" &&
@@ -91,24 +102,25 @@ function SheetContent({
 
 /** La cabecera fija del panel. */
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
+  /* El `pe-12` es el hueco del aspa, que va posicionada encima, igual que en
+     `DialogHeader`. */
   return (
-    <div
-      data-slot="sheet-header"
-      className={cn("flex flex-col gap-1.5 p-4", className)}
-      {...props}
-    />
+    <div data-slot="sheet-header" className={cn(CABECERA_DIALOGO, "pe-12", className)} {...props} />
   );
+}
+
+/**
+ * El cuerpo del panel. Es lo único que se desplaza: la cabecera y el pie se
+ * quedan fijos, así que con un formulario largo las acciones no hay que ir a
+ * buscarlas al final.
+ */
+function SheetBody({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
+  return <div data-slot="sheet-body" className={cn(CUERPO_DIALOGO, className)} {...props} />;
 }
 
 /** El pie fijo, donde van las acciones. */
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
-  return (
-    <div
-      data-slot="sheet-footer"
-      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
-      {...props}
-    />
-  );
+  return <div data-slot="sheet-footer" className={cn(PIE_DIALOGO, className)} {...props} />;
 }
 
 /** El título del panel, que anuncia el lector de pantalla al abrirlo. */
@@ -119,7 +131,7 @@ function SheetTitle({
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn("text-foreground font-semibold", className)}
+      className={cn(TITULO_DIALOGO, "text-foreground", className)}
       {...props}
     />
   );
@@ -133,7 +145,7 @@ function SheetDescription({
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn(DESCRIPCION_DIALOGO, className)}
       {...props}
     />
   );
@@ -145,6 +157,7 @@ export {
   SheetClose,
   SheetContent,
   SheetHeader,
+  SheetBody,
   SheetFooter,
   SheetTitle,
   SheetDescription,
