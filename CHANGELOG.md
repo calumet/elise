@@ -3,6 +3,26 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.6.0
+
+### Agrega
+
+- **`Combobox` acepta `modal` y lo reenvía al `Popover`.** También lo aceptan
+  `MultiCombobox`, `ComboboxField` y `MultiComboboxField`. Dentro de un
+  `Dialog`, el bloqueo de scroll del diálogo cancelaba la rueda sobre la lista,
+  que solo se recorría con las flechas o arrastrando la barra. Medido sobre una
+  lista que desborda: sin `modal` el desplazamiento se queda en 0 tras una
+  rueda de 200px; con `modal` llega a 200. Fuera de un diálogo no cambia nada.
+  Cierra [#21](https://github.com/calumet/elise/issues/21).
+
+- **`ComboboxItem` y `ComboboxOption` aceptan `level`.** Para una lista que
+  aplana un árbol. La raíz es 0 y cada nivel sangra 16px, la misma medida que
+  `Tree`. `group` no cubría el caso: agrupa en un solo escalón y con encabezado,
+  y un árbol tiene profundidad arbitraria y padres que también se eligen. La
+  sangría va en el contenido de la fila, así que el resaltado del teclado sigue
+  midiendo lo mismo a cualquier profundidad.
+  Cierra [#22](https://github.com/calumet/elise/issues/22).
+
 ## `@calumet/elise-ui` 0.5.3
 
 ### Corrige

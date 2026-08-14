@@ -77,6 +77,13 @@ export type ComboboxProps = {
   /** Deja el panel abierto al elegir. Útil para selección múltiple. */
   closeOnSelect?: boolean;
 
+  /**
+   * Le da al panel su propio bloqueo de scroll. Hace falta dentro de un
+   * `Dialog`: el bloqueo del diálogo cancela la rueda sobre la lista, que
+   * entonces solo se recorre con las flechas o arrastrando la barra.
+   */
+  modal?: boolean;
+
   children?: React.ReactNode;
 };
 
@@ -111,6 +118,7 @@ function Combobox({
   defaultOpen,
   onOpenChange,
   closeOnSelect = true,
+  modal,
   children,
 }: ComboboxProps): React.JSX.Element {
   const [valorInterno, setValorInterno] = React.useState(defaultValue ?? "");
@@ -145,7 +153,7 @@ function Combobox({
 
   return (
     <ComboboxContext.Provider value={ctx}>
-      <Popover open={abierto} onOpenChange={cambiarApertura}>
+      <Popover open={abierto} onOpenChange={cambiarApertura} modal={modal}>
         {children}
       </Popover>
     </ComboboxContext.Provider>
@@ -175,6 +183,7 @@ function MultiCombobox({
   defaultOpen,
   onOpenChange,
   closeOnSelect = false,
+  modal,
   children,
 }: MultiComboboxProps): React.JSX.Element {
   const [valoresInternos, setValoresInternos] = React.useState<string[]>(defaultValue ?? []);
@@ -212,7 +221,7 @@ function MultiCombobox({
 
   return (
     <ComboboxContext.Provider value={ctx}>
-      <Popover open={abierto} onOpenChange={cambiarApertura}>
+      <Popover open={abierto} onOpenChange={cambiarApertura} modal={modal}>
         {children}
       </Popover>
     </ComboboxContext.Provider>
@@ -432,6 +441,12 @@ export type ComboboxItemProps = Omit<
   /** Icono al inicio de la fila. Para items que son acciones, no opciones. */
   icon?: React.ReactNode;
 
+  /**
+   * A qué profundidad cuelga la opción, para una lista que aplana un árbol. La
+   * raíz es 0. Sangra 16px por nivel, la misma medida que `Tree`.
+   */
+  level?: number;
+
   onSelect?: (value: string) => void;
 };
 
@@ -448,6 +463,7 @@ function ComboboxItem({
   value,
   keywords,
   icon,
+  level = 0,
   onSelect,
   children,
   ...props
@@ -470,7 +486,13 @@ function ComboboxItem({
       className={cn("justify-between", elegido && "font-semibold", className)}
       {...props}
     >
-      <span className="flex min-w-0 flex-1 items-center gap-2">
+      {/* La sangría va en el contenido y no en la fila: sobre la fila
+          estrecharía el resaltado, de modo que cuanto más hondo cuelga una
+          opción menos se vería al recorrerla con las flechas. */}
+      <span
+        className="flex min-w-0 flex-1 items-center gap-2"
+        style={level > 0 ? { paddingInlineStart: `${level * 16}px` } : undefined}
+      >
         {icon}
         {children}
       </span>
@@ -496,8 +518,17 @@ export type ComboboxOption = {
   /** Términos extra por los que la opción también debería encontrarse. */
   keywords?: string[];
 
-  /** Agrupa opciones bajo un encabezado. */
+  /**
+   * Agrupa opciones bajo un encabezado. Es un solo escalón, así que no sirve
+   * para un árbol: para eso está `level`.
+   */
   group?: string;
+
+  /**
+   * A qué profundidad cuelga la opción, para una lista que aplana un árbol. La
+   * raíz es 0.
+   */
+  level?: number;
 };
 
 /** Props de {@link ComboboxField}. */
@@ -515,6 +546,9 @@ export type ComboboxFieldProps = {
   disabled?: boolean;
   clearable?: boolean;
   size?: ComboboxTriggerProps["size"];
+
+  /** Le da al panel su propio bloqueo de scroll. Hace falta dentro de un `Dialog`. */
+  modal?: boolean;
 
   /** Emite un input oculto, para formularios que se envian por HTML. */
   name?: string;
@@ -543,6 +577,7 @@ function ComboboxField({
   disabled,
   clearable = false,
   size = "md",
+  modal,
   name,
   className,
   contentClassName,
@@ -572,7 +607,7 @@ function ComboboxField({
   }, [options]);
 
   return (
-    <Combobox value={value} onValueChange={cambiar}>
+    <Combobox value={value} onValueChange={cambiar} modal={modal}>
       <ComboboxTrigger
         size={size}
         disabled={disabled}
@@ -597,6 +632,7 @@ function ComboboxField({
                   value={o.value}
                   keywords={[o.label, ...(o.keywords ?? [])]}
                   disabled={o.disabled}
+                  level={o.level}
                 >
                   <span className="flex min-w-0 flex-col">
                     <span className="truncate">{o.label}</span>
@@ -665,6 +701,7 @@ function MultiComboboxField({
   emptyMessage,
   disabled,
   size = "md",
+  modal,
   name,
   maxChips,
   className,
@@ -725,7 +762,7 @@ function MultiComboboxField({
   }, [options]);
 
   return (
-    <MultiCombobox value={valores} onValueChange={cambiar}>
+    <MultiCombobox value={valores} onValueChange={cambiar} modal={modal}>
       <ComboboxTrigger
         size={size}
         disabled={disabled}
@@ -790,6 +827,7 @@ function MultiComboboxField({
                   value={o.value}
                   keywords={[o.label, ...(o.keywords ?? [])]}
                   disabled={o.disabled}
+                  level={o.level}
                 >
                   <span className="flex min-w-0 flex-col">
                     <span className="truncate">{o.label}</span>
