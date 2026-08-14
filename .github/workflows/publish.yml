@@ -5,6 +5,15 @@ on:
     branches:
       - master
 
+# Dos merges seguidos lanzan dos publicaciones a la vez, y `jsr publish` no
+# tolera que otra esté subiendo la misma versión: la segunda muere con un
+# desajuste de checksum aunque el contenido sea idéntico. En serie, la segunda
+# encuentra la versión ya publicada y se la salta, que es el camino previsto.
+# `cancel-in-progress: false` porque una publicación a medias no se cancela.
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
 jobs:
   # `NODE_AUTH_TOKEN` va a nivel de job y no en el paso de publicar: el
   # `install` también lo necesita, porque el workspace incluye `packages/site` y
