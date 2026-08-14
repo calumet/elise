@@ -184,7 +184,7 @@ const App = () => (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button size="sm" variant="outline" className="whitespace-nowrap">
+                    <Button size="sm" variant="outline">
                       Ver en accion
                     </Button>
                   </TooltipTrigger>
@@ -206,7 +206,7 @@ const App = () => (
             action={
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button size="sm" variant="outline" className="whitespace-nowrap">
+                  <Button size="sm" variant="outline">
                     Ver codigo
                   </Button>
                 </PopoverTrigger>
@@ -229,7 +229,7 @@ const App = () => (
             action={
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button size="sm" variant="outline" className="whitespace-nowrap">
+                  <Button size="sm" variant="outline">
                     Abrir modal
                   </Button>
                 </DialogTrigger>
