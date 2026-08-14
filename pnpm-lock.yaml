@@ -33,10 +33,10 @@ importers:
   packages/alerts:
     dependencies:
       '@calumet/elise-icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icons
       '@calumet/elise-ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ui
     devDependencies:
       '@types/react':
@@ -290,10 +290,10 @@ importers:
   packages/tables:
     dependencies:
       '@calumet/elise-icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icons
       '@calumet/elise-ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ui
       '@tanstack/react-table':
         specifier: ^8.21.3
@@ -330,10 +330,10 @@ importers:
   packages/toasts:
     dependencies:
       '@calumet/elise-icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icons
       '@calumet/elise-ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ui
     devDependencies:
       '@types/react':
@@ -361,7 +361,7 @@ importers:
   packages/ui:
     dependencies:
       '@calumet/elise-icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icons
       '@fontsource-variable/geist':
         specifier: ^5.3.0

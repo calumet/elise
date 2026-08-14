@@ -3,6 +3,29 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.6.2, `elise-toasts` 0.3.2, `elise-alerts` 0.2.3 y `elise-tables` 0.2.3
+
+### Corrige
+
+- **El enlace entre paquetes se publicaba clavado a una versión exacta.** Los
+  cuatro declaraban sus dependencias del monorepo con `workspace:*`, que al
+  publicar se traduce a la versión que tuviera el otro en ese momento. Así,
+  `elise-toasts@0.3.1` salió pidiendo `elise-ui@0.6.1` clavado, y cualquier
+  parche de `elise-ui` dejaba un aviso de peer sin cumplir en cada
+  `pnpm install`. Con `workspace:^` la traducción pasa a `^0.6.1`, que es el
+  rango que el propio CHANGELOG venía anotando en prosa.
+
+  Comprobado sobre el tarball, antes y después:
+
+  ```
+  antes   "@calumet/elise-ui": "0.6.1"
+  ahora   "@calumet/elise-ui": "^0.6.1"
+  ```
+
+  Alcanza a `dependencies` y a `peerDependencies`. Ninguna API cambia; lo que
+  cambia es lo que va dentro del paquete publicado.
+  Cierra [#28](https://github.com/calumet/elise/issues/28).
+
 ## `@calumet/elise-ui` 0.6.1
 
 ### Corrige
