@@ -6,11 +6,18 @@ on:
       - master
 
 jobs:
+  # `NODE_AUTH_TOKEN` va a nivel de job y no en el paso de publicar: el
+  # `install` también lo necesita, porque el workspace incluye `packages/site` y
+  # este depende de paquetes privados de la organización. Sin el token en ese
+  # paso, `setup-node` deja el marcador sin resolver en el .npmrc y la descarga
+  # sale con 401. Es lo mismo que ya hace ci.yml.
   publish-gpr:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -27,20 +34,25 @@ jobs:
       - run: pnpm --filter "@calumet/elise-*" build
 
       - run: pnpm -r --filter "@calumet/elise-*" publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # JSR publica el fuente TypeScript, no el build, así que este job no compila.
-  # `id-token: write` es toda la autenticación: JSR valida el token OIDC contra
-  # el repositorio enlazado en la configuración de cada paquete, y no hay ningún
-  # secreto que rotar. `jsr publish` lee el workspace de deno.json y sube los
-  # ocho paquetes en una sola pasada, saltándose los que ya tengan publicada esa
-  # versión -- por eso puede correr en cada push a master sin tropezar.
+  # `id-token: write` es toda la autenticación de la publicación: JSR valida el
+  # token OIDC contra el repositorio enlazado en la configuración de cada
+  # paquete, y no hay ningún secreto que rotar. `jsr publish` lee el workspace de
+  # deno.json y sube los ocho paquetes en una sola pasada, saltándose los que ya
+  # tengan publicada esa versión -- por eso puede correr en cada push a master
+  # sin tropezar.
+  #
+  # El registro de GitHub Packages entra igual, aunque acá no se publique en él,
+  # porque la instalación previa baja de ahí los privados de la organización.
   publish-jsr:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: read
       id-token: write
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -49,6 +61,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: "@calumet"
           cache: pnpm
 
       # Deno resuelve las dependencias contra node_modules (byonm), así que sin
