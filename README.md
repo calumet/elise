@@ -32,37 +32,49 @@ pnpm install
 
 ## Consumir los paquetes
 
-Los paquetes se publican en dos registros a la vez, desde el mismo commit.
-
-Desde [JSR](https://jsr.io/@calumet), que sirve el TypeScript sin compilar:
+Los paquetes se publican en dos registros a la vez, desde el mismo commit y con
+la misma API. [JSR](https://jsr.io/@calumet) sirve la salida de `tsc`, un módulo
+por archivo, y no pide token:
 
 ```bash
 pnpm add jsr:@calumet/elise-ui
 ```
 
-Desde GitHub Packages, que sirve el build de tsup:
-
-```bash
-pnpm add @calumet/elise-ui
-```
-
-Para lo segundo hace falta un `.npmrc` que apunte el scope al registro de
-GitHub, y un token con permiso `read:packages`:
+GitHub Packages sirve el bundle de tsup, y pide un `.npmrc` con el scope
+apuntado y un token con permiso `read:packages`:
 
 ```
 @calumet:registry=https://npm.pkg.github.com
 ```
 
-Las dos vías exponen la misma API de TypeScript, con una diferencia: **las hojas
-de estilo solo tienen subpath en GitHub Packages**. JSR todavía no deja exportar
-archivos que no sean JavaScript o TypeScript
+```bash
+pnpm add @calumet/elise-ui
+```
+
+Lo que cambia entre las dos es el CSS, en dos puntos.
+
+**Las hojas de estilo solo tienen subpath en GitHub Packages.** JSR todavía no
+deja exportar archivos que no sean JavaScript o TypeScript
 ([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)), así que
-`@calumet/elise-ui/tailwind/elise.css` no resuelve ahí. El archivo sí viaja
-dentro del paquete, y desde JSR se importa por su ruta en `node_modules`:
+`@calumet/elise-ui/tailwind/elise.css` no resuelve ahí. Viajan igual dentro del
+paquete y se importan por su ruta, y el `@source` apunta a `jsr` en vez de a
+`dist`:
 
 ```css
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
+@source "../node_modules/@calumet/elise-ui/jsr";
 ```
+
+**Desde JSR hay que instalar a mano lo que piden las hojas.** JSR arma la lista
+de dependencias recorriendo los imports del código, y las de un `.css` no
+aparecen ahí:
+
+```bash
+pnpm add -D tw-animate-css @fontsource-variable/geist \
+            @fontsource-variable/jetbrains-mono @fontsource-variable/source-serif-4
+```
+
+El paso a paso completo está en la [Guía de inicio](docs/guia-inicio.md#instalación).
 
 ## Scripts
 
@@ -150,6 +162,9 @@ export default defineConfig({
 @source '../node_modules/@calumet/elise-toasts/dist';
 @source '../node_modules/@calumet/elise-alerts/dist';
 ```
+
+> Esas rutas son las de GitHub Packages. Instalando desde JSR cambian, y el
+> paso a paso está en la [Guía de inicio](docs/guia-inicio.md#instalación).
 
 ## Documentación
 

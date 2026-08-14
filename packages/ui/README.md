@@ -26,12 +26,29 @@ Los componentes no traen estilos propios, así que la app tiene que importar las
 Instalando desde JSR esos subpaths no existen, porque JSR todavía no permite exportar archivos que no sean JavaScript o TypeScript ([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)). Los `.css` viajan igual dentro del paquete y se importan por su ruta:
 
 ```css
+@import "../node_modules/@calumet/elise-ui/src/tailwind/fonts.css";
+@import "tailwindcss";
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
+
 @source '../node_modules/@calumet/elise-ui/jsr';
 ```
 
 Las hojas quedan en `src` porque viajan tal cual, y las clases que Tailwind
-tiene que encontrar están en `jsr`, que es lo que se publica compilado.
+tiene que encontrar están en `jsr`, que es lo que se publica compilado. Apuntar
+el `@source` a `src` deja la app sin estilos.
+
+Por esa vía hay que instalar además lo que las hojas importan, porque JSR arma
+la lista de dependencias recorriendo los imports del código y las de un `.css`
+no aparecen ahí:
+
+```bash
+pnpm add -D tw-animate-css                    # lo pide elise.css
+pnpm add -D @fontsource-variable/geist \
+            @fontsource-variable/jetbrains-mono \
+            @fontsource-variable/source-serif-4   # los pide fonts.css
+```
+
+Desde GitHub Packages son dependencias del paquete y se instalan solas.
 
 ## Uso
 
