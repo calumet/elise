@@ -9,7 +9,13 @@ scope del monorepo es más amplio que un design system estricto.
 
 ## Monorepo
 
-Elise está organizado como un monorepo gestionado con [pnpm workspaces](https://pnpm.io/workspaces). Todos los paquetes residen en `packages/` y se referencian entre sí con el protocolo `workspace:*`.
+Elise está organizado como un monorepo gestionado con [pnpm workspaces](https://pnpm.io/workspaces). Todos los paquetes residen en `packages/` y se referencian entre sí con el protocolo `workspace:^`.
+
+El sufijo importa. Dentro del workspace los tres se resuelven igual, contra la
+copia local, pero al publicar cada uno se traduce distinto: `workspace:*` deja
+la versión exacta que tuviera el otro en ese momento, `workspace:~` un rango de
+parche y `workspace:^` uno de minor. Con la exacta, cada parche de `elise-ui`
+deja un aviso de peer sin cumplir en quien ya tenga instalado el siguiente.
 
 ```
 elise/
