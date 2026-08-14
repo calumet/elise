@@ -52,6 +52,7 @@ const FeedbackDemo = React.lazy(() => import("./sections/FeedbackDemo"));
 const FieldDemo = React.lazy(() => import("./sections/FieldDemo"));
 const AppShellDemo = React.lazy(() => import("./sections/AppShellDemo"));
 const FormControlsDemo = React.lazy(() => import("./sections/FormControlsDemo"));
+const TamanosDemo = React.lazy(() => import("./sections/TamanosDemo"));
 const GruposDemo = React.lazy(() => import("./sections/GruposDemo"));
 const HelloWorld = React.lazy(() => import("./sections/HelloWorld"));
 const LoginCard = React.lazy(() => import("./sections/LoginCard"));
@@ -374,6 +375,12 @@ const App = () => (
           <SectionCard title="Dropdown & Hover Card">
             <LazySection>
               <MenusHoverDemo />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="La escala de los campos y los botones">
+            <LazySection>
+              <TamanosDemo />
             </LazySection>
           </SectionCard>
 

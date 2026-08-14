@@ -14,6 +14,17 @@ import {
 } from "@calumet/elise-ui/dialog";
 import { Field } from "@calumet/elise-ui/field";
 import { Input } from "@calumet/elise-ui/input";
+import {
+  Sheet,
+  SheetBody,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@calumet/elise-ui/sheet";
 import { Textarea } from "@calumet/elise-ui/textarea";
 import { useState } from "react";
 
@@ -87,6 +98,46 @@ const DialogsDemo = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* El panel lateral comparte las tres zonas con el diálogo: cabecera y pie
+          sobre banda tenue con su filete, cuerpo en blanco y desplazable. */}
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline">Panel lateral</Button>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Filtros del catálogo</SheetTitle>
+            <SheetDescription>Se aplican al cerrar el panel.</SheetDescription>
+          </SheetHeader>
+
+          <SheetBody className="flex flex-col gap-4">
+            <Field label="Buscar por nombre">
+              {(control) => <Input {...control} placeholder="Café…" />}
+            </Field>
+            <Field label="Proveedor">
+              {(control) => <Input {...control} placeholder="Finca…" />}
+            </Field>
+            <p className="text-sm text-muted-foreground">
+              El cuerpo es lo único que se desplaza: baja aquí y verás que el título y las acciones
+              se quedan donde están.
+            </p>
+            <div
+              className="h-64 rounded-md border border-dashed border-border"
+              aria-hidden="true"
+            />
+          </SheetBody>
+
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="outline">Limpiar</Button>
+            </SheetClose>
+            <SheetClose asChild>
+              <Button>Aplicar</Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <Button
         tone="success"

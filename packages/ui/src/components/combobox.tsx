@@ -38,6 +38,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "./command";
+import { TAMANOS_CAMPO, type TamanoCampo } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Spinner } from "./spinner";
 
@@ -230,18 +231,11 @@ function MultiCombobox({
 
 /** Props de {@link ComboboxTrigger}. */
 export type ComboboxTriggerProps = React.ComponentProps<"button"> & {
-  size?: "sm" | "md" | "lg";
+  /** Por defecto `md`, 36px de alto. */
+  size?: TamanoCampo;
 
   /** Muestra una X que devuelve el combobox a "sin selección". */
   onClear?: () => void;
-};
-
-/* La misma escala que `Button`, para que un combobox y un botón puestos uno al
-   lado del otro en una barra de herramientas cuadren de alto. */
-const triggerSizes: Record<NonNullable<ComboboxTriggerProps["size"]>, string> = {
-  sm: "h-8 px-3 text-sm",
-  md: "h-9 px-3 text-base",
-  lg: "h-10 px-4 text-base",
 };
 
 /** El control que abre la lista, con el valor elegido adentro. */
@@ -269,7 +263,7 @@ function ComboboxTrigger({
           data-state={abierto ? "open" : "closed"}
           className={cn(
             "flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-input bg-background text-foreground transition-[border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
-            triggerSizes[size],
+            TAMANOS_CAMPO[size],
             className,
           )}
           {...props}

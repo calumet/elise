@@ -14,7 +14,7 @@ import { cn } from "@/lib/cn";
 /** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "solid" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg" | "icon" | "icon-sm";
+  size?: "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
   asChild?: boolean;
@@ -117,6 +117,10 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   sm: "h-8 px-3 text-sm",
   md: "h-9 px-4 text-base",
   lg: "h-10 px-5 text-base",
+  /* El paso táctil: 44px es el mínimo de área de toque, y ninguno de los otros
+     tres llega. Los campos tienen el suyo del mismo alto, para que un botón y
+     un campo en la misma fila sigan cuadrando también acá. */
+  xl: "h-11 px-6 text-base",
   icon: "size-9",
   "icon-sm": "size-8",
 };

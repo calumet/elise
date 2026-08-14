@@ -8,7 +8,7 @@ import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
-import { CAMPO_INVALIDO } from "./input";
+import { CAJA_CAMPO, CAMPO_INVALIDO, TAMANOS_CAMPO, type TamanoCampo } from "./input";
 
 import { cn } from "@/lib/cn";
 
@@ -19,30 +19,40 @@ export const SelectGroup = SelectPrimitive.Group;
 /** Muestra la opción elegida dentro del disparador, o el `placeholder` si no hay ninguna. */
 export const SelectValue = SelectPrimitive.Value;
 
+/** Props de {@link SelectTrigger}. */
+export type SelectTriggerProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+  /** Por defecto `md`, 36px de alto. */
+  size?: TamanoCampo;
+};
+
 /** El control que abre la lista. */
 export const SelectTrigger: React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>> &
+  React.PropsWithoutRef<SelectTriggerProps> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Trigger>>
-> = React.forwardRef<
-  React.ComponentRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    data-slot="select-trigger"
-    ref={ref}
-    className={cn(
-      "flex h-9 w-full items-center justify-between rounded-md border border-input hover:border-border-strong bg-background px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground",
-      CAMPO_INVALIDO,
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
+> = React.forwardRef<React.ComponentRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
+  ({ className, children, size = "md", ...props }, ref) => (
+    <SelectPrimitive.Trigger
+      data-slot="select-trigger"
+      ref={ref}
+      /* La caja sale de `CAJA_CAMPO` y no de una copia: cuando era propia, el
+       selector y el campo de al lado ya se habían desincronizado en el borde y
+       en el foco. */
+      className={cn(
+        CAJA_CAMPO,
+        TAMANOS_CAMPO[size],
+        "items-center justify-between data-placeholder:text-muted-foreground",
+        CAMPO_INVALIDO,
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  ),
+);
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 /** El panel con las opciones. */

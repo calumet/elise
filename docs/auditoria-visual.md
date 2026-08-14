@@ -118,6 +118,12 @@ las que ya cayó esta herramienta:
   propósito, y lo dice en `data-level`. La alineación se compara dentro de cada
   profundidad, así que una lista sin el atributo se mide igual que siempre y una
   con él sigue delatando la fila que se desvía de sus hermanas.
+- **Un panel flotante encima de la página.** Los botones de un diálogo o de un
+  panel lateral pisan lo que haya debajo porque para eso están. El solapamiento
+  compara solo controles que cuelgan del mismo antecesor posicionado, de modo
+  que dentro del panel se sigue midiendo lo de siempre. El diálogo no lo
+  destapó por geometría: está centrado y sus botones no llegaban a caer sobre
+  ninguno de la página.
 
 Cuando un chequeo falle, el informe trae los valores crudos que midio. Un número
 sin evidencia no se puede refutar, y un fallo de la sonda se confunde con uno del

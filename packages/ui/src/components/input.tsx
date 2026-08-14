@@ -8,8 +8,29 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
+/** Tamaño de un campo o de un control que se presenta como campo. */
+export type TamanoCampo = "sm" | "md" | "lg" | "xl";
+
+/**
+ * El alto, el relleno y el tamaño de texto de cada paso.
+ *
+ * Vive acá y lo consumen `Input`, `SelectTrigger` y `ComboboxTrigger`, porque un
+ * campo y un disparador puestos en la misma fila tienen que medir lo mismo. Los
+ * altos coinciden con los de `Button`, que lleva más relleno a los costados
+ * porque su caja la marca el rótulo y no el valor que se escribe dentro.
+ */
+export const TAMANOS_CAMPO: Record<TamanoCampo, string> = {
+  sm: "h-8 px-3 py-1 text-sm",
+  md: "h-9 px-3 py-2 text-base",
+  lg: "h-10 px-4 py-2 text-base",
+  xl: "h-11 px-4 py-2.5 text-base",
+};
+
 /** Props de {@link Input}. */
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
+  /** Por defecto `md`, 36px de alto. */
+  size?: TamanoCampo;
+};
 
 /**
  * Marca de campo inválido, compartida por los controles de texto.
@@ -66,12 +87,18 @@ export const CAMPO_DESNUDO =
 export const Input: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<InputProps> & React.RefAttributes<HTMLInputElement>
 > = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = "text", ...props }, ref) => (
+  ({ className, type = "text", size = "md", ...props }, ref) => (
     <input
       data-slot="input"
       ref={ref}
       type={type}
-      className={cn(CAJA_CAMPO, "placeholder:text-muted-foreground", CAMPO_INVALIDO, className)}
+      className={cn(
+        CAJA_CAMPO,
+        TAMANOS_CAMPO[size],
+        "placeholder:text-muted-foreground",
+        CAMPO_INVALIDO,
+        className,
+      )}
       {...props}
     />
   ),
