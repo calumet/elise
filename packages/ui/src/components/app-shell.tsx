@@ -189,10 +189,13 @@ export type AppShellHeaderProps = React.ComponentProps<"header">;
  * buscador simplemente estirado, su centro se movería con lo que haya a los
  * costados.
  *
+ * El botón del cajón va suelto y no dentro de la marca: la marca se esconde por
+ * debajo del breakpoint, que es justo donde el cajón existe.
+ *
  * ```tsx
  * <AppShellHeader>
+ *   <AppShellNavToggle />
  *   <AppShellHeaderBrand>
- *     <AppShellNavToggle />
  *     <Text size="lg" weight="bold">Calumet</Text>
  *   </AppShellHeaderBrand>
  *   <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={abrirBuscador}>

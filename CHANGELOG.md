@@ -3,6 +3,26 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.6.1
+
+### Corrige
+
+- **`Button` partía y recortaba su rótulo dentro de una fila flex.** Llevaba
+  `overflow-hidden` sin `whitespace-nowrap`, y las dos se necesitan juntas: sin
+  recorte el rótulo desborda, y sin `nowrap` se parte antes de desbordar.
+  Medido a 360px con un rótulo de dos palabras: el botón bajaba de 105px a 82,
+  el rótulo pasaba a dos renglones y el bloque de texto llegaba a 37px de alto
+  dentro de una caja de 32, así que el segundo renglón se cortaba. Es la misma
+  pareja que ya llevaban `Badge` y `SegmentedControl`.
+  Cierra [#24](https://github.com/calumet/elise/issues/24).
+
+- **El ejemplo de `AppShellHeader` escondía el botón del cajón.** Lo ponía
+  dentro de `AppShellHeaderBrand`, que no se pinta por debajo del breakpoint,
+  que es justo donde el cajón existe; por encima se esconde el botón. Medido:
+  invisible a 360px y a 1280. El ejemplo pasa a ponerlo suelto, como ya hacían
+  el docstring de la marca, la vitrina y `docs/componentes.md`.
+  Cierra [#26](https://github.com/calumet/elise/issues/26).
+
 ## `@calumet/elise-ui` 0.6.0
 
 ### Agrega

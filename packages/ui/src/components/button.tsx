@@ -39,8 +39,12 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
    Sidebar: los de Lucide vienen a 24px y al lado de un rótulo de 13–14px se leen
    como otra jerarquía. `:not([class*='size-'])` deja la puerta abierta a quien
    necesite otro tamaño sin pelearse con la especificidad. */
+/* `whitespace-nowrap` va junto al `overflow-hidden`, no por separado: dentro de
+   una fila flex el botón encoge por debajo de su contenido, y con las dos
+   sueltas el rótulo se parte en dos renglones y el recorte se lleva el segundo.
+   Es la misma pareja que ya llevan `Badge` y `SegmentedControl`. */
 const baseClasses =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight whitespace-nowrap rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 /* El apagado es un cambio de tokens, no una capa de opacidad encima: sumar las
    dos apaga dos veces y el rótulo baja de contraste más de lo que se pretendía.
