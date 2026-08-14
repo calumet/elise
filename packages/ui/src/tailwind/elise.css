@@ -140,11 +140,11 @@
   --foreground: oklch(0.21 0.012 265);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.21 0.012 265);
-  /* Superficie invertida: lo que en el tema claro es casi negro y en el oscuro
-     casi blanco. Se define intercambiando fondo y texto, así que se voltea sola
-     al cambiar de tema y no hace falta declararla dos veces. La usan los avisos
-     que aparecen encima de todo, como los toasts: invertirlos es lo que los
-     separa de las tarjetas de la pantalla en vez de sumarles una más. */
+  /* Superficie de lo que aparece encima de todo, como los toasts. En el tema
+     claro es casi negra, para separarse de las tarjetas en vez de sumar una
+     más. En el oscuro no se da vuelta: seguir la definición al pie dejaría un
+     aviso blanco encima de una pantalla oscura, así que allá el escalón va por
+     encima de `--popover`, que es lo que corresponde a la capa más alta. */
   --inverse: var(--foreground);
   --inverse-foreground: var(--background);
   --popover: oklch(1 0 0);
@@ -354,6 +354,8 @@
   /* popover se eleva por encima de card, no al mismo nivel */
   --popover: oklch(0.235 0.012 265);
   --popover-foreground: oklch(0.962 0.003 265);
+  --inverse: oklch(0.262 0.012 265);
+  --inverse-foreground: oklch(0.962 0.003 265);
   /* primary sube a 0.655 porque el 0.55 del modo claro se apaga sobre el fondo
      oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
   --primary: oklch(0.655 0.17 262);

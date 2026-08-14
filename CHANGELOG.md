@@ -3,6 +3,21 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.5.3
+
+### Corrige
+
+- **La superficie invertida se daba vuelta en el tema oscuro.** `--inverse` era
+  `var(--foreground)`, de modo que en oscuro salía casi blanca y el toast
+  aparecía como un panel claro encima de una pantalla oscura. El tema oscuro
+  declara ahora la suya, un escalón por encima de `--popover`, que es la capa
+  que le corresponde a lo que va encima de todo. En claro no cambia nada.
+
+  De paso, los iconos teñidos del toast dejan de estar calibrados contra el
+  fondo equivocado en oscuro. Contra el disco que llevan detrás: info 2.51 →
+  3.85, advertencia 1.57 → 5.96, éxito 2.13 → 4.49. El de error baja de 3.42 a
+  2.94, que es el único que queda por debajo de 3:1.
+
 ## `@calumet/elise-ui` 0.5.1
 
 ### Corrige
