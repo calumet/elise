@@ -474,6 +474,10 @@ function ComboboxItem({
   return (
     <CommandItem
       data-slot="combobox-item"
+      /* La profundidad sale al DOM porque desde afuera la fila no la delata:
+         para la auditoría visual, dos filas que arrancan en distinta x son un
+         defecto salvo que la sangría esté declarada. */
+      data-level={level > 0 ? level : undefined}
       value={value}
       keywords={keywords}
       onSelect={() => {

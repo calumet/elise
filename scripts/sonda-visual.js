@@ -264,10 +264,22 @@
       if (filas.length < 2) continue;
       const validos = filas.map(xDelTexto).filter(Boolean);
       if (validos.length < 2) continue;
-      const min = Math.min(...validos.map((v) => v.x));
+      /* Una lista que aplana un árbol sangra a propósito, y lo declara en
+         `data-level`. Se compara dentro de cada profundidad: sin el atributo
+         todas caen en la misma y el chequeo mide lo de siempre. */
+      const porNivel = new Map();
       for (const v of validos) {
-        if (v.x - min > 1) {
-          anota("alineacion", v.fila, `texto ${(v.x - min).toFixed(1)}px a la derecha del resto`);
+        const nivel = v.fila.dataset.level ?? "0";
+        if (!porNivel.has(nivel)) porNivel.set(nivel, []);
+        porNivel.get(nivel).push(v);
+      }
+      for (const grupo of porNivel.values()) {
+        if (grupo.length < 2) continue;
+        const min = Math.min(...grupo.map((v) => v.x));
+        for (const v of grupo) {
+          if (v.x - min > 1) {
+            anota("alineacion", v.fila, `texto ${(v.x - min).toFixed(1)}px a la derecha del resto`);
+          }
         }
       }
     }
