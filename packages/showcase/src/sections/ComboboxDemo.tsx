@@ -1,4 +1,5 @@
 import { Badge } from "@calumet/elise-ui/badge";
+import { Button } from "@calumet/elise-ui/button";
 import {
   Combobox,
   ComboboxContent,
@@ -13,6 +14,14 @@ import {
   ComboboxValue,
   type ComboboxOption,
 } from "@calumet/elise-ui/combobox";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@calumet/elise-ui/dialog";
 import { Label } from "@calumet/elise-ui/label";
 import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
 import { Text } from "@calumet/elise-ui/text";
@@ -34,6 +43,29 @@ const equipos: ComboboxOption[] = [
   { value: "sre", label: "SRE", group: "Ingeniería" },
   { value: "brand", label: "Marca", group: "Diseño" },
   { value: "product", label: "Producto", group: "Diseño" },
+];
+
+/* Un árbol aplanado en preorden. Sin `level` la lista no dice de quién cuelga
+   cada entrada. */
+const MENU: ComboboxOption[] = [
+  { value: "raiz", label: "Raíz del menú" },
+  { value: "academica", label: "Información académica", level: 1 },
+  { value: "horario", label: "Horario", level: 2 },
+  { value: "notas", label: "Notas", level: 2 },
+  { value: "boletin", label: "Boletín del período", level: 3 },
+  { value: "certificados", label: "Certificados", level: 2 },
+  { value: "aula", label: "Aula virtual", level: 1 },
+  { value: "cursos", label: "Mis cursos", level: 2 },
+  { value: "tareas", label: "Tareas pendientes", level: 3 },
+  { value: "entregas", label: "Entregas corregidas", level: 3 },
+  { value: "foros", label: "Foros", level: 2 },
+  { value: "biblioteca", label: "Biblioteca", level: 1 },
+  { value: "prestamos", label: "Préstamos", level: 2 },
+  { value: "reservas", label: "Reservas", level: 2 },
+  { value: "administracion", label: "Administración", level: 1 },
+  { value: "matricula", label: "Matrícula", level: 2 },
+  { value: "pagos", label: "Pagos", level: 2 },
+  { value: "comprobantes", label: "Comprobantes", level: 3 },
 ];
 
 const CATALOGO = [
@@ -100,6 +132,8 @@ const BusquedaAsincrona = () => {
 const ComboboxDemo = () => {
   const [pais, setPais] = useState("co");
   const [equipo, setEquipo] = useState("");
+  const [rama, setRama] = useState("horario");
+  const [destino, setDestino] = useState("");
 
   return (
     <BlockStack gap={6} className="w-full">
@@ -142,7 +176,59 @@ const ComboboxDemo = () => {
             Con opciones agrupadas.
           </Text>
         </BlockStack>
+
+        <BlockStack gap={2}>
+          <Label htmlFor="cb-rama">Rama del menú</Label>
+          <ComboboxField
+            id="cb-rama"
+            options={MENU}
+            value={rama}
+            onValueChange={setRama}
+            searchPlaceholder="Buscar rama…"
+          />
+          <Text size="xs" tone="muted">
+            Con `level` por opción: la lista aplanada conserva la forma del árbol.
+          </Text>
+        </BlockStack>
       </BlockStack>
+
+      <BlockStack gap={2}>
+        <Text size="sm" weight="semibold">
+          Dentro de un diálogo
+        </Text>
+        <Text size="xs" tone="muted">
+          Con `modal`, la lista lleva su propio bloqueo de scroll y la rueda llega a ella. Sin él,
+          el del diálogo la cancela y solo se recorre con las flechas.
+        </Text>
+      </BlockStack>
+      <div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm">
+              Abrir el diálogo
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Mover a otra rama</DialogTitle>
+            </DialogHeader>
+            <DialogBody>
+              <BlockStack gap={2}>
+                <Label htmlFor="cb-destino">Destino</Label>
+                <ComboboxField
+                  id="cb-destino"
+                  modal
+                  options={MENU}
+                  value={destino}
+                  onValueChange={setDestino}
+                  placeholder="Elegir destino…"
+                  searchPlaceholder="Buscar rama…"
+                />
+              </BlockStack>
+            </DialogBody>
+          </DialogContent>
+        </Dialog>
+      </div>
 
       <BlockStack gap={2}>
         <Text size="sm" weight="semibold">

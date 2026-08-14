@@ -350,24 +350,46 @@ const paises: ComboboxOption[] = [
 <ComboboxField options={paises} value={pais} onValueChange={setPais} clearable />;
 ```
 
-| Prop                | Tipo                      | Default | Descripción                              |
-| ------------------- | ------------------------- | ------- | ---------------------------------------- |
-| `options`           | `ComboboxOption[]`        | —       | Requerido                                |
-| `value`             | `string`                  | —       | Modo controlado                          |
-| `defaultValue`      | `string`                  | —       | Modo no controlado                       |
-| `onValueChange`     | `(value: string) => void` | —       | —                                        |
-| `placeholder`       | `string`                  | i18n    | Texto del disparador sin selección       |
-| `searchPlaceholder` | `string`                  | i18n    | —                                        |
-| `emptyMessage`      | `string`                  | i18n    | —                                        |
-| `clearable`         | `boolean`                 | `false` | Muestra una X para volver a sin valor    |
-| `size`              | `"sm" \| "md" \| "lg"`    | `"md"`  | —                                        |
-| `name`              | `string`                  | —       | Emite un input oculto para forms nativos |
-| `disabled`          | `boolean`                 | —       | —                                        |
+| Prop                | Tipo                      | Default | Descripción                                |
+| ------------------- | ------------------------- | ------- | ------------------------------------------ |
+| `options`           | `ComboboxOption[]`        | —       | Requerido                                  |
+| `value`             | `string`                  | —       | Modo controlado                            |
+| `defaultValue`      | `string`                  | —       | Modo no controlado                         |
+| `onValueChange`     | `(value: string) => void` | —       | —                                          |
+| `placeholder`       | `string`                  | i18n    | Texto del disparador sin selección         |
+| `searchPlaceholder` | `string`                  | i18n    | —                                          |
+| `emptyMessage`      | `string`                  | i18n    | —                                          |
+| `clearable`         | `boolean`                 | `false` | Muestra una X para volver a sin valor      |
+| `size`              | `"sm" \| "md" \| "lg"`    | `"md"`  | —                                          |
+| `modal`             | `boolean`                 | —       | El panel lleva su propio bloqueo de scroll |
+| `name`              | `string`                  | —       | Emite un input oculto para forms nativos   |
+| `disabled`          | `boolean`                 | —       | —                                          |
 
 `ComboboxOption` acepta `value`, `label`, `description`, `disabled`, `group`
-(agrupa bajo un encabezado) y `keywords`. Con `keywords` se suman términos extra
-por los que la opción también se encuentra, útil para que "bogota" encuentre
-Colombia.
+(agrupa bajo un encabezado), `level` y `keywords`. Con `keywords` se suman
+términos extra por los que la opción también se encuentra, útil para que
+"bogota" encuentre Colombia.
+
+**`modal` dentro de un diálogo.** El bloqueo de scroll del `Dialog` cancela la
+rueda sobre la lista del combobox, que entonces solo se recorre con las flechas
+o arrastrando la barra. Con `modal` el panel lleva el suyo y la rueda vuelve a
+llegar. Fuera de un diálogo no hace falta.
+
+**`level` para una lista que aplana un árbol.** La raíz es 0 y cada nivel sangra
+16px, la misma medida que `Tree`. `group` no cubre este caso, porque agrupa en
+un solo escalón y con encabezado, mientras que un árbol tiene profundidad
+arbitraria y padres que también se eligen.
+
+```tsx
+const menu: ComboboxOption[] = [
+  { value: "raiz", label: "Raiz del menu" },
+  { value: "academica", label: "Informacion academica", level: 1 },
+  { value: "horario", label: "Horario", level: 2 },
+];
+```
+
+La sangría va en el contenido de la fila y no en la fila, de modo que el
+resaltado del teclado sigue midiendo lo mismo a cualquier profundidad.
 
 ##### Partes componibles
 

@@ -114,6 +114,10 @@ las que ya cayó esta herramienta:
 - **Una caja rotada.** `animate-spin` agranda el rectángulo que devuelve
   `getBoundingClientRect`, y un `Spinner` de 16px se mide en 22. Lo cubre el
   congelado de animaciones que ya se hacía por los colores.
+- **Una sangría declarada.** Una lista que aplana un árbol corre sus filas a
+  propósito, y lo dice en `data-level`. La alineación se compara dentro de cada
+  profundidad, así que una lista sin el atributo se mide igual que siempre y una
+  con él sigue delatando la fila que se desvía de sus hermanas.
 
 Cuando un chequeo falle, el informe trae los valores crudos que midio. Un número
 sin evidencia no se puede refutar, y un fallo de la sonda se confunde con uno del
