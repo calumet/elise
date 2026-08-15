@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.7.1
+
+### Corrige
+
+- **Las bandas de la cabecera y el pie de la navegación se pueden envolver.**
+  `AppShellHeader` repartía sus hijos mirándoles el `displayName`, así que una
+  banda sacada a un componente propio no caía en su columna sino junto a la
+  marca. `AppShellNav` hacía lo mismo con su pie. Ahora la cabecera es una
+  rejilla y cada banda declara su columna, y el pie se ancla con `sticky`; un
+  componente de React no agrega nodo al DOM, de modo que envolver deja de
+  importar. Medido: envuelta o no, la marca cae en la columna 1, el buscador en
+  la 2 y las acciones en la 3, con la misma geometría que antes a 360, 768 y 1280.
+
+  Queda fuera el tercer sitio, `AppShell` buscando su cabecera entre los hijos:
+  la fila de contenido es un nodo real del que cuelgan el cajón y su velo, y
+  moverla pide rehacer el marco en rejilla.
+  Adelanta [#25](https://github.com/calumet/elise/issues/25).
+
 ## `@calumet/elise-ui` 0.7.0
 
 Sube la minor porque hay dos cambios que rompen: por debajo de la 1.0 es ahí

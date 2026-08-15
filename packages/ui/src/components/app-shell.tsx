@@ -178,11 +178,11 @@ export type AppShellHeaderProps = React.ComponentProps<"header">;
  * Sin filete inferior: con este contraste la línea sobra, y en oscuro sobre
  * oscuro solo ensucia el borde.
  *
- * Reparte sus tres bandas por sí misma, buscando `AppShellHeaderBrand`,
- * `AppShellHeaderSearch` y `AppShellHeaderActions` entre sus hijos, así que el
- * orden en que se escriban da igual. Antes era una fila vacía y cada pantalla
- * se inventaba la rejilla, el buscador y la ficha de usuario; a la segunda
- * pantalla ya no se parecían.
+ * Es una rejilla de tres columnas y cada banda dice en cuál cae, así que el
+ * orden en que se escriban da igual y cada una puede salir envuelta en un
+ * componente propio. Antes era una fila vacía y cada pantalla se inventaba la
+ * rejilla, el buscador y la ficha de usuario; a la segunda pantalla ya no se
+ * parecían.
  *
  * Las dos bandas de los lados valen `1fr`, de modo que miden lo mismo y el
  * buscador queda centrado en la ventana aunque el nombre crezca. Con el
@@ -209,17 +209,6 @@ export type AppShellHeaderProps = React.ComponentProps<"header">;
  * ```
  */
 function AppShellHeader({ className, children, ...props }: AppShellHeaderProps): React.JSX.Element {
-  const bandas: Record<string, React.ReactNode[]> = { marca: [], buscador: [], acciones: [] };
-  const sueltos: React.ReactNode[] = [];
-
-  React.Children.forEach(children, (hijo) => {
-    const tipo = React.isValidElement(hijo) ? (hijo.type as { displayName?: string }) : null;
-    if (tipo?.displayName === "AppShellHeaderBrand") bandas.marca.push(hijo);
-    else if (tipo?.displayName === "AppShellHeaderSearch") bandas.buscador.push(hijo);
-    else if (tipo?.displayName === "AppShellHeaderActions") bandas.acciones.push(hijo);
-    else sueltos.push(hijo);
-  });
-
   return (
     <header
       data-slot="app-shell-header"
@@ -236,6 +225,9 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
          sobra ancho; en estrecho lo que se nota es el ritmo, y con la rejilla el
          hueco entre bandas y el de dentro del grupo de acciones no eran el
          mismo, así que la barra se leía a saltos. */
+      /* Las columnas existen por la plantilla, no por que haya alguien en cada
+         una, así que una cabecera sin buscador no corre las otras dos de sitio.
+         Cada banda dice en cuál cae; la cabecera no mira a sus hijos. */
       className={cn(
         "flex h-14 shrink-0 items-center gap-2 bg-background px-4 text-foreground",
         "md:grid md:grid-cols-[1fr_minmax(0,420px)_1fr] md:gap-4",
@@ -243,29 +235,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
       )}
       {...props}
     >
-      {/* Las bandas se pintan siempre, aunque vayan vacías: son las que
-          sostienen la rejilla. Sin la del medio, el buscador de otra pantalla
-          caería en otra columna. */}
-      {/* Las de los lados no llevan `min-w-0`, y es a propósito: ponerlo anula
-          el mínimo automático de su pista, y entonces el centro, que es de
-          tamaño fijo y se reparte antes que las `fr`, se lleva el ancho entero
-          y las deja en cero con su contenido desbordando fuera de la barra.
-          Quien encoge es el texto de dentro, no la banda. */}
-      <div data-slot="app-shell-header-start" className="flex items-center gap-3">
-        {bandas.marca}
-        {sueltos}
-      </div>
-      {/* En la fila estrecha es la banda que crece y se queda con lo que sobra;
-          dentro de la rejilla el `flex-1` no pinta nada y manda la pista. */}
-      <div
-        data-slot="app-shell-header-center"
-        className="flex min-w-0 flex-1 items-center justify-center"
-      >
-        {bandas.buscador}
-      </div>
-      <div data-slot="app-shell-header-end" className="flex items-center justify-end gap-2">
-        {bandas.acciones}
-      </div>
+      {children}
     </header>
   );
 }
@@ -286,7 +256,7 @@ function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps):
   return (
     <div
       data-slot="app-shell-header-brand"
-      className={cn("hidden min-w-0 items-center gap-3 md:flex", className)}
+      className={cn("hidden items-center gap-3 md:col-start-1 md:flex", className)}
       {...props}
     />
   );
@@ -333,7 +303,7 @@ function AppShellHeaderSearch({
          define es el contorno. */
       className={cn(
         "flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-card text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        "w-full px-3",
+        "w-full min-w-0 flex-1 px-3 md:col-start-2 md:flex-none",
         className,
       )}
       {...props}
@@ -374,7 +344,7 @@ function AppShellHeaderActions({
          ritmo: con las acciones a 4px y todo lo demás a 16, el grupo del final
          se leía apretado contra el resto. Se encoge donde no hay sitio, que es
          donde esos píxeles se los quita al buscador. */
-      className={cn("flex min-w-0 items-center gap-2 md:gap-4", className)}
+      className={cn("flex items-center justify-end gap-2 md:col-start-3 md:gap-4", className)}
       {...props}
     />
   );
@@ -594,14 +564,6 @@ function AppShellNav({
   const cerrar = useElLabel("ui", "closeNavigation", "Cerrar navegación");
   const etiqueta = useElLabel("ui", "navigation", "Navegación");
 
-  const pie: React.ReactNode[] = [];
-  const resto: React.ReactNode[] = [];
-  React.Children.forEach(children, (hijo) => {
-    const tipo = React.isValidElement(hijo) ? (hijo.type as { displayName?: string }) : null;
-    if (tipo?.displayName === "AppShellNavFooter") pie.push(hijo);
-    else resto.push(hijo);
-  });
-
   return (
     <>
       {/* El velo solo existe donde hay cajón. Va antes del `<nav>` en el
@@ -633,7 +595,7 @@ function AppShellNav({
            orden del fichero), y en escritorio RTL la barra se iba entera fuera
            del marco. Por debajo del breakpoint no hay nada que anular. */
         className={cn(
-          "flex w-60 shrink-0 flex-col overflow-hidden border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
+          "flex w-60 shrink-0 flex-col overflow-y-auto border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
           "max-md:absolute max-md:inset-y-0 max-md:start-0 max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
           cajonAbierto
             ? "max-md:translate-x-0"
@@ -642,8 +604,7 @@ function AppShellNav({
         )}
         {...props}
       >
-        <div className="min-h-0 flex-1 overflow-y-auto">{resto}</div>
-        {pie}
+        {children}
       </nav>
     </>
   );
@@ -658,7 +619,9 @@ export type AppShellNavFooterProps = React.ComponentProps<"div">;
  *
  * Se queda abajo aunque la lista de arriba se desplace, que es la razón de que
  * exista: metido en la lista, con veinte entradas por encima, habría que bajar
- * a buscarlo.
+ * a buscarlo. Se ancla solo, con `sticky`, de modo que la navegación no tiene
+ * que sacarlo de la zona que se desplaza y puede salir envuelto en un
+ * componente propio.
  */
 function AppShellNavFooter({
   className,
@@ -668,7 +631,10 @@ function AppShellNavFooter({
   return (
     <div
       data-slot="app-shell-nav-footer"
-      className={cn("mt-2 shrink-0 border-t border-sidebar-border pt-2", className)}
+      className={cn(
+        "sticky bottom-0 mt-auto shrink-0 border-t border-sidebar-border bg-sidebar pt-2 pb-1",
+        className,
+      )}
       {...props}
     >
       <ul className="list-none">{children}</ul>
