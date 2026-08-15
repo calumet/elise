@@ -632,7 +632,7 @@ function AppShellNavFooter({
     <div
       data-slot="app-shell-nav-footer"
       className={cn(
-        "sticky bottom-0 mt-auto shrink-0 border-t border-sidebar-border bg-sidebar pt-2 pb-1",
+        "sticky bottom-0 mt-auto shrink-0 border-t border-sidebar-border bg-sidebar pt-2",
         className,
       )}
       {...props}
