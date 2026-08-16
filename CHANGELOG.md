@@ -3,6 +3,32 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.8.0
+
+Sube la minor porque cambia la forma del marco y con ella lo que `AppShell`
+acepta como hijo.
+
+### Rompe
+
+- **`AppShell` es una rejilla y cada parte declara su celda.** Era una columna
+  flex con un nodo intermedio, `data-slot="app-shell-body"`, que ya no existe:
+  una regla que lo apuntara se queda sin blanco. Un hijo que no sea una de las
+  partes tampoco cae solo en su sitio; para ocupar el área de contenido necesita
+  `col-start-2 row-start-2`, que es lo que ya trae `AppShellMain`.
+
+### Corrige
+
+- **La cabecera se puede envolver.** `AppShell` la buscaba entre sus hijos por
+  `displayName` para dejarla fuera de la fila de contenido, así que una
+  `<CabeceraDeLaApp />` propia que por dentro emitiera un `AppShellHeader` caía
+  dentro de esa fila, al lado de la navegación y encogida a lo que sobrara.
+  Ahora cada parte lleva su celda escrita y el marco no mira a sus hijos.
+  Medido con la cabecera, la navegación y el contenido envueltos cada uno en dos
+  componentes: las cuatro cajas dan lo mismo que sin envolver a 360, 768 y 1280,
+  en LTR y en RTL, con el cajón abierto y cerrado, y sin envolver la captura es
+  idéntica píxel a píxel a la de 0.7.1.
+  Cierra [#25](https://github.com/calumet/elise/issues/25).
+
 ## `@calumet/elise-ui` 0.7.1
 
 ### Corrige

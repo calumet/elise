@@ -945,6 +945,14 @@ import {
 
 ### Cómo se comporta
 
+**Cada parte dice en qué celda cae.** El marco es una rejilla de dos filas, y la
+cabecera, la navegación y el contenido llevan su sitio escrito encima, así que
+el orden en que se escriban da igual y el marco no tiene que reconocer a
+ninguno. Eso es lo que permite envolverlos: un `<CabeceraDeLaApp />` propio que
+por dentro emita un `AppShellHeader` sigue cayendo en la fila de arriba, a
+cualquier profundidad. Lo que sí rompe la colocación es meterlos dentro de un
+`<div>`, porque entonces el hijo de la rejilla es el `<div>` y no la parte.
+
 **El cajón cuelga de la fila de contenido y no de la ventana**, de modo que la
 cabecera sigue a la vista y alcanzable mientras la navegación está abierta. Por
 eso el cajón no es un `Sheet`, que es de posición fija.
