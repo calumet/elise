@@ -3,6 +3,41 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.8.1
+
+Tres correcciones, todas del mismo tipo: cosas que el componente no resolvía y
+cada pantalla tenía que acordarse de hacer bien.
+
+### Corrige
+
+- **El rótulo de una pestaña se partía en dos renglones.** `TabsTrigger` no
+  llevaba `whitespace-nowrap`, así que dentro de la fila flex encogía hasta su
+  ancho de contenido mínimo, que en una etiqueta de dos palabras es la palabra
+  más larga. Medido a 320, 360 y 414: «Actas y decisiones» pasaba de 157px a 105,
+  el ancho de «decisiones», y se partía dentro de una caja de 40px de alto. Es el
+  mismo defecto que se corrigió en `Button` y la misma pareja que ya llevan
+  `Badge` y `SegmentedControl`.
+
+- **La fila de pestañas se desborda donde no cabe.** Cuatro pestañas piden 514px
+  y el área de contenido de un móvil de 360 da 320, así que dos quedaban fuera de
+  la pantalla, sin desplazamiento ni nada que lo indicara. Ahora se desplaza a lo
+  ancho, como ya hacían `Table` y el `Stepper` horizontal. El recorte vive en una
+  envoltura nueva, `data-slot="tabs-list-scroll"`, y no en la propia lista,
+  porque `overflow-x` arrastra a `overflow-y` y ahí el anillo de foco de una
+  pestaña salía cortado por los cuatro lados. La lista sigue siendo el mismo
+  elemento con las mismas clases; lo único que cambia para quien ya la usaba es
+  que deja de ser hija directa de su contenedor. De 768 para arriba la fila se
+  dibuja idéntica píxel a píxel.
+
+- **Sin navegación, el botón del cajón dejaba la pantalla muerta.** Un marco de
+  un solo registro no lleva `AppShellNav`, y ahí el botón se dibujaba igual por
+  debajo del breakpoint. Pulsarlo no era inocuo: `AppShellMain` mira
+  `cajonAbierto` para volverse inerte, así que el contenido dejaba de responder
+  sin velo ni cajón que explicaran por qué, y en un teléfono no hay Escape que lo
+  recupere. Ahora `AppShellNav` se anuncia al marco al montarse: sin ninguna, el
+  botón no se dibuja y el contenido no puede quedar inerte. Con navegación, el
+  cajón, el velo y el estado inerte se comportan igual que antes.
+
 ## `@calumet/elise-ui` 0.8.0
 
 Sube la minor porque cambia la forma del marco y con ella lo que `AppShell`

@@ -63,6 +63,7 @@ const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
 const PantallaInicio = React.lazy(() => import("./sections/pantallas/PantallaInicio"));
 const PantallaListado = React.lazy(() => import("./sections/pantallas/PantallaListado"));
 const PantallaFicha = React.lazy(() => import("./sections/pantallas/PantallaFicha"));
+const PantallaTrabajoGrado = React.lazy(() => import("./sections/pantallas/PantallaTrabajoGrado"));
 const PantallaAjustes = React.lazy(() => import("./sections/pantallas/PantallaAjustes"));
 const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
@@ -321,6 +322,12 @@ const App = () => (
           <SectionCard title="Pantalla de listado">
             <LazySection>
               <PantallaListado />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="COMA: trabajo de grado">
+            <LazySection>
+              <PantallaTrabajoGrado />
             </LazySection>
           </SectionCard>
 

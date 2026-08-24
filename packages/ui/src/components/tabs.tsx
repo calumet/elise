@@ -17,20 +17,28 @@ function Tabs({
   return <TabsPrimitive.Root data-slot="tabs" className={cn(className)} {...props} />;
 }
 
-/** La fila de pestañas. Recorre con las flechas del teclado. */
+/** La fila de pestañas. Recorre con las flechas del teclado, y se desplaza a lo ancho donde no cabe. */
 function TabsList({
   className,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.List>): React.JSX.Element {
   return (
-    <TabsPrimitive.List
-      data-slot="tabs-list"
-      className={cn(
-        "inline-flex items-center gap-1 border-b border-border text-base font-semibold",
-        className,
-      )}
-      {...props}
-    />
+    <div
+      data-slot="tabs-list-scroll"
+      /* El recorte va acá y no en la lista: `overflow-x` arrastra a `overflow-y`
+         y le cortaría el anillo de foco a las pestañas. El relleno le hace sitio
+         dentro y el margen negativo lo devuelve. */
+      className="-m-1 max-w-[calc(100%+0.5rem)] overflow-x-auto p-1"
+    >
+      <TabsPrimitive.List
+        data-slot="tabs-list"
+        className={cn(
+          "inline-flex items-center gap-1 border-b border-border text-base font-semibold",
+          className,
+        )}
+        {...props}
+      />
+    </div>
   );
 }
 
@@ -43,7 +51,7 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "inline-flex h-10 cursor-pointer items-center justify-center rounded-t-sm border-b-2 border-transparent px-4 text-base font-semibold text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-primary data-[state=active]:text-foreground",
+        "inline-flex h-10 cursor-pointer items-center justify-center rounded-t-sm border-b-2 border-transparent px-4 text-base font-semibold whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-primary data-[state=active]:text-foreground",
         className,
       )}
       {...props}

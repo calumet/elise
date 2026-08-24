@@ -52,6 +52,10 @@ type AppShellContextValue = {
 
   /** Por debajo del breakpoint, que es donde el cajón existe. */
   esMovil: boolean;
+
+  /** Hay una `AppShellNav` montada. Un marco de un solo registro puede no tenerla. */
+  hayNav: boolean;
+  registrarNav: () => () => void;
 };
 
 const AppShellContext = React.createContext<AppShellContextValue | null>(null);
@@ -130,9 +134,21 @@ function AppShell({
     return () => document.removeEventListener("keydown", alTeclear);
   }, [abierto, setCajonAbierto]);
 
+  const [navsMontadas, setNavsMontadas] = React.useState(0);
+  const registrarNav = React.useCallback(() => {
+    setNavsMontadas((n) => n + 1);
+    return () => setNavsMontadas((n) => n - 1);
+  }, []);
+
   const ctx = React.useMemo(
-    () => ({ cajonAbierto: abierto, setCajonAbierto, esMovil }),
-    [abierto, setCajonAbierto, esMovil],
+    () => ({
+      cajonAbierto: abierto,
+      setCajonAbierto,
+      esMovil,
+      hayNav: navsMontadas > 0,
+      registrarNav,
+    }),
+    [abierto, setCajonAbierto, esMovil, navsMontadas, registrarNav],
   );
 
   return (
@@ -482,14 +498,16 @@ AppShellUserMenu.displayName = "AppShellUserMenu";
 /** Props de {@link AppShellNavToggle}. */
 export type AppShellNavToggleProps = React.ComponentProps<"button">;
 
-/** Abre y cierra el cajón. Solo se ve donde la navegación está plegada. */
+/** Abre y cierra el cajón. Solo se ve donde la navegación está plegada, y no se dibuja si no hay ninguna. */
 function AppShellNavToggle({
   className,
   children,
   ...props
-}: AppShellNavToggleProps): React.JSX.Element {
-  const { cajonAbierto, setCajonAbierto } = useAppShell("AppShellNavToggle");
+}: AppShellNavToggleProps): React.JSX.Element | null {
+  const { cajonAbierto, setCajonAbierto, hayNav } = useAppShell("AppShellNavToggle");
   const etiqueta = useElLabel("ui", "toggleNavigation", "Alternar navegación");
+
+  if (!hayNav) return null;
 
   return (
     <button
@@ -556,9 +574,13 @@ function AppShellNav({
   label,
   ...props
 }: AppShellNavProps): React.JSX.Element {
-  const { cajonAbierto, setCajonAbierto, esMovil } = useAppShell("AppShellNav");
+  const { cajonAbierto, setCajonAbierto, esMovil, registrarNav } = useAppShell("AppShellNav");
   const cerrar = useElLabel("ui", "closeNavigation", "Cerrar navegación");
   const etiqueta = useElLabel("ui", "navigation", "Navegación");
+
+  /* Antes de pintar y no después: el botón del cajón se dibuja según esto, y con
+     un efecto normal aparecería un cuadro más tarde. */
+  React.useLayoutEffect(() => registrarNav(), [registrarNav]);
 
   return (
     <>
@@ -1180,12 +1202,14 @@ export type AppShellMainProps = React.ComponentProps<"main">;
  * velo que lo tape, así que dejarlo inerte lo haría inalcanzable a plena vista.
  */
 function AppShellMain({ className, children, ...props }: AppShellMainProps): React.JSX.Element {
-  const { cajonAbierto, esMovil } = useAppShell("AppShellMain");
+  const { cajonAbierto, esMovil, hayNav } = useAppShell("AppShellMain");
 
   return (
     <main
       data-slot="app-shell-main"
-      inert={cajonAbierto && esMovil}
+      /* Sin navegación no hay cajón que lo tape, así que dejarlo inerte lo
+         volvía inalcanzable sin nada a la vista que explicara por qué. */
+      inert={cajonAbierto && esMovil && hayNav}
       /* El lienzo, no el fondo de la página: va un punto por encima de la barra
          de navegación y por debajo de las tarjetas que se apoyan en él. Con el
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
