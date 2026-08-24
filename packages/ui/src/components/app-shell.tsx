@@ -135,28 +135,24 @@ function AppShell({
     [abierto, setCajonAbierto, esMovil],
   );
 
-  const cabecera: React.ReactNode[] = [];
-  const resto: React.ReactNode[] = [];
-  React.Children.forEach(children, (hijo) => {
-    const tipo = React.isValidElement(hijo) ? (hijo.type as { displayName?: string }) : null;
-    if (tipo?.displayName === "AppShellHeader") cabecera.push(hijo);
-    else resto.push(hijo);
-  });
-
   return (
     <AppShellContext.Provider value={ctx}>
       <div
         data-slot="app-shell"
+        /* Rejilla, y cada parte dice en qué celda cae. Con una fila de contenido
+           como nodo, el marco tenía que reconocer a la cabecera para dejarla
+           fuera de ella, y envuelta en un componente propio caía dentro.
+
+           Por debajo del breakpoint la pista de la navegación mide cero, de modo
+           que el cajón se monta encima del contenido en vez de correrlo. */
         className={cn(
-          "flex h-svh flex-col overflow-hidden bg-background text-foreground",
+          "grid h-svh grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-background text-foreground",
+          "grid-cols-[0_minmax(0,1fr)] md:grid-cols-[auto_minmax(0,1fr)]",
           className,
         )}
         {...props}
       >
-        {cabecera}
-        <div data-slot="app-shell-body" className="relative flex min-h-0 flex-1 items-stretch">
-          {resto}
-        </div>
+        {children}
       </div>
     </AppShellContext.Provider>
   );
@@ -229,7 +225,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
          una, así que una cabecera sin buscador no corre las otras dos de sitio.
          Cada banda dice en cuál cae; la cabecera no mira a sus hijos. */
       className={cn(
-        "flex h-14 shrink-0 items-center gap-2 bg-background px-4 text-foreground",
+        "col-start-1 col-end-3 row-start-1 flex h-14 items-center gap-2 bg-background px-4 text-foreground",
         "md:grid md:grid-cols-[1fr_minmax(0,420px)_1fr] md:gap-4",
         className,
       )}
@@ -570,12 +566,17 @@ function AppShellNav({
           documento para que quede por debajo sin tener que apilarlos. */}
       <button
         type="button"
+        data-slot="app-shell-nav-overlay"
         aria-label={cerrar}
         tabIndex={cajonAbierto ? undefined : -1}
         aria-hidden={cajonAbierto ? undefined : true}
         onClick={() => setCajonAbierto(false)}
         className={cn(
-          "absolute inset-0 z-overlay cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out md:hidden",
+          /* Las dos columnas por sus extremos y no con `col-span-2`: sin decir
+             dónde empieza, la rejilla busca sitio, y en esta fila las dos pistas
+             ya las tienen la navegación y el contenido, así que se inventaba una
+             tercera y el velo salía de ancho cero al costado. */
+          "col-start-1 col-end-3 row-start-2 z-overlay cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out md:hidden",
           cajonAbierto ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
@@ -595,8 +596,8 @@ function AppShellNav({
            orden del fichero), y en escritorio RTL la barra se iba entera fuera
            del marco. Por debajo del breakpoint no hay nada que anular. */
         className={cn(
-          "flex w-60 shrink-0 flex-col overflow-y-auto border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
-          "max-md:absolute max-md:inset-y-0 max-md:start-0 max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
+          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
+          "max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
           cajonAbierto
             ? "max-md:translate-x-0"
             : "max-md:-translate-x-full max-md:rtl:translate-x-full",
@@ -1189,7 +1190,10 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps): Rea
          de navegación y por debajo de las tarjetas que se apoyan en él. Con el
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
          el marco se leía como una sola plancha. */
-      className={cn("flex min-w-0 flex-1 flex-col overflow-y-auto bg-secondary p-5", className)}
+      className={cn(
+        "col-start-2 row-start-2 flex min-w-0 flex-col overflow-y-auto bg-secondary p-5",
+        className,
+      )}
       {...props}
     >
       {children}
