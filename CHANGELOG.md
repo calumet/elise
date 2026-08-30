@@ -7,17 +7,17 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Agrega
 
-- **Dos convenciones de React que nadie comprobaba.** El preset `react` aplica
-  el `recommended` de `eslint-plugin-react`, que deja fuera
-  `react/jsx-pascal-case` (componentes en PascalCase) y `react/no-multi-comp`
-  (un componente por archivo). Quien consume el preset las hereda; `base` no
-  cambia.
+- **`react/jsx-pascal-case` en `error`.** El preset `react` aplica el
+  `recommended` de `eslint-plugin-react`, que la deja apagada, así que los
+  nombres de componente no los comprobaba nadie. Quien consume el preset la
+  hereda, `tailwind` incluido; `base` no cambia. Medida sobre este repositorio
+  no marca ni un archivo.
 
-  `jsx-pascal-case` va en `error`: no marca ni un archivo de este repositorio.
-  `no-multi-comp` va en `warn`, porque sí marca: 224 avisos, 202 de ellos en
-  `elise-ui`, donde un archivo publica el componente compuesto entero. Los
-  paquetes del sistema la apagan en su propio `eslint.config.js`, y una app que
-  quiera cortar el build con ella la sube a `error` en el suyo.
+  `react/no-multi-comp`, un componente por archivo, se evaluó junto con ella y
+  queda fuera del preset: marca 224 avisos, 202 de ellos en `elise-ui`, donde un
+  archivo publica el componente compuesto entero. El anfitrión que la quiera la
+  añade en su propia config, y el cómo está en
+  [docs/linter.md](docs/linter.md).
 
   Cierra [#39](https://github.com/calumet/elise/issues/39).
 
