@@ -19,10 +19,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./tailwind.css": "./src/tailwind.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/tailwind.css"
   ],
   "scripts": {
     "build": "tsup --dts && pnpm build:jsr",

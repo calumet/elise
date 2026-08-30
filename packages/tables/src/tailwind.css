@@ -1,0 +1,10 @@
+/*
+ * Dónde buscar las clases de este paquete.
+ *
+ * Tailwind resuelve cada `@source` contra el archivo que lo declara, así que
+ * las rutas valen igual desde dentro de `node_modules`. La carpeta del código
+ * compilado cambia según el registro -- `dist` en GitHub Packages, `jsr` en
+ * JSR -- y la que no exista se ignora sin error.
+ */
+@source "../dist";
+@source "../jsr";

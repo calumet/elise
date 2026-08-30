@@ -1,0 +1,17 @@
+/*
+ * Entrada del CSS ya compilado que se publica como
+ * `@calumet/elise-ui/styles.css`.
+ *
+ * Sale CSS plano: la app que lo importa no instala Tailwind ni escribe
+ * `@source` en ningun lado. Cubre el sistema entero, no solo `elise-ui`, por
+ * eso escanea tambien los paquetes que traen clases propias.
+ *
+ * Las tipografias quedan fuera: sus `url()` apuntan a los archivos de
+ * Fontsource dentro de `node_modules` y esas rutas no sobreviven al publicado.
+ * Van aparte, en `@calumet/elise-ui/tailwind/fonts.css`.
+ */
+@import "./elise.css";
+
+@source "../../../alerts/src";
+@source "../../../tables/src";
+@source "../../../toasts/src";

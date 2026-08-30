@@ -55,14 +55,12 @@ Lo que cambia entre las dos es el CSS, en dos puntos.
 
 **Las hojas de estilo solo tienen subpath en GitHub Packages.** JSR todavía no
 deja exportar archivos que no sean JavaScript o TypeScript
-([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)), así que
-`@calumet/elise-ui/tailwind/elise.css` no resuelve ahí. Viajan igual dentro del
-paquete y se importan por su ruta, y el `@source` apunta a `jsr` en vez de a
-`dist`:
+([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)), así que ni
+`@calumet/elise-ui/styles.css` ni `@calumet/elise-ui/tailwind/elise.css`
+resuelven ahí. Viajan igual dentro del paquete y se importan por su ruta:
 
 ```css
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
-@source "../node_modules/@calumet/elise-ui/jsr";
 ```
 
 **Desde JSR hay que instalar a mano lo que piden las hojas.** JSR arma la lista
@@ -130,9 +128,17 @@ function App() {
 }
 ```
 
-Asegurate de importar los estilos de Elise en tu CSS:
+Los estilos llegan de una de dos formas.
 
-Si usas Vite, instala y activa el plugin oficial de Tailwind:
+**Sin Tailwind**, con el CSS que el paquete trae ya compilado. Un import en el
+punto de entrada de la app y listo:
+
+```ts
+import "@calumet/elise-ui/styles.css";
+```
+
+**Con Tailwind**, si querés usar los tokens del sistema en tu propio marcado.
+Con Vite, instala y activa el plugin oficial:
 
 ```bash
 pnpm add -D tailwindcss @tailwindcss/vite
@@ -153,17 +159,18 @@ export default defineConfig({
 ```css
 /* Tipografias autoalojadas. Omitilo solo si tu app ya carga Geist. */
 @import "@calumet/elise-ui/tailwind/fonts.css";
-
-@import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
 
-@source '../node_modules/@calumet/elise-ui/dist';
-@source '../node_modules/@calumet/elise-tables/dist';
-@source '../node_modules/@calumet/elise-toasts/dist';
-@source '../node_modules/@calumet/elise-alerts/dist';
+/* Solo los que uses */
+@import "@calumet/elise-tables/tailwind.css";
+@import "@calumet/elise-toasts/tailwind.css";
+@import "@calumet/elise-alerts/tailwind.css";
 ```
 
-> Esas rutas son las de GitHub Packages. Instalando desde JSR cambian, y el
+> Cada hoja trae dentro `@import "tailwindcss"` y sus `@source`, así que la app
+> no repite ninguno de los dos.
+>
+> Esos subpaths son los de GitHub Packages. Instalando desde JSR cambian, y el
 > paso a paso está en la [Guía de inicio](docs/guia-inicio.md#instalación).
 
 ## Documentación

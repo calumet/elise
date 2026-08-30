@@ -13,29 +13,29 @@ Requiere React 19. La configuración del registro de GitHub está en el [README 
 
 ## Hojas de estilo
 
-Los componentes no traen estilos propios, así que la app tiene que importar las dos hojas y decirle a Tailwind dónde buscar las clases:
+Los componentes no traen estilos propios. Hay dos formas de dárselos, según si la app usa Tailwind o no.
+
+**Sin Tailwind.** El paquete trae el CSS ya compilado. Un import en el punto de entrada de la app y no hace falta nada más:
+
+```ts
+import "@calumet/elise-ui/styles.css";
+```
+
+**Con Tailwind.** La hoja del sistema trae dentro su propio `@import "tailwindcss"` y los `@source` que apuntan al código de Elise, así que la app la importa y ya:
 
 ```css
 @import "@calumet/elise-ui/tailwind/fonts.css";
-@import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
-
-@source '../node_modules/@calumet/elise-ui/dist';
 ```
+
+Por esta vía las clases de Elise y las tuyas salen de la misma compilación, y podés usar los tokens del sistema (`text-sm`, `bg-card`) en tu propio marcado.
 
 Instalando desde JSR esos subpaths no existen, porque JSR todavía no permite exportar archivos que no sean JavaScript o TypeScript ([jsr-io/jsr#293](https://github.com/jsr-io/jsr/issues/293)). Los `.css` viajan igual dentro del paquete y se importan por su ruta:
 
 ```css
 @import "../node_modules/@calumet/elise-ui/src/tailwind/fonts.css";
-@import "tailwindcss";
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
-
-@source '../node_modules/@calumet/elise-ui/jsr';
 ```
-
-Las hojas quedan en `src` porque viajan tal cual, y las clases que Tailwind
-tiene que encontrar están en `jsr`, que es lo que se publica compilado. Apuntar
-el `@source` a `src` deja la app sin estilos.
 
 Por esa vía hay que instalar además lo que las hojas importan, porque JSR arma
 la lista de dependencias recorriendo los imports del código y las de un `.css`
