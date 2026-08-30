@@ -123,6 +123,7 @@ const react = [
       "@typescript-eslint/no-explicit-any": "off",
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
+      "react/jsx-pascal-case": "error",
     },
   },
 ];
