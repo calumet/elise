@@ -688,14 +688,5 @@
   }
 }
 
-/*
- * Dónde buscar las clases de Elise.
- *
- * Tailwind resuelve cada `@source` contra el archivo que lo declara, no contra
- * el CSS de la app, así que estas rutas siguen siendo válidas desde dentro de
- * `node_modules`. La carpeta del código compilado cambia según el registro
- * -- `dist` en GitHub Packages, `jsr` en JSR -- y la que no exista se ignora
- * sin error.
- */
 @source "../../dist";
 @source "../../jsr";
