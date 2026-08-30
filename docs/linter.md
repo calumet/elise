@@ -30,6 +30,27 @@ import { configs } from "@calumet/elise-linter";
 export default [...configs.react];
 ```
 
+Sobre el `recommended` de `eslint-plugin-react`, el preset añade dos
+convenciones que ese conjunto deja apagadas:
+
+| Regla                   | Severidad | Qué pide                                 |
+| ----------------------- | --------- | ---------------------------------------- |
+| `react/jsx-pascal-case` | `error`   | Los componentes se nombran en PascalCase |
+| `react/no-multi-comp`   | `warn`    | Un componente por archivo                |
+
+`no-multi-comp` va en `warn` por lo que marca sobre código ya escrito: 224
+avisos en este repositorio, 202 de ellos en `elise-ui`, donde un archivo publica
+el componente compuesto entero, `Sidebar` con todas sus partes. Los paquetes del
+sistema la apagan en su propio `eslint.config.js`. Una app que quiera cortar el
+build con ella la sube en el suyo:
+
+```js
+export default [
+  ...configs.react,
+  { files: ["**/*.tsx"], rules: { "react/no-multi-comp": "error" } },
+];
+```
+
 ### Opción 3: React + Tailwind
 
 Para usar `configs.tailwind`, instala también las dependencias de Tailwind lint:

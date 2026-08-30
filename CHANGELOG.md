@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.2.0
+
+### Agrega
+
+- **Dos convenciones de React que nadie comprobaba.** El preset `react` aplica
+  el `recommended` de `eslint-plugin-react`, que deja fuera
+  `react/jsx-pascal-case` (componentes en PascalCase) y `react/no-multi-comp`
+  (un componente por archivo). Quien consume el preset las hereda; `base` no
+  cambia.
+
+  `jsx-pascal-case` va en `error`: no marca ni un archivo de este repositorio.
+  `no-multi-comp` va en `warn`, porque sí marca: 224 avisos, 202 de ellos en
+  `elise-ui`, donde un archivo publica el componente compuesto entero. Los
+  paquetes del sistema la apagan en su propio `eslint.config.js`, y una app que
+  quiera cortar el build con ella la sube a `error` en el suyo.
+
+  Cierra [#39](https://github.com/calumet/elise/issues/39).
+
 ## `@calumet/elise-ui` 0.9.0, `elise-tables` 0.3.0, `elise-toasts` 0.4.0 y `elise-alerts` 0.3.0
 
 ### Agrega
