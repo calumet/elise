@@ -3,6 +3,48 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.9.0, `elise-tables` 0.3.0, `elise-toasts` 0.4.0 y `elise-alerts` 0.3.0
+
+### Agrega
+
+- **Cada hoja dice dónde está su código.** Montar Elise pedía una ruta escrita a
+  mano por paquete instalado, y otra distinta según el registro: el código
+  compilado vive en `dist` desde GitHub Packages y en `jsr` desde JSR. Tailwind
+  resuelve cada `@source` contra el archivo que lo declara, no contra el CSS de
+  la app, así que ahora los declaran `elise.css` y el `tailwind.css` nuevo de
+  `elise-tables`, `elise-toasts` y `elise-alerts`, y siguen siendo válidos desde
+  dentro de `node_modules`. Un `@source` que apunta a una carpeta inexistente se
+  ignora sin error, así que las dos rutas conviven en la misma hoja y el snippet
+  es el mismo en los dos registros. Tampoco hay que repetir
+  `@import "tailwindcss"`: la hoja ya lo trae, y la detección automática de
+  Tailwind sigue anclada al CSS de la app, no al de la librería.
+
+  ```
+  antes   @import "tailwindcss";
+          @import "@calumet/elise-ui/tailwind/elise.css";
+          @source "../node_modules/@calumet/elise-ui/dist";
+          @source "../node_modules/@calumet/elise-tables/dist";
+
+  ahora   @import "@calumet/elise-ui/tailwind/elise.css";
+          @import "@calumet/elise-tables/tailwind.css";
+  ```
+
+  Sigue habiendo una línea por paquete instalado, y ese es el piso: Tailwind
+  resuelve los enlaces de pnpm al directorio real del store, donde una hoja no
+  ve a sus hermanas. El montaje viejo no se rompe; un `@source` repetido solo
+  escanea dos veces.
+
+- **`@calumet/elise-ui/styles.css`, el sistema ya compilado.** Un import en el
+  punto de entrada de la app y no hay nada que configurar: ni Tailwind, ni
+  plugin de Vite, ni `@source`. Son 105 KB minificados que el `build` del
+  paquete arma con el CLI de Tailwind desde `src/tailwind/standalone.css`, y
+  cubren también `elise-tables`, `elise-toasts` y `elise-alerts`.
+
+  A cambio, los tokens del sistema no quedan disponibles para el marcado propio
+  de la app; para eso está la vía con Tailwind. Las tipografías siguen aparte en
+  `fonts.css`, porque sus `url()` apuntan a los archivos de Fontsource dentro
+  de `node_modules` y esas rutas no sobreviven al publicado.
+
 ## `@calumet/elise-ui` 0.8.1
 
 Tres correcciones, todas del mismo tipo: cosas que el componente no resolvía y
