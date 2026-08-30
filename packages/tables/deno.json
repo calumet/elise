@@ -1,10 +1,10 @@
 {
   "name": "@calumet/elise-tables",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "license": "MIT",
   "exports": "./jsr/index.js",
   "publish": {
-    "include": ["jsr/**/*.js", "jsr/**/*.d.ts", "package.json", "README.md"],
+    "include": ["jsr/**/*.js", "jsr/**/*.d.ts", "src/tailwind.css", "package.json", "README.md"],
     "exclude": ["!jsr"]
   }
 }

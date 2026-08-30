@@ -78,25 +78,26 @@ export default defineConfig({
 
 > Con Vite no necesitas `postcss` ni `@tailwindcss/postcss`.
 
-5. En tu CSS principal (por ejemplo `src/index.css`), importa Tailwind y los
-   estilos de Elise. **Las rutas cambian según el registro.**
+5. En tu CSS principal (por ejemplo `src/index.css`), importa los estilos de
+   Elise. **Los subpaths cambian según el registro.**
+
+> Si tu app no usa Tailwind, saltate este paso y el 3: el paquete trae el CSS ya
+> compilado en `import "@calumet/elise-ui/styles.css"`, que no necesita ni
+> Tailwind ni configuración. A cambio no podés usar los tokens del sistema en tu
+> propio marcado.
 
 Desde GitHub Packages las hojas tienen subpath propio:
 
 ```css
 /* Tipografias autoalojadas (Geist, JetBrains Mono, Source Serif 4).
-   Va primero, antes de Tailwind. */
+   Va primero, antes que la hoja del sistema. */
 @import "@calumet/elise-ui/tailwind/fonts.css";
-
-@import "tailwindcss";
 @import "@calumet/elise-ui/tailwind/elise.css";
 
-/* Permite que Tailwind detecte las clases usadas en los paquetes */
-@source "../node_modules/@calumet/elise-ui/dist";
 /* Solo incluye los que uses */
-@source "../node_modules/@calumet/elise-tables/dist";
-@source "../node_modules/@calumet/elise-toasts/dist";
-@source "../node_modules/@calumet/elise-alerts/dist";
+@import "@calumet/elise-tables/tailwind.css";
+@import "@calumet/elise-toasts/tailwind.css";
+@import "@calumet/elise-alerts/tailwind.css";
 ```
 
 Desde JSR no, porque JSR todavía no deja exportar archivos que no sean
@@ -105,28 +106,24 @@ Las hojas viajan igual dentro del paquete y se importan por su ruta:
 
 ```css
 @import "../node_modules/@calumet/elise-ui/src/tailwind/fonts.css";
-
-@import "tailwindcss";
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
 
-@source "../node_modules/@calumet/elise-ui/jsr";
 /* Solo incluye los que uses */
-@source "../node_modules/@calumet/elise-tables/jsr";
-@source "../node_modules/@calumet/elise-toasts/jsr";
-@source "../node_modules/@calumet/elise-alerts/jsr";
+@import "../node_modules/@calumet/elise-tables/src/tailwind.css";
+@import "../node_modules/@calumet/elise-toasts/src/tailwind.css";
+@import "../node_modules/@calumet/elise-alerts/src/tailwind.css";
 ```
 
-Las dos carpetas son distintas a propósito:
+Cada hoja trae dentro `@import "tailwindcss"` y los `@source` que Tailwind
+necesita para encontrar las clases, así que la app no escribe ninguno de los
+dos. Esos `@source` apuntan a la carpeta del código compilado, que cambia según
+el registro, y la que no exista se ignora sin error:
 
-| Ruta   | Qué hay                      | Quién la usa                     |
-| ------ | ---------------------------- | -------------------------------- |
-| `src`  | Las hojas de estilo          | El `@import` de Tailwind         |
-| `jsr`  | El código ya compilado       | El `@source`, para hallar clases |
-| `dist` | El bundle de GitHub Packages | El `@source` en esa vía          |
-
-Apuntar el `@source` a `src` instalando desde JSR deja la app sin estilos: ahí
-solo están los `.css`, y las clases que Tailwind tiene que encontrar están en
-`jsr`.
+| Ruta   | Qué hay                      | Quién la usa                       |
+| ------ | ---------------------------- | ---------------------------------- |
+| `src`  | Las hojas de estilo          | El `@import` de la app             |
+| `jsr`  | El código ya compilado       | El `@source` de la hoja, desde JSR |
+| `dist` | El bundle de GitHub Packages | El `@source` de la hoja, desde npm |
 
 > **No te saltees `fonts.css`.** Sin el, `--font-sans` cae en la fuente del
 > sistema y tu app se ve distinta en macOS, Windows y Linux. Las tres familias

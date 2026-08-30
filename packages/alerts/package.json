@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-alerts",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "private": false,
   "description": "Sistema de alertas modales basado en event bus para Elise.",
   "repository": {
@@ -19,10 +19,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./tailwind.css": "./src/tailwind.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/tailwind.css"
   ],
   "scripts": {
     "build": "tsup --dts && pnpm build:jsr",

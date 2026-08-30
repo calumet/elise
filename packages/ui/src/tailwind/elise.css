@@ -687,3 +687,6 @@
     }
   }
 }
+
+@source "../../dist";
+@source "../../jsr";
