@@ -149,9 +149,9 @@
   --inverse-foreground: var(--background);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.012 265);
-  /* primary/destructive/success oscurecidos para cumplir WCAG AA (≥4.5:1)
-     con su texto blanco; warning usa texto oscuro por la misma razón */
-  --primary: oklch(0.55 0.19 262);
+  /* El navy, el rojo y el ocre salen del logo de Calumet sin retocar. Los cuatro
+     rellenos sólidos llevan texto blanco y cumplen AA con él. */
+  --primary: oklch(0.252 0.156 265);
   --primary-foreground: oklch(1 0 0);
   /* Superficie de trabajo: el lienzo sobre el que se apoyan las tarjetas. Cae
      entre la barra de navegación (0.94) y la tarjeta (1.0), y esa es toda su
@@ -184,9 +184,9 @@
      queda en un pulgar flotando sin nada alrededor. Este valor es el más claro
      que llega (3.12:1 sobre la tarjeta blanca). */
   --track: oklch(0.66 0.008 265);
-  --accent: oklch(0.955 0.025 250);
-  --accent-foreground: oklch(0.38 0.14 262);
-  --destructive: oklch(0.577 0.225 27);
+  --accent: oklch(0.95 0.024 265);
+  --accent-foreground: oklch(0.3 0.14 265);
+  --destructive: oklch(0.479 0.175 27);
   --destructive-foreground: oklch(1 0 0);
   /* border = divisores; border-strong = contorno de controles; input = campos.
      Son tres valores distintos porque un campo necesita más peso que un
@@ -199,19 +199,25 @@
   --border: oklch(0.922 0.005 265);
   --border-strong: oklch(0.865 0.008 265);
   --input: oklch(0.878 0.007 265);
-  --ring: oklch(0.55 0.19 262);
-  --chart-1: oklch(0.62 0.19 259.76);
-  --chart-2: oklch(0.55 0.22 262.96);
-  --chart-3: oklch(0.49 0.22 264.43);
-  --chart-4: oklch(0.42 0.18 265.55);
-  --chart-5: oklch(0.38 0.14 265.59);
+  --ring: oklch(0.252 0.156 265);
+  /* Tinta, no relleno. El navy de la marca es un fondo excelente y un texto
+     imposible sobre oscuro: ahi hace falta L 0.60 para leerse, y a esa altura
+     el relleno vuelve a ser un azul cualquiera. Por eso son dos tokens. */
+  --link: oklch(0.38 0.155 265);
+  --link-hover: oklch(0.32 0.152 265);
+  --link-active: oklch(0.27 0.15 265);
+  --chart-1: oklch(0.62 0.14 265);
+  --chart-2: oklch(0.52 0.15 265);
+  --chart-3: oklch(0.42 0.155 265);
+  --chart-4: oklch(0.34 0.15 265);
+  --chart-5: oklch(0.252 0.156 265);
   /* La barra es más oscura que el lienzo y la entrada elegida es más clara que
      la barra, no al revés. Es lo que separa una navegación de una columna de
      enlaces: el riel se lee como chasis y lo elegido como una pastilla que se
      levanta de él. */
   --sidebar: oklch(0.94 0.003 265);
   --sidebar-foreground: oklch(0.21 0.012 265);
-  --sidebar-primary: oklch(0.55 0.19 262);
+  --sidebar-primary: oklch(0.252 0.156 265);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-hover: oklch(0.958 0.002 265);
   --sidebar-accent: oklch(0.985 0.001 265);
@@ -223,11 +229,11 @@
   /* El codo que se asoma al apuntar una entrada. Contrasta menos que la guía
      firme, que es lo que lo hace leer como anticipo y no como estado. */
   --sidebar-guide-hover: oklch(0.845 0 0);
-  --sidebar-ring: oklch(0.55 0.19 262);
-  --success: oklch(0.52 0.15 152);
+  --sidebar-ring: oklch(0.252 0.156 265);
+  --success: oklch(0.52 0.115 155);
   --success-foreground: oklch(1 0 0);
-  --warning: oklch(0.75 0.15 75);
-  --warning-foreground: oklch(0.25 0 0);
+  --warning: oklch(0.532 0.112 56);
+  --warning-foreground: oklch(1 0 0);
   --info: oklch(0.55 0.15 240);
   --info-foreground: oklch(1 0 0);
 
@@ -235,26 +241,26 @@
      que compone el color contra el fondo y mueve el relleno *hacia* la página,
      con lo que el hover baja el contraste. Estos tokens se alejan del fondo:
      en claro oscurecen y en oscuro aclaran. */
-  --primary-hover: oklch(0.5 0.19 262);
-  --primary-active: oklch(0.455 0.18 262);
-  --destructive-hover: oklch(0.53 0.22 27);
-  --destructive-active: oklch(0.485 0.205 27);
-  --success-hover: oklch(0.475 0.145 152);
-  --success-active: oklch(0.43 0.135 152);
-  --warning-hover: oklch(0.71 0.15 75);
-  --warning-active: oklch(0.67 0.145 75);
+  --primary-hover: oklch(0.3 0.152 265);
+  --primary-active: oklch(0.34 0.15 265);
+  --destructive-hover: oklch(0.44 0.17 27);
+  --destructive-active: oklch(0.4 0.162 27);
+  --success-hover: oklch(0.48 0.112 155);
+  --success-active: oklch(0.44 0.105 155);
+  --warning-hover: oklch(0.492 0.11 56);
+  --warning-active: oklch(0.452 0.105 56);
   --info-hover: oklch(0.5 0.15 240);
   --info-active: oklch(0.455 0.145 240);
 
   /* Superficies sutiles de estado. Reemplazan los `bg-success/10` y
      `bg-warning/20`, ya que el alfa sobre fondo oscuro se enloda y un token
      sólido no. */
-  --success-subtle: oklch(0.962 0.032 152);
-  --success-subtle-foreground: oklch(0.4 0.11 152);
-  --warning-subtle: oklch(0.965 0.045 85);
-  --warning-subtle-foreground: oklch(0.45 0.1 70);
-  --destructive-subtle: oklch(0.962 0.03 25);
-  --destructive-subtle-foreground: oklch(0.45 0.17 27);
+  --success-subtle: oklch(0.962 0.026 155);
+  --success-subtle-foreground: oklch(0.4 0.09 155);
+  --warning-subtle: oklch(0.958 0.035 62);
+  --warning-subtle-foreground: oklch(0.44 0.095 56);
+  --destructive-subtle: oklch(0.962 0.028 27);
+  --destructive-subtle-foreground: oklch(0.43 0.145 27);
   --info-subtle: oklch(0.962 0.028 240);
   --info-subtle-foreground: oklch(0.42 0.12 245);
 
@@ -358,8 +364,8 @@
   --inverse-foreground: oklch(0.962 0.003 265);
   /* primary sube a 0.655 porque el 0.55 del modo claro se apaga sobre el fondo
      oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
-  --primary: oklch(0.655 0.17 262);
-  --primary-foreground: oklch(0.17 0.03 262);
+  --primary: oklch(0.42 0.156 265);
+  --primary-foreground: oklch(1 0 0);
   /* El mismo orden que en claro, invertido: barra (0.196) por debajo del lienzo
      y este por debajo de la tarjeta (0.216). En oscuro los tres pasos son más
      cortos, porque a esta luminosidad la vista separa antes. */
@@ -377,28 +383,31 @@
      contra una tarjeta ya oscura no queda hacia dónde bajar. 3.61:1 sobre
      ella. */
   --track: oklch(0.55 0.014 265);
-  --accent: oklch(0.33 0.09 262);
-  --accent-foreground: oklch(0.89 0.06 255);
+  --accent: oklch(0.3 0.085 265);
+  --accent-foreground: oklch(0.88 0.06 262);
   /* Excepcion a la regla de aclarar en oscuro. Como destructive lleva texto
      blanco, aclararlo lo baja de 4.5:1. Se queda en 0.577 y sus estados
      oscurecen, que igual lo separa del fondo (0.172) y de paso sube el
      contraste del texto. */
-  --destructive: oklch(0.577 0.225 27);
+  --destructive: oklch(0.55 0.172 27);
   --destructive-foreground: oklch(1 0 0);
   --border-subtle: oklch(0.26 0.012 265);
   --border: oklch(0.302 0.013 265);
   --border-strong: oklch(0.38 0.016 265);
   --input: oklch(0.36 0.015 265);
-  --ring: oklch(0.655 0.17 262);
-  --chart-1: oklch(0.71 0.14 254.69);
-  --chart-2: oklch(0.62 0.19 259.76);
-  --chart-3: oklch(0.55 0.22 262.96);
-  --chart-4: oklch(0.49 0.22 264.43);
-  --chart-5: oklch(0.42 0.18 265.55);
+  --ring: oklch(0.65 0.15 265);
+  --link: oklch(0.72 0.13 265);
+  --link-hover: oklch(0.78 0.12 265);
+  --link-active: oklch(0.83 0.1 265);
+  --chart-1: oklch(0.72 0.125 265);
+  --chart-2: oklch(0.63 0.14 265);
+  --chart-3: oklch(0.54 0.15 265);
+  --chart-4: oklch(0.45 0.155 265);
+  --chart-5: oklch(0.36 0.15 265);
   --sidebar: oklch(0.196 0.01 265);
   --sidebar-foreground: oklch(0.945 0.004 265);
-  --sidebar-primary: oklch(0.655 0.17 262);
-  --sidebar-primary-foreground: oklch(0.17 0.03 262);
+  --sidebar-primary: oklch(0.42 0.156 265);
+  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-hover: oklch(0.235 0.012 265);
   --sidebar-accent: oklch(0.268 0.013 265);
   --sidebar-accent-foreground: oklch(0.945 0.004 265);
@@ -407,32 +416,32 @@
   /* En oscuro el anticipo también contrasta menos, y eso lo acerca al fondo en
      vez de alejarlo: por eso baja de luminosidad en lugar de subir. */
   --sidebar-guide-hover: oklch(0.355 0.013 265);
-  --sidebar-ring: oklch(0.655 0.17 262);
-  --success: oklch(0.68 0.15 152);
-  --success-foreground: oklch(0.16 0.03 152);
-  --warning: oklch(0.8 0.14 75);
-  --warning-foreground: oklch(0.22 0.04 75);
+  --sidebar-ring: oklch(0.65 0.15 265);
+  --success: oklch(0.52 0.115 155);
+  --success-foreground: oklch(1 0 0);
+  --warning: oklch(0.532 0.112 56);
+  --warning-foreground: oklch(1 0 0);
   --info: oklch(0.68 0.14 240);
   --info-foreground: oklch(0.16 0.03 240);
 
   /* En oscuro el hover aclara, ya que alejarse del fondo sube el contraste. */
-  --primary-hover: oklch(0.705 0.165 262);
-  --primary-active: oklch(0.75 0.15 262);
-  --destructive-hover: oklch(0.53 0.22 27);
-  --destructive-active: oklch(0.485 0.205 27);
-  --success-hover: oklch(0.73 0.145 152);
-  --success-active: oklch(0.775 0.135 152);
-  --warning-hover: oklch(0.845 0.135 75);
-  --warning-active: oklch(0.885 0.12 75);
+  --primary-hover: oklch(0.47 0.152 265);
+  --primary-active: oklch(0.52 0.148 265);
+  --destructive-hover: oklch(0.595 0.17 27);
+  --destructive-active: oklch(0.64 0.16 27);
+  --success-hover: oklch(0.565 0.115 155);
+  --success-active: oklch(0.61 0.112 155);
+  --warning-hover: oklch(0.577 0.112 56);
+  --warning-active: oklch(0.62 0.11 56);
   --info-hover: oklch(0.73 0.135 240);
   --info-active: oklch(0.775 0.125 240);
 
-  --success-subtle: oklch(0.28 0.05 152);
-  --success-subtle-foreground: oklch(0.86 0.12 152);
-  --warning-subtle: oklch(0.3 0.05 75);
-  --warning-subtle-foreground: oklch(0.88 0.11 82);
-  --destructive-subtle: oklch(0.285 0.06 27);
-  --destructive-subtle-foreground: oklch(0.85 0.11 27);
+  --success-subtle: oklch(0.28 0.04 155);
+  --success-subtle-foreground: oklch(0.86 0.095 155);
+  --warning-subtle: oklch(0.3 0.042 56);
+  --warning-subtle-foreground: oklch(0.86 0.085 62);
+  --destructive-subtle: oklch(0.285 0.05 27);
+  --destructive-subtle-foreground: oklch(0.85 0.09 27);
   --info-subtle: oklch(0.285 0.055 240);
   --info-subtle-foreground: oklch(0.85 0.1 240);
 
@@ -470,6 +479,9 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-link-active: var(--link-active);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
