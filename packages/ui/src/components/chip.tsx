@@ -148,7 +148,7 @@ export const Chip: React.ForwardRefExoticComponent<
                   }
             }
             className={cn(
-              "inline-flex size-4 shrink-0 items-center justify-center rounded-xs text-muted-foreground",
+              "relative inline-flex size-4 shrink-0 items-center justify-center rounded-xs text-muted-foreground before:absolute before:-inset-1 before:content-['']",
               removeAs !== "presentation" &&
                 "cursor-pointer transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               (disabled || removeAs === "presentation") && "pointer-events-none",

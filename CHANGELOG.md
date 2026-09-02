@@ -72,6 +72,14 @@ catálogo ya lo era.
   El área pulsable de `Alert` y `Dialog` no cambia, y la posición del glifo de
   `Sheet` tampoco. Cierra [#42](https://github.com/calumet/elise/issues/42).
 
+- **Los botones de solo icono llegan a 24px de área pulsable.** La × de `Chip`
+  medía 16×16 y `AppShellNavAction` y el «limpiar» del `Combobox` 20×20, por
+  debajo del mínimo de WCAG 2.2. Lo que crece es solo el área: la caja que se ve
+  sigue midiendo lo mismo y no se mueve nada de sitio, porque la zona extra la
+  pone un pseudo-elemento posicionado. Medido con `elementFromPoint`: los tres
+  reciben el clic en 24×24.
+  Cierra [#43](https://github.com/calumet/elise/issues/43).
+
 ## `@calumet/elise-linter` 0.2.0
 
 ### Agrega
