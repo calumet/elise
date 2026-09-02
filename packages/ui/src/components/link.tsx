@@ -41,7 +41,7 @@ export type LinkProps = React.ComponentProps<"a"> & {
 };
 
 const tonos: Record<NonNullable<LinkProps["tone"]>, string> = {
-  auto: "text-primary hover:text-primary-hover active:text-primary-active",
+  auto: "text-link hover:text-link-hover active:text-link-active",
   neutral: "text-inherit",
   critical:
     "text-destructive-subtle-foreground hover:text-destructive-hover active:text-destructive-active",

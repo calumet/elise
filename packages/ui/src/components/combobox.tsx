@@ -494,7 +494,9 @@ function ComboboxItem({
         {icon}
         {children}
       </span>
-      {elegido ? <Check className="size-4 shrink-0 text-primary" aria-hidden="true" /> : null}
+      {elegido ? (
+        <Check className="size-4 shrink-0 text-accent-foreground" aria-hidden="true" />
+      ) : null}
     </CommandItem>
   );
 }

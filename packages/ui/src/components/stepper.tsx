@@ -74,7 +74,7 @@ export type StepperItemProps = React.ComponentProps<"li"> & {
 
 const indicadorPorEstado: Record<StepStatus, string> = {
   complete: "border-primary bg-primary text-primary-foreground shadow-bevel",
-  current: "border-primary bg-background text-primary",
+  current: "border-primary bg-background text-accent-foreground",
   upcoming: "border-border-strong bg-background text-muted-foreground",
 };
 

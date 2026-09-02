@@ -56,7 +56,7 @@ const weightClasses: Record<NonNullable<TextProps["weight"]>, string> = {
 const toneClasses: Record<NonNullable<TextProps["tone"]>, string> = {
   default: "text-foreground",
   muted: "text-muted-foreground",
-  primary: "text-primary",
+  primary: "text-accent-foreground",
   success: "text-success",
   warning: "text-warning",
   danger: "text-destructive",

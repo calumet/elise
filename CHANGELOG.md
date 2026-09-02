@@ -3,6 +3,60 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.10.0
+
+La paleta pasa a salir del logo de Calumet. Sube la minor porque cambia el
+aspecto de todo lo que consume el catálogo, y porque un relleno cambia de claro
+a oscuro.
+
+### Rompe
+
+- **`--warning` era ámbar claro con texto oscuro y ahora es ocre con texto
+  blanco.** Quien pintara su propio texto sobre `bg-warning` se queda con texto
+  oscuro sobre un relleno oscuro. Lo que use `text-warning-foreground` no tiene
+  que hacer nada.
+
+- **Lo que usaba `--primary` como tinta pasa a otros tokens.** `Link` va a
+  `--link`, y el icono de elegido del `Combobox`, el número del paso actual del
+  `Stepper` y `Text tone="primary"` van a `--accent-foreground`. Un consumidor
+  que escribiera `text-primary` a mano sigue teniendo el token, pero sobre fondo
+  oscuro ya no se lee: ahí `--primary` es un navy de relleno.
+
+### Cambia
+
+- **El primario es el navy del logo, sin retocar:** `oklch(0.252 0.156 265)`,
+  que es `#020b6b`. El que había, `oklch(0.55 0.19 262)`, estaba a 0.004 de
+  luminosidad y 0.9° de tono del azul por defecto de shadcn y de Tailwind
+  blue-600. Era, literalmente, el azul de todo el mundo.
+
+  En claro entra entero: 16.63:1 con texto blanco y 15.93:1 como anillo de foco.
+  Como es casi negro, `hover` y `active` aclaran en vez de oscurecer, que es lo
+  que hace cualquier botón de ese peso; oscureciendo, los tres estados quedaban
+  a menos de dos niveles de distancia entre sí.
+
+- **`--destructive` es el rojo de las plumas** (`oklch(0.479 0.175 27)`,
+  `#aa1f1e`) y **`--warning` el ocre del amarre** (`oklch(0.532 0.112 56)`,
+  `#9c5921`), los dos tal cual salen del logo. El tono ya coincidía casi exacto
+  en los dos casos; lo que sobraba era saturación: el rojo estaba 29% por encima
+  y el aviso al doble.
+
+- **Nuevos `--link`, `--link-hover` y `--link-active`.** Un color de relleno y
+  uno de texto no pueden ser el mismo token: sobre fondo oscuro el navy necesita
+  llegar a L 0.60 para leerse como texto, y a esa altura el relleno vuelve a ser
+  un azul cualquiera. Lo encontró la auditoría, con diecisiete enlaces a 2:1.
+
+- **En oscuro `--ring` se separa de `--primary`.** El relleno se queda navy
+  (`oklch(0.42 0.156 265)`, lo más profundo que sigue leyéndose como plancha
+  contra el fondo) y el anillo sube a `oklch(0.65 0.15 265)` para cumplir sus
+  3:1. El navy puro no sirve allá: da 1.15:1 contra el fondo y el botón se
+  disuelve en la página.
+
+- **`--warning` y `--success` son el mismo valor en los dos temas.** Contra el
+  fondo oscuro dan 3.51:1 y 3.67:1, así que no necesitan una versión por tema.
+
+Los grises no se tocan: el gris del logo es neutro (croma 0.004) y el del
+catálogo ya lo era.
+
 ## `@calumet/elise-linter` 0.2.0
 
 ### Agrega
