@@ -57,6 +57,21 @@ a oscuro.
 Los grises no se tocan: el gris del logo es neutro (croma 0.004) y el del
 catálogo ya lo era.
 
+### Corrige
+
+- **El botón de cerrar no alineaba con lo que tiene enfrente.** Centrar un glifo
+  de 16 en una caja pulsable más grande lo deja hundido por el colchón, así que
+  el icono del tono de un `Alert` arrancaba a 13px del borde y su × acababa a 19. Medido: 6px de desfase en `Alert` y 4px en `Dialog`. Ahora los dos llevan
+  un margen negativo del tamaño del colchón, que es la misma corrección que
+  `Alert` ya aplicaba en el eje vertical y que había quedado a medias.
+
+  `Sheet` tenía el defecto contrario: su × alineaba bien porque no tenía caja
+  ninguna, y el área pulsable eran los 16×16 del propio glifo. Ahora son 28×28 y
+  el glifo no se movió.
+
+  El área pulsable de `Alert` y `Dialog` no cambia, y la posición del glifo de
+  `Sheet` tampoco. Cierra [#42](https://github.com/calumet/elise/issues/42).
+
 ## `@calumet/elise-linter` 0.2.0
 
 ### Agrega

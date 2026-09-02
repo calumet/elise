@@ -58,11 +58,13 @@ const toneIcons: Record<NonNullable<AlertProps["tone"]>, React.ElementType> = {
   danger: XCircle,
 };
 
-/* El margen negativo deja el botón en 28px de área táctil sin que la barra
-   crezca por él: sin eso, la misma alerta mide 36px o 44 según se pueda cerrar
-   o no, y dos avisos seguidos no cuadran. */
+/* Los márgenes negativos dejan el botón en 28px de área táctil sin que la barra
+   crezca por él: sin el vertical, la misma alerta mide 36px o 44 según se pueda
+   cerrar o no, y dos avisos seguidos no cuadran. El horizontal es el mismo
+   arreglo en el otro eje: centrar un glifo de 16 en una caja de 28 lo deja 6px
+   por dentro, y ahí deja de alinear con el icono del tono de enfrente. */
 const BOTON_CERRAR =
-  "-my-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-current transition-[background-color] duration-(--duration-fast) ease-out hover:bg-current/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1 focus-visible:ring-offset-transparent";
+  "-my-1 -me-1.5 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-current transition-[background-color] duration-(--duration-fast) ease-out hover:bg-current/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1 focus-visible:ring-offset-transparent";
 
 /**
  * Mensaje en línea, no modal. Para interrumpir al usuario con una decisión usa
