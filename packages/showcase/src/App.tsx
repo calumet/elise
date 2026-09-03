@@ -63,6 +63,7 @@ const MenusSelectDemo = React.lazy(() => import("./sections/MenusSelectDemo"));
 const PantallaInicio = React.lazy(() => import("./sections/pantallas/PantallaInicio"));
 const PantallaListado = React.lazy(() => import("./sections/pantallas/PantallaListado"));
 const PantallaFicha = React.lazy(() => import("./sections/pantallas/PantallaFicha"));
+const PortalHeaderDemo = React.lazy(() => import("./sections/PortalHeaderDemo"));
 const PantallaRegistroUnico = React.lazy(
   () => import("./sections/pantallas/PantallaRegistroUnico"),
 );
@@ -324,6 +325,12 @@ const App = () => (
           <SectionCard title="Pantalla de listado">
             <LazySection>
               <PantallaListado />
+            </LazySection>
+          </SectionCard>
+
+          <SectionCard title="Portal: cabecera">
+            <LazySection>
+              <PortalHeaderDemo />
             </LazySection>
           </SectionCard>
 

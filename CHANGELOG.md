@@ -3,7 +3,7 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.11.0
+## `@calumet/elise-ui` 0.12.0
 
 El realce al apuntar salía de un color fijo, y un color fijo da un salto
 distinto en cada superficie: una tarjeta de KPI saltaba 0.114 de luminosidad y
@@ -41,6 +41,54 @@ Se quedan como estaban los realces con color propio, que son otra cosa: el
 relleno de un botón de tono va a su `-hover` (0.038 a 0.048 en los dos temas),
 la barra lateral tiene su propia escala porque es una región con su tema, y la
 zona de soltar ficheros se tiñe de `--accent`.
+
+## `@calumet/elise-ui` 0.11.0
+
+`NavigationMenu` se rehace para la barra principal de un sitio. La del portal de
+escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
+
+### Rompe
+
+- **La fila deja de ser una caja.** Traía `border`, `bg-background` y `p-1`, que
+  en una cabecera se ve como un control metido dentro de otro.
+
+- **El disparador arranca en `foreground` y no en `muted-foreground`,** que es
+  el trato de un enlace secundario y no el de la navegación principal.
+
+- **El panel pierde el tope de 384px,** contra el que se apretaba cualquier
+  megamenú de más de una columna. Ahora el tope es la barra.
+
+- **La fila se sale 10px por lado** con un margen negativo, para que lo que caiga
+  a plomo con la marca sea el rótulo y no la pastilla del hover. En una barra sin
+  relleno, esa pastilla se sale.
+
+- **`NavigationMenuItem` pasa a ser `relative`,** porque es el marco contra el
+  que se coloca el panel.
+
+### Cambia
+
+- **Lo que no cabe se agrupa al final.** Los anchos se miden del layout ya
+  pintado y no se estiman, porque el rótulo lo escribe quien usa el componente.
+  Lo que se desborda no se desmonta, se vuelve a montar como submenú vertical,
+  así que cada sección conserva su panel. Con las nueve del portal: 8 en la fila
+  con 1056 de sitio, 7 con 1004, 5 con 804 y 4 con 672.
+
+- **Por debajo de 768px la fila se cambia por un botón,** que abre las secciones
+  en el sitio, debajo de la barra y empujando lo que siga, no en un panel encima
+  de la página. Es el mismo corte que usa `AppShell`.
+
+- **Nuevo `NavigationMenuToggle`,** para poner ese botón donde vayan el resto de
+  acciones de la cabecera. Si no hay ninguno, la fila dibuja el suyo.
+
+- **Nuevo `align` en `NavigationMenuContent`:** `start` (por defecto) y `end`
+  abren bajo el disparador, `full` estira al ancho de la barra. Un `start` que se
+  pasara del borde derecho se corre hacia adentro lo que se sale.
+
+- **Nuevo `overflowLabel` en `NavigationMenuList`,** el rótulo del grupo. Por
+  defecto «Más», o la clave `ui.more` si hay Provider de i18n montado.
+
+- **Las animaciones pasan a los tiempos del sistema,** con dos fotogramas nuevos,
+  `nav-down` y `nav-up`, para lo que se abre en el flujo.
 
 ## `@calumet/elise-ui` 0.10.1
 
