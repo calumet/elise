@@ -170,6 +170,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const fila = React.useRef<HTMLUListElement | null>(null);
   const anchos = React.useRef<number[]>([]);
   const anchoGrupo = React.useRef(96);
+  const repartir = React.useRef<() => void>(undefined);
   const [visibles, setVisibles] = React.useState(secciones.length);
 
   React.useLayoutEffect(() => {
@@ -178,7 +179,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     const caja = lista?.closest<HTMLElement>('[data-slot="navigation-menu"]');
     if (!lista || !caja) return;
 
-    const repartir = () => {
+    repartir.current = () => {
       const hijos = [...lista.children] as HTMLElement[];
       const grupo = lista.querySelector<HTMLElement>('[data-slot="navigation-menu-overflow"]');
       if (grupo) anchoGrupo.current = grupo.getBoundingClientRect().width;
@@ -211,11 +212,18 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       setVisibles(caben);
     };
 
-    const ro = new ResizeObserver(repartir);
+    const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
-    repartir();
-    return () => ro.disconnect();
+    repartir.current();
+    return () => {
+      ro.disconnect();
+      repartir.current = undefined;
+    };
   }, [secciones.length, esMovil]);
+
+  /* El ancho del grupo solo se sabe con el grupo puesto, asi que la primera
+     cuenta va con una estimacion y esta la corrige antes de pintar. */
+  React.useLayoutEffect(() => repartir.current?.(), [visibles]);
 
   const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
     <DentroDeUnaSecuencia.Provider value={variante}>
