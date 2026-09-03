@@ -5,93 +5,51 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ## `@calumet/elise-ui` 0.11.0
 
-`NavigationMenu` se rehace para la barra principal de un sitio. La del portal
-de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
+`NavigationMenu` se rehace para la barra principal de un sitio. La del portal de
+escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
 
 ### Rompe
 
-- **La fila deja de ser una caja.** `NavigationMenuList` traía `border`,
-  `bg-background` y `p-1`, así que la navegación de la cabecera se veía como un
-  control metido dentro de otro. Quien quiera ese recuadro lo pone por
-  `className`.
+- **La fila deja de ser una caja.** Traía `border`, `bg-background` y `p-1`, que
+  en una cabecera se ve como un control metido dentro de otro.
 
-- **El disparador arranca en `foreground` y no en `muted-foreground`.** Toda la
-  barra se leía apagada hasta pasarle el cursor por encima, que es el trato de
-  un enlace secundario y no el de la navegación principal.
+- **El disparador arranca en `foreground` y no en `muted-foreground`,** que es
+  el trato de un enlace secundario y no el de la navegación principal.
 
-- **El panel pierde el tope de 384px.** Con `max-w-sm` un megamenú de dos o tres
-  columnas se apretaba contra ese ancho. Ahora el tope es la barra.
+- **El panel pierde el tope de 384px,** contra el que se apretaba cualquier
+  megamenú de más de una columna. Ahora el tope es la barra.
+
+- **La fila se sale 10px por lado** con un margen negativo, para que lo que caiga
+  a plomo con la marca sea el rótulo y no la pastilla del hover. En una barra sin
+  relleno, esa pastilla se sale.
 
 - **`NavigationMenuItem` pasa a ser `relative`,** porque es el marco contra el
-  que se coloca el panel. Un hijo suyo en `absolute` que antes se colocaba
-  contra la página ahora se coloca contra la sección.
+  que se coloca el panel.
 
 ### Cambia
 
-- **Lo que no cabe se agrupa al final.** La fila mide el layout ya pintado, no
-  estima: el rótulo de cada sección lo escribe quien la usa. Lo que se desborda
-  no se desmonta, se vuelve a montar dentro del grupo como submenú vertical, así
-  que cada sección conserva su panel tal como se escribió, sea un enlace suelto
-  o un megamenú. Con las nueve secciones del portal:
+- **Lo que no cabe se agrupa al final.** Los anchos se miden del layout ya
+  pintado y no se estiman, porque el rótulo lo escribe quien usa el componente.
+  Lo que se desborda no se desmonta, se vuelve a montar como submenú vertical,
+  así que cada sección conserva su panel. Con las nueve del portal: 8 en la fila
+  con 1056 de sitio, 7 con 1004, 5 con 804 y 4 con 672.
 
-  | ancho de la barra | en la fila | agrupadas |
-  | ----------------- | ---------- | --------- |
-  | 1036              | 8          | 1         |
-  | 984               | 7          | 2         |
-  | 908               | 6          | 3         |
-  | 784               | 5          | 4         |
-  | 684               | 4          | 5         |
+- **Por debajo de 768px la fila se cambia por un botón,** que abre las secciones
+  en el sitio, debajo de la barra y empujando lo que siga, no en un panel encima
+  de la página. Es el mismo corte que usa `AppShell`.
 
-  La cuenta se hace dos veces, y la segunda descuenta el ancho del propio grupo:
-  sin eso, el grupo provoca el desbordamiento que venía a resolver. Dentro del
-  grupo cada sección abre en flujo, y el grupo crece hasta `70vh` y ahí rueda.
+- **Nuevo `NavigationMenuToggle`,** para poner ese botón donde vayan el resto de
+  acciones de la cabecera. Si no hay ninguno, la fila dibuja el suyo.
 
-- **Por debajo de 768px la fila entera se cambia por un botón.** Agrupar tiene
-  un límite: en un teléfono la fila termina siendo el grupo y nada más. Sale el
-  botón de siempre, que abre las secciones en el sitio, debajo de la barra y
-  empujando lo que venga después, no en un panel encima de la página. Cada
-  sección se abre a su vez donde está, y un enlace lo cierra todo. Es el mismo
-  corte que usa `AppShell`, así que las dos navegaciones del sistema cambian de
-  forma a la vez.
-
-- **Nuevo `NavigationMenuToggle`,** para poner ese botón donde va el resto de
-  acciones de la cabecera en vez de en la fila. Se registra solo: si hay uno, la
-  fila no dibuja el suyo. Envolvé la cabecera entera con `NavigationMenu` y
-  ponelo donde quieras dentro; la raíz pasa a ser una columna para eso.
-
-- **Todo cae a plomo con la cabecera.** El rótulo de una sección arrancaba
-  10px a la derecha de la marca, porque cada disparador lleva el relleno de su
-  pastilla. Ahora la fila lo descuenta con un margen negativo, el panel al ancho
-  de la barra se sangra lo mismo que la fila, y en el despliegue de móvil las
-  filas no ponen sangría propia. Medido en el portal: marca, primera sección,
-  título de columna y primer enlace del megamenú, todos en la misma vertical.
-
-- **El menú corriente y el megamenú no llevan el mismo marco.** Un menú es una
-  columna de enlaces que ya traen su propio recuadro, y ahí `p-3` alcanza. El
-  megamenú ocupa la barra entera y con ese mismo marco se ve apretado, así que
-  sube el vertical y deja el horizontal en la sangría de la fila.
-
-- **Las animaciones pasan a los tiempos del sistema.** El panel flotante entra y
-  sale en `--duration-fast` con `--ease-out`, y al pasar de una sección a otra
-  se desliza hacia el lado del que viene. Lo que se abre en el flujo (una
-  sección dentro del grupo o del despliegue de móvil) usa los mismos 200ms y la
-  misma curva que el `Accordion` y el `Collapsible`, con dos fotogramas nuevos,
-  `nav-down` y `nav-up`. El alto lo mide el componente, porque ahí el primitivo
-  no publica ninguno.
-
-- **Nuevo `align` en `NavigationMenuContent`.** `start` (por defecto) y `end`
-  abren el panel bajo su disparador; `full` lo estira al ancho de la barra, que
-  es lo que pide un megamenú de varias columnas. Un panel `start` que se pasara
-  del borde derecho se corre hacia adentro justo lo que se sale, así que no hace
-  falta elegir `end` a mano por estar cerca del borde. Por debajo de `sm` los
-  tres se estiran igual, que es lo único que cabe en un teléfono.
+- **Nuevo `align` en `NavigationMenuContent`:** `start` (por defecto) y `end`
+  abren bajo el disparador, `full` estira al ancho de la barra. Un `start` que se
+  pasara del borde derecho se corre hacia adentro lo que se sale.
 
 - **Nuevo `overflowLabel` en `NavigationMenuList`,** el rótulo del grupo. Por
   defecto «Más», o la clave `ui.more` si hay Provider de i18n montado.
 
-- **Los rótulos no se parten.** El disparador y el enlace llevan
-  `whitespace-nowrap`, que es lo que hace que el ancho de una sección se pueda
-  medir una vez y reusar.
+- **Las animaciones pasan a los tiempos del sistema,** con dos fotogramas nuevos,
+  `nav-down` y `nav-up`, para lo que se abre en el flujo.
 
 ## `@calumet/elise-ui` 0.10.1
 
