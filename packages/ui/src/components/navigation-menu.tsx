@@ -4,11 +4,14 @@
  * @module
  */
 
-import { ChevronDown } from "@calumet/elise-icons";
+import { ChevronDown, Menu } from "@calumet/elise-icons";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 
+import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./sheet";
+
 import { cn } from "@/lib/cn";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
 
 /* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
@@ -46,7 +49,8 @@ export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
 
 /**
  * La fila de secciones. Las que no caben se recogen en un grupo al final, y ese
- * grupo crece a medida que la ventana se angosta.
+ * grupo crece a medida que la ventana se angosta, hasta que por debajo de los
+ * 768px la fila entera se cambia por el cajón de siempre.
  *
  * Los anchos se miden del layout ya pintado y no se estiman, porque el rótulo
  * de cada sección lo escribe quien la usa. La cuenta se hace dos veces: la
@@ -55,6 +59,7 @@ export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
  *
  * Lo que se desborda no se desmonta, se vuelve a montar dentro del grupo como
  * submenú vertical, así que cada sección conserva su panel tal como se escribió.
+ * En el cajón pasa lo mismo con todas.
  */
 export const NavigationMenuList: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<NavigationMenuListProps> &
@@ -64,7 +69,10 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   NavigationMenuListProps
 >(({ className, children, overflowLabel, ...props }, ref) => {
   const mas = useElLabel("ui", "more", "Más");
+  const navegacion = useElLabel("ui", "navigation", "Navegación");
   const rotuloGrupo = overflowLabel ?? mas;
+  const esMovil = useIsMobile();
+  const [cajon, setCajon] = React.useState(false);
 
   const secciones = React.useMemo(
     () => React.Children.toArray(children).filter(React.isValidElement),
@@ -117,10 +125,51 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     ro.observe(caja);
     repartir();
     return () => ro.disconnect();
-  }, [secciones.length]);
+  }, [secciones.length, esMovil]);
+
+  const secuencia = (
+    <NavigationMenuPrimitive.Sub
+      data-slot="navigation-menu-sub"
+      orientation="vertical"
+      className={PANEL_EN_GRUPO}
+    >
+      <NavigationMenuPrimitive.List className="flex list-none flex-col gap-0">
+        {esMovil ? secciones : secciones.slice(visibles)}
+      </NavigationMenuPrimitive.List>
+    </NavigationMenuPrimitive.Sub>
+  );
+
+  if (esMovil) {
+    return (
+      <Sheet open={cajon} onOpenChange={setCajon}>
+        <SheetTrigger asChild>
+          <button
+            type="button"
+            data-slot="navigation-menu-toggle"
+            aria-label={navegacion}
+            className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <Menu className="size-5" aria-hidden />
+          </button>
+        </SheetTrigger>
+        <SheetContent side="left" aria-describedby={undefined}>
+          <SheetHeader>
+            <SheetTitle>{navegacion}</SheetTitle>
+          </SheetHeader>
+          {/* Un clic en un enlace cierra el cajón; desplegar una sección, no. */}
+          <SheetBody
+            onClick={(e) => {
+              if ((e.target as HTMLElement).closest("a")) setCajon(false);
+            }}
+          >
+            {secuencia}
+          </SheetBody>
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   const dentro = secciones.slice(0, visibles);
-  const fuera = secciones.slice(visibles);
 
   return (
     <NavigationMenuPrimitive.List
@@ -134,19 +183,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       {...props}
     >
       {dentro}
-      {fuera.length > 0 ? (
+      {visibles < secciones.length ? (
         <NavigationMenuPrimitive.Item data-slot="navigation-menu-overflow" className="relative">
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
           <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
-            <NavigationMenuPrimitive.Sub
-              data-slot="navigation-menu-sub"
-              orientation="vertical"
-              className={PANEL_EN_GRUPO}
-            >
-              <NavigationMenuPrimitive.List className="flex list-none flex-col gap-0">
-                {fuera}
-              </NavigationMenuPrimitive.List>
-            </NavigationMenuPrimitive.Sub>
+            {secuencia}
           </NavigationMenuContent>
         </NavigationMenuPrimitive.Item>
       ) : null}
@@ -184,7 +225,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
     data-slot="navigation-menu-trigger"
     ref={ref}
     className={cn(
-      "group inline-flex h-9 w-max select-none items-center justify-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-between",
+      "group inline-flex h-9 w-max select-none items-center justify-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted in-data-[slot=navigation-menu-sub]:w-full in-data-[slot=navigation-menu-sub]:justify-between",
       className,
     )}
     {...props}

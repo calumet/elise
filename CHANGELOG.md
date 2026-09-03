@@ -37,13 +37,20 @@ de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
   | ancho de la barra | en la fila | agrupadas |
   | ----------------- | ---------- | --------- |
   | 1036              | 8          | 1         |
+  | 984               | 7          | 2         |
   | 908               | 6          | 3         |
+  | 784               | 5          | 4         |
   | 684               | 4          | 5         |
-  | 524               | 3          | 6         |
-  | 304               | 1          | 8         |
 
   La cuenta se hace dos veces, y la segunda descuenta el ancho del propio grupo:
-  sin eso, el grupo provoca el desbordamiento que venía a resolver.
+  sin eso, el grupo provoca el desbordamiento que venía a resolver. Dentro del
+  grupo cada sección abre en flujo, y el grupo crece hasta `70vh` y ahí rueda.
+
+- **Por debajo de 768px la fila entera se cambia por un cajón.** Agrupar tiene
+  un límite: en un teléfono la fila termina siendo el grupo y nada más. Sale el
+  botón de siempre y las nueve secciones se despliegan en un `Sheet`, cada una
+  con su panel, y un enlace lo cierra. Es el mismo corte que usa `AppShell`, así
+  que las dos navegaciones del sistema cambian de forma a la vez.
 
 - **Nuevo `align` en `NavigationMenuContent`.** `start` (por defecto) y `end`
   abren el panel bajo su disparador; `full` lo estira al ancho de la barra, que
