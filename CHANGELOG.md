@@ -3,6 +3,51 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.11.0
+
+`NavigationMenu` se rehace para la barra principal de un sitio. La del portal
+de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
+
+### Rompe
+
+- **La fila deja de ser una caja.** `NavigationMenuList` traía `border`,
+  `bg-background` y `p-1`, así que la navegación de la cabecera se veía como un
+  control metido dentro de otro. Quien quiera ese recuadro lo pone por
+  `className`.
+
+- **El disparador arranca en `foreground` y no en `muted-foreground`.** Toda la
+  barra se leía apagada hasta pasarle el cursor por encima, que es el trato de
+  un enlace secundario y no el de la navegación principal.
+
+- **El panel pierde el tope de 384px.** Con `max-w-sm` un megamenú de dos o tres
+  columnas se apretaba contra ese ancho. El único tope que queda es el viewport.
+
+### Cambia
+
+- **Lo que no cabe se agrupa al final.** La fila mide el layout ya pintado, no
+  estima: el rótulo de cada sección lo escribe quien la usa. Lo que se desborda
+  no se desmonta, se vuelve a montar dentro del grupo como submenú vertical, así
+  que cada sección conserva su panel tal como se escribió, sea un enlace suelto
+  o un megamenú. Con las nueve secciones del portal de escuelas:
+
+  | ancho | en la fila | agrupadas |
+  | ----- | ---------- | --------- |
+  | 1280  | 9          | 0         |
+  | 1100  | 8          | 1         |
+  | 1024  | 7          | 2         |
+  | 900   | 6          | 3         |
+  | 800   | 5          | 4         |
+
+  La cuenta se hace dos veces, y la segunda descuenta el ancho del propio grupo:
+  sin eso, el grupo provoca el desbordamiento que venía a resolver.
+
+- **Nuevo `overflowLabel` en `NavigationMenuList`,** el rótulo de ese grupo. Por
+  defecto «Más», o la clave `ui.more` si hay Provider de i18n montado.
+
+- **Los rótulos no se parten.** El disparador y el enlace llevan
+  `whitespace-nowrap`, que es lo que hace que el ancho de una sección se pueda
+  medir una vez y reusar.
+
 ## `@calumet/elise-ui` 0.10.0
 
 La paleta pasa a salir del logo de Calumet. Sube la minor porque cambia el
