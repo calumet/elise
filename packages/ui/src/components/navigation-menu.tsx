@@ -39,6 +39,9 @@ const BOTON_DESPLIEGUE =
 /**
  * Raíz del menú de navegación, para la barra principal de un sitio. Envolvé con
  * ella toda la cabecera si querés poner el botón arriba, junto a la marca.
+ *
+ * El relleno horizontal va aquí y no en la fila: el despliegue de móvil lo
+ * hereda, y así sus rótulos caen a plomo con los de la fila.
  */
 export const NavigationMenu: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
@@ -221,10 +224,14 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
     <DentroDeUnaSecuencia.Provider value={variante}>
-      <NavigationMenuPrimitive.Sub data-slot="navigation-menu-sub" orientation="vertical">
+      <NavigationMenuPrimitive.Sub
+        data-slot="navigation-menu-sub"
+        orientation="vertical"
+        className="w-full"
+      >
         <NavigationMenuPrimitive.List
           className={cn(
-            "flex list-none flex-col gap-0",
+            "flex w-full list-none flex-col gap-0",
             variante === "cajon" && "divide-y divide-border",
           )}
         >
@@ -249,7 +256,9 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
             if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
           }}
         >
-          <div className={cn(!hayDisparador && "border-t border-border", className)}>
+          {/* Sin el `className` de la fila: describe una fila, y con un `flex`
+              dentro el submenu se encoge a su contenido. */}
+          <div className={cn("w-full", !hayDisparador && "border-t border-border")}>
             {secuencia(secciones, "cajon")}
           </div>
         </CollapsibleContent>
