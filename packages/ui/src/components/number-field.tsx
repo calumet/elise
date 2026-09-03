@@ -151,7 +151,7 @@ export const NumberField: React.ForwardRefExoticComponent<
         aria-label={etiqueta}
         disabled={disabled || readOnly || apagado}
         onClick={() => pasar(direccion)}
-        className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:text-border-strong"
+        className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground disabled:pointer-events-none disabled:text-border-strong"
       >
         {direccion === 1 ? (
           <Plus className="size-4" aria-hidden />

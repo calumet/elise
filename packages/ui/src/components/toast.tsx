@@ -106,7 +106,7 @@ export const ToastClose: React.ForwardRefExoticComponent<
       data-slot="toast-close"
       ref={ref}
       className={cn(
-        "absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+        "absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
         className,
       )}
       {...props}
@@ -130,7 +130,7 @@ export const ToastAction: React.ForwardRefExoticComponent<
     data-slot="toast-action"
     ref={ref}
     className={cn(
-      "mt-2 inline-flex items-center justify-center rounded-md border border-border px-3 py-1.5 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+      "mt-2 inline-flex items-center justify-center rounded-md border border-border px-3 py-1.5 text-base font-semibold text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
       className,
     )}
     {...props}

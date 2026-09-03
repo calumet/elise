@@ -63,9 +63,9 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   solid:
     "bg-primary text-primary-foreground shadow-bevel hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   outline:
-    "border border-border-strong text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset data-[state=open]:bg-muted data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
+    "border border-border-strong text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   ghost:
-    "text-foreground hover:bg-muted active:bg-muted active:shadow-bevel-inset data-[state=open]:bg-muted data-[state=open]:shadow-bevel-inset",
+    "text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset",
 };
 
 const toneOverrides: Record<

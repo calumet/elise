@@ -270,7 +270,7 @@ export const TreeItem: React.ForwardRefExoticComponent<
             if (esRama) ctx.alternar(id);
           }}
           className={cn(
-            "relative flex cursor-pointer items-center gap-1.5 rounded-md py-1 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted",
+            "relative flex cursor-pointer items-center gap-1.5 rounded-md py-1 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover",
             elegido && "bg-accent text-accent-foreground",
           )}
           style={{ paddingInlineStart: `${(profundidad - 1) * 16 + 4}px` }}

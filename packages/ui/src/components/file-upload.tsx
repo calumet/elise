@@ -176,7 +176,7 @@ function FileUpload({
         type="button"
         disabled={disabled}
         onClick={() => inputRef.current?.click()}
-        className="mt-1 inline-flex h-8 cursor-pointer items-center rounded-md border border-border-strong bg-background px-3 text-sm font-semibold text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed"
+        className="mt-1 inline-flex h-8 cursor-pointer items-center rounded-md border border-border-strong bg-background px-3 text-sm font-semibold text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed"
       >
         {etiquetaBoton}
       </button>
@@ -230,7 +230,7 @@ function FileUploadItem({
           type="button"
           onClick={onRemove}
           aria-label={`${quitarLabel} ${name}`}
-          className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <X className="size-3.5" aria-hidden="true" />
         </button>

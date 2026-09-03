@@ -8,9 +8,8 @@
  * el elemento por sí sola: con `href` es un enlace y sin él un botón, que es la
  * diferencia entre navegar y hacer algo.
  *
- * El realce al apuntar va sobre el relleno terciario y no sobre el fondo que le
- * hayan puesto, así que una caja con superficie propia y otra transparente
- * responden igual.
+ * El realce al apuntar es un velo encima de la superficie que haya, así que
+ * responde igual con fondo propio que sin él.
  *
  * Apagado, un enlace no tiene `disabled`, de modo que se marca con
  * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
@@ -69,9 +68,8 @@ export type ClickableProps = CajaProps &
  * el elemento por sí sola: con `href` es un enlace y sin él un botón, que es la
  * diferencia entre navegar y hacer algo.
  *
- * El realce al apuntar va sobre el relleno terciario y no sobre el fondo que le
- * hayan puesto, así que una caja con superficie propia y otra transparente
- * responden igual.
+ * El realce al apuntar es un velo encima de la superficie que haya, así que
+ * responde igual con fondo propio que sin él.
  *
  * Apagado, un enlace no tiene `disabled`, de modo que se marca con
  * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
@@ -123,7 +121,7 @@ export const Clickable: React.ForwardRefExoticComponent<
         aria-disabled={disabled || undefined}
         className={cn(
           "block w-full cursor-pointer text-start transition-[background-color,box-shadow] duration-(--duration-fast) ease-out",
-          "hover:bg-fill-tertiary-hover active:bg-fill-tertiary-active",
+          "hover:bg-state-hover active:bg-state-active",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           "aria-disabled:pointer-events-none aria-disabled:opacity-50",
           clasesDeCaja({
