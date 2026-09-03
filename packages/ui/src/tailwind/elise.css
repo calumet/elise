@@ -119,9 +119,7 @@
     }
   }
 
-  /* Apertura de una sección del menú de navegación dentro de una secuencia
-     vertical. El alto lo mide el componente, que ahí el primitivo no publica
-     ninguno. */
+  /* Sección del menú que se abre en el flujo. El alto lo mide el componente. */
   --animate-nav-down: nav-down 200ms var(--ease-out);
   --animate-nav-up: nav-up 200ms var(--ease-out);
 

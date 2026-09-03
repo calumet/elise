@@ -280,8 +280,7 @@
         visible,
       );
       if (filas.length < 2) continue;
-      /* Una lista horizontal reparte sus filas a lo ancho, asi que donde
-         arranca cada rotulo no dice nada. Se reconoce en que comparten renglon. */
+      /* En una lista horizontal cada rotulo arranca en otra x a proposito. */
       const cajas = filas.map((f) => f.getBoundingClientRect());
       if (cajas.some((c, i) => i > 0 && Math.abs(c.top - cajas[i - 1].top) < 2)) continue;
       const validos = filas.map(xDelTexto).filter(Boolean);

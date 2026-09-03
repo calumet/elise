@@ -17,9 +17,7 @@ import { useElLabel } from "@/lib/i18n";
 /* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
 const SELECTOR_ITEM = '[data-slot="navigation-menu-item"],[data-slot="navigation-menu-overflow"]';
 
-/* Una secuencia vertical no tiene sitio para un panel flotante: ahí cada sección
-   cae en el flujo y se abre en alto. Son dos, y no se ven igual: el grupo es un
-   panel de escritorio y el despliegue es la navegación entera en un teléfono. */
+/* En una secuencia el panel no flota: cae en el flujo y se abre en alto. */
 type Secuencia = "grupo" | "cajon";
 
 const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContext<Secuencia | null>(
@@ -39,10 +37,8 @@ const BOTON_DESPLIEGUE =
   "group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 /**
- * Raíz del menú de navegación, para la barra principal de un sitio. Es una
- * columna: la fila de secciones va dentro, y por debajo del breakpoint el
- * despliegue se abre a continuación. Envolvé con ella toda la cabecera si
- * querés poner el botón arriba, junto a la marca.
+ * Raíz del menú de navegación, para la barra principal de un sitio. Envolvé con
+ * ella toda la cabecera si querés poner el botón arriba, junto a la marca.
  */
 export const NavigationMenu: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
@@ -102,8 +98,7 @@ export const NavigationMenuToggle: React.ForwardRefExoticComponent<
   ({ className, ...props }, ref) => {
     const { registrarDisparador } = useNavegacion("NavigationMenuToggle");
 
-    /* Antes de pintar: la fila decide con esto si dibuja el suyo, y con un
-       efecto normal aparecerían los dos por un cuadro. */
+    /* Antes de pintar: si no, aparecen los dos botones por un cuadro. */
     React.useLayoutEffect(() => registrarDisparador(), [registrarDisparador]);
 
     return <BotonDespliegue ref={ref} className={cn("md:hidden", className)} {...props} />;
@@ -149,18 +144,11 @@ export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
 };
 
 /**
- * La fila de secciones. Las que no caben se recogen en un grupo al final, y ese
- * grupo crece a medida que la ventana se angosta, hasta que por debajo de los
- * 768px la fila entera se cambia por el cajón de siempre.
+ * La fila de secciones. Las que no caben se recogen en un grupo al final, y por
+ * debajo de 768px la fila entera se cambia por el botón de siempre.
  *
- * Los anchos se miden del layout ya pintado y no se estiman, porque el rótulo
- * de cada sección lo escribe quien la usa. La cuenta se hace dos veces: la
- * segunda descuenta el ancho del propio grupo, que si no provoca el
- * desbordamiento que venía a resolver.
- *
- * Lo que se desborda no se desmonta, se vuelve a montar dentro del grupo como
- * submenú vertical, así que cada sección conserva su panel tal como se escribió.
- * En el cajón pasa lo mismo con todas.
+ * Lo que se agrupa no se desmonta: se vuelve a montar como submenú vertical, así
+ * que cada sección conserva su panel tal como se escribió.
  */
 export const NavigationMenuList: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<NavigationMenuListProps> &
@@ -186,8 +174,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   React.useLayoutEffect(() => {
     const lista = fila.current;
-    /* El ancho disponible es el de la raiz y no el del padre inmediato: Radix
-       envuelve la lista en un div propio que crece con su contenido. */
+    /* La raiz y no el padre: Radix envuelve la lista en un div que crece. */
     const caja = lista?.closest<HTMLElement>('[data-slot="navigation-menu"]');
     if (!lista || !caja) return;
 
@@ -195,17 +182,13 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       const hijos = [...lista.children] as HTMLElement[];
       const grupo = lista.querySelector<HTMLElement>('[data-slot="navigation-menu-overflow"]');
       if (grupo) anchoGrupo.current = grupo.getBoundingClientRect().width;
-      /* Los anchos se toman solo con la fila entera a la vista, que es la unica
-         vez que estan todos medidos; despues se reusan. */
+      /* Solo con la fila entera a la vista estan todos medidos. */
       if (!grupo && hijos.length === secciones.length) {
         anchos.current = hijos.map((h) => h.getBoundingClientRect().width);
       }
       if (anchos.current.length !== secciones.length) return;
 
-      /* `clientWidth` trae el relleno dentro, y el sitio para las secciones es
-         lo que quede sin el de la barra ni el de la fila. Los 10px que la fila
-         se sale por su margen negativo no se cuentan: son para que la pastilla
-         de la primera sección se salga a la izquierda, no sitio que gastar. */
+      /* `clientWidth` trae el relleno dentro; el margen negativo no cuenta. */
       const relleno = (el: HTMLElement) => {
         const e = getComputedStyle(el);
         return parseFloat(e.paddingLeft) + parseFloat(e.paddingRight);
@@ -218,8 +201,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         usado += ancho;
         caben += 1;
       }
-      /* Segunda pasada: el propio grupo ocupa, y sin descontarlo provoca el
-         desbordamiento que venia a resolver. */
+      /* El propio grupo ocupa: sin descontarlo provoca el desbordamiento. */
       if (caben < secciones.length) {
         while (caben > 0 && usado + anchoGrupo.current > disponible) {
           caben -= 1;
@@ -265,8 +247,6 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
             if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
           }}
         >
-          {/* Las secciones no ponen sangría propia: la alineación sale de donde
-              esté puesta la barra, así el rótulo cae a plomo con la marca. */}
           <div className={cn(!hayDisparador && "border-t border-border", className)}>
             {secuencia(secciones, "cajon")}
           </div>
@@ -285,8 +265,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         if (typeof ref === "function") ref(nodo);
         else if (ref) ref.current = nodo;
       }}
-      /* El `-mx` descuenta el relleno de la pastilla: lo que tiene que caer a
-         plomo con la marca de la cabecera es el rótulo, no la caja del hover. */
+      /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
       className={cn("group -mx-2.5 flex flex-1 list-none items-center gap-0", className)}
       {...props}
     >
@@ -340,9 +319,6 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
       ref={ref}
       className={cn(
         "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        /* Abierta, una sección de la fila se marca con el relleno. En una
-           secuencia la marca es el galón girado y la sección que se abrió
-           debajo, así que el relleno solo sobra. */
         secuencia
           ? "h-9 w-full justify-between"
           : "h-9 w-max justify-center data-[state=open]:bg-muted",
@@ -374,19 +350,15 @@ export type NavigationMenuContentProps = React.ComponentPropsWithoutRef<
 };
 
 const ALINEACION: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
-  /* El corrimiento no deja que el panel se pase del borde derecho de la barra,
-     sin despegarlo del disparador mas de lo que se sale. `w-max` es lo que le
-     permite ser mas ancho que su seccion: en shrink-to-fit el ancho disponible
-     es el del item, que mide lo que su rotulo. */
+  /* El ajuste lo mete hacia adentro si se pasa del borde. `w-max` es lo que le
+     deja ser mas ancho que su seccion. */
   start:
     "sm:left-[calc(0px-var(--el-nav-ajuste,0px))] sm:w-max sm:max-w-[var(--el-nav-ancho,100%)]",
   end: "sm:left-auto sm:right-0 sm:w-max sm:max-w-[var(--el-nav-ancho,100%)]",
   full: "",
 };
 
-/* Un menú corriente es una columna de enlaces que ya traen su propio recuadro,
-   así que el marco es fino. El megamenú ocupa la barra entera y ahí el mismo
-   marco se ve apretado. */
+/* El megamenú ocupa la barra entera y con el marco de un menú se ve apretado. */
 const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
   start: "p-3",
   end: "p-3",
@@ -396,9 +368,8 @@ const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> 
 const PANEL_FLOTANTE =
   "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 data-[motion=from-start]:slide-in-from-left-8 data-[motion=from-end]:slide-in-from-right-8 data-[motion=to-start]:slide-out-to-left-8 data-[motion=to-end]:slide-out-to-right-8 sm:min-w-64";
 
-/* En una secuencia el panel se abre en alto, con la misma animación que el
-   acordeón. El relleno vive en el div de adentro porque animar el alto de algo
-   que además tiene relleno vertical aprieta el texto durante la transición. */
+/* El relleno va en el div de adentro: animar un alto con relleno vertical
+   aprieta el texto durante la transición. */
 const PANEL_EN_SECUENCIA =
   "static w-full overflow-hidden data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
 
@@ -410,14 +381,11 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof NavigationMenuPrimitive.Content>,
   NavigationMenuContentProps
 >(({ className, align = "start", children, ...props }, ref) => {
-  /* En estado, no en una referencia: el panel se monta al abrirse, asi que la
-     medida tiene que esperarlo. */
+  /* En estado y no en una referencia: el panel se monta al abrirse. */
   const [panel, setPanel] = React.useState<HTMLDivElement | null>(null);
   const secuencia = React.useContext(DentroDeUnaSecuencia);
 
-  /* El alto al que se abre sale del contenido, y se mide del hijo y no del
-     panel: el panel esta animando el suyo, asi que medirlo es medir el propio
-     movimiento. */
+  /* Se mide el hijo: el panel esta animando su alto. */
   React.useLayoutEffect(() => {
     const caja = panel;
     const dentro = caja?.firstElementChild;
@@ -430,10 +398,7 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
     return () => ro.disconnect();
   }, [panel, secuencia]);
 
-  /* La barra y el item son los dos marcos que necesita el panel flotante, y
-     ninguno de los dos se puede escribir en CSS: `full` tiene que deshacer el
-     corrimiento del item para volver al borde de la barra, y `start` tiene que
-     saber cuanto se sale por la derecha. */
+  /* Nada de esto se escribe en CSS: hay que medir la barra y el item. */
   React.useLayoutEffect(() => {
     const caja = panel;
     const barra = caja?.closest<HTMLElement>('[data-slot="navigation-menu"]');
@@ -446,8 +411,7 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
       const i = item.getBoundingClientRect();
       caja.style.setProperty("--el-nav-corrimiento", `${b.left - i.left}px`);
       caja.style.setProperty("--el-nav-ancho", `${b.width}px`);
-      /* Un panel al ancho de la barra se sangra como la fila, para que sus
-         rótulos caigan a plomo con los de las secciones. */
+      /* Al ancho de la barra se sangra como la fila, para caer a plomo. */
       if (fila) {
         const f = fila.getBoundingClientRect();
         const sangria = f.left + parseFloat(getComputedStyle(fila).paddingLeft) - b.left;
@@ -482,9 +446,7 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
       {...props}
     >
       {secuencia ? (
-        /* En el grupo la sangría es lo que dice que esto cuelga de la sección de
-           arriba. En el cajón lo dicen los filetes, y sangrar además desalinea
-           la lista entera. */
+        /* En el grupo la sangría dice de qué cuelga; en el cajón, los filetes. */
         <div className={cn("pb-2", secuencia === "grupo" && "ps-3")}>{children}</div>
       ) : (
         children
