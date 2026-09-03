@@ -543,7 +543,7 @@ const FilaDeLista = React.forwardRef<
       ref={ref}
       className={cn(
         "flex flex-wrap items-start gap-x-4 gap-y-2 px-3 py-2",
-        clickDelegate && "cursor-pointer hover:bg-muted",
+        clickDelegate && "cursor-pointer hover:bg-state-hover",
         className,
       )}
       {...props}
@@ -689,7 +689,7 @@ export const TableRow: React.ForwardRefExoticComponent<
            del borde, así que ese píxel no aparecía ya claro sino oscureciéndose
            y aclarándose durante 150ms. */
         className={cn(
-          "border-border-subtle transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted data-[state=selected]:bg-secondary",
+          "border-border-subtle transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover data-[state=selected]:bg-secondary",
           clickDelegate && "cursor-pointer",
           className,
         )}

@@ -181,7 +181,7 @@ export const TimePicker: React.ForwardRefExoticComponent<
                   type="button"
                   aria-label={etiquetaAbrir}
                   disabled={disabled || readOnly}
-                  className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:text-border-strong"
+                  className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:text-border-strong"
                 >
                   <Clock className="size-4" aria-hidden />
                 </button>
@@ -214,7 +214,7 @@ export const TimePicker: React.ForwardRefExoticComponent<
                           setAbierto(false);
                         }}
                         className={cn(
-                          "cursor-pointer rounded-sm px-2 py-1.5 text-start text-sm tabular-nums transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:bg-muted",
+                          "cursor-pointer rounded-sm px-2 py-1.5 text-start text-sm tabular-nums transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:bg-muted",
                           puesta && "bg-accent text-accent-foreground",
                         )}
                       >

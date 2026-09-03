@@ -5,34 +5,42 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ## `@calumet/elise-ui` 0.11.0
 
-El realce al apuntar de `Clickable` era una plancha. Una tarjeta de KPI pasaba
-de blanca a `oklch(0.87)` de golpe: 0.114 de luminosidad, cinco veces el salto
-con el que responde una fila de tabla.
+El realce al apuntar salía de un color fijo, y un color fijo da un salto
+distinto en cada superficie: una tarjeta de KPI saltaba 0.114 de luminosidad y
+un botón fantasma sobre el lienzo, 0.008. Ahora es una capa, y el salto es el
+mismo en todas partes.
 
 ### Cambia
 
-- **`Clickable` se realza con un velo y no con un color.** Usaba
-  `--fill-tertiary-hover`, que es el apuntado de un control que ya descansa
-  sobre el relleno terciario: de 0.94 a 0.87 son 0.07, el paso para el que se
-  diseñó. Puesto sobre blanco, ese mismo color se come el trayecto entero.
+- **Nuevos `--state-hover` y `--state-active`,** que no son un fondo sino un
+  velo encima de lo que haya debajo: negro al 3% y 6% en claro, blanco al 5% y
+  9% en oscuro. Los porcentajes salen de reproducir el salto que ya daba la fila
+  de tabla apuntada.
 
-  Ahora hay `--state-hover` y `--state-active`, que no son un fondo sino una
-  capa encima de lo que haya debajo. Es lo que necesita una caja que se pulsa
-  entera y no sabe sobre qué la van a poner, que es justo lo que su
-  documentación venía prometiendo y el color fijo no cumplía.
+- **Pasan a usarlo los 150 elementos que se realzaban con un color fijo:** lo
+  que usaba `--muted` como apuntado, pulsado, resaltado de menú o marca de
+  desplegable abierto; la X de un `Chip`, que iba a `--border`; los botones de
+  paginar, que iban al relleno terciario; y `Clickable`, que era el caso más
+  llamativo.
 
   Medido en el catálogo, en luminosidad OKLCH:
 
-  |               | apuntado claro | apuntado oscuro | pulsado claro | pulsado oscuro |
-  | ------------- | -------------- | --------------- | ------------- | -------------- |
-  | antes         | 0.114 a 0.130  | 0.139 a 0.183   | ~0.15         | ~0.21          |
-  | ahora         | 0.024          | 0.053           | 0.045         | 0.091          |
-  | fila de tabla | 0.024          | 0.046           |               |                |
-  | botón relleno | 0.038 a 0.048  | 0.043 a 0.048   | 0.078 a 0.088 | 0.088 a 0.099  |
+  |                                | apuntado claro | apuntado oscuro | pulsado claro | pulsado oscuro |
+  | ------------------------------ | -------------- | --------------- | ------------- | -------------- |
+  | `Clickable` antes              | 0.114 a 0.130  | 0.139 a 0.183   | ~0.15         | ~0.21          |
+  | `--muted` como apuntado, antes | 0.008 a 0.024  | 0.046 a 0.092   | igual         | igual          |
+  | paginación antes               | 0.071          | 0.067           | 0.095         | 0.101          |
+  | ahora, los tres                | 0.024          | 0.053           | 0.045         | 0.091          |
 
-  El velo da el mismo salto sobre la tarjeta, sobre el lienzo y sobre una
-  superficie tenue: 0.023, 0.022 y 0.022 en claro. Un color fijo daba 0.024,
-  0.008 y 0.
+  El mismo token daba once veces más contraste en oscuro que en claro. El velo
+  además se comporta igual sobre cualquier superficie: sobre la tarjeta 0.023,
+  sobre el lienzo 0.022 y sobre una superficie tenue 0.022, donde el color fijo
+  daba 0.024, 0.008 y 0.
+
+Se quedan como estaban los realces con color propio, que son otra cosa: el
+relleno de un botón de tono va a su `-hover` (0.038 a 0.048 en los dos temas),
+la barra lateral tiene su propia escala porque es una región con su tema, y la
+zona de soltar ficheros se tiñe de `--accent`.
 
 ## `@calumet/elise-ui` 0.10.1
 
