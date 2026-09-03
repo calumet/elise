@@ -177,12 +177,7 @@
   --fill-tertiary: oklch(0.94 0.004 265);
   --fill-tertiary-hover: oklch(0.87 0.006 265);
   --fill-tertiary-active: oklch(0.845 0.007 265);
-  /* Velo de estado: no es un color de fondo sino una capa que se pone encima
-     de la superficie que haya. Es lo que necesita una caja que se pulsa entera
-     y no sabe sobre qué la van a poner; un color fijo le sale de un paso
-     distinto en cada sitio, y sobre esa misma superficie, de ninguno. El 3% y
-     el 6% son los que dejan el mismo salto que la fila de tabla apuntada
-     (0.023 de luminosidad) y el doble al pulsar. */
+  /* Velo de estado: una capa encima de la superficie que haya, no un fondo. */
   --state-hover: rgb(0 0 0 / 3%);
   --state-active: rgb(0 0 0 / 6%);
   /* Carril: el tramo sin llenar de un control que muestra un estado o un
@@ -387,9 +382,7 @@
   --fill-tertiary: oklch(0.29 0.013 265);
   --fill-tertiary-hover: oklch(0.355 0.015 265);
   --fill-tertiary-active: oklch(0.39 0.016 265);
-  /* El velo aclara, y sube al 5% y al 9%: a esta luminosidad hace falta más
-     capa para el mismo salto. Deja 0.049 sobre la tarjeta, igual que la fila de
-     tabla apuntada en oscuro. */
+  /* Aclara, y sube: a esta luminosidad hace falta más capa para el mismo salto. */
   --state-hover: rgb(255 255 255 / 5%);
   --state-active: rgb(255 255 255 / 9%);
   /* El carril aclara en vez de oscurecer, por la misma razón que el bisel:

@@ -8,9 +8,8 @@
  * el elemento por sí sola: con `href` es un enlace y sin él un botón, que es la
  * diferencia entre navegar y hacer algo.
  *
- * El realce al apuntar es un velo que se pone encima de la superficie que haya,
- * y no un color propio: así una caja con fondo de tarjeta, una transparente y
- * una sobre el lienzo responden con el mismo salto.
+ * El realce al apuntar es un velo encima de la superficie que haya, así que
+ * responde igual con fondo propio que sin él.
  *
  * Apagado, un enlace no tiene `disabled`, de modo que se marca con
  * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
@@ -69,9 +68,8 @@ export type ClickableProps = CajaProps &
  * el elemento por sí sola: con `href` es un enlace y sin él un botón, que es la
  * diferencia entre navegar y hacer algo.
  *
- * El realce al apuntar es un velo que se pone encima de la superficie que haya,
- * y no un color propio: así una caja con fondo de tarjeta, una transparente y
- * una sobre el lienzo responden con el mismo salto.
+ * El realce al apuntar es un velo encima de la superficie que haya, así que
+ * responde igual con fondo propio que sin él.
  *
  * Apagado, un enlace no tiene `disabled`, de modo que se marca con
  * `aria-disabled` y se le quitan los eventos. Un `<a>` con `disabled` a secas
