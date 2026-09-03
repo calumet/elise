@@ -3,6 +3,37 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.11.0
+
+El realce al apuntar de `Clickable` era una plancha. Una tarjeta de KPI pasaba
+de blanca a `oklch(0.87)` de golpe: 0.114 de luminosidad, cinco veces el salto
+con el que responde una fila de tabla.
+
+### Cambia
+
+- **`Clickable` se realza con un velo y no con un color.** Usaba
+  `--fill-tertiary-hover`, que es el apuntado de un control que ya descansa
+  sobre el relleno terciario: de 0.94 a 0.87 son 0.07, el paso para el que se
+  diseñó. Puesto sobre blanco, ese mismo color se come el trayecto entero.
+
+  Ahora hay `--state-hover` y `--state-active`, que no son un fondo sino una
+  capa encima de lo que haya debajo. Es lo que necesita una caja que se pulsa
+  entera y no sabe sobre qué la van a poner, que es justo lo que su
+  documentación venía prometiendo y el color fijo no cumplía.
+
+  Medido en el catálogo, en luminosidad OKLCH:
+
+  |               | apuntado claro | apuntado oscuro | pulsado claro | pulsado oscuro |
+  | ------------- | -------------- | --------------- | ------------- | -------------- |
+  | antes         | 0.114 a 0.130  | 0.139 a 0.183   | ~0.15         | ~0.21          |
+  | ahora         | 0.024          | 0.053           | 0.045         | 0.091          |
+  | fila de tabla | 0.024          | 0.046           |               |                |
+  | botón relleno | 0.038 a 0.048  | 0.043 a 0.048   | 0.078 a 0.088 | 0.088 a 0.099  |
+
+  El velo da el mismo salto sobre la tarjeta, sobre el lienzo y sobre una
+  superficie tenue: 0.023, 0.022 y 0.022 en claro. Un color fijo daba 0.024,
+  0.008 y 0.
+
 ## `@calumet/elise-ui` 0.10.1
 
 Dos correcciones sobre botones de solo icono, las dos salidas de medir la
