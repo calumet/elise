@@ -280,6 +280,9 @@
         visible,
       );
       if (filas.length < 2) continue;
+      /* En una lista horizontal cada rotulo arranca en otra x a proposito. */
+      const cajas = filas.map((f) => f.getBoundingClientRect());
+      if (cajas.some((c, i) => i > 0 && Math.abs(c.top - cajas[i - 1].top) < 2)) continue;
       const validos = filas.map(xDelTexto).filter(Boolean);
       if (validos.length < 2) continue;
       /* Una lista que aplana un árbol sangra a propósito, y lo declara en
