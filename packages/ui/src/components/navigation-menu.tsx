@@ -189,26 +189,20 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       }
       if (anchos.current.length !== secciones.length) return;
 
-      /* `clientWidth` trae el relleno dentro; el margen negativo no cuenta. */
-      const relleno = (el: HTMLElement) => {
-        const e = getComputedStyle(el);
-        return parseFloat(e.paddingLeft) + parseFloat(e.paddingRight);
-      };
-      const disponible = caja.clientWidth - relleno(caja) - relleno(lista);
-      let usado = 0;
-      let caben = 0;
-      for (const ancho of anchos.current) {
-        if (usado + ancho > disponible) break;
-        usado += ancho;
-        caben += 1;
-      }
-      /* El propio grupo ocupa: sin descontarlo provoca el desbordamiento. */
-      if (caben < secciones.length) {
-        while (caben > 0 && usado + anchoGrupo.current > disponible) {
-          caben -= 1;
-          usado -= anchos.current[caben];
-        }
-      }
+      /* El sitio es la caja de contenido de la fila, que con el margen negativo
+         es mas ancha que la barra. */
+      const e = getComputedStyle(lista);
+      const disponible = lista.clientWidth - parseFloat(e.paddingLeft) - parseFloat(e.paddingRight);
+
+      /* Lo que ocupan las primeras `n`, contando el grupo solo si queda alguna
+         fuera. Se baja desde todas: la ultima que entra hace desaparecer el
+         grupo, asi que no crece de forma pareja y no vale buscar de abajo. */
+      const ocupado = (n: number) =>
+        anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
+        (n < secciones.length ? anchoGrupo.current : 0);
+
+      let caben = secciones.length;
+      while (caben > 0 && ocupado(caben) > disponible) caben -= 1;
       setVisibles(caben);
     };
 
