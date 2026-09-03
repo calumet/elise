@@ -17,7 +17,7 @@ mismo en todas partes.
   9% en oscuro. Los porcentajes salen de reproducir el salto que ya daba la fila
   de tabla apuntada.
 
-- **Pasan a usarlo los 150 elementos que se realzaban con un color fijo:** lo
+- **Pasan a usarlo los 159 elementos que se realzaban con un color fijo:** lo
   que usaba `--muted` como apuntado, pulsado, resaltado de menú o marca de
   desplegable abierto; la X de un `Chip`, que iba a `--border`; los botones de
   paginar, que iban al relleno terciario; y `Clickable`, que era el caso más
