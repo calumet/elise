@@ -1179,7 +1179,7 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
       type="button"
       data-slot="app-shell-nav-action"
       className={cn(
-        "inline-flex size-5 flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring [&_svg]:size-4",
+        "relative inline-flex size-5 flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring [&_svg]:size-4",
         className,
       )}
       {...props}
