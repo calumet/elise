@@ -20,7 +20,11 @@ de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
   un enlace secundario y no el de la navegación principal.
 
 - **El panel pierde el tope de 384px.** Con `max-w-sm` un megamenú de dos o tres
-  columnas se apretaba contra ese ancho. El único tope que queda es el viewport.
+  columnas se apretaba contra ese ancho. Ahora el tope es la barra.
+
+- **`NavigationMenuItem` pasa a ser `relative`,** porque es el marco contra el
+  que se coloca el panel. Un hijo suyo en `absolute` que antes se colocaba
+  contra la página ahora se coloca contra la sección.
 
 ### Cambia
 
@@ -28,20 +32,27 @@ de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
   estima: el rótulo de cada sección lo escribe quien la usa. Lo que se desborda
   no se desmonta, se vuelve a montar dentro del grupo como submenú vertical, así
   que cada sección conserva su panel tal como se escribió, sea un enlace suelto
-  o un megamenú. Con las nueve secciones del portal de escuelas:
+  o un megamenú. Con las nueve secciones del portal:
 
-  | ancho | en la fila | agrupadas |
-  | ----- | ---------- | --------- |
-  | 1280  | 9          | 0         |
-  | 1100  | 8          | 1         |
-  | 1024  | 7          | 2         |
-  | 900   | 6          | 3         |
-  | 800   | 5          | 4         |
+  | ancho de la barra | en la fila | agrupadas |
+  | ----------------- | ---------- | --------- |
+  | 1036              | 8          | 1         |
+  | 908               | 6          | 3         |
+  | 684               | 4          | 5         |
+  | 524               | 3          | 6         |
+  | 304               | 1          | 8         |
 
   La cuenta se hace dos veces, y la segunda descuenta el ancho del propio grupo:
   sin eso, el grupo provoca el desbordamiento que venía a resolver.
 
-- **Nuevo `overflowLabel` en `NavigationMenuList`,** el rótulo de ese grupo. Por
+- **Nuevo `align` en `NavigationMenuContent`.** `start` (por defecto) y `end`
+  abren el panel bajo su disparador; `full` lo estira al ancho de la barra, que
+  es lo que pide un megamenú de varias columnas. Un panel `start` que se pasara
+  del borde derecho se corre hacia adentro justo lo que se sale, así que no hace
+  falta elegir `end` a mano por estar cerca del borde. Por debajo de `sm` los
+  tres se estiran igual, que es lo único que cabe en un teléfono.
+
+- **Nuevo `overflowLabel` en `NavigationMenuList`,** el rótulo del grupo. Por
   defecto «Más», o la clave `ui.more` si hay Provider de i18n montado.
 
 - **Los rótulos no se parten.** El disparador y el enlace llevan

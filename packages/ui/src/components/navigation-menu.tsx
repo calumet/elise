@@ -11,6 +11,14 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
+/* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
+const SELECTOR_ITEM = '[data-slot="navigation-menu-item"],[data-slot="navigation-menu-overflow"]';
+
+/* Dentro del grupo no hay sitio para un panel flotante: cada seccion abre en
+   flujo, como una lista que se despliega, y el grupo crece hacia abajo. */
+const PANEL_EN_GRUPO =
+  "[&_[data-slot=navigation-menu-content]]:static [&_[data-slot=navigation-menu-content]]:mt-0 [&_[data-slot=navigation-menu-content]]:w-full [&_[data-slot=navigation-menu-content]]:min-w-0 [&_[data-slot=navigation-menu-content]]:border-0 [&_[data-slot=navigation-menu-content]]:bg-transparent [&_[data-slot=navigation-menu-content]]:p-0 [&_[data-slot=navigation-menu-content]]:ps-3 [&_[data-slot=navigation-menu-content]]:shadow-none";
+
 /** Raíz del menú de navegación, para la barra principal de un sitio. */
 export const NavigationMenu: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
@@ -127,10 +135,14 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     >
       {dentro}
       {fuera.length > 0 ? (
-        <NavigationMenuPrimitive.Item data-slot="navigation-menu-overflow">
+        <NavigationMenuPrimitive.Item data-slot="navigation-menu-overflow" className="relative">
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
-          <NavigationMenuContent className="sm:min-w-56">
-            <NavigationMenuPrimitive.Sub orientation="vertical">
+          <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
+            <NavigationMenuPrimitive.Sub
+              data-slot="navigation-menu-sub"
+              orientation="vertical"
+              className={PANEL_EN_GRUPO}
+            >
               <NavigationMenuPrimitive.List className="flex list-none flex-col gap-0">
                 {fuera}
               </NavigationMenuPrimitive.List>
@@ -143,8 +155,22 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 });
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;
 
-/** Una sección del menú. */
-export const NavigationMenuItem = NavigationMenuPrimitive.Item;
+/** Una sección del menú. Es el marco contra el que se coloca su panel. */
+export const NavigationMenuItem: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item>> &
+    React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Item>>
+> = React.forwardRef<
+  React.ComponentRef<typeof NavigationMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item>
+>(({ className, ...props }, ref) => (
+  <NavigationMenuPrimitive.Item
+    data-slot="navigation-menu-item"
+    ref={ref}
+    className={cn("relative", className)}
+    {...props}
+  />
+));
+NavigationMenuItem.displayName = NavigationMenuPrimitive.Item.displayName;
 
 /** El control que despliega el panel de una sección. */
 export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
@@ -158,7 +184,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
     data-slot="navigation-menu-trigger"
     ref={ref}
     className={cn(
-      "group inline-flex h-9 w-max select-none items-center justify-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted",
+      "group inline-flex h-9 w-max select-none items-center justify-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-between",
       className,
     )}
     {...props}
@@ -172,24 +198,87 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
 ));
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName;
 
+/** Props de {@link NavigationMenuContent}. */
+export type NavigationMenuContentProps = React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Content
+> & {
+  /**
+   * Dónde abre el panel. `start` y `end` lo pegan a un borde de su disparador;
+   * `full` lo estira al ancho de la barra, que es lo que pide un megamenú de
+   * varias columnas. Por debajo de `sm` los tres se estiran igual.
+   */
+  align?: "start" | "end" | "full";
+};
+
+const ALINEACION: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
+  /* El corrimiento no deja que el panel se pase del borde derecho de la barra,
+     sin despegarlo del disparador mas de lo que se sale. `w-max` es lo que le
+     permite ser mas ancho que su seccion: en shrink-to-fit el ancho disponible
+     es el del item, que mide lo que su rotulo. */
+  start:
+    "sm:left-[calc(0px-var(--el-nav-ajuste,0px))] sm:w-max sm:max-w-[var(--el-nav-ancho,100%)]",
+  end: "sm:left-auto sm:right-0 sm:w-max sm:max-w-[var(--el-nav-ancho,100%)]",
+  full: "",
+};
+
 /** El panel de una sección. */
 export const NavigationMenuContent: React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>> &
+  React.PropsWithoutRef<NavigationMenuContentProps> &
     React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Content>>
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>
->(({ className, ...props }, ref) => (
-  <NavigationMenuPrimitive.Content
-    data-slot="navigation-menu-content"
-    ref={ref}
-    className={cn(
-      "absolute left-0 top-full z-popover mt-1.5 w-[calc(100vw-24px)] max-w-[calc(100vw-24px)] rounded-xl border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:w-auto sm:min-w-64",
-      className,
-    )}
-    {...props}
-  />
-));
+  NavigationMenuContentProps
+>(({ className, align = "start", ...props }, ref) => {
+  /* En estado, no en una referencia: el panel se monta al abrirse, asi que la
+     medida tiene que esperarlo. */
+  const [panel, setPanel] = React.useState<HTMLDivElement | null>(null);
+
+  /* La barra y el item son los dos marcos que necesita el panel, y ninguno de
+     los dos se puede escribir en CSS: `full` tiene que deshacer el corrimiento
+     del item para volver al borde de la barra, y `start` tiene que saber cuanto
+     se sale por la derecha. */
+  React.useLayoutEffect(() => {
+    const caja = panel;
+    const barra = caja?.closest<HTMLElement>('[data-slot="navigation-menu"]');
+    const item = caja?.closest<HTMLElement>(SELECTOR_ITEM);
+    if (!caja || !barra || !item) return;
+
+    const colocar = () => {
+      const b = barra.getBoundingClientRect();
+      const i = item.getBoundingClientRect();
+      caja.style.setProperty("--el-nav-corrimiento", `${b.left - i.left}px`);
+      caja.style.setProperty("--el-nav-ancho", `${b.width}px`);
+      caja.style.setProperty(
+        "--el-nav-ajuste",
+        `${Math.max(0, i.left + caja.offsetWidth - b.right)}px`,
+      );
+    };
+
+    colocar();
+    const ro = new ResizeObserver(colocar);
+    ro.observe(barra);
+    ro.observe(caja);
+    return () => ro.disconnect();
+  }, [panel]);
+
+  return (
+    <NavigationMenuPrimitive.Content
+      data-slot="navigation-menu-content"
+      data-align={align}
+      ref={(nodo) => {
+        setPanel(nodo);
+        if (typeof ref === "function") ref(nodo);
+        else if (ref) ref.current = nodo;
+      }}
+      className={cn(
+        "absolute top-full z-popover mt-1.5 left-[var(--el-nav-corrimiento,0px)] w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:min-w-64",
+        ALINEACION[align],
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
 /** Un enlace del menú. Marcá el actual con `active`. */
