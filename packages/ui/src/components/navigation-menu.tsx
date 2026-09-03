@@ -26,22 +26,119 @@ const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContex
   null,
 );
 
-/** Raíz del menú de navegación, para la barra principal de un sitio. */
+type ContextoNavegacion = {
+  desplegado: boolean;
+  setDesplegado: (v: boolean) => void;
+  hayDisparador: boolean;
+  registrarDisparador: () => () => void;
+};
+
+const Navegacion = React.createContext<ContextoNavegacion | null>(null);
+
+const BOTON_DESPLIEGUE =
+  "group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
+/**
+ * Raíz del menú de navegación, para la barra principal de un sitio. Es una
+ * columna: la fila de secciones va dentro, y por debajo del breakpoint el
+ * despliegue se abre a continuación. Envolvé con ella toda la cabecera si
+ * querés poner el botón arriba, junto a la marca.
+ */
 export const NavigationMenu: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
     React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Root>>
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <NavigationMenuPrimitive.Root
-    data-slot="navigation-menu"
-    ref={ref}
-    className={cn("group/navigation-menu relative flex w-full items-center", className)}
-    {...props}
-  />
-));
+>(({ className, children, ...props }, ref) => {
+  const [desplegado, setDesplegado] = React.useState(false);
+  const [disparadores, setDisparadores] = React.useState(0);
+
+  const registrarDisparador = React.useCallback(() => {
+    setDisparadores((n) => n + 1);
+    return () => setDisparadores((n) => n - 1);
+  }, []);
+
+  const ctx = React.useMemo(
+    () => ({
+      desplegado,
+      setDesplegado,
+      hayDisparador: disparadores > 0,
+      registrarDisparador,
+    }),
+    [desplegado, disparadores, registrarDisparador],
+  );
+
+  return (
+    <Navegacion.Provider value={ctx}>
+      <Collapsible open={desplegado} onOpenChange={setDesplegado} asChild>
+        <NavigationMenuPrimitive.Root
+          data-slot="navigation-menu"
+          ref={ref}
+          className={cn("group/navigation-menu relative flex w-full flex-col", className)}
+          {...props}
+        >
+          {children}
+        </NavigationMenuPrimitive.Root>
+      </Collapsible>
+    </Navegacion.Provider>
+  );
+});
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName;
+
+const useNavegacion = (quien: string): ContextoNavegacion => {
+  const ctx = React.useContext(Navegacion);
+  if (!ctx) throw new Error(`${quien} tiene que ir dentro de un NavigationMenu.`);
+  return ctx;
+};
+
+/**
+ * Abre y cierra el despliegue de móvil. Ponelo donde vaya el resto de acciones
+ * de la cabecera; si no hay ninguno, la fila dibuja el suyo en su sitio.
+ */
+export const NavigationMenuToggle: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"button">> & React.RefAttributes<HTMLButtonElement>
+> = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
+  ({ className, ...props }, ref) => {
+    const { registrarDisparador } = useNavegacion("NavigationMenuToggle");
+
+    /* Antes de pintar: la fila decide con esto si dibuja el suyo, y con un
+       efecto normal aparecerían los dos por un cuadro. */
+    React.useLayoutEffect(() => registrarDisparador(), [registrarDisparador]);
+
+    return <BotonDespliegue ref={ref} className={cn("md:hidden", className)} {...props} />;
+  },
+);
+NavigationMenuToggle.displayName = "NavigationMenuToggle";
+
+const BotonDespliegue = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
+  ({ className, ...props }, ref) => {
+    const etiqueta = useElLabel("ui", "navigation", "Navegación");
+
+    return (
+      <CollapsibleTrigger asChild>
+        <button
+          type="button"
+          data-slot="navigation-menu-toggle"
+          aria-label={etiqueta}
+          ref={ref}
+          className={cn(BOTON_DESPLIEGUE, className)}
+          {...props}
+        >
+          <Menu
+            className="size-5 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0"
+            aria-hidden
+          />
+          <X
+            className="absolute size-5 -rotate-90 opacity-0 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-0 group-data-[state=open]:opacity-100"
+            aria-hidden
+          />
+        </button>
+      </CollapsibleTrigger>
+    );
+  },
+);
+BotonDespliegue.displayName = "BotonDespliegue";
 
 /** Props de {@link NavigationMenuList}. */
 export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
@@ -73,10 +170,9 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   NavigationMenuListProps
 >(({ className, children, overflowLabel, ...props }, ref) => {
   const mas = useElLabel("ui", "more", "Más");
-  const navegacion = useElLabel("ui", "navigation", "Navegación");
   const rotuloGrupo = overflowLabel ?? mas;
   const esMovil = useIsMobile();
-  const [desplegado, setDesplegado] = React.useState(false);
+  const { hayDisparador, setDesplegado } = useNavegacion("NavigationMenuList");
 
   const secciones = React.useMemo(
     () => React.Children.toArray(children).filter(React.isValidElement),
@@ -106,7 +202,15 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       }
       if (anchos.current.length !== secciones.length) return;
 
-      const disponible = caja.clientWidth;
+      /* `clientWidth` trae el relleno dentro, y el sitio para las secciones es
+         lo que quede sin el de la barra ni el de la fila. Los 10px que la fila
+         se sale por su margen negativo no se cuentan: son para que la pastilla
+         de la primera sección se salga a la izquierda, no sitio que gastar. */
+      const relleno = (el: HTMLElement) => {
+        const e = getComputedStyle(el);
+        return parseFloat(e.paddingLeft) + parseFloat(e.paddingRight);
+      };
+      const disponible = caja.clientWidth - relleno(caja) - relleno(lista);
       let usado = 0;
       let caben = 0;
       for (const ancho of anchos.current) {
@@ -148,26 +252,12 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   if (esMovil) {
     return (
-      <Collapsible open={desplegado} onOpenChange={setDesplegado} className="w-full">
-        <div className={cn("flex items-center", className)}>
-          <CollapsibleTrigger asChild>
-            <button
-              type="button"
-              data-slot="navigation-menu-toggle"
-              aria-label={navegacion}
-              className="group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <Menu
-                className="size-5 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0"
-                aria-hidden
-              />
-              <X
-                className="absolute size-5 -rotate-90 opacity-0 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-0 group-data-[state=open]:opacity-100"
-                aria-hidden
-              />
-            </button>
-          </CollapsibleTrigger>
-        </div>
+      <>
+        {hayDisparador ? null : (
+          <div className={cn("flex items-center", className)}>
+            <BotonDespliegue />
+          </div>
+        )}
         {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
         <CollapsibleContent
           data-slot="navigation-menu-drawer"
@@ -175,9 +265,13 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
             if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
           }}
         >
-          <div className="border-t border-border">{secuencia(secciones, "cajon")}</div>
+          {/* Las secciones no ponen sangría propia: la alineación sale de donde
+              esté puesta la barra, así el rótulo cae a plomo con la marca. */}
+          <div className={cn(!hayDisparador && "border-t border-border", className)}>
+            {secuencia(secciones, "cajon")}
+          </div>
         </CollapsibleContent>
-      </Collapsible>
+      </>
     );
   }
 
@@ -191,12 +285,17 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         if (typeof ref === "function") ref(nodo);
         else if (ref) ref.current = nodo;
       }}
-      className={cn("group flex flex-1 list-none items-center gap-0", className)}
+      /* El `-mx` descuenta el relleno de la pastilla: lo que tiene que caer a
+         plomo con la marca de la cabecera es el rótulo, no la caja del hover. */
+      className={cn("group -mx-2.5 flex flex-1 list-none items-center gap-0", className)}
       {...props}
     >
       {dentro}
       {visibles < secciones.length ? (
-        <NavigationMenuPrimitive.Item data-slot="navigation-menu-overflow" className="relative">
+        <NavigationMenuPrimitive.Item
+          data-slot="navigation-menu-overflow"
+          className="relative shrink-0"
+        >
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
           <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
             {secuencia(secciones.slice(visibles), "grupo")}
@@ -219,7 +318,7 @@ export const NavigationMenuItem: React.ForwardRefExoticComponent<
   <NavigationMenuPrimitive.Item
     data-slot="navigation-menu-item"
     ref={ref}
-    className={cn("relative", className)}
+    className={cn("relative shrink-0", className)}
     {...props}
   />
 ));
@@ -247,7 +346,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         secuencia
           ? "h-9 w-full justify-between"
           : "h-9 w-max justify-center data-[state=open]:bg-muted",
-        secuencia === "cajon" && "h-11",
+        secuencia === "cajon" && "h-11 px-0",
         className,
       )}
       {...props}
@@ -291,7 +390,7 @@ const ALINEACION: Record<NonNullable<NavigationMenuContentProps["align"]>, strin
 const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
   start: "p-3",
   end: "p-3",
-  full: "p-5",
+  full: "px-[var(--el-nav-sangria,0.875rem)] py-5",
 };
 
 const PANEL_FLOTANTE =
@@ -339,6 +438,7 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
     const caja = panel;
     const barra = caja?.closest<HTMLElement>('[data-slot="navigation-menu"]');
     const item = caja?.closest<HTMLElement>(SELECTOR_ITEM);
+    const fila = barra?.querySelector<HTMLElement>('[data-slot="navigation-menu-list"]');
     if (secuencia || !caja || !barra || !item) return;
 
     const colocar = () => {
@@ -346,6 +446,13 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
       const i = item.getBoundingClientRect();
       caja.style.setProperty("--el-nav-corrimiento", `${b.left - i.left}px`);
       caja.style.setProperty("--el-nav-ancho", `${b.width}px`);
+      /* Un panel al ancho de la barra se sangra como la fila, para que sus
+         rótulos caigan a plomo con los de las secciones. */
+      if (fila) {
+        const f = fila.getBoundingClientRect();
+        const sangria = f.left + parseFloat(getComputedStyle(fila).paddingLeft) - b.left;
+        caja.style.setProperty("--el-nav-sangria", `${sangria}px`);
+      }
       caja.style.setProperty(
         "--el-nav-ajuste",
         `${Math.max(0, i.left + caja.offsetWidth - b.right)}px`,
@@ -394,17 +501,22 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Link>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>
->(({ className, ...props }, ref) => (
-  <NavigationMenuPrimitive.Link
-    data-slot="navigation-menu-link"
-    ref={ref}
-    className={cn(
-      "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const secuencia = React.useContext(DentroDeUnaSecuencia);
+
+  return (
+    <NavigationMenuPrimitive.Link
+      data-slot="navigation-menu-link"
+      ref={ref}
+      className={cn(
+        "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
+        secuencia === "cajon" && "h-11 px-0",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 
 /** El contenedor donde se dibujan los paneles, y que se anima al cambiar de sección. */

@@ -54,10 +54,22 @@ de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
   corte que usa `AppShell`, así que las dos navegaciones del sistema cambian de
   forma a la vez.
 
+- **Nuevo `NavigationMenuToggle`,** para poner ese botón donde va el resto de
+  acciones de la cabecera en vez de en la fila. Se registra solo: si hay uno, la
+  fila no dibuja el suyo. Envolvé la cabecera entera con `NavigationMenu` y
+  ponelo donde quieras dentro; la raíz pasa a ser una columna para eso.
+
+- **Todo cae a plomo con la cabecera.** El rótulo de una sección arrancaba
+  10px a la derecha de la marca, porque cada disparador lleva el relleno de su
+  pastilla. Ahora la fila lo descuenta con un margen negativo, el panel al ancho
+  de la barra se sangra lo mismo que la fila, y en el despliegue de móvil las
+  filas no ponen sangría propia. Medido en el portal: marca, primera sección,
+  título de columna y primer enlace del megamenú, todos en la misma vertical.
+
 - **El menú corriente y el megamenú no llevan el mismo marco.** Un menú es una
   columna de enlaces que ya traen su propio recuadro, y ahí `p-3` alcanza. El
   megamenú ocupa la barra entera y con ese mismo marco se ve apretado, así que
-  va a `p-5`.
+  sube el vertical y deja el horizontal en la sangría de la fila.
 
 - **Las animaciones pasan a los tiempos del sistema.** El panel flotante entra y
   sale en `--duration-fast` con `--ease-out`, y al pasar de una sección a otra
