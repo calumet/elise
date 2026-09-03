@@ -4,11 +4,11 @@
  * @module
  */
 
-import { ChevronDown, Menu } from "@calumet/elise-icons";
+import { ChevronDown, Menu, X } from "@calumet/elise-icons";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 
-import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./sheet";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
 
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
@@ -17,10 +17,14 @@ import { useElLabel } from "@/lib/i18n";
 /* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
 const SELECTOR_ITEM = '[data-slot="navigation-menu-item"],[data-slot="navigation-menu-overflow"]';
 
-/* Dentro del grupo no hay sitio para un panel flotante: cada seccion abre en
-   flujo, como una lista que se despliega, y el grupo crece hacia abajo. */
-const PANEL_EN_GRUPO =
-  "[&_[data-slot=navigation-menu-content]]:static [&_[data-slot=navigation-menu-content]]:mt-0 [&_[data-slot=navigation-menu-content]]:w-full [&_[data-slot=navigation-menu-content]]:min-w-0 [&_[data-slot=navigation-menu-content]]:border-0 [&_[data-slot=navigation-menu-content]]:bg-transparent [&_[data-slot=navigation-menu-content]]:p-0 [&_[data-slot=navigation-menu-content]]:ps-3 [&_[data-slot=navigation-menu-content]]:shadow-none";
+/* Una secuencia vertical no tiene sitio para un panel flotante: ahí cada sección
+   cae en el flujo y se abre en alto. Son dos, y no se ven igual: el grupo es un
+   panel de escritorio y el despliegue es la navegación entera en un teléfono. */
+type Secuencia = "grupo" | "cajon";
+
+const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContext<Secuencia | null>(
+  null,
+);
 
 /** Raíz del menú de navegación, para la barra principal de un sitio. */
 export const NavigationMenu: React.ForwardRefExoticComponent<
@@ -72,7 +76,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const navegacion = useElLabel("ui", "navigation", "Navegación");
   const rotuloGrupo = overflowLabel ?? mas;
   const esMovil = useIsMobile();
-  const [cajon, setCajon] = React.useState(false);
+  const [desplegado, setDesplegado] = React.useState(false);
 
   const secciones = React.useMemo(
     () => React.Children.toArray(children).filter(React.isValidElement),
@@ -127,45 +131,53 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     return () => ro.disconnect();
   }, [secciones.length, esMovil]);
 
-  const secuencia = (
-    <NavigationMenuPrimitive.Sub
-      data-slot="navigation-menu-sub"
-      orientation="vertical"
-      className={PANEL_EN_GRUPO}
-    >
-      <NavigationMenuPrimitive.List className="flex list-none flex-col gap-0">
-        {esMovil ? secciones : secciones.slice(visibles)}
-      </NavigationMenuPrimitive.List>
-    </NavigationMenuPrimitive.Sub>
+  const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
+    <DentroDeUnaSecuencia.Provider value={variante}>
+      <NavigationMenuPrimitive.Sub data-slot="navigation-menu-sub" orientation="vertical">
+        <NavigationMenuPrimitive.List
+          className={cn(
+            "flex list-none flex-col gap-0",
+            variante === "cajon" && "divide-y divide-border",
+          )}
+        >
+          {filas}
+        </NavigationMenuPrimitive.List>
+      </NavigationMenuPrimitive.Sub>
+    </DentroDeUnaSecuencia.Provider>
   );
 
   if (esMovil) {
     return (
-      <Sheet open={cajon} onOpenChange={setCajon}>
-        <SheetTrigger asChild>
-          <button
-            type="button"
-            data-slot="navigation-menu-toggle"
-            aria-label={navegacion}
-            className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            <Menu className="size-5" aria-hidden />
-          </button>
-        </SheetTrigger>
-        <SheetContent side="left" aria-describedby={undefined}>
-          <SheetHeader>
-            <SheetTitle>{navegacion}</SheetTitle>
-          </SheetHeader>
-          {/* Un clic en un enlace cierra el cajón; desplegar una sección, no. */}
-          <SheetBody
-            onClick={(e) => {
-              if ((e.target as HTMLElement).closest("a")) setCajon(false);
-            }}
-          >
-            {secuencia}
-          </SheetBody>
-        </SheetContent>
-      </Sheet>
+      <Collapsible open={desplegado} onOpenChange={setDesplegado} className="w-full">
+        <div className={cn("flex items-center", className)}>
+          <CollapsibleTrigger asChild>
+            <button
+              type="button"
+              data-slot="navigation-menu-toggle"
+              aria-label={navegacion}
+              className="group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <Menu
+                className="size-5 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0"
+                aria-hidden
+              />
+              <X
+                className="absolute size-5 -rotate-90 opacity-0 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-0 group-data-[state=open]:opacity-100"
+                aria-hidden
+              />
+            </button>
+          </CollapsibleTrigger>
+        </div>
+        {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
+        <CollapsibleContent
+          data-slot="navigation-menu-drawer"
+          onClick={(e) => {
+            if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
+          }}
+        >
+          <div className="border-t border-border">{secuencia(secciones, "cajon")}</div>
+        </CollapsibleContent>
+      </Collapsible>
     );
   }
 
@@ -187,7 +199,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         <NavigationMenuPrimitive.Item data-slot="navigation-menu-overflow" className="relative">
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
           <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
-            {secuencia}
+            {secuencia(secciones.slice(visibles), "grupo")}
           </NavigationMenuContent>
         </NavigationMenuPrimitive.Item>
       ) : null}
@@ -220,23 +232,34 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <NavigationMenuPrimitive.Trigger
-    data-slot="navigation-menu-trigger"
-    ref={ref}
-    className={cn(
-      "group inline-flex h-9 w-max select-none items-center justify-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-muted in-data-[slot=navigation-menu-sub]:w-full in-data-[slot=navigation-menu-sub]:justify-between",
-      className,
-    )}
-    {...props}
-  >
-    {props.children}
-    <ChevronDown
-      className="relative top-px ml-1 size-3 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180"
-      aria-hidden
-    />
-  </NavigationMenuPrimitive.Trigger>
-));
+>(({ className, ...props }, ref) => {
+  const secuencia = React.useContext(DentroDeUnaSecuencia);
+
+  return (
+    <NavigationMenuPrimitive.Trigger
+      data-slot="navigation-menu-trigger"
+      ref={ref}
+      className={cn(
+        "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        /* Abierta, una sección de la fila se marca con el relleno. En una
+           secuencia la marca es el galón girado y la sección que se abrió
+           debajo, así que el relleno solo sobra. */
+        secuencia
+          ? "h-9 w-full justify-between"
+          : "h-9 w-max justify-center data-[state=open]:bg-muted",
+        secuencia === "cajon" && "h-11",
+        className,
+      )}
+      {...props}
+    >
+      {props.children}
+      <ChevronDown
+        className="relative top-px ml-1 size-3 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180"
+        aria-hidden
+      />
+    </NavigationMenuPrimitive.Trigger>
+  );
+});
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName;
 
 /** Props de {@link NavigationMenuContent}. */
@@ -262,6 +285,24 @@ const ALINEACION: Record<NonNullable<NavigationMenuContentProps["align"]>, strin
   full: "",
 };
 
+/* Un menú corriente es una columna de enlaces que ya traen su propio recuadro,
+   así que el marco es fino. El megamenú ocupa la barra entera y ahí el mismo
+   marco se ve apretado. */
+const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
+  start: "p-3",
+  end: "p-3",
+  full: "p-5",
+};
+
+const PANEL_FLOTANTE =
+  "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 data-[motion=from-start]:slide-in-from-left-8 data-[motion=from-end]:slide-in-from-right-8 data-[motion=to-start]:slide-out-to-left-8 data-[motion=to-end]:slide-out-to-right-8 sm:min-w-64";
+
+/* En una secuencia el panel se abre en alto, con la misma animación que el
+   acordeón. El relleno vive en el div de adentro porque animar el alto de algo
+   que además tiene relleno vertical aprieta el texto durante la transición. */
+const PANEL_EN_SECUENCIA =
+  "static w-full overflow-hidden data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
+
 /** El panel de una sección. */
 export const NavigationMenuContent: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<NavigationMenuContentProps> &
@@ -269,20 +310,36 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Content>,
   NavigationMenuContentProps
->(({ className, align = "start", ...props }, ref) => {
+>(({ className, align = "start", children, ...props }, ref) => {
   /* En estado, no en una referencia: el panel se monta al abrirse, asi que la
      medida tiene que esperarlo. */
   const [panel, setPanel] = React.useState<HTMLDivElement | null>(null);
+  const secuencia = React.useContext(DentroDeUnaSecuencia);
 
-  /* La barra y el item son los dos marcos que necesita el panel, y ninguno de
-     los dos se puede escribir en CSS: `full` tiene que deshacer el corrimiento
-     del item para volver al borde de la barra, y `start` tiene que saber cuanto
-     se sale por la derecha. */
+  /* El alto al que se abre sale del contenido, y se mide del hijo y no del
+     panel: el panel esta animando el suyo, asi que medirlo es medir el propio
+     movimiento. */
+  React.useLayoutEffect(() => {
+    const caja = panel;
+    const dentro = caja?.firstElementChild;
+    if (!secuencia || !caja || !dentro) return;
+
+    const medir = () => caja.style.setProperty("--el-nav-alto", `${caja.scrollHeight}px`);
+    medir();
+    const ro = new ResizeObserver(medir);
+    ro.observe(dentro);
+    return () => ro.disconnect();
+  }, [panel, secuencia]);
+
+  /* La barra y el item son los dos marcos que necesita el panel flotante, y
+     ninguno de los dos se puede escribir en CSS: `full` tiene que deshacer el
+     corrimiento del item para volver al borde de la barra, y `start` tiene que
+     saber cuanto se sale por la derecha. */
   React.useLayoutEffect(() => {
     const caja = panel;
     const barra = caja?.closest<HTMLElement>('[data-slot="navigation-menu"]');
     const item = caja?.closest<HTMLElement>(SELECTOR_ITEM);
-    if (!caja || !barra || !item) return;
+    if (secuencia || !caja || !barra || !item) return;
 
     const colocar = () => {
       const b = barra.getBoundingClientRect();
@@ -300,7 +357,7 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
     ro.observe(barra);
     ro.observe(caja);
     return () => ro.disconnect();
-  }, [panel]);
+  }, [panel, secuencia]);
 
   return (
     <NavigationMenuPrimitive.Content
@@ -312,12 +369,20 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
         else if (ref) ref.current = nodo;
       }}
       className={cn(
-        "absolute top-full z-popover mt-1.5 left-[var(--el-nav-corrimiento,0px)] w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover p-3 shadow-lg data-[motion=from-start]:animate-in data-[motion=from-end]:animate-in data-[motion=to-start]:animate-out data-[motion=to-end]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out sm:min-w-64",
-        ALINEACION[align],
+        secuencia ? PANEL_EN_SECUENCIA : cn(PANEL_FLOTANTE, HOLGURA[align], ALINEACION[align]),
         className,
       )}
       {...props}
-    />
+    >
+      {secuencia ? (
+        /* En el grupo la sangría es lo que dice que esto cuelga de la sección de
+           arriba. En el cajón lo dicen los filetes, y sangrar además desalinea
+           la lista entera. */
+        <div className={cn("pb-2", secuencia === "grupo" && "ps-3")}>{children}</div>
+      ) : (
+        children
+      )}
+    </NavigationMenuPrimitive.Content>
   );
 });
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;

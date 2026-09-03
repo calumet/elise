@@ -119,6 +119,30 @@
     }
   }
 
+  /* Apertura de una sección del menú de navegación dentro de una secuencia
+     vertical. El alto lo mide el componente, que ahí el primitivo no publica
+     ninguno. */
+  --animate-nav-down: nav-down 200ms var(--ease-out);
+  --animate-nav-up: nav-up 200ms var(--ease-out);
+
+  @keyframes nav-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--el-nav-alto);
+    }
+  }
+
+  @keyframes nav-up {
+    from {
+      height: var(--el-nav-alto);
+    }
+    to {
+      height: 0;
+    }
+  }
+
   /* Progress sin valor conocido. La barra mide un tercio del carril y lo
      recorre entera, de lado a lado. */
   --animate-progress-indeterminate: progress-indeterminate 1.4s var(--ease-in-out) infinite;

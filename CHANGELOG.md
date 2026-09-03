@@ -46,11 +46,26 @@ de escuelas de COMA, con nueve secciones, se salía 305px del viewport a 768.
   sin eso, el grupo provoca el desbordamiento que venía a resolver. Dentro del
   grupo cada sección abre en flujo, y el grupo crece hasta `70vh` y ahí rueda.
 
-- **Por debajo de 768px la fila entera se cambia por un cajón.** Agrupar tiene
+- **Por debajo de 768px la fila entera se cambia por un botón.** Agrupar tiene
   un límite: en un teléfono la fila termina siendo el grupo y nada más. Sale el
-  botón de siempre y las nueve secciones se despliegan en un `Sheet`, cada una
-  con su panel, y un enlace lo cierra. Es el mismo corte que usa `AppShell`, así
-  que las dos navegaciones del sistema cambian de forma a la vez.
+  botón de siempre, que abre las secciones en el sitio, debajo de la barra y
+  empujando lo que venga después, no en un panel encima de la página. Cada
+  sección se abre a su vez donde está, y un enlace lo cierra todo. Es el mismo
+  corte que usa `AppShell`, así que las dos navegaciones del sistema cambian de
+  forma a la vez.
+
+- **El menú corriente y el megamenú no llevan el mismo marco.** Un menú es una
+  columna de enlaces que ya traen su propio recuadro, y ahí `p-3` alcanza. El
+  megamenú ocupa la barra entera y con ese mismo marco se ve apretado, así que
+  va a `p-5`.
+
+- **Las animaciones pasan a los tiempos del sistema.** El panel flotante entra y
+  sale en `--duration-fast` con `--ease-out`, y al pasar de una sección a otra
+  se desliza hacia el lado del que viene. Lo que se abre en el flujo (una
+  sección dentro del grupo o del despliegue de móvil) usa los mismos 200ms y la
+  misma curva que el `Accordion` y el `Collapsible`, con dos fotogramas nuevos,
+  `nav-down` y `nav-up`. El alto lo mide el componente, porque ahí el primitivo
+  no publica ninguno.
 
 - **Nuevo `align` en `NavigationMenuContent`.** `start` (por defecto) y `end`
   abren el panel bajo su disparador; `full` lo estira al ancho de la barra, que
