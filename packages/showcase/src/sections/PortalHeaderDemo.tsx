@@ -54,14 +54,14 @@ const SECCIONES: Seccion[] = [
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
-    <NavigationMenu>
-      <div className="flex items-center justify-between gap-3 border-b border-border px-6 py-4">
+    <NavigationMenu className="px-6">
+      <div className="-mx-6 flex items-center justify-between gap-3 border-b border-border px-6 py-4">
         <Text weight="bold" size="lg">
           EISI
         </Text>
         <NavigationMenuToggle />
       </div>
-      <NavigationMenuList className="px-6">
+      <NavigationMenuList>
         {SECCIONES.map((seccion) => (
           <NavigationMenuItem key={seccion.nombre}>
             <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
