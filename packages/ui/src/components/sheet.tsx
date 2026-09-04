@@ -45,6 +45,7 @@ function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Po
 
 function SheetOverlay({
   className,
+  style,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
   const tema = useThemeScope();
@@ -52,8 +53,9 @@ function SheetOverlay({
   return (
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
+      style={{ ...tema.variables, ...style }}
       className={cn(
-        tema,
+        tema.clases,
         "fixed inset-0 z-overlay bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
         className,
       )}
@@ -65,6 +67,7 @@ function SheetOverlay({
 /** El panel, anclado al borde que diga `side`. */
 function SheetContent({
   className,
+  style,
   children,
   side = "right",
   ...props
@@ -79,8 +82,9 @@ function SheetContent({
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
+        style={{ ...tema.variables, ...style }}
         className={cn(
-          tema,
+          tema.clases,
           /* Sin hueco entre las zonas y sobre la superficie de tarjeta, que es
              lo que hace el panel del diálogo: los filetes de la cabecera y del
              pie son lo que las separa, y el cuerpo no trae fondo propio. */

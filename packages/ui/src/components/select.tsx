@@ -63,16 +63,17 @@ export const SelectContent: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => {
+>(({ className, style, children, position = "popper", ...props }, ref) => {
   const tema = useThemeScope();
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         data-slot="select-content"
+        style={{ ...tema.variables, ...style }}
         ref={ref}
         position={position}
         className={cn(
-          tema,
+          tema.clases,
           "z-popover min-w-32 max-h-(--radix-select-content-available-height) overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
           position === "popper" && "translate-y-1",
           className,

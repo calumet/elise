@@ -49,17 +49,18 @@ export const DropdownMenuContent: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 6, align = "start", ...props }, ref) => {
+>(({ className, style, sideOffset = 6, align = "start", ...props }, ref) => {
   const tema = useThemeScope();
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
         data-slot="dropdown-menu-content"
+        style={{ ...tema.variables, ...style }}
         ref={ref}
         sideOffset={sideOffset}
         align={align}
         className={cn(
-          tema,
+          tema.clases,
           "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
           canaletaIndicador,
           className,
