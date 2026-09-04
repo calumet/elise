@@ -7,6 +7,20 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Corrige
 
+- **La fila se quedaba compactada con sitio de sobra.** Los anchos de las
+  secciones se medían una sola vez y quedaban congelados en cuanto aparecía el
+  grupo, así que una medida tomada en mal momento (antes de que cargara la
+  tipografía, o con la cabecera todavía estrecha) no se corregía nunca. Ahora se
+  vuelven a medir cuando `document.fonts.ready` resuelve y cuando aparece más
+  sitio que en la cuenta anterior.
+
+  El sitio, además, vuelve a salir de la barra y no de la fila: a la fila la
+  encoge su propio contenido cuando algo de arriba se ajusta a ella, y entonces
+  la cuenta se muerde la cola.
+
+- **Con render en servidor, la fila ya no asoma una barra de desplazamiento**
+  hasta que hidrata: hasta la primera medida recorta en vez de desbordarse.
+
 - **El despliegue de móvil se encogía a su contenido.** `NavigationMenuList` le
   pasaba al panel el `className` de la fila, y un `flex` ahí dentro deja el
   submenú al ancho de su rótulo más largo: medido, 134px dentro de una barra de 352. El panel ya no toma ese `className`, que describe una fila y no una
