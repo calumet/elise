@@ -170,8 +170,13 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const fila = React.useRef<HTMLUListElement | null>(null);
   const anchos = React.useRef<number[]>([]);
   const anchoGrupo = React.useRef(96);
+  const sitioPrevio = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
   const [visibles, setVisibles] = React.useState(secciones.length);
+  /* Hasta la primera medida la fila recorta en vez de desbordarse: el servidor
+     pinta todas las secciones y sin esto la pagina asoma una barra de
+     desplazamiento hasta que hidrata. */
+  const [medido, setMedido] = React.useState(false);
 
   React.useLayoutEffect(() => {
     const lista = fila.current;
@@ -189,10 +194,18 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       }
       if (anchos.current.length !== secciones.length) return;
 
-      /* El sitio es la caja de contenido de la fila, que con el margen negativo
-         es mas ancha que la barra. */
-      const e = getComputedStyle(lista);
-      const disponible = lista.clientWidth - parseFloat(e.paddingLeft) - parseFloat(e.paddingRight);
+      /* Se mide la barra y no la fila: a la fila la encoge su propio contenido
+         cuando algo de arriba se ajusta a el, y entonces la cuenta se muerde la
+         cola. El margen negativo de la fila suma, que es sitio de verdad. */
+      const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
+        const e = getComputedStyle(el) as unknown as Record<string, string>;
+        return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
+      };
+      const disponible =
+        caja.clientWidth -
+        aLosLados(caja, "padding") -
+        aLosLados(lista, "padding") -
+        aLosLados(lista, "margin");
 
       /* Lo que ocupan las primeras `n`, contando el grupo solo si queda alguna
          fuera. Se baja desde todas: la ultima que entra hace desaparecer el
@@ -201,14 +214,29 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
         (n < secciones.length ? anchoGrupo.current : 0);
 
+      /* Con mas sitio que la vez anterior, los anchos guardados pueden estar
+         mal: se midieron con el rotulo mas ancho de lo que acabo siendo, que es
+         lo que pasa si la tipografia todavia no habia cargado. Se vuelven a
+         poner todas para medirlas de nuevo, y la pasada siguiente reparte. */
+      if (grupo && disponible > sitioPrevio.current) {
+        sitioPrevio.current = disponible;
+        setVisibles(secciones.length);
+        return;
+      }
+      sitioPrevio.current = disponible;
+
       let caben = secciones.length;
       while (caben > 0 && ocupado(caben) > disponible) caben -= 1;
+      setMedido(true);
       setVisibles(caben);
     };
 
     const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
     repartir.current();
+    /* El rotulo cambia de ancho cuando entra la tipografia, y eso no lo ve el
+       ResizeObserver de la barra. */
+    void document.fonts?.ready.then(() => repartir.current?.());
     return () => {
       ro.disconnect();
       repartir.current = undefined;
@@ -268,7 +296,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         else if (ref) ref.current = nodo;
       }}
       /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
-      className={cn("group -mx-2.5 flex flex-1 list-none items-center gap-0", className)}
+      className={cn(
+        "group -mx-2.5 flex flex-1 list-none items-center gap-0",
+        !medido && "overflow-hidden",
+        className,
+      )}
       {...props}
     >
       {dentro}

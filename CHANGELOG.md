@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.12.1
+
+### Corrige
+
+- **La fila se quedaba compactada con sitio de sobra.** Los anchos de las
+  secciones se medían una sola vez y quedaban congelados en cuanto aparecía el
+  grupo, así que una medida tomada en mal momento (antes de que cargara la
+  tipografía, o con la cabecera todavía estrecha) no se corregía nunca. Ahora se
+  vuelven a medir cuando `document.fonts.ready` resuelve y cuando aparece más
+  sitio que en la cuenta anterior.
+
+  El sitio, además, vuelve a salir de la barra y no de la fila: a la fila la
+  encoge su propio contenido cuando algo de arriba se ajusta a ella, y entonces
+  la cuenta se muerde la cola.
+
+- **Con render en servidor, la fila ya no asoma una barra de desplazamiento**
+  hasta que hidrata: hasta la primera medida recorta en vez de desbordarse.
+
 ## `@calumet/elise-ui` 0.12.0
 
 El realce al apuntar salía de un color fijo, y un color fijo da un salto
