@@ -173,8 +173,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const fila = React.useRef<HTMLUListElement | null>(null);
   const anchos = React.useRef<number[]>([]);
   const anchoGrupo = React.useRef(96);
+  const sitioPrevio = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
   const [visibles, setVisibles] = React.useState(secciones.length);
+  /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
+  const [medido, setMedido] = React.useState(false);
 
   React.useLayoutEffect(() => {
     const lista = fila.current;
@@ -192,10 +195,16 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       }
       if (anchos.current.length !== secciones.length) return;
 
-      /* El sitio es la caja de contenido de la fila, que con el margen negativo
-         es mas ancha que la barra. */
-      const e = getComputedStyle(lista);
-      const disponible = lista.clientWidth - parseFloat(e.paddingLeft) - parseFloat(e.paddingRight);
+      /* La barra y no la fila, que a la fila la encoge su contenido. */
+      const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
+        const e = getComputedStyle(el) as unknown as Record<string, string>;
+        return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
+      };
+      const disponible =
+        caja.clientWidth -
+        aLosLados(caja, "padding") -
+        aLosLados(lista, "padding") -
+        aLosLados(lista, "margin");
 
       /* Lo que ocupan las primeras `n`, contando el grupo solo si queda alguna
          fuera. Se baja desde todas: la ultima que entra hace desaparecer el
@@ -204,14 +213,25 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
         (n < secciones.length ? anchoGrupo.current : 0);
 
+      /* Con mas sitio, los anchos guardados pueden ser de antes de la tipografia. */
+      if (grupo && disponible > sitioPrevio.current) {
+        sitioPrevio.current = disponible;
+        setVisibles(secciones.length);
+        return;
+      }
+      sitioPrevio.current = disponible;
+
       let caben = secciones.length;
       while (caben > 0 && ocupado(caben) > disponible) caben -= 1;
+      setMedido(true);
       setVisibles(caben);
     };
 
     const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
     repartir.current();
+    /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
+    void document.fonts?.ready.then(() => repartir.current?.());
     return () => {
       ro.disconnect();
       repartir.current = undefined;
@@ -277,7 +297,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         else if (ref) ref.current = nodo;
       }}
       /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
-      className={cn("group -mx-2.5 flex flex-1 list-none items-center gap-0", className)}
+      className={cn(
+        "group -mx-2.5 flex flex-1 list-none items-center gap-0",
+        !medido && "overflow-hidden",
+        className,
+      )}
       {...props}
     >
       {dentro}
@@ -331,9 +355,9 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
       className={cn(
         "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         secuencia
-          ? "h-9 w-full justify-between"
+          ? "min-h-9 w-full justify-between whitespace-normal text-start"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        secuencia === "cajon" && "h-11 px-0",
+        secuencia === "cajon" && "min-h-11 px-0",
         className,
       )}
       {...props}
@@ -381,8 +405,9 @@ const PANEL_FLOTANTE =
 
 /* El relleno va en el div de adentro: animar un alto con relleno vertical
    aprieta el texto durante la transición. */
+/* La contencion lo mide por su contenedor: el grupo no cambia de ancho. */
 const PANEL_EN_SECUENCIA =
-  "static w-full overflow-hidden data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
+  "static w-full overflow-hidden [contain:inline-size] data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
 
 /** El panel de una sección. */
 export const NavigationMenuContent: React.ForwardRefExoticComponent<
@@ -483,7 +508,8 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       ref={ref}
       className={cn(
         "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
-        secuencia === "cajon" && "h-11 px-0",
+        secuencia && "whitespace-normal",
+        secuencia === "cajon" && "min-h-11 px-0",
         className,
       )}
       {...props}
