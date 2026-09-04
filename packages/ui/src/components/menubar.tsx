@@ -84,18 +84,19 @@ export const MenubarContent: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>
->(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => {
+>(({ className, style, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => {
   const tema = useThemeScope();
   return (
     <MenubarPrimitive.Portal>
       <MenubarPrimitive.Content
         data-slot="menubar-content"
+        style={{ ...tema.variables, ...style }}
         ref={ref}
         align={align}
         alignOffset={alignOffset}
         sideOffset={sideOffset}
         className={cn(
-          tema,
+          tema.clases,
           // Solo animación de entrada: una animación de salida mantiene montado el
           // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
           // de trigger con hover (mismo criterio que shadcn para Menubar).

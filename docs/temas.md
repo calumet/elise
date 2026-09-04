@@ -467,7 +467,7 @@ import { ThemeScope } from "@calumet/elise-ui/theme-scope";
 </ThemeScope>;
 ```
 
-Se lo lleva a los trece paneles que salen por portal: los de `Dialog`,
+Se lo lleva a los catorce paneles que salen por portal: los de `Dialog`,
 `AlertDialog` y `Sheet` con sus velos, `Popover`, `Select`, `Tooltip`,
 `DropdownMenu`, `Menubar` y `ContextMenu` con sus submenús. Los `ThemeScope`
 anidados se suman, así que uno dentro de otro solo redefine lo suyo.
@@ -477,9 +477,31 @@ de su `overflow` y de su `transform`, que es justo por lo que Radix monta en
 `body`. Medido, con un `transform` en la sección el panel se iba 400px de su
 sitio.
 
-`ThemeScope` lleva clases, así que cubre el tema declarado en CSS. Si el tema lo
-pusiste con `applyTheme(tema, elemento)`, que escribe las variables en línea,
-aplicalo también al elemento del panel o declaralo como clase.
+#### Un tema que no se puede escribir como clase
+
+Un color de marca que sale de la base de datos no se conoce cuando se compila el
+CSS, así que no puede llegar en una clase. `ThemeScope` también lleva al panel
+las variables escritas en el elemento, vengan por `style` o por
+`applyTheme(tema, elemento)`:
+
+```tsx
+<ThemeScope style={{ "--primary": config.colorDeMarca } as React.CSSProperties}>
+  <Popover>…</Popover>
+</ThemeScope>
+```
+
+```tsx
+const caja = React.useRef<HTMLDivElement>(null);
+React.useLayoutEffect(() => {
+  if (caja.current) applyTheme(tema, caja.current);
+}, [tema]);
+
+<ThemeScope ref={caja}>…</ThemeScope>;
+```
+
+Las lee del elemento y no del `style` que recibe, así que `applyTheme` puede
+escribirlas cuando quiera: si el color llega tarde, los paneles ya abiertos se
+repintan.
 
 ### Cambiar el radio base
 

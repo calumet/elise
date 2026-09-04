@@ -3,6 +3,26 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.14.0
+
+`ThemeScope` solo llevaba clases al panel, así que un tema declarado en
+variables se quedaba en la sección. Un color de marca que sale de la base de
+datos no se conoce cuando se compila el CSS y no se puede escribir como clase,
+que es justo el caso para el que se hizo `ThemeScope`.
+
+### Rompe
+
+- **`useThemeScope` devuelve `{ clases, variables }` y ya no un `string`.** Quien
+  lo use para llevar el tema a un panel propio pasa de `cn(tema, …)` a
+  `cn(tema.clases, …)` más `style={{ ...tema.variables, ...style }}`.
+
+### Cambia
+
+- **`ThemeScope` lleva al panel también las variables escritas en el elemento,**
+  vengan por `style` o por `applyTheme(tema, elemento)`. Las lee del elemento y
+  no del `style` que recibe, así que da igual cuándo se escriban: si el color
+  llega tarde, los paneles ya abiertos se repintan.
+
 ## `@calumet/elise-ui` 0.13.0
 
 ### Cambia
