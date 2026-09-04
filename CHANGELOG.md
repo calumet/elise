@@ -3,7 +3,7 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.12.1
+## `@calumet/elise-ui` 0.12.2
 
 ### Corrige
 
@@ -21,15 +21,6 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 - **Con render en servidor, la fila ya no asoma una barra de desplazamiento**
   hasta que hidrata: hasta la primera medida recorta en vez de desbordarse.
 
-- **El despliegue de móvil se encogía a su contenido.** `NavigationMenuList` le
-  pasaba al panel el `className` de la fila, y un `flex` ahí dentro deja el
-  submenú al ancho de su rótulo más largo: medido, 134px dentro de una barra que
-  medía 352px. El panel ya no toma ese `className`, que describe una fila y no
-  una columna.
-
-  Con eso, **el relleno horizontal va en `NavigationMenu` y no en la fila**: el
-  despliegue lo hereda, y así sus rótulos caen a plomo con los de la fila.
-
 - **El grupo cambiaba de ancho según la sección que se abriera.** El panel de
   una sección desplegada contaba para el ancho de su contenedor, así que abrir
   una con un rótulo largo ensanchaba el grupo entero y el salto se veía: medido,
@@ -38,6 +29,19 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
   Como consecuencia, un rótulo largo dentro del grupo o del despliegue de móvil
   se parte en dos renglones en vez de estirar el panel.
+
+## `@calumet/elise-ui` 0.12.1
+
+### Corrige
+
+- **El despliegue de móvil se encogía a su contenido.** `NavigationMenuList` le
+  pasaba al panel el `className` de la fila, y un `flex` ahí dentro deja el
+  submenú al ancho de su rótulo más largo: medido, 134px dentro de una barra que
+  medía 352px. El panel ya no toma ese `className`, que describe una fila y no
+  una columna.
+
+  Con eso, **el relleno horizontal va en `NavigationMenu` y no en la fila**: el
+  despliegue lo hereda, y así sus rótulos caen a plomo con los de la fila.
 
 ## `@calumet/elise-ui` 0.12.0
 
