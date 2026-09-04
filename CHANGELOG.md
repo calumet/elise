@@ -23,9 +23,9 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 - **El despliegue de móvil se encogía a su contenido.** `NavigationMenuList` le
   pasaba al panel el `className` de la fila, y un `flex` ahí dentro deja el
-  submenú al ancho de su rótulo más largo: medido, 134px dentro de una barra de
-  352. El panel ya no toma ese `className`, que describe una fila y no una
-  columna.
+  submenú al ancho de su rótulo más largo: medido, 134px dentro de una barra que
+  medía 352px. El panel ya no toma ese `className`, que describe una fila y no
+  una columna.
 
   Con eso, **el relleno horizontal va en `NavigationMenu` y no en la fila**: el
   despliegue lo hereda, y así sus rótulos caen a plomo con los de la fila.
