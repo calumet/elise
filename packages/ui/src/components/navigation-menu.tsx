@@ -363,9 +363,9 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
       className={cn(
         "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         secuencia
-          ? "h-9 w-full justify-between"
+          ? "min-h-9 w-full justify-between whitespace-normal text-start"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        secuencia === "cajon" && "h-11 px-0",
+        secuencia === "cajon" && "min-h-11 px-0",
         className,
       )}
       {...props}
@@ -413,8 +413,11 @@ const PANEL_FLOTANTE =
 
 /* El relleno va en el div de adentro: animar un alto con relleno vertical
    aprieta el texto durante la transición. */
+/* `contain: inline-size` hace que el panel se mida a lo ancho por su
+   contenedor y no por lo que lleva dentro, asi el grupo no cambia de ancho
+   segun la seccion que se abra. */
 const PANEL_EN_SECUENCIA =
-  "static w-full overflow-hidden data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
+  "static w-full overflow-hidden [contain:inline-size] data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
 
 /** El panel de una sección. */
 export const NavigationMenuContent: React.ForwardRefExoticComponent<
@@ -515,7 +518,8 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       ref={ref}
       className={cn(
         "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
-        secuencia === "cajon" && "h-11 px-0",
+        secuencia && "whitespace-normal",
+        secuencia === "cajon" && "min-h-11 px-0",
         className,
       )}
       {...props}

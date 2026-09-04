@@ -44,7 +44,10 @@ const SECCIONES: Seccion[] = [
   },
   { nombre: "Investigación", columnas: [{ entradas: ["Grupos", "Semilleros", "Publicaciones"] }] },
   { nombre: "Extensión", columnas: [{ entradas: ["Educación continua", "Convenios"] }] },
-  { nombre: "Calidad", columnas: [{ entradas: ["Acreditación", "Autoevaluación"] }] },
+  {
+    nombre: "Calidad",
+    columnas: [{ entradas: ["Proceso de Autoevaluación ABET", "Acreditación"] }],
+  },
   { nombre: "Comunicación", columnas: [{ entradas: ["Noticias", "Eventos", "Contacto"] }] },
 ];
 
