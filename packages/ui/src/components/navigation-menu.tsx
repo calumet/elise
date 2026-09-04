@@ -176,9 +176,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const sitioPrevio = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
   const [visibles, setVisibles] = React.useState(secciones.length);
-  /* Hasta la primera medida la fila recorta en vez de desbordarse: el servidor
-     pinta todas las secciones y sin esto la pagina asoma una barra de
-     desplazamiento hasta que hidrata. */
+  /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
   const [medido, setMedido] = React.useState(false);
 
   React.useLayoutEffect(() => {
@@ -197,9 +195,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       }
       if (anchos.current.length !== secciones.length) return;
 
-      /* Se mide la barra y no la fila: a la fila la encoge su propio contenido
-         cuando algo de arriba se ajusta a el, y entonces la cuenta se muerde la
-         cola. El margen negativo de la fila suma, que es sitio de verdad. */
+      /* La barra y no la fila, que a la fila la encoge su contenido. */
       const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
         const e = getComputedStyle(el) as unknown as Record<string, string>;
         return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
@@ -217,10 +213,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
         (n < secciones.length ? anchoGrupo.current : 0);
 
-      /* Con mas sitio que la vez anterior, los anchos guardados pueden estar
-         mal: se midieron con el rotulo mas ancho de lo que acabo siendo, que es
-         lo que pasa si la tipografia todavia no habia cargado. Se vuelven a
-         poner todas para medirlas de nuevo, y la pasada siguiente reparte. */
+      /* Con mas sitio, los anchos guardados pueden ser de antes de la tipografia. */
       if (grupo && disponible > sitioPrevio.current) {
         sitioPrevio.current = disponible;
         setVisibles(secciones.length);
@@ -237,8 +230,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
     repartir.current();
-    /* El rotulo cambia de ancho cuando entra la tipografia, y eso no lo ve el
-       ResizeObserver de la barra. */
+    /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
     void document.fonts?.ready.then(() => repartir.current?.());
     return () => {
       ro.disconnect();
@@ -413,9 +405,7 @@ const PANEL_FLOTANTE =
 
 /* El relleno va en el div de adentro: animar un alto con relleno vertical
    aprieta el texto durante la transición. */
-/* `contain: inline-size` hace que el panel se mida a lo ancho por su
-   contenedor y no por lo que lleva dentro, asi el grupo no cambia de ancho
-   segun la seccion que se abra. */
+/* La contencion lo mide por su contenedor: el grupo no cambia de ancho. */
 const PANEL_EN_SECUENCIA =
   "static w-full overflow-hidden [contain:inline-size] data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
 
