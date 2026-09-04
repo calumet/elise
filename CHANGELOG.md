@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.12.1
+
+### Corrige
+
+- **El grupo cambiaba de ancho según la sección que se abriera.** El panel de
+  una sección desplegada contaba para el ancho de su contenedor, así que abrir
+  una con un rótulo largo ensanchaba el grupo entero y el salto se veía: medido,
+  de 256 a 275 en la vitrina. Ahora ese panel se mide a lo ancho por su
+  contenedor y no por lo que lleva dentro, así que el grupo no se mueve.
+
+  Como consecuencia, un rótulo largo dentro del grupo o del despliegue de móvil
+  se parte en dos renglones en vez de estirar el panel.
+
 ## `@calumet/elise-ui` 0.12.0
 
 El realce al apuntar salía de un color fijo, y un color fijo da un salto
