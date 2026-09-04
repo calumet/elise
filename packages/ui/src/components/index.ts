@@ -69,6 +69,7 @@ export * from "./stepper";
 export * from "./switch";
 export * from "./tabs";
 export * from "./table";
+export * from "./theme-scope";
 export * from "./text";
 export * from "./textarea";
 export * from "./toast";

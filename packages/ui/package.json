@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-ui",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "private": false,
   "description": "Design system personalizado basado en Radix primitives y Tailwind CSS.",
   "repository": {
@@ -389,6 +389,11 @@
     },
     "./tailwind/elise.css": "./src/tailwind/elise.css",
     "./tailwind/fonts.css": "./src/tailwind/fonts.css",
+    "./theme-scope": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./text": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",

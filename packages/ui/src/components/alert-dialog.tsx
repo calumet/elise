@@ -17,6 +17,7 @@ import {
   TITULO_DIALOGO,
   VELO_DIALOGO,
 } from "./dialog";
+import { useThemeScope } from "./theme-scope";
 
 import { cn } from "@/lib/cn";
 
@@ -38,14 +39,17 @@ export const AlertDialogOverlay: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Overlay
-    data-slot="alert-dialog-overlay"
-    ref={ref}
-    className={cn(VELO_DIALOGO, className)}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const tema = useThemeScope();
+  return (
+    <AlertDialogPrimitive.Overlay
+      data-slot="alert-dialog-overlay"
+      ref={ref}
+      className={cn(tema, VELO_DIALOGO, className)}
+      {...props}
+    />
+  );
+});
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 
 /**
@@ -75,17 +79,20 @@ export const AlertDialogContent: React.ForwardRefExoticComponent<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
     size?: keyof typeof ANCHOS_DIALOGO;
   }
->(({ className, size = "sm", ...props }, ref) => (
-  <AlertDialogPortal>
-    <AlertDialogOverlay />
-    <AlertDialogPrimitive.Content
-      data-slot="alert-dialog-content"
-      ref={ref}
-      className={cn(PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
-      {...props}
-    />
-  </AlertDialogPortal>
-));
+>(({ className, size = "sm", ...props }, ref) => {
+  const tema = useThemeScope();
+  return (
+    <AlertDialogPortal>
+      <AlertDialogOverlay />
+      <AlertDialogPrimitive.Content
+        data-slot="alert-dialog-content"
+        ref={ref}
+        className={cn(tema, PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
+        {...props}
+      />
+    </AlertDialogPortal>
+  );
+});
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
 /** La cabecera: el título y la descripción. */

@@ -446,6 +446,41 @@ Puedes aplicar tokens diferentes a secciones específicas de la página:
 </div>
 ```
 
+#### Los overlays necesitan `ThemeScope`
+
+Un `Dialog`, un `Popover`, un `Select`, un `Tooltip` o cualquiera de los menús se
+monta en `body` por un portal, así que sale de la sección y deja atrás sus
+tokens: el panel se pinta con el tema de la página. `ThemeScope` lo resuelve
+llevándole el tema al panel, sin mover el portal.
+
+```tsx
+import { ThemeScope } from "@calumet/elise-ui/theme-scope";
+
+<ThemeScope className="seccion-marketing">
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button>Ver</Button>
+    </PopoverTrigger>
+    {/* el panel sale con el tema de la sección, sin tocar nada */}
+    <PopoverContent>…</PopoverContent>
+  </Popover>
+</ThemeScope>;
+```
+
+Se lo lleva a los trece paneles que salen por portal: los de `Dialog`,
+`AlertDialog` y `Sheet` con sus velos, `Popover`, `Select`, `Tooltip`,
+`DropdownMenu`, `Menubar` y `ContextMenu` con sus submenús. Los `ThemeScope`
+anidados se suman, así que uno dentro de otro solo redefine lo suyo.
+
+No mueve el portal a propósito: dentro de la sección, el panel quedaría a merced
+de su `overflow` y de su `transform`, que es justo por lo que Radix monta en
+`body`. Medido, con un `transform` en la sección el panel se iba 400px de su
+sitio.
+
+`ThemeScope` lleva clases, así que cubre el tema declarado en CSS. Si el tema lo
+pusiste con `applyTheme(tema, elemento)`, que escribe las variables en línea,
+aplicalo también al elemento del panel o declaralo como clase.
+
 ### Cambiar el radio base
 
 El radio de bordes se calcula a partir de un único token `--radius`, que equivale

@@ -3,6 +3,21 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.13.0
+
+### Cambia
+
+- **Nuevo `ThemeScope`, para que un tema por sección alcance a sus overlays.**
+  Un `Dialog`, un `Popover` o un menú se monta en `body` por un portal, así que
+  salía de la sección y se pintaba con el tema de la página. Lo que hay dentro de
+  un `ThemeScope` se lleva el tema al panel sin mover el portal, que moverlo lo
+  dejaría a merced del `overflow` y del `transform` de la sección.
+
+  Alcanza a los trece paneles que salen por portal: `Dialog`, `AlertDialog` y
+  `Sheet` con sus velos, `Popover`, `Select`, `Tooltip`, `DropdownMenu`,
+  `Menubar` y `ContextMenu` con sus submenús. Sin `ThemeScope` alrededor no
+  cambia nada.
+
 ## `@calumet/elise-ui` 0.12.2
 
 ### Corrige
