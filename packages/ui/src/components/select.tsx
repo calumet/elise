@@ -9,6 +9,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
 import { CAJA_CAMPO, CAMPO_INVALIDO, TAMANOS_CAMPO, type TamanoCampo } from "./input";
+import { useThemeScope } from "./theme-scope";
 
 import { cn } from "@/lib/cn";
 
@@ -62,20 +63,23 @@ export const SelectContent: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      data-slot="select-content"
-      ref={ref}
-      position={position}
-      className={cn(
-        "z-popover min-w-32 max-h-(--radix-select-content-available-height) overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
-        position === "popper" && "translate-y-1",
-        className,
-      )}
-      {...props}
-    >
-      {/* Radix esconde la barra del visor, con su propia regla para
+>(({ className, children, position = "popper", ...props }, ref) => {
+  const tema = useThemeScope();
+  return (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        data-slot="select-content"
+        ref={ref}
+        position={position}
+        className={cn(
+          tema,
+          "z-popover min-w-32 max-h-(--radix-select-content-available-height) overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+          position === "popper" && "translate-y-1",
+          className,
+        )}
+        {...props}
+      >
+        {/* Radix esconde la barra del visor, con su propia regla para
           `[data-radix-select-viewport]`, porque da por hecho que en su lugar se
           usan sus botones de subir y bajar. Sin ellos una lista larga se
           desplazaba sin que nada lo indicara. Se devuelve la del sistema, que
@@ -84,12 +88,13 @@ export const SelectContent: React.ForwardRefExoticComponent<
           Va en `style` y no en una clase porque la regla de Radix no está en
           ninguna capa y las capas pierden contra lo que no lo está: una
           utilidad de Tailwind no la gana. */}
-      <SelectPrimitive.Viewport className="p-1" style={{ scrollbarWidth: "thin" }}>
-        {children}
-      </SelectPrimitive.Viewport>
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-));
+        <SelectPrimitive.Viewport className="p-1" style={{ scrollbarWidth: "thin" }}>
+          {children}
+        </SelectPrimitive.Viewport>
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  );
+});
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 /** Título de un grupo. No se puede elegir. */

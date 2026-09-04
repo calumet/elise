@@ -7,6 +7,8 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 
+import { useThemeScope } from "./theme-scope";
+
 import { cn } from "@/lib/cn";
 
 /** Reparte a los tooltips de abajo la demora compartida, para que abrir uno y moverse al siguiente no espere de nuevo. */
@@ -38,12 +40,15 @@ function TooltipContent({
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>): React.JSX.Element {
+  const tema = useThemeScope();
+
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
+          tema,
           "z-tooltip w-max max-w-[calc(100vw-1rem)] rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-[state=instant-open]:animate-in data-[state=instant-open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
           className,
         )}

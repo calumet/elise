@@ -8,6 +8,8 @@ import { X } from "@calumet/elise-icons";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 
+import { useThemeScope } from "./theme-scope";
+
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
@@ -70,14 +72,17 @@ export const DialogOverlay: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
-    data-slot="dialog-overlay"
-    ref={ref}
-    className={cn(VELO_DIALOGO, className)}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const tema = useThemeScope();
+  return (
+    <DialogPrimitive.Overlay
+      data-slot="dialog-overlay"
+      ref={ref}
+      className={cn(tema, VELO_DIALOGO, className)}
+      {...props}
+    />
+  );
+});
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 /** El panel del modal, con su cabecera, su cuerpo y su pie. `size` elige el ancho. */
@@ -96,6 +101,8 @@ export const DialogContent: React.ForwardRefExoticComponent<
     size?: keyof typeof ANCHOS_DIALOGO;
   }
 >(({ className, children, showCloseButton = true, size = "md", ...props }, ref) => {
+  const tema = useThemeScope();
+
   const closeLabel = useElLabel("ui", "close", "Cerrar");
   return (
     <DialogPortal>
@@ -103,7 +110,7 @@ export const DialogContent: React.ForwardRefExoticComponent<
       <DialogPrimitive.Content
         data-slot="dialog-content"
         ref={ref}
-        className={cn(PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
+        className={cn(tema, PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
         {...props}
       >
         {showCloseButton ? (

@@ -8,6 +8,8 @@ import { Circle, ChevronDown } from "@calumet/elise-icons";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import * as React from "react";
 
+import { useThemeScope } from "./theme-scope";
+
 import { cn } from "@/lib/cn";
 
 const baseItem =
@@ -82,26 +84,30 @@ export const MenubarContent: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof MenubarPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>
->(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => (
-  <MenubarPrimitive.Portal>
-    <MenubarPrimitive.Content
-      data-slot="menubar-content"
-      ref={ref}
-      align={align}
-      alignOffset={alignOffset}
-      sideOffset={sideOffset}
-      className={cn(
-        // Solo animación de entrada: una animación de salida mantiene montado el
-        // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
-        // de trigger con hover (mismo criterio que shadcn para Menubar).
-        "z-popover min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
-        canaletaIndicador,
-        className,
-      )}
-      {...props}
-    />
-  </MenubarPrimitive.Portal>
-));
+>(({ className, align = "start", alignOffset = -3, sideOffset = 8, ...props }, ref) => {
+  const tema = useThemeScope();
+  return (
+    <MenubarPrimitive.Portal>
+      <MenubarPrimitive.Content
+        data-slot="menubar-content"
+        ref={ref}
+        align={align}
+        alignOffset={alignOffset}
+        sideOffset={sideOffset}
+        className={cn(
+          tema,
+          // Solo animación de entrada: una animación de salida mantiene montado el
+          // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
+          // de trigger con hover (mismo criterio que shadcn para Menubar).
+          "z-popover min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+          canaletaIndicador,
+          className,
+        )}
+        {...props}
+      />
+    </MenubarPrimitive.Portal>
+  );
+});
 MenubarContent.displayName = MenubarPrimitive.Content.displayName;
 
 /** Una opción. `inset` la alinea con las que llevan casilla. */
