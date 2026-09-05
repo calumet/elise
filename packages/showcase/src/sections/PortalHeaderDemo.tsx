@@ -57,42 +57,51 @@ const SECCIONES: Seccion[] = [
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
-    <NavigationMenu className="px-6">
-      <div className="-mx-6 flex items-center justify-between gap-3 border-b border-border px-6 py-4">
-        <Text weight="bold" size="lg">
-          EISI
-        </Text>
-        <NavigationMenuToggle />
+    {/* El relleno va en un contenedor de adentro y no en la raiz, que es como se
+        arma una cabecera de verdad: la fila tiene que contarlo igual. */}
+    <NavigationMenu>
+      <div className="px-6">
+        <div className="-mx-6 flex items-center justify-between gap-3 border-b border-border px-6 py-4">
+          <Text weight="bold" size="lg">
+            EISI
+          </Text>
+          <NavigationMenuToggle />
+        </div>
+        <NavigationMenuList>
+          {SECCIONES.map((seccion) => (
+            <NavigationMenuItem key={seccion.nombre}>
+              <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
+              <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
+                <div
+                  className={
+                    seccion.ancha ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col"
+                  }
+                >
+                  {seccion.columnas.map((columna, i) => (
+                    <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
+                      {columna.titulo ? (
+                        <Text
+                          size="sm"
+                          weight="semibold"
+                          tone="muted"
+                          className="px-2.5 max-md:px-0"
+                        >
+                          {columna.titulo}
+                        </Text>
+                      ) : null}
+                      {columna.entradas.map((entrada) => (
+                        <NavigationMenuLink key={entrada} href="#portal">
+                          {entrada}
+                        </NavigationMenuLink>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          ))}
+        </NavigationMenuList>
       </div>
-      <NavigationMenuList>
-        {SECCIONES.map((seccion) => (
-          <NavigationMenuItem key={seccion.nombre}>
-            <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
-            <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
-              <div
-                className={
-                  seccion.ancha ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col"
-                }
-              >
-                {seccion.columnas.map((columna, i) => (
-                  <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
-                    {columna.titulo ? (
-                      <Text size="sm" weight="semibold" tone="muted" className="px-2.5 max-md:px-0">
-                        {columna.titulo}
-                      </Text>
-                    ) : null}
-                    {columna.entradas.map((entrada) => (
-                      <NavigationMenuLink key={entrada} href="#portal">
-                        {entrada}
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        ))}
-      </NavigationMenuList>
     </NavigationMenu>
     <div className="h-[30rem] bg-background" />
   </div>

@@ -3,6 +3,23 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.14.2
+
+### Corrige
+
+- **La fila no contaba el relleno que no estuviera en la raíz.** El sitio salía
+  de `NavigationMenu`, así que un relleno puesto en un contenedor de en medio,
+  que es como se arma cualquier cabecera, no se le descontaba: medido en una
+  cabecera con `px-10` por dentro, contaba 1100px de sitio cuando los reales eran
+  1020, no agrupaba nunca y la fila se salía por la derecha con barra de
+  desplazamiento en la página. En un barrido de 226 anchos, 51 con barra. Ahora
+  el sitio sale de la caja contra la que se resuelve el ancho de la fila, que
+  incluye cualquier relleno de por medio.
+
+  La cabecera de la vitrina tenía el relleno en la raíz, que es el único caso en
+  el que esto no se veía; ahora lo lleva por dentro, como una de verdad. Con ese
+  cambio, la versión anterior se sale en 44 de 61 anchos y esta en ninguno.
+
 ## `@calumet/elise-ui` 0.14.1
 
 ### Corrige
