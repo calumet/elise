@@ -160,8 +160,9 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   React.useLayoutEffect(() => {
     const lista = fila.current;
-    /* La raiz y no el padre: Radix envuelve la lista en un div que crece. */
-    const caja = lista?.closest<HTMLElement>('[data-slot="navigation-menu"]');
+    /* La caja de la fila, que es contra la que se resuelve su ancho: entre ella y
+       la raiz puede haber relleno, y ese relleno tambien le quita sitio. */
+    const caja = lista?.parentElement;
     if (!lista || !caja) return;
 
     repartir.current = () => {
@@ -176,7 +177,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       }
       if (anchos.current.length !== secciones.length) return;
 
-      /* La barra y no la fila, que a la fila la encoge su contenido. */
+      /* La caja y no la fila, que a la fila la encoge su contenido. */
       const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
         const e = getComputedStyle(el) as unknown as Record<string, string>;
         return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
