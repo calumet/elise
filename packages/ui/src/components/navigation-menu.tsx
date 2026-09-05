@@ -11,7 +11,6 @@ import * as React from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
 
 import { cn } from "@/lib/cn";
-import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
 
 /* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
@@ -27,8 +26,6 @@ const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContex
 type ContextoNavegacion = {
   desplegado: boolean;
   setDesplegado: (v: boolean) => void;
-  hayDisparador: boolean;
-  registrarDisparador: () => () => void;
 };
 
 const Navegacion = React.createContext<ContextoNavegacion | null>(null);
@@ -51,22 +48,8 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
 >(({ className, children, ...props }, ref) => {
   const [desplegado, setDesplegado] = React.useState(false);
-  const [disparadores, setDisparadores] = React.useState(0);
 
-  const registrarDisparador = React.useCallback(() => {
-    setDisparadores((n) => n + 1);
-    return () => setDisparadores((n) => n - 1);
-  }, []);
-
-  const ctx = React.useMemo(
-    () => ({
-      desplegado,
-      setDesplegado,
-      hayDisparador: disparadores > 0,
-      registrarDisparador,
-    }),
-    [desplegado, disparadores, registrarDisparador],
-  );
+  const ctx = React.useMemo(() => ({ desplegado, setDesplegado }), [desplegado]);
 
   return (
     <Navegacion.Provider value={ctx}>
@@ -99,11 +82,7 @@ export const NavigationMenuToggle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"button">> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, ...props }, ref) => {
-    const { registrarDisparador } = useNavegacion("NavigationMenuToggle");
-
-    /* Antes de pintar: si no, aparecen los dos botones por un cuadro. */
-    React.useLayoutEffect(() => registrarDisparador(), [registrarDisparador]);
-
+    useNavegacion("NavigationMenuToggle");
     return <BotonDespliegue ref={ref} className={cn("md:hidden", className)} {...props} />;
   },
 );
@@ -162,8 +141,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 >(({ className, children, overflowLabel, ...props }, ref) => {
   const mas = useElLabel("ui", "more", "Más");
   const rotuloGrupo = overflowLabel ?? mas;
-  const esMovil = useIsMobile();
-  const { hayDisparador, setDesplegado } = useNavegacion("NavigationMenuList");
+  const { setDesplegado } = useNavegacion("NavigationMenuList");
 
   const secciones = React.useMemo(
     () => React.Children.toArray(children).filter(React.isValidElement),
@@ -188,6 +166,8 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     if (!lista || !caja) return;
 
     repartir.current = () => {
+      /* En movil la fila no se pinta, y medir lo que no se pinta da ceros. */
+      if (!lista.getClientRects().length) return;
       const hijos = [...lista.children] as HTMLElement[];
       const grupo = lista.querySelector<HTMLElement>('[data-slot="navigation-menu-overflow"]');
       if (grupo) anchoGrupo.current = grupo.getBoundingClientRect().width;
@@ -234,6 +214,8 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
     const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
+    /* Y la fila: cruzar el breakpoint la enciende sin que la barra cambie. */
+    ro.observe(lista);
     repartir.current();
     /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
     void document.fonts?.ready.then(() => repartir.current?.());
@@ -241,7 +223,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       ro.disconnect();
       repartir.current = undefined;
     };
-  }, [secciones.length, esMovil]);
+  }, [secciones.length]);
 
   /* Rehace la cuenta antes de pintar cuando la anterior se hizo a ciegas: sin el
      ancho del grupo, o con todas mostradas para medirlas. Las dos condiciones se
@@ -272,62 +254,67 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     </DentroDeUnaSecuencia.Provider>
   );
 
-  if (esMovil) {
-    return (
-      <>
-        {hayDisparador ? null : (
-          <div className={cn("flex items-center", className)}>
-            <BotonDespliegue />
-          </div>
-        )}
-        {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
-        <CollapsibleContent
-          data-slot="navigation-menu-drawer"
-          onClick={(e) => {
-            if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
-          }}
-        >
-          {/* Sin el `className` de la fila: describe una fila, y con un `flex`
-              dentro el submenu se encoge a su contenido. */}
-          <div className={cn("w-full", !hayDisparador && "border-t border-border")}>
-            {secuencia(secciones, "cajon")}
-          </div>
-        </CollapsibleContent>
-      </>
-    );
-  }
-
   const dentro = secciones.slice(0, visibles);
 
   return (
-    <NavigationMenuPrimitive.List
-      data-slot="navigation-menu-list"
-      ref={(nodo) => {
-        fila.current = nodo;
-        if (typeof ref === "function") ref(nodo);
-        else if (ref) ref.current = nodo;
-      }}
-      /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
-      className={cn(
-        "group -mx-2.5 flex flex-1 list-none items-center gap-0",
-        !medido && "overflow-hidden",
-        className,
-      )}
-      {...props}
-    >
-      {dentro}
-      {visibles < secciones.length ? (
-        <NavigationMenuPrimitive.Item
-          data-slot="navigation-menu-overflow"
-          className="relative shrink-0"
-        >
-          <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
-          <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
-            {secuencia(secciones.slice(visibles), "grupo")}
-          </NavigationMenuContent>
-        </NavigationMenuPrimitive.Item>
-      ) : null}
-    </NavigationMenuPrimitive.List>
+    <>
+      {/* El de respaldo, para quien no puso ninguno. Lo esconde el CSS y no el
+          JS: en servidor no se sabe si hay otro, y corregirlo despues parpadea. */}
+      <div
+        className={cn(
+          "flex items-center md:hidden group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:hidden",
+          className,
+        )}
+      >
+        <BotonDespliegue data-respaldo="" />
+      </div>
+
+      {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
+      <CollapsibleContent
+        data-slot="navigation-menu-drawer"
+        className="md:hidden"
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
+        }}
+      >
+        {/* Sin el `className` de la fila: describe una fila, y con un `flex`
+            dentro el submenu se encoge a su contenido. */}
+        <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:border-t-0">
+          {secuencia(secciones, "cajon")}
+        </div>
+      </CollapsibleContent>
+
+      {/* La rama que se pinta la decide el ancho en CSS: en servidor no se sabe,
+          y decidirla en JS manda la fila entera al movil hasta que hidrata. */}
+      <NavigationMenuPrimitive.List
+        data-slot="navigation-menu-list"
+        ref={(nodo) => {
+          fila.current = nodo;
+          if (typeof ref === "function") ref(nodo);
+          else if (ref) ref.current = nodo;
+        }}
+        /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
+        className={cn(
+          "group -mx-2.5 flex flex-1 list-none items-center gap-0 max-md:hidden",
+          !medido && "overflow-hidden",
+          className,
+        )}
+        {...props}
+      >
+        {dentro}
+        {visibles < secciones.length ? (
+          <NavigationMenuPrimitive.Item
+            data-slot="navigation-menu-overflow"
+            className="relative shrink-0"
+          >
+            <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
+            <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
+              {secuencia(secciones.slice(visibles), "grupo")}
+            </NavigationMenuContent>
+          </NavigationMenuPrimitive.Item>
+        ) : null}
+      </NavigationMenuPrimitive.List>
+    </>
   );
 });
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;

@@ -23,6 +23,18 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 - **El ancho del grupo ya no se estima.** Arrancaba en 96 cuando el real son 65,
   y esa estimación solo se corregía con la pasada que ahora tiene tope.
 
+- **En móvil se veía la fila de escritorio hasta que hidrataba.** Qué rama se
+  pintaba lo decidía `useIsMobile`, que en el servidor no puede saber el ancho y
+  devuelve `false`: medido con el HTML del servidor y sin JS a 390px, el teléfono
+  pintaba la fila con los nueve rótulos, 36px de alto, y la cabecera medía 105px
+  en vez de 69. Ahora las dos ramas se pintan siempre y decide el CSS, que es lo
+  que hace falta para que el primer pintado ya sea el bueno.
+
+  El disparador de respaldo, el que dibuja la fila cuando no pusiste un
+  `NavigationMenuToggle`, se esconde por la misma razón con `:has()` y no
+  contando disparadores en un contexto: en el servidor tampoco se sabe todavía
+  cuántos hay. `NavigationMenu` deja de exponer ese contexto.
+
 ## `@calumet/elise-ui` 0.14.0
 
 `ThemeScope` solo llevaba clases al panel, así que un tema declarado en
