@@ -3,6 +3,48 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.14.3
+
+### Corrige
+
+- **Dentro de una fila flex, la fila medía el sitio sobre la caja de Radix y se
+  desbordaba.** El sitio salía de la caja que Radix pone alrededor de la fila, y
+  esa caja, como item de una fila flex, no se encoge por debajo de su contenido
+  ni crece más allá de él: mide lo que la fila ocupa y nunca lo que le queda.
+  Medido en una cabecera con la marca a un lado y los accesos al otro, la caja
+  se quedaba en 893px mientras la fila iba de 1050 a 650: con 87px libres no
+  reabría nunca, y a lo estrecho se salía hasta 313px. Es la forma que obliga a
+  poner la fila en una fila flex, y es la que se ve en un portal de verdad.
+
+  La caja no sale en el árbol de quien la usa, así que la estila la raíz con
+  `:has()`: toma el sitio que le queda y se deja encoger. Barrida de 1150 a 500
+  y de vuelta en pasos de 4px: la cuenta sigue al ancho en los dos sentidos, de
+  7 secciones a 2 y de 2 a 7, y nada sobresale más de los 10px del `-mx-2.5`.
+
+- **Los anchos guardados no se rehacían al cambiar los rótulos.** Se medían una
+  vez, así que un cambio de idioma con el grupo puesto contaba con los anchos
+  del idioma anterior, y lo mismo pasaba con la tipografía que llega tarde.
+  Ahora, si a las secciones a la vista les cambió el ancho, se muestran todas y
+  se vuelven a medir. Medido: con rótulos más largos la fila pasa de 7 a 4 y al
+  volver, a 7.
+
+- **Antes de hidratar se veía la fila entera.** El recorte de la fila sin medir
+  solo servía si la caja la recortaba, y en una fila flex no lo hacía. Ahora,
+  sin medir, las secciones que no caben pasan a una segunda línea que no se ve:
+  el primer pintado muestra enteras las que caben, y la hidratación solo añade
+  el grupo y quita, como mucho, una.
+
+- **El reparto tiene un tope de verdad.** Tres reaperturas seguidas sin que
+  pase nada por fuera son la fila mordiéndose la cola, y ahí se para. Con una
+  transición al lado que no cruza ningún umbral, 0 filas rehechas; antes, 8.
+
+- **El despliegue de móvil cae debajo en una fila flex con `flex-wrap`.** Lleva
+  `order-last basis-full`, que en un bloque no cambia nada. Sin `flex-wrap`, se
+  queda en la línea, como antes.
+
+La cabecera de la vitrina tiene ahora la marca, la fila y los accesos en una
+misma línea, que es la forma que fallaba.
+
 ## `@calumet/elise-ui` 0.14.2
 
 ### Corrige
