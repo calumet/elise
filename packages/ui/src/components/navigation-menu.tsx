@@ -33,9 +33,7 @@ const Navegacion = React.createContext<ContextoNavegacion | null>(null);
 const BOTON_DESPLIEGUE =
   "group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
-/* La caja que Radix pone alrededor de la fila. No sale en el arbol de quien la
-   usa, asi que se estila desde aqui: como item de una fila flex tiene que tomar
-   el sitio que le queda y poder encogerse, o mide lo que lleva dentro. */
+/* La caja de Radix alrededor de la fila, que quien usa el componente no alcanza. */
 const CAJA_DE_LA_FILA =
   "[&_div:has(>[data-slot=navigation-menu-list])]:min-w-0 [&_div:has(>[data-slot=navigation-menu-list])]:flex-1";
 
@@ -188,9 +186,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
     };
 
-    /* Las de fuera no se pueden medir sin mostrarlas. Tres reaperturas seguidas
-       sin que pase nada por fuera son la fila mordiendose la cola, y ahi se para:
-       sin ese tope, React corta con «Maximum update depth». */
+    /* Con tope: sin el, la fila puede morderse la cola hasta el «Maximum update depth». */
     const reabrir = () => {
       if (reaperturas.current >= 3) return;
       reaperturas.current += 1;
@@ -214,8 +210,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.length !== secciones.length ||
         aLaVista.some((w, i) => Math.abs(w - anchos.current[i]) > 0.5)
       ) {
-        /* Si a las de la fila les cambio el ancho (la tipografia, el idioma), a
-           las de fuera tambien. */
+        /* Cambiaron de ancho, y las de fuera tambien. */
         reabrir();
         return;
       }
@@ -264,15 +259,13 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     };
   }, [secciones.length]);
 
-  /* Los rotulos pueden cambiar sin que cambie cuantos hay, como al cambiar de
-     idioma, y eso tampoco lo ve el observer. */
+  /* Un cambio de rotulo no lo ve el observer. */
   React.useLayoutEffect(() => {
     reaperturas.current = 0;
     repartir.current?.();
   }, [secciones]);
 
-  /* Rehace antes de pintar la cuenta que se hizo a ciegas. Las dos condiciones se
-     apagan solas. */
+  /* Rehace antes de pintar la cuenta que se hizo a ciegas. */
   React.useLayoutEffect(() => {
     if (!remidiendo.current && anchoGrupo.current) return;
     remidiendo.current = false;
@@ -313,7 +306,6 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       </div>
 
       {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
-      {/* En una fila flex con `flex-wrap`, cae debajo en una linea propia. */}
       <CollapsibleContent
         data-slot="navigation-menu-drawer"
         className="order-last basis-full md:hidden"
@@ -338,8 +330,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
         className={cn(
           "group -mx-2.5 flex flex-1 list-none items-center gap-0 max-md:hidden",
-          /* Sin medir aun se ven enteras las que caben y ninguna a medias: las
-             demas pasan a una segunda linea que se recorta. */
+          /* Sin medir, lo que no cabe pasa a una segunda linea recortada. */
           !medido && "max-h-9 flex-wrap overflow-hidden",
           className,
         )}

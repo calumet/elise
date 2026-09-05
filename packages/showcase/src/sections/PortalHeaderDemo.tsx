@@ -54,13 +54,11 @@ const SECCIONES: Seccion[] = [
 
 /**
  * El header del portal de escuelas: nueve secciones, unas con megamenú y otras
- * con un menú corriente. Es el caso que obliga a la fila a agrupar.
+ * con un menú corriente, y la marca y los accesos en la misma línea. Es el caso
+ * que obliga a la fila a agrupar.
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
-    {/* La marca y los accesos comparten linea con la fila, que es lo que obliga
-        a ponerla en una fila flex: toma el sitio que le dejan. Con flex-wrap el
-        despliegue de movil cae debajo. */}
     <NavigationMenu>
       <div className="flex flex-wrap items-center gap-3 px-6 py-3">
         <Text weight="bold" size="lg" className="shrink-0">
