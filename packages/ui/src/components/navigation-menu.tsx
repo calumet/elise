@@ -33,12 +33,17 @@ const Navegacion = React.createContext<ContextoNavegacion | null>(null);
 const BOTON_DESPLIEGUE =
   "group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
+/* La caja de Radix alrededor de la fila, que quien usa el componente no alcanza. */
+const CAJA_DE_LA_FILA =
+  "[&_div:has(>[data-slot=navigation-menu-list])]:min-w-0 [&_div:has(>[data-slot=navigation-menu-list])]:flex-1";
+
 /**
  * Raíz del menú de navegación, para la barra principal de un sitio. Envolvé con
  * ella toda la cabecera si querés poner el botón arriba, junto a la marca.
  *
- * El relleno horizontal va aquí y no en la fila: el despliegue de móvil lo
- * hereda, y así sus rótulos caen a plomo con los de la fila.
+ * El relleno horizontal va en la raíz o en cualquier contenedor de en medio: el
+ * despliegue de móvil lo hereda, y así sus rótulos caen a plomo con los de la
+ * fila.
  */
 export const NavigationMenu: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
@@ -57,7 +62,11 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
         <NavigationMenuPrimitive.Root
           data-slot="navigation-menu"
           ref={ref}
-          className={cn("group/navigation-menu relative flex w-full min-w-0 flex-col", className)}
+          className={cn(
+            "group/navigation-menu relative flex w-full min-w-0 flex-col",
+            CAJA_DE_LA_FILA,
+            className,
+          )}
           {...props}
         >
           {children}
@@ -129,6 +138,11 @@ export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
  * La fila de secciones. Las que no caben se recogen en un grupo al final, y por
  * debajo de 768px la fila entera se cambia por el botón de siempre.
  *
+ * La fila ocupa el sitio que le deja su contenedor: el ancho de un bloque, o lo
+ * que queda entre sus hermanos en una fila flex. Si la fila flex lleva
+ * `flex-wrap`, el despliegue de móvil cae debajo en una línea propia. Para darle
+ * un ancho fijo, envolvela en un `div` con ese ancho.
+ *
  * Lo que se agrupa no se desmonta: se vuelve a montar como submenú vertical, así
  * que cada sección conserva su panel tal como se escribió.
  */
@@ -154,6 +168,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const anchoGrupo = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
   const remidiendo = React.useRef(false);
+  const reaperturas = React.useRef(0);
   const [visibles, setVisibles] = React.useState(secciones.length);
   /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
   const [medido, setMedido] = React.useState(false);
@@ -165,25 +180,44 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     const caja = lista?.parentElement;
     if (!lista || !caja) return;
 
+    const ancho = (el: Element) => el.getBoundingClientRect().width;
+    const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
+      const e = getComputedStyle(el) as unknown as Record<string, string>;
+      return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
+    };
+
+    /* Con tope: sin el, la fila puede morderse la cola hasta el «Maximum update depth». */
+    const reabrir = () => {
+      if (reaperturas.current >= 3) return;
+      reaperturas.current += 1;
+      remidiendo.current = true;
+      anchoGrupo.current = 0;
+      setVisibles(secciones.length);
+    };
+
     repartir.current = () => {
       /* En movil no se pinta, y sin pintar mide ceros. */
       if (!lista.getClientRects().length) return;
       const hijos = [...lista.children] as HTMLElement[];
       const grupo = lista.querySelector<HTMLElement>('[data-slot="navigation-menu-overflow"]');
-      if (grupo) anchoGrupo.current = grupo.getBoundingClientRect().width;
-      /* Solo con la fila entera a la vista estan todos medidos. */
-      if (!grupo && hijos.length === secciones.length) {
-        anchos.current = hijos.map((h) => h.getBoundingClientRect().width);
+      if (grupo) anchoGrupo.current = ancho(grupo);
+      const enFila = hijos.length - (grupo ? 1 : 0);
+      const aLaVista = hijos.slice(0, enFila).map(ancho);
+
+      if (!grupo && enFila === secciones.length) {
+        anchos.current = aLaVista;
+      } else if (
+        anchos.current.length !== secciones.length ||
+        aLaVista.some((w, i) => Math.abs(w - anchos.current[i]) > 0.5)
+      ) {
+        /* Cambiaron de ancho, y las de fuera tambien. */
+        reabrir();
+        return;
       }
-      if (anchos.current.length !== secciones.length) return;
 
       /* La caja y no la fila, que a la fila la encoge su contenido. */
-      const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
-        const e = getComputedStyle(el) as unknown as Record<string, string>;
-        return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
-      };
       const disponible =
-        caja.clientWidth -
+        ancho(caja) -
         aLosLados(caja, "padding") -
         aLosLados(lista, "padding") -
         aLosLados(lista, "margin");
@@ -195,12 +229,10 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
         (n < secciones.length ? anchoGrupo.current : 0);
 
-      /* Las de fuera no se pueden medir sin mostrarlas. Solo si una mas entraria:
-         si no, algo animado al lado rehace la fila en cada cuadro. */
-      const enFila = hijos.length - (grupo ? 1 : 0);
+      /* Solo si una mas entraria: si no, algo animado al lado rehace la fila en
+         cada cuadro. */
       if (grupo && ocupado(enFila + 1) <= disponible) {
-        remidiendo.current = true;
-        setVisibles(secciones.length);
+        reabrir();
         return;
       }
 
@@ -210,21 +242,30 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       setVisibles(caben);
     };
 
-    const ro = new ResizeObserver(() => repartir.current?.());
+    const desdeFuera = () => {
+      reaperturas.current = 0;
+      repartir.current?.();
+    };
+    const ro = new ResizeObserver(desdeFuera);
     ro.observe(caja);
     /* Cruzar el breakpoint enciende la fila sin que la barra cambie. */
     ro.observe(lista);
-    repartir.current();
+    desdeFuera();
     /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
-    void document.fonts?.ready.then(() => repartir.current?.());
+    void document.fonts?.ready.then(desdeFuera);
     return () => {
       ro.disconnect();
       repartir.current = undefined;
     };
   }, [secciones.length]);
 
-  /* Rehace antes de pintar la cuenta que se hizo a ciegas. Las dos condiciones se
-     apagan solas: sin ese tope, React corta con «Maximum update depth». */
+  /* Un cambio de rotulo no lo ve el observer. */
+  React.useLayoutEffect(() => {
+    reaperturas.current = 0;
+    repartir.current?.();
+  }, [secciones]);
+
+  /* Rehace antes de pintar la cuenta que se hizo a ciegas. */
   React.useLayoutEffect(() => {
     if (!remidiendo.current && anchoGrupo.current) return;
     remidiendo.current = false;
@@ -267,7 +308,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
       <CollapsibleContent
         data-slot="navigation-menu-drawer"
-        className="md:hidden"
+        className="order-last basis-full md:hidden"
         onClick={(e) => {
           if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
         }}
@@ -289,7 +330,8 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
         className={cn(
           "group -mx-2.5 flex flex-1 list-none items-center gap-0 max-md:hidden",
-          !medido && "overflow-hidden",
+          /* Sin medir, lo que no cabe pasa a una segunda linea recortada. */
+          !medido && "max-h-9 flex-wrap overflow-hidden",
           className,
         )}
         {...props}

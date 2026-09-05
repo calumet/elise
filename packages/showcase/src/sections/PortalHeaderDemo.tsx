@@ -1,3 +1,4 @@
+import { Button } from "@calumet/elise-ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -53,20 +54,16 @@ const SECCIONES: Seccion[] = [
 
 /**
  * El header del portal de escuelas: nueve secciones, unas con megamenú y otras
- * con un menú corriente. Es el caso que obliga a la fila a agrupar.
+ * con un menú corriente, y la marca y los accesos en la misma línea. Es el caso
+ * que obliga a la fila a agrupar.
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
-    {/* El relleno va en un contenedor de adentro y no en la raiz, que es como se
-        arma una cabecera de verdad: la fila tiene que contarlo igual. */}
     <NavigationMenu>
-      <div className="px-6">
-        <div className="-mx-6 flex items-center justify-between gap-3 border-b border-border px-6 py-4">
-          <Text weight="bold" size="lg">
-            EISI
-          </Text>
-          <NavigationMenuToggle />
-        </div>
+      <div className="flex flex-wrap items-center gap-3 px-6 py-3">
+        <Text weight="bold" size="lg" className="shrink-0">
+          EISI
+        </Text>
         <NavigationMenuList>
           {SECCIONES.map((seccion) => (
             <NavigationMenuItem key={seccion.nombre}>
@@ -101,6 +98,10 @@ const PortalHeaderDemo = (): React.JSX.Element => (
             </NavigationMenuItem>
           ))}
         </NavigationMenuList>
+        <Button size="sm" className="shrink-0 max-md:hidden">
+          Ingresar
+        </Button>
+        <NavigationMenuToggle />
       </div>
     </NavigationMenu>
     <div className="h-[30rem] bg-background" />
