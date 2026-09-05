@@ -3,6 +3,26 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.14.1
+
+### Corrige
+
+- **El reparto de secciones de la fila no tenía tope.** Cada cuenta pedía otra
+  para medir el ancho del grupo, y nada cortaba la cadena: con cualquier cosa
+  animada al lado de la barra la fila se rehacía entera cuadro a cuadro, y la
+  cadena podía llegar al «Maximum update depth» de React. Medido, con una
+  transición al lado: 58 filas rehechas en 6s, ahora 2. La cuenta se rehace solo
+  cuando la anterior se hizo a ciegas (sin el ancho del grupo, o con todas
+  mostradas para medirlas), y las dos condiciones se apagan solas.
+
+- **El sitio disponible dependía de la propia cuenta.** Puesta como item
+  flexible, la barra crecía con lo que llevaba dentro: medido, 1004px con las
+  nueve secciones a la vista y 940 con el grupo, así que la decisión se mordía la
+  cola. La raíz lleva ahora `min-w-0` y no la estira su contenido.
+
+- **El ancho del grupo ya no se estima.** Arrancaba en 96 cuando el real son 65,
+  y esa estimación solo se corregía con la pasada que ahora tiene tope.
+
 ## `@calumet/elise-ui` 0.14.0
 
 `ThemeScope` solo llevaba clases al panel, así que un tema declarado en

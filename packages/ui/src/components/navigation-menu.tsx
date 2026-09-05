@@ -74,7 +74,7 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
         <NavigationMenuPrimitive.Root
           data-slot="navigation-menu"
           ref={ref}
-          className={cn("group/navigation-menu relative flex w-full flex-col", className)}
+          className={cn("group/navigation-menu relative flex w-full min-w-0 flex-col", className)}
           {...props}
         >
           {children}
@@ -172,9 +172,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   const fila = React.useRef<HTMLUListElement | null>(null);
   const anchos = React.useRef<number[]>([]);
-  const anchoGrupo = React.useRef(96);
-  const sitioPrevio = React.useRef(0);
+  /* 0 mientras no se haya puesto nunca: solo con el grupo puesto se puede medir. */
+  const anchoGrupo = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
+  /* Se mostraron todas para medirlas: falta rehacer la cuenta antes de pintar. */
+  const remidiendo = React.useRef(false);
   const [visibles, setVisibles] = React.useState(secciones.length);
   /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
   const [medido, setMedido] = React.useState(false);
@@ -213,13 +215,16 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
         (n < secciones.length ? anchoGrupo.current : 0);
 
-      /* Con mas sitio, los anchos guardados pueden ser de antes de la tipografia. */
-      if (grupo && disponible > sitioPrevio.current) {
-        sitioPrevio.current = disponible;
+      /* Para recuperar sitio hay que volver a mostrarlas todas, que con el grupo
+         puesto las de fuera no se pueden medir. Solo cuando una mas entraria: si
+         no, cualquier cosa animada al lado rehace la fila en cada cuadro. La
+         cuenta sale de la fila, que el cierre guarda el estado de su pasada. */
+      const enFila = hijos.length - (grupo ? 1 : 0);
+      if (grupo && ocupado(enFila + 1) <= disponible) {
+        remidiendo.current = true;
         setVisibles(secciones.length);
         return;
       }
-      sitioPrevio.current = disponible;
 
       let caben = secciones.length;
       while (caben > 0 && ocupado(caben) > disponible) caben -= 1;
@@ -238,9 +243,15 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     };
   }, [secciones.length, esMovil]);
 
-  /* El ancho del grupo solo se sabe con el grupo puesto, asi que la primera
-     cuenta va con una estimacion y esta la corrige antes de pintar. */
-  React.useLayoutEffect(() => repartir.current?.(), [visibles]);
+  /* Rehace la cuenta antes de pintar cuando la anterior se hizo a ciegas: sin el
+     ancho del grupo, o con todas mostradas para medirlas. Las dos condiciones se
+     apagan solas, asi que la cadena para; sin tope, React la corta con «Maximum
+     update depth». */
+  React.useLayoutEffect(() => {
+    if (!remidiendo.current && anchoGrupo.current) return;
+    remidiendo.current = false;
+    repartir.current?.();
+  }, [visibles]);
 
   const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
     <DentroDeUnaSecuencia.Provider value={variante}>
