@@ -150,10 +150,9 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   const fila = React.useRef<HTMLUListElement | null>(null);
   const anchos = React.useRef<number[]>([]);
-  /* 0 mientras no se haya puesto nunca: solo con el grupo puesto se puede medir. */
+  /* 0 hasta que haya un grupo que medir. */
   const anchoGrupo = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
-  /* Se mostraron todas para medirlas: falta rehacer la cuenta antes de pintar. */
   const remidiendo = React.useRef(false);
   const [visibles, setVisibles] = React.useState(secciones.length);
   /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
@@ -166,7 +165,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     if (!lista || !caja) return;
 
     repartir.current = () => {
-      /* En movil la fila no se pinta, y medir lo que no se pinta da ceros. */
+      /* En movil no se pinta, y sin pintar mide ceros. */
       if (!lista.getClientRects().length) return;
       const hijos = [...lista.children] as HTMLElement[];
       const grupo = lista.querySelector<HTMLElement>('[data-slot="navigation-menu-overflow"]');
@@ -195,10 +194,8 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
         (n < secciones.length ? anchoGrupo.current : 0);
 
-      /* Para recuperar sitio hay que volver a mostrarlas todas, que con el grupo
-         puesto las de fuera no se pueden medir. Solo cuando una mas entraria: si
-         no, cualquier cosa animada al lado rehace la fila en cada cuadro. La
-         cuenta sale de la fila, que el cierre guarda el estado de su pasada. */
+      /* Las de fuera no se pueden medir sin mostrarlas. Solo si una mas entraria:
+         si no, algo animado al lado rehace la fila en cada cuadro. */
       const enFila = hijos.length - (grupo ? 1 : 0);
       if (grupo && ocupado(enFila + 1) <= disponible) {
         remidiendo.current = true;
@@ -214,7 +211,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
     const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
-    /* Y la fila: cruzar el breakpoint la enciende sin que la barra cambie. */
+    /* Cruzar el breakpoint enciende la fila sin que la barra cambie. */
     ro.observe(lista);
     repartir.current();
     /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
@@ -225,10 +222,8 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     };
   }, [secciones.length]);
 
-  /* Rehace la cuenta antes de pintar cuando la anterior se hizo a ciegas: sin el
-     ancho del grupo, o con todas mostradas para medirlas. Las dos condiciones se
-     apagan solas, asi que la cadena para; sin tope, React la corta con «Maximum
-     update depth». */
+  /* Rehace antes de pintar la cuenta que se hizo a ciegas. Las dos condiciones se
+     apagan solas: sin ese tope, React corta con «Maximum update depth». */
   React.useLayoutEffect(() => {
     if (!remidiendo.current && anchoGrupo.current) return;
     remidiendo.current = false;
@@ -258,8 +253,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
   return (
     <>
-      {/* El de respaldo, para quien no puso ninguno. Lo esconde el CSS y no el
-          JS: en servidor no se sabe si hay otro, y corregirlo despues parpadea. */}
+      {/* El de respaldo. Lo esconde el CSS: en servidor no se sabe si hay otro. */}
       <div
         className={cn(
           "flex items-center md:hidden group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:hidden",
@@ -284,8 +278,6 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         </div>
       </CollapsibleContent>
 
-      {/* La rama que se pinta la decide el ancho en CSS: en servidor no se sabe,
-          y decidirla en JS manda la fila entera al movil hasta que hidrata. */}
       <NavigationMenuPrimitive.List
         data-slot="navigation-menu-list"
         ref={(nodo) => {
