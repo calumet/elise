@@ -69,8 +69,7 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
           data-slot="navigation-menu"
           ref={ref}
           className={cn(
-            /* Los paneles entran y salen deslizando de lado, y a ras del borde se saldrian de la barra. */
-            "group/navigation-menu relative flex w-full min-w-0 flex-col overflow-x-clip",
+            "group/navigation-menu relative flex w-full min-w-0 flex-col",
             CAJA_DE_LA_FILA,
             className,
           )}
@@ -335,7 +334,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
           className="relative shrink-0"
         >
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
-          <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
+          <NavigationMenuContent className="max-h-[min(70vh,30rem)] overflow-y-auto">
             {secuencia(secciones.slice(visibles), "grupo")}
           </NavigationMenuContent>
         </NavigationMenuPrimitive.Item>
@@ -424,8 +423,9 @@ const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> 
   full: "px-[var(--el-nav-sangria,0.875rem)] py-5",
 };
 
+/* Sin deslizamiento lateral: a ras del borde se saldria de la pantalla. */
 const PANEL_FLOTANTE =
-  "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 data-[motion=from-start]:slide-in-from-left-8 data-[motion=from-end]:slide-in-from-right-8 data-[motion=to-start]:slide-out-to-left-8 data-[motion=to-end]:slide-out-to-right-8 sm:min-w-64";
+  "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 sm:min-w-64";
 
 /* El relleno va en el div de adentro: animar un alto con relleno vertical
    aprieta el texto durante la transición. */
