@@ -1,4 +1,4 @@
-import { Button } from "@calumet/elise-ui/button";
+import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,6 +9,7 @@ import {
   NavigationMenuTrigger,
 } from "@calumet/elise-ui/navigation-menu";
 import { Text } from "@calumet/elise-ui/text";
+import { UserMenu } from "@calumet/elise-ui/user-menu";
 
 type Seccion = {
   nombre: string;
@@ -54,8 +55,9 @@ const SECCIONES: Seccion[] = [
 
 /**
  * El header del portal de escuelas: nueve secciones, unas con megamenú y otras
- * con un menú corriente, y la marca y los accesos en la misma línea. Es el caso
- * que obliga a la fila a agrupar.
+ * con un menú corriente, y la marca y la cuenta en la misma línea. Es el caso
+ * que obliga a la fila a agrupar, y el que necesita el `UserMenu` sin montar un
+ * `AppShell` y sobre una franja clara.
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
@@ -98,9 +100,12 @@ const PortalHeaderDemo = (): React.JSX.Element => (
             </NavigationMenuItem>
           ))}
         </NavigationMenuList>
-        <Button size="sm" className="shrink-0 max-md:hidden">
-          Ingresar
-        </Button>
+        <UserMenu name="Juan Lipez" detail="Estudiante de pregrado">
+          <DropdownMenuItem>Mi perfil</DropdownMenuItem>
+          <DropdownMenuItem>Mis trámites</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
+        </UserMenu>
         <NavigationMenuToggle />
       </div>
     </NavigationMenu>

@@ -586,6 +586,7 @@ estado con texto para lectores de pantalla.
 | DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, ...  | `@calumet/elise-ui/dropdown-menu`   | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
 | ContextMenu, ContextMenuTrigger, ContextMenuContent, ...     | `@calumet/elise-ui/context-menu`    | [ContextMenu](https://www.radix-ui.com/primitives/docs/components/context-menu)       |
 | Pagination, PaginationContent, PaginationItem                | `@calumet/elise-ui/pagination`      | —                                                                                     |
+| UserMenu                                                     | `@calumet/elise-ui/user-menu`       | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
 
 ### Feedback
 
@@ -753,7 +754,7 @@ las tres zonas se leen como contenido que se quedó arriba y abajo.
 
 | Componente                                                              | Import                           | Radix / Externo                                                      |
 | ----------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------- |
-| Avatar, AvatarImage, AvatarFallback                                     | `@calumet/elise-ui/avatar`       | [Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) |
+| Avatar, AvatarImage, AvatarFallback, inicialesDe                        | `@calumet/elise-ui/avatar`       | [Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) |
 | AvatarGroup                                                             | `@calumet/elise-ui/avatar-group` | —                                                                    |
 | Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext | `@calumet/elise-ui/carousel`     | [Embla Carousel](https://www.embla-carousel.com/)                    |
 | Calendar                                                                | `@calumet/elise-ui/calendar`     | [react-day-picker](https://react-day-picker.js.org/)                 |
@@ -896,7 +897,7 @@ import {
     </AppShellHeaderSearch>
     <AppShellHeaderActions>
       <AppShellHeaderAction label="Notificaciones" icon={<Campana />} onClick={…} />
-      <AppShellUserMenu name="Juan D." detail="Calumet S.A.S." initials="JD">
+      <AppShellUserMenu name="Juan Lipez" detail="Calumet">
         <DropdownMenuItem>Perfil</DropdownMenuItem>
       </AppShellUserMenu>
     </AppShellHeaderActions>
@@ -923,25 +924,25 @@ import {
 
 ### Las partes
 
-| Parte                   | Qué es                                                    |
-| ----------------------- | --------------------------------------------------------- |
-| `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho |
-| `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola           |
-| `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                        |
-| `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                |
-| `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta      |
-| `AppShellHeaderAction`  | Una acción de solo icono                                  |
-| `AppShellUserMenu`      | La cuenta, sobre `DropdownMenu`                           |
-| `AppShellNavToggle`     | Abre y cierra el cajón. Solo donde la barra está plegada  |
-| `AppShellNav`           | La navegación lateral                                     |
-| `AppShellNavSection`    | Grupo de entradas con su rótulo                           |
-| `AppShellNavGroup`      | Una entrada con hijas, plegable                           |
-| `AppShellNavItem`       | Una entrada                                               |
-| `AppShellNavAction`     | Acción que aparece al apuntar una entrada                 |
-| `AppShellNavSubList`    | La lista de hijas, con su guía                            |
-| `AppShellNavSubItem`    | Una hija                                                  |
-| `AppShellNavFooter`     | Zona fija al pie de la navegación                         |
-| `AppShellMain`          | El área de contenido                                      |
+| Parte                   | Qué es                                                      |
+| ----------------------- | ----------------------------------------------------------- |
+| `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho   |
+| `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola             |
+| `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                          |
+| `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                  |
+| `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta        |
+| `AppShellHeaderAction`  | Una acción de solo icono                                    |
+| `AppShellUserMenu`      | La cuenta. Es `UserMenu`, que también sirve fuera del shell |
+| `AppShellNavToggle`     | Abre y cierra el cajón. Solo donde la barra está plegada    |
+| `AppShellNav`           | La navegación lateral                                       |
+| `AppShellNavSection`    | Grupo de entradas con su rótulo                             |
+| `AppShellNavGroup`      | Una entrada con hijas, plegable                             |
+| `AppShellNavItem`       | Una entrada                                                 |
+| `AppShellNavAction`     | Acción que aparece al apuntar una entrada                   |
+| `AppShellNavSubList`    | La lista de hijas, con su guía                              |
+| `AppShellNavSubItem`    | Una hija                                                    |
+| `AppShellNavFooter`     | Zona fija al pie de la navegación                           |
+| `AppShellMain`          | El área de contenido                                        |
 
 ### Cómo se comporta
 

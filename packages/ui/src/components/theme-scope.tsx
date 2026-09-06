@@ -7,6 +7,9 @@
  * portal: moverlo dejaría al panel a merced del `overflow` y del `transform` de
  * la sección, que es por lo que Radix monta en `body`.
  *
+ * El tema va en `theme` y la caja en `className`: al panel solo se lleva el
+ * primero.
+ *
  * @module
  */
 
@@ -43,23 +46,30 @@ const mismas = (a: React.CSSProperties, b: React.CSSProperties) => {
 };
 
 /** Props de {@link ThemeScope}. */
-export type ThemeScopeProps = React.ComponentProps<"div">;
+export type ThemeScopeProps = React.ComponentProps<"div"> & {
+  /**
+   * Las clases del tema, y las únicas que se repintan en el panel. Van aparte
+   * de `className` porque una caja con `p-5` repintada ahí le corre las bandas
+   * al panel.
+   */
+  theme?: string;
+};
 
 /**
  * Una sección con su propio tema, que alcanza también a sus overlays.
  *
  * El tema puede venir en clases o en variables escritas en el elemento, que es
  * lo que deja `applyTheme` o un color que sale de la base de datos. Las dos
- * viajan al panel.
+ * viajan al panel. `className` se queda en la caja.
  *
  * ```tsx
- * <ThemeScope className="seccion-marketing">…</ThemeScope>
+ * <ThemeScope theme="seccion-marketing" className="rounded-xl border p-5">…</ThemeScope>
  * <ThemeScope style={{ "--primary": colorDeLaEscuela }}>…</ThemeScope>
  * ```
  */
 export const ThemeScope: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ThemeScopeProps> & React.RefAttributes<HTMLDivElement>
-> = React.forwardRef<HTMLDivElement, ThemeScopeProps>(({ className, ...props }, ref) => {
+> = React.forwardRef<HTMLDivElement, ThemeScopeProps>(({ className, theme, ...props }, ref) => {
   const heredado = React.useContext(Tema);
   const [nodo, setNodo] = React.useState<HTMLDivElement | null>(null);
   const [enLinea, setEnLinea] = React.useState<React.CSSProperties>(SIN_TEMA.variables);
@@ -92,15 +102,15 @@ export const ThemeScope: React.ForwardRefExoticComponent<
   /* Anidados se suman, que un tema dentro de otro solo redefine lo suyo. */
   const tema = React.useMemo(
     () => ({
-      clases: cn(heredado.clases, className),
+      clases: cn(heredado.clases, theme),
       variables: { ...heredado.variables, ...enLinea },
     }),
-    [heredado, className, enLinea],
+    [heredado, theme, enLinea],
   );
 
   return (
     <Tema.Provider value={tema}>
-      <div data-slot="theme-scope" ref={tomar} className={className} {...props} />
+      <div data-slot="theme-scope" ref={tomar} className={cn(theme, className)} {...props} />
     </Tema.Provider>
   );
 });

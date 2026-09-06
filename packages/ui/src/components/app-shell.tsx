@@ -23,9 +23,8 @@
 
 import * as React from "react";
 
-import { Avatar, AvatarFallback } from "./avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu";
 import { Kbd } from "./kbd";
+import { UserMenu, type UserMenuProps } from "./user-menu";
 
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
@@ -215,7 +214,7 @@ export type AppShellHeaderProps = React.ComponentProps<"header">;
  *   </AppShellHeaderSearch>
  *   <AppShellHeaderActions>
  *     <AppShellHeaderAction label="Notificaciones" icon={<Campana />} onClick={…} />
- *     <AppShellUserMenu name="Juan D." initials="JD">…</AppShellUserMenu>
+ *     <AppShellUserMenu name="Juan Lipez">…</AppShellUserMenu>
  *   </AppShellHeaderActions>
  * </AppShellHeader>
  * ```
@@ -403,97 +402,16 @@ function AppShellHeaderAction({
 }
 AppShellHeaderAction.displayName = "AppShellHeaderAction";
 
-/** Props de {@link AppShellUserMenu}. */
-export type AppShellUserMenuProps = {
-  /** Nombre de quien entró. Se esconde donde no cabe, pero sigue anunciándose. */
-  name: string;
-
-  /** Debajo del nombre dentro del menú: la organización, el correo, el rol. */
-  detail?: string;
-
-  /** Dos letras, cuando no hay foto. */
-  initials?: string;
-
-  /** Una foto, que sustituye a las iniciales. */
-  avatar?: React.ReactNode;
-
-  className?: string;
-
-  /** Lo que se despliega: `DropdownMenuItem` y compañía. */
-  children: React.ReactNode;
-};
+/** Props de {@link AppShellUserMenu}. Las de {@link UserMenu}. */
+export type AppShellUserMenuProps = UserMenuProps;
 
 /**
- * La cuenta, al final de la cabecera.
+ * La cuenta, al final de la cabecera. Es {@link UserMenu} con otro nombre.
  *
- * Es un menú de verdad y no una ficha decorativa. Dibujada con borde y fondo
- * pide que la pulses, así que si no despliega nada el aspecto miente.
- *
- * El nombre desaparece donde no cabe pero no se quita del árbol de
- * accesibilidad: en una pantalla estrecha se ven dos iniciales, que no dicen de
- * quién es la sesión.
+ * El menú no depende del shell, así que vive en su propio módulo y una cabecera
+ * que no monta un `AppShell` lo importa de ahí.
  */
-function AppShellUserMenu({
-  name,
-  detail,
-  initials,
-  avatar,
-  className,
-  children,
-}: AppShellUserMenuProps): React.JSX.Element {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          data-slot="app-shell-user-menu"
-          /* Donde el nombre no cabe se queda el avatar suelto: una caja con
-             borde alrededor de dos letras no dibuja nada que el propio avatar
-             no dibuje ya. */
-          className={cn(
-            "flex h-8 flex-none cursor-pointer items-center gap-2 rounded-md text-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:border md:border-border md:bg-card md:ps-2.5 md:pe-1 md:hover:border-border-strong",
-            className,
-          )}
-        >
-          <span className="hidden max-w-32 truncate text-sm font-semibold md:inline">{name}</span>
-          <span className="sr-only md:hidden">{name}</span>
-          <Avatar size="xs" shape="square" className="border-0">
-            {avatar ?? (
-              <AvatarFallback className="bg-primary font-bold text-primary-foreground">
-                {initials}
-              </AvatarFallback>
-            )}
-          </Avatar>
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-56">
-        {/* La cabecera es una franja y no una entrada más: fondo tenue, de
-            borde a borde y hasta las esquinas de arriba. Los márgenes negativos
-            cancelan el relleno del menú, y el radio es el suyo menos el píxel
-            del borde, que si no la esquina teñida asoma por fuera de la curva.
-            Sin fondo, quién eres se leía como una opción del menú que resulta
-            que no se puede pulsar. */}
-        <div className="-mx-1 -mt-1 mb-1 flex items-center gap-2.5 rounded-t-[11px] border-b border-border bg-muted px-3 py-2.5">
-          <Avatar size="sm" shape="square" className="border-0">
-            {avatar ?? (
-              <AvatarFallback className="bg-primary font-bold text-primary-foreground">
-                {initials}
-              </AvatarFallback>
-            )}
-          </Avatar>
-          <span className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-semibold text-foreground">{name}</span>
-            {detail ? (
-              <span className="truncate text-xs text-muted-foreground">{detail}</span>
-            ) : null}
-          </span>
-        </div>
-        {children}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-AppShellUserMenu.displayName = "AppShellUserMenu";
+const AppShellUserMenu: typeof UserMenu = UserMenu;
 
 /** Props de {@link AppShellNavToggle}. */
 export type AppShellNavToggleProps = React.ComponentProps<"button">;

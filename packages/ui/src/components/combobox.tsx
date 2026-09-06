@@ -766,7 +766,7 @@ function MultiComboboxField({
       <ComboboxTrigger
         size={size}
         disabled={disabled}
-        className={cn(elegidas.length > 0 && "h-auto min-h-10 py-1.5", className)}
+        className={className}
         onClear={elegidas.length > 0 && !disabled ? () => cambiar([]) : undefined}
         {...props}
       >

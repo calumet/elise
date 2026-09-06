@@ -244,7 +244,7 @@ const ConApplyTheme = (): React.JSX.Element => {
  */
 const TemaPorSeccionDemo = (): React.JSX.Element => (
   <div className="space-y-4">
-    <ThemeScope className={`${EN_CLASES} ${CAJA}`}>
+    <ThemeScope theme={EN_CLASES} className={CAJA}>
       <Text size="sm" tone="muted" className="mb-3 block">
         Tema en clases. Todo lo que se abra desde aquí sale con el papel ocre, aunque el portal lo
         monte en <code>body</code>.
