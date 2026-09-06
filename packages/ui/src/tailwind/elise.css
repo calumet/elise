@@ -73,13 +73,16 @@
 
   /* Apertura y cierre del Accordion. La altura la publica el primitivo en
      `--radix-accordion-content-height` una vez medido el contenido, porque
-     `height: auto` no es animable. */
+     `height: auto` no es animable. El relleno vertical va con ella porque en
+     `border-box` la caja no mide menos que su relleno, y el cierre frenaría
+     ahí. */
   --animate-accordion-down: accordion-down 200ms var(--ease-out);
   --animate-accordion-up: accordion-up 200ms var(--ease-out);
 
   @keyframes accordion-down {
     from {
       height: 0;
+      padding-block: 0;
     }
     to {
       height: var(--radix-accordion-content-height);
@@ -92,18 +95,18 @@
     }
     to {
       height: 0;
+      padding-block: 0;
     }
   }
 
-  /* Apertura y cierre del Collapsible. Mismo mecanismo que el Accordion: la
-     altura medida la publica el primitivo, porque `height: auto` no es
-     animable. */
+  /* Apertura y cierre del Collapsible. Mismo mecanismo que el Accordion. */
   --animate-collapsible-down: collapsible-down 200ms var(--ease-out);
   --animate-collapsible-up: collapsible-up 200ms var(--ease-out);
 
   @keyframes collapsible-down {
     from {
       height: 0;
+      padding-block: 0;
     }
     to {
       height: var(--radix-collapsible-content-height);
@@ -116,6 +119,7 @@
     }
     to {
       height: 0;
+      padding-block: 0;
     }
   }
 

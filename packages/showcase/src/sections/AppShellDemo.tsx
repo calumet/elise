@@ -104,7 +104,7 @@ const AppShellDemo = () => {
               icon={<CircleHelp />}
               onClick={() => setAviso("Ayuda")}
             />
-            <AppShellUserMenu name="Juan D." detail="Calumet S.A.S." initials="JD">
+            <AppShellUserMenu name="Juan Lipez" detail="Calumet">
               <DropdownMenuItem onSelect={() => setAviso("Perfil")}>
                 <CircleUser aria-hidden="true" />
                 Perfil

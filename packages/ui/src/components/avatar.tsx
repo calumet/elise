@@ -37,6 +37,45 @@ const cuadrados: Record<NonNullable<AvatarProps["size"]>, string> = {
   lg: "rounded-xl",
 };
 
+/* Unen dos apellidos pero no son ninguno, así que no dan letra. */
+const PARTICULAS = new Set([
+  "de",
+  "del",
+  "la",
+  "las",
+  "lo",
+  "los",
+  "y",
+  "e",
+  "da",
+  "das",
+  "do",
+  "dos",
+  "di",
+  "du",
+  "van",
+  "von",
+  "der",
+  "den",
+]);
+
+/**
+ * Las iniciales de un nombre: la primera letra de la primera palabra y la de la
+ * última, en mayúscula. «María de los Ángeles Pérez» da «MP», y un nombre de
+ * una sola palabra da una sola letra.
+ */
+export const inicialesDe = (nombre: string): string => {
+  const palabras = nombre.split(/\s+/).filter(Boolean);
+  const propias = palabras.filter((p) => !PARTICULAS.has(p.toLocaleLowerCase()));
+  const utiles = propias.length > 0 ? propias : palabras;
+  if (utiles.length === 0) return "";
+
+  /* Por code point, que una letra puede ocupar dos. */
+  const primera = [...utiles[0]][0] ?? "";
+  const ultima = utiles.length > 1 ? ([...utiles[utiles.length - 1]][0] ?? "") : "";
+  return `${primera}${ultima}`.toLocaleUpperCase();
+};
+
 /** El contenedor circular de la foto o de las iniciales. */
 export const Avatar: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<AvatarProps> &

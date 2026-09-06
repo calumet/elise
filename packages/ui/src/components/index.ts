@@ -82,3 +82,4 @@ export * from "./date-picker";
 export * from "./date-field";
 export * from "./pagination";
 export * from "./command";
+export * from "./user-menu";

@@ -3,6 +3,48 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.15.0
+
+### Rompe
+
+- **`ThemeScope` lleva al panel lo que va en `theme`, y ya no su `className`.**
+  La caja se queda en `className` y el tema pasa a `theme`. Repintado entero, el
+  `className` metía en el panel lo que era de la sección: un `p-5` corría las
+  bandas de la cabecera y del pie 20px hacia adentro, y ahí ya no llegaban al
+  borde. Quien tenga el tema en `className` lo mueve a `theme`.
+
+- **El disparador de la cuenta marca `data-slot="user-menu"`,** que antes era
+  `app-shell-user-menu`.
+
+### Agrega
+
+- **`UserMenu`, en `@calumet/elise-ui/user-menu`.** El menú de la cuenta no
+  depende de ningún contexto, así que la cabecera de un portal lo monta sin un
+  `AppShell` alrededor. `AppShellUserMenu` es este mismo componente y sigue
+  exportándose desde `app-shell`.
+
+- **`variant="avatar"` deja el avatar suelto en cualquier ancho,** para una
+  cabecera que decida su propio corte. Por defecto, `variant="name"` dibuja la
+  píldora con el nombre y la pliega al avatar donde no cabe, como hasta ahora.
+
+- **Las iniciales salen del nombre.** `initials` pasa a ser el respaldo para
+  cuando las que salen no sirven. El helper está suelto como `inicialesDe` en
+  `@calumet/elise-ui/avatar`: se salta las partículas y los espacios de más, así
+  que «María de los Ángeles Pérez» da «MP» y «Juan» da «J».
+
+### Corrige
+
+- **El cierre del `Collapsible` frenaba y terminaba de un salto.** La animación
+  lleva la altura a cero, pero en `border-box` una caja no mide menos que su
+  relleno: con `pt-3` se quedaba en 12px hasta que el primitivo la escondía.
+  Ahora el relleno vertical va con la altura, en el `Collapsible` y en el
+  `Accordion`. Medido, el cierre pasa de 65px a 0 sin escalón.
+
+- **El disparador del `MultiComboboxField` medía distinto con fichas y sin
+  ellas:** 40px puestas y 36px vacío, en un `size="md"` que es de 36. Traía un
+  alto propio que ya no hacía falta, porque la fila de fichas no envuelve. Ahora
+  mide lo que su tamaño en los dos estados.
+
 ## `@calumet/elise-ui` 0.14.5
 
 ### Corrige

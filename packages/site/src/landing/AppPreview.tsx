@@ -221,7 +221,7 @@ export function AppPreview() {
                   toast({ title: t("app.bell"), description: t("app.bellBody"), variant: "info" })
                 }
               />
-              <AppShellUserMenu name="Ana Ruiz" detail={t("app.org")} initials="AR">
+              <AppShellUserMenu name="Ana Ruiz" detail={t("app.org")}>
                 <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
                   <Settings aria-hidden="true" />
                   {t("app.nav.settings")}

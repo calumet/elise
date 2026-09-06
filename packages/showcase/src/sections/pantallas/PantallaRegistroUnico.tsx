@@ -62,7 +62,7 @@ const PantallaRegistroUnico = (): React.JSX.Element => (
         <AppShellHeaderActions>
           <AppShellHeaderAction label="Notificaciones" icon={<Bell />} />
           <AppShellHeaderAction label="Ayuda" icon={<CircleHelp />} />
-          <AppShellUserMenu name="Laura R." detail="Ingeniería de Sistemas" initials="LR">
+          <AppShellUserMenu name="Laura Restrepo" detail="Ingeniería de Sistemas">
             <DropdownMenuItem>Mi perfil</DropdownMenuItem>
             <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
           </AppShellUserMenu>

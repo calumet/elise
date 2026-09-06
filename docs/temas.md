@@ -456,7 +456,7 @@ llevándole el tema al panel, sin mover el portal.
 ```tsx
 import { ThemeScope } from "@calumet/elise-ui/theme-scope";
 
-<ThemeScope className="seccion-marketing">
+<ThemeScope theme="seccion-marketing">
   <Popover>
     <PopoverTrigger asChild>
       <Button>Ver</Button>
@@ -465,6 +465,17 @@ import { ThemeScope } from "@calumet/elise-ui/theme-scope";
     <PopoverContent>…</PopoverContent>
   </Popover>
 </ThemeScope>;
+```
+
+El tema va en `theme` y la caja en `className`, que se queda donde está: al
+panel solo se repinta `theme`. Con el relleno o el fondo de la sección en la
+misma lista, el panel los recibiría también y sus bandas se cortarían antes del
+borde.
+
+```tsx
+<ThemeScope theme="seccion-marketing" className="rounded-xl border border-border p-5">
+  …
+</ThemeScope>
 ```
 
 Se lo lleva a los catorce paneles que salen por portal: los de `Dialog`,
