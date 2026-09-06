@@ -69,7 +69,8 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
           data-slot="navigation-menu"
           ref={ref}
           className={cn(
-            "group/navigation-menu relative flex w-full min-w-0 flex-col",
+            /* Los paneles entran y salen deslizando de lado, y a ras del borde se saldrian de la barra. */
+            "group/navigation-menu relative flex w-full min-w-0 flex-col overflow-x-clip",
             CAJA_DE_LA_FILA,
             className,
           )}
