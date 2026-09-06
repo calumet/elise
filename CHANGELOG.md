@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.15.1
+
+### Corrige
+
+- **El recorte de la 0.14.5 se llevaba por delante los paneles.** El
+  `overflow-x: clip` de la raíz cortaba la sombra y las esquinas del panel de
+  una sección pegada al borde, y en Safari los menús se abrían un instante y se
+  cerraban. Se quita el recorte: en vez de tapar lo que se sale, los paneles ya no se
+  deslizan de lado al cambiar de sección, así que ninguno cruza el borde.
+  Siguen con su fundido, su escala y su entrada desde arriba. Medido en WebKit
+  y en Chromium, cambiando entre las ocho secciones una a una: 0 desborde de
+  página, que es lo que arreglaba la 0.14.5.
+
+- **El grupo se colocaba al revés que el resto.** Abría anclado por su derecha
+  y se iba hacia la izquierda, en vez de arrimarse hacia dentro solo lo que
+  hiciera falta, como hace cualquier sección cerca del borde. Ahora usa la
+  misma alineación que las demás.
+
 ## `@calumet/elise-ui` 0.15.0
 
 ### Rompe
