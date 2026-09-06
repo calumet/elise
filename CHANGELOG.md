@@ -3,6 +3,28 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.15.2
+
+### Corrige
+
+- **El panel entraba desde fuera de la pantalla.** El sitio del panel se pone
+  desde JS, en `left`, pero el panel llevaba una duración de animación sin decir
+  qué propiedad transicionar, y el valor por defecto de `transition-property` es
+  `all`: `left` también se transicionaba, desde 0, así que el panel arrancaba en
+  el borde de su sección y se arrastraba hasta su sitio durante 140ms. En una
+  sección pegada al canto eso son 123px fuera de la pantalla y barra de
+  desplazamiento, cada vez que se abre. Es lo que la 0.14.5 tapaba con
+  `overflow-x: clip`, lo que la 0.15.1 no arregló, y por lo que se veía tanto al
+  pararse en la última sección como al pasar entre dos. Ahora el panel no
+  transiciona nada; su animación de entrada conserva la misma duración.
+
+  Medido en WebKit y en Chromium, parándose en cada sección y cambiando entre
+  todas las vecinas en los dos sentidos, a 1180 y a 1040: 0 cuadros con barra de
+  desplazamiento de 1923, y el panel nunca cruza el borde.
+
+- **El panel se pegaba al canto de la barra.** Cuando se arrima para caber, se
+  detiene 6px antes, el mismo hueco que lo separa de la barra por arriba.
+
 ## `@calumet/elise-ui` 0.15.1
 
 ### Corrige

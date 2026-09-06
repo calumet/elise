@@ -16,6 +16,9 @@ import { useElLabel } from "@/lib/i18n";
 /* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
 const SELECTOR_ITEM = '[data-slot="navigation-menu-item"],[data-slot="navigation-menu-overflow"]';
 
+/* Lo que separa el panel del canto de la barra, igual que del borde de abajo. */
+const RESPIRO = 6;
+
 /* En una secuencia el panel no flota: cae en el flujo y se abre en alto. */
 type Secuencia = "grupo" | "cajon";
 
@@ -423,9 +426,12 @@ const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> 
   full: "px-[var(--el-nav-sangria,0.875rem)] py-5",
 };
 
-/* Sin deslizamiento lateral: a ras del borde se saldria de la pantalla. */
+/* `transition-none` porque el sitio del panel se pone desde JS: sin el, la
+   duracion de la animacion se la queda tambien `left`, que arranca en 0, y el
+   panel entra desde fuera de la pantalla. La duracion sigue siendo la del
+   fotograma, que sale de la misma variable. */
 const PANEL_FLOTANTE =
-  "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 sm:min-w-64";
+  "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 transition-none w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 sm:min-w-64";
 
 /* El relleno va en el div de adentro: animar un alto con relleno vertical
    aprieta el texto durante la transición. */
@@ -477,10 +483,10 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
         const sangria = f.left + parseFloat(getComputedStyle(fila).paddingLeft) - b.left;
         caja.style.setProperty("--el-nav-sangria", `${sangria}px`);
       }
-      caja.style.setProperty(
-        "--el-nav-ajuste",
-        `${Math.max(0, i.left + caja.offsetWidth - b.right)}px`,
-      );
+      /* Se arrima hasta el respiro, y nunca mas alla del otro canto. */
+      const fuera = i.left + caja.offsetWidth - (b.right - RESPIRO);
+      const arrimo = Math.min(Math.max(0, fuera), Math.max(0, i.left - b.left));
+      caja.style.setProperty("--el-nav-ajuste", `${arrimo}px`);
     };
 
     colocar();
