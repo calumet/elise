@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.14.4
+
+### Corrige
+
+- **Con HTML del servidor, la fila se veía entera hasta hidratar.** La cuenta
+  de secciones que caben solo existe en el cliente. Ahora `NavigationMenu` deja
+  al final un `<script>` inline que reparte la fila al parsear, antes de pintar,
+  y `NavigationMenuList` arranca de esa cuenta: el DOM tras el script y tras
+  hidratar es el mismo, píxel a píxel. Para eso lo agrupado queda en la fila con
+  `hidden` en vez de desmontarse, y el grupo es siempre el último `li`. Lo que
+  comparta línea con la fila va dentro de `NavigationMenu`; con CSP, pasale
+  `nonce`.
+
 ## `@calumet/elise-ui` 0.14.3
 
 ### Corrige

@@ -37,6 +37,9 @@ const BOTON_DESPLIEGUE =
 const CAJA_DE_LA_FILA =
   "[&_div:has(>[data-slot=navigation-menu-list])]:min-w-0 [&_div:has(>[data-slot=navigation-menu-list])]:flex-1";
 
+/* El reparto en JS plano, para correr al parsear el HTML del servidor, antes de pintar. */
+const REPARTO_AL_PARSEAR = `(function(){var s=document.currentScript,r=s&&s.parentElement;if(!r)return;var filas=r.querySelectorAll('[data-slot="navigation-menu-list"]');for(var k=0;k<filas.length;k++){var u=filas[k];if(!u.getClientRects().length)continue;var c=u.parentElement,g=null,li=[];for(var i=0;i<u.children.length;i++){var e=u.children[i];if(e.tagName!=="LI")continue;if(e.getAttribute("data-slot")==="navigation-menu-overflow")g=e;else li.push(e)}if(!g||!c)continue;var w=function(e){return e.getBoundingClientRect().width},p=function(e,q){var t=getComputedStyle(e);return parseFloat(t[q+"Left"])+parseFloat(t[q+"Right"])};g.hidden=false;var ag=w(g);g.hidden=true;var a=li.map(w),d=w(c)-p(c,"padding")-p(u,"padding")-p(u,"margin"),n=li.length,o=function(m){var t=0;for(var j=0;j<m;j++)t+=a[j];return t+(m<li.length?ag:0)};while(n>0&&o(n)>d)n--;for(i=0;i<li.length;i++)li[i].hidden=i>=n;g.hidden=n===li.length;u.removeAttribute("data-sin-medir");u.setAttribute("data-visibles",String(n))}})();`;
+
 /**
  * Raíz del menú de navegación, para la barra principal de un sitio. Envolvé con
  * ella toda la cabecera si querés poner el botón arriba, junto a la marca.
@@ -44,6 +47,9 @@ const CAJA_DE_LA_FILA =
  * El relleno horizontal va en la raíz o en cualquier contenedor de en medio: el
  * despliegue de móvil lo hereda, y así sus rótulos caen a plomo con los de la
  * fila.
+ *
+ * Con HTML del servidor, un `<script>` inline al final de la raíz reparte la fila
+ * antes de pintar: lo que comparta línea con la fila va dentro. `nonce` es para CSP.
  */
 export const NavigationMenu: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
@@ -51,7 +57,7 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
->(({ className, children, ...props }, ref) => {
+>(({ className, children, nonce, ...props }, ref) => {
   const [desplegado, setDesplegado] = React.useState(false);
 
   const ctx = React.useMemo(() => ({ desplegado, setDesplegado }), [desplegado]);
@@ -70,6 +76,8 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
           {...props}
         >
           {children}
+          {/* Lo que crea React no se ejecuta. */}
+          <script nonce={nonce} dangerouslySetInnerHTML={{ __html: REPARTO_AL_PARSEAR }} />
         </NavigationMenuPrimitive.Root>
       </Collapsible>
     </Navegacion.Provider>
@@ -126,6 +134,17 @@ const BotonDespliegue = React.forwardRef<HTMLButtonElement, React.ComponentProps
 );
 BotonDespliegue.displayName = "BotonDespliegue";
 
+/* La cuenta que dejo el script del servidor, si corrio. */
+const cuentaAlParsear = (id: string, total: number): number | undefined => {
+  if (typeof document === "undefined") return undefined;
+  for (const el of document.querySelectorAll('[data-slot="navigation-menu-list"][data-visibles]')) {
+    if (el.getAttribute("data-fila") !== id) continue;
+    const n = Number(el.getAttribute("data-visibles"));
+    return Number.isInteger(n) && n >= 0 && n <= total ? n : undefined;
+  }
+  return undefined;
+};
+
 /** Props de {@link NavigationMenuList}. */
 export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.List
@@ -143,8 +162,9 @@ export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
  * `flex-wrap`, el despliegue de móvil cae debajo en una línea propia. Para darle
  * un ancho fijo, envolvela en un `div` con ese ancho.
  *
- * Lo que se agrupa no se desmonta: se vuelve a montar como submenú vertical, así
- * que cada sección conserva su panel tal como se escribió.
+ * Lo que se agrupa queda en la fila con `hidden` y se vuelve a montar como
+ * submenú vertical, así que cada sección conserva su panel tal como se escribió.
+ * El grupo es siempre el último `li`, esté o no a la vista.
  */
 export const NavigationMenuList: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<NavigationMenuListProps> &
@@ -162,16 +182,14 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     [children],
   );
 
+  const id = React.useId();
   const fila = React.useRef<HTMLUListElement | null>(null);
-  const anchos = React.useRef<number[]>([]);
-  /* 0 hasta que haya un grupo que medir. */
-  const anchoGrupo = React.useRef(0);
   const repartir = React.useRef<() => void>(undefined);
-  const remidiendo = React.useRef(false);
-  const reaperturas = React.useRef(0);
-  const [visibles, setVisibles] = React.useState(secciones.length);
+  /* Si el script del servidor ya repartio, se arranca de su cuenta. */
+  const [alParsear] = React.useState(() => cuentaAlParsear(id, secciones.length));
+  const [visibles, setVisibles] = React.useState(alParsear ?? secciones.length);
   /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
-  const [medido, setMedido] = React.useState(false);
+  const [medido, setMedido] = React.useState(alParsear !== undefined);
 
   React.useLayoutEffect(() => {
     const lista = fila.current;
@@ -186,34 +204,23 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
     };
 
-    /* Con tope: sin el, la fila puede morderse la cola hasta el «Maximum update depth». */
-    const reabrir = () => {
-      if (reaperturas.current >= 3) return;
-      reaperturas.current += 1;
-      remidiendo.current = true;
-      anchoGrupo.current = 0;
-      setVisibles(secciones.length);
-    };
-
     repartir.current = () => {
       /* En movil no se pinta, y sin pintar mide ceros. */
       if (!lista.getClientRects().length) return;
-      const hijos = [...lista.children] as HTMLElement[];
-      const grupo = lista.querySelector<HTMLElement>('[data-slot="navigation-menu-overflow"]');
-      if (grupo) anchoGrupo.current = ancho(grupo);
-      const enFila = hijos.length - (grupo ? 1 : 0);
-      const aLaVista = hijos.slice(0, enFila).map(ancho);
+      const grupo = lista.querySelector<HTMLElement>(
+        ':scope > [data-slot="navigation-menu-overflow"]',
+      );
+      const items = [...lista.children].filter(
+        (el): el is HTMLElement => el.tagName === "LI" && el !== grupo,
+      );
+      if (!grupo || items.length !== secciones.length) return;
 
-      if (!grupo && enFila === secciones.length) {
-        anchos.current = aLaVista;
-      } else if (
-        anchos.current.length !== secciones.length ||
-        aLaVista.some((w, i) => Math.abs(w - anchos.current[i]) > 0.5)
-      ) {
-        /* Cambiaron de ancho, y las de fuera tambien. */
-        reabrir();
-        return;
-      }
+      /* Lo escondido mide cero: se destapa lo justo para medirlo. */
+      const tapados = [...items, grupo].filter((el) => el.hidden);
+      for (const el of tapados) el.hidden = false;
+      const anchos = items.map(ancho);
+      const anchoGrupo = ancho(grupo);
+      for (const el of tapados) el.hidden = true;
 
       /* La caja y no la fila, que a la fila la encoge su contenido. */
       const disponible =
@@ -226,15 +233,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
          fuera. Se baja desde todas: la ultima que entra hace desaparecer el
          grupo, asi que no crece de forma pareja y no vale buscar de abajo. */
       const ocupado = (n: number) =>
-        anchos.current.slice(0, n).reduce((a, b) => a + b, 0) +
-        (n < secciones.length ? anchoGrupo.current : 0);
-
-      /* Solo si una mas entraria: si no, algo animado al lado rehace la fila en
-         cada cuadro. */
-      if (grupo && ocupado(enFila + 1) <= disponible) {
-        reabrir();
-        return;
-      }
+        anchos.slice(0, n).reduce((a, b) => a + b, 0) + (n < secciones.length ? anchoGrupo : 0);
 
       let caben = secciones.length;
       while (caben > 0 && ocupado(caben) > disponible) caben -= 1;
@@ -242,17 +241,13 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       setVisibles(caben);
     };
 
-    const desdeFuera = () => {
-      reaperturas.current = 0;
-      repartir.current?.();
-    };
-    const ro = new ResizeObserver(desdeFuera);
+    const ro = new ResizeObserver(() => repartir.current?.());
     ro.observe(caja);
     /* Cruzar el breakpoint enciende la fila sin que la barra cambie. */
     ro.observe(lista);
-    desdeFuera();
+    repartir.current();
     /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
-    void document.fonts?.ready.then(desdeFuera);
+    void document.fonts?.ready.then(() => repartir.current?.());
     return () => {
       ro.disconnect();
       repartir.current = undefined;
@@ -260,17 +255,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   }, [secciones.length]);
 
   /* Un cambio de rotulo no lo ve el observer. */
-  React.useLayoutEffect(() => {
-    reaperturas.current = 0;
-    repartir.current?.();
-  }, [secciones]);
-
-  /* Rehace antes de pintar la cuenta que se hizo a ciegas. */
-  React.useLayoutEffect(() => {
-    if (!remidiendo.current && anchoGrupo.current) return;
-    remidiendo.current = false;
-    repartir.current?.();
-  }, [visibles]);
+  React.useLayoutEffect(() => repartir.current?.(), [secciones]);
 
   const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
     <DentroDeUnaSecuencia.Provider value={variante}>
@@ -291,7 +276,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
     </DentroDeUnaSecuencia.Provider>
   );
 
-  const dentro = secciones.slice(0, visibles);
+  const dentro = secciones.map((seccion, i) =>
+    React.cloneElement(seccion as React.ReactElement<{ hidden?: boolean }>, {
+      hidden: i >= visibles,
+    }),
+  );
 
   return (
     <>
@@ -322,32 +311,33 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
 
       <NavigationMenuPrimitive.List
         data-slot="navigation-menu-list"
+        data-fila={id}
+        data-sin-medir={medido ? undefined : ""}
+        data-visibles={medido ? visibles : undefined}
         ref={(nodo) => {
           fila.current = nodo;
           if (typeof ref === "function") ref(nodo);
           else if (ref) ref.current = nodo;
         }}
         /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
+        /* Sin medir, lo que no cabe pasa a una segunda linea recortada. */
         className={cn(
-          "group -mx-2.5 flex flex-1 list-none items-center gap-0 max-md:hidden",
-          /* Sin medir, lo que no cabe pasa a una segunda linea recortada. */
-          !medido && "max-h-9 flex-wrap overflow-hidden",
+          "group -mx-2.5 flex flex-1 list-none items-center gap-0 max-md:hidden data-[sin-medir]:max-h-9 data-[sin-medir]:flex-wrap data-[sin-medir]:overflow-hidden",
           className,
         )}
         {...props}
       >
         {dentro}
-        {visibles < secciones.length ? (
-          <NavigationMenuPrimitive.Item
-            data-slot="navigation-menu-overflow"
-            className="relative shrink-0"
-          >
-            <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
-            <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
-              {secuencia(secciones.slice(visibles), "grupo")}
-            </NavigationMenuContent>
-          </NavigationMenuPrimitive.Item>
-        ) : null}
+        <NavigationMenuPrimitive.Item
+          data-slot="navigation-menu-overflow"
+          hidden={visibles >= secciones.length}
+          className="relative shrink-0"
+        >
+          <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
+          <NavigationMenuContent align="end" className="max-h-[min(70vh,30rem)] overflow-y-auto">
+            {secuencia(secciones.slice(visibles), "grupo")}
+          </NavigationMenuContent>
+        </NavigationMenuPrimitive.Item>
       </NavigationMenuPrimitive.List>
     </>
   );
