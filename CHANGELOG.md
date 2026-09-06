@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.14.5
+
+### Corrige
+
+- **Un panel a ras del borde sacaba barra de desplazamiento al cambiar de
+  sección.** Los paneles entran y salen deslizando 2rem de lado, y el de una
+  sección pegada al borde derecho cruzaba el viewport durante la animación: la
+  página ganaba barra horizontal, y con barras clásicas también vertical, por
+  unos cuadros. `NavigationMenu` lleva ahora `overflow-x: clip`, que recorta de
+  lado sin tocar lo vertical. Medido con un panel 26px fuera del borde: el
+  desborde de la página pasa de 26 a 0 y el panel sigue a la vista debajo de la
+  barra.
+
 ## `@calumet/elise-ui` 0.14.4
 
 ### Corrige
