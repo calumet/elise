@@ -176,6 +176,13 @@
   /* El texto secundario de la franja. `--muted-foreground` está calibrado
      contra las superficies claras y sobre esta da 3.3; este da 5.5. */
   --inverse-muted-foreground: oklch(0.65 0.014 265);
+  /* Los estados como tinta encima. La franja es oscura en los dos temas, así
+     que valen los mismos valores con los que el tema oscuro pinta la tinta de
+     estado; los rellenos sólidos no sirven, que no llegan ni a 3.5. */
+  --inverse-info: oklch(0.85 0.1 240);
+  --inverse-success: oklch(0.86 0.095 155);
+  --inverse-warning: oklch(0.86 0.085 62);
+  --inverse-danger: oklch(0.85 0.09 27);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.012 265);
   /* El navy, el rojo y el ocre salen del logo de Calumet sin retocar. Los cuatro
@@ -520,6 +527,10 @@
   --color-inverse: var(--inverse);
   --color-inverse-foreground: var(--inverse-foreground);
   --color-inverse-muted-foreground: var(--inverse-muted-foreground);
+  --color-inverse-info: var(--inverse-info);
+  --color-inverse-success: var(--inverse-success);
+  --color-inverse-warning: var(--inverse-warning);
+  --color-inverse-danger: var(--inverse-danger);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);

@@ -26,6 +26,14 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 - **`Box background="inverse"`,** que faltaba en la lista de superficies.
 
+- **La franja lleva también la tinta de estado.** Un icono de éxito o de error
+  encima se pintaba con el relleno sólido, que está hecho para llevar texto
+  blanco encima y no para ser tinta: ninguno de los cuatro llegaba al 3:1 de un
+  gráfico, y el de información quedaba en 1.07 en el tema claro. La superficie
+  reapunta los `--*-subtle-foreground` a `--inverse-info`, `--inverse-success`,
+  `--inverse-warning` e `--inverse-danger`, que son los valores con los que el
+  tema oscuro pinta la tinta de estado. Los cuatro quedan entre 9.3 y 12.0.
+
 ### Corrige
 
 - **El riel de navegación tenía el texto tenue a dos centésimas del mínimo.** Es
@@ -37,6 +45,9 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   en `text-inverse-foreground/75`, que mide 9.87 de contraste: casi lo mismo que
   el título, así que los dos niveles de texto se leían igual. Ahora sale del
   token y queda en 5.48. Lo mismo con el aspa, que estaba en `/70`.
+
+- **El icono de un toast de información era invisible en el tema claro.** Se
+  pintaba con `--primary`, que sobre la franja mide 1.07.
 
 ## `@calumet/elise-ui` 0.15.2
 

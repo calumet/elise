@@ -92,6 +92,10 @@ suya, así que el texto secundario no se resuelve con opacidades a ojo.
 | `--inverse-foreground`       | `text-inverse-foreground`       | Texto principal de la franja invertida       |
 | `--inverse-muted-foreground` | `text-inverse-muted-foreground` | Texto secundario de la franja invertida      |
 | `--sidebar-muted-foreground` | `text-sidebar-muted-foreground` | Texto secundario del riel de navegación      |
+| `--inverse-info`             | `text-inverse-info`             | Tinta de estado sobre la franja invertida    |
+| `--inverse-success`          | `text-inverse-success`          | Tinta de éxito sobre la franja invertida     |
+| `--inverse-warning`          | `text-inverse-warning`          | Tinta de advertencia sobre la franja         |
+| `--inverse-danger`           | `text-inverse-danger`           | Tinta de error sobre la franja               |
 
 No hace falta nombrarlos en cada sitio. Las dos superficies declaran su par en el
 propio elemento, de modo que `Text tone="muted"` y `text-muted-foreground`
@@ -103,6 +107,10 @@ resuelven contra ellas y no contra la página:
   <Text tone="muted">Cambios sincronizados</Text>
 </Box>
 ```
+
+La franja invertida reapunta también los `--*-subtle-foreground`, que es con lo
+que se pinta un icono de estado: los de la raíz están calibrados contra los
+fondos tenues y encima de la franja no se ven.
 
 Es el mismo mecanismo que usa la cabecera del `AppShell` con `data-theme="dark"`.
 Quien pinte la franja a mano tiene las listas de clases en `SUPERFICIE_INVERSA` y

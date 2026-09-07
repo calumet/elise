@@ -22,11 +22,13 @@ export type ToasterProps = {
   position?: Position;
 };
 
+/* La tinta de estado y no el relleno sólido: el relleno lleva texto blanco
+   encima, así que usado como color de icono sobre la franja no se ve. */
 const iconColor = {
-  info: "var(--primary)",
-  alert: "var(--warning)",
-  error: "var(--destructive)",
-  success: "var(--success)",
+  info: "var(--info-subtle-foreground)",
+  alert: "var(--warning-subtle-foreground)",
+  error: "var(--destructive-subtle-foreground)",
+  success: "var(--success-subtle-foreground)",
 };
 
 const viewportPosition = (position: Position) => {

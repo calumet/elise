@@ -24,9 +24,19 @@ export const SUPERFICIE =
    superficie y no contra la página, sin que el componente sepa dónde está. Es lo
    mismo que hace `data-theme="dark"` en la cabecera del AppShell. */
 
-/** La franja invertida: la capa que va encima de todo, como un toast. */
-export const SUPERFICIE_INVERSA =
-  "bg-inverse text-foreground [--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]";
+/**
+ * La franja invertida: la capa que va encima de todo, como un toast.
+ *
+ * Reapunta también la tinta de estado, que es con lo que se pinta un icono de
+ * éxito o de error: los `--*-subtle-foreground` de la raíz están calibrados
+ * contra los fondos tenues y encima de la franja no se ven.
+ */
+export const SUPERFICIE_INVERSA = [
+  "bg-inverse text-foreground",
+  "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
+  "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
+  "[--warning-subtle-foreground:var(--inverse-warning)] [--destructive-subtle-foreground:var(--inverse-danger)]",
+].join(" ");
 
 /** El riel de la navegación. */
 export const SUPERFICIE_SIDEBAR =
