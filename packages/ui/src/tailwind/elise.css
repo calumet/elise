@@ -173,16 +173,18 @@
      encima de `--popover`, que es lo que corresponde a la capa más alta. */
   --inverse: var(--foreground);
   --inverse-foreground: var(--background);
-  /* El texto secundario de la franja. `--muted-foreground` está calibrado
-     contra las superficies claras y sobre esta da 3.3; este da 5.5. */
+  /* 5.5 sobre la franja; el general da 3.3. */
   --inverse-muted-foreground: oklch(0.65 0.014 265);
-  /* Los estados como tinta encima. La franja es oscura en los dos temas, así
-     que valen los mismos valores con los que el tema oscuro pinta la tinta de
-     estado; los rellenos sólidos no sirven, que no llegan ni a 3.5. */
+  /* Tinta de estado: los valores del tema oscuro, que la franja lo es en los dos. */
   --inverse-info: oklch(0.85 0.1 240);
   --inverse-success: oklch(0.86 0.095 155);
   --inverse-warning: oklch(0.86 0.085 62);
   --inverse-danger: oklch(0.85 0.09 27);
+  /* Los pasos de la rampa de la raíz, espejados sobre fondo oscuro. */
+  --inverse-border-subtle: oklch(0.282 0.013 265);
+  --inverse-border: oklch(0.3 0.013 265);
+  --inverse-input: oklch(0.344 0.013 265);
+  --inverse-border-strong: oklch(0.357 0.013 265);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.012 265);
   /* El navy, el rojo y el ocre salen del logo de Calumet sin retocar. Los cuatro
@@ -256,9 +258,7 @@
      levanta de él. */
   --sidebar: oklch(0.94 0.003 265);
   --sidebar-foreground: oklch(0.21 0.012 265);
-  /* La barra es la más oscura de las superficies claras, así que es la que
-     marca el techo: `--muted-foreground` da 4.52 encima, a dos centésimas del
-     mínimo. Este da 5.25, que es la banda del resto. */
+  /* 5.25 sobre la barra; el general da 4.52, a dos centésimas del mínimo. */
   --sidebar-muted-foreground: oklch(0.49 0.016 265);
   --sidebar-primary: oklch(0.252 0.156 265);
   --sidebar-primary-foreground: oklch(1 0 0);
@@ -405,8 +405,6 @@
   --popover-foreground: oklch(0.962 0.003 265);
   --inverse: oklch(0.262 0.012 265);
   --inverse-foreground: oklch(0.962 0.003 265);
-  /* Acá la franja es el mismo valor que `--muted`, así que el par general ya
-     está calibrado contra ella: da 5.46. */
   --inverse-muted-foreground: var(--muted-foreground);
   /* primary sube a 0.655 porque el 0.55 del modo claro se apaga sobre el fondo
      oscuro. A esa luminosidad el texto encima pasa a ser oscuro para AA. */
@@ -455,8 +453,6 @@
   --chart-5: oklch(0.36 0.15 265);
   --sidebar: oklch(0.196 0.01 265);
   --sidebar-foreground: oklch(0.945 0.004 265);
-  /* Acá la barra es más oscura que el lienzo, así que el par general le sobra:
-     da 6.46. */
   --sidebar-muted-foreground: var(--muted-foreground);
   --sidebar-primary: oklch(0.42 0.156 265);
   --sidebar-primary-foreground: oklch(1 0 0);
@@ -531,6 +527,10 @@
   --color-inverse-success: var(--inverse-success);
   --color-inverse-warning: var(--inverse-warning);
   --color-inverse-danger: var(--inverse-danger);
+  --color-inverse-border-subtle: var(--inverse-border-subtle);
+  --color-inverse-border: var(--inverse-border);
+  --color-inverse-input: var(--inverse-input);
+  --color-inverse-border-strong: var(--inverse-border-strong);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);

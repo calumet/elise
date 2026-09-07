@@ -195,6 +195,4 @@ function Box({
 
 export { Box };
 
-/* Las dos superficies con escala propia salen por acá porque `Box` es quien
-   las pinta desde el catálogo, y el `Toaster` vive en otro paquete. */
 export { SUPERFICIE_INVERSA, SUPERFICIE_SIDEBAR };

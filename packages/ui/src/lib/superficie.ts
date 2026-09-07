@@ -18,26 +18,22 @@
 export const SUPERFICIE =
   "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
 
-/* `--muted-foreground` está calibrado contra las superficies de la raíz, y estas
-   dos caen fuera de esa escala. Declaran su par en el propio elemento, así que
-   `text-foreground` y `text-muted-foreground` de adentro resuelven contra la
-   superficie y no contra la página, sin que el componente sepa dónde está. Es lo
-   mismo que hace `data-theme="dark"` en la cabecera del AppShell. */
+/* Caen fuera de la escala de la raíz, así que declaran la suya en el propio
+   elemento y lo de adentro resuelve contra la superficie sin saber dónde está. */
 
-/**
- * La franja invertida: la capa que va encima de todo, como un toast.
- *
- * Reapunta también la tinta de estado, que es con lo que se pinta un icono de
- * éxito o de error: los `--*-subtle-foreground` de la raíz están calibrados
- * contra los fondos tenues y encima de la franja no se ven.
- */
+/** La franja invertida: la capa que va encima de todo, como un toast. */
 export const SUPERFICIE_INVERSA = [
   "bg-inverse text-foreground",
   "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
   "[--warning-subtle-foreground:var(--inverse-warning)] [--destructive-subtle-foreground:var(--inverse-danger)]",
+  "[--border-subtle:var(--inverse-border-subtle)] [--border:var(--inverse-border)]",
+  "[--input:var(--inverse-input)] [--border-strong:var(--inverse-border-strong)]",
 ].join(" ");
 
 /** El riel de la navegación. */
-export const SUPERFICIE_SIDEBAR =
-  "bg-sidebar text-foreground [--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]";
+export const SUPERFICIE_SIDEBAR = [
+  "bg-sidebar text-foreground",
+  "[--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]",
+  "[--border:var(--sidebar-border)]",
+].join(" ");

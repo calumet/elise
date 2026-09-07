@@ -22,8 +22,7 @@ export type ToasterProps = {
   position?: Position;
 };
 
-/* La tinta de estado y no el relleno sólido: el relleno lleva texto blanco
-   encima, así que usado como color de icono sobre la franja no se ve. */
+/* Tinta y no relleno: el relleno lleva texto blanco encima. */
 const iconColor = {
   info: "var(--info-subtle-foreground)",
   alert: "var(--warning-subtle-foreground)",
