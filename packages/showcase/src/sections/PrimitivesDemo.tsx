@@ -55,6 +55,38 @@ const PrimitivesDemo = () => (
 
     <BlockStack gap={3}>
       <Text size="sm" weight="semibold">
+        Las superficies con escala propia: el mismo tone resuelve contra ellas
+      </Text>
+      <Grid columns={1} smColumns={3} gap={4}>
+        <Box padding={4} background="card" border radius="xl">
+          <Text size="sm" weight="semibold">
+            card
+          </Text>
+          <Text size="sm" tone="muted">
+            Texto secundario
+          </Text>
+        </Box>
+        <Box padding={4} background="sidebar" radius="xl">
+          <Text size="sm" weight="semibold">
+            sidebar
+          </Text>
+          <Text size="sm" tone="muted">
+            Texto secundario
+          </Text>
+        </Box>
+        <Box padding={4} background="inverse" radius="xl">
+          <Text size="sm" weight="semibold">
+            inverse
+          </Text>
+          <Text size="sm" tone="muted">
+            Texto secundario
+          </Text>
+        </Box>
+      </Grid>
+    </BlockStack>
+
+    <BlockStack gap={3}>
+      <Text size="sm" weight="semibold">
         Grid mobile-first, de 1 a 2 y a 3 columnas
       </Text>
       <Grid columns={1} smColumns={2} mdColumns={3} gap={3}>

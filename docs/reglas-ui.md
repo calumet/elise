@@ -111,9 +111,16 @@ produce el defecto que ya evitan.
 | Nombre accesible de una región             | `Section`, con `heading` o `accessibilityLabel`  |
 | Sacar del tabulador lo que está tapado     | `AppShellMain` y `Table` con `inert`             |
 | Respetar `prefers-reduced-motion`          | Los tokens de movimiento                         |
+| El tono secundario de cada superficie      | La superficie, que declara su par de texto       |
 
 Un campo escrito a mano con un `<label>` suelto pierde el `aria-describedby`,
 así que el lector de pantalla no anuncia ni la ayuda ni el error.
+
+Sobre una superficie invertida o sobre el riel de navegación, `tone="muted"` y
+`text-muted-foreground` ya resuelven contra ella: la superficie declara su propio
+par de texto. Atenuar con `opacity` o con `text-inverse-foreground/70` es
+inventar un número que no responde al tema, y que además queda casi al contraste
+del texto principal.
 
 ## 4. Lo que no se escribe
 

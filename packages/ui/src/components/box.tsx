@@ -9,6 +9,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { SUPERFICIE_INVERSA, SUPERFICIE_SIDEBAR } from "@/lib/superficie";
 
 /** Escala de espaciado compartida por Box, los Stack y Grid. */
 export type SpaceScale = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
@@ -21,7 +22,15 @@ export type BoxProps = React.ComponentProps<"div"> & {
   paddingX?: SpaceScale;
   paddingY?: SpaceScale;
 
-  background?: "none" | "card" | "popover" | "muted" | "secondary" | "accent" | "sidebar";
+  background?:
+    | "none"
+    | "card"
+    | "popover"
+    | "muted"
+    | "secondary"
+    | "accent"
+    | "sidebar"
+    | "inverse";
   border?: boolean | "strong";
   radius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
   shadow?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
@@ -84,7 +93,8 @@ const backgroundClasses: Record<NonNullable<BoxProps["background"]>, string> = {
   muted: "bg-muted",
   secondary: "bg-secondary text-secondary-foreground",
   accent: "bg-accent text-accent-foreground",
-  sidebar: "bg-sidebar text-sidebar-foreground",
+  sidebar: SUPERFICIE_SIDEBAR,
+  inverse: SUPERFICIE_INVERSA,
 };
 
 const radiusClasses: Record<NonNullable<BoxProps["radius"]>, string> = {
@@ -184,3 +194,7 @@ function Box({
 }
 
 export { Box };
+
+/* Las dos superficies con escala propia salen por acá porque `Box` es quien
+   las pinta desde el catálogo, y el `Toaster` vive en otro paquete. */
+export { SUPERFICIE_INVERSA, SUPERFICIE_SIDEBAR };
