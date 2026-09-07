@@ -29,6 +29,7 @@ import { UserMenu, type UserMenuProps } from "./user-menu";
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
+import { SUPERFICIE_SIDEBAR } from "@/lib/superficie";
 
 /* Los iconos propios de la barra se dibujan aquí y no se toman del catálogo,
    igual que el de plegar y el caret de sección: son parte del chasis, no
@@ -536,7 +537,8 @@ function AppShellNav({
            orden del fichero), y en escritorio RTL la barra se iba entera fuera
            del marco. Por debajo del breakpoint no hay nada que anular. */
         className={cn(
-          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto border-e border-sidebar-border bg-sidebar py-3 text-sidebar-foreground",
+          SUPERFICIE_SIDEBAR,
+          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto border-e border-sidebar-border py-3",
           "max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
           cajonAbierto
             ? "max-md:translate-x-0"

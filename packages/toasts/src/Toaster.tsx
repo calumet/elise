@@ -1,4 +1,5 @@
 import { TriangleAlert, Info, CircleX, X, CircleCheck } from "@calumet/elise-icons";
+import { SUPERFICIE_INVERSA } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
 import {
   Toast,
@@ -21,11 +22,13 @@ export type ToasterProps = {
   position?: Position;
 };
 
+/* La tinta de estado y no el relleno sólido: el relleno lleva texto blanco
+   encima, así que usado como color de icono sobre la franja no se ve. */
 const iconColor = {
-  info: "var(--primary)",
-  alert: "var(--warning)",
-  error: "var(--destructive)",
-  success: "var(--success)",
+  info: "var(--info-subtle-foreground)",
+  alert: "var(--warning-subtle-foreground)",
+  error: "var(--destructive-subtle-foreground)",
+  success: "var(--success-subtle-foreground)",
 };
 
 const viewportPosition = (position: Position) => {
@@ -74,13 +77,13 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
              y otra tarjeta blanca más se confunde con ellas.
              Invertirlo lo despega sin recurrir a un color de estado, que aquí
              significaría otra cosa. Radio de 8px y 12 de relleno. */
-          className="group relative flex w-full max-w-md flex-col gap-2 rounded-md bg-inverse p-3 pr-12 text-inverse-foreground shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out"
+          className={`${SUPERFICIE_INVERSA} group relative flex w-full max-w-md flex-col gap-2 rounded-md p-3 pr-12 shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out`}
         >
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />
             <div className="flex-1 space-y-1">
               <ToastTitle className="text-sm font-semibold">{toastItem.title}</ToastTitle>
-              <ToastDescription className="text-sm text-inverse-foreground/75">
+              <ToastDescription className="text-sm text-muted-foreground">
                 {toastItem.description}
               </ToastDescription>
               {toastItem.actionLabel && toastItem.action ? (
@@ -88,7 +91,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="px-0 text-inverse-foreground underline-offset-2 hover:underline hover:bg-transparent"
+                  className="px-0 text-foreground underline-offset-2 hover:underline hover:bg-transparent"
                   onClick={toastItem.action}
                 >
                   {toastItem.actionLabel}
@@ -96,7 +99,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
               ) : null}
             </div>
             <ToastClose
-              className="absolute right-2 top-2 inline-flex size-7 items-center justify-center rounded-md text-inverse-foreground/70 transition hover:text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-foreground focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
+              className="absolute right-2 top-2 inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
               aria-label={closeLabel}
             >
               <X className="h-4 w-4" aria-hidden />

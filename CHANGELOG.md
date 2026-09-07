@@ -3,6 +3,52 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.16.0 y `elise-toasts` 0.4.1
+
+### Agrega
+
+- **La franja invertida y el riel de navegación llevan su propia escala de
+  texto.** `--muted-foreground` está calibrado contra las superficies de la raíz
+  y encima de esas dos se sale de la escala. Ahora cada una declara su par en el
+  propio elemento, así que `Text tone="muted"` y `text-muted-foreground`
+  resuelven contra la superficie sin que el componente sepa dónde está, igual
+  que dentro de `data-theme="dark"`. Los tokens nuevos son
+  `--inverse-muted-foreground` y `--sidebar-muted-foreground`, y las listas de
+  clases salen como `SUPERFICIE_INVERSA` y `SUPERFICIE_SIDEBAR` desde
+  `@calumet/elise-ui/box`.
+
+  | texto secundario sobre   | antes | ahora |
+  | ------------------------ | ----- | ----- |
+  | `--inverse`, tema claro  | 3.29  | 5.48  |
+  | `--inverse`, tema oscuro | 5.43  | 5.43  |
+  | `--sidebar`, tema claro  | 4.52  | 5.28  |
+  | `--sidebar`, tema oscuro | 6.46  | 6.46  |
+
+- **`Box background="inverse"`,** que faltaba en la lista de superficies.
+
+- **La franja lleva también la tinta de estado.** Un icono de éxito o de error
+  encima se pintaba con el relleno sólido, que está hecho para llevar texto
+  blanco encima y no para ser tinta: ninguno de los cuatro llegaba al 3:1 de un
+  gráfico, y el de información quedaba en 1.07 en el tema claro. La superficie
+  reapunta los `--*-subtle-foreground` a `--inverse-info`, `--inverse-success`,
+  `--inverse-warning` e `--inverse-danger`, que son los valores con los que el
+  tema oscuro pinta la tinta de estado. Los cuatro quedan entre 9.3 y 12.0.
+
+### Corrige
+
+- **El riel de navegación tenía el texto tenue a dos centésimas del mínimo.** Es
+  la más oscura de las superficies claras, así que era la que marcaba el techo
+  de `--muted-foreground`: 4.52 sobre 4.5. El rótulo de sección, la entrada no
+  activa, el contador y la acción de una entrada usan ese tono.
+
+- **La descripción de un toast se atenuaba con una opacidad inventada.** Estaba
+  en `text-inverse-foreground/75`, que mide 9.87 de contraste: casi lo mismo que
+  el título, así que los dos niveles de texto se leían igual. Ahora sale del
+  token y queda en 5.48. Lo mismo con el aspa, que estaba en `/70`.
+
+- **El icono de un toast de información era invisible en el tema claro.** Se
+  pintaba con `--primary`, que sobre la franja mide 1.07.
+
 ## `@calumet/elise-ui` 0.15.2
 
 ### Corrige

@@ -79,6 +79,43 @@ Los temas se implementan vía CSS custom properties definidas en `@calumet/elise
 > porque los divisores son más claros que el contorno de un control y un campo de
 > entrada necesita más peso que ambos para leerse como editable.
 
+### Superficies con escala propia
+
+`--muted-foreground` está calibrado contra las superficies de la raíz: encima de
+`--background`, `--card`, `--popover`, `--secondary` y `--muted` se lee entre 5.0
+y 6.7 en los dos temas. Dos superficies caen fuera de esa escala y llevan la
+suya, así que el texto secundario no se resuelve con opacidades a ojo.
+
+| Token CSS                    | Utilidad Tailwind               | Descripción                                  |
+| ---------------------------- | ------------------------------- | -------------------------------------------- |
+| `--inverse`                  | `bg-inverse`                    | La capa que va encima de todo, como un toast |
+| `--inverse-foreground`       | `text-inverse-foreground`       | Texto principal de la franja invertida       |
+| `--inverse-muted-foreground` | `text-inverse-muted-foreground` | Texto secundario de la franja invertida      |
+| `--sidebar-muted-foreground` | `text-sidebar-muted-foreground` | Texto secundario del riel de navegación      |
+| `--inverse-info`             | `text-inverse-info`             | Tinta de estado sobre la franja invertida    |
+| `--inverse-success`          | `text-inverse-success`          | Tinta de éxito sobre la franja invertida     |
+| `--inverse-warning`          | `text-inverse-warning`          | Tinta de advertencia sobre la franja         |
+| `--inverse-danger`           | `text-inverse-danger`           | Tinta de error sobre la franja               |
+
+No hace falta nombrarlos en cada sitio. Las dos superficies declaran su par en el
+propio elemento, de modo que `Text tone="muted"` y `text-muted-foreground`
+resuelven contra ellas y no contra la página:
+
+```tsx
+<Box background="inverse" padding={4} radius="xl">
+  <Text weight="semibold">Guardado</Text>
+  <Text tone="muted">Cambios sincronizados</Text>
+</Box>
+```
+
+La franja invertida reapunta también los `--*-subtle-foreground`, que es con lo
+que se pinta un icono de estado: los de la raíz están calibrados contra los
+fondos tenues y encima de la franja no se ven.
+
+Es el mismo mecanismo que usa la cabecera del `AppShell` con `data-theme="dark"`.
+Quien pinte la franja a mano tiene las listas de clases en `SUPERFICIE_INVERSA` y
+`SUPERFICIE_SIDEBAR`, que se exportan desde `@calumet/elise-ui/box`.
+
 ### Estados de los rellenos sólidos
 
 Cada relleno sólido tiene sus propios tokens de `hover` y `active`. No se derivan
@@ -174,6 +211,7 @@ de campo obligatorio de `Field`.
 | ------------------------------ | --------------------------------- |
 | `--sidebar`                    | `bg-sidebar`                      |
 | `--sidebar-foreground`         | `text-sidebar-foreground`         |
+| `--sidebar-muted-foreground`   | `text-sidebar-muted-foreground`   |
 | `--sidebar-primary`            | `bg-sidebar-primary`              |
 | `--sidebar-primary-foreground` | `text-sidebar-primary-foreground` |
 | `--sidebar-accent`             | `bg-sidebar-accent`               |

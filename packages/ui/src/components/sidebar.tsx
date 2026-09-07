@@ -22,6 +22,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tool
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
+import { SUPERFICIE_SIDEBAR } from "@/lib/superficie";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -182,10 +183,7 @@ function Sidebar({
     return (
       <div
         data-slot="sidebar"
-        className={cn(
-          "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
-          className,
-        )}
+        className={cn(SUPERFICIE_SIDEBAR, "flex h-full w-(--sidebar-width) flex-col", className)}
         {...props}
       >
         {children}
@@ -200,7 +198,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className={cn(SUPERFICIE_SIDEBAR, "w-(--sidebar-width) p-0 [&>button]:hidden")}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
