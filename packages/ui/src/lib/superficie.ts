@@ -18,19 +18,10 @@
 export const SUPERFICIE =
   "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
 
-/* `--muted-foreground` está calibrado contra las superficies de la raíz, y estas
-   dos caen fuera de esa escala. Declaran su par en el propio elemento, así que
-   `text-foreground` y `text-muted-foreground` de adentro resuelven contra la
-   superficie y no contra la página, sin que el componente sepa dónde está. Es lo
-   mismo que hace `data-theme="dark"` en la cabecera del AppShell. */
+/* Caen fuera de la escala de la raíz, así que declaran la suya en el propio
+   elemento y lo de adentro resuelve contra la superficie sin saber dónde está. */
 
-/**
- * La franja invertida: la capa que va encima de todo, como un toast.
- *
- * Declara las tres escalas que la raíz calibra contra superficies claras: el
- * par de texto, la tinta de estado con la que se pinta un icono de éxito o de
- * error, y las líneas. Un `Separator` de adentro sale como pelo y no como raya.
- */
+/** La franja invertida: la capa que va encima de todo, como un toast. */
 export const SUPERFICIE_INVERSA = [
   "bg-inverse text-foreground",
   "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
@@ -40,7 +31,7 @@ export const SUPERFICIE_INVERSA = [
   "[--input:var(--inverse-input)] [--border-strong:var(--inverse-border-strong)]",
 ].join(" ");
 
-/** El riel de la navegación, que además tiene su propia línea. */
+/** El riel de la navegación. */
 export const SUPERFICIE_SIDEBAR = [
   "bg-sidebar text-foreground",
   "[--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]",

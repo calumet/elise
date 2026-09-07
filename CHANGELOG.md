@@ -3,7 +3,7 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.17.0
+## `@calumet/elise-ui` 0.16.1
 
 ### Corrige
 

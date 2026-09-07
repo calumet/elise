@@ -74,7 +74,6 @@ const PrimitivesDemo = () => (
               <Text size="sm" tone="muted">
                 Texto secundario
               </Text>
-              {/* El divisor sale de `--border`, que también es de la superficie. */}
               <Separator />
               <InlineStack gap={2} align="center">
                 <CircleCheck className="size-4 text-success-subtle-foreground" aria-hidden />
