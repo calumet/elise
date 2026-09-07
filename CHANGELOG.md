@@ -3,6 +3,23 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.17.0
+
+### Corrige
+
+- **Un `Separator` dentro de la franja invertida salía como una raya blanca.**
+  Un divisor de este sistema vive entre 1.15 y 1.35 de contraste contra su
+  superficie; dentro de la franja estaba en 14.07 en el tema claro, porque la
+  línea sale de `--border` y la rampa de líneas de la raíz está calibrada contra
+  superficies claras. Ahora la franja declara también su rampa, con los mismos
+  pasos espejados: el divisor queda en 1.30, donde `--border` queda sobre
+  `--card`. Los tokens son `--inverse-border-subtle`, `--inverse-border`,
+  `--inverse-input` e `--inverse-border-strong`.
+
+- **En el riel de navegación, un `Separator` corriente era casi invisible.**
+  Dibujaba con `--border`, que sobre el riel mide 1.06. El riel reapunta ahora
+  `--border` a `--sidebar-border`, la línea que ya tenía: 1.15.
+
 ## `@calumet/elise-ui` 0.16.0 y `elise-toasts` 0.4.1
 
 ### Agrega

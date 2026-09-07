@@ -96,6 +96,10 @@ suya, así que el texto secundario no se resuelve con opacidades a ojo.
 | `--inverse-success`          | `text-inverse-success`          | Tinta de éxito sobre la franja invertida     |
 | `--inverse-warning`          | `text-inverse-warning`          | Tinta de advertencia sobre la franja         |
 | `--inverse-danger`           | `text-inverse-danger`           | Tinta de error sobre la franja               |
+| `--inverse-border-subtle`    | `border-inverse-border-subtle`  | Línea tenue sobre la franja invertida        |
+| `--inverse-border`           | `border-inverse-border`         | Divisor sobre la franja invertida            |
+| `--inverse-input`            | `border-inverse-input`          | Borde de campo sobre la franja invertida     |
+| `--inverse-border-strong`    | `border-inverse-border-strong`  | Contorno de control sobre la franja          |
 
 No hace falta nombrarlos en cada sitio. Las dos superficies declaran su par en el
 propio elemento, de modo que `Text tone="muted"` y `text-muted-foreground`
@@ -108,9 +112,11 @@ resuelven contra ellas y no contra la página:
 </Box>
 ```
 
-La franja invertida reapunta también los `--*-subtle-foreground`, que es con lo
-que se pinta un icono de estado: los de la raíz están calibrados contra los
-fondos tenues y encima de la franja no se ven.
+Cada una reapunta las tres escalas que la raíz calibra contra superficies
+claras: el par de texto, la tinta de estado con la que se pinta un icono de
+éxito o de error, y las líneas. Un `Separator` dentro de la franja sale como
+pelo y no como raya blanca, y en el riel sale con `--sidebar-border`, que es la
+línea que ya tenía.
 
 Es el mismo mecanismo que usa la cabecera del `AppShell` con `data-theme="dark"`.
 Quien pinte la franja a mano tiene las listas de clases en `SUPERFICIE_INVERSA` y

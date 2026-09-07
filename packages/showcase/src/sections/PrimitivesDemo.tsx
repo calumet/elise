@@ -1,3 +1,4 @@
+import { CircleCheck } from "@calumet/elise-icons";
 import { Badge } from "@calumet/elise-ui/badge";
 import { Bleed } from "@calumet/elise-ui/bleed";
 import { Box } from "@calumet/elise-ui/box";
@@ -58,30 +59,30 @@ const PrimitivesDemo = () => (
         Las superficies con escala propia: el mismo tone resuelve contra ellas
       </Text>
       <Grid columns={1} smColumns={3} gap={4}>
-        <Box padding={4} background="card" border radius="xl">
-          <Text size="sm" weight="semibold">
-            card
-          </Text>
-          <Text size="sm" tone="muted">
-            Texto secundario
-          </Text>
-        </Box>
-        <Box padding={4} background="sidebar" radius="xl">
-          <Text size="sm" weight="semibold">
-            sidebar
-          </Text>
-          <Text size="sm" tone="muted">
-            Texto secundario
-          </Text>
-        </Box>
-        <Box padding={4} background="inverse" radius="xl">
-          <Text size="sm" weight="semibold">
-            inverse
-          </Text>
-          <Text size="sm" tone="muted">
-            Texto secundario
-          </Text>
-        </Box>
+        {(["card", "sidebar", "inverse"] as const).map((superficie) => (
+          <Box
+            key={superficie}
+            padding={4}
+            background={superficie}
+            border={superficie === "card"}
+            radius="xl"
+          >
+            <BlockStack gap={2}>
+              <Text size="sm" weight="semibold">
+                {superficie}
+              </Text>
+              <Text size="sm" tone="muted">
+                Texto secundario
+              </Text>
+              {/* El divisor sale de `--border`, que también es de la superficie. */}
+              <Separator />
+              <InlineStack gap={2} align="center">
+                <CircleCheck className="size-4 text-success-subtle-foreground" aria-hidden />
+                <Text size="sm">Tinta de estado</Text>
+              </InlineStack>
+            </BlockStack>
+          </Box>
+        ))}
       </Grid>
     </BlockStack>
 

@@ -27,17 +27,22 @@ export const SUPERFICIE =
 /**
  * La franja invertida: la capa que va encima de todo, como un toast.
  *
- * Reapunta también la tinta de estado, que es con lo que se pinta un icono de
- * éxito o de error: los `--*-subtle-foreground` de la raíz están calibrados
- * contra los fondos tenues y encima de la franja no se ven.
+ * Declara las tres escalas que la raíz calibra contra superficies claras: el
+ * par de texto, la tinta de estado con la que se pinta un icono de éxito o de
+ * error, y las líneas. Un `Separator` de adentro sale como pelo y no como raya.
  */
 export const SUPERFICIE_INVERSA = [
   "bg-inverse text-foreground",
   "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
   "[--warning-subtle-foreground:var(--inverse-warning)] [--destructive-subtle-foreground:var(--inverse-danger)]",
+  "[--border-subtle:var(--inverse-border-subtle)] [--border:var(--inverse-border)]",
+  "[--input:var(--inverse-input)] [--border-strong:var(--inverse-border-strong)]",
 ].join(" ");
 
-/** El riel de la navegación. */
-export const SUPERFICIE_SIDEBAR =
-  "bg-sidebar text-foreground [--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]";
+/** El riel de la navegación, que además tiene su propia línea. */
+export const SUPERFICIE_SIDEBAR = [
+  "bg-sidebar text-foreground",
+  "[--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]",
+  "[--border:var(--sidebar-border)]",
+].join(" ");
