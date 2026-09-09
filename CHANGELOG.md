@@ -14,6 +14,11 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   arrima a lo que va debajo, que es lo que lo ata a su grupo. Al principio de un
   panel no separa nada, que ahí no hay de qué.
 
+- **`NavigationMenuLink` acepta `description`, una segunda línea que dice a
+  dónde lleva el enlace.** Sale en tono atenuado y un escalón por debajo del
+  rótulo, como la de `Checkbox`. En el cajón de móvil es lo que convierte una
+  lista de enlaces sueltos en algo con jerarquía.
+
 ### Corrige
 
 - **Una sección desplegada de `NavigationMenu` no se cerraba pulsando su propio
@@ -31,11 +36,19 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   baja ahora esos 6px al relleno de ese lado mientras el botón está, y el glifo
   cae en la línea de las otras bandas.
 
-- **En el cajón de móvil las filas no tenían relleno horizontal, así que el
-  fondo de hover salía pegado al rótulo.** Lo llevaban a cero para que el
-  rótulo cayera a plomo con la marca de la cabecera. Ahora la lista del cajón
-  sangra lo que mide la pastilla, de modo que el rótulo sigue en su línea y el
-  fondo la rodea. Los filetes acompañan a la pastilla.
+- **En el cajón de móvil el fondo de hover salía pegado al rótulo y con las
+  esquinas cortadas.** Las filas llevaban el relleno a cero para que el rótulo
+  cayera a plomo con la marca de la cabecera. Ahora lo recuperan y el cajón
+  sangra lo mismo, así que el rótulo sigue en su línea y la pastilla lo rodea.
+  La sangría va en el cajón y no en su lista: el cajón recorta para poder
+  animarse, y desde dentro le comía las esquinas a la pastilla. En lugar de los
+  filetes va un hueco entre filas, que un filete cruzando una pastilla la
+  convierte en una banda.
+
+- **En el cajón, una sección y sus hijos se veían iguales.** Los dos iban al
+  mismo cuerpo y al mismo peso, así que el despliegue se leía como una lista
+  plana. La sección pasa a semibold, su caret de 12 a 16px, y las filas de
+  segundo nivel se aprietan de 44 a 36px de alto.
 
 - **El cierre de `Alert` pintaba su fondo de hover fuera del relleno de la
   barra.** Alineaba el glifo con un margen negativo, que le sacaba la caja 6px

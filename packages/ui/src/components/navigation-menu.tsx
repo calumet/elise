@@ -182,7 +182,7 @@ const Secuencia = ({
               "flex w-full list-none flex-col gap-0",
               /* La sangría deja sitio a la pastilla sin mover el rótulo, y el
                  ancho automático la ensancha en vez de correrla. */
-              variante === "cajon" && "-mx-2.5 w-auto divide-y divide-border",
+              variante === "cajon" && "gap-0.5",
             )}
           >
             {children}
@@ -327,7 +327,9 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
       <CollapsibleContent
         data-slot="navigation-menu-drawer"
-        className="order-last basis-full md:hidden"
+        /* La sangría va acá y no en la lista: el cajón recorta para animarse,
+           y desde dentro le cortaría las esquinas a la pastilla. */
+        className="order-last -mx-2.5 basis-[calc(100%+1.25rem)] md:hidden"
         onClick={(e) => {
           if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
         }}
@@ -429,16 +431,20 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
       className={cn(
         "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         secuencia
-          ? "min-h-9 w-full justify-between whitespace-normal text-start"
+          ? "min-h-9 w-full justify-between whitespace-normal text-start font-semibold"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        secuencia === "cajon" && "min-h-11",
+        secuencia === "cajon" && "min-h-11 px-2.5",
         className,
       )}
       {...props}
     >
       {props.children}
       <ChevronDown
-        className="relative top-px ml-1 size-3 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180"
+        className={cn(
+          "relative top-px ml-1 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180",
+          /* En una secuencia encabeza una fila alta, y a 12px se pierde. */
+          secuencia ? "size-4" : "size-3",
+        )}
         aria-hidden
       />
     </NavigationMenuPrimitive.Trigger>
@@ -570,14 +576,22 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
 });
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
+/** Props de {@link NavigationMenuLink}. */
+export type NavigationMenuLinkProps = React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Link
+> & {
+  /** Segunda línea, para decir a dónde lleva el enlace. */
+  description?: React.ReactNode;
+};
+
 /** Un enlace del menú. Marcá el actual con `active`. */
 export const NavigationMenuLink: React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>> &
+  React.PropsWithoutRef<NavigationMenuLinkProps> &
     React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Link>>
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Link>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>
->(({ className, ...props }, ref) => {
+  NavigationMenuLinkProps
+>(({ className, description, children, ...props }, ref) => {
   const secuencia = React.useContext(DentroDeUnaSecuencia);
 
   return (
@@ -587,11 +601,28 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       className={cn(
         "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
         secuencia && "whitespace-normal",
-        secuencia === "cajon" && "min-h-11",
+        secuencia === "cajon" && "min-h-11 px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
+        description && "flex-col items-start justify-center gap-0.5",
         className,
       )}
       {...props}
-    />
+    >
+      {/* Sin descripción pasa el hijo tal cual: con `asChild`, el `Slot` de
+          Radix exige uno solo y dos lo rompen. */}
+      {description ? (
+        <>
+          {children}
+          <span
+            data-slot="navigation-menu-link-description"
+            className="text-xs font-normal text-muted-foreground"
+          >
+            {description}
+          </span>
+        </>
+      ) : (
+        children
+      )}
+    </NavigationMenuPrimitive.Link>
   );
 });
 NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;

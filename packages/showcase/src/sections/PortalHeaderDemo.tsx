@@ -12,9 +12,11 @@ import {
 import { Text } from "@calumet/elise-ui/text";
 import { UserMenu } from "@calumet/elise-ui/user-menu";
 
+type Entrada = string | { rotulo: string; detalle: string };
+
 type Seccion = {
   nombre: string;
-  columnas: { titulo?: string; entradas: string[] }[];
+  columnas: { titulo?: string; entradas: Entrada[] }[];
   ancha?: boolean;
 };
 
@@ -29,8 +31,17 @@ const SECCIONES: Seccion[] = [
     ],
   },
   {
+    /* Con detalle, que es lo que pide un cajón de móvil con sitio de sobra. */
     nombre: "Nuestra Gente",
-    columnas: [{ entradas: ["Profesores", "Administrativos", "Egresados"] }],
+    columnas: [
+      {
+        entradas: [
+          { rotulo: "Profesores", detalle: "Planta docente y áreas de trabajo" },
+          { rotulo: "Administrativos", detalle: "Quién resuelve cada trámite" },
+          { rotulo: "Egresados", detalle: "Red de egresados y bolsa de empleo" },
+        ],
+      },
+    ],
   },
   {
     /* Dos columnas, para que el rótulo caiga a media lista. */
@@ -70,7 +81,7 @@ const SECCIONES: Seccion[] = [
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
     <NavigationMenu>
-      <div className="flex flex-wrap items-center gap-3 px-6 py-3">
+      <div className="flex flex-wrap items-center gap-3 px-4 py-3">
         <Text weight="bold" size="lg" className="shrink-0">
           EISI
         </Text>
@@ -93,11 +104,18 @@ const PortalHeaderDemo = (): React.JSX.Element => (
                           {columna.titulo}
                         </NavigationMenuLabel>
                       ) : null,
-                      ...columna.entradas.map((entrada) => (
-                        <NavigationMenuLink key={entrada} href="#portal">
-                          {entrada}
-                        </NavigationMenuLink>
-                      )),
+                      ...columna.entradas.map((entrada) => {
+                        const suelta = typeof entrada === "string";
+                        return (
+                          <NavigationMenuLink
+                            key={suelta ? entrada : entrada.rotulo}
+                            href="#portal"
+                            description={suelta ? undefined : entrada.detalle}
+                          >
+                            {suelta ? entrada : entrada.rotulo}
+                          </NavigationMenuLink>
+                        );
+                      }),
                     ];
                     /* En columnas cada grupo va en la suya; en una sola, todos
                        caen en la misma lista y el rótulo queda a media altura. */
