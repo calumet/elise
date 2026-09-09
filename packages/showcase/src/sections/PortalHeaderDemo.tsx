@@ -2,8 +2,8 @@ import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropd
 import {
   NavigationMenu,
   NavigationMenuContent,
+  NavigationMenuGroup,
   NavigationMenuItem,
-  NavigationMenuLabel,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuToggle,
@@ -90,44 +90,22 @@ const PortalHeaderDemo = (): React.JSX.Element => (
             <NavigationMenuItem key={seccion.nombre}>
               <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
               <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
-                <div
-                  className={
-                    seccion.ancha
-                      ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-                      : "flex flex-col gap-1"
-                  }
-                >
-                  {seccion.columnas.flatMap((columna, i) => {
-                    const dentro = [
-                      columna.titulo ? (
-                        <NavigationMenuLabel key={`${columna.titulo}-rotulo`}>
-                          {columna.titulo}
-                        </NavigationMenuLabel>
-                      ) : null,
-                      ...columna.entradas.map((entrada) => {
-                        const suelta = typeof entrada === "string";
-                        return (
-                          <NavigationMenuLink
-                            key={suelta ? entrada : entrada.rotulo}
-                            href="#portal"
-                            description={suelta ? undefined : entrada.detalle}
-                          >
-                            {suelta ? entrada : entrada.rotulo}
-                          </NavigationMenuLink>
-                        );
-                      }),
-                    ];
-                    /* En columnas cada grupo va en la suya; en una sola, todos
-                       caen en la misma lista y el rótulo queda a media altura. */
-                    return seccion.ancha
-                      ? [
-                          <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
-                            {dentro}
-                          </div>,
-                        ]
-                      : dentro;
-                  })}
-                </div>
+                {seccion.columnas.map((columna, i) => (
+                  <NavigationMenuGroup key={columna.titulo ?? i} label={columna.titulo}>
+                    {columna.entradas.map((entrada) => {
+                      const suelta = typeof entrada === "string";
+                      return (
+                        <NavigationMenuLink
+                          key={suelta ? entrada : entrada.rotulo}
+                          href="#portal"
+                          description={suelta ? undefined : entrada.detalle}
+                        >
+                          {suelta ? entrada : entrada.rotulo}
+                        </NavigationMenuLink>
+                      );
+                    })}
+                  </NavigationMenuGroup>
+                ))}
               </NavigationMenuContent>
             </NavigationMenuItem>
           ))}
@@ -138,7 +116,7 @@ const PortalHeaderDemo = (): React.JSX.Element => (
           <DropdownMenuSeparator />
           <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
         </UserMenu>
-        <NavigationMenuToggle className="-me-2" />
+        <NavigationMenuToggle />
       </div>
     </NavigationMenu>
     <div className="h-[30rem] bg-background" />

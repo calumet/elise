@@ -102,16 +102,17 @@ const useNavegacion = (quien: string): ContextoNavegacion => {
  * Abre y cierra el despliegue de móvil. Ponelo donde vaya el resto de acciones
  * de la cabecera; si no hay ninguno, la fila dibuja el suyo en su sitio.
  *
- * La caja lleva holgura alrededor del glifo. Contra el borde de un contenedor
- * con relleno, el relleno de ese lado es el que se la baja; está en las reglas
- * de interfaz.
+ * Trae puesto el descuento de la holgura de su caja, para que el glifo cierre
+ * donde abre la marca. Si no queda contra el borde, `className="me-0"`.
  */
 export const NavigationMenuToggle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"button">> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, ...props }, ref) => {
     useNavegacion("NavigationMenuToggle");
-    return <BotonDespliegue ref={ref} className={cn("md:hidden", className)} {...props} />;
+    /* El `-me` descuenta la holgura de la caja. El botón cierra una cabecera, y
+       ahí el glifo tiene que caer donde abre la marca; `me-0` lo anula. */
+    return <BotonDespliegue ref={ref} className={cn("-me-2 md:hidden", className)} {...props} />;
   },
 );
 NavigationMenuToggle.displayName = "NavigationMenuToggle";
@@ -484,6 +485,14 @@ const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> 
    duracion de la animacion se la queda tambien `left`, que arranca en 0, y el
    panel entra desde fuera de la pantalla. La duracion sigue siendo la del
    fotograma, que sale de la misma variable. */
+/* El reparto de los grupos lo pone el panel. Va con `:has` para no tocar a
+   quien monta su propia caja dentro del panel, y literal porque Tailwind no ve
+   una clase interpolada. */
+const APILADOS =
+  "has-[>[data-slot=navigation-menu-group]]:flex has-[>[data-slot=navigation-menu-group]]:flex-col has-[>[data-slot=navigation-menu-group]]:gap-4";
+const EN_COLUMNAS =
+  "has-[>[data-slot=navigation-menu-group]]:grid has-[>[data-slot=navigation-menu-group]]:gap-6 sm:has-[>[data-slot=navigation-menu-group]]:grid-cols-2 lg:has-[>[data-slot=navigation-menu-group]]:grid-cols-3";
+
 const PANEL_FLOTANTE =
   "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 transition-none w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 sm:min-w-64";
 
@@ -560,14 +569,22 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
         else if (ref) ref.current = nodo;
       }}
       className={cn(
-        secuencia ? PANEL_EN_SECUENCIA : cn(PANEL_FLOTANTE, HOLGURA[align], ALINEACION[align]),
+        secuencia
+          ? PANEL_EN_SECUENCIA
+          : cn(
+              PANEL_FLOTANTE,
+              HOLGURA[align],
+              ALINEACION[align],
+              align === "full" ? EN_COLUMNAS : APILADOS,
+            ),
         className,
       )}
       {...props}
     >
       {secuencia ? (
-        /* En el grupo la sangría dice de qué cuelga; en el cajón, los filetes. */
-        <div className={cn("pb-2", secuencia === "grupo" && "ps-3")}>{children}</div>
+        /* En el grupo la sangría dice de qué cuelga. Apilado y no en columnas:
+           acá el panel es tan ancho como la fila que lo abre. */
+        <div className={cn("pb-2", APILADOS, secuencia === "grupo" && "ps-3")}>{children}</div>
       ) : (
         children
       )}
@@ -647,6 +664,33 @@ export const NavigationMenuLabel: React.ForwardRefExoticComponent<
   ),
 );
 NavigationMenuLabel.displayName = "NavigationMenuLabel";
+
+/** Props de {@link NavigationMenuGroup}. */
+export type NavigationMenuGroupProps = React.ComponentProps<"div"> & {
+  /** Rótulo del grupo. Sin él, el grupo solo agrupa. */
+  label?: React.ReactNode;
+};
+
+/**
+ * Un grupo de enlaces dentro de un panel, con su rótulo. El panel los reparte:
+ * en columnas donde es ancho, apilados donde no.
+ */
+export const NavigationMenuGroup: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<NavigationMenuGroupProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, NavigationMenuGroupProps>(
+  ({ className, label, children, ...props }, ref) => (
+    <div
+      data-slot="navigation-menu-group"
+      ref={ref}
+      className={cn("flex min-w-0 flex-col gap-1", className)}
+      {...props}
+    >
+      {label ? <NavigationMenuLabel>{label}</NavigationMenuLabel> : null}
+      {children}
+    </div>
+  ),
+);
+NavigationMenuGroup.displayName = "NavigationMenuGroup";
 
 /** El contenedor donde se dibujan los paneles, y que se anima al cambiar de sección. */
 export const NavigationMenuViewport: React.ForwardRefExoticComponent<

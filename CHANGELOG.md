@@ -7,11 +7,12 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Corrige
 
-- **Un rótulo de grupo dentro de un panel se leía como un enlace apagado.**
-  Escrito a mano queda con el mismo aire que los enlaces que lo rodean, o con
-  menos, así que no se distinguía del principio de un grupo. Lo resuelve
-  `NavigationMenuLabel`, que separa de lo que viene encima y se arrima a lo que
-  va debajo. Al principio de un panel no separa nada, que ahí no hay de qué.
+- **Un panel con varios grupos de enlaces había que armarlo por fuera.** El
+  rótulo, la caja de cada columna, el reparto en rejilla y los huecos salían del
+  código de quien montaba el menú, y con eso el rótulo terminaba leyéndose como
+  un enlace apagado. Lo resuelve `NavigationMenuGroup`, que toma el rótulo en
+  `label` y deja al panel repartir: en columnas donde es ancho, apilado donde
+  no. `NavigationMenuLabel` sigue disponible suelto.
 
 - **En el cajón de móvil no había forma de decir a dónde lleva un enlace.**
   `NavigationMenuLink` acepta ahora `description`, una segunda línea en tono
@@ -26,6 +27,12 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   cajón de móvil y el grupo «Más» del escritorio. Ahora el disparador corta ese
   `onItemSelect` y vacía la secuencia él mismo. Pasaba también en el grupo de
   escritorio, que la incidencia no mencionaba.
+
+- **`NavigationMenuToggle` no caía a plomo con la marca de su cabecera.** Su
+  caja mide 36px alrededor de un glifo de 20, así que el icono cerraba 8px por
+  dentro de donde abría la marca, y el descuento lo tenía que poner quien lo
+  montaba. Ahora lo trae puesto; `className="me-0"` lo anula donde el botón no
+  quede contra el borde.
 
 - **El botón de navegación de `AppShellHeader` no caía a plomo con el resto de
   la cabecera.** Su caja mide 32px alrededor de un glifo de 20, así que el icono
