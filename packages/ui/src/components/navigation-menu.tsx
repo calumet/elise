@@ -607,7 +607,10 @@ export const NavigationMenuLabel: React.ForwardRefExoticComponent<
     <div
       data-slot="navigation-menu-label"
       ref={ref}
-      className={cn("px-2.5 pt-4 text-sm font-semibold text-muted-foreground", className)}
+      className={cn(
+        "px-2.5 pt-3 text-sm font-semibold text-muted-foreground first:pt-0",
+        className,
+      )}
       {...props}
     />
   ),

@@ -11,7 +11,8 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   panel.** Un rótulo escrito a mano queda con el mismo aire que los enlaces que
   lo rodean, o con menos, así que se lee como un enlace apagado en vez de como
   el principio de un grupo. El componente separa de lo que viene encima y se
-  arrima a lo que va debajo, que es lo que lo ata a su grupo.
+  arrima a lo que va debajo, que es lo que lo ata a su grupo. Al principio de un
+  panel no separa nada, que ahí no hay de qué.
 
 ### Corrige
 

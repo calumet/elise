@@ -81,21 +81,34 @@ const PortalHeaderDemo = (): React.JSX.Element => (
               <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
                 <div
                   className={
-                    seccion.ancha ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col"
+                    seccion.ancha
+                      ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                      : "flex flex-col gap-1"
                   }
                 >
-                  {seccion.columnas.map((columna, i) => (
-                    <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
-                      {columna.titulo ? (
-                        <NavigationMenuLabel>{columna.titulo}</NavigationMenuLabel>
-                      ) : null}
-                      {columna.entradas.map((entrada) => (
+                  {seccion.columnas.flatMap((columna, i) => {
+                    const dentro = [
+                      columna.titulo ? (
+                        <NavigationMenuLabel key={`${columna.titulo}-rotulo`}>
+                          {columna.titulo}
+                        </NavigationMenuLabel>
+                      ) : null,
+                      ...columna.entradas.map((entrada) => (
                         <NavigationMenuLink key={entrada} href="#portal">
                           {entrada}
                         </NavigationMenuLink>
-                      ))}
-                    </div>
-                  ))}
+                      )),
+                    ];
+                    /* En columnas cada grupo va en la suya; en una sola, todos
+                       caen en la misma lista y el rótulo queda a media altura. */
+                    return seccion.ancha
+                      ? [
+                          <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
+                            {dentro}
+                          </div>,
+                        ]
+                      : dentro;
+                  })}
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
