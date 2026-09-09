@@ -3,6 +3,35 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.16.2
+
+### Corrige
+
+- **Una sección desplegada de `NavigationMenu` no se cerraba pulsando su propio
+  disparador.** Solo la cerraba abrir otra, así que el cajón de móvil se quedaba
+  abierto sin forma de volver a la lista de secciones. Radix alterna en la raíz,
+  pero el `onItemSelect` de un `Sub` asigna el valor sin compararlo con el que
+  había, y las dos secuencias verticales del componente cuelgan de un `Sub`: el
+  cajón de móvil y el grupo «Más» del escritorio. Ahora el disparador corta ese
+  `onItemSelect` y vacía la secuencia él mismo. Pasaba también en el grupo de
+  escritorio, que la incidencia no mencionaba.
+
+- **El botón de navegación de `AppShellHeader` no caía a plomo con el resto de
+  la cabecera.** Su caja mide 32px alrededor de un glifo de 20, así que el icono
+  abría a 22px mientras la marca y las demás bandas abrían a 16. La cabecera le
+  baja ahora esos 6px al relleno de ese lado mientras el botón está, y el glifo
+  cae en la línea de las otras bandas.
+
+- **El cierre de `Alert` pintaba su fondo de hover fuera del relleno de la
+  barra.** Alineaba el glifo con un margen negativo, que le sacaba la caja 6px
+  por fuera del canto. Ahora es la barra la que se acomoda cuando el cierre
+  está: el glifo queda en el mismo sitio y la caja, dentro.
+
+Un botón de icono que pongas vos contra el borde de un contenedor con relleno
+se acomoda igual, bajándole al relleno de ese lado la holgura de la caja. La
+regla, con el porqué de no hacerlo con un margen negativo, está en
+[reglas-ui.md](docs/reglas-ui.md).
+
 ## `@calumet/elise-ui` 0.16.1
 
 ### Corrige

@@ -26,6 +26,10 @@ const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContex
   null,
 );
 
+/* Radix solo alterna en la raíz: el `onItemSelect` de un `Sub` asigna sin
+   comparar, y la sección no se cierra sola. */
+const CerrarLaSeccion = React.createContext<(() => void) | null>(null);
+
 type ContextoNavegacion = {
   desplegado: boolean;
   setDesplegado: (v: boolean) => void;
@@ -97,6 +101,10 @@ const useNavegacion = (quien: string): ContextoNavegacion => {
 /**
  * Abre y cierra el despliegue de móvil. Ponelo donde vaya el resto de acciones
  * de la cabecera; si no hay ninguno, la fila dibuja el suyo en su sitio.
+ *
+ * La caja lleva holgura alrededor del glifo. Contra el borde de un contenedor
+ * con relleno, el relleno de ese lado es el que se la baja; está en las reglas
+ * de interfaz.
  */
 export const NavigationMenuToggle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"button">> & React.RefAttributes<HTMLButtonElement>
@@ -147,6 +155,42 @@ const cuentaAlParsear = (id: string, total: number): number | undefined => {
   }
   return undefined;
 };
+
+/* El `Sub` va controlado: es de donde el disparador vacía la sección. */
+const Secuencia = ({
+  variante,
+  children,
+}: {
+  variante: Secuencia;
+  children: React.ReactNode;
+}): React.JSX.Element => {
+  const [abierta, setAbierta] = React.useState("");
+  const cerrar = React.useCallback(() => setAbierta(""), []);
+
+  return (
+    <DentroDeUnaSecuencia.Provider value={variante}>
+      <CerrarLaSeccion.Provider value={cerrar}>
+        <NavigationMenuPrimitive.Sub
+          data-slot="navigation-menu-sub"
+          orientation="vertical"
+          value={abierta}
+          onValueChange={setAbierta}
+          className="w-full"
+        >
+          <NavigationMenuPrimitive.List
+            className={cn(
+              "flex w-full list-none flex-col gap-0",
+              variante === "cajon" && "divide-y divide-border",
+            )}
+          >
+            {children}
+          </NavigationMenuPrimitive.List>
+        </NavigationMenuPrimitive.Sub>
+      </CerrarLaSeccion.Provider>
+    </DentroDeUnaSecuencia.Provider>
+  );
+};
+Secuencia.displayName = "Secuencia";
 
 /** Props de {@link NavigationMenuList}. */
 export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
@@ -260,25 +304,6 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   /* Un cambio de rotulo no lo ve el observer. */
   React.useLayoutEffect(() => repartir.current?.(), [secciones]);
 
-  const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
-    <DentroDeUnaSecuencia.Provider value={variante}>
-      <NavigationMenuPrimitive.Sub
-        data-slot="navigation-menu-sub"
-        orientation="vertical"
-        className="w-full"
-      >
-        <NavigationMenuPrimitive.List
-          className={cn(
-            "flex w-full list-none flex-col gap-0",
-            variante === "cajon" && "divide-y divide-border",
-          )}
-        >
-          {filas}
-        </NavigationMenuPrimitive.List>
-      </NavigationMenuPrimitive.Sub>
-    </DentroDeUnaSecuencia.Provider>
-  );
-
   const dentro = secciones.map((seccion, i) =>
     React.cloneElement(seccion as React.ReactElement<{ hidden?: boolean }>, {
       hidden: i >= visibles,
@@ -308,7 +333,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         {/* Sin el `className` de la fila: describe una fila, y con un `flex`
             dentro el submenu se encoge a su contenido. */}
         <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:border-t-0">
-          {secuencia(secciones, "cajon")}
+          <Secuencia variante="cajon">{secciones}</Secuencia>
         </div>
       </CollapsibleContent>
 
@@ -338,7 +363,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         >
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
           <NavigationMenuContent className="max-h-[min(70vh,30rem)] overflow-y-auto">
-            {secuencia(secciones.slice(visibles), "grupo")}
+            <Secuencia variante="grupo">{secciones.slice(visibles)}</Secuencia>
           </NavigationMenuContent>
         </NavigationMenuPrimitive.Item>
       </NavigationMenuPrimitive.List>
@@ -371,13 +396,34 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
->(({ className, ...props }, ref) => {
+>(({ className, onClick, onPointerEnter, onPointerMove, ...props }, ref) => {
   const secuencia = React.useContext(DentroDeUnaSecuencia);
+  const cerrar = React.useContext(CerrarLaSeccion);
+  /* El mismo pestillo que Radix lleva en la raíz, que acá no llega a ponerse. */
+  const cerradoPorClic = React.useRef(false);
 
   return (
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
       ref={ref}
+      onClick={(e) => {
+        onClick?.(e);
+        if (e.defaultPrevented || !cerrar) return;
+        if (e.currentTarget.dataset.state !== "open") return;
+        /* Corta el `onItemSelect` de Radix, que volvería a seleccionarla. */
+        e.preventDefault();
+        cerradoPorClic.current = true;
+        cerrar();
+      }}
+      onPointerEnter={(e) => {
+        onPointerEnter?.(e);
+        cerradoPorClic.current = false;
+      }}
+      onPointerMove={(e) => {
+        onPointerMove?.(e);
+        /* El puntero encima la reabriría al primer temblor. */
+        if (cerradoPorClic.current && e.pointerType === "mouse") e.preventDefault();
+      }}
       className={cn(
         "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         secuencia

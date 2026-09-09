@@ -103,18 +103,42 @@ diálogo.
 Estas cosas están hechas dentro de los componentes. Rehacerlas por fuera
 produce el defecto que ya evitan.
 
-| Qué                                        | Quién lo hace                                    |
-| ------------------------------------------ | ------------------------------------------------ |
-| Enlazar rótulo, ayuda y error a un control | `Field`, y los campos que traen su capa de campo |
-| Anillo de foco                             | Todos los componentes con `focus-visible`        |
-| `rel` al abrir en otra pestaña             | `Link` cuando recibe `target="_blank"`           |
-| Nombre accesible de una región             | `Section`, con `heading` o `accessibilityLabel`  |
-| Sacar del tabulador lo que está tapado     | `AppShellMain` y `Table` con `inert`             |
-| Respetar `prefers-reduced-motion`          | Los tokens de movimiento                         |
-| El tono secundario de cada superficie      | La superficie, que declara su par de texto       |
+| Qué                                         | Quién lo hace                                    |
+| ------------------------------------------- | ------------------------------------------------ |
+| Enlazar rótulo, ayuda y error a un control  | `Field`, y los campos que traen su capa de campo |
+| Anillo de foco                              | Todos los componentes con `focus-visible`        |
+| `rel` al abrir en otra pestaña              | `Link` cuando recibe `target="_blank"`           |
+| Nombre accesible de una región              | `Section`, con `heading` o `accessibilityLabel`  |
+| Sacar del tabulador lo que está tapado      | `AppShellMain` y `Table` con `inert`             |
+| Respetar `prefers-reduced-motion`           | Los tokens de movimiento                         |
+| El tono secundario de cada superficie       | La superficie, que declara su par de texto       |
+| El glifo de un botón de icono suyo, a plomo | `Alert`, `Dialog`, `Sheet`, `Toast` y `AppShell` |
 
 Un campo escrito a mano con un `<label>` suelto pierde el `aria-describedby`,
 así que el lector de pantalla no anuncia ni la ayuda ni el error.
+
+Un botón de icono es más grande que su glifo a propósito, para que el área de
+pulsación llegue al mínimo. Contra el borde de un contenedor con relleno eso se
+lee como un desajuste: una caja de 36px con un icono de 20 deja el glifo 8px por
+dentro, así que cierra a 24 donde la marca de enfrente abre a 16.
+
+Lo que se acomoda es el relleno del contenedor en ese lado, no el botón: le
+bajás la holgura del botón al relleno de ese canto y el glifo cae en la misma
+línea que abre el otro lado. Con `px-6` y un botón de 36 con glifo de 20, el
+lado del botón va a `pe-4`. Si el botón solo aparece en algunos anchos, el
+relleno se acomoda en esos: `pe-4 md:pe-6`, o desde el contenedor con
+`max-md:has-[[data-slot=…]]:ps-2.5`, que es lo que hace `AppShellHeader`.
+
+Un margen negativo en el botón alinea el glifo igual, y por eso es tentador,
+pero le saca la caja fuera del canto: el fondo de hover y el anillo de foco
+pasan a pintar dentro del relleno. Vale cuando no hay relleno que acomodar,
+que es lo que le pasa a la fila de `NavigationMenu`: no toca el canto, va entre
+la marca y la cuenta, y ahí el margen negativo es la única palanca. `Bleed`
+tampoco sirve, que saca contenido hasta el borde y eso es otra cosa.
+
+Una fila de 44px en un cajón de móvil no es espaciado suelto, sino el mínimo de
+área de toque, el mismo escalón que `Button` con `size="xl"`. Donde el puntero
+es fino las filas bajan solas: en el popover de escritorio miden 36 y 32px.
 
 Sobre una superficie invertida o sobre el riel de navegación, `tone="muted"` y
 `text-muted-foreground` ya resuelven contra ella: la superficie declara su propio
