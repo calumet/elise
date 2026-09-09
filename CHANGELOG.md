@@ -3,23 +3,20 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.17.0
-
-### Agrega
-
-- **`NavigationMenuLabel`, para rotular un grupo de enlaces dentro de un
-  panel.** Un rótulo escrito a mano queda con el mismo aire que los enlaces que
-  lo rodean, o con menos, así que se lee como un enlace apagado en vez de como
-  el principio de un grupo. El componente separa de lo que viene encima y se
-  arrima a lo que va debajo, que es lo que lo ata a su grupo. Al principio de un
-  panel no separa nada, que ahí no hay de qué.
-
-- **`NavigationMenuLink` acepta `description`, una segunda línea que dice a
-  dónde lleva el enlace.** Sale en tono atenuado y un escalón por debajo del
-  rótulo, como la de `Checkbox`. En el cajón de móvil es lo que convierte una
-  lista de enlaces sueltos en algo con jerarquía.
+## `@calumet/elise-ui` 0.16.2
 
 ### Corrige
+
+- **Un rótulo de grupo dentro de un panel se leía como un enlace apagado.**
+  Escrito a mano queda con el mismo aire que los enlaces que lo rodean, o con
+  menos, así que no se distinguía del principio de un grupo. Lo resuelve
+  `NavigationMenuLabel`, que separa de lo que viene encima y se arrima a lo que
+  va debajo. Al principio de un panel no separa nada, que ahí no hay de qué.
+
+- **En el cajón de móvil no había forma de decir a dónde lleva un enlace.**
+  `NavigationMenuLink` acepta ahora `description`, una segunda línea en tono
+  atenuado y un escalón por debajo del rótulo, como la de `Checkbox`. Es lo que
+  convierte una lista de enlaces sueltos en algo con jerarquía.
 
 - **Una sección desplegada de `NavigationMenu` no se cerraba pulsando su propio
   disparador.** Solo la cerraba abrir otra, así que el cajón de móvil se quedaba
