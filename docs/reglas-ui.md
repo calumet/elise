@@ -122,19 +122,23 @@ pulsación llegue al mínimo. Contra el borde de un contenedor con relleno eso s
 lee como un desajuste: una caja de 36px con un icono de 20 deja el glifo 8px por
 dentro, así que cierra a 24 donde la marca de enfrente abre a 16.
 
-Lo que se acomoda es el relleno del contenedor en ese lado, no el botón: le
-bajás la holgura del botón al relleno de ese canto y el glifo cae en la misma
-línea que abre el otro lado. Con `px-6` y un botón de 36 con glifo de 20, el
-lado del botón va a `pe-4`. Si el botón solo aparece en algunos anchos, el
-relleno se acomoda en esos: `pe-4 md:pe-6`, o desde el contenedor con
-`max-md:has-[[data-slot=…]]:ps-2.5`, que es lo que hace `AppShellHeader`.
+La holgura se descuenta, y hay dos sitios donde ponerla. Los dos dibujan el
+botón exactamente igual; lo que cambia es a quién más le afecta.
 
-Un margen negativo en el botón alinea el glifo igual, y por eso es tentador,
-pero le saca la caja fuera del canto: el fondo de hover y el anillo de foco
-pasan a pintar dentro del relleno. Vale cuando no hay relleno que acomodar,
-que es lo que le pasa a la fila de `NavigationMenu`: no toca el canto, va entre
-la marca y la cuenta, y ahí el margen negativo es la única palanca. `Bleed`
-tampoco sirve, que saca contenido hasta el borde y eso es otra cosa.
+Bajársela al relleno del contenedor es lo limpio cuando el botón es lo único
+que toca ese canto, porque la caja queda dentro del relleno: `AppShellHeader` y
+la barra de `Alert` lo hacen con un `has-[[data-slot=…]]:pe-1.5`, que además no
+se aplica cuando el botón no está.
+
+Un margen negativo en el botón es lo que hay que usar cuando ese relleno lo
+comparten otros que no se pueden mover. En la cabecera de un `NavigationMenu`,
+el cajón de móvil es una fila más del mismo contenedor: bajarle el relleno a la
+cabecera le corre también los filetes del cajón, y quedan descuadrados contra la
+marca. Ahí va `-me-2` en el botón.
+
+Lo que alinea es el glifo y no la caja, así que la caja acaba metida en el
+relleno en los dos casos. `Bleed` no sirve para esto, que saca contenido hasta
+el borde y eso es otra cosa.
 
 Una fila de 44px en un cajón de móvil no es espaciado suelto, sino el mínimo de
 área de toque, el mismo escalón que `Button` con `size="xl"`. Donde el puntero

@@ -180,7 +180,9 @@ const Secuencia = ({
           <NavigationMenuPrimitive.List
             className={cn(
               "flex w-full list-none flex-col gap-0",
-              variante === "cajon" && "divide-y divide-border",
+              /* La sangría deja sitio a la pastilla sin mover el rótulo, y el
+                 ancho automático la ensancha en vez de correrla. */
+              variante === "cajon" && "-mx-2.5 w-auto divide-y divide-border",
             )}
           >
             {children}
@@ -429,7 +431,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         secuencia
           ? "min-h-9 w-full justify-between whitespace-normal text-start"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        secuencia === "cajon" && "min-h-11 px-0",
+        secuencia === "cajon" && "min-h-11",
         className,
       )}
       {...props}
@@ -585,7 +587,7 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       className={cn(
         "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
         secuencia && "whitespace-normal",
-        secuencia === "cajon" && "min-h-11 px-0",
+        secuencia === "cajon" && "min-h-11",
         className,
       )}
       {...props}
@@ -601,22 +603,14 @@ NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 export const NavigationMenuLabel: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"div">> & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
-  ({ className, ...props }, ref) => {
-    const secuencia = React.useContext(DentroDeUnaSecuencia);
-
-    return (
-      <div
-        data-slot="navigation-menu-label"
-        ref={ref}
-        className={cn(
-          "px-2.5 pt-4 text-sm font-semibold text-muted-foreground",
-          secuencia === "cajon" && "px-0",
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
+  ({ className, ...props }, ref) => (
+    <div
+      data-slot="navigation-menu-label"
+      ref={ref}
+      className={cn("px-2.5 pt-4 text-sm font-semibold text-muted-foreground", className)}
+      {...props}
+    />
+  ),
 );
 NavigationMenuLabel.displayName = "NavigationMenuLabel";
 

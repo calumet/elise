@@ -70,7 +70,7 @@ const SECCIONES: Seccion[] = [
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
     <NavigationMenu>
-      <div className="flex flex-wrap items-center gap-3 ps-6 pe-4 py-3 md:pe-6">
+      <div className="flex flex-wrap items-center gap-3 px-6 py-3">
         <Text weight="bold" size="lg" className="shrink-0">
           EISI
         </Text>
@@ -107,7 +107,7 @@ const PortalHeaderDemo = (): React.JSX.Element => (
           <DropdownMenuSeparator />
           <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
         </UserMenu>
-        <NavigationMenuToggle />
+        <NavigationMenuToggle className="-me-2" />
       </div>
     </NavigationMenu>
     <div className="h-[30rem] bg-background" />

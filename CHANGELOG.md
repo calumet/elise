@@ -11,8 +11,7 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   panel.** Un rótulo escrito a mano queda con el mismo aire que los enlaces que
   lo rodean, o con menos, así que se lee como un enlace apagado en vez de como
   el principio de un grupo. El componente separa de lo que viene encima y se
-  arrima a lo que va debajo, y en el cajón de móvil quita la sangría igual que
-  `NavigationMenuLink`.
+  arrima a lo que va debajo, que es lo que lo ata a su grupo.
 
 ### Corrige
 
@@ -30,6 +29,12 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   abría a 22px mientras la marca y las demás bandas abrían a 16. La cabecera le
   baja ahora esos 6px al relleno de ese lado mientras el botón está, y el glifo
   cae en la línea de las otras bandas.
+
+- **En el cajón de móvil las filas no tenían relleno horizontal, así que el
+  fondo de hover salía pegado al rótulo.** Lo llevaban a cero para que el
+  rótulo cayera a plomo con la marca de la cabecera. Ahora la lista del cajón
+  sangra lo que mide la pastilla, de modo que el rótulo sigue en su línea y el
+  fondo la rodea. Los filetes acompañan a la pastilla.
 
 - **El cierre de `Alert` pintaba su fondo de hover fuera del relleno de la
   barra.** Alineaba el glifo con un margen negativo, que le sacaba la caja 6px
