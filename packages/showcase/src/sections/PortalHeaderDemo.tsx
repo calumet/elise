@@ -3,6 +3,7 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
+  NavigationMenuLabel,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuToggle,
@@ -32,8 +33,15 @@ const SECCIONES: Seccion[] = [
     columnas: [{ entradas: ["Profesores", "Administrativos", "Egresados"] }],
   },
   {
+    /* Dos columnas, para que el rótulo caiga a media lista. */
     nombre: "Pregrado",
-    columnas: [{ entradas: ["Plan de estudios", "Inscripciones", "Movilidad"] }],
+    columnas: [
+      { entradas: ["Ingeniería Biomédica", "Ingeniería de Sistemas", "Planes de estudio"] },
+      {
+        titulo: "Reglamentos de pregrado",
+        entradas: ["Reglamento Académico Estudiantil", "Reglamento de Trabajos de Grado"],
+      },
+    ],
   },
   { nombre: "Posgrados", columnas: [{ entradas: ["Maestría", "Doctorado", "Especializaciones"] }] },
   {
@@ -79,14 +87,7 @@ const PortalHeaderDemo = (): React.JSX.Element => (
                   {seccion.columnas.map((columna, i) => (
                     <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
                       {columna.titulo ? (
-                        <Text
-                          size="sm"
-                          weight="semibold"
-                          tone="muted"
-                          className="px-2.5 max-md:px-0"
-                        >
-                          {columna.titulo}
-                        </Text>
+                        <NavigationMenuLabel>{columna.titulo}</NavigationMenuLabel>
                       ) : null}
                       {columna.entradas.map((entrada) => (
                         <NavigationMenuLink key={entrada} href="#portal">

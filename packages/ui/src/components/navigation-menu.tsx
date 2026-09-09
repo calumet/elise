@@ -594,6 +594,32 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
 });
 NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 
+/**
+ * Rótulo de un grupo de enlaces dentro de un panel. Separa de lo que viene
+ * encima, que es lo que lo distingue de un enlace apagado.
+ */
+export const NavigationMenuLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"div">> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
+  ({ className, ...props }, ref) => {
+    const secuencia = React.useContext(DentroDeUnaSecuencia);
+
+    return (
+      <div
+        data-slot="navigation-menu-label"
+        ref={ref}
+        className={cn(
+          "px-2.5 pt-5 text-sm font-semibold text-muted-foreground",
+          secuencia === "cajon" && "px-0",
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
+NavigationMenuLabel.displayName = "NavigationMenuLabel";
+
 /** El contenedor donde se dibujan los paneles, y que se anima al cambiar de sección. */
 export const NavigationMenuViewport: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>> &

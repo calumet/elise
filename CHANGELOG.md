@@ -3,7 +3,16 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.16.2
+## `@calumet/elise-ui` 0.17.0
+
+### Agrega
+
+- **`NavigationMenuLabel`, para rotular un grupo de enlaces dentro de un
+  panel.** Un rótulo escrito a mano queda con el mismo aire que los enlaces que
+  lo rodean, o con menos, así que se lee como un enlace apagado en vez de como
+  el principio de un grupo. El componente separa de lo que viene encima y se
+  arrima a lo que va debajo, y en el cajón de móvil quita la sangría igual que
+  `NavigationMenuLink`.
 
 ### Corrige
 
