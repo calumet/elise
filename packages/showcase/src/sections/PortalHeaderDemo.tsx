@@ -2,6 +2,7 @@ import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropd
 import {
   NavigationMenu,
   NavigationMenuContent,
+  NavigationMenuGroup,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
@@ -11,9 +12,11 @@ import {
 import { Text } from "@calumet/elise-ui/text";
 import { UserMenu } from "@calumet/elise-ui/user-menu";
 
+type Entrada = string | { rotulo: string; detalle: string };
+
 type Seccion = {
   nombre: string;
-  columnas: { titulo?: string; entradas: string[] }[];
+  columnas: { titulo?: string; entradas: Entrada[] }[];
   ancha?: boolean;
 };
 
@@ -28,12 +31,28 @@ const SECCIONES: Seccion[] = [
     ],
   },
   {
+    /* Con detalle, que es lo que pide un cajón de móvil con sitio de sobra. */
     nombre: "Nuestra Gente",
-    columnas: [{ entradas: ["Profesores", "Administrativos", "Egresados"] }],
+    columnas: [
+      {
+        entradas: [
+          { rotulo: "Profesores", detalle: "Planta docente y áreas de trabajo" },
+          { rotulo: "Administrativos", detalle: "Quién resuelve cada trámite" },
+          { rotulo: "Egresados", detalle: "Red de egresados y bolsa de empleo" },
+        ],
+      },
+    ],
   },
   {
+    /* Dos columnas, para que el rótulo caiga a media lista. */
     nombre: "Pregrado",
-    columnas: [{ entradas: ["Plan de estudios", "Inscripciones", "Movilidad"] }],
+    columnas: [
+      { entradas: ["Ingeniería Biomédica", "Ingeniería de Sistemas", "Planes de estudio"] },
+      {
+        titulo: "Reglamentos de pregrado",
+        entradas: ["Reglamento Académico Estudiantil", "Reglamento de Trabajos de Grado"],
+      },
+    ],
   },
   { nombre: "Posgrados", columnas: [{ entradas: ["Maestría", "Doctorado", "Especializaciones"] }] },
   {
@@ -62,7 +81,7 @@ const SECCIONES: Seccion[] = [
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
     <NavigationMenu>
-      <div className="flex flex-wrap items-center gap-3 px-6 py-3">
+      <div className="flex flex-wrap items-center gap-3 px-4 py-3">
         <Text weight="bold" size="lg" className="shrink-0">
           EISI
         </Text>
@@ -71,31 +90,22 @@ const PortalHeaderDemo = (): React.JSX.Element => (
             <NavigationMenuItem key={seccion.nombre}>
               <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
               <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
-                <div
-                  className={
-                    seccion.ancha ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col"
-                  }
-                >
-                  {seccion.columnas.map((columna, i) => (
-                    <div key={columna.titulo ?? i} className="flex min-w-0 flex-col gap-1">
-                      {columna.titulo ? (
-                        <Text
-                          size="sm"
-                          weight="semibold"
-                          tone="muted"
-                          className="px-2.5 max-md:px-0"
+                {seccion.columnas.map((columna, i) => (
+                  <NavigationMenuGroup key={columna.titulo ?? i} label={columna.titulo}>
+                    {columna.entradas.map((entrada) => {
+                      const suelta = typeof entrada === "string";
+                      return (
+                        <NavigationMenuLink
+                          key={suelta ? entrada : entrada.rotulo}
+                          href="#portal"
+                          description={suelta ? undefined : entrada.detalle}
                         >
-                          {columna.titulo}
-                        </Text>
-                      ) : null}
-                      {columna.entradas.map((entrada) => (
-                        <NavigationMenuLink key={entrada} href="#portal">
-                          {entrada}
+                          {suelta ? entrada : entrada.rotulo}
                         </NavigationMenuLink>
-                      ))}
-                    </div>
-                  ))}
-                </div>
+                      );
+                    })}
+                  </NavigationMenuGroup>
+                ))}
               </NavigationMenuContent>
             </NavigationMenuItem>
           ))}

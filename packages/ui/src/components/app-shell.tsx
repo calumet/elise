@@ -242,6 +242,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
          Cada banda dice en cuál cae; la cabecera no mira a sus hijos. */
       className={cn(
         "col-start-1 col-end-3 row-start-1 flex h-14 items-center gap-2 bg-background px-4 text-foreground",
+        "max-md:has-[[data-slot=app-shell-nav-toggle]]:ps-2.5",
         "md:grid md:grid-cols-[1fr_minmax(0,420px)_1fr] md:gap-4",
         className,
       )}

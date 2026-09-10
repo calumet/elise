@@ -26,6 +26,10 @@ const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContex
   null,
 );
 
+/* Radix solo alterna en la raíz: el `onItemSelect` de un `Sub` asigna sin
+   comparar, y la sección no se cierra sola. */
+const CerrarLaSeccion = React.createContext<(() => void) | null>(null);
+
 type ContextoNavegacion = {
   desplegado: boolean;
   setDesplegado: (v: boolean) => void;
@@ -97,13 +101,18 @@ const useNavegacion = (quien: string): ContextoNavegacion => {
 /**
  * Abre y cierra el despliegue de móvil. Ponelo donde vaya el resto de acciones
  * de la cabecera; si no hay ninguno, la fila dibuja el suyo en su sitio.
+ *
+ * Trae puesto el descuento de la holgura de su caja, para que el glifo cierre
+ * donde abre la marca. Si no queda contra el borde, `className="me-0"`.
  */
 export const NavigationMenuToggle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"button">> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, ...props }, ref) => {
     useNavegacion("NavigationMenuToggle");
-    return <BotonDespliegue ref={ref} className={cn("md:hidden", className)} {...props} />;
+    /* El `-me` descuenta la holgura de la caja. El botón cierra una cabecera, y
+       ahí el glifo tiene que caer donde abre la marca; `me-0` lo anula. */
+    return <BotonDespliegue ref={ref} className={cn("-me-2 md:hidden", className)} {...props} />;
   },
 );
 NavigationMenuToggle.displayName = "NavigationMenuToggle";
@@ -147,6 +156,44 @@ const cuentaAlParsear = (id: string, total: number): number | undefined => {
   }
   return undefined;
 };
+
+/* El `Sub` va controlado: es de donde el disparador vacía la sección. */
+const Secuencia = ({
+  variante,
+  children,
+}: {
+  variante: Secuencia;
+  children: React.ReactNode;
+}): React.JSX.Element => {
+  const [abierta, setAbierta] = React.useState("");
+  const cerrar = React.useCallback(() => setAbierta(""), []);
+
+  return (
+    <DentroDeUnaSecuencia.Provider value={variante}>
+      <CerrarLaSeccion.Provider value={cerrar}>
+        <NavigationMenuPrimitive.Sub
+          data-slot="navigation-menu-sub"
+          orientation="vertical"
+          value={abierta}
+          onValueChange={setAbierta}
+          className="w-full"
+        >
+          <NavigationMenuPrimitive.List
+            className={cn(
+              "flex w-full list-none flex-col gap-0",
+              /* La sangría deja sitio a la pastilla sin mover el rótulo, y el
+                 ancho automático la ensancha en vez de correrla. */
+              variante === "cajon" && "gap-0.5",
+            )}
+          >
+            {children}
+          </NavigationMenuPrimitive.List>
+        </NavigationMenuPrimitive.Sub>
+      </CerrarLaSeccion.Provider>
+    </DentroDeUnaSecuencia.Provider>
+  );
+};
+Secuencia.displayName = "Secuencia";
 
 /** Props de {@link NavigationMenuList}. */
 export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
@@ -260,25 +307,6 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   /* Un cambio de rotulo no lo ve el observer. */
   React.useLayoutEffect(() => repartir.current?.(), [secciones]);
 
-  const secuencia = (filas: React.ReactNode, variante: Secuencia) => (
-    <DentroDeUnaSecuencia.Provider value={variante}>
-      <NavigationMenuPrimitive.Sub
-        data-slot="navigation-menu-sub"
-        orientation="vertical"
-        className="w-full"
-      >
-        <NavigationMenuPrimitive.List
-          className={cn(
-            "flex w-full list-none flex-col gap-0",
-            variante === "cajon" && "divide-y divide-border",
-          )}
-        >
-          {filas}
-        </NavigationMenuPrimitive.List>
-      </NavigationMenuPrimitive.Sub>
-    </DentroDeUnaSecuencia.Provider>
-  );
-
   const dentro = secciones.map((seccion, i) =>
     React.cloneElement(seccion as React.ReactElement<{ hidden?: boolean }>, {
       hidden: i >= visibles,
@@ -300,7 +328,9 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
       <CollapsibleContent
         data-slot="navigation-menu-drawer"
-        className="order-last basis-full md:hidden"
+        /* La sangría va acá y no en la lista: el cajón recorta para animarse,
+           y desde dentro le cortaría las esquinas a la pastilla. */
+        className="order-last -mx-2.5 basis-[calc(100%+1.25rem)] md:hidden"
         onClick={(e) => {
           if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
         }}
@@ -308,7 +338,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         {/* Sin el `className` de la fila: describe una fila, y con un `flex`
             dentro el submenu se encoge a su contenido. */}
         <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:border-t-0">
-          {secuencia(secciones, "cajon")}
+          <Secuencia variante="cajon">{secciones}</Secuencia>
         </div>
       </CollapsibleContent>
 
@@ -338,7 +368,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         >
           <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
           <NavigationMenuContent className="max-h-[min(70vh,30rem)] overflow-y-auto">
-            {secuencia(secciones.slice(visibles), "grupo")}
+            <Secuencia variante="grupo">{secciones.slice(visibles)}</Secuencia>
           </NavigationMenuContent>
         </NavigationMenuPrimitive.Item>
       </NavigationMenuPrimitive.List>
@@ -371,26 +401,51 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
->(({ className, ...props }, ref) => {
+>(({ className, onClick, onPointerEnter, onPointerMove, ...props }, ref) => {
   const secuencia = React.useContext(DentroDeUnaSecuencia);
+  const cerrar = React.useContext(CerrarLaSeccion);
+  /* El mismo pestillo que Radix lleva en la raíz, que acá no llega a ponerse. */
+  const cerradoPorClic = React.useRef(false);
 
   return (
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
       ref={ref}
+      onClick={(e) => {
+        onClick?.(e);
+        if (e.defaultPrevented || !cerrar) return;
+        if (e.currentTarget.dataset.state !== "open") return;
+        /* Corta el `onItemSelect` de Radix, que volvería a seleccionarla. */
+        e.preventDefault();
+        cerradoPorClic.current = true;
+        cerrar();
+      }}
+      onPointerEnter={(e) => {
+        onPointerEnter?.(e);
+        cerradoPorClic.current = false;
+      }}
+      onPointerMove={(e) => {
+        onPointerMove?.(e);
+        /* El puntero encima la reabriría al primer temblor. */
+        if (cerradoPorClic.current && e.pointerType === "mouse") e.preventDefault();
+      }}
       className={cn(
         "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         secuencia
-          ? "min-h-9 w-full justify-between whitespace-normal text-start"
+          ? "min-h-9 w-full justify-between whitespace-normal text-start font-semibold"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        secuencia === "cajon" && "min-h-11 px-0",
+        secuencia === "cajon" && "min-h-11 px-2.5",
         className,
       )}
       {...props}
     >
       {props.children}
       <ChevronDown
-        className="relative top-px ml-1 size-3 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180"
+        className={cn(
+          "relative top-px ml-1 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180",
+          /* En una secuencia encabeza una fila alta, y a 12px se pierde. */
+          secuencia ? "size-4" : "size-3",
+        )}
         aria-hidden
       />
     </NavigationMenuPrimitive.Trigger>
@@ -430,6 +485,14 @@ const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> 
    duracion de la animacion se la queda tambien `left`, que arranca en 0, y el
    panel entra desde fuera de la pantalla. La duracion sigue siendo la del
    fotograma, que sale de la misma variable. */
+/* El reparto de los grupos lo pone el panel. Va con `:has` para no tocar a
+   quien monta su propia caja dentro del panel, y literal porque Tailwind no ve
+   una clase interpolada. */
+const APILADOS =
+  "has-[>[data-slot=navigation-menu-group]]:flex has-[>[data-slot=navigation-menu-group]]:flex-col has-[>[data-slot=navigation-menu-group]]:gap-4";
+const EN_COLUMNAS =
+  "has-[>[data-slot=navigation-menu-group]]:grid has-[>[data-slot=navigation-menu-group]]:gap-6 sm:has-[>[data-slot=navigation-menu-group]]:grid-cols-2 lg:has-[>[data-slot=navigation-menu-group]]:grid-cols-3";
+
 const PANEL_FLOTANTE =
   "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 transition-none w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 sm:min-w-64";
 
@@ -506,14 +569,22 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
         else if (ref) ref.current = nodo;
       }}
       className={cn(
-        secuencia ? PANEL_EN_SECUENCIA : cn(PANEL_FLOTANTE, HOLGURA[align], ALINEACION[align]),
+        secuencia
+          ? PANEL_EN_SECUENCIA
+          : cn(
+              PANEL_FLOTANTE,
+              HOLGURA[align],
+              ALINEACION[align],
+              align === "full" ? EN_COLUMNAS : APILADOS,
+            ),
         className,
       )}
       {...props}
     >
       {secuencia ? (
-        /* En el grupo la sangría dice de qué cuelga; en el cajón, los filetes. */
-        <div className={cn("pb-2", secuencia === "grupo" && "ps-3")}>{children}</div>
+        /* En el grupo la sangría dice de qué cuelga. Apilado y no en columnas:
+           acá el panel es tan ancho como la fila que lo abre. */
+        <div className={cn("pb-2", APILADOS, secuencia === "grupo" && "ps-3")}>{children}</div>
       ) : (
         children
       )}
@@ -522,14 +593,22 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
 });
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
+/** Props de {@link NavigationMenuLink}. */
+export type NavigationMenuLinkProps = React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Link
+> & {
+  /** Segunda línea, para decir a dónde lleva el enlace. */
+  description?: React.ReactNode;
+};
+
 /** Un enlace del menú. Marcá el actual con `active`. */
 export const NavigationMenuLink: React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>> &
+  React.PropsWithoutRef<NavigationMenuLinkProps> &
     React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Link>>
 > = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Link>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link>
->(({ className, ...props }, ref) => {
+  NavigationMenuLinkProps
+>(({ className, description, children, ...props }, ref) => {
   const secuencia = React.useContext(DentroDeUnaSecuencia);
 
   return (
@@ -539,14 +618,79 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       className={cn(
         "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
         secuencia && "whitespace-normal",
-        secuencia === "cajon" && "min-h-11 px-0",
+        secuencia === "cajon" && "min-h-11 px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
+        description && "flex-col items-start justify-center gap-0.5",
+        className,
+      )}
+      {...props}
+    >
+      {/* Sin descripción pasa el hijo tal cual: con `asChild`, el `Slot` de
+          Radix exige uno solo y dos lo rompen. */}
+      {description ? (
+        <>
+          {children}
+          <span
+            data-slot="navigation-menu-link-description"
+            className="text-xs font-normal text-muted-foreground"
+          >
+            {description}
+          </span>
+        </>
+      ) : (
+        children
+      )}
+    </NavigationMenuPrimitive.Link>
+  );
+});
+NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
+
+/**
+ * Rótulo de un grupo de enlaces dentro de un panel. Separa de lo que viene
+ * encima, que es lo que lo distingue de un enlace apagado.
+ */
+export const NavigationMenuLabel: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"div">> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      data-slot="navigation-menu-label"
+      ref={ref}
+      className={cn(
+        "px-2.5 pt-3 text-sm font-semibold text-muted-foreground first:pt-0",
         className,
       )}
       {...props}
     />
-  );
-});
-NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
+  ),
+);
+NavigationMenuLabel.displayName = "NavigationMenuLabel";
+
+/** Props de {@link NavigationMenuGroup}. */
+export type NavigationMenuGroupProps = React.ComponentProps<"div"> & {
+  /** Rótulo del grupo. Sin él, el grupo solo agrupa. */
+  label?: React.ReactNode;
+};
+
+/**
+ * Un grupo de enlaces dentro de un panel, con su rótulo. El panel los reparte:
+ * en columnas donde es ancho, apilados donde no.
+ */
+export const NavigationMenuGroup: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<NavigationMenuGroupProps> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, NavigationMenuGroupProps>(
+  ({ className, label, children, ...props }, ref) => (
+    <div
+      data-slot="navigation-menu-group"
+      ref={ref}
+      className={cn("flex min-w-0 flex-col gap-1", className)}
+      {...props}
+    >
+      {label ? <NavigationMenuLabel>{label}</NavigationMenuLabel> : null}
+      {children}
+    </div>
+  ),
+);
+NavigationMenuGroup.displayName = "NavigationMenuGroup";
 
 /** El contenedor donde se dibujan los paneles, y que se anima al cambiar de sección. */
 export const NavigationMenuViewport: React.ForwardRefExoticComponent<

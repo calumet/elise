@@ -3,6 +3,67 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.16.2
+
+### Corrige
+
+- **Un panel con varios grupos de enlaces había que armarlo por fuera.** El
+  rótulo, la caja de cada columna, el reparto en rejilla y los huecos salían del
+  código de quien montaba el menú, y con eso el rótulo terminaba leyéndose como
+  un enlace apagado. Lo resuelve `NavigationMenuGroup`, que toma el rótulo en
+  `label` y deja al panel repartir: en columnas donde es ancho, apilado donde
+  no. `NavigationMenuLabel` sigue disponible suelto.
+
+- **En el cajón de móvil no había forma de decir a dónde lleva un enlace.**
+  `NavigationMenuLink` acepta ahora `description`, una segunda línea en tono
+  atenuado y un escalón por debajo del rótulo, como la de `Checkbox`. Es lo que
+  convierte una lista de enlaces sueltos en algo con jerarquía.
+
+- **Una sección desplegada de `NavigationMenu` no se cerraba pulsando su propio
+  disparador.** Solo la cerraba abrir otra, así que el cajón de móvil se quedaba
+  abierto sin forma de volver a la lista de secciones. Radix alterna en la raíz,
+  pero el `onItemSelect` de un `Sub` asigna el valor sin compararlo con el que
+  había, y las dos secuencias verticales del componente cuelgan de un `Sub`: el
+  cajón de móvil y el grupo «Más» del escritorio. Ahora el disparador corta ese
+  `onItemSelect` y vacía la secuencia él mismo. Pasaba también en el grupo de
+  escritorio, que la incidencia no mencionaba.
+
+- **`NavigationMenuToggle` no caía a plomo con la marca de su cabecera.** Su
+  caja mide 36px alrededor de un glifo de 20, así que el icono cerraba 8px por
+  dentro de donde abría la marca, y el descuento lo tenía que poner quien lo
+  montaba. Ahora lo trae puesto; `className="me-0"` lo anula donde el botón no
+  quede contra el borde.
+
+- **El botón de navegación de `AppShellHeader` no caía a plomo con el resto de
+  la cabecera.** Su caja mide 32px alrededor de un glifo de 20, así que el icono
+  abría a 22px mientras la marca y las demás bandas abrían a 16. La cabecera le
+  baja ahora esos 6px al relleno de ese lado mientras el botón está, y el glifo
+  cae en la línea de las otras bandas.
+
+- **En el cajón de móvil el fondo de hover salía pegado al rótulo y con las
+  esquinas cortadas.** Las filas llevaban el relleno a cero para que el rótulo
+  cayera a plomo con la marca de la cabecera. Ahora lo recuperan y el cajón
+  sangra lo mismo, así que el rótulo sigue en su línea y la pastilla lo rodea.
+  La sangría va en el cajón y no en su lista: el cajón recorta para poder
+  animarse, y desde dentro le comía las esquinas a la pastilla. En lugar de los
+  filetes va un hueco entre filas, que un filete cruzando una pastilla la
+  convierte en una banda.
+
+- **En el cajón, una sección y sus hijos se veían iguales.** Los dos iban al
+  mismo cuerpo y al mismo peso, así que el despliegue se leía como una lista
+  plana. La sección pasa a semibold, su caret de 12 a 16px, y las filas de
+  segundo nivel se aprietan de 44 a 36px de alto.
+
+- **El cierre de `Alert` pintaba su fondo de hover fuera del relleno de la
+  barra.** Alineaba el glifo con un margen negativo, que le sacaba la caja 6px
+  por fuera del canto. Ahora es la barra la que se acomoda cuando el cierre
+  está: el glifo queda en el mismo sitio y la caja, dentro.
+
+Un botón de icono que pongas vos contra el borde de un contenedor con relleno
+se acomoda igual, bajándole al relleno de ese lado la holgura de la caja. La
+regla, con el porqué de no hacerlo con un margen negativo, está en
+[reglas-ui.md](docs/reglas-ui.md).
+
 ## `@calumet/elise-ui` 0.16.1
 
 ### Corrige

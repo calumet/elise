@@ -58,10 +58,9 @@ const toneIcons: Record<NonNullable<AlertProps["tone"]>, React.ElementType> = {
   danger: XCircle,
 };
 
-/* Los márgenes negativos dan los 28px de área táctil sin que la barra crezca
-   por el botón ni el glifo se hunda respecto al icono de enfrente. */
+/* El `-my` da el área táctil sin que la barra crezca por el botón. */
 const BOTON_CERRAR =
-  "-my-1 -me-1.5 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-current transition-[background-color] duration-(--duration-fast) ease-out hover:bg-current/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1 focus-visible:ring-offset-transparent";
+  "-my-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-current transition-[background-color] duration-(--duration-fast) ease-out hover:bg-current/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1 focus-visible:ring-offset-transparent";
 
 /**
  * Mensaje en línea, no modal. Para interrumpir al usuario con una decisión usa
@@ -128,7 +127,10 @@ function Alert({
       >
         <div
           data-slot="alert-bar"
-          className={cn("flex items-center gap-2 px-3 py-2", barraClasses[tone])}
+          className={cn(
+            "flex items-center gap-2 px-3 py-2 has-[[data-slot=alert-dismiss]]:pe-1.5",
+            barraClasses[tone],
+          )}
         >
           {marcaIcono()}
           {titulo}
