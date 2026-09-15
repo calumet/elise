@@ -83,11 +83,14 @@ function ContactForm() {
 ### API
 
 ```typescript
-function useZodForm<TSchema extends z.ZodType<FieldValues, FieldValues>>(
+function useZodForm<TSchema extends z4.$ZodType<FieldValues, FieldValues>>(
   schema: TSchema,
-  options?: Omit<UseFormProps<z.input<TSchema>, unknown, z.output<TSchema>>, "resolver">,
-): UseFormReturn<z.input<TSchema>, unknown, z.output<TSchema>>;
+  options?: Omit<UseFormProps<z4.input<TSchema>, unknown, z4.output<TSchema>>, "resolver">,
+): UseFormReturn<z4.input<TSchema>, unknown, z4.output<TSchema>>;
 ```
+
+> `z4` es `zod/v4/core`, el subpath que Zod publica para librerías. Quien escribe
+> esquemas sigue usando el `z` que reexporta este paquete.
 
 > El hook separa `z.input<TSchema>` (valores que entran al form, antes de coerciones) de `z.output<TSchema>` (valores que salen de `handleSubmit`, después de validar y transformar). Esto te da tipos correctos cuando el schema usa `z.coerce.*`, `transform`, defaults, etc.
 
@@ -266,7 +269,7 @@ type AlertOptions = {
 
 ## Tables - DataTable
 
-Componente de tabla avanzada con filtros, ordenamiento, paginación y exportación. Construido sobre [TanStack React Table v8](https://tanstack.com/table/latest).
+Componente de tabla avanzada con filtros, ordenamiento, paginación y exportación. Construido sobre [TanStack React Table v9](https://tanstack.com/table/latest).
 
 ### Uso basico
 
@@ -370,7 +373,15 @@ function MiTabla() {
 | `pageSizeOptions` | `number[]`                       | `[5, 10, 25, 50]` | Opciones de tamaño de página             |
 | `initialPageSize` | `number`                         | —                 | Tamaño de página inicial                 |
 
-> **Dependencia externa**: La definición de columnas (`ColumnDef`) y toda la API de tablas viene de [TanStack React Table v8](https://tanstack.com/table/latest/docs/introduction). Consulta su documentación para guías de columnas, celdas personalizadas y features avanzados.
+> **Dependencia externa**: La definición de columnas (`ColumnDef`) y toda la API de tablas viene de [TanStack React Table v9](https://tanstack.com/table/latest/docs/introduction). Consulta su documentación para guías de columnas, celdas personalizadas y features avanzados.
+
+> **Ordenar y filtrar por nombre**: en la v9 un `sortFn: "basic"` o un
+> `filterFn: "startsWith"` solo resuelve si esa función está registrada en la
+> tabla, y `DataTable` registra las que elige el `auto` de por defecto:
+> `datetime`, `alphanumeric` y `text` para ordenar, y `includesString`,
+> `inNumberRange`, `equals`, `arrIncludes`, `inDateRange` y `weakEquals` para
+> filtrar. Para cualquier otra, pasa la función por referencia en vez del
+> nombre: `sortFn: sortFn_basic`, importándola de `@tanstack/react-table`.
 
 ---
 

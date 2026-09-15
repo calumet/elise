@@ -69,8 +69,9 @@ escrita, no inferida. Lo que sale del dry-run como error:
   `React.ForwardRefExoticComponent<React.PropsWithoutRef<Props> & React.RefAttributes<Elemento>>`.
 - **Sin ampliaciones globales.** Nada de `declare module` ni `declare global`:
   cambian los tipos de un módulo desde fuera. Por eso `@calumet/elise-tables`
-  exporta su propio `ColumnDef` con el `meta` tipado en vez de ampliar el de
-  TanStack.
+  exporta su propio `ColumnDef` en vez de ampliar el `ColumnMeta` de TanStack;
+  desde la v9 el tipo del `meta` sale de la ranura `columnMeta` del propio juego
+  de características, que es por tabla en lugar de global.
 - **Sin `export =` ni `import ... = require(...)`**, solo ESM.
 
 `@calumet/elise-linter` sale con un warning por ser JavaScript sin declaraciones.

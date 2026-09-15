@@ -3,6 +3,93 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.17.0 y `elise-tables` 0.4.0
+
+Suben también `elise-icons` 0.2.2, `elise-forms` 0.1.4, `elise-linter` 0.2.1,
+`elise-alerts` 0.3.1 y `elise-toasts` 0.4.2. Las dos últimas no cambian por
+dentro: dependen de `elise-ui` por rango de caret, y `^0.16.2` no alcanza a la
+0.17.0, así que sin republicarlas quedarían pidiendo una versión que ya no es la
+última y un consumidor se instalaría dos copias del design system.
+
+### Rompe
+
+- **`DataTable` pasa a TanStack Table v9.** Lo que cambia está en las columnas,
+  que las escribe quien consume el paquete:
+
+  | antes                       | ahora                    |
+  | --------------------------- | ------------------------ |
+  | `sortingFn: "alphanumeric"` | `sortFn: "alphanumeric"` |
+  | `ColumnDef<Fila, string>[]` | `ColumnDef<Fila>[]`      |
+  | `<DataTable<Fila, string>>` | `<DataTable<Fila>>`      |
+
+  **El valor de celda sale del arreglo de columnas.** La v8 lo llevaba como
+  segundo genérico y por dentro lo resolvía a `any`, porque un arreglo de
+  columnas tiene tantos tipos de valor como columnas y uno solo nunca describió
+  ninguno. En la v9 el arreglo se tipa sin él y cada columna conserva el suyo en
+  su `accessorFn`, que es donde siempre estuvo. Una columna suelta lo sigue
+  aceptando: `ColumnDef<Fila, string>` vale para tipar una, no para el arreglo.
+
+  **La fila tiene que ser un objeto.** El `RowData` de la v9 es
+  `Record<string, any> | Array<any>`, donde el de la v8 era `unknown`. Una tabla
+  de primitivas no compila.
+
+  **Solo se registran las funciones de orden y filtro que el `auto` puede
+  elegir**, que son las que deciden una columna que no pide ninguna: `datetime`,
+  `alphanumeric` y `text` para ordenar, y seis para filtrar según el valor sea
+  texto, número, booleano, arreglo, fecha u objeto. La v9 deprecó los registros
+  completos, y un nombre solo resuelve si su función está registrada. Una
+  columna que quiera otra de las incorporadas pasa la función por referencia en
+  su `filterFn` o su `sortFn`, que la v9 acepta sin registro de por medio; el
+  registro existe solo para poder nombrarla con un string.
+
+  No cambia nada del marcado ni de `meta.filterVariant`, que es lo que decide
+  qué filtro dibuja la barra.
+
+- **`Calendar` sigue a react-day-picker 10.** Sus props son las de `DayPicker`,
+  así que lo que la 10 retira viaja hasta acá. La 10 quita lo que la 9 dejó
+  deprecado, y lo que Elise usa por dentro ya estaba en la forma nueva, así que
+  esto solo alcanza a quien le pasara una de las viejas:
+
+  | antes                   | ahora                                     |
+  | ----------------------- | ----------------------------------------- |
+  | `fromMonth`, `fromYear` | `startMonth`                              |
+  | `toMonth`, `toYear`     | `endMonth`                                |
+  | `fromDate`, `toDate`    | `hidden` con `before` / `after`           |
+  | `initialFocus`          | `autoFocus`                               |
+  | `components.Button`     | `PreviousMonthButton` / `NextMonthButton` |
+
+  En `classNames` también se fueron las claves viejas: `table` es `month_grid`,
+  `nav_button` se parte en `button_previous` y `button_next`, `day_selected` es
+  `selected` y `day_disabled` es `disabled`.
+
+### Cambia
+
+- **Sube el piso de las dependencias.** Radix al día en veinte de las veintiocho que
+  usa el paquete, `react-day-picker` a la 10, `lucide-react` a la 1.46,
+  `tailwind-merge` a la 3.7, y en `elise-forms` `zod` a la 4.6 con
+  `react-hook-form` a la 7.88. Son dependencias normales y no peers, así que no
+  hay nada que instalar a mano.
+
+- **El `meta` de una columna ya no necesita ampliar un módulo ajeno.** La v9
+  trae una ranura de solo tipo por tabla, así que `MetaDeColumna` se declara
+  donde se arma la tabla en vez de con un `declare module` sobre `ColumnMeta` de
+  TanStack, que es lo que JSR rechaza. Para quien consume el paquete no cambia
+  nada: el `meta` sigue llegando tipado al importar `ColumnDef` desde acá.
+
+### Corrige
+
+- **`useZodForm` dejó de compilar sus tipos al subir `@hookform/resolvers`.** De
+  la 5.4 a la 5.9 el resolver cambió su sobrecarga de Zod 4 por una que encaja
+  por forma, y un `ZodType` de Zod 4 encaja también en la de Zod 3, que está
+  declarada antes y devuelve el tipo de la restricción en vez del del esquema.
+  El hook acota ahora contra el `$ZodType` de `zod/v4/core`, que es la
+  interfaz que Zod 4 publica para quien escribe librerías y no lleva las
+  propiedades por las que encajaba en la sobrecarga vieja. Se importa de ese
+  subpath y no de `zod` porque Zod lo pide así: `zod` apunta al major que tenga
+  instalado la aplicación, y `zod/v4/core` es un enlace fijo a la 4 que
+  sobrevive al siguiente. La entrada y la salida del esquema se siguen
+  distinguiendo igual.
+
 ## `@calumet/elise-ui` 0.16.2
 
 ### Corrige

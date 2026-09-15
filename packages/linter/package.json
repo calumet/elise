@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Reglas compartidas de ESLint/Prettier para Elise.",
   "repository": {
     "type": "git",
@@ -30,12 +30,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.48.1",
-    "@typescript-eslint/parser": "^8.48.1",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1"
+    "eslint-plugin-react-hooks": "^7.1.1"
   },
   "peerDependencies": {
     "eslint": ">=9.0.0 <10.0.0",

@@ -23,14 +23,7 @@ export type BoxProps = React.ComponentProps<"div"> & {
   paddingY?: SpaceScale;
 
   background?:
-    | "none"
-    | "card"
-    | "popover"
-    | "muted"
-    | "secondary"
-    | "accent"
-    | "sidebar"
-    | "inverse";
+    "none" | "card" | "popover" | "muted" | "secondary" | "accent" | "sidebar" | "inverse";
   border?: boolean | "strong";
   radius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
   shadow?: "none" | "xs" | "sm" | "md" | "lg" | "xl";

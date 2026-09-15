@@ -20,8 +20,7 @@ export type LazyGlobModules = Record<string, () => Promise<{ default: unknown }>
  *   Archivo `<locale>.<ext>`, ej. `es-CO.ts`.
  */
 export type ParseResult =
-  | { namespace: string; locale: Locale }
-  | { namespace?: undefined; locale: Locale };
+  { namespace: string; locale: Locale } | { namespace?: undefined; locale: Locale };
 
 export type ParsePathFn = (path: string) => ParseResult | null;
 

@@ -2,6 +2,8 @@ import { type FilterFn } from "@tanstack/react-table";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { type Caracteristicas } from "./features";
+
 /** Concatena clases de Tailwind resolviendo las que se pisan entre sí. */
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -32,7 +34,11 @@ export function toCurrency(
  * dos puede venir vacía para acotar por un solo extremo. Descarta las filas sin
  * valor o con una fecha que no se puede parsear.
  */
-export const dateRangeFilterFn: FilterFn<unknown> = (row, columnId, value: [string, string]) => {
+export const dateRangeFilterFn: FilterFn<Caracteristicas, Record<string, unknown>> = (
+  row,
+  columnId,
+  value: [string, string],
+) => {
   if (!value || value.length !== 2) return true;
   const [from, to] = value;
 
@@ -68,7 +74,11 @@ dateRangeFilterFn.autoRemove = (val: [string, string]) => !val || (val[0] === ""
  * Filtro de selección múltiple. El valor es la lista de opciones elegidas, y
  * la fila pasa si su valor, convertido a texto, está entre ellas.
  */
-export const multiSelectFilterFn: FilterFn<unknown> = (row, columnId, value: string[]) => {
+export const multiSelectFilterFn: FilterFn<Caracteristicas, Record<string, unknown>> = (
+  row,
+  columnId,
+  value: string[],
+) => {
   if (!value || value.length === 0) return true;
 
   const rowValue = row.getValue<unknown>(columnId);
