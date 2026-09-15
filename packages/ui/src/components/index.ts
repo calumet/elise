@@ -56,6 +56,7 @@ export * from "./password-field";
 export * from "./popover";
 export * from "./progress";
 export * from "./radio-group";
+export * from "./save-bar";
 export * from "./scroll-area";
 export * from "./section";
 export * from "./select";

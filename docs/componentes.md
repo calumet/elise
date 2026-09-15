@@ -597,6 +597,7 @@ estado con texto para lectores de pantalla.
 | Progress                                                                               | `@calumet/elise-ui/progress`     | [Progress](https://www.radix-ui.com/primitives/docs/components/progress)        |
 | Skeleton                                                                               | `@calumet/elise-ui/skeleton`     | —                                                                               |
 | Alert, AlertTitle, AlertDescription                                                    | `@calumet/elise-ui/alert`        | —                                                                               |
+| SaveBar                                                                                | `@calumet/elise-ui/save-bar`     | —                                                                               |
 | Badge                                                                                  | `@calumet/elise-ui/badge`        | —                                                                               |
 | Chip                                                                                   | `@calumet/elise-ui/chip`         | —                                                                               |
 | Spinner                                                                                | `@calumet/elise-ui/spinner`      | —                                                                               |

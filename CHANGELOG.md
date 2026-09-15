@@ -3,6 +3,52 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.19.0
+
+### Agrega
+
+- **Una pantalla de ajustes no tenía cómo avisar de cambios sin guardar.** El
+  guardado vivía en un botón al pie, y con cinco secciones ese pie queda varias
+  pantallas por debajo del primer campo: quien cambia el color primario arriba
+  pierde de vista el único control que lo aplica, y nada en la pantalla le dice
+  que el cambio sigue sin guardarse. Deshacer tampoco tenía vía, salvo recargar
+  y llevarse por delante todo lo demás que se hubiera editado.
+
+  `SaveBar` aparece mientras `dirty` y se lleva las dos salidas a una franja
+  fija arriba. Va sobre la superficie invertida, la misma del toast, porque es
+  una capa encima de la pantalla y no una sección suya. El botón del pie se
+  queda donde estaba: la barra avisa, no lo sustituye.
+
+  ```tsx
+  const form = useZodForm(esquema);
+
+  <SaveBar
+    dirty={form.formState.isDirty}
+    saving={form.formState.isSubmitting}
+    onSave={form.handleSubmit(guardar)}
+    onDiscard={() => form.reset()}
+  />;
+  ```
+
+  **Lo sucio entra como booleano y no sale de un contexto de formulario.** Con
+  un contexto, la barra tendría que depender de `react-hook-form`, que no es
+  dependencia de este paquete, y quedaría inservible en un formulario que no use
+  `useZodForm`. Con el booleano no hace falta nada: `useZodForm` devuelve el
+  `UseFormReturn` de react-hook-form, así que `formState.isDirty` ya está ahí.
+
+  **Descartar destruye lo editado, así que pasa por `AlertDialog`** y no por el
+  botón a secas, como fija `reglas-ui.md` § 1.4.
+
+  **`retain` cubre la mitad que es del navegador**: cerrar la pestaña, recargar
+  o escribir otra dirección. Ahí manda `beforeunload`, que pinta su propio
+  diálogo con su propio texto y no se puede sustituir. Se engancha solo mientras
+  haya algo que perder, porque un `beforeunload` puesto siempre le quita a la
+  pestaña el bfcache. Viene apagado.
+
+  La otra mitad, navegar dentro de la aplicación, no tiene evento que valga
+  porque el enrutado es de cada app: esa la conecta la pantalla con su propio
+  enrutador, leyendo el mismo `dirty` que ya le pasa a la barra.
+
 ## `@calumet/elise-ui` 0.18.0 y `elise-alerts` 0.3.2
 
 Suben también `elise-tables` 0.4.1 y `elise-toasts` 0.4.3, que no cambian por
