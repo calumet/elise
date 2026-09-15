@@ -39,10 +39,17 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   **Descartar destruye lo editado, así que pasa por `AlertDialog`** y no por el
   botón a secas, como fija `reglas-ui.md` § 1.4.
 
-  **Dentro del marco va `AppShellSaveBar`,** que se monta en lugar de
-  `AppShellHeader` mientras haya cambios: la franja toma la misma celda y el
-  mismo fondo oscuro que la cabecera, y la barra flota dentro con su borde. Mide
-  los mismos 56px, así que el cambio no corre de sitio al contenido.
+  **Dentro del marco va `AppShellSaveBar`,** que ocupa el sitio del buscador y
+  deja a los lados el botón del cajón y las acciones, que siguen haciendo falta
+  mientras se edita. No se lleva la fila entera: con la fila la barra tapaba la
+  cuenta y los avisos, y en estrecho se comía el ancho completo.
+
+  Lleva la misma receta que el resto de las piezas de la cabecera, `bg-card`
+  bajo el tema oscuro más el contorno, porque contra un fondo casi negro la
+  diferencia de luminosidad no alcanza a dibujar la caja y lo que la define es
+  el borde. En estrecho el rótulo pasa a `sr-only`: entre el cajón y las
+  acciones no queda ancho para el texto y los dos botones, y lo que no puede
+  faltar son los botones.
 
   **`retain` cubre la mitad que es del navegador**: cerrar la pestaña, recargar
   o escribir otra dirección. Ahí manda `beforeunload`, que pinta su propio

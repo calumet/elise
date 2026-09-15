@@ -117,40 +117,58 @@ export function SaveBar({
 
   return (
     <>
-      {/* Las medidas salen de sus dueños: el relleno y la superficie de `Box`,
-          el hueco de `InlineStack`, el cuerpo de `Text`. Los botones van en `sm`
-          porque esto es cromo y no el pie de un formulario: en `md` la barra
-          crece a 52px y se lee como una sección más de la pantalla. */}
+      {/* La misma receta que el resto de las piezas de la cabecera: `bg-card`
+          bajo el tema oscuro más el contorno, porque contra un fondo casi negro
+          la diferencia de luminosidad no alcanza a dibujar la caja y lo que la
+          define es el borde. Dentro de `AppShellHeader` el tema ya es ese y el
+          atributo no cambia nada; suelta en una pantalla clara, es lo que la
+          vuelve oscura.
+
+          Las medidas salen de sus dueños: el relleno y la superficie de `Box`,
+          el hueco de `InlineStack`, el cuerpo de `Text`. El relleno es de un
+          escalón para que la barra se lea dentro de la cabecera y no encima. */}
       <Box
         data-slot="save-bar"
+        data-theme="dark"
         /* `status` y no `alert`: aparece al teclear y un `alert` interrumpiría
            al lector de pantalla en mitad de la palabra. */
         role="status"
-        background="inverse"
+        background="card"
         border
-        radius="lg"
-        paddingX={3}
-        paddingY={2}
-        className={cn("sticky top-2 z-sticky", className)}
+        radius="md"
+        paddingX={2}
+        paddingY={1}
+        className={cn("min-w-0", className)}
         {...props}
       >
-        <InlineStack gap={3} align="center">
-          <AlertCircle aria-hidden="true" className="size-5 shrink-0" />
-          <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
+        {/* Sin `wrap`: es una fila de cabecera, y al envolver se sale de ella y
+            se monta encima de las acciones. */}
+        <InlineStack gap={2} align="center" wrap={false}>
+          <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
+          {/* En estrecho entre el botón del cajón y las acciones no queda ancho
+              para el rótulo y los dos botones, y lo que no puede faltar son los
+              botones. El rótulo se va a `sr-only`, así que lo sigue leyendo el
+              lector de pantalla y el icono carga con el aviso a la vista. */}
+          <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate max-md:sr-only">
             {message ?? rotulo}
           </Text>
-          <InlineStack gap={2} align="center" className="shrink-0">
+          <InlineStack gap={1} align="center" wrap={false} className="shrink-0">
+            {/* Relleno sutil y contorno, no un contorno a secas: en la barra los
+                dos botones se leen como un par y el de descartar es el que pesa
+                menos, no el que desaparece. `--state-hover` en oscuro es blanco
+                al 5%. */}
             <Button
               size="sm"
               variant="outline"
               disabled={saving}
+              className="bg-state-hover"
               onClick={() => setConfirmando(true)}
             >
               {rotuloDescartar}
             </Button>
-            {/* El relleno sale de la propia superficie y no de `--primary`, que
-                acá no se remapea: sobre la franja el sólido del sistema queda
-                azul oscuro contra casi negro. */}
+            {/* El relleno sale de `--foreground` y no de `--primary`: el sólido
+                del sistema en oscuro es azul casi negro y sobre esta caja no se
+                despega. */}
             <Button
               size="sm"
               loading={saving}

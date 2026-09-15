@@ -17,6 +17,12 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      /* La segunda página existe para probar el marco con los anchos de la
+         ventana y no los de una caja de la vitrina. */
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        marco: path.resolve(__dirname, "marco.html"),
+      },
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;

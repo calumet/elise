@@ -261,40 +261,34 @@ export type AppShellSaveBarProps = SaveBarProps;
 /**
  * La barra de cambios sin guardar, en la fila de la cabecera.
  *
- * Se monta en lugar de `AppShellHeader` mientras haya algo sin guardar: se
- * lleva el sitio de la cabecera porque mientras hay cambios pendientes las
- * únicas dos salidas que importan son guardar y descartar.
- *
- * La franja toma la misma celda y el mismo fondo oscuro que la cabecera, y la
- * barra flota dentro con su relleno. Ese reparto de dos capas es el de la
- * referencia, y mide los mismos 56px que la cabecera, así que el cambio no
- * corre de sitio al contenido.
+ * Es una banda de la cabecera, no la fila entera: ocupa el sitio del buscador y
+ * deja a los lados el botón del cajón y las acciones, que siguen haciendo falta
+ * mientras se edita. Con la fila entera la barra tapaba la cuenta y los avisos,
+ * y en estrecho se comía el ancho completo.
  *
  * ```tsx
- * <AppShell>
+ * <AppShellHeader>
+ *   <AppShellNavToggle />
+ *   <AppShellHeaderBrand>…</AppShellHeaderBrand>
  *   {sucio ? (
  *     <AppShellSaveBar dirty={sucio} onSave={guardar} onDiscard={descartar} />
  *   ) : (
- *     <AppShellHeader>…</AppShellHeader>
+ *     <AppShellHeaderSearch>…</AppShellHeaderSearch>
  *   )}
- *   <AppShellNav>…</AppShellNav>
- *   <AppShellMain>…</AppShellMain>
- * </AppShell>
+ *   <AppShellHeaderActions>…</AppShellHeaderActions>
+ * </AppShellHeader>
  * ```
  */
 function AppShellSaveBar({ className, ...props }: AppShellSaveBarProps): React.JSX.Element {
   return (
-    <div
+    <SaveBar
       data-slot="app-shell-save-bar"
-      data-theme="dark"
-      /* `h-14`, la de la cabecera, y la barra centrada dentro. Con relleno en
-         vez de altura la fila medía 58 y el contenido se corría 2px al
-         aparecer, porque el borde de la barra suma a su alto. */
-      className="col-start-1 col-end-3 row-start-1 flex h-14 items-center bg-background px-2"
-    >
-      {/* Dentro de la franja no hay nada que seguir: la fila no desplaza. */}
-      <SaveBar className={cn("static w-full", className)} {...props} />
-    </div>
+      /* La colocación del buscador, que es la banda cuyo sitio toma: se estira
+         en estrecho, donde la cabecera es una fila, y cae en la columna del
+         medio a partir del breakpoint. */
+      className={cn("w-full min-w-0 flex-1 md:col-start-2 md:flex-none", className)}
+      {...props}
+    />
   );
 }
 AppShellSaveBar.displayName = "AppShellSaveBar";

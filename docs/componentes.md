@@ -949,7 +949,7 @@ import {
 | ----------------------- | ----------------------------------------------------------- |
 | `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho   |
 | `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola             |
-| `AppShellSaveBar`       | Ocupa la fila de la cabecera mientras haya sin guardar      |
+| `AppShellSaveBar`       | Toma el sitio del buscador mientras haya sin guardar        |
 | `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                          |
 | `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                  |
 | `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta        |
