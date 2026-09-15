@@ -10,7 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@calumet/elise-ui/alert-dialog";
-import { Button } from "@calumet/elise-ui/button";
 import * as React from "react";
 
 import { closeAlert, onAlert, onCloseAlert, type AlertEvent } from "./bus";
@@ -97,28 +96,23 @@ export const AlertHost: React.FC = () => {
         ) : null}
         <AlertDialogFooter>
           {showCancel ? (
-            <AlertDialogCancel asChild>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  current.onCancel?.();
-                  closeAlert(current.id);
-                }}
-                className="font-semibold"
-              >
-                {current.cancelLabel ?? labelCancel}
-              </Button>
-            </AlertDialogCancel>
-          ) : null}
-          <AlertDialogAction asChild>
-            <Button
+            <AlertDialogCancel
               onClick={() => {
-                current.onConfirm?.();
+                current.onCancel?.();
                 closeAlert(current.id);
               }}
+              className="font-semibold"
             >
-              {current.confirmLabel ?? (current.variant === "confirm" ? labelConfirm : labelOk)}
-            </Button>
+              {current.cancelLabel ?? labelCancel}
+            </AlertDialogCancel>
+          ) : null}
+          <AlertDialogAction
+            onClick={() => {
+              current.onConfirm?.();
+              closeAlert(current.id);
+            }}
+          >
+            {current.confirmLabel ?? (current.variant === "confirm" ? labelConfirm : labelOk)}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -7,6 +7,7 @@
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import * as React from "react";
 
+import { buttonVariants, type ButtonProps } from "./button";
 import {
   ANCHOS_DIALOGO,
   CABECERA_DIALOGO,
@@ -27,10 +28,44 @@ export const AlertDialog = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
 /** Monta la alerta al final del `body`. */
 export const AlertDialogPortal = AlertDialogPrimitive.Portal;
-/** El botón que confirma y cierra. */
-export const AlertDialogAction = AlertDialogPrimitive.Action;
-/** El botón que descarta y cierra. */
-export const AlertDialogCancel = AlertDialogPrimitive.Cancel;
+/** Props de {@link AlertDialogAction}. */
+export type AlertDialogActionProps = React.ComponentProps<typeof AlertDialogPrimitive.Action> &
+  Pick<ButtonProps, "variant" | "size" | "tone">;
+
+/** Props de {@link AlertDialogCancel}. */
+export type AlertDialogCancelProps = React.ComponentProps<typeof AlertDialogPrimitive.Cancel> &
+  Pick<ButtonProps, "variant" | "size" | "tone">;
+
+/** El botón que confirma y cierra. Sale con el aspecto de `Button` sólido; `variant`, `size` y `tone` lo cambian. */
+export const AlertDialogAction = ({
+  className,
+  variant = "solid",
+  size,
+  tone,
+  ...props
+}: AlertDialogActionProps): React.JSX.Element => (
+  <AlertDialogPrimitive.Action
+    data-slot="alert-dialog-action"
+    /* Con `asChild` no se ponen: sumadas a las del hijo, `twMerge` resolvería a favor de estas. */
+    className={props.asChild ? className : cn(buttonVariants({ variant, size, tone }), className)}
+    {...props}
+  />
+);
+
+/** El botón que descarta y cierra. Sale con el aspecto de `Button` `outline`; `variant`, `size` y `tone` lo cambian. */
+export const AlertDialogCancel = ({
+  className,
+  variant = "outline",
+  size,
+  tone,
+  ...props
+}: AlertDialogCancelProps): React.JSX.Element => (
+  <AlertDialogPrimitive.Cancel
+    data-slot="alert-dialog-cancel"
+    className={props.asChild ? className : cn(buttonVariants({ variant, size, tone }), className)}
+    {...props}
+  />
+);
 
 /** El velo que tapa la página detrás de la alerta. */
 export const AlertDialogOverlay: React.ForwardRefExoticComponent<

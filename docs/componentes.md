@@ -750,6 +750,25 @@ Las clases salen de `CABECERA_DIALOGO`, `CUERPO_DIALOGO` y `PIE_DIALOGO`, que
 mismas. Un panel o un diálogo sin su zona de cuerpo pierde el desplazamiento y
 las tres zonas se leen como contenido que se quedó arriba y abajo.
 
+Sin cuerpo, la cabecera y el pie quedan pegados y el filete es uno solo: el pie
+no repite el de la cabecera.
+
+#### Los botones del pie de `AlertDialog`
+
+`AlertDialogAction` y `AlertDialogCancel` traen el aspecto de `Button` puesto,
+sólido el que confirma y `outline` el que descarta, y aceptan `variant`, `size`
+y `tone`. No hay que componerlos con un `Button`.
+
+```tsx
+<AlertDialogFooter>
+  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+  <AlertDialogAction tone="danger">Eliminar</AlertDialogAction>
+</AlertDialogFooter>
+```
+
+`asChild` sigue disponible para poner otro control en su lugar, y ahí el aspecto
+lo pone el hijo entero.
+
 ### Media
 
 | Componente                                                              | Import                           | Radix / Externo                                                      |

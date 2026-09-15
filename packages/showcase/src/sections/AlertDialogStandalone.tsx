@@ -26,9 +26,7 @@ const AlertDialogStandalone = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button tone="danger">Eliminar</Button>
-          </AlertDialogAction>
+          <AlertDialogAction tone="danger">Eliminar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

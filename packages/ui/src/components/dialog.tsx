@@ -44,9 +44,10 @@ export const CABECERA_DIALOGO =
   "flex shrink-0 flex-col gap-1 border-b border-border bg-muted p-4 text-left";
 /** Las clases del cuerpo, que es la única zona que desplaza. */
 export const CUERPO_DIALOGO = "min-h-0 flex-1 overflow-y-auto p-4";
+/* Sin cuerpo la cabecera y el pie se tocan, y el filete de arriba sobra: ya está el de ella. */
 /** Las clases del pie, donde van las acciones. */
 export const PIE_DIALOGO =
-  "flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted p-4 sm:flex-row sm:justify-end";
+  "flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted p-4 sm:flex-row sm:justify-end [[data-slot$=-header]+&]:border-t-0";
 
 /** Las clases del título. */
 export const TITULO_DIALOGO = "text-lg font-semibold tracking-tight";

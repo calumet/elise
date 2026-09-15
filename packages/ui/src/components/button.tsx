@@ -102,10 +102,19 @@ const toneOverrides: Record<
 export const buttonVariants = ({
   variant = "solid",
   size = "md",
+  tone,
 }: {
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-} = {}): string => cn(baseClasses, disabledClasses, variantClasses[variant], sizeClasses[size]);
+  tone?: ButtonProps["tone"];
+} = {}): string =>
+  cn(
+    baseClasses,
+    disabledClasses,
+    variantClasses[variant],
+    tone ? toneOverrides[tone][variant] : undefined,
+    sizeClasses[size],
+  );
 
 /* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
    chrome de escritorio denso: el resto del catálogo escribe a 14px y un botón
@@ -145,7 +154,6 @@ export const Button: React.ForwardRefExoticComponent<
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
-    const toneClass = tone ? toneOverrides[tone][variant] : undefined;
     /* Con `asChild` el contenido pasa intacto: `Slot` admite un solo hijo, así
        que envolverlo rompería la composición. Ahí el estado lo anuncia
        `aria-busy` y el hijo pinta lo que quiera. */
@@ -162,14 +170,7 @@ export const Button: React.ForwardRefExoticComponent<
         disabled={disabled || cargando || undefined}
         data-loading={loading ? "" : undefined}
         aria-busy={loading || undefined}
-        className={cn(
-          baseClasses,
-          disabledClasses,
-          variantClasses[variant],
-          toneClass,
-          sizeClasses[size],
-          className,
-        )}
+        className={cn(buttonVariants({ variant, size, tone }), className)}
         {...props}
       >
         {/* Las dos capas del estado de carga van dentro de una sola expresión:
