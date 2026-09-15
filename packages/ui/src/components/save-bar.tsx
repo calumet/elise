@@ -189,23 +189,16 @@ export function SaveBar({
             <AlertDialogTitle>{tituloConfirmar}</AlertDialogTitle>
             <AlertDialogDescription>{textoConfirmar}</AlertDialogDescription>
           </AlertDialogHeader>
-          {/* Los dos van con `asChild`: `AlertDialogCancel` y `AlertDialogAction`
-              son el primitivo de Radix tal cual, sin estilo, así que sueltos
-              salen como texto pelado. */}
           <AlertDialogFooter>
-            <AlertDialogCancel asChild>
-              <Button variant="outline">{rotuloSeguir}</Button>
-            </AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button
-                tone="danger"
-                onClick={() => {
-                  setConfirmando(false);
-                  onDiscard();
-                }}
-              >
-                {rotuloDescartar}
-              </Button>
+            <AlertDialogCancel>{rotuloSeguir}</AlertDialogCancel>
+            <AlertDialogAction
+              tone="danger"
+              onClick={() => {
+                setConfirmando(false);
+                onDiscard();
+              }}
+            >
+              {rotuloDescartar}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

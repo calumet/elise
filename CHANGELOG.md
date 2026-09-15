@@ -5,6 +5,10 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ## `@calumet/elise-ui` 0.19.0
 
+Suben también `elise-alerts` 0.3.3, `elise-tables` 0.4.2 y `elise-toasts` 0.4.4,
+que no cambian por dentro: dependen de `elise-ui` por rango de caret y `^0.18.0`
+no alcanza a la 0.19.0.
+
 ### Agrega
 
 - **Una pantalla de ajustes no tenía cómo avisar de cambios sin guardar.** El
