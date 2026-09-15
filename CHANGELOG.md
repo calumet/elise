@@ -3,6 +3,31 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.18.0 y `elise-alerts` 0.3.2
+
+Suben también `elise-tables` 0.4.1 y `elise-toasts` 0.4.3, que no cambian por
+dentro: dependen de `elise-ui` por rango de caret y `^0.17.0` no alcanza a la
+0.18.0.
+
+### Rompe
+
+- **`AlertDialogAction` y `AlertDialogCancel` traen el aspecto de `Button`
+  puesto,** sólido el que confirma y `outline` el que descarta, y aceptan
+  `variant`, `size` y `tone`. Eran el primitivo de Radix sin una sola clase, así
+  que sueltos salían como texto pelado. Con `asChild` no cambia nada: ahí las
+  clases no se ponen y el aspecto lo sigue poniendo el hijo.
+
+### Cambia
+
+- **`buttonVariants` acepta `tone`.** Sin él, reusar el aspecto del botón fuera
+  de `Button` daba siempre el primario.
+
+### Corrige
+
+- **Un diálogo sin cuerpo pintaba dos filetes.** Con la cabecera y el pie
+  pegados, cada uno dejaba el suyo. El pie se queda sin el de arriba cuando va
+  justo después de una cabecera. Vale para `Dialog`, `AlertDialog` y `Sheet`.
+
 ## `@calumet/elise-ui` 0.17.0 y `elise-tables` 0.4.0
 
 Suben también `elise-icons` 0.2.2, `elise-forms` 0.1.4, `elise-linter` 0.2.1,
