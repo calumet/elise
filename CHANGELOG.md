@@ -47,9 +47,10 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   Lleva la misma receta que el resto de las piezas de la cabecera, `bg-card`
   bajo el tema oscuro más el contorno, porque contra un fondo casi negro la
   diferencia de luminosidad no alcanza a dibujar la caja y lo que la define es
-  el borde. En estrecho el rótulo pasa a `sr-only`: entre el cajón y las
-  acciones no queda ancho para el texto y los dos botones, y lo que no puede
-  faltar son los botones.
+  el borde. Al apretar el ancho el rótulo cede y se recorta, y los
+  botones no: lo que decide si cabe es lo que quede entre el botón del cajón y
+  las acciones, no el ancho de la ventana, así que no hay breakpoint de por
+  medio.
 
   **`retain` cubre la mitad que es del navegador**: cerrar la pestaña, recargar
   o escribir otra dirección. Ahí manda `beforeunload`, que pinta su propio

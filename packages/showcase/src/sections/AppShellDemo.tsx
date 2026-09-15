@@ -296,8 +296,8 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
           </div>
           <Text size="xs" tone="muted" className="mt-2">
             Pulsa «Ensuciar el formulario»: la barra de cambios sin guardar toma el sitio del
-            buscador y deja a los lados el botón del cajón y las acciones. En estrecho el rótulo se
-            va y quedan el icono y los dos botones.
+            buscador y deja a los lados el botón del cajón y las acciones. Al apretar el ancho el
+            rótulo cede y se recorta; los botones no.
           </Text>
           <Text size="xs" tone="muted" className="mt-2">
             Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva su

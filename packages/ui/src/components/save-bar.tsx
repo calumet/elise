@@ -145,11 +145,13 @@ export function SaveBar({
             se monta encima de las acciones. */}
         <InlineStack gap={2} align="center" wrap={false}>
           <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
-          {/* En estrecho entre el botón del cajón y las acciones no queda ancho
-              para el rótulo y los dos botones, y lo que no puede faltar son los
-              botones. El rótulo se va a `sr-only`, así que lo sigue leyendo el
-              lector de pantalla y el icono carga con el aviso a la vista. */}
-          <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate max-md:sr-only">
+          {/* El rótulo cede el ancho que haga falta y se recorta, en vez de irse
+              a partir de un breakpoint: lo que decide si cabe no es el ancho de
+              la ventana sino lo que quede entre el botón del cajón y las
+              acciones, y con la regla por breakpoint el rótulo desaparecía en
+              una ventana de 760px donde sobraba sitio. `min-w-0` es lo que deja
+              al flex encogerlo por debajo de su texto; los botones no ceden. */}
+          <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
             {message ?? rotulo}
           </Text>
           <InlineStack gap={1} align="center" wrap={false} className="shrink-0">
