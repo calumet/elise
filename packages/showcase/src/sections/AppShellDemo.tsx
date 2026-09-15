@@ -21,6 +21,7 @@ import {
   AppShellHeaderActions,
   AppShellHeaderBrand,
   AppShellHeaderSearch,
+  AppShellSaveBar,
   AppShellMain,
   AppShellNav,
   AppShellNavAction,
@@ -69,6 +70,7 @@ const AppShellDemo = () => {
   const [aviso, setAviso] = useState<string | null>(null);
 
   const [guardando, setGuardando] = useState(false);
+  const [sucio, setSucio] = useState(false);
   const guardar = () => {
     setGuardando(true);
     setTimeout(() => setGuardando(false), 1600);
@@ -77,50 +79,68 @@ const AppShellDemo = () => {
   return (
     <div className="h-[560px] w-full overflow-hidden rounded-xl border border-border">
       <AppShell className="h-full">
-        <AppShellHeader>
-          {/* La hamburguesa va suelta y no dentro de la marca, porque la marca
+        {/* Mientras hay cambios pendientes la barra se lleva la fila de la
+            cabecera: las únicas dos salidas que importan son guardar y
+            descartar. */}
+        {sucio ? (
+          <AppShellSaveBar
+            dirty
+            saving={guardando}
+            onSave={() => {
+              setGuardando(true);
+              window.setTimeout(() => {
+                setGuardando(false);
+                setSucio(false);
+              }, 900);
+            }}
+            onDiscard={() => setSucio(false)}
+          />
+        ) : (
+          <AppShellHeader>
+            {/* La hamburguesa va suelta y no dentro de la marca, porque la marca
               desaparece en pantalla estrecha y el botón del cajón se queda. */}
-          <AppShellNavToggle />
-          <AppShellHeaderBrand>
-            <Text size="lg" weight="bold" className="truncate">
-              Calumet
-            </Text>
-          </AppShellHeaderBrand>
+            <AppShellNavToggle />
+            <AppShellHeaderBrand>
+              <Text size="lg" weight="bold" className="truncate">
+                Calumet
+              </Text>
+            </AppShellHeaderBrand>
 
-          <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={() => setBuscando(true)}>
-            Buscar
-          </AppShellHeaderSearch>
+            <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={() => setBuscando(true)}>
+              Buscar
+            </AppShellHeaderSearch>
 
-          {/* Las acciones van antes del menú de la cuenta, que es el ancla de
+            {/* Las acciones van antes del menú de la cuenta, que es el ancla de
               la esquina: al revés bailaría de sitio en cada pantalla. */}
-          <AppShellHeaderActions>
-            <AppShellHeaderAction
-              label="Notificaciones"
-              icon={<Bell />}
-              onClick={() => setAviso("Notificaciones")}
-            />
-            <AppShellHeaderAction
-              label="Ayuda"
-              icon={<CircleHelp />}
-              onClick={() => setAviso("Ayuda")}
-            />
-            <AppShellUserMenu name="Juan Lipez" detail="Calumet">
-              <DropdownMenuItem onSelect={() => setAviso("Perfil")}>
-                <CircleUser aria-hidden="true" />
-                Perfil
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
-                <Settings aria-hidden="true" />
-                Ajustes
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => setAviso("Cerrar sesión")}>
-                <LogOut aria-hidden="true" />
-                Cerrar sesión
-              </DropdownMenuItem>
-            </AppShellUserMenu>
-          </AppShellHeaderActions>
-        </AppShellHeader>
+            <AppShellHeaderActions>
+              <AppShellHeaderAction
+                label="Notificaciones"
+                icon={<Bell />}
+                onClick={() => setAviso("Notificaciones")}
+              />
+              <AppShellHeaderAction
+                label="Ayuda"
+                icon={<CircleHelp />}
+                onClick={() => setAviso("Ayuda")}
+              />
+              <AppShellUserMenu name="Juan Lipez" detail="Calumet">
+                <DropdownMenuItem onSelect={() => setAviso("Perfil")}>
+                  <CircleUser aria-hidden="true" />
+                  Perfil
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
+                  <Settings aria-hidden="true" />
+                  Ajustes
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => setAviso("Cerrar sesión")}>
+                  <LogOut aria-hidden="true" />
+                  Cerrar sesión
+                </DropdownMenuItem>
+              </AppShellUserMenu>
+            </AppShellHeaderActions>
+          </AppShellHeader>
+        )}
 
         <AppShellNav>
           <ul className="list-none p-0">
@@ -264,7 +284,14 @@ const AppShellDemo = () => {
             <Button variant="ghost" disabled>
               No disponible
             </Button>
+            <Button variant="outline" onClick={() => setSucio(true)}>
+              Ensuciar el formulario
+            </Button>
           </div>
+          <Text size="xs" tone="muted" className="mt-2">
+            Pulsa «Ensuciar el formulario»: la barra de cambios sin guardar se lleva la fila de la
+            cabecera y mide lo mismo, así que el contenido no se corre de sitio.
+          </Text>
           <Text size="xs" tone="muted" className="mt-2">
             Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva su
             ancho y no empuja a los de al lado.

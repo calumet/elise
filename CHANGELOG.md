@@ -39,6 +39,11 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   **Descartar destruye lo editado, así que pasa por `AlertDialog`** y no por el
   botón a secas, como fija `reglas-ui.md` § 1.4.
 
+  **Dentro del marco va `AppShellSaveBar`,** que se monta en lugar de
+  `AppShellHeader` mientras haya cambios: la franja toma la misma celda y el
+  mismo fondo oscuro que la cabecera, y la barra flota dentro con su borde. Mide
+  los mismos 56px, así que el cambio no corre de sitio al contenido.
+
   **`retain` cubre la mitad que es del navegador**: cerrar la pestaña, recargar
   o escribir otra dirección. Ahí manda `beforeunload`, que pinta su propio
   diálogo con su propio texto y no se puede sustituir. Se engancha solo mientras

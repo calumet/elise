@@ -127,10 +127,11 @@ export function SaveBar({
            al lector de pantalla en mitad de la palabra. */
         role="status"
         background="inverse"
+        border
         radius="lg"
         paddingX={3}
         paddingY={2}
-        className={cn("sticky top-0 z-sticky", className)}
+        className={cn("sticky top-2 z-sticky", className)}
         {...props}
       >
         <InlineStack gap={3} align="center">
@@ -168,15 +169,23 @@ export function SaveBar({
             <AlertDialogTitle>{tituloConfirmar}</AlertDialogTitle>
             <AlertDialogDescription>{textoConfirmar}</AlertDialogDescription>
           </AlertDialogHeader>
+          {/* Los dos van con `asChild`: `AlertDialogCancel` y `AlertDialogAction`
+              son el primitivo de Radix tal cual, sin estilo, así que sueltos
+              salen como texto pelado. */}
           <AlertDialogFooter>
-            <AlertDialogCancel>{rotuloSeguir}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                setConfirmando(false);
-                onDiscard();
-              }}
-            >
-              {rotuloDescartar}
+            <AlertDialogCancel asChild>
+              <Button variant="outline">{rotuloSeguir}</Button>
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Button
+                tone="danger"
+                onClick={() => {
+                  setConfirmando(false);
+                  onDiscard();
+                }}
+              >
+                {rotuloDescartar}
+              </Button>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

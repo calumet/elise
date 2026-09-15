@@ -24,6 +24,7 @@
 import * as React from "react";
 
 import { Kbd } from "./kbd";
+import { SaveBar, type SaveBarProps } from "./save-bar";
 import { UserMenu, type UserMenuProps } from "./user-menu";
 
 import { cn } from "@/lib/cn";
@@ -253,6 +254,50 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
   );
 }
 AppShellHeader.displayName = "AppShellHeader";
+
+/** Props de {@link AppShellSaveBar}. Las mismas de `SaveBar`. */
+export type AppShellSaveBarProps = SaveBarProps;
+
+/**
+ * La barra de cambios sin guardar, en la fila de la cabecera.
+ *
+ * Se monta en lugar de `AppShellHeader` mientras haya algo sin guardar: se
+ * lleva el sitio de la cabecera porque mientras hay cambios pendientes las
+ * únicas dos salidas que importan son guardar y descartar.
+ *
+ * La franja toma la misma celda y el mismo fondo oscuro que la cabecera, y la
+ * barra flota dentro con su relleno. Ese reparto de dos capas es el de la
+ * referencia, y mide los mismos 56px que la cabecera, así que el cambio no
+ * corre de sitio al contenido.
+ *
+ * ```tsx
+ * <AppShell>
+ *   {sucio ? (
+ *     <AppShellSaveBar dirty={sucio} onSave={guardar} onDiscard={descartar} />
+ *   ) : (
+ *     <AppShellHeader>…</AppShellHeader>
+ *   )}
+ *   <AppShellNav>…</AppShellNav>
+ *   <AppShellMain>…</AppShellMain>
+ * </AppShell>
+ * ```
+ */
+function AppShellSaveBar({ className, ...props }: AppShellSaveBarProps): React.JSX.Element {
+  return (
+    <div
+      data-slot="app-shell-save-bar"
+      data-theme="dark"
+      /* `h-14`, la de la cabecera, y la barra centrada dentro. Con relleno en
+         vez de altura la fila medía 58 y el contenido se corría 2px al
+         aparecer, porque el borde de la barra suma a su alto. */
+      className="col-start-1 col-end-3 row-start-1 flex h-14 items-center bg-background px-2"
+    >
+      {/* Dentro de la franja no hay nada que seguir: la fila no desplaza. */}
+      <SaveBar className={cn("static w-full", className)} {...props} />
+    </div>
+  );
+}
+AppShellSaveBar.displayName = "AppShellSaveBar";
 
 /** Props de {@link AppShellHeaderBrand}. */
 export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
@@ -1149,6 +1194,7 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps): Rea
 export {
   AppShell,
   AppShellHeader,
+  AppShellSaveBar,
   AppShellHeaderBrand,
   AppShellHeaderSearch,
   AppShellHeaderActions,
