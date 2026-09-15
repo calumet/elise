@@ -24,15 +24,15 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 
 | Librería                    | Uso en Elise                                             | Documentación                     |
 | --------------------------- | -------------------------------------------------------- | --------------------------------- |
-| **TanStack React Table v8** | Motor de `DataTable` (filtros, ordenamiento, paginación) | https://tanstack.com/table/latest |
+| **TanStack React Table v9** | Motor de `DataTable` (filtros, ordenamiento, paginación) | https://tanstack.com/table/latest |
 
 ## Componentes especializados
 
-| Librería             | Uso en Elise                                                 | Documentación                    |
-| -------------------- | ------------------------------------------------------------ | -------------------------------- |
-| **Embla Carousel**   | Motor del componente `Carousel`                              | https://www.embla-carousel.com/  |
-| **react-day-picker** | Motor de `Calendar`, `DatePicker` y `DateRangePicker`        | https://react-day-picker.js.org/ |
-| **cmdk**             | Motor del componente `Command` (paleta de comandos/búsqueda) | https://cmdk.paco.me/            |
+| Librería             | Uso en Elise                                                 | Documentación                   |
+| -------------------- | ------------------------------------------------------------ | ------------------------------- |
+| **Embla Carousel**   | Motor del componente `Carousel`                              | https://www.embla-carousel.com/ |
+| **react-day-picker** | Motor de `Calendar`, `DatePicker` y `DateRangePicker`        | https://daypicker.dev/          |
+| **cmdk**             | Motor del componente `Command` (paleta de comandos/búsqueda) | https://cmdk.paco.me/           |
 
 ## Utilidades CSS
 

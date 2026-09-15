@@ -86,7 +86,7 @@ Integración de [react-hook-form](https://react-hook-form.com/) + [Zod](https://
 
 ### @calumet/elise-tables
 
-Componente `DataTable` con filtros, ordenamiento, paginación y exportación CSV/JSON. Construido sobre [TanStack React Table v8](https://tanstack.com/table).
+Componente `DataTable` con filtros, ordenamiento, paginación y exportación CSV/JSON. Construido sobre [TanStack React Table v9](https://tanstack.com/table).
 
 - **Peer dependencies**: React 19, `@calumet/elise-ui`, `@calumet/elise-icons`
 - Dep directa: `@tanstack/react-table`

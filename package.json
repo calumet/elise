@@ -22,12 +22,12 @@
   },
   "devDependencies": {
     "@calumet/elise-linter": "workspace:*",
-    "@types/node": "^24.10.1",
-    "eslint": "^9.39.1",
+    "@types/node": "^24.13.4",
+    "eslint": "^9.39.5",
     "jsr": "^0.14.3",
-    "playwright": "^1.56.1",
-    "prettier": "^3.7.3",
-    "typescript": "^5.6.3"
+    "playwright": "^1.63.0",
+    "prettier": "^3.9.6",
+    "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.14.0"
 }
