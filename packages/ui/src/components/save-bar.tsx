@@ -1,5 +1,5 @@
 /**
- * La barra que avisa de cambios sin guardar y se apodera de la cabecera.
+ * La barra que avisa de cambios sin guardar.
  *
  * @module
  */
@@ -47,13 +47,13 @@ export type SaveBarProps = Omit<React.ComponentProps<"div">, "children"> & {
 /**
  * La barra que avisa de cambios sin guardar.
  *
- * Aparece mientras `dirty`, encima de la cabecera del marco, y se lleva de ahí
- * las dos únicas salidas que quedan: guardar y descartar. Una pantalla de
- * ajustes larga deja el pie varias pantallas por debajo del primer campo, así
- * que quien cambia algo arriba pierde de vista el control que lo aplica.
+ * Aparece mientras `dirty` y se lleva ahí las dos salidas que quedan: guardar y
+ * descartar. Una pantalla de ajustes larga deja el pie varias pantallas por
+ * debajo del primer campo, así que quien cambia algo arriba pierde de vista el
+ * control que lo aplica.
  *
- * Va sobre la franja invertida, la misma superficie del toast, porque es una
- * capa que se pone encima de la pantalla y no una sección suya.
+ * Dentro del marco va `AppShellSaveBar`, que la coloca en la banda de la
+ * cabecera. Suelta sirve igual en un formulario que no viva en un marco.
  *
  * **Descartar destruye lo editado**, así que pasa por `AlertDialog` y no por el
  * botón a secas, como fija `reglas-ui.md` § 1.4.
@@ -97,15 +97,13 @@ export function SaveBar({
   );
   const rotuloSeguir = useElLabel("ui", "saveBarKeepEditing", "Seguir editando");
 
-  /* El aviso del navegador se engancha solo mientras haya algo que perder: un
-     `beforeunload` puesto siempre le quita a la pestaña el bfcache. */
+  // Puesto siempre, un `beforeunload` le quita a la pestaña el bfcache.
   React.useEffect(() => {
     if (!dirty || !retain) return;
 
     const alSalir = (evento: BeforeUnloadEvent) => {
       evento.preventDefault();
-      /* Chrome todavía pide que el evento quede con `returnValue` asignado. El
-         texto no se usa: el navegador pinta el suyo desde hace años. */
+      // Chrome todavía lo pide; el texto no se usa, el diálogo es el suyo.
       evento.returnValue = "";
     };
 
@@ -117,21 +115,11 @@ export function SaveBar({
 
   return (
     <>
-      {/* La misma receta que el resto de las piezas de la cabecera: `bg-card`
-          bajo el tema oscuro más el contorno, porque contra un fondo casi negro
-          la diferencia de luminosidad no alcanza a dibujar la caja y lo que la
-          define es el borde. Dentro de `AppShellHeader` el tema ya es ese y el
-          atributo no cambia nada; suelta en una pantalla clara, es lo que la
-          vuelve oscura.
-
-          Las medidas salen de sus dueños: el relleno y la superficie de `Box`,
-          el hueco de `InlineStack`, el cuerpo de `Text`. El relleno es de un
-          escalón para que la barra se lea dentro de la cabecera y no encima. */}
+      {/* Sobre el casi negro de la cabecera la caja la dibuja el borde, como en `AppShellHeaderSearch`. */}
       <Box
         data-slot="save-bar"
         data-theme="dark"
-        /* `status` y no `alert`: aparece al teclear y un `alert` interrumpiría
-           al lector de pantalla en mitad de la palabra. */
+        // `status` y no `alert`: aparece al teclear y no debe interrumpir.
         role="status"
         background="card"
         border
@@ -141,24 +129,15 @@ export function SaveBar({
         className={cn("min-w-0", className)}
         {...props}
       >
-        {/* Sin `wrap`: es una fila de cabecera, y al envolver se sale de ella y
-            se monta encima de las acciones. */}
+        {/* Al envolver se sale de la cabecera y se monta sobre las acciones. */}
         <InlineStack gap={2} align="center" wrap={false}>
           <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
-          {/* El rótulo cede el ancho que haga falta y se recorta, en vez de irse
-              a partir de un breakpoint: lo que decide si cabe no es el ancho de
-              la ventana sino lo que quede entre el botón del cajón y las
-              acciones, y con la regla por breakpoint el rótulo desaparecía en
-              una ventana de 760px donde sobraba sitio. `min-w-0` es lo que deja
-              al flex encogerlo por debajo de su texto; los botones no ceden. */}
+          {/* `min-w-0`: el rótulo es lo que cede ancho, los botones no. */}
           <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
             {message ?? rotulo}
           </Text>
           <InlineStack gap={1} align="center" wrap={false} className="shrink-0">
-            {/* Relleno sutil y contorno, no un contorno a secas: en la barra los
-                dos botones se leen como un par y el de descartar es el que pesa
-                menos, no el que desaparece. `--state-hover` en oscuro es blanco
-                al 5%. */}
+            {/* Con relleno: es el hermano menor de guardar, no otra cosa. */}
             <Button
               size="sm"
               variant="outline"
@@ -168,9 +147,7 @@ export function SaveBar({
             >
               {rotuloDescartar}
             </Button>
-            {/* El relleno sale de `--foreground` y no de `--primary`: el sólido
-                del sistema en oscuro es azul casi negro y sobre esta caja no se
-                despega. */}
+            {/* De `--foreground`: `--primary` en oscuro no se despega de esta caja. */}
             <Button
               size="sm"
               loading={saving}

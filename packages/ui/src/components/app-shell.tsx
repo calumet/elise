@@ -283,9 +283,7 @@ function AppShellSaveBar({ className, ...props }: AppShellSaveBarProps): React.J
   return (
     <SaveBar
       data-slot="app-shell-save-bar"
-      /* La colocación del buscador, que es la banda cuyo sitio toma: se estira
-         en estrecho, donde la cabecera es una fila, y cae en la columna del
-         medio a partir del breakpoint. */
+      // La colocación del buscador, que es la banda cuyo sitio toma.
       className={cn("w-full min-w-0 flex-1 md:col-start-2 md:flex-none", className)}
       {...props}
     />
