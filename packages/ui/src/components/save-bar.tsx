@@ -52,8 +52,12 @@ export type SaveBarProps = Omit<React.ComponentProps<"div">, "children"> & {
  * debajo del primer campo, así que quien cambia algo arriba pierde de vista el
  * control que lo aplica.
  *
+ * Suelta se queda pegada arriba y entra deslizándose: aparece al teclear, y a
+ * mitad de un formulario largo eso pasa fuera de la vista. Bajo
+ * `prefers-reduced-motion` la entrada se anula sola.
+ *
  * Dentro del marco va `AppShellSaveBar`, que la coloca en la banda de la
- * cabecera. Suelta sirve igual en un formulario que no viva en un marco.
+ * cabecera y le quita el pegado, que ahí ya lo pone la cabecera.
  *
  * **Descartar destruye lo editado**, así que pasa por `AlertDialog` y no por el
  * botón a secas, como fija `reglas-ui.md` § 1.4.
@@ -126,7 +130,11 @@ export function SaveBar({
         radius="md"
         paddingX={2}
         paddingY={1}
-        className={cn("min-w-0", className)}
+        className={cn(
+          "sticky top-2 z-sticky min-w-0",
+          "animate-in fade-in slide-in-from-top-2 duration-(--duration-base) ease-out",
+          className,
+        )}
         {...props}
       >
         {/* Al envolver se sale de la cabecera y se monta sobre las acciones. */}

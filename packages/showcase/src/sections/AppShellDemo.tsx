@@ -73,7 +73,10 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
   const [sucio, setSucio] = useState(false);
   const guardar = () => {
     setGuardando(true);
-    setTimeout(() => setGuardando(false), 1600);
+    setTimeout(() => {
+      setGuardando(false);
+      setSucio(false);
+    }, 1600);
   };
 
   return (
@@ -286,7 +289,9 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
             <Button loading={guardando} onClick={guardar}>
               Guardar cambios
             </Button>
-            <Button variant="outline">Descartar</Button>
+            <Button variant="outline" onClick={() => setSucio(false)}>
+              Descartar
+            </Button>
             <Button variant="ghost" disabled>
               No disponible
             </Button>
