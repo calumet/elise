@@ -52,12 +52,8 @@ export type SaveBarProps = Omit<React.ComponentProps<"div">, "children"> & {
  * debajo del primer campo, así que quien cambia algo arriba pierde de vista el
  * control que lo aplica.
  *
- * Suelta se queda pegada arriba y entra deslizándose: aparece al teclear, y a
- * mitad de un formulario largo eso pasa fuera de la vista. Bajo
- * `prefers-reduced-motion` la entrada se anula sola.
- *
  * Dentro del marco va `AppShellSaveBar`, que la coloca en la banda de la
- * cabecera y le quita el pegado, que ahí ya lo pone la cabecera.
+ * cabecera. Suelta sirve igual en un formulario que no viva en un marco.
  *
  * **Descartar destruye lo editado**, así que pasa por `AlertDialog` y no por el
  * botón a secas, como fija `reglas-ui.md` § 1.4.
@@ -101,13 +97,11 @@ export function SaveBar({
   );
   const rotuloSeguir = useElLabel("ui", "saveBarKeepEditing", "Seguir editando");
 
-  // Puesto siempre, un `beforeunload` le quita a la pestaña el bfcache.
   React.useEffect(() => {
     if (!dirty || !retain) return;
 
     const alSalir = (evento: BeforeUnloadEvent) => {
       evento.preventDefault();
-      // Chrome todavía lo pide; el texto no se usa, el diálogo es el suyo.
       evento.returnValue = "";
     };
 
@@ -119,33 +113,24 @@ export function SaveBar({
 
   return (
     <>
-      {/* Sobre el casi negro de la cabecera la caja la dibuja el borde, como en `AppShellHeaderSearch`. */}
       <Box
         data-slot="save-bar"
         data-theme="dark"
-        // `status` y no `alert`: aparece al teclear y no debe interrumpir.
         role="status"
         background="card"
         border
         radius="md"
         paddingX={2}
         paddingY={1}
-        className={cn(
-          "sticky top-2 z-sticky min-w-0",
-          "animate-in fade-in slide-in-from-top-2 duration-(--duration-base) ease-out",
-          className,
-        )}
+        className={cn("min-w-0", className)}
         {...props}
       >
-        {/* Al envolver se sale de la cabecera y se monta sobre las acciones. */}
         <InlineStack gap={2} align="center" wrap={false}>
           <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
-          {/* `min-w-0`: el rótulo es lo que cede ancho, los botones no. */}
           <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
             {message ?? rotulo}
           </Text>
           <InlineStack gap={1} align="center" wrap={false} className="shrink-0">
-            {/* Con relleno: es el hermano menor de guardar, no otra cosa. */}
             <Button
               size="sm"
               variant="outline"
@@ -155,7 +140,6 @@ export function SaveBar({
             >
               {rotuloDescartar}
             </Button>
-            {/* De `--foreground`: `--primary` en oscuro no se despega de esta caja. */}
             <Button
               size="sm"
               loading={saving}

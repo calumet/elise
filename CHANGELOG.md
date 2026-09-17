@@ -40,10 +40,6 @@ no alcanza a la 0.19.0.
   `useZodForm`. Con el booleano no hace falta nada: `useZodForm` devuelve el
   `UseFormReturn` de react-hook-form, así que `formState.isDirty` ya está ahí.
 
-  **Suelta se queda pegada arriba y entra deslizándose.** Aparece al teclear, y a
-  mitad de un formulario largo eso pasa fuera de la vista. Bajo
-  `prefers-reduced-motion` la entrada se anula sola.
-
   **Descartar destruye lo editado, así que pasa por `AlertDialog`** y no por el
   botón a secas, como fija `reglas-ui.md` § 1.4.
 
