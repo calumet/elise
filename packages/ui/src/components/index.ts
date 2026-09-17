@@ -78,6 +78,7 @@ export * from "./toggle";
 export * from "./toggle-group";
 export * from "./toolbar";
 export * from "./tooltip";
+export * from "./value-field";
 export * from "./skeleton";
 export * from "./date-picker";
 export * from "./date-field";

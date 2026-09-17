@@ -3,6 +3,51 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.20.0
+
+Suben también `elise-alerts` 0.3.4, `elise-tables` 0.4.3 y `elise-toasts` 0.4.5,
+que no cambian por dentro: dependen de `elise-ui` por rango de caret y `^0.19.0`
+no alcanza a la 0.20.0.
+
+### Agrega
+
+- **Un campo cuyo valor es un registro no tenía pieza.** Una dirección son
+  cuatro campos y un banner siete, y puestos en línea dentro del formulario que
+  los contiene, una lista de tres deja veintiún controles seguidos. La pantalla
+  se vuelve ilegible y no había con qué agruparlos.
+
+  `ValueField` los resume en sitio y los edita aparte. Vacío es una fila con un
+  más, el rótulo de lo que falta y un caret; lleno es el resumen en varias
+  líneas con un lápiz al costado. Con valor deja de ser un enlace: es un dato
+  con su acción de editar.
+
+  ```tsx
+  <ValueField
+    label="Dirección comercial"
+    addLabel="Agregar dirección"
+    lines={direccion && [direccion.calle, direccion.ciudad, direccion.pais]}
+    onDone={() => setDireccion(borrador)}
+  >
+    <Field label="Calle">{(c) => <Input {...c} … />}</Field>
+  </ValueField>
+  ```
+
+  **El resumen lo arma quien llama** y llega en `lines`, ya formateado. Con el
+  registro crudo el campo tendría que saber de direcciones, de banners y de
+  entradas de menú, que es justo lo que no puede saber.
+
+  **Se edita en un `Dialog`**, en su ancho `md`. El registro es un formulario
+  corto y cerrado, y centrado deja el foco en él sin mover la pantalla de
+  debajo.
+
+  Entra como componente y no como bloque: los diez de `patrones-bloque.md` son
+  composiciones de piezas existentes, y este trae estado propio. Monta encima a
+  `Field`, así que el rótulo, la ayuda y el error llegan enlazados sin repetir
+  ese cableado.
+
+  Vaciar el campo no vive acá: es una acción del grupo, y `Section` ya acepta
+  `actions`.
+
 ## `@calumet/elise-ui` 0.19.0
 
 Suben también `elise-alerts` 0.3.3, `elise-tables` 0.4.2 y `elise-toasts` 0.4.4,

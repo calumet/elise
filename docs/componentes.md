@@ -207,6 +207,7 @@ pequeño sin dejar de ser un `h2` para el lector de pantalla.
 | Slider                                                        | `@calumet/elise-ui/slider`            | [Slider](https://www.radix-ui.com/primitives/docs/components/slider)            |
 | OTPField                                                      | `@calumet/elise-ui/otp-field`         | —                                                                               |
 | PasswordField                                                 | `@calumet/elise-ui/password-field`    | —                                                                               |
+| ValueField                                                    | `@calumet/elise-ui/value-field`       | Dialog                                                                          |
 | Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
 | MultiCombobox, MultiComboboxField                             | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
 | FileUpload, FileUploadList, FileUploadItem                    | `@calumet/elise-ui/file-upload`       | —                                                                               |
