@@ -18,6 +18,7 @@ import {
 } from "@calumet/elise-ui/select";
 import { Separator } from "@calumet/elise-ui/separator";
 import { Text } from "@calumet/elise-ui/text";
+import { ValueField } from "@calumet/elise-ui/value-field";
 import * as React from "react";
 
 const SUBPANTALLAS = [
@@ -58,10 +59,22 @@ const HERRAMIENTAS = [
 
 const NOMBRE_GUARDADO = "Calumet Café";
 
+type Direccion = { nombre: string; calle: string; ciudad: string; pais: string };
+
 const PantallaAjustes = () => {
   const [nombre, setNombre] = React.useState(NOMBRE_GUARDADO);
   const [guardando, setGuardando] = React.useState(false);
   const sucio = nombre !== NOMBRE_GUARDADO;
+
+  const [direccion, setDireccion] = React.useState<Direccion | null>(null);
+  const [borrador, setBorrador] = React.useState<Direccion>({
+    nombre: "Calumet Café SAS",
+    calle: "Av. Rivadavia 1234, piso 3",
+    ciudad: "Medellín, ANT",
+    pais: "Colombia",
+  });
+  const campo = (clave: keyof Direccion) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setBorrador((previo) => ({ ...previo, [clave]: e.target.value }));
 
   return (
     /* El ancho baja a `sm`: una pantalla de ajustes es una columna de
@@ -93,9 +106,34 @@ const PantallaAjustes = () => {
               <Input {...props} value={nombre} onChange={(e) => setNombre(e.target.value)} />
             )}
           </Field>
-          <Field label="Dirección comercial" description="La que sale en las facturas.">
-            {(props) => <Input {...props} defaultValue="Av. Rivadavia 1234, CABA" />}
-          </Field>
+          <ValueField
+            label="Dirección comercial"
+            description="La que sale en las facturas."
+            addLabel="Agregar dirección"
+            editorDescription="Se guarda con el resto de los ajustes."
+            lines={
+              direccion
+                ? [direccion.nombre, direccion.calle, direccion.ciudad, direccion.pais]
+                : undefined
+            }
+            onDone={() => setDireccion(borrador)}
+            onClear={() => setDireccion(null)}
+          >
+            <div className="flex flex-col gap-3">
+              <Field label="Nombre o razón social">
+                {(props) => <Input {...props} value={borrador.nombre} onChange={campo("nombre")} />}
+              </Field>
+              <Field label="Dirección">
+                {(props) => <Input {...props} value={borrador.calle} onChange={campo("calle")} />}
+              </Field>
+              <Field label="Ciudad">
+                {(props) => <Input {...props} value={borrador.ciudad} onChange={campo("ciudad")} />}
+              </Field>
+              <Field label="País">
+                {(props) => <Input {...props} value={borrador.pais} onChange={campo("pais")} />}
+              </Field>
+            </div>
+          </ValueField>
           <Field label="Teléfono">
             {(props) => <Input {...props} defaultValue="+54 11 5555 1234" />}
           </Field>

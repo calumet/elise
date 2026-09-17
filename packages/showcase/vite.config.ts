@@ -22,6 +22,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "index.html"),
         marco: path.resolve(__dirname, "marco.html"),
+        campo: path.resolve(__dirname, "campo.html"),
       },
       output: {
         manualChunks(id) {

@@ -3,6 +3,27 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.20.0
+
+Suben también `elise-alerts` 0.3.4, `elise-tables` 0.4.3 y `elise-toasts` 0.4.5,
+que no cambian por dentro: dependen de `elise-ui` por rango de caret y `^0.19.0`
+no alcanza a la 0.20.0.
+
+### Agrega
+
+- **`ValueField`, el campo cuyo valor es un registro.** Lo resume en sitio, en
+  varias líneas con un lápiz al costado, y lo edita en un `Dialog` aparte; sin
+  valor es una fila que lo abre. El resumen llega en `lines`, ya formateado, y
+  los campos del registro van como hijos. Con `onClear` aparece «Vaciar» junto
+  al rótulo.
+
+  Es para lo que aplanado no se lee: una dirección son cuatro campos y un banner
+  siete, y una lista de tres deja veintiún controles seguidos.
+
+- **`Field` acepta una `action` a la altura del rótulo,** para lo que actúa
+  sobre ese campo y no cabe dentro del control. Lo que actúa sobre el grupo
+  sigue en las `actions` de `Section`.
+
 ## `@calumet/elise-ui` 0.19.0
 
 Suben también `elise-alerts` 0.3.3, `elise-tables` 0.4.2 y `elise-toasts` 0.4.4,

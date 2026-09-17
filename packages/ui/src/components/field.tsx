@@ -121,6 +121,14 @@ export type FieldProps = Omit<React.ComponentProps<"div">, "children"> & {
    */
   labelHidden?: boolean;
 
+  /**
+   * Una acción a la altura del rótulo, alineada al otro extremo.
+   *
+   * Es para lo que actúa sobre este campo y no cabe dentro del control, como
+   * vaciar un valor. Lo que actúa sobre el grupo va en `actions` de `Section`.
+   */
+  action?: React.ReactNode;
+
   /** Fuerza el `id` del control. Por defecto se genera uno. */
   id?: string;
 
@@ -160,6 +168,7 @@ function Field({
   error,
   required,
   labelHidden,
+  action,
   id: idProp,
   children,
   ...props
@@ -171,6 +180,17 @@ function Field({
     required,
   });
 
+  const etiqueta = (
+    <label
+      data-slot="field-label"
+      htmlFor={id}
+      className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
+    >
+      {label}
+      {required ? <FieldRequiredMark /> : null}
+    </label>
+  );
+
   return (
     <div
       data-slot="field"
@@ -178,14 +198,17 @@ function Field({
       className={cn("flex flex-col gap-1.5", className)}
       {...props}
     >
-      <label
-        data-slot="field-label"
-        htmlFor={id}
-        className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
-      >
-        {label}
-        {required ? <FieldRequiredMark /> : null}
-      </label>
+      {action ? (
+        <div className="flex items-center justify-between gap-2">
+          {etiqueta}
+          {/* El margen negativo se come lo que el control de la acción mide de
+              más que el rótulo, así la fila ocupa lo mismo que uno pelado y el
+              campo conserva el ritmo de los demás. */}
+          <div className="-my-1.5 flex items-center">{action}</div>
+        </div>
+      ) : (
+        etiqueta
+      )}
 
       {children(control)}
 
