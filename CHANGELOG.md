@@ -3,6 +3,69 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.19.0
+
+Suben también `elise-alerts` 0.3.3, `elise-tables` 0.4.2 y `elise-toasts` 0.4.4,
+que no cambian por dentro: dependen de `elise-ui` por rango de caret y `^0.18.0`
+no alcanza a la 0.19.0.
+
+### Agrega
+
+- **Una pantalla de ajustes no tenía cómo avisar de cambios sin guardar.** El
+  guardado vivía en un botón al pie, y con cinco secciones ese pie queda varias
+  pantallas por debajo del primer campo: quien cambia el color primario arriba
+  pierde de vista el único control que lo aplica, y nada en la pantalla le dice
+  que el cambio sigue sin guardarse. Deshacer tampoco tenía vía, salvo recargar
+  y llevarse por delante todo lo demás que se hubiera editado.
+
+  `SaveBar` aparece mientras `dirty` y se lleva las dos salidas a una franja
+  fija arriba. Va sobre la superficie invertida, la misma del toast, porque es
+  una capa encima de la pantalla y no una sección suya. El botón del pie se
+  queda donde estaba: la barra avisa, no lo sustituye.
+
+  ```tsx
+  const form = useZodForm(esquema);
+
+  <SaveBar
+    dirty={form.formState.isDirty}
+    saving={form.formState.isSubmitting}
+    onSave={form.handleSubmit(guardar)}
+    onDiscard={() => form.reset()}
+  />;
+  ```
+
+  **Lo sucio entra como booleano y no sale de un contexto de formulario.** Con
+  un contexto, la barra tendría que depender de `react-hook-form`, que no es
+  dependencia de este paquete, y quedaría inservible en un formulario que no use
+  `useZodForm`. Con el booleano no hace falta nada: `useZodForm` devuelve el
+  `UseFormReturn` de react-hook-form, así que `formState.isDirty` ya está ahí.
+
+  **Descartar destruye lo editado, así que pasa por `AlertDialog`** y no por el
+  botón a secas, como fija `reglas-ui.md` § 1.4.
+
+  **Dentro del marco va `AppShellSaveBar`,** que ocupa el sitio del buscador y
+  deja a los lados el botón del cajón y las acciones, que siguen haciendo falta
+  mientras se edita. No se lleva la fila entera: con la fila la barra tapaba la
+  cuenta y los avisos, y en estrecho se comía el ancho completo.
+
+  Lleva la misma receta que el resto de las piezas de la cabecera, `bg-card`
+  bajo el tema oscuro más el contorno, porque contra un fondo casi negro la
+  diferencia de luminosidad no alcanza a dibujar la caja y lo que la define es
+  el borde. Al apretar el ancho el rótulo cede y se recorta, y los
+  botones no: lo que decide si cabe es lo que quede entre el botón del cajón y
+  las acciones, no el ancho de la ventana, así que no hay breakpoint de por
+  medio.
+
+  **`retain` cubre la mitad que es del navegador**: cerrar la pestaña, recargar
+  o escribir otra dirección. Ahí manda `beforeunload`, que pinta su propio
+  diálogo con su propio texto y no se puede sustituir. Se engancha solo mientras
+  haya algo que perder, porque un `beforeunload` puesto siempre le quita a la
+  pestaña el bfcache. Viene apagado.
+
+  La otra mitad, navegar dentro de la aplicación, no tiene evento que valga
+  porque el enrutado es de cada app: esa la conecta la pantalla con su propio
+  enrutador, leyendo el mismo `dirty` que ya le pasa a la barra.
+
 ## `@calumet/elise-ui` 0.18.0 y `elise-alerts` 0.3.2
 
 Suben también `elise-tables` 0.4.1 y `elise-toasts` 0.4.3, que no cambian por

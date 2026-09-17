@@ -24,6 +24,7 @@
 import * as React from "react";
 
 import { Kbd } from "./kbd";
+import { SaveBar, type SaveBarProps } from "./save-bar";
 import { UserMenu, type UserMenuProps } from "./user-menu";
 
 import { cn } from "@/lib/cn";
@@ -253,6 +254,42 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
   );
 }
 AppShellHeader.displayName = "AppShellHeader";
+
+/** Props de {@link AppShellSaveBar}. Las mismas de `SaveBar`. */
+export type AppShellSaveBarProps = SaveBarProps;
+
+/**
+ * La barra de cambios sin guardar, en la fila de la cabecera.
+ *
+ * Es una banda de la cabecera, no la fila entera: ocupa el sitio del buscador y
+ * deja a los lados el botón del cajón y las acciones, que siguen haciendo falta
+ * mientras se edita. Con la fila entera la barra tapaba la cuenta y los avisos,
+ * y en estrecho se comía el ancho completo.
+ *
+ * ```tsx
+ * <AppShellHeader>
+ *   <AppShellNavToggle />
+ *   <AppShellHeaderBrand>…</AppShellHeaderBrand>
+ *   {sucio ? (
+ *     <AppShellSaveBar dirty={sucio} onSave={guardar} onDiscard={descartar} />
+ *   ) : (
+ *     <AppShellHeaderSearch>…</AppShellHeaderSearch>
+ *   )}
+ *   <AppShellHeaderActions>…</AppShellHeaderActions>
+ * </AppShellHeader>
+ * ```
+ */
+function AppShellSaveBar({ className, ...props }: AppShellSaveBarProps): React.JSX.Element {
+  return (
+    <SaveBar
+      data-slot="app-shell-save-bar"
+      // La colocación del buscador, que es la banda cuyo sitio toma.
+      className={cn("w-full min-w-0 flex-1 md:col-start-2 md:flex-none", className)}
+      {...props}
+    />
+  );
+}
+AppShellSaveBar.displayName = "AppShellSaveBar";
 
 /** Props de {@link AppShellHeaderBrand}. */
 export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
@@ -1149,6 +1186,7 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps): Rea
 export {
   AppShell,
   AppShellHeader,
+  AppShellSaveBar,
   AppShellHeaderBrand,
   AppShellHeaderSearch,
   AppShellHeaderActions,

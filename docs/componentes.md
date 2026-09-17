@@ -597,6 +597,7 @@ estado con texto para lectores de pantalla.
 | Progress                                                                               | `@calumet/elise-ui/progress`     | [Progress](https://www.radix-ui.com/primitives/docs/components/progress)        |
 | Skeleton                                                                               | `@calumet/elise-ui/skeleton`     | —                                                                               |
 | Alert, AlertTitle, AlertDescription                                                    | `@calumet/elise-ui/alert`        | —                                                                               |
+| SaveBar                                                                                | `@calumet/elise-ui/save-bar`     | —                                                                               |
 | Badge                                                                                  | `@calumet/elise-ui/badge`        | —                                                                               |
 | Chip                                                                                   | `@calumet/elise-ui/chip`         | —                                                                               |
 | Spinner                                                                                | `@calumet/elise-ui/spinner`      | —                                                                               |
@@ -890,6 +891,7 @@ partes componibles, y por eso vive en su propia categoría.
 import {
   AppShell,
   AppShellHeader,
+  AppShellSaveBar,
   AppShellHeaderBrand,
   AppShellHeaderSearch,
   AppShellHeaderActions,
@@ -947,6 +949,7 @@ import {
 | ----------------------- | ----------------------------------------------------------- |
 | `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho   |
 | `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola             |
+| `AppShellSaveBar`       | Toma el sitio del buscador mientras haya sin guardar        |
 | `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                          |
 | `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                  |
 | `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta        |

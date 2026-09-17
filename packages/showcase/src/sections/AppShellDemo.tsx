@@ -21,6 +21,7 @@ import {
   AppShellHeaderActions,
   AppShellHeaderBrand,
   AppShellHeaderSearch,
+  AppShellSaveBar,
   AppShellMain,
   AppShellNav,
   AppShellNavAction,
@@ -46,7 +47,7 @@ import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropd
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
-const AppShellDemo = () => {
+const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean }) => {
   /* Arranca en la primera hija a propósito: es el caso donde la vertical tiene
      hermanas por debajo y donde se ve que el codo la termina. */
   const [ruta, setRuta] = useState("/segmentos");
@@ -69,13 +70,23 @@ const AppShellDemo = () => {
   const [aviso, setAviso] = useState<string | null>(null);
 
   const [guardando, setGuardando] = useState(false);
+  const [sucio, setSucio] = useState(false);
   const guardar = () => {
     setGuardando(true);
-    setTimeout(() => setGuardando(false), 1600);
+    setTimeout(() => {
+      setGuardando(false);
+      setSucio(false);
+    }, 1600);
   };
 
   return (
-    <div className="h-[560px] w-full overflow-hidden rounded-xl border border-border">
+    <div
+      className={
+        pantallaCompleta
+          ? "h-svh w-full"
+          : "h-[560px] w-full overflow-hidden rounded-xl border border-border"
+      }
+    >
       <AppShell className="h-full">
         <AppShellHeader>
           {/* La hamburguesa va suelta y no dentro de la marca, porque la marca
@@ -87,9 +98,27 @@ const AppShellDemo = () => {
             </Text>
           </AppShellHeaderBrand>
 
-          <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={() => setBuscando(true)}>
-            Buscar
-          </AppShellHeaderSearch>
+          {/* La barra toma el sitio del buscador y deja a los lados el botón
+                del cajón y las acciones, que siguen haciendo falta mientras se
+                edita. */}
+          {sucio ? (
+            <AppShellSaveBar
+              dirty
+              saving={guardando}
+              onSave={() => {
+                setGuardando(true);
+                window.setTimeout(() => {
+                  setGuardando(false);
+                  setSucio(false);
+                }, 900);
+              }}
+              onDiscard={() => setSucio(false)}
+            />
+          ) : (
+            <AppShellHeaderSearch shortcut={["Ctrl", "K"]} onClick={() => setBuscando(true)}>
+              Buscar
+            </AppShellHeaderSearch>
+          )}
 
           {/* Las acciones van antes del menú de la cuenta, que es el ancla de
               la esquina: al revés bailaría de sitio en cada pantalla. */}
@@ -260,11 +289,21 @@ const AppShellDemo = () => {
             <Button loading={guardando} onClick={guardar}>
               Guardar cambios
             </Button>
-            <Button variant="outline">Descartar</Button>
+            <Button variant="outline" onClick={() => setSucio(false)}>
+              Descartar
+            </Button>
             <Button variant="ghost" disabled>
               No disponible
             </Button>
+            <Button variant="outline" onClick={() => setSucio(true)}>
+              Ensuciar el formulario
+            </Button>
           </div>
+          <Text size="xs" tone="muted" className="mt-2">
+            Pulsa «Ensuciar el formulario»: la barra de cambios sin guardar toma el sitio del
+            buscador y deja a los lados el botón del cajón y las acciones. Al apretar el ancho el
+            rótulo cede y se recorta; los botones no.
+          </Text>
           <Text size="xs" tone="muted" className="mt-2">
             Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva su
             ancho y no empuja a los de al lado.
