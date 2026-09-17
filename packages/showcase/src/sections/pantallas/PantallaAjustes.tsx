@@ -117,6 +117,7 @@ const PantallaAjustes = () => {
                 : undefined
             }
             onDone={() => setDireccion(borrador)}
+            onClear={() => setDireccion(null)}
           >
             <div className="flex flex-col gap-3">
               <Field label="Nombre o razón social">

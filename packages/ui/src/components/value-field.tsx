@@ -56,6 +56,15 @@ export type ValueFieldProps = Omit<React.ComponentProps<"div">, "children" | "on
   /** Se llama al cancelar, antes de cerrar. */
   onCancel?: () => void;
 
+  /**
+   * Vacía el campo. Con esto aparece «Vaciar» junto al rótulo mientras haya
+   * valor. Sin esto, el campo no se puede vaciar desde acá.
+   */
+  onClear?: () => void;
+
+  /** El rótulo de esa acción. Por defecto, «Vaciar». */
+  clearLabel?: React.ReactNode;
+
   /** Los campos del registro, dentro del modal. */
   children?: React.ReactNode;
 };
@@ -89,8 +98,9 @@ export type ValueFieldProps = Omit<React.ComponentProps<"div">, "children" | "on
  * </ValueField>
  * ```
  *
- * Vaciar el campo no vive acá: es una acción del grupo, y `Section` ya acepta
- * `actions`.
+ * Con `onClear` aparece «Vaciar» junto al rótulo mientras haya valor. Va ahí y
+ * no en las `actions` de `Section`, porque esas nombran al grupo: en una sección
+ * con cuatro campos, «Vaciar» arriba no dice a cuál vacía.
  */
 export function ValueField({
   className,
@@ -105,6 +115,8 @@ export function ValueField({
   size = "md",
   onDone,
   onCancel,
+  onClear,
+  clearLabel,
   children,
   ...props
 }: ValueFieldProps): React.JSX.Element {
@@ -114,6 +126,7 @@ export function ValueField({
   const rotuloEditar = useElLabel("ui", "valueFieldEdit", "Editar");
   const rotuloCancelar = useElLabel("ui", "valueFieldCancel", "Cancelar");
   const rotuloListo = useElLabel("ui", "valueFieldDone", "Listo");
+  const rotuloVaciar = useElLabel("ui", "valueFieldClear", "Vaciar");
 
   const lleno = Boolean(lines?.length);
 
@@ -181,6 +194,13 @@ export function ValueField({
         description={description}
         error={error}
         required={required}
+        action={
+          lleno && onClear ? (
+            <Button variant="ghost" size="sm" disabled={disabled} onClick={onClear}>
+              {clearLabel ?? rotuloVaciar}
+            </Button>
+          ) : null
+        }
         {...props}
       >
         {(control) => (lleno ? resumen(control) : vacio(control))}
