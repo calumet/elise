@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.21.0
+
+Suben también `elise-alerts` 0.3.5, `elise-tables` 0.4.4 y `elise-toasts` 0.4.6,
+que no cambian por dentro: dependen de `elise-ui` por rango de caret y `^0.20.0`
+no alcanza a la 0.21.0.
+
+### Agrega
+
+- **`FileField`, el campo de un archivo para un formulario de ajustes.** Ocupa
+  una fila: miniatura, nombre, peso y el botón de subir o reemplazar, con
+  «Quitar» junto al rótulo. Entrega el `File` por `onChange` y nada más; subirlo
+  es de la app, y `progress` es por dónde vuelve ese estado. Soltar encima
+  funciona, y se marca solo cuando ya hay algo encima.
+
+  `FileUpload` se queda donde estaba, para adjuntar varios de una. Este es para
+  cuando el archivo es un ajuste: el logo de un portal entre el nombre y el
+  color, donde una zona de arrastre de 130px se lleva la sección.
+
 ## `@calumet/elise-ui` 0.20.0
 
 Suben también `elise-alerts` 0.3.4, `elise-tables` 0.4.3 y `elise-toasts` 0.4.5,

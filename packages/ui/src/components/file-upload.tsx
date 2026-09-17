@@ -51,14 +51,14 @@ export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
 };
 
 /** Formatea un tamaño en bytes a la unidad que le queda cómoda, por ejemplo `"1,2 MB"`. */
-const formatearTamano = (bytes: number): string => {
+export const formatearTamano = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
 /** Comprueba un archivo contra el atributo `accept` nativo. */
-const tipoAceptado = (file: File, accept?: string) => {
+export const tipoAceptado = (file: File, accept?: string): boolean => {
   if (!accept) return true;
   return accept
     .split(",")
