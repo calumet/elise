@@ -99,20 +99,22 @@ export const ColorPicker: React.ForwardRefExoticComponent<
     /* Solo se relee el prop cuando dice algo distinto de lo que este selector
        acaba de emitir. Si se releyera siempre, el tono se perdería al pasar por
        negro: el hex no lo lleva, y volver de #000000 dejaría el área en rojo. */
-    const ultimoEmitido = React.useRef(hex);
-    React.useEffect(() => {
-      if (value === undefined || value === ultimoEmitido.current) return;
-      const leido = analizar(value);
-      // oxlint-disable-next-line react/set-state-in-effect -- en el render habría que leer `ultimoEmitido`, que es un ref.
-      if (leido) setColor(leido);
-    }, [value]);
+    const [ultimoEmitido, setUltimoEmitido] = React.useState(hex);
+    const [valuePrevio, setValuePrevio] = React.useState(value);
+    if (value !== valuePrevio) {
+      setValuePrevio(value);
+      if (value !== undefined && value !== ultimoEmitido) {
+        const leido = analizar(value);
+        if (leido) setColor(leido);
+      }
+    }
 
     const emitir = React.useCallback(
       (siguiente: Color, cerrado: boolean) => {
         setColor(siguiente);
         setEscrito(null);
         const texto = aHex(siguiente, alpha);
-        ultimoEmitido.current = texto;
+        setUltimoEmitido(texto);
         onValueChange?.(texto);
         if (cerrado) onValueCommit?.(texto);
       },
@@ -171,7 +173,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
       const siguiente = alpha ? leido : { ...leido, alfa: 1 };
       setColor(siguiente);
       const emitido = aHex(siguiente, alpha);
-      ultimoEmitido.current = emitido;
+      setUltimoEmitido(emitido);
       onValueChange?.(emitido);
       onValueCommit?.(emitido);
     };

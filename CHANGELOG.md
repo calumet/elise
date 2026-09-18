@@ -3,6 +3,14 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.21.2
+
+### Corrige
+
+- **El cajón del `AppShell` ya no puede quedar abierto en escritorio.** Su
+  apertura se deriva del ancho en vez de sincronizarse con un efecto, así que
+  por encima del breakpoint no hay overlay ni montando ya ancho.
+
 ## `@calumet/elise-ui` 0.21.1
 
 ### Corrige
