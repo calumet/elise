@@ -25,10 +25,10 @@
 
 import * as React from "react";
 
-import { InlineError } from "./inline-error";
-
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
+
+import { InlineError } from "./inline-error";
 
 /** Props que el campo tiene que recibir para quedar bien enlazado. */
 export type FieldControlProps = {

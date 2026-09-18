@@ -8,9 +8,9 @@ import { Search } from "@calumet/elise-icons";
 import { Command as CommandPrimitive } from "cmdk";
 import * as React from "react";
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
-
 import { cn } from "@/lib/cn";
+
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 
 /** Raíz de la paleta de comandos. Filtra y recorre con el teclado. */
 function Command({

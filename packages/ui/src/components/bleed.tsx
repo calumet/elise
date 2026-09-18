@@ -11,9 +11,9 @@
 
 import * as React from "react";
 
-import type { SpaceScale } from "./box";
-
 import { cn } from "@/lib/cn";
+
+import type { SpaceScale } from "./box";
 
 /** Props de {@link Bleed}. */
 export type BleedProps = React.ComponentProps<"div"> & {

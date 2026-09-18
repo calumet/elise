@@ -8,10 +8,10 @@ import { ChevronDown, Menu, X } from "@calumet/elise-icons";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
-
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
+
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
 
 /* El grupo de desbordamiento es un item aunque no lleve el mismo `data-slot`. */
 const SELECTOR_ITEM = '[data-slot="navigation-menu-item"],[data-slot="navigation-menu-overflow"]';

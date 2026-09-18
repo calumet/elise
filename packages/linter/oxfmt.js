@@ -1,4 +1,4 @@
-// @ts-self-types="./prettier.d.ts"
+// @ts-self-types="./oxfmt.d.ts"
 
 export default {
   semi: true,
@@ -16,4 +16,7 @@ export default {
   proseWrap: "preserve",
   htmlWhitespaceSensitivity: "css",
   embeddedLanguageFormatting: "auto",
+  sortImports: true,
+  // Reordenar las claves de un package.json es tocar contenido, no formato.
+  sortPackageJson: false,
 };

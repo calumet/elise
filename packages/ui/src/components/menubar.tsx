@@ -8,9 +8,9 @@ import { Circle, ChevronDown } from "@calumet/elise-icons";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import * as React from "react";
 
-import { useThemeScope } from "./theme-scope";
-
 import { cn } from "@/lib/cn";
+
+import { useThemeScope } from "./theme-scope";
 
 const baseItem =
   "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground";

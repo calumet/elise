@@ -251,7 +251,7 @@ import { Search, ChevronDown } from "@calumet/elise-icons";
 
 ## Linter y formato
 
-Para configurar Oxlint/Prettier con los presets de Elise, consulta [Linter y formato](linter.md).
+Para configurar Oxlint/Oxfmt con los presets de Elise, consulta [Linter y formato](linter.md).
 
 ---
 

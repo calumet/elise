@@ -13,10 +13,10 @@
 
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { Avatar, AvatarFallback, inicialesDe } from "./avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu";
-
-import { cn } from "@/lib/cn";
 
 /** Props de {@link UserMenu}. */
 export type UserMenuProps = {

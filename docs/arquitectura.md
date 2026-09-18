@@ -27,7 +27,7 @@ elise/
 │   ├── alerts/       @calumet/elise-alerts    Sistema de alertas
 │   ├── i18n/         @calumet/elise-i18n      Internacionalizacion (Intl)
 │   ├── icons/        @calumet/elise-icons     Iconos (Lucide)
-│   ├── linter/       @calumet/elise-linter    Config Oxlint + Prettier
+│   ├── linter/       @calumet/elise-linter    Config Oxlint + Oxfmt
 │   ├── showcase/     showcase                 App demo
 │   └── blocks/       (futuro)                 Bloques prefabricados
 ├── package.json                                Scripts globales
@@ -124,7 +124,7 @@ Wrapper de re-exportación sobre [`lucide-react`](https://lucide.dev/icons/). Ce
 Configuración compartida de herramientas de calidad de código:
 
 - **Oxlint**: dos configuraciones extensibles, los exports `base` y `react`
-- **Prettier**: 100 caracteres, 2 espacios, trailing commas, LF
+- **Oxfmt**: 100 caracteres, 2 espacios, trailing commas, LF, y el orden de imports
 - Plugins base: `typescript` e `import`, nativos de Oxlint
 
 Ver setup completo en [Linter y formato](linter.md).

@@ -7,9 +7,9 @@
 import * as FormPrimitive from "@radix-ui/react-form";
 import * as React from "react";
 
-import { InlineError } from "./inline-error";
-
 import { cn } from "@/lib/cn";
+
+import { InlineError } from "./inline-error";
 
 /** Raíz del formulario. Reparte el estado de validación a los campos. */
 export const Form = FormPrimitive.Root;

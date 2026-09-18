@@ -18,10 +18,10 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { FieldRequiredMark, useFieldIds } from "./field";
 import { InlineError } from "./inline-error";
-
-import { cn } from "@/lib/cn";
 
 /* El grupo baja el id de su error para que una opción concreta pueda señalarse
    como la culpable con `invalid`. Sin esto, marcar una opción como inválida

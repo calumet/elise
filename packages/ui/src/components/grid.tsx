@@ -8,10 +8,10 @@
 
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import type { SpaceScale } from "./box";
 import { gapClasses } from "./stack";
-
-import { cn } from "@/lib/cn";
 
 /** Las columnas que admite `Grid`. */
 export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 12;

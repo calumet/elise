@@ -30,7 +30,7 @@ elise/
     alerts/       # Sistema de alertas modales (event bus + AlertHost)
     i18n/         # Internacionalización y formateo (Intl)
     icons/        # Iconos (re-export de Lucide)
-    linter/       # Config compartida de Oxlint + Prettier
+    linter/       # Config compartida de Oxlint + Oxfmt
     showcase/     # App demo interactiva (Vite + React 19)
     blocks/       # (reservado para uso futuro)
   docs/           # Documentación del proyecto
@@ -78,7 +78,7 @@ La showcase incluye demos de todos los componentes y utilidades. Si agregas un c
 
 ## Estilo de Código
 
-La configuración de Oxlint y Prettier está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
+La configuración de Oxlint y Oxfmt está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
 
 - El repositorio extiende el export `base`; un proyecto con React extiende `react`.
 

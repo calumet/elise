@@ -19,12 +19,12 @@
 import { Clock } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import { Field } from "./field";
 import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 const PATRON = /^(\d{1,2}):(\d{2})$/;
 

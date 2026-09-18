@@ -20,10 +20,10 @@
 
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { FieldRequiredMark, useFieldIds } from "./field";
 import { InlineError } from "./inline-error";
-
-import { cn } from "@/lib/cn";
 
 /** Props de {@link CheckboxGroup}. */
 export type CheckboxGroupProps = {

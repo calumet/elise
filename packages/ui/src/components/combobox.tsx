@@ -27,6 +27,9 @@
 import { Check, ChevronsUpDown, X } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import { Badge } from "./badge";
 import { Chip } from "./chip";
 import {
@@ -41,9 +44,6 @@ import {
 import { TAMANOS_CAMPO, type TamanoCampo } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Spinner } from "./spinner";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ *
  * Primitivo componible

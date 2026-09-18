@@ -8,6 +8,9 @@ import { X } from "@calumet/elise-icons";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import {
   CABECERA_DIALOGO,
   CUERPO_DIALOGO,
@@ -16,9 +19,6 @@ import {
   TITULO_DIALOGO,
 } from "./dialog";
 import { useThemeScope } from "./theme-scope";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 /** Raíz del panel lateral. Guarda si está abierto. */
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>): React.JSX.Element {

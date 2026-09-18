@@ -18,11 +18,11 @@
 
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { Chip } from "./chip";
 import { Field } from "./field";
 import { CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
-
-import { cn } from "@/lib/cn";
 
 /** Props de {@link TagInput}. */
 export type TagInputProps = {

@@ -24,10 +24,10 @@ import { Check, Minus } from "@calumet/elise-icons";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { FieldRequiredMark, useFieldIds } from "./field";
 import { InlineError } from "./inline-error";
-
-import { cn } from "@/lib/cn";
 
 /** Props de {@link Checkbox}. */
 export type CheckboxProps = {

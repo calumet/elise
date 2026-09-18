@@ -7,9 +7,9 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 
-import { useThemeScope } from "./theme-scope";
-
 import { cn } from "@/lib/cn";
+
+import { useThemeScope } from "./theme-scope";
 
 /** Reparte a los tooltips de abajo la demora compartida, para que abrir uno y moverse al siguiente no espere de nuevo. */
 function TooltipProvider({

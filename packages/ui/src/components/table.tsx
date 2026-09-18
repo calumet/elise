@@ -28,6 +28,9 @@
 
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { SUPERFICIE } from "@/lib/superficie";
+
 import {
   Pagination,
   PaginationContent,
@@ -38,9 +41,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./pagination";
-
-import { cn } from "@/lib/cn";
-import { SUPERFICIE } from "@/lib/superficie";
 
 /** Las clases de la superficie que comparten `Card` y `Table`, para que las dos cajas del sistema no se separen. */
 export { SUPERFICIE };

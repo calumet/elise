@@ -50,7 +50,7 @@ export default {
     "icons.body": "Lucide re-exportado con tipos, para tener la dependencia en un solo sitio.",
     "linter.title": "Linter y formato",
     "linter.body":
-      "La configuración de ESLint 9 y Prettier que usa el monorepo, para extender en tu repo.",
+      "La configuración de Oxlint y Oxfmt que usa el monorepo, para extender en tu repo.",
   },
 
   install: {
@@ -75,8 +75,7 @@ export default {
       "El aviso de abajo salió de `toast.success()` dentro del handler, sin providers anidados.",
     "note.forms":
       "«Registrar trabajo» abre un formulario con `useZodForm`. Borrar llama a `confirm()` y espera la promesa.",
-    "note.icons":
-      "Los iconos vienen tipados de Lucide y el repo entero pasa por el mismo ESLint 9.",
+    "note.icons": "Los iconos vienen tipados de Lucide y el repo entero pasa por el mismo Oxlint.",
 
     "app.name": "COMA",
     "app.org": "UIS",

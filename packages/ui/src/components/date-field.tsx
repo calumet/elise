@@ -29,13 +29,13 @@
 import { Calendar as CalendarIcon } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import { Calendar } from "./calendar";
 import { Field } from "./field";
 import { CAJA_CAMPO, CAMPO_INVALIDO } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 const PATRON = /^(\d{4})-(\d{2})-(\d{2})$/;
 

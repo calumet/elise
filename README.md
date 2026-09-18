@@ -13,7 +13,7 @@ Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind C
 | [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                              |
 | [`@calumet/elise-i18n`](packages/i18n)     | Internacionalización: `I18nProvider`, hooks y formateo `Intl` (dates, numbers)    |
 | [`@calumet/elise-icons`](packages/icons)   | Re-export de [Lucide Icons](https://lucide.dev/icons/)                            |
-| [`@calumet/elise-linter`](packages/linter) | Configuración compartida de Oxlint y Prettier                                     |
+| [`@calumet/elise-linter`](packages/linter) | Configuración compartida de Oxlint y Oxfmt                                        |
 | [`showcase`](packages/showcase)            | App demo interactiva con ejemplos de todos los componentes                        |
 
 ## Requisitos
@@ -84,7 +84,7 @@ El paso a paso completo está en la [Guía de inicio](docs/guia-inicio.md#instal
 | `pnpm build`        | Build de producción (icons → ui → i18n → forms → tables → toasts → alerts → showcase) |
 | `pnpm lint`         | Verificar Oxlint                                                                      |
 | `pnpm lint:fix`     | Corregir problemas de Oxlint                                                          |
-| `pnpm format`       | Formatear con Prettier                                                                |
+| `pnpm format`       | Formatear con Oxfmt                                                                   |
 | `pnpm format:check` | Verificar formato                                                                     |
 | `pnpm audit:visual` | Auditoría visual del showcase en Chromium (ver [docs](docs/auditoria-visual.md))      |
 | `pnpm jsr:check`    | Simular la publicación en JSR de todo el workspace (ver [docs](docs/publicar-jsr.md)) |
@@ -102,7 +102,7 @@ elise/
 │   ├── alerts/       # Sistema de alertas modales
 │   ├── i18n/         # Internacionalización (Intl)
 │   ├── icons/        # Iconos (Lucide)
-│   ├── linter/       # Config Oxlint + Prettier
+│   ├── linter/       # Config Oxlint + Oxfmt
 │   ├── showcase/     # App demo (Vite + React 19)
 │   └── blocks/       # (reservado para uso futuro)
 ├── package.json
