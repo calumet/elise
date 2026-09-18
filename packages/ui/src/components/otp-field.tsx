@@ -53,8 +53,9 @@ export const OTPField: React.ForwardRefExoticComponent<
        ya está vencido. Todo handler que reaccione a un foco programático tiene
        que leer el valor de este ref. */
     const valueRef = React.useRef(value);
-    // oxlint-disable-next-line react/refs -- escribirlo en un efecto llega tarde: `onFocus` corre antes del siguiente render.
-    valueRef.current = value;
+    React.useLayoutEffect(() => {
+      valueRef.current = value;
+    });
 
     const setValue = (next: string) => {
       const normalized = next.slice(0, length);

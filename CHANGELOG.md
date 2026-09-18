@@ -3,6 +3,22 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.6.0
+
+### Rompe
+
+- **`typescript/no-explicit-any` pasa de apagada a error.** Venía apagada del
+  config de ESLint y este repositorio no tiene ni un `any`, así que estaba
+  apagada sin nada que tapar. Quien extienda el preset y sí los tenga, los verá.
+
+## `@calumet/elise-ui` 0.21.2
+
+### Corrige
+
+- **El cajón del `AppShell` ya no puede quedar abierto en escritorio.** Su
+  apertura se deriva del ancho en vez de sincronizarse con un efecto, así que
+  por encima del breakpoint no hay overlay ni montando ya ancho.
+
 ## `@calumet/elise-ui` 0.21.1
 
 ### Corrige

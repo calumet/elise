@@ -105,8 +105,14 @@ function AppShell({
 }: AppShellProps): React.JSX.Element {
   const [interno, setInterno] = React.useState(defaultNavOpen);
   const controlado = navOpen !== undefined;
-  const abierto = controlado ? navOpen : interno;
   const esMovil = useIsMobile();
+
+  /* El cajón solo existe por debajo del breakpoint. Por encima se cierra en el
+     propio render, que es donde React admite ajustar el estado de uno mismo, y
+     además se deriva del ancho: así el overlay no existe en escritorio ni
+     siquiera montando ya ancho, que antes dejaba el contenido tapado e inerte. */
+  if (!esMovil && interno) setInterno(false);
+  const abierto = (controlado ? navOpen : interno) === true && esMovil;
 
   const setCajonAbierto = React.useCallback(
     (siguiente: boolean) => {
@@ -115,17 +121,6 @@ function AppShell({
     },
     [controlado, onNavOpenChange],
   );
-
-  /* El cajón solo existe por debajo del breakpoint. Al pasar de ahí desaparece,
-     y si siguiera abierto dejaría el contenido inerte sin nada que lo tape.
-     Se mira el ancho de verdad y no solo su cambio: antes se escuchaba el
-     evento `change` de la media query, que no se dispara al montar, así que
-     montar con el cajón abierto por encima de 768px dejaba el contenido inerte
-     para siempre, inalcanzable y a la vista. */
-  React.useEffect(() => {
-    // oxlint-disable-next-line react/set-state-in-effect -- no puede ir en el render: `setCajonAbierto` avisa al padre por `onNavOpenChange`.
-    if (abierto && !esMovil) setCajonAbierto(false);
-  }, [abierto, esMovil, setCajonAbierto]);
 
   React.useEffect(() => {
     if (!abierto) return;

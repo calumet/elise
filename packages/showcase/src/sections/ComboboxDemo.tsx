@@ -81,21 +81,23 @@ const CATALOGO = [
 const BusquedaAsincrona = () => {
   const [abierto, setAbierto] = useState(false);
   const [texto, setTexto] = useState("");
-  const [cargando, setCargando] = useState(false);
   const [resultados, setResultados] = useState<string[]>([]);
+  const [consultado, setConsultado] = useState<string | null>(null);
   const [elegido, setElegido] = useState("");
+
+  const consulta = texto.trim().toLowerCase();
 
   useEffect(() => {
     if (!abierto) return;
-    // oxlint-disable-next-line react/set-state-in-effect -- la demo finge una búsqueda remota, y ese es el sistema externo.
-    setCargando(true);
     const id = setTimeout(() => {
-      const q = texto.trim().toLowerCase();
-      setResultados(CATALOGO.filter((p) => p.includes(q)));
-      setCargando(false);
+      setResultados(CATALOGO.filter((p) => p.includes(consulta)));
+      setConsultado(consulta);
     }, 450);
     return () => clearTimeout(id);
-  }, [texto, abierto]);
+  }, [consulta, abierto]);
+
+  // Está cargando mientras lo que se ve no corresponde a lo que hay escrito.
+  const cargando = abierto && consultado !== consulta;
 
   return (
     <Combobox value={elegido} onValueChange={setElegido} open={abierto} onOpenChange={setAbierto}>
