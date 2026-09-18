@@ -27,13 +27,13 @@ elise/
 │   ├── alerts/       @calumet/elise-alerts    Sistema de alertas
 │   ├── i18n/         @calumet/elise-i18n      Internacionalizacion (Intl)
 │   ├── icons/        @calumet/elise-icons     Iconos (Lucide)
-│   ├── linter/       @calumet/elise-linter    Config ESLint + Prettier
+│   ├── linter/       @calumet/elise-linter    Config Oxlint + Prettier
 │   ├── showcase/     showcase                 App demo
 │   └── blocks/       (futuro)                 Bloques prefabricados
 ├── package.json                                Scripts globales
 ├── pnpm-workspace.yaml                         Config workspaces
 ├── tsconfig.base.json                          TypeScript base compartido
-└── eslint.config.js                            ESLint raiz (flat config)
+└── oxlint.config.ts                            Oxlint raiz, extiende el del linter
 ```
 
 ## Grafo de dependencias
@@ -123,10 +123,9 @@ Wrapper de re-exportación sobre [`lucide-react`](https://lucide.dev/icons/). Ce
 
 Configuración compartida de herramientas de calidad de código:
 
-- **ESLint** (flat config): tres presets combinables — `base`, `react`, `tailwind`
+- **Oxlint**: dos configuraciones extensibles, los exports `base` y `react`
 - **Prettier**: 100 caracteres, 2 espacios, trailing commas, LF
-- Plugins base: `@typescript-eslint`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-import`
-- Tailwind lint opcional: `eslint-plugin-better-tailwindcss` (solo si usas `configs.tailwind`)
+- Plugins base: `typescript` e `import`, nativos de Oxlint
 
 Ver setup completo en [Linter y formato](linter.md).
 

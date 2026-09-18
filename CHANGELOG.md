@@ -3,6 +3,30 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.3.0
+
+### Rompe
+
+- **La configuración pasa de ESLint a Oxlint.** ESLint 9 llegó al fin de su
+  soporte el 6 de agosto de 2026. `configs.base`, `configs.react` y
+  `configs.tailwind` desaparecen, y con ellos el export raíz del paquete; en su
+  lugar salen dos objetos que se extienden desde `oxlint.config.ts`:
+
+  ```ts
+  import { defineConfig } from "oxlint";
+
+  import { base } from "@calumet/elise-linter/oxlint";
+
+  export default defineConfig({ extends: [base] });
+  ```
+
+  `react` es el otro. Va en `oxlint.config.ts` y no en `.oxlintrc.json` porque
+  el formato JSON no resuelve imports de paquetes, así que pide Node 22.18 o 24
+  en adelante. El preset de Tailwind no tiene reemplazo todavía.
+
+- **`import/order` ya no se comprueba.** Oxlint no la va a implementar. Quien la
+  quiera puede ordenar con `@ianvs/prettier-plugin-sort-imports` desde Prettier.
+
 ## `@calumet/elise-ui` 0.21.0
 
 Suben también `elise-alerts` 0.3.5, `elise-tables` 0.4.4 y `elise-toasts` 0.4.6,

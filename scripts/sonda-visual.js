@@ -11,8 +11,6 @@
  * pone el conductor antes de llamar.
  */
 
-/* eslint-env browser */
-
 (() => {
   /* --- utilidades compartidas --- */
 

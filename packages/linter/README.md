@@ -1,6 +1,6 @@
 # @calumet/elise-linter
 
-Configuración compartida de ESLint y Prettier. Los proyectos de Calumet la consumen entera en vez de copiar reglas entre repositorios.
+Configuración compartida de Oxlint y Prettier. Los proyectos de Calumet la consumen entera en vez de copiar reglas entre repositorios.
 
 ## Instalación
 
@@ -9,26 +9,27 @@ pnpm add -D jsr:@calumet/elise-linter   # JSR
 pnpm add -D @calumet/elise-linter       # GitHub Packages
 ```
 
-Requiere ESLint 9 y Prettier 3. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
+Requiere Oxlint 1.80 y Prettier 3. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
 
-## ESLint
+## Oxlint
 
-Tres configuraciones planas, cada una construida sobre la anterior:
+Dos configuraciones, la de React construida sobre la base:
 
-| Config             | Para qué                                                        |
-| ------------------ | --------------------------------------------------------------- |
-| `configs.base`     | TypeScript y orden de imports                                   |
-| `configs.react`    | Lo anterior más React y las reglas de hooks                     |
-| `configs.tailwind` | Lo anterior más el orden y la validez de las clases de Tailwind |
+| Export  | Para qué                            |
+| ------- | ----------------------------------- |
+| `base`  | TypeScript e imports                |
+| `react` | Lo anterior más las reglas de React |
 
-```js
-// eslint.config.js
-import { configs } from "@calumet/elise-linter";
+```ts
+// oxlint.config.ts
+import { defineConfig } from "oxlint";
 
-export default [...configs.react];
+import { base } from "@calumet/elise-linter/oxlint";
+
+export default defineConfig({ extends: [base] });
 ```
 
-`configs.tailwind` carga `eslint-plugin-better-tailwindcss` recién cuando se accede a la propiedad, así que hay que instalarlo junto con `tailwindcss`. Si falta, ESLint corta con el comando de instalación en el mensaje.
+Va en `oxlint.config.ts` porque `.oxlintrc.json` no resuelve imports de paquetes. Necesita Node 22.18 o 24 en adelante.
 
 ## Prettier
 
