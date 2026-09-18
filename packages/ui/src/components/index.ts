@@ -77,6 +77,7 @@ export * from "./toast";
 export * from "./toggle";
 export * from "./toggle-group";
 export * from "./toolbar";
+export * from "./file-field";
 export * from "./tooltip";
 export * from "./value-field";
 export * from "./skeleton";

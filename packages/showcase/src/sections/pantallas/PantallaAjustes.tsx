@@ -5,6 +5,7 @@ import { CheckboxGroup } from "@calumet/elise-ui/checkbox-group";
 import { Clickable } from "@calumet/elise-ui/clickable";
 import { Container } from "@calumet/elise-ui/container";
 import { Field } from "@calumet/elise-ui/field";
+import { FileField, type StoredFile } from "@calumet/elise-ui/file-field";
 import { Input } from "@calumet/elise-ui/input";
 import { RadioGroup, RadioGroupItem } from "@calumet/elise-ui/radio-group";
 import { SaveBar } from "@calumet/elise-ui/save-bar";
@@ -76,6 +77,9 @@ const PantallaAjustes = () => {
   const campo = (clave: keyof Direccion) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setBorrador((previo) => ({ ...previo, [clave]: e.target.value }));
 
+  const [logo, setLogo] = React.useState<File | StoredFile | null>(null);
+  const [errorLogo, setErrorLogo] = React.useState<string>();
+
   return (
     /* El ancho baja a `sm`: una pantalla de ajustes es una columna de
      formularios, y más ancha deja los campos más largos que lo que se escribe
@@ -137,6 +141,26 @@ const PantallaAjustes = () => {
           <Field label="Teléfono">
             {(props) => <Input {...props} defaultValue="+54 11 5555 1234" />}
           </Field>
+          <FileField
+            label="Logo de la tienda"
+            description="SVG o PNG, hasta 2 MB. Se ve en la cabecera y en las facturas."
+            accept="image/*"
+            maxSize={2 * 1024 * 1024}
+            value={logo}
+            error={errorLogo}
+            emptyLabel="Todavía no hay logo"
+            onChange={(archivo) => {
+              setLogo(archivo);
+              setErrorLogo(undefined);
+            }}
+            onReject={({ file, reason }) =>
+              setErrorLogo(
+                reason === "size"
+                  ? `El archivo pesa ${(file.size / 1024 / 1024).toFixed(1)} MB y el máximo son 2.`
+                  : "Tiene que ser una imagen.",
+              )
+            }
+          />
           <RadioGroup label="Moneda principal" defaultValue="ars">
             <RadioGroupItem value="ars" label="Peso argentino ($)" />
             <RadioGroupItem value="usd" label="Dólar estadounidense (US$)" />
