@@ -1,15 +1,14 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "license": "MIT",
   "exports": {
-    ".": "./index.js",
     "./prettier": "./prettier.js"
   },
   "publish": {
     "include": [
-      "index.js",
-      "index.d.ts",
+      "oxlint.json",
+      "oxlint.react.json",
       "prettier.js",
       "prettier.d.ts",
       "package.json",

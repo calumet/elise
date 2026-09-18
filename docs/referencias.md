@@ -50,7 +50,7 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 | **tsup**              | Bundler de paquetes de librería (ESM + CJS + .d.ts)  | https://tsup.egoist.dev/                                        |
 | **Vite**              | Dev server de la app showcase                        | https://vite.dev/                                               |
 | **@tailwindcss/vite** | Integración de Tailwind CSS v4 en Vite (sin PostCSS) | https://tailwindcss.com/docs/installation/framework-guides/vite |
-| **ESLint**            | Linter de código (flat config)                       | https://eslint.org/                                             |
+| **Oxlint**            | Linter de código, en Rust                            | https://oxc.rs/docs/guide/usage/linter.html                     |
 | **Prettier**          | Formateador de código                                | https://prettier.io/                                            |
 
 ## Design systems de referencia

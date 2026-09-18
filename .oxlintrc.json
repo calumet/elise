@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./node_modules/@calumet/elise-linter/oxlint.json"],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/jsr/**",
+    "**/.turbo/**",
+    "**/build/**",
+    "**/.next/**"
+  ]
+}

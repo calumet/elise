@@ -75,7 +75,7 @@ escrita, no inferida. Lo que sale del dry-run como error:
 - **Sin `export =` ni `import ... = require(...)`**, solo ESM.
 
 `@calumet/elise-linter` sale con un warning por ser JavaScript sin declaraciones.
-Es un paquete de configuración de ESLint y Prettier, no una librería de tipos:
+Es un paquete de configuración de Oxlint y Prettier, no una librería de tipos:
 el warning no bloquea el publish y no vale la pena reescribirlo en TypeScript
 para callarlo.
 

@@ -1,0 +1,8 @@
+{
+  "extends": ["./oxlint.json"],
+  "plugins": ["typescript", "import", "react"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-pascal-case": "error"
+  }
+}

@@ -30,7 +30,7 @@ elise/
     alerts/       # Sistema de alertas modales (event bus + AlertHost)
     i18n/         # Internacionalización y formateo (Intl)
     icons/        # Iconos (re-export de Lucide)
-    linter/       # Config compartida de ESLint + Prettier
+    linter/       # Config compartida de Oxlint + Prettier
     showcase/     # App demo interactiva (Vite + React 19)
     blocks/       # (reservado para uso futuro)
   docs/           # Documentación del proyecto
@@ -78,10 +78,9 @@ La showcase incluye demos de todos los componentes y utilidades. Si agregas un c
 
 ## Estilo de Código
 
-La configuración de ESLint y Prettier está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
+La configuración de Oxlint y Prettier está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
 
-- Para proyectos no web usa `configs.base` o `configs.react`.
-- Si usas `configs.tailwind`, instala también `tailwindcss` y `eslint-plugin-better-tailwindcss`.
+- El repositorio extiende `oxlint.json`; un proyecto con React extiende `oxlint.react.json`.
 
 - Usa TypeScript para todo el código.
 - Sigue el estilo de código existente.

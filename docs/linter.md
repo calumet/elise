@@ -1,70 +1,57 @@
 # Linter y Formato
 
-`@calumet/elise-linter` centraliza la configuración de ESLint y Prettier para proyectos TypeScript.
+`@calumet/elise-linter` centraliza la configuración de Oxlint y Prettier para proyectos TypeScript.
 
 ## Instalación
 
 Instala las herramientas base en tu proyecto:
 
 ```bash
-pnpm add -D @calumet/elise-linter eslint prettier typescript
+pnpm add -D @calumet/elise-linter oxlint prettier typescript
 ```
 
-## ESLint (flat config)
+## Oxlint
+
+La configuración se extiende desde `node_modules`, porque `extends` resuelve
+rutas relativas al archivo que las escribe.
 
 ### Opción 1: Base (Node, scripts, librerías sin React)
 
-```js
-// eslint.config.js
-import { configs } from "@calumet/elise-linter";
-
-export default [...configs.base];
+```json
+// .oxlintrc.json
+{
+  "extends": ["./node_modules/@calumet/elise-linter/oxlint.json"]
+}
 ```
 
-### Opción 2: React (sin reglas Tailwind)
+### Opción 2: React
 
-```js
-// eslint.config.js
-import { configs } from "@calumet/elise-linter";
-
-export default [...configs.react];
+```json
+// .oxlintrc.json
+{
+  "extends": ["./node_modules/@calumet/elise-linter/oxlint.react.json"]
+}
 ```
 
-Sobre el `recommended` de `eslint-plugin-react`, el preset añade una
-convención que ese conjunto deja apagada:
+Sobre las reglas de React que Oxlint trae de fábrica, el preset apaga la que
+sobra con el runtime automático de React 19 y añade una convención:
 
-| Regla                   | Severidad | Qué pide                                 |
-| ----------------------- | --------- | ---------------------------------------- |
-| `react/jsx-pascal-case` | `error`   | Los componentes se nombran en PascalCase |
+| Regla                      | Severidad | Qué pide                                 |
+| -------------------------- | --------- | ---------------------------------------- |
+| `react/react-in-jsx-scope` | `off`     | El runtime automático no pide el import  |
+| `react/jsx-pascal-case`    | `error`   | Los componentes se nombran en PascalCase |
 
-`react/no-multi-comp`, un componente por archivo, queda fuera del preset: marca
-224 avisos en este repositorio, 202 de ellos en `elise-ui`, donde un archivo
-publica el componente compuesto entero, `Sidebar` con todas sus partes. El
-anfitrión que la quiera la añade en su config:
+`react/prop-types` no hace falta apagarla: Oxlint no la implementa.
 
-```js
-export default [
-  ...configs.react,
-  { files: ["**/*.tsx"], rules: { "react/no-multi-comp": "error" } },
-];
-```
+Ninguno de los dos presets enciende la categoría `correctness` de Oxlint. Está
+apagada para que la migración desde ESLint no cambiara lo que se exige; sobre
+este repositorio son 114 hallazgos, y encenderla es un trabajo aparte.
 
-### Opción 3: React + Tailwind
+### Tailwind
 
-Para usar `configs.tailwind`, instala también las dependencias de Tailwind lint:
-
-```bash
-pnpm add -D tailwindcss eslint-plugin-better-tailwindcss
-```
-
-```js
-// eslint.config.js
-import { configs } from "@calumet/elise-linter";
-
-export default [...configs.tailwind];
-```
-
-> `configs.tailwind` es opcional. Si no usas Tailwind, usa `base` o `react`.
+El preset de Tailwind no existe en esta versión. `eslint-plugin-better-tailwindcss`
+se fue con ESLint, y el reemplazo, `oxlint-tailwindcss`, lee el `@theme` del
+proyecto y por eso no se puede compartir desde aquí sin más.
 
 ## Prettier
 
@@ -75,30 +62,27 @@ import prettierConfig from "@calumet/elise-linter/prettier";
 export default prettierConfig;
 ```
 
+El orden de imports lo vigilaba `import/order`, que Oxlint no va a implementar.
+Quien lo necesite puede añadir `@ianvs/prettier-plugin-sort-imports` a su
+Prettier, teniendo en cuenta que además ordena los nombres dentro de cada
+import.
+
 ## Scripts sugeridos
 
 ```json
 {
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   }
 }
 ```
 
-## Troubleshooting
-
-Si ves un error al usar `configs.tailwind` diciendo que faltan dependencias, instala:
-
-```bash
-pnpm add -D tailwindcss eslint-plugin-better-tailwindcss
-```
-
 ## Referencias
 
-- ESLint: https://eslint.org/
+- Oxlint: https://oxc.rs/docs/guide/usage/linter.html
 - Prettier: https://prettier.io/
 - Tailwind CSS: https://tailwindcss.com/docs
 

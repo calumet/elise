@@ -10,8 +10,8 @@
     "dev:showcase": "pnpm build:libs && pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-forms\" --filter \"@calumet/elise-tables\" --filter \"@calumet/elise-toasts\" --filter \"@calumet/elise-alerts\" --filter \"@calumet/elise-i18n\" --filter \"showcase\" dev",
     "dev:site": "pnpm build:libs && pnpm -r --parallel --filter \"@calumet/elise-icons\" --filter \"@calumet/elise-ui\" --filter \"@calumet/elise-i18n\" --filter \"site\" dev",
     "build": "pnpm -r build",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "audit:visual": "node scripts/audit-visual.mjs -- --tema=ambos",
@@ -23,8 +23,8 @@
   "devDependencies": {
     "@calumet/elise-linter": "workspace:*",
     "@types/node": "^24.13.4",
-    "eslint": "^9.39.5",
     "jsr": "^0.14.3",
+    "oxlint": "^1.83.0",
     "playwright": "^1.63.0",
     "prettier": "^3.9.6",
     "typescript": "^5.9.3"
