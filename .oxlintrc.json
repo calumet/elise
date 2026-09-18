@@ -8,5 +8,11 @@
     "**/.turbo/**",
     "**/build/**",
     "**/.next/**"
+  ],
+  "overrides": [
+    {
+      "files": ["scripts/sonda-visual.js"],
+      "env": { "browser": true }
+    }
   ]
 }
