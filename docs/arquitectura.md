@@ -216,10 +216,11 @@ Consulta la [documentación de Radix sobre asChild](https://www.radix-ui.com/pri
 
 ## Sistema de build
 
-Todos los paquetes de librería usan [tsup](https://tsup.egoist.dev/) como bundler:
+Todos los paquetes de librería usan [tsdown](https://tsdown.dev/) como bundler:
 
 - **Formatos de salida**: ESM (`.mjs`) + CommonJS (`.cjs`)
-- **Declaraciones TypeScript**: generadas automáticamente (`.d.ts`)
+- **Declaraciones TypeScript**: generadas por oxc-transform, que es lo que
+  `isolatedDeclarations` habilita y lo que deja de pedir la API del compilador
 - **Source maps**: habilitados
 - **Orden de build**: `icons → ui → i18n → forms → tables → toasts → alerts → showcase`
 

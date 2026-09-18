@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsdown";
 
 export default defineConfig((opciones) => ({
   entry: ["src/index.ts"],
@@ -6,18 +6,16 @@ export default defineConfig((opciones) => ({
   banner: { js: '"use client";' },
   sourcemap: true,
   dts: true,
-  outExtension: ({ format }) => ({
-    js: format === "esm" ? ".mjs" : ".cjs",
+  outExtensions: ({ format }) => ({
+    js: format === "cjs" ? ".cjs" : ".mjs",
+    dts: ".d.ts",
   }),
-  splitting: false,
   /* En watch, `clean` vacía dist justo al arrancar. El servidor de la
      vitrina levanta en paralelo y resuelve sus imports contra dist, así que
      esa ventana le da un módulo inexistente. */
   clean: !opciones.watch,
-  // treeshake (rollup) elimina el banner "use client"; el entry es un barrel
-  // completo así que el treeshake no aporta nada aquí.
-  treeshake: false,
+  treeshake: true,
+  outputOptions: { comments: { legal: true, annotation: true, jsdoc: false } },
   minify: false,
   target: "es2020",
-  external: ["react", "react-dom", "tailwindcss"],
 }));
