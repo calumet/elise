@@ -33,6 +33,7 @@ import type {
   CreatedFilterFn,
   CreatedSortFn,
   RowModel,
+  RowData,
   Table,
   TableFeature,
   TableFeatures,
@@ -72,29 +73,36 @@ export type Caracteristicas = {
   rowSelectionFeature: TableFeature;
   rowSortingFeature: TableFeature;
   facetedMinMaxValues: (
-    table: Table<TableFeatures, any>,
+    table: Table<TableFeatures, RowData>,
     columnId: string,
   ) => () => undefined | [number, number];
-  facetedRowModel: (table: Table<any, any>, columnId: string) => () => RowModel<any, any>;
-  facetedUniqueValues: (
-    table: Table<TableFeatures, any>,
+  facetedRowModel: (
+    table: Table<TableFeatures, RowData>,
     columnId: string,
-  ) => () => Map<any, number>;
-  filteredRowModel: (table: Table<any, any>) => () => RowModel<any, any>;
-  paginatedRowModel: (table: Table<any, any>) => () => RowModel<any, any>;
-  sortedRowModel: (table: Table<any, any>) => () => RowModel<any, any>;
+  ) => () => RowModel<TableFeatures, RowData>;
+  facetedUniqueValues: (
+    table: Table<TableFeatures, RowData>,
+    columnId: string,
+  ) => () => Map<unknown, number>;
+  filteredRowModel: (
+    table: Table<TableFeatures, RowData>,
+  ) => () => RowModel<TableFeatures, RowData>;
+  paginatedRowModel: (
+    table: Table<TableFeatures, RowData>,
+  ) => () => RowModel<TableFeatures, RowData>;
+  sortedRowModel: (table: Table<TableFeatures, RowData>) => () => RowModel<TableFeatures, RowData>;
   filterFns: {
-    arrIncludes: CreatedFilterFn<any, any>;
-    equals: CreatedFilterFn<any, any>;
-    inDateRange: CreatedFilterFn<any, any>;
-    inNumberRange: CreatedFilterFn<any, any>;
-    includesString: CreatedFilterFn<any, any>;
-    weakEquals: CreatedFilterFn<any, any>;
+    arrIncludes: CreatedFilterFn<TableFeatures, RowData>;
+    equals: CreatedFilterFn<TableFeatures, RowData>;
+    inDateRange: CreatedFilterFn<TableFeatures, RowData>;
+    inNumberRange: CreatedFilterFn<TableFeatures, RowData>;
+    includesString: CreatedFilterFn<TableFeatures, RowData>;
+    weakEquals: CreatedFilterFn<TableFeatures, RowData>;
   };
   sortFns: {
-    alphanumeric: CreatedSortFn<any, any>;
-    datetime: CreatedSortFn<any, any>;
-    text: CreatedSortFn<any, any>;
+    alphanumeric: CreatedSortFn<TableFeatures, RowData>;
+    datetime: CreatedSortFn<TableFeatures, RowData>;
+    text: CreatedSortFn<TableFeatures, RowData>;
   };
   columnMeta: MetaDeColumna;
 };
