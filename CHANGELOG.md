@@ -3,6 +3,27 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.21.1
+
+### Corrige
+
+- **El hueco de carga del `Sidebar` rompía la hidratación.** Sorteaba su ancho
+  con `Math.random()`, así que el servidor y el cliente pintaban distinto. Ahora
+  sale del `useId`, que es estable en los dos lados.
+
+- **`useIsMobile` daba `false` en el primer render.** El valor llegaba de un
+  efecto, que en el servidor no corre, y la pantalla saltaba de escritorio a
+  móvil ya hidratada. Pasa a `useSyncExternalStore`, que sí tiene un valor para
+  el servidor.
+
+## `@calumet/elise-linter` 0.5.0
+
+### Agrega
+
+- **Tres reglas de React en el preset `react`:** `set-state-in-effect`, `refs` y
+  `purity`. Son las de `correctness` que cazan bugs y no estilo. Quien extienda
+  el preset las hereda.
+
 ## `@calumet/elise-linter` 0.4.0
 
 ### Rompe

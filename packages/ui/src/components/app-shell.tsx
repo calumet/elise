@@ -123,6 +123,7 @@ function AppShell({
      montar con el cajón abierto por encima de 768px dejaba el contenido inerte
      para siempre, inalcanzable y a la vista. */
   React.useEffect(() => {
+    // oxlint-disable-next-line react/set-state-in-effect -- no puede ir en el render: `setCajonAbierto` avisa al padre por `onNavOpenChange`.
     if (abierto && !esMovil) setCajonAbierto(false);
   }, [abierto, esMovil, setCajonAbierto]);
 

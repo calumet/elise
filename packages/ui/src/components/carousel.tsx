@@ -101,6 +101,7 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+    // oxlint-disable-next-line react/set-state-in-effect -- Embla es el sistema externo: su `api` no existe hasta después del montaje.
     onSelect(api);
     api.on("reInit", onSelect);
     api.on("select", onSelect);

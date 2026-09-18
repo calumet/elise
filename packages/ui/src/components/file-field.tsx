@@ -124,15 +124,18 @@ export function FileField({
 
   const subiendo = typeof progress === "number";
 
-  /* El `objectURL` de un `File` hay que soltarlo a mano, y uno nuevo por render
-     dejaría el anterior colgado. */
+  /* El `objectURL` de un `File` hay que soltarlo a mano, y crear y revocar van
+     de a pares. Armarlo en el render con `useMemo` rompe el par: React puede
+     descartar un memo cuando quiera, y ahí la URL queda sin quien la suelte. */
   const [urlLocal, setUrlLocal] = React.useState<string>();
   React.useEffect(() => {
     if (!(value instanceof File) || !value.type.startsWith("image/")) {
+      // oxlint-disable-next-line react/set-state-in-effect -- crear el objectURL fuera del efecto lo deja sin la limpieza que lo revoca.
       setUrlLocal(undefined);
       return;
     }
     const url = URL.createObjectURL(value);
+    // oxlint-disable-next-line react/set-state-in-effect -- ídem: el par crear/revocar vive en el efecto.
     setUrlLocal(url);
     return () => URL.revokeObjectURL(url);
   }, [value]);
@@ -156,9 +159,10 @@ export function FileField({
   const urlVista = value instanceof File ? urlLocal : value?.url;
 
   // Un archivo roto o de un formato que el navegador no pinta deja el cuadro en
-  // blanco, que se lee como que no hay nada.
-  const [vistaFallo, setVistaFallo] = React.useState(false);
-  React.useEffect(() => setVistaFallo(false), [urlVista]);
+  // blanco, que se lee como que no hay nada. Se guarda cuál falló y no un
+  // booleano, así el archivo siguiente se reintenta sin un efecto que reponga.
+  const [urlFallida, setUrlFallida] = React.useState<string>();
+  const vistaFallo = urlVista !== undefined && urlVista === urlFallida;
 
   const miniatura = () => {
     if (arrastrando) {
@@ -169,7 +173,7 @@ export function FileField({
         <img
           src={urlVista}
           alt=""
-          onError={() => setVistaFallo(true)}
+          onError={() => setUrlFallida(urlVista)}
           className="max-h-full max-w-full object-contain"
           style={{ borderRadius: 4 }}
         />
