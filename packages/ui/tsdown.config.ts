@@ -10,9 +10,7 @@ export default defineConfig((opciones) => ({
     js: format === "cjs" ? ".cjs" : ".mjs",
     dts: ".d.ts",
   }),
-  /* En watch, `clean` vacía dist justo al arrancar. El servidor de la
-     vitrina levanta en paralelo y resuelve sus imports contra dist, así que
-     esa ventana le da un módulo inexistente. */
+  // En watch no se limpia: la vitrina resuelve contra dist mientras arranca.
   clean: !opciones.watch,
   treeshake: true,
   outputOptions: { comments: { legal: true, annotation: true, jsdoc: false } },

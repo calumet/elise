@@ -4,8 +4,6 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "node"],
     "noEmit": true,
-
-    /* Es una app, no publica tipos: no tiene .d.ts que aislar. */
     "declaration": false,
     "isolatedDeclarations": false
   },
