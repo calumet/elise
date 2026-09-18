@@ -11,9 +11,7 @@ const suscribir = (avisar: () => void) => {
 };
 
 export function useIsMobile(): boolean {
-  /* `useSyncExternalStore` en vez de estado más efecto: el efecto no corre en el
-     servidor, así que el primer render daba `false` y saltaba al valor real ya
-     hidratado. El tercer argumento es lo que se pinta en el servidor. */
+  // El tercer argumento es lo que vale en el servidor, donde no hay `matchMedia`.
   return React.useSyncExternalStore(
     suscribir,
     () => consulta().matches,

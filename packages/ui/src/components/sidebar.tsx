@@ -650,9 +650,8 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
 }): React.JSX.Element {
-  /* El ancho varía para que la lista no parezca una grilla, pero sale del `id` y
-     no de `Math.random()`: en SSR el servidor y el cliente sorteaban distinto y
-     la hidratación no cuadraba. */
+  // El ancho varía para que la lista no parezca una grilla, y sale del `id`
+  // porque en SSR tiene que dar lo mismo en el servidor y en el cliente.
   const id = React.useId();
   let suma = 0;
   for (const c of id) suma += c.charCodeAt(0);

@@ -103,7 +103,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
     React.useEffect(() => {
       if (value === undefined || value === ultimoEmitido.current) return;
       const leido = analizar(value);
-      // oxlint-disable-next-line react/set-state-in-effect -- moverlo al render obliga a leer `ultimoEmitido` ahí, que es el ref que sostiene la guarda de arriba.
+      // oxlint-disable-next-line react/set-state-in-effect -- en el render habría que leer `ultimoEmitido`, que es un ref.
       if (leido) setColor(leido);
     }, [value]);
 

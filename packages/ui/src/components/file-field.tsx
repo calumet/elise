@@ -124,9 +124,7 @@ export function FileField({
 
   const subiendo = typeof progress === "number";
 
-  /* El `objectURL` de un `File` hay que soltarlo a mano, y crear y revocar van
-     de a pares. Armarlo en el render con `useMemo` rompe el par: React puede
-     descartar un memo cuando quiera, y ahí la URL queda sin quien la suelte. */
+  // Crear y revocar el `objectURL` van de a pares, y el par vive en el efecto.
   const [urlLocal, setUrlLocal] = React.useState<string>();
   React.useEffect(() => {
     if (!(value instanceof File) || !value.type.startsWith("image/")) {
@@ -158,9 +156,8 @@ export function FileField({
   const tamano = value instanceof File ? value.size : value?.size;
   const urlVista = value instanceof File ? urlLocal : value?.url;
 
-  // Un archivo roto o de un formato que el navegador no pinta deja el cuadro en
-  // blanco, que se lee como que no hay nada. Se guarda cuál falló y no un
-  // booleano, así el archivo siguiente se reintenta sin un efecto que reponga.
+  // Un archivo que el navegador no pinta deja el cuadro en blanco, que se lee
+  // como que no hay nada.
   const [urlFallida, setUrlFallida] = React.useState<string>();
   const vistaFallo = urlVista !== undefined && urlVista === urlFallida;
 

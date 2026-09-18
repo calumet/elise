@@ -42,10 +42,10 @@ export const react = {
     ...base.rules,
     "react/react-in-jsx-scope": "off",
     "react/jsx-pascal-case": "error",
-    // Las tres de `correctness` que cazan bugs y no estilo: un render de más,
-    // un ref escrito mientras se pinta y un render que no da lo mismo dos veces.
     "react/set-state-in-effect": "error",
     "react/refs": "error",
     "react/purity": "error",
+    "react/rules-of-hooks": "error",
+    "react/jsx-no-constructed-context-values": "error",
   },
 };

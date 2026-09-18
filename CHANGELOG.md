@@ -16,13 +16,19 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   móvil ya hidratada. Pasa a `useSyncExternalStore`, que sí tiene un valor para
   el servidor.
 
+- **El `Carousel` rehacía el valor de su contexto en cada render**, así que todas
+  sus partes se repintaban aunque no cambiara nada.
+
+- **`Table` tenía un hook con nombre que no empieza por `use`.** React no puede
+  comprobar las reglas de hooks dentro de una función así.
+
 ## `@calumet/elise-linter` 0.5.0
 
 ### Agrega
 
-- **Tres reglas de React en el preset `react`:** `set-state-in-effect`, `refs` y
-  `purity`. Son las de `correctness` que cazan bugs y no estilo. Quien extienda
-  el preset las hereda.
+- **Cinco reglas de React en el preset `react`:** `set-state-in-effect`, `refs`,
+  `purity`, `rules-of-hooks` y `jsx-no-constructed-context-values`. Quien
+  extienda el preset las hereda.
 
 ## `@calumet/elise-linter` 0.4.0
 

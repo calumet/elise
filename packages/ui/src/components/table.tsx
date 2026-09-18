@@ -608,7 +608,7 @@ export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
 const INTERACTIVOS =
   "a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=checkbox],[contenteditable=true]";
 
-const usarDelegado = (clickDelegate: string | undefined) => {
+const useDelegado = (clickDelegate: string | undefined) => {
   const fila = React.useRef<HTMLElement | null>(null);
 
   const alPulsar = (evento: React.MouseEvent<HTMLElement>) => {
@@ -631,7 +631,7 @@ export const TableRow: React.ForwardRefExoticComponent<
 > = React.forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, children, clickDelegate, onClick, ...props }, ref) => {
     const { modo } = React.useContext(TablaCtx);
-    const { fila, alPulsar } = usarDelegado(clickDelegate);
+    const { fila, alPulsar } = useDelegado(clickDelegate);
 
     const pulsar = (evento: React.MouseEvent<HTMLElement>) => {
       onClick?.(evento as React.MouseEvent<HTMLTableRowElement>);
