@@ -3,6 +3,14 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.6.0
+
+### Rompe
+
+- **`typescript/no-explicit-any` pasa de apagada a error.** Venía apagada del
+  config de ESLint y este repositorio no tiene ni un `any`, así que estaba
+  apagada sin nada que tapar. Quien extienda el preset y sí los tenga, los verá.
+
 ## `@calumet/elise-ui` 0.21.2
 
 ### Corrige
