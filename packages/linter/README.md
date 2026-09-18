@@ -15,19 +15,21 @@ Requiere Oxlint 1.80 y Prettier 3. La configuración del registro de GitHub est�
 
 Dos configuraciones, la de React construida sobre la base:
 
-| Config              | Para qué                            |
-| ------------------- | ----------------------------------- |
-| `oxlint.json`       | TypeScript e imports                |
-| `oxlint.react.json` | Lo anterior más las reglas de React |
+| Export  | Para qué                            |
+| ------- | ----------------------------------- |
+| `base`  | TypeScript e imports                |
+| `react` | Lo anterior más las reglas de React |
 
-```json
-// .oxlintrc.json
-{
-  "extends": ["./node_modules/@calumet/elise-linter/oxlint.json"]
-}
+```ts
+// oxlint.config.ts
+import { defineConfig } from "oxlint";
+
+import { base } from "@calumet/elise-linter/oxlint";
+
+export default defineConfig({ extends: [base] });
 ```
 
-`extends` resuelve rutas relativas al archivo que las escribe, de ahí el `./node_modules`.
+Va en `oxlint.config.ts` porque `.oxlintrc.json` no resuelve imports de paquetes. Necesita Node 22.18 o 24 en adelante.
 
 ## Prettier
 

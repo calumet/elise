@@ -3,12 +3,13 @@
   "version": "0.3.0",
   "license": "MIT",
   "exports": {
+    "./oxlint": "./oxlint.js",
     "./prettier": "./prettier.js"
   },
   "publish": {
     "include": [
-      "oxlint.json",
-      "oxlint.react.json",
+      "oxlint.js",
+      "oxlint.d.ts",
       "prettier.js",
       "prettier.d.ts",
       "package.json",

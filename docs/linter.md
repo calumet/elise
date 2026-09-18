@@ -12,25 +12,30 @@ pnpm add -D @calumet/elise-linter oxlint prettier typescript
 
 ## Oxlint
 
-La configuración se extiende desde `node_modules`, porque `extends` resuelve
-rutas relativas al archivo que las escribe.
+El config va en `oxlint.config.ts` y no en `.oxlintrc.json`: el formato JSON no
+resuelve imports de paquetes, así que es el único que puede extender una
+configuración compartida. Necesita Node 22.18 o 24 en adelante.
 
 ### Opción 1: Base (Node, scripts, librerías sin React)
 
-```json
-// .oxlintrc.json
-{
-  "extends": ["./node_modules/@calumet/elise-linter/oxlint.json"]
-}
+```ts
+// oxlint.config.ts
+import { defineConfig } from "oxlint";
+
+import { base } from "@calumet/elise-linter/oxlint";
+
+export default defineConfig({ extends: [base] });
 ```
 
 ### Opción 2: React
 
-```json
-// .oxlintrc.json
-{
-  "extends": ["./node_modules/@calumet/elise-linter/oxlint.react.json"]
-}
+```ts
+// oxlint.config.ts
+import { defineConfig } from "oxlint";
+
+import { react } from "@calumet/elise-linter/oxlint";
+
+export default defineConfig({ extends: [react] });
 ```
 
 Sobre las reglas de React que Oxlint trae de fábrica, el preset apaga la que
@@ -52,6 +57,19 @@ este repositorio son 114 hallazgos, y encenderla es un trabajo aparte.
 El preset de Tailwind no existe en esta versión. `eslint-plugin-better-tailwindcss`
 se fue con ESLint, y el reemplazo, `oxlint-tailwindcss`, lee el `@theme` del
 proyecto y por eso no se puede compartir desde aquí sin más.
+
+### Variantes
+
+Lo que en ESLint era concatenar arrays, aquí son tres cosas:
+
+- **Añadir o pisar una regla**: un `rules` junto al `extends`. Gana siempre el
+  que extiende sobre lo extendido.
+- **Cambiar reglas para unas rutas**: un `overrides`, con su `files`. Es lo que
+  hace este repositorio para declarar que `scripts/sonda-visual.js` corre en el
+  navegador.
+- **Cambiar reglas para una carpeta**: un `oxlint.config.ts` o un
+  `.oxlintrc.json` dentro de ella. Oxlint los carga solo; el flag
+  `--disable-nested-config` es para apagarlos.
 
 ## Prettier
 

@@ -33,7 +33,7 @@ elise/
 ├── package.json                                Scripts globales
 ├── pnpm-workspace.yaml                         Config workspaces
 ├── tsconfig.base.json                          TypeScript base compartido
-└── .oxlintrc.json                              Oxlint raiz, extiende el del linter
+└── oxlint.config.ts                            Oxlint raiz, extiende el del linter
 ```
 
 ## Grafo de dependencias
@@ -123,7 +123,7 @@ Wrapper de re-exportación sobre [`lucide-react`](https://lucide.dev/icons/). Ce
 
 Configuración compartida de herramientas de calidad de código:
 
-- **Oxlint**: dos configuraciones extensibles, `oxlint.json` y `oxlint.react.json`
+- **Oxlint**: dos configuraciones extensibles, los exports `base` y `react`
 - **Prettier**: 100 caracteres, 2 espacios, trailing commas, LF
 - Plugins base: `typescript` e `import`, nativos de Oxlint
 

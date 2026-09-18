@@ -10,14 +10,19 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 - **La configuración pasa de ESLint a Oxlint.** ESLint 9 llegó al fin de su
   soporte el 6 de agosto de 2026. `configs.base`, `configs.react` y
   `configs.tailwind` desaparecen, y con ellos el export raíz del paquete; en su
-  lugar salen dos archivos que se extienden desde `.oxlintrc.json`:
+  lugar salen dos objetos que se extienden desde `oxlint.config.ts`:
 
-  ```json
-  { "extends": ["./node_modules/@calumet/elise-linter/oxlint.json"] }
+  ```ts
+  import { defineConfig } from "oxlint";
+
+  import { base } from "@calumet/elise-linter/oxlint";
+
+  export default defineConfig({ extends: [base] });
   ```
 
-  `oxlint.react.json` es el que trae React. El preset de Tailwind no tiene
-  reemplazo todavía.
+  `react` es el otro. Va en `oxlint.config.ts` y no en `.oxlintrc.json` porque
+  el formato JSON no resuelve imports de paquetes, así que pide Node 22.18 o 24
+  en adelante. El preset de Tailwind no tiene reemplazo todavía.
 
 - **`import/order` ya no se comprueba.** Oxlint no la va a implementar. Quien la
   quiera puede ordenar con `@ianvs/prettier-plugin-sort-imports` desde Prettier.

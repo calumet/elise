@@ -1,16 +1,18 @@
-{
-  "plugins": ["typescript", "import"],
-  "categories": {
-    "correctness": "off"
+// @ts-self-types="./oxlint.d.ts"
+
+export const base = {
+  plugins: ["typescript", "import"],
+  categories: {
+    correctness: "off",
   },
-  "env": {
-    "builtin": true
+  env: {
+    builtin: true,
   },
-  "rules": {
+  rules: {
     "no-array-constructor": "error",
     "no-unused-expressions": "error",
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
-    "import/newline-after-import": ["warn", { "count": 1 }],
+    "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+    "import/newline-after-import": ["warn", { count: 1 }],
     "typescript/ban-ts-comment": "error",
     "typescript/no-duplicate-enum-values": "error",
     "typescript/no-empty-object-type": "error",
@@ -28,6 +30,17 @@
     "typescript/prefer-as-const": "error",
     "typescript/prefer-namespace-keyword": "error",
     "typescript/triple-slash-reference": "error",
-    "typescript/explicit-module-boundary-types": "off"
-  }
-}
+    "typescript/explicit-module-boundary-types": "off",
+  },
+};
+
+export const react = {
+  plugins: [...base.plugins, "react"],
+  categories: base.categories,
+  env: base.env,
+  rules: {
+    ...base.rules,
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-pascal-case": "error",
+  },
+};

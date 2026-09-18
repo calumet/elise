@@ -12,14 +12,14 @@
   },
   "type": "module",
   "exports": {
-    "./oxlint": "./oxlint.json",
-    "./oxlint-react": "./oxlint.react.json",
+    "./oxlint": "./oxlint.js",
     "./prettier": "./prettier.js"
   },
   "files": [
-    "oxlint.json",
-    "oxlint.react.json",
-    "prettier.js"
+    "oxlint.js",
+    "oxlint.d.ts",
+    "prettier.js",
+    "prettier.d.ts"
   ],
   "scripts": {
     "lint": "echo \"Config package, no lint\""

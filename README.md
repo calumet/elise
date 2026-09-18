@@ -108,7 +108,7 @@ elise/
 ├── package.json
 ├── pnpm-workspace.yaml
 ├── tsconfig.base.json
-└── .oxlintrc.json
+└── oxlint.config.ts
 ```
 
 ## Inicio rápido

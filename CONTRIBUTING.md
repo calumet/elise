@@ -80,7 +80,7 @@ La showcase incluye demos de todos los componentes y utilidades. Si agregas un c
 
 La configuración de Oxlint y Prettier está centralizada en `@calumet/elise-linter`. No necesitas configurar nada adicional.
 
-- El repositorio extiende `oxlint.json`; un proyecto con React extiende `oxlint.react.json`.
+- El repositorio extiende el export `base`; un proyecto con React extiende `react`.
 
 - Usa TypeScript para todo el código.
 - Sigue el estilo de código existente.
