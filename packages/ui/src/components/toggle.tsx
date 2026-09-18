@@ -14,9 +14,9 @@
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import * as React from "react";
 
-import { DentroDeToggleGroup, ToggleGroupItem, clasesToggle } from "./toggle-group";
-
 import { cn } from "@/lib/cn";
+
+import { DentroDeToggleGroup, ToggleGroupItem, clasesToggle } from "./toggle-group";
 
 /** Props de {@link Toggle}. */
 export type ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root> & {

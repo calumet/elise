@@ -6,9 +6,9 @@
 
 import * as React from "react";
 
-import { CAMPO_INVALIDO } from "./input";
-
 import { cn } from "@/lib/cn";
+
+import { CAMPO_INVALIDO } from "./input";
 
 /** Props de {@link Textarea}. */
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;

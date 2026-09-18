@@ -7,6 +7,9 @@
 import { AlertCircle } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,9 +24,6 @@ import { Box } from "./box";
 import { Button } from "./button";
 import { InlineStack } from "./stack";
 import { Text } from "./text";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 /** Props de {@link SaveBar}. */
 export type SaveBarProps = Omit<React.ComponentProps<"div">, "children"> & {

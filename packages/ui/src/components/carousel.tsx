@@ -8,10 +8,10 @@ import { ChevronLeft, ChevronRight } from "@calumet/elise-icons";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import * as React from "react";
 
-import { Button } from "./button";
-
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
+
+import { Button } from "./button";
 
 /** La API de Embla que expone el carrusel por `setApi`, para controlarlo desde afuera. */
 type CarouselApi = UseEmblaCarouselType[1];

@@ -7,9 +7,9 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
-import { Spinner } from "./spinner";
-
 import { cn } from "@/lib/cn";
+
+import { Spinner } from "./spinner";
 
 /** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {

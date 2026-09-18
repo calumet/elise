@@ -7,9 +7,9 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
 
-import { useThemeScope } from "./theme-scope";
-
 import { cn } from "@/lib/cn";
+
+import { useThemeScope } from "./theme-scope";
 
 /* Los iconos se miden aquí y no en cada sitio que los pase: sin esto, un icono
    suelto en una fila salía a su tamaño natural, que en la mayoría de los juegos

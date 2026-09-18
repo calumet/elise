@@ -1,19 +1,12 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "MIT",
   "exports": {
     "./oxlint": "./oxlint.js",
-    "./prettier": "./prettier.js"
+    "./oxfmt": "./oxfmt.js"
   },
   "publish": {
-    "include": [
-      "oxlint.js",
-      "oxlint.d.ts",
-      "prettier.js",
-      "prettier.d.ts",
-      "package.json",
-      "README.md"
-    ]
+    "include": ["oxlint.js", "oxlint.d.ts", "oxfmt.js", "oxfmt.d.ts", "package.json", "README.md"]
   }
 }

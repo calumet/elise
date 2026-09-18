@@ -1,38 +1,39 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.3.0",
-  "description": "Reglas compartidas de Oxlint/Prettier para Elise.",
+  "version": "0.4.0",
+  "description": "Reglas compartidas de Oxlint/Oxfmt para Elise.",
+  "keywords": [
+    "elise",
+    "oxfmt",
+    "oxfmt-config",
+    "oxlint",
+    "oxlint-config"
+  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/calumet/elise.git",
     "directory": "packages/linter"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
-  "type": "module",
-  "exports": {
-    "./oxlint": "./oxlint.js",
-    "./prettier": "./prettier.js"
-  },
   "files": [
     "oxlint.js",
     "oxlint.d.ts",
-    "prettier.js",
-    "prettier.d.ts"
+    "oxfmt.js",
+    "oxfmt.d.ts"
   ],
+  "type": "module",
+  "exports": {
+    "./oxlint": "./oxlint.js",
+    "./oxfmt": "./oxfmt.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "lint": "echo \"Config package, no lint\""
   },
-  "keywords": [
-    "oxlint",
-    "oxlint-config",
-    "prettier-config",
-    "elise"
-  ],
-  "license": "MIT",
   "peerDependencies": {
-    "oxlint": ">=1.80.0",
-    "prettier": ">=3.0.0"
+    "oxfmt": ">=0.68.0",
+    "oxlint": ">=1.80.0"
   }
 }

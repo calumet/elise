@@ -7,6 +7,9 @@
 import { ChevronRight, CirclePlus, Pencil } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import { Button } from "./button";
 import {
   Dialog,
@@ -18,9 +21,6 @@ import {
   DialogTitle,
 } from "./dialog";
 import { Field, type FieldControlProps } from "./field";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 /** Props de {@link ValueField}. */
 export type ValueFieldProps = Omit<React.ComponentProps<"div">, "children" | "onChange"> & {

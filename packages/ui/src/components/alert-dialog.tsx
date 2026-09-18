@@ -7,6 +7,8 @@
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { buttonVariants, type ButtonProps } from "./button";
 import {
   ANCHOS_DIALOGO,
@@ -19,8 +21,6 @@ import {
   VELO_DIALOGO,
 } from "./dialog";
 import { useThemeScope } from "./theme-scope";
-
-import { cn } from "@/lib/cn";
 
 /** Raíz de la alerta modal. A diferencia de `Dialog`, no se cierra con Escape ni al pulsar fuera: exige una respuesta. */
 export const AlertDialog = AlertDialogPrimitive.Root;

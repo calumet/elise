@@ -15,9 +15,9 @@
 
 import * as React from "react";
 
-import type { BoxProps } from "./box";
-
 import { cn } from "@/lib/cn";
+
+import type { BoxProps } from "./box";
 
 /** Props de {@link Image}. */
 export type ImageProps = Omit<React.ComponentProps<"img">, "width" | "height"> & {

@@ -48,8 +48,7 @@ export default {
     "icons.title": "Icons",
     "icons.body": "Lucide re-exported with types, so the dependency lives in one place.",
     "linter.title": "Linting and formatting",
-    "linter.body":
-      "The ESLint 9 and Prettier setup the monorepo runs on, to extend in your own repo.",
+    "linter.body": "The Oxlint and Oxfmt setup the monorepo runs on, to extend in your own repo.",
   },
 
   install: {
@@ -74,7 +73,7 @@ export default {
     "note.forms":
       "“Register a thesis” opens a form built with `useZodForm`. Deleting calls `confirm()` and awaits the promise.",
     "note.icons":
-      "The icons come typed from Lucide, and the whole repo runs through the same ESLint 9.",
+      "The icons come typed from Lucide, and the whole repo runs through the same Oxlint.",
 
     "app.name": "COMA",
     "app.org": "UIS",

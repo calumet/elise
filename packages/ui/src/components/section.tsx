@@ -18,9 +18,9 @@
 
 import * as React from "react";
 
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "./card";
-
 import { cn } from "@/lib/cn";
+
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "./card";
 
 /** Props de {@link Section}. */
 export type SectionProps = Omit<React.ComponentProps<"section">, "title"> & {

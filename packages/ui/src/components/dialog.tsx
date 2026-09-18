@@ -8,10 +8,10 @@ import { X } from "@calumet/elise-icons";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 
-import { useThemeScope } from "./theme-scope";
-
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
+
+import { useThemeScope } from "./theme-scope";
 
 /** Raíz del modal. Guarda si está abierto, y admite `open` con `onOpenChange` para controlarlo desde afuera. */
 export const Dialog = DialogPrimitive.Root;

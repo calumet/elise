@@ -7,9 +7,9 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
 
-import { useThemeScope } from "./theme-scope";
-
 import { cn } from "@/lib/cn";
+
+import { useThemeScope } from "./theme-scope";
 
 /** Raíz del popover. Guarda si está abierto. */
 export const Popover = PopoverPrimitive.Root;

@@ -6,10 +6,10 @@
 
 import * as React from "react";
 
-import { CAMPO_INVALIDO } from "./input";
-
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
+
+import { CAMPO_INVALIDO } from "./input";
 
 /** Props de {@link PasswordField}. */
 export type PasswordFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & {

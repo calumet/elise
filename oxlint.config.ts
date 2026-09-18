@@ -1,6 +1,5 @@
-import { defineConfig } from "oxlint";
-
 import { base } from "@calumet/elise-linter/oxlint";
+import { defineConfig } from "oxlint";
 
 export default defineConfig({
   extends: [base],

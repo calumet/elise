@@ -1,6 +1,6 @@
 # @calumet/elise-linter
 
-Configuración compartida de Oxlint y Prettier. Los proyectos de Calumet la consumen entera en vez de copiar reglas entre repositorios.
+Configuración compartida de Oxlint y Oxfmt. Los proyectos de Calumet la consumen entera en vez de copiar reglas entre repositorios.
 
 ## Instalación
 
@@ -9,7 +9,7 @@ pnpm add -D jsr:@calumet/elise-linter   # JSR
 pnpm add -D @calumet/elise-linter       # GitHub Packages
 ```
 
-Requiere Oxlint 1.80 y Prettier 3. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
+Requiere Oxlint 1.80 y Oxfmt 0.68. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
 
 ## Oxlint
 
@@ -31,13 +31,17 @@ export default defineConfig({ extends: [base] });
 
 Va en `oxlint.config.ts` porque `.oxlintrc.json` no resuelve imports de paquetes. Necesita Node 22.18 o 24 en adelante.
 
-## Prettier
+## Oxfmt
 
-```js
-// prettier.config.js
-import prettierConfig from "@calumet/elise-linter/prettier";
+Oxfmt no tiene `extends`, así que la configuración se esparce:
 
-export default prettierConfig;
+```ts
+// oxfmt.config.ts
+import { defineConfig } from "oxfmt";
+
+import formato from "@calumet/elise-linter/oxfmt";
+
+export default defineConfig({ ...formato });
 ```
 
 El detalle de las reglas está en [docs/linter.md](../../docs/linter.md).

@@ -15,11 +15,11 @@
 import { Search, X } from "@calumet/elise-icons";
 import * as React from "react";
 
-import { Field } from "./field";
-import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
-
 import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
+
+import { Field } from "./field";
+import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
 
 /** Props de {@link SearchField}. */
 export type SearchFieldProps = {

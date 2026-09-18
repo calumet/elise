@@ -7,12 +7,12 @@
 import { File as FileIcon, ImageIcon, Upload, X } from "@calumet/elise-icons";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+import { useElLabel } from "@/lib/i18n";
+
 import { Button } from "./button";
 import { Field } from "./field";
 import { formatearTamano, tipoAceptado, type RejectedFile } from "./file-upload";
-
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
 
 /** Un archivo que ya estaba guardado, tal como lo devuelve el servidor. */
 export type StoredFile = {

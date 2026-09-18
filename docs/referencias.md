@@ -51,7 +51,7 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 | **Vite**              | Dev server de la app showcase                        | https://vite.dev/                                               |
 | **@tailwindcss/vite** | Integración de Tailwind CSS v4 en Vite (sin PostCSS) | https://tailwindcss.com/docs/installation/framework-guides/vite |
 | **Oxlint**            | Linter de código, en Rust                            | https://oxc.rs/docs/guide/usage/linter.html                     |
-| **Prettier**          | Formateador de código                                | https://prettier.io/                                            |
+| **Oxfmt**             | Formateador de código, en Rust                       | https://oxc.rs/docs/guide/usage/formatter.html                  |
 
 ## Design systems de referencia
 

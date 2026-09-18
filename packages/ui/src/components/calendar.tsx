@@ -8,9 +8,9 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "@calumet/elise-icons";
 import * as React from "react";
 import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
 
-import { Button, buttonVariants } from "./button";
-
 import { cn } from "@/lib/cn";
+
+import { Button, buttonVariants } from "./button";
 
 /**
  * Calendario.

@@ -1,13 +1,13 @@
 # Linter y Formato
 
-`@calumet/elise-linter` centraliza la configuración de Oxlint y Prettier para proyectos TypeScript.
+`@calumet/elise-linter` centraliza la configuración de Oxlint y Oxfmt para proyectos TypeScript.
 
 ## Instalación
 
 Instala las herramientas base en tu proyecto:
 
 ```bash
-pnpm add -D @calumet/elise-linter oxlint prettier typescript
+pnpm add -D @calumet/elise-linter oxlint oxfmt typescript
 ```
 
 ## Oxlint
@@ -71,19 +71,32 @@ Lo que en ESLint era concatenar arrays, aquí son tres cosas:
   `.oxlintrc.json` dentro de ella. Oxlint los carga solo; el flag
   `--disable-nested-config` es para apagarlos.
 
-## Prettier
+## Oxfmt
 
-```js
-// prettier.config.js
-import prettierConfig from "@calumet/elise-linter/prettier";
+Oxfmt no tiene `extends`, así que la configuración se esparce:
 
-export default prettierConfig;
+```ts
+// oxfmt.config.ts
+import { defineConfig } from "oxfmt";
+
+import formato from "@calumet/elise-linter/oxfmt";
+
+export default defineConfig({ ...formato });
 ```
 
-El orden de imports lo vigilaba `import/order`, que Oxlint no va a implementar.
-Quien lo necesite puede añadir `@ianvs/prettier-plugin-sort-imports` a su
-Prettier, teniendo en cuenta que además ordena los nombres dentro de cada
-import.
+Formatea lo mismo que Prettier: TypeScript, JSX, JSON, Markdown, CSS y YAML.
+Lo que se ignoraba en `.prettierignore` va en `ignorePatterns`.
+
+Dos ajustes que el formato de Elise fija a propósito:
+
+| Opción            | Valor   | Por qué                                                        |
+| ----------------- | ------- | -------------------------------------------------------------- |
+| `sortImports`     | `true`  | Es lo que reemplaza a `import/order`                           |
+| `sortPackageJson` | `false` | Reordenar claves de un `package.json` es contenido, no formato |
+
+`sortImports` mueve líneas de import enteras entre grupos y nunca toca los
+nombres dentro de un import, ni borra uno sin usar, ni fusiona dos del mismo
+módulo.
 
 ## Scripts sugeridos
 
@@ -92,8 +105,8 @@ import.
   "scripts": {
     "lint": "oxlint .",
     "lint:fix": "oxlint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check ."
   }
 }
 ```
@@ -101,7 +114,7 @@ import.
 ## Referencias
 
 - Oxlint: https://oxc.rs/docs/guide/usage/linter.html
-- Prettier: https://prettier.io/
+- Oxfmt: https://oxc.rs/docs/guide/usage/formatter.html
 - Tailwind CSS: https://tailwindcss.com/docs
 
 ---

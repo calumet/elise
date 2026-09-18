@@ -3,6 +3,31 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.4.0
+
+### Rompe
+
+- **El formato pasa de Prettier a Oxfmt.** El export `./prettier` desaparece y
+  en su lugar queda `./oxfmt`, que se esparce porque Oxfmt no tiene `extends`:
+
+  ```ts
+  import { defineConfig } from "oxfmt";
+
+  import formato from "@calumet/elise-linter/oxfmt";
+
+  export default defineConfig({ ...formato });
+  ```
+
+  Formatea lo mismo que Prettier: TypeScript, JSX, JSON, Markdown, CSS y YAML.
+  Lo que iba en `.prettierignore` va en `ignorePatterns`.
+
+### Agrega
+
+- **El orden de imports vuelve, ahora con `sortImports` de Oxfmt.** Es lo que
+  reemplaza a `import/order`, que se había perdido en la 0.3.0. Mueve líneas
+  enteras entre grupos y no toca los nombres dentro de un import, ni borra uno
+  sin usar, ni fusiona dos del mismo módulo.
+
 ## `@calumet/elise-linter` 0.3.0
 
 ### Rompe
@@ -24,8 +49,8 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
   el formato JSON no resuelve imports de paquetes, así que pide Node 22.18 o 24
   en adelante. El preset de Tailwind no tiene reemplazo todavía.
 
-- **`import/order` ya no se comprueba.** Oxlint no la va a implementar. Quien la
-  quiera puede ordenar con `@ianvs/prettier-plugin-sort-imports` desde Prettier.
+- **`import/order` ya no se comprueba.** Oxlint no la va a implementar, porque
+  ordenar imports es formato. Vuelve en la 0.4.0 con `sortImports` de Oxfmt.
 
 ## `@calumet/elise-ui` 0.21.0
 

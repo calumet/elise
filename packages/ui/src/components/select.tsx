@@ -8,10 +8,10 @@ import { ChevronDown } from "@calumet/elise-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
+import { cn } from "@/lib/cn";
+
 import { CAJA_CAMPO, CAMPO_INVALIDO, TAMANOS_CAMPO, type TamanoCampo } from "./input";
 import { useThemeScope } from "./theme-scope";
-
-import { cn } from "@/lib/cn";
 
 /** Raíz del selector. Guarda el valor elegido. */
 export const Select = SelectPrimitive.Root;

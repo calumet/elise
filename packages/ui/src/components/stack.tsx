@@ -6,9 +6,9 @@
 
 import * as React from "react";
 
-import type { SpaceScale } from "./box";
-
 import { cn } from "@/lib/cn";
+
+import type { SpaceScale } from "./box";
 
 type StackBase = React.ComponentProps<"div"> & {
   as?: React.ElementType;

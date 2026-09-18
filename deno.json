@@ -13,7 +13,7 @@
     "react": "npm:react@^19.0.0",
     "react-dom": "npm:react-dom@^19.0.0",
     "oxlint": "npm:oxlint@^1.80.0",
-    "prettier": "npm:prettier@^3.0.0",
+    "oxfmt": "npm:oxfmt@^0.68.0",
     "react/": "npm:/react@^19.0.0/"
   },
   "compilerOptions": {

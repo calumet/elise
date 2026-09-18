@@ -21,9 +21,9 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
-import { type CajaProps, clasesDeCaja } from "./box";
-
 import { cn } from "@/lib/cn";
+
+import { type CajaProps, clasesDeCaja } from "./box";
 
 /* Los manejadores se tipan contra `HTMLElement` y no contra el botón: el
    componente puede salir como `<a>` o como `<button>`, y el tipo común es lo

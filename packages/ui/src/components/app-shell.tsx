@@ -23,14 +23,14 @@
 
 import * as React from "react";
 
-import { Kbd } from "./kbd";
-import { SaveBar, type SaveBarProps } from "./save-bar";
-import { UserMenu, type UserMenuProps } from "./user-menu";
-
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
 import { SUPERFICIE_SIDEBAR } from "@/lib/superficie";
+
+import { Kbd } from "./kbd";
+import { SaveBar, type SaveBarProps } from "./save-bar";
+import { UserMenu, type UserMenuProps } from "./user-menu";
 
 /* Los iconos propios de la barra se dibujan aquí y no se toman del catálogo,
    igual que el de plegar y el caret de sección: son parte del chasis, no

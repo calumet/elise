@@ -19,11 +19,11 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
-import { CAJA_CAMPO } from "./input";
-
 import { cn } from "@/lib/cn";
 import { aCss, aHex, analizar, type Color, limitar, tonoPuro } from "@/lib/color";
 import { useElLabel } from "@/lib/i18n";
+
+import { CAJA_CAMPO } from "./input";
 
 const CARRIL = "relative h-3 w-full grow overflow-hidden rounded-full";
 const PULGAR =
