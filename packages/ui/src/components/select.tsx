@@ -14,11 +14,11 @@ import { CAJA_CAMPO, CAMPO_INVALIDO, TAMANOS_CAMPO, type TamanoCampo } from "./i
 import { useThemeScope } from "./theme-scope";
 
 /** Raíz del selector. Guarda el valor elegido. */
-export const Select = SelectPrimitive.Root;
+export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root;
 /** Agrupa opciones afines, con `SelectLabel` como título. */
-export const SelectGroup = SelectPrimitive.Group;
+export const SelectGroup: typeof SelectPrimitive.Group = SelectPrimitive.Group;
 /** Muestra la opción elegida dentro del disparador, o el `placeholder` si no hay ninguna. */
-export const SelectValue = SelectPrimitive.Value;
+export const SelectValue: typeof SelectPrimitive.Value = SelectPrimitive.Value;
 
 /** Props de {@link SelectTrigger}. */
 export type SelectTriggerProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {

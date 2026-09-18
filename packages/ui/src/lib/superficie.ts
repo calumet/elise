@@ -22,7 +22,7 @@ export const SUPERFICIE =
    elemento y lo de adentro resuelve contra la superficie sin saber dónde está. */
 
 /** La franja invertida: la capa que va encima de todo, como un toast. */
-export const SUPERFICIE_INVERSA = [
+export const SUPERFICIE_INVERSA: string = [
   "bg-inverse text-foreground",
   "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
@@ -32,7 +32,7 @@ export const SUPERFICIE_INVERSA = [
 ].join(" ");
 
 /** El riel de la navegación. */
-export const SUPERFICIE_SIDEBAR = [
+export const SUPERFICIE_SIDEBAR: string = [
   "bg-sidebar text-foreground",
   "[--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]",
   "[--border:var(--sidebar-border)]",

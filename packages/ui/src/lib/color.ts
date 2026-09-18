@@ -17,7 +17,8 @@ export type Hsv = { h: number; s: number; v: number };
 
 export type Color = { hsv: Hsv; alfa: number };
 
-export const limitar = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+export const limitar = (n: number, min: number, max: number): number =>
+  Math.min(max, Math.max(min, n));
 
 const aTramo = (texto: string, escala: number) => {
   const n = parseFloat(texto);
@@ -149,7 +150,7 @@ const dosDigitos = (n: number) =>
     .padStart(2, "0");
 
 /** Siempre hex: de 6, o de 8 cuando el selector admite alfa. */
-export const aHex = ({ hsv, alfa }: Color, conAlfa: boolean) => {
+export const aHex = ({ hsv, alfa }: Color, conAlfa: boolean): string => {
   const { r, g, b } = hsvARgb(hsv);
   const base = `#${dosDigitos(r)}${dosDigitos(g)}${dosDigitos(b)}`;
   return conAlfa ? `${base}${dosDigitos(alfa * 255)}` : base;

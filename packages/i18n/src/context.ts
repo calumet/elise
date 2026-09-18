@@ -27,4 +27,4 @@ if (!globalScope[CONTEXT_KEY]) {
  * El contexto que llena `I18nProvider`. Vale `null` fuera del provider, y de
  * ahí que los hooks tengan un camino sin traducciones.
  */
-export const I18nContext = globalScope[CONTEXT_KEY]!;
+export const I18nContext: React.Context<I18nContextValue | null> = globalScope[CONTEXT_KEY]!;

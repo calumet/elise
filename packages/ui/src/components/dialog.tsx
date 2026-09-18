@@ -14,13 +14,13 @@ import { useElLabel } from "@/lib/i18n";
 import { useThemeScope } from "./theme-scope";
 
 /** Raíz del modal. Guarda si está abierto, y admite `open` con `onOpenChange` para controlarlo desde afuera. */
-export const Dialog = DialogPrimitive.Root;
+export const Dialog: typeof DialogPrimitive.Root = DialogPrimitive.Root;
 /** El control que abre el modal. */
-export const DialogTrigger = DialogPrimitive.Trigger;
+export const DialogTrigger: typeof DialogPrimitive.Trigger = DialogPrimitive.Trigger;
 /** Monta el modal al final del `body`, fuera del recorte de cualquier ancestro. */
-export const DialogPortal = DialogPrimitive.Portal;
+export const DialogPortal: typeof DialogPrimitive.Portal = DialogPrimitive.Portal;
 /** Cierra el modal. Envolvé con él cualquier botón del pie. */
-export const DialogClose = DialogPrimitive.Close;
+export const DialogClose: typeof DialogPrimitive.Close = DialogPrimitive.Close;
 
 /* El marco entero vive en constantes porque `AlertDialog` cuelga de otro
    primitivo de Radix: no puede reutilizar estos componentes, solo sus clases.
@@ -142,7 +142,6 @@ export const DialogHeader = ({
      no lo lleva porque no tiene aspa: hay que responderlo. */
   <div data-slot="dialog-header" className={cn(CABECERA_DIALOGO, "pe-12", className)} {...props} />
 );
-DialogHeader.displayName = "DialogHeader";
 
 /**
  * El cuerpo del diálogo. Es lo único que se desplaza: la cabecera y el pie se
@@ -155,7 +154,6 @@ export const DialogBody = ({
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
 );
-DialogBody.displayName = "DialogBody";
 
 /** El título del modal. Es lo que anuncia el lector de pantalla al abrirlo. */
 export const DialogTitle: React.ForwardRefExoticComponent<
@@ -205,4 +203,3 @@ export const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
 );
-DialogFooter.displayName = "DialogFooter";

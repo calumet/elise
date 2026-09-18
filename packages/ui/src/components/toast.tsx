@@ -17,7 +17,7 @@ export type ToastProps = React.ComponentPropsWithoutRef<typeof ToastPrimitive.Ro
 export type ToastActionElement = React.ReactElement<typeof ToastPrimitive.Action>;
 
 /** Reparte a los toasts de abajo la duración y el comportamiento del foco. */
-export const ToastProvider = ToastPrimitive.Provider;
+export const ToastProvider: typeof ToastPrimitive.Provider = ToastPrimitive.Provider;
 
 /** La esquina donde se apilan los toasts. */
 export const ToastViewport: React.ForwardRefExoticComponent<

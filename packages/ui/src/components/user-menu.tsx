@@ -120,6 +120,5 @@ function UserMenu({
     </DropdownMenu>
   );
 }
-UserMenu.displayName = "UserMenu";
 
 export { UserMenu };

@@ -167,7 +167,7 @@ export const MenubarCheckboxItem: React.ForwardRefExoticComponent<
 MenubarCheckboxItem.displayName = MenubarPrimitive.CheckboxItem.displayName;
 
 /** Agrupa opciones excluyentes y guarda cuál está elegida. */
-export const MenubarRadioGroup = MenubarPrimitive.RadioGroup;
+export const MenubarRadioGroup: typeof MenubarPrimitive.RadioGroup = MenubarPrimitive.RadioGroup;
 
 /** Una opción excluyente dentro de un `MenubarRadioGroup`. */
 export const MenubarRadioItem: React.ForwardRefExoticComponent<
@@ -228,7 +228,7 @@ export const MenubarSeparator: React.ForwardRefExoticComponent<
 MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName;
 
 /** Un submenú. Guarda si está abierto. */
-export const MenubarSub = MenubarPrimitive.Sub;
+export const MenubarSub: typeof MenubarPrimitive.Sub = MenubarPrimitive.Sub;
 
 /** La opción que abre el submenú, con la flecha a la derecha. */
 export const MenubarSubTrigger: React.ForwardRefExoticComponent<

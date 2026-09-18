@@ -10,7 +10,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 /** Raíz del plegable. Guarda si está abierto. */
-export const Collapsible = CollapsiblePrimitive.Root;
+export const Collapsible: typeof CollapsiblePrimitive.Root = CollapsiblePrimitive.Root;
 
 /** El control que pliega y despliega. */
 export const CollapsibleTrigger: React.ForwardRefExoticComponent<

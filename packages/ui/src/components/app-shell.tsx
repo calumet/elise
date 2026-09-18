@@ -249,7 +249,6 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
     </header>
   );
 }
-AppShellHeader.displayName = "AppShellHeader";
 
 /** Props de {@link AppShellSaveBar}. Las mismas de `SaveBar`. */
 export type AppShellSaveBarProps = SaveBarProps;
@@ -285,7 +284,6 @@ function AppShellSaveBar({ className, ...props }: AppShellSaveBarProps): React.J
     />
   );
 }
-AppShellSaveBar.displayName = "AppShellSaveBar";
 
 /** Props de {@link AppShellHeaderBrand}. */
 export type AppShellHeaderBrandProps = React.ComponentProps<"div">;
@@ -307,7 +305,6 @@ function AppShellHeaderBrand({ className, ...props }: AppShellHeaderBrandProps):
     />
   );
 }
-AppShellHeaderBrand.displayName = "AppShellHeaderBrand";
 
 /** Props de {@link AppShellHeaderSearch}. */
 export type AppShellHeaderSearchProps = Omit<React.ComponentProps<"button">, "onClick"> & {
@@ -366,7 +363,6 @@ function AppShellHeaderSearch({
     </button>
   );
 }
-AppShellHeaderSearch.displayName = "AppShellHeaderSearch";
 
 /** Props de {@link AppShellHeaderActions}. */
 export type AppShellHeaderActionsProps = React.ComponentProps<"div">;
@@ -395,7 +391,6 @@ function AppShellHeaderActions({
     />
   );
 }
-AppShellHeaderActions.displayName = "AppShellHeaderActions";
 
 /** Props de {@link AppShellHeaderAction}. */
 export type AppShellHeaderActionProps = Omit<React.ComponentProps<"button">, "children"> & {
@@ -435,7 +430,6 @@ function AppShellHeaderAction({
     </button>
   );
 }
-AppShellHeaderAction.displayName = "AppShellHeaderAction";
 
 /** Props de {@link AppShellUserMenu}. Las de {@link UserMenu}. */
 export type AppShellUserMenuProps = UserMenuProps;
@@ -618,7 +612,6 @@ function AppShellNavFooter({
     </div>
   );
 }
-AppShellNavFooter.displayName = "AppShellNavFooter";
 
 /** Props de {@link AppShellNavSection}. */
 export type AppShellNavSectionProps = Omit<React.ComponentProps<"li">, "title"> & {
@@ -864,7 +857,6 @@ function AppShellNavGroup({
     </GrupoContext.Provider>
   );
 }
-AppShellNavGroup.displayName = "AppShellNavGroup";
 
 /** Props de {@link AppShellNavSubItem}. */
 export type AppShellNavSubItemProps = React.ComponentProps<"a"> & {
@@ -1140,7 +1132,6 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
     />
   );
 }
-AppShellNavAction.displayName = "AppShellNavAction";
 
 /** Props de {@link AppShellMain}. */
 export type AppShellMainProps = React.ComponentProps<"main">;
