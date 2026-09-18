@@ -182,7 +182,6 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"p">): React.J
   );
 }
 /* `Alert` lo busca por nombre para subirlo a la barra del tono. */
-AlertTitle.displayName = "AlertTitle";
 
 /** El detalle del aviso. */
 function AlertDescription({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {

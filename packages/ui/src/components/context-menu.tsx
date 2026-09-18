@@ -26,17 +26,18 @@ const canaletaIndicador =
   "[&:has([data-slot=context-menu-checkbox-item],[data-slot=context-menu-radio-item])_[data-slot=context-menu-item]]:pl-7 [&:has([data-slot=context-menu-checkbox-item],[data-slot=context-menu-radio-item])_[data-slot=context-menu-sub-trigger]]:pl-7";
 
 /** Raíz de el menú contextual. Guarda qué está abierto; no dibuja nada por sí sola. */
-export const ContextMenu = ContextMenuPrimitive.Root;
+export const ContextMenu: typeof ContextMenuPrimitive.Root = ContextMenuPrimitive.Root;
 /** El control que abre el menú contextual. */
-export const ContextMenuTrigger = ContextMenuPrimitive.Trigger;
+export const ContextMenuTrigger: typeof ContextMenuPrimitive.Trigger = ContextMenuPrimitive.Trigger;
 /** Agrupa opciones afines. Con `ContextMenuLabel` encima, les pone título. */
-export const ContextMenuGroup = ContextMenuPrimitive.Group;
+export const ContextMenuGroup: typeof ContextMenuPrimitive.Group = ContextMenuPrimitive.Group;
 /** Monta el panel al final del `body`, para que no lo recorte ningún ancestro. */
-export const ContextMenuPortal = ContextMenuPrimitive.Portal;
+export const ContextMenuPortal: typeof ContextMenuPrimitive.Portal = ContextMenuPrimitive.Portal;
 /** Un submenú. Guarda si está abierto. */
-export const ContextMenuSub = ContextMenuPrimitive.Sub;
+export const ContextMenuSub: typeof ContextMenuPrimitive.Sub = ContextMenuPrimitive.Sub;
 /** Agrupa opciones excluyentes y guarda cuál está elegida. */
-export const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup;
+export const ContextMenuRadioGroup: typeof ContextMenuPrimitive.RadioGroup =
+  ContextMenuPrimitive.RadioGroup;
 
 /** El panel con las opciones. */
 export const ContextMenuContent: React.ForwardRefExoticComponent<

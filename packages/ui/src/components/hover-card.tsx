@@ -10,9 +10,9 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 /** Raíz de la tarjeta al pasar el mouse. Solo funciona con puntero, así que su contenido tiene que ser accesible por otra vía. */
-export const HoverCard = HoverCardPrimitive.Root;
+export const HoverCard: typeof HoverCardPrimitive.Root = HoverCardPrimitive.Root;
 /** El elemento que la abre al pasarle el mouse por encima. */
-export const HoverCardTrigger = HoverCardPrimitive.Trigger;
+export const HoverCardTrigger: typeof HoverCardPrimitive.Trigger = HoverCardPrimitive.Trigger;
 
 /** La tarjeta flotante. */
 export const HoverCardContent: React.ForwardRefExoticComponent<

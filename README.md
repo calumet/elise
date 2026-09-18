@@ -40,7 +40,7 @@ por archivo, y no pide token:
 pnpm add jsr:@calumet/elise-ui
 ```
 
-GitHub Packages sirve el bundle de tsup, y pide un `.npmrc` con el scope
+GitHub Packages sirve el bundle de tsdown, y pide un `.npmrc` con el scope
 apuntado y un token con permiso `read:packages`:
 
 ```

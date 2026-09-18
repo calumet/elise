@@ -30,17 +30,19 @@ const canaletaIndicador =
   "[&:has([data-slot=dropdown-menu-checkbox-item],[data-slot=dropdown-menu-radio-item])_[data-slot=dropdown-menu-item]]:pl-7 [&:has([data-slot=dropdown-menu-checkbox-item],[data-slot=dropdown-menu-radio-item])_[data-slot=dropdown-menu-sub-trigger]]:pl-7";
 
 /** Raíz de el menú desplegable. Guarda qué está abierto; no dibuja nada por sí sola. */
-export const DropdownMenu = DropdownMenuPrimitive.Root;
+export const DropdownMenu: typeof DropdownMenuPrimitive.Root = DropdownMenuPrimitive.Root;
 /** El control que abre el menú desplegable. */
-export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+export const DropdownMenuTrigger: typeof DropdownMenuPrimitive.Trigger =
+  DropdownMenuPrimitive.Trigger;
 /** Agrupa opciones afines. Con `DropdownMenuLabel` encima, les pone título. */
-export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
+export const DropdownMenuGroup: typeof DropdownMenuPrimitive.Group = DropdownMenuPrimitive.Group;
 /** Monta el panel al final del `body`, para que no lo recorte ningún ancestro. */
-export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
+export const DropdownMenuPortal: typeof DropdownMenuPrimitive.Portal = DropdownMenuPrimitive.Portal;
 /** Un submenú. Guarda si está abierto. */
-export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
+export const DropdownMenuSub: typeof DropdownMenuPrimitive.Sub = DropdownMenuPrimitive.Sub;
 /** Agrupa opciones excluyentes y guarda cuál está elegida. */
-export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
+export const DropdownMenuRadioGroup: typeof DropdownMenuPrimitive.RadioGroup =
+  DropdownMenuPrimitive.RadioGroup;
 
 /** El panel con las opciones. */
 export const DropdownMenuContent: React.ForwardRefExoticComponent<

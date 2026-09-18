@@ -50,9 +50,9 @@ export const ToolbarButton: React.ForwardRefExoticComponent<
 ToolbarButton.displayName = ToolbarPrimitive.Button.displayName;
 
 /** Un grupo de conmutadores dentro de la barra. */
-export const ToolbarToggleGroup = ToolbarPrimitive.ToggleGroup;
+export const ToolbarToggleGroup: typeof ToolbarPrimitive.ToggleGroup = ToolbarPrimitive.ToggleGroup;
 /** Un conmutador del grupo. */
-export const ToolbarToggleItem = ToolbarPrimitive.ToggleItem;
+export const ToolbarToggleItem: typeof ToolbarPrimitive.ToggleItem = ToolbarPrimitive.ToggleItem;
 /** La línea que separa dos grupos de acciones. */
 export const ToolbarSeparator: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof ToolbarPrimitive.Separator>> &

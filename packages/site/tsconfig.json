@@ -3,7 +3,9 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "types": ["vite/client", "node"],
-    "noEmit": true
+    "noEmit": true,
+    "declaration": false,
+    "isolatedDeclarations": false
   },
   "include": ["src/**/*", "vite.config.ts", "server.ts"]
 }

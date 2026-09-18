@@ -1,7 +1,7 @@
 # Publicar en JSR
 
 Los paquetes se publican en dos registros desde el mismo commit: GitHub Packages
-recibe el bundle de tsup, y [JSR](https://jsr.io/@calumet) recibe la salida de
+recibe el bundle de tsdown, y [JSR](https://jsr.io/@calumet) recibe la salida de
 `tsc`, un módulo por archivo. Los dos jobs viven en
 [`.github/workflows/publish.yml`](../.github/workflows/publish.yml) y corren en
 cada push a `master`; cada registro se salta las versiones que ya tiene, así que

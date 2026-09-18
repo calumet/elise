@@ -12,15 +12,15 @@ import { cn } from "@/lib/cn";
 import { useThemeScope } from "./theme-scope";
 
 /** Raíz del popover. Guarda si está abierto. */
-export const Popover = PopoverPrimitive.Root;
+export const Popover: typeof PopoverPrimitive.Root = PopoverPrimitive.Root;
 /** El control que lo abre. */
-export const PopoverTrigger = PopoverPrimitive.Trigger;
+export const PopoverTrigger: typeof PopoverPrimitive.Trigger = PopoverPrimitive.Trigger;
 /* Ancla el panel a un elemento sin que ese elemento controle la apertura. Hace
    falta cuando lo que abre el panel es otra cosa, por ejemplo un campo de
    búsqueda cuyo panel sigue abierto mientras haya texto. Con PopoverTrigger,
    pulsar el campo para seguir escribiendo lo cerraría. */
 /** Fija a qué elemento se ancla el panel, cuando no es el disparador. */
-export const PopoverAnchor = PopoverPrimitive.Anchor;
+export const PopoverAnchor: typeof PopoverPrimitive.Anchor = PopoverPrimitive.Anchor;
 
 /** El panel flotante, que se reubica solo si no entra donde debía. */
 export const PopoverContent: React.ForwardRefExoticComponent<

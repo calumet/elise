@@ -23,11 +23,11 @@ import {
 import { useThemeScope } from "./theme-scope";
 
 /** Raíz de la alerta modal. A diferencia de `Dialog`, no se cierra con Escape ni al pulsar fuera: exige una respuesta. */
-export const AlertDialog = AlertDialogPrimitive.Root;
+export const AlertDialog: typeof AlertDialogPrimitive.Root = AlertDialogPrimitive.Root;
 /** El control que abre la alerta. */
-export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+export const AlertDialogTrigger: typeof AlertDialogPrimitive.Trigger = AlertDialogPrimitive.Trigger;
 /** Monta la alerta al final del `body`. */
-export const AlertDialogPortal = AlertDialogPrimitive.Portal;
+export const AlertDialogPortal: typeof AlertDialogPrimitive.Portal = AlertDialogPrimitive.Portal;
 /** Props de {@link AlertDialogAction}. */
 export type AlertDialogActionProps = React.ComponentProps<typeof AlertDialogPrimitive.Action> &
   Pick<ButtonProps, "variant" | "size" | "tone">;
@@ -139,7 +139,6 @@ export const AlertDialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-header" className={cn(CABECERA_DIALOGO, className)} {...props} />
 );
-AlertDialogHeader.displayName = "AlertDialogHeader";
 
 /**
  * El cuerpo: la pregunta y lo que haga falta para responderla.
@@ -154,7 +153,6 @@ export const AlertDialogBody = ({
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
 );
-AlertDialogBody.displayName = "AlertDialogBody";
 
 /** El título, que es lo que anuncia el lector de pantalla al abrir. */
 export const AlertDialogTitle: React.ForwardRefExoticComponent<
@@ -197,4 +195,3 @@ export const AlertDialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   <div data-slot="alert-dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
 );
-AlertDialogFooter.displayName = "AlertDialogFooter";

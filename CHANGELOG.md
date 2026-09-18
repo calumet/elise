@@ -3,6 +3,17 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.22.0
+
+Suben también `elise-alerts` 0.3.6, `elise-tables` 0.4.5 y `elise-toasts` 0.4.7,
+que no cambian por dentro: dependen por caret y `^0.21.0` no alcanza a la 0.22.0.
+
+### Cambia
+
+- **El bundler pasa de tsup a tsdown**, que es el sucesor que el propio tsup
+  recomienda desde que dejó de mantenerse. La API publicada es la misma, nombre
+  por nombre, y el paquete sale un 15% más chico comprimido.
+
 ## `@calumet/elise-linter` 0.6.0
 
 ### Rompe

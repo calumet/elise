@@ -29,6 +29,15 @@ import {
   sortFn_text,
   tableFeatures,
 } from "@tanstack/react-table";
+import type {
+  CreatedFilterFn,
+  CreatedSortFn,
+  RowModel,
+  RowData,
+  Table,
+  TableFeature,
+  TableFeatures,
+} from "@tanstack/react-table";
 
 /** Ajustes de columna que lee `DataTable`, en el `meta` de cada columna. */
 export type MetaDeColumna = {
@@ -56,7 +65,49 @@ export type MetaDeColumna = {
    `columnMeta` es una ranura de solo tipo: de ahí sale el tipo de
    `columnDef.meta` para toda la tabla. Antes eso pedía un `declare module` sobre
    `ColumnMeta` de TanStack, que JSR rechaza por ampliar un módulo desde fuera. */
-export const caracteristicas = tableFeatures({
+export type Caracteristicas = {
+  columnFacetingFeature: TableFeature;
+  columnFilteringFeature: TableFeature;
+  columnVisibilityFeature: TableFeature;
+  rowPaginationFeature: TableFeature;
+  rowSelectionFeature: TableFeature;
+  rowSortingFeature: TableFeature;
+  facetedMinMaxValues: (
+    table: Table<TableFeatures, RowData>,
+    columnId: string,
+  ) => () => undefined | [number, number];
+  facetedRowModel: (
+    table: Table<TableFeatures, RowData>,
+    columnId: string,
+  ) => () => RowModel<TableFeatures, RowData>;
+  facetedUniqueValues: (
+    table: Table<TableFeatures, RowData>,
+    columnId: string,
+  ) => () => Map<unknown, number>;
+  filteredRowModel: (
+    table: Table<TableFeatures, RowData>,
+  ) => () => RowModel<TableFeatures, RowData>;
+  paginatedRowModel: (
+    table: Table<TableFeatures, RowData>,
+  ) => () => RowModel<TableFeatures, RowData>;
+  sortedRowModel: (table: Table<TableFeatures, RowData>) => () => RowModel<TableFeatures, RowData>;
+  filterFns: {
+    arrIncludes: CreatedFilterFn<TableFeatures, RowData>;
+    equals: CreatedFilterFn<TableFeatures, RowData>;
+    inDateRange: CreatedFilterFn<TableFeatures, RowData>;
+    inNumberRange: CreatedFilterFn<TableFeatures, RowData>;
+    includesString: CreatedFilterFn<TableFeatures, RowData>;
+    weakEquals: CreatedFilterFn<TableFeatures, RowData>;
+  };
+  sortFns: {
+    alphanumeric: CreatedSortFn<TableFeatures, RowData>;
+    datetime: CreatedSortFn<TableFeatures, RowData>;
+    text: CreatedSortFn<TableFeatures, RowData>;
+  };
+  columnMeta: MetaDeColumna;
+};
+
+export const caracteristicas: Caracteristicas = tableFeatures({
   columnFacetingFeature,
   columnFilteringFeature,
   columnVisibilityFeature,
@@ -84,6 +135,3 @@ export const caracteristicas = tableFeatures({
   },
   columnMeta: metaHelper<MetaDeColumna>(),
 });
-
-/** El tipo del juego de características, que llevan todos los tipos de TanStack. */
-export type Caracteristicas = typeof caracteristicas;

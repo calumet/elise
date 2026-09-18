@@ -12,7 +12,7 @@ import { cn } from "@/lib/cn";
 import { InlineError } from "./inline-error";
 
 /** Raíz del formulario. Reparte el estado de validación a los campos. */
-export const Form = FormPrimitive.Root;
+export const Form: typeof FormPrimitive.Root = FormPrimitive.Root;
 
 type GridColCount = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -118,7 +118,7 @@ export const FormLabel: React.ForwardRefExoticComponent<
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
 /** Envuelve al control para que reciba los `id` y los `aria` del campo. */
-export const FormControl = FormPrimitive.Control;
+export const FormControl: typeof FormPrimitive.Control = FormPrimitive.Control;
 
 /** El error del campo. Sale por `InlineError`, así que es un `<p>` y no el `<span>` de Radix. */
 export const FormMessage: React.ForwardRefExoticComponent<
