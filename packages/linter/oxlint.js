@@ -42,5 +42,10 @@ export const react = {
     ...base.rules,
     "react/react-in-jsx-scope": "off",
     "react/jsx-pascal-case": "error",
+    "react/set-state-in-effect": "error",
+    "react/refs": "error",
+    "react/purity": "error",
+    "react/rules-of-hooks": "error",
+    "react/jsx-no-constructed-context-values": "error",
   },
 };

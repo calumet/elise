@@ -101,6 +101,7 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+    // oxlint-disable-next-line react/set-state-in-effect -- Embla es el sistema externo: su `api` no existe hasta después del montaje.
     onSelect(api);
     api.on("reInit", onSelect);
     api.on("select", onSelect);
@@ -111,19 +112,22 @@ function Carousel({
     };
   }, [api, onSelect]);
 
+  const contexto = React.useMemo(
+    () => ({
+      carouselRef,
+      api,
+      opts,
+      orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+      scrollPrev,
+      scrollNext,
+      canScrollPrev,
+      canScrollNext,
+    }),
+    [carouselRef, api, opts, orientation, scrollPrev, scrollNext, canScrollPrev, canScrollNext],
+  );
+
   return (
-    <CarouselContext.Provider
-      value={{
-        carouselRef,
-        api: api,
-        opts,
-        orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-        scrollPrev,
-        scrollNext,
-        canScrollPrev,
-        canScrollNext,
-      }}
-    >
+    <CarouselContext.Provider value={contexto}>
       <div
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}

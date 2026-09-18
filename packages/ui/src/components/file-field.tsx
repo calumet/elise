@@ -124,15 +124,16 @@ export function FileField({
 
   const subiendo = typeof progress === "number";
 
-  /* El `objectURL` de un `File` hay que soltarlo a mano, y uno nuevo por render
-     dejaría el anterior colgado. */
+  // Crear y revocar el `objectURL` van de a pares, y el par vive en el efecto.
   const [urlLocal, setUrlLocal] = React.useState<string>();
   React.useEffect(() => {
     if (!(value instanceof File) || !value.type.startsWith("image/")) {
+      // oxlint-disable-next-line react/set-state-in-effect -- crear el objectURL fuera del efecto lo deja sin la limpieza que lo revoca.
       setUrlLocal(undefined);
       return;
     }
     const url = URL.createObjectURL(value);
+    // oxlint-disable-next-line react/set-state-in-effect -- ídem: el par crear/revocar vive en el efecto.
     setUrlLocal(url);
     return () => URL.revokeObjectURL(url);
   }, [value]);
@@ -155,10 +156,10 @@ export function FileField({
   const tamano = value instanceof File ? value.size : value?.size;
   const urlVista = value instanceof File ? urlLocal : value?.url;
 
-  // Un archivo roto o de un formato que el navegador no pinta deja el cuadro en
-  // blanco, que se lee como que no hay nada.
-  const [vistaFallo, setVistaFallo] = React.useState(false);
-  React.useEffect(() => setVistaFallo(false), [urlVista]);
+  // Un archivo que el navegador no pinta deja el cuadro en blanco, que se lee
+  // como que no hay nada.
+  const [urlFallida, setUrlFallida] = React.useState<string>();
+  const vistaFallo = urlVista !== undefined && urlVista === urlFallida;
 
   const miniatura = () => {
     if (arrastrando) {
@@ -169,7 +170,7 @@ export function FileField({
         <img
           src={urlVista}
           alt=""
-          onError={() => setVistaFallo(true)}
+          onError={() => setUrlFallida(urlVista)}
           className="max-h-full max-w-full object-contain"
           style={{ borderRadius: 4 }}
         />

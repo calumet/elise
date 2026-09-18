@@ -87,6 +87,7 @@ const BusquedaAsincrona = () => {
 
   useEffect(() => {
     if (!abierto) return;
+    // oxlint-disable-next-line react/set-state-in-effect -- la demo finge una búsqueda remota, y ese es el sistema externo.
     setCargando(true);
     const id = setTimeout(() => {
       const q = texto.trim().toLowerCase();

@@ -650,10 +650,12 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
 }): React.JSX.Element {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+  // El ancho varía para que la lista no parezca una grilla, y sale del `id`
+  // porque en SSR tiene que dar lo mismo en el servidor y en el cliente.
+  const id = React.useId();
+  let suma = 0;
+  for (const c of id) suma += c.charCodeAt(0);
+  const width = `${(suma % 41) + 50}%`;
 
   return (
     <div

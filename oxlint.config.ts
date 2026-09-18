@@ -1,8 +1,8 @@
-import { base } from "@calumet/elise-linter/oxlint";
+import { react } from "@calumet/elise-linter/oxlint";
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  extends: [base],
+  extends: [react],
   ignorePatterns: [
     "**/node_modules/**",
     "**/dist/**",
