@@ -95,15 +95,20 @@ export const tailwind = (entryPoint) => ({
    hereda de aquí. */
 const DENY = ["max-w-*", "opacity-*"];
 
-/* `layout` solo se alcanza por el `deny` de `max-w-*`, porque el resto de esa
+/* En inglés, como el resto de la salida del linter: el mensaje sale junto a los
+   de Oxlint y los del propio plugin, y mezclar idiomas en un mismo flujo es
+   peor que elegir cualquiera de los dos. La regla que citan sí está en
+   español, que es donde vive la documentación.
+
+   `layout` solo se alcanza por el `deny` de `max-w-*`, porque el resto de esa
    categoría está permitido. `effects` se alcanza entera, así que su texto vale
    tanto para una sombra como para el `opacity` del que habla §3. */
 const DENY_MESSAGE = {
-  layout: "El ancho de una pantalla lo pone `Container` con su `size`. Ver docs/reglas-ui.md §2.",
+  layout: "A screen's width belongs to `Container` and its `size`. See docs/reglas-ui.md §2.",
   effects:
-    "Los efectos son del componente. Si es para atenuar, `opacity` inventa un número que no " +
-    'responde al tema: la superficie ya declara su par de texto, así que va `tone="muted"`. ' +
-    "Ver docs/reglas-ui.md §3.",
+    "Effects belong to the component. To dim, `opacity` invents a value that does not follow " +
+    'the theme: the surface already declares its own text pair, so use `tone="muted"`. ' +
+    "See docs/reglas-ui.md §3.",
 };
 
 /* Qué acepta cada componente por encima de `layout`. Un contrato reemplaza las
@@ -124,10 +129,10 @@ const CONTRACTS = [
     deny: [...DENY, "border-*", "rounded-*", "shadow-*"],
     message: {
       ...DENY_MESSAGE,
-      shape: "El contorno de un marco sale de `SURFACE`. Ver docs/reglas-ui.md §2.",
+      shape: "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md §2.",
       // La sombra del bisel también es del marco, y cae en `effects` igual que
       // el `opacity` del que habla el mensaje de arriba.
-      effects: "El contorno de un marco sale de `SURFACE`. Ver docs/reglas-ui.md §2.",
+      effects: "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md §2.",
     },
   },
   // El texto se compone: quien lo usa elige el tamaño y el peso.
@@ -144,8 +149,8 @@ const CONTRACTS = [
     deny: [...DENY, "w-*"],
     message: {
       ...DENY_MESSAGE,
-      spacing: "Usá un `size` de {{component}}: {{sizes|sm, md, lg, xl, icon, icon-sm}}.",
-      default: "Usá una `variant` o un `tone` de {{component}}.",
+      spacing: "Use a {{component}} `size`: {{sizes|sm, md, lg, xl, icon, icon-sm}}.",
+      default: "Use a {{component}} `variant` or `tone`.",
     },
   },
 ];

@@ -115,7 +115,18 @@ escrito quién es dueño de cada medida:
 | §4, clases por interpolación | `require-static-classes`                                                              |
 | §4, segundo juego de anchos  | una medida cruda que la escala ya tiene: `max-w-[600px]` cuando existe `max-w-150`    |
 
-Cada uno responde con la regla y dónde leerla, no con un «no se puede».
+Cada uno responde con la regla y dónde leerla, no con un «no se puede»:
+
+```
+A frame's outline comes from `SURFACE`. See docs/reglas-ui.md §2.
+Use a Button `size`: sm, md, lg, xl, icon, icon-sm.
+```
+
+Los mensajes van en inglés, como el resto de la salida del linter: salen junto
+a los de Oxlint y los del propio plugin, y mezclar idiomas en un mismo flujo
+es peor que elegir cualquiera de los dos. La regla que citan sí está en
+español, que es donde vive la documentación.
+
 Los contratos se amplían con `contracts`.
 
 Esto vale para **todos** los componentes del catálogo, no solo para los que
