@@ -82,7 +82,7 @@ Integración de [react-hook-form](https://react-hook-form.com/) + [Zod](https://
 
 - Exporta `useZodForm()` y el re-export `z` de Zod
 - **Independiente de `elise-ui`** (puede usarse con cualquier UI)
-- **Peer dependencies**: React 19
+- **Peer dependencies**: React 19, `zod`, `react-hook-form`
 
 ### @calumet/elise-tables
 

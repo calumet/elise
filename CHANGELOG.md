@@ -37,6 +37,20 @@ Los demás campos pasan `control` a un `<input>`, donde que el `<label>` lo
 nombre es lo correcto. Este era el único componente que se lo daba a un botón
 con texto.
 
+## `@calumet/elise-forms` 0.2.0
+
+### Rompe
+
+**`zod` y `react-hook-form` pasan a ser peer dependencies.** Eran dependencias
+normales, y con dos copias nada avisa: un esquema hecho con el Zod del
+proyecto no es el que espera el resolver, y el contexto de react-hook-form
+tampoco es el mismo. Es lo que ya hace `@hookform/resolvers`.
+
+pnpm y npm las instalan solas. Con Yarn, o con `auto-install-peers=false`, hay
+que declararlas.
+
+`@hookform/resolvers` se queda como dependencia normal.
+
 ## `@calumet/elise-linter` 0.9.0
 
 ### Añade
