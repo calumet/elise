@@ -965,6 +965,9 @@ function AppShellNavSubList({
 
 /** Props de {@link AppShellNavItem}. */
 export type AppShellNavItemProps = React.ComponentProps<"a"> & {
+  /** Obligatorio: un `<a>` sin destino no se enfoca ni se activa con teclado. */
+  href: string;
+
   active?: boolean;
   icon?: React.ReactNode;
 

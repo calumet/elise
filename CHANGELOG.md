@@ -3,6 +3,35 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.23.0
+
+Suben también `elise-alerts` 0.3.7 y `elise-toasts` 0.4.8, que no cambian por
+dentro: dependen por caret y `^0.22.0` no alcanza a la 0.23.0.
+
+### Rompe
+
+- **`AppShellNavItem` exige `href`.** Sin destino renderizaba un `<a>` que no se
+  enfoca ni se activa con teclado, así que una entrada de navegación quedaba
+  fuera del alcance de quien no usa ratón.
+
+## `@calumet/elise-tables` 0.5.0
+
+### Corrige
+
+- **El encabezado ordenable no se anunciaba como control.** Ahora lleva
+  `role="button"`, y los que no ordenan dejan de traer manejadores y `tabIndex`.
+
+- **El filtro de selección no decía qué lista abre.** Le faltaba el
+  `aria-controls` que `role="combobox"` pide.
+
+## `@calumet/elise-linter` 0.8.0
+
+### Agrega
+
+- **28 de las 35 reglas de `jsx-a11y` en el preset `react`.** Las siete que
+  quedan fuera están en [docs/linter.md](docs/linter.md) con el motivo: sus
+  hallazgos en un catálogo de componentes son falsos positivos.
+
 ## `@calumet/elise-ui` 0.22.1
 
 ### Corrige

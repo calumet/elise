@@ -73,6 +73,22 @@ Va esparcido y no dentro de `extends` porque `extends` no fusiona `settings`.
 El orden de las clases no entra ahí: lo arregla `sortTailwindcss` de Oxfmt al
 formatear. Encender además `enforce-sort-order` reportaría lo mismo dos veces.
 
+### Accesibilidad
+
+El preset `react` enciende 28 de las 35 reglas de `jsx-a11y`. Las siete que
+quedan fuera se revisaron una por una sobre este catálogo, y sus hallazgos aquí
+son falsos positivos por tres causas:
+
+| Causa                                                                                                  | Reglas                                                                                                     |
+| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| **Delegación**: el manejador vive en un contenedor que recoge el clic de un hijo que ya es interactivo | `click-events-have-key-events`, `no-static-element-interactions`, `no-noninteractive-element-interactions` |
+| **Props por spread**: el linter no ve el `href` ni los hijos que llegan en `{...props}`                | `anchor-has-content`                                                                                       |
+| **Patrones ARIA sin equivalente nativo**: `listbox`, `option`, `application`, `status`                 | `prefer-tag-over-role`, `no-noninteractive-tabindex`, `no-autofocus`                                       |
+
+La más ruidosa es `prefer-tag-over-role`, con 13 de los 24 hallazgos: pide un
+`<option>` donde hay `role="option"`, y `<option>` solo existe dentro de un
+`<select>`, donde no caben botones con contenido propio.
+
 ### Variantes
 
 Lo que en ESLint era concatenar arrays, aquí son tres cosas:
