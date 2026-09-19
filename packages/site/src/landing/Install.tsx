@@ -32,7 +32,7 @@ export function Install() {
         <h2 className="text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.035em]">
           {t("title")}
         </h2>
-        <p className="mt-3 max-w-[540px] text-lg text-muted-foreground text-pretty">{t("lede")}</p>
+        <p className="mt-3 max-w-[540px] text-lg text-pretty text-muted-foreground">{t("lede")}</p>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <Panel titulo={t("panel.terminal")}>

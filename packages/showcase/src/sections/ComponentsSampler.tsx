@@ -21,7 +21,7 @@ const ComponentsSampler = () => {
         <TabsContent value="details">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <span className="text-base text-muted-foreground w-24">Progreso</span>
+              <span className="w-24 text-base text-muted-foreground">Progreso</span>
               <Progress value={progress} className="flex-1" />
               <Button
                 size="sm"

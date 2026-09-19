@@ -76,7 +76,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
              y otra tarjeta blanca más se confunde con ellas.
              Invertirlo lo despega sin recurrir a un color de estado, que aquí
              significaría otra cosa. Radio de 8px y 12 de relleno. */
-          className={`${SUPERFICIE_INVERSA} group relative flex w-full max-w-md flex-col gap-2 rounded-md p-3 pr-12 shadow-lg transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out`}
+          className={`${SUPERFICIE_INVERSA} group relative flex w-full max-w-md flex-col gap-2 rounded-md p-3 pr-12 shadow-lg transition data-[state=closed]:animate-out data-[state=open]:animate-in data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x)`}
         >
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />
@@ -90,7 +90,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="px-0 text-foreground underline-offset-2 hover:underline hover:bg-transparent"
+                  className="px-0 text-foreground underline-offset-2 hover:bg-transparent hover:underline"
                   onClick={toastItem.action}
                 >
                   {toastItem.actionLabel}
@@ -98,7 +98,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
               ) : null}
             </div>
             <ToastClose
-              className="absolute right-2 top-2 inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
+              className="absolute top-2 right-2 inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-1 focus-visible:ring-offset-transparent focus-visible:outline-none"
               aria-label={closeLabel}
             >
               <X className="h-4 w-4" aria-hidden />

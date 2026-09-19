@@ -76,7 +76,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "bg-background group/calendar p-3 [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
+        "group/calendar bg-background p-3 [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -90,46 +90,46 @@ function Calendar({
       }}
       classNames={{
         root: cn("w-fit", defaultClassNames.root),
-        months: cn("flex gap-4 flex-col md:flex-row relative", defaultClassNames.months),
+        months: cn("relative flex flex-col gap-4 md:flex-row", defaultClassNames.months),
         /* 4px entre el título y la retícula. Con 16 el encabezado se despega y
            el mes deja de leerse como una sola pieza. */
-        month: cn("flex flex-col w-full gap-1", defaultClassNames.month),
+        month: cn("flex w-full flex-col gap-1", defaultClassNames.month),
         /* Nada de `w-full` aquí: la raíz es `w-fit`, así que el ancho de la
            tabla y el de su contenedor se definirían el uno al otro. El ancho
            sale de las celdas, que miden `--cell-size`. */
         month_grid: cn("border-collapse", defaultClassNames.month_grid),
         nav: cn(
-          "flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between",
+          "absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1",
           defaultClassNames.nav,
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
-          "size-(--cell-size) aria-disabled:opacity-50 p-0 select-none",
+          "size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
           defaultClassNames.button_previous,
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant }),
-          "size-(--cell-size) aria-disabled:opacity-50 p-0 select-none",
+          "size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
           defaultClassNames.button_next,
         ),
         month_caption: cn(
-          "flex items-center justify-center h-(--cell-size) w-full px-(--cell-size)",
+          "flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)",
           defaultClassNames.month_caption,
         ),
         dropdowns: cn(
-          "w-full flex items-center text-sm font-medium justify-center h-(--cell-size) gap-1.5",
+          "flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium",
           defaultClassNames.dropdowns,
         ),
         dropdown_root: cn(
-          "relative has-focus:border-ring border border-border has-focus:ring-ring/50 has-focus:ring-[3px] rounded-sm",
+          "relative rounded-sm border border-border has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50",
           defaultClassNames.dropdown_root,
         ),
-        dropdown: cn("absolute bg-popover inset-0 opacity-0", defaultClassNames.dropdown),
+        dropdown: cn("absolute inset-0 bg-popover opacity-0", defaultClassNames.dropdown),
         caption_label: cn(
-          "select-none font-medium",
+          "font-medium select-none",
           captionLayout === "label"
             ? "text-sm"
-            : "rounded-sm pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
+            : "flex h-8 items-center gap-1 rounded-sm pr-1 pl-2 text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground",
           defaultClassNames.caption_label,
         ),
         /* Las filas se quedan como filas de tabla en vez de pasar a `flex`.
@@ -138,7 +138,7 @@ function Calendar({
            sueltas sin nada que las agrupe. El ancho lo reparte `table-fixed`. */
         weekdays: cn(defaultClassNames.weekdays),
         weekday: cn(
-          "text-muted-foreground py-2 font-normal text-xs select-none",
+          "py-2 text-xs font-normal text-muted-foreground select-none",
           defaultClassNames.weekday,
         ),
         /* Sin separación entre semanas: un rango de varias filas tiene que
@@ -151,13 +151,13 @@ function Calendar({
           "[&>td:last-child>button[data-range-middle=true]]:rounded-r-[0.25rem]",
           defaultClassNames.week,
         ),
-        week_number_header: cn("select-none w-(--cell-size)", defaultClassNames.week_number_header),
+        week_number_header: cn("w-(--cell-size) select-none", defaultClassNames.week_number_header),
         week_number: cn(
-          "text-[0.8rem] select-none text-muted-foreground",
+          "text-[0.8rem] text-muted-foreground select-none",
           defaultClassNames.week_number,
         ),
         day: cn(
-          "relative w-full h-full p-0 text-center group/day aspect-square select-none",
+          "group/day relative aspect-square h-full w-full p-0 text-center select-none",
           defaultClassNames.day,
         ),
         /* El rango lo pinta el botón, no la celda. Pintarlo en las dos hacía que
@@ -239,7 +239,7 @@ function CalendarDayButton({
       data-range-middle={modifiers.range_middle}
       data-today={modifiers.today}
       className={cn(
-        "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md text-xs leading-none font-normal",
+        "flex aspect-square h-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md text-xs leading-none font-normal",
         /* Hoy solo cambia de peso. Un fondo lo pondría a competir con el día
            elegido, que es el que de verdad tiene que destacar. */
         "data-[today=true]:font-bold",
@@ -248,10 +248,10 @@ function CalendarDayButton({
            propósito, que es lo que hace que el rango se pueda recorrer. */
         "hover:bg-primary-hover hover:text-primary-foreground",
         "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground",
-        "data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-start=true]:rounded-md",
-        "data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-end=true]:rounded-r-md",
-        "data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-middle=true]:rounded-none",
-        "[&[data-range-end=true][data-range-start=false]]:rounded-l-none [&[data-range-end=false][data-range-start=true]]:rounded-r-none",
+        "data-[range-start=true]:rounded-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground",
+        "data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground",
+        "data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground",
+        "[&[data-range-end=false][data-range-start=true]]:rounded-r-none [&[data-range-end=true][data-range-start=false]]:rounded-l-none",
         "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50",
         "[&>span]:text-xs [&>span]:opacity-70",
         defaultClassNames.day,

@@ -462,7 +462,7 @@ export const TableBody: React.ForwardRefExoticComponent<
      bajo el encabezado la pone este `border-t`, y va un tono más firme que los
      separadores: cierra la banda del encabezado, mientras que los de entre filas
      solo tienen que dejar contar. */
-    const filetes = cn("border-t border-border divide-y divide-border-subtle", cargando && APAGADO);
+    const filetes = cn("divide-y divide-border-subtle border-t border-border", cargando && APAGADO);
 
     if (modo === "list") {
       return (

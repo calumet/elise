@@ -24,7 +24,7 @@ const ProgressSkeletonDemo = () => {
   }, [loading]);
 
   return (
-    <div className="space-y-4 w-full">
+    <div className="w-full space-y-4">
       <div className="flex items-center gap-3">
         <Progress value={value} className="flex-1" />
         <Button
@@ -44,7 +44,7 @@ const ProgressSkeletonDemo = () => {
         </p>
         <Progress value={null} />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {loading ? (
           <>
             <Skeleton className="h-6 w-full" />

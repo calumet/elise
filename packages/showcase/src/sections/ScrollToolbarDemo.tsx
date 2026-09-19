@@ -9,7 +9,7 @@ const ScrollToolbarDemo = () => {
       <div className="space-y-2">
         <p className="text-sm font-semibold text-foreground">Scroll Area</p>
         <ScrollArea className="h-40 rounded-sm border border-border">
-          <div className="p-3 space-y-2">
+          <div className="space-y-2 p-3">
             {items.map((item) => (
               <div key={item} className="rounded-sm bg-muted px-3 py-2 text-base">
                 {item}

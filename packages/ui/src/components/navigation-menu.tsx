@@ -318,7 +318,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       {/* El de respaldo. Lo esconde el CSS: en servidor no se sabe si hay otro. */}
       <div
         className={cn(
-          "flex items-center md:hidden group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:hidden",
+          "flex items-center group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:hidden md:hidden",
           className,
         )}
       >
@@ -355,7 +355,7 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
         /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
         /* Sin medir, lo que no cabe pasa a una segunda linea recortada. */
         className={cn(
-          "group -mx-2.5 flex flex-1 list-none items-center gap-0 max-md:hidden data-[sin-medir]:max-h-9 data-[sin-medir]:flex-wrap data-[sin-medir]:overflow-hidden",
+          "group -mx-2.5 flex flex-1 list-none items-center gap-0 data-[sin-medir]:max-h-9 data-[sin-medir]:flex-wrap data-[sin-medir]:overflow-hidden max-md:hidden",
           className,
         )}
         {...props}
@@ -430,9 +430,9 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         if (cerradoPorClic.current && e.pointerType === "mouse") e.preventDefault();
       }}
       className={cn(
-        "group inline-flex select-none items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "group inline-flex items-center rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
         secuencia
-          ? "min-h-9 w-full justify-between whitespace-normal text-start font-semibold"
+          ? "min-h-9 w-full justify-between text-start font-semibold whitespace-normal"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
         secuencia === "cajon" && "min-h-11 px-2.5",
         className,
@@ -616,7 +616,7 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       data-slot="navigation-menu-link"
       ref={ref}
       className={cn(
-        "inline-flex h-9 w-max select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-2.5 py-1.5 text-base font-medium text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
+        "inline-flex h-9 w-max items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
         secuencia && "whitespace-normal",
         secuencia === "cajon" && "min-h-11 px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
         description && "flex-col items-start justify-center gap-0.5",
@@ -724,12 +724,12 @@ export const NavigationMenuIndicator: React.ForwardRefExoticComponent<
     data-slot="navigation-menu-indicator"
     ref={ref}
     className={cn(
-      "top-full flex h-2 items-end justify-center overflow-hidden transition-[width,transform] duration-200 data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
+      "top-full flex h-2 items-end justify-center overflow-hidden transition-[width,transform] duration-200 data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:animate-in data-[state=visible]:fade-in",
       className,
     )}
     {...props}
   >
-    <div className="relative top-px h-2 w-2 rotate-45 rounded-sm bg-popover border-l border-t border-border" />
+    <div className="relative top-px h-2 w-2 rotate-45 rounded-sm border-t border-l border-border bg-popover" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName = NavigationMenuPrimitive.Indicator.displayName;

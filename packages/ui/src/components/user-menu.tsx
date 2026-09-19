@@ -83,7 +83,7 @@ function UserMenu({
           type="button"
           data-slot="user-menu"
           className={cn(
-            "flex h-8 flex-none cursor-pointer items-center gap-2 rounded-md text-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+            "flex h-8 flex-none cursor-pointer items-center gap-2 rounded-md text-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
             variant === "name" &&
               "md:border md:border-border md:bg-card md:ps-2.5 md:pe-1 md:hover:border-border-strong",
             className,

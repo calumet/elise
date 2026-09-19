@@ -74,7 +74,7 @@ export const Link: React.ForwardRefExoticComponent<
         target={target}
         rel={rel ?? (target === "_blank" ? "noreferrer noopener" : undefined)}
         className={cn(
-          "inline cursor-pointer rounded-xs underline underline-offset-2 transition-[color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "inline cursor-pointer rounded-xs underline underline-offset-2 transition-[color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
           tonos[tone],
           className,
         )}

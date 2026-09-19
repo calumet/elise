@@ -24,7 +24,7 @@ export const Slider: React.ForwardRefExoticComponent<
       <SliderPrimitive.Root
         data-slot="slider"
         ref={ref}
-        className={cn("relative flex w-full touch-none select-none items-center", className)}
+        className={cn("relative flex w-full touch-none items-center select-none", className)}
         {...props}
       >
         {/* El carril lleva `bg-track` y no un fondo tenue: lo que aún no está
@@ -36,7 +36,7 @@ export const Slider: React.ForwardRefExoticComponent<
         {Array.from({ length: thumbCount }).map((_, index) => (
           <SliderPrimitive.Thumb
             key={index}
-            className="block h-4 w-4 rounded-full bg-background shadow-sm ring-1 ring-border transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+            className="block h-4 w-4 rounded-full bg-background shadow-sm ring-1 ring-border transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
           />
         ))}
       </SliderPrimitive.Root>

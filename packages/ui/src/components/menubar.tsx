@@ -63,14 +63,14 @@ export const MenubarTrigger: React.ForwardRefExoticComponent<
     data-slot="menubar-trigger"
     ref={ref}
     className={cn(
-      "group flex select-none items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:bg-state-hover data-[state=open]:text-foreground",
+      "group flex items-center gap-2 rounded-xs px-3 py-2 text-base font-semibold text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none data-[state=open]:bg-state-hover data-[state=open]:text-foreground",
       className,
     )}
     {...props}
   >
     {props.children}
     <ChevronDown
-      className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]:rotate-180 -mr-1"
+      className="-mr-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]:rotate-180"
       aria-hidden
     />
   </MenubarPrimitive.Trigger>

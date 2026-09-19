@@ -29,7 +29,7 @@ export const PasswordField: React.ForwardRefExoticComponent<
           ref={ref}
           type={visible ? "text" : "password"}
           className={cn(
-            "flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+            "flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             CAMPO_INVALIDO,
             className,
           )}
@@ -39,7 +39,7 @@ export const PasswordField: React.ForwardRefExoticComponent<
           type="button"
           aria-label={toggleAriaLabel ?? defaultToggleLabel}
           onClick={() => setVisible((v) => !v)}
-          className="absolute inset-y-0 right-2 my-auto inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="absolute inset-y-0 right-2 my-auto inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
         >
           {visible ? (
             <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true" focusable="false">

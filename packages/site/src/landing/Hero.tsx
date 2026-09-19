@@ -27,16 +27,16 @@ export function Hero() {
               se tocan y se leen como un solo bloque. Cualquier valor mayor abre
               una franja de página entre las dos. */}
           <h1 className="max-w-4xl text-[clamp(2.25rem,6vw,4.25rem)] leading-[1.29] font-semibold tracking-[-0.035em] text-balance">
-            <span className="box-decoration-clone bg-primary px-3 text-primary-foreground">
+            <span className="bg-primary box-decoration-clone px-3 text-primary-foreground">
               {t("titleLine1")}
             </span>
             <br />
-            <span className="box-decoration-clone bg-primary px-3 text-primary-foreground">
+            <span className="bg-primary box-decoration-clone px-3 text-primary-foreground">
               {t("titleLine2")}
             </span>
           </h1>
 
-          <p className="mt-7 max-w-[620px] text-[clamp(1rem,1.6vw,1.1875rem)] leading-relaxed text-secondary-foreground text-pretty">
+          <p className="mt-7 max-w-[620px] text-[clamp(1rem,1.6vw,1.1875rem)] leading-relaxed text-pretty text-secondary-foreground">
             {t("lede")}
           </p>
 
@@ -65,7 +65,7 @@ export function Hero() {
                  Las separaciones van por posición en la rejilla y no por orden,
                  porque en el móvil son dos filas de dos y la celda que abre fila
                  es la impar, no solo la primera. */
-              className="flex-col-reverse gap-1.5 border-border px-7 py-6 odd:pl-0 even:border-l even:pr-0 [&:nth-child(n+3)]:border-t md:border-t-0 md:border-l md:odd:pl-7 md:even:pr-7 md:first:border-l-0 md:first:pl-0 md:last:pr-0"
+              className="flex-col-reverse gap-1.5 border-border px-7 py-6 odd:pl-0 even:border-l even:pr-0 md:border-t-0 md:border-l md:first:border-l-0 md:first:pl-0 md:last:pr-0 md:odd:pl-7 md:even:pr-7 [&:nth-child(n+3)]:border-t"
             />
           ))}
         </div>

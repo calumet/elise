@@ -3,6 +3,31 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.22.1
+
+### Corrige
+
+- **La variante `outline` de `SidebarMenuButton` no dibujaba su contorno.** La
+  sombra pedía `hsl(var(--sidebar-border))`, pero esa variable ya es un color
+  `oklch`, así que la declaración era inválida y el navegador la descartaba.
+
+- **Dos clases de Tailwind que no hacían nada.** `text-md` no existe, y en el
+  calendario `w-full` le ganaba el ancho a `size-auto`.
+
+### Cambia
+
+- **`class-variance-authority` se va del paquete.** Estaba abandonada desde
+  noviembre de 2024 y la usaba un solo archivo. `SidebarMenuButton` declara sus
+  variantes como el resto del catálogo.
+
+## `@calumet/elise-linter` 0.7.0
+
+### Agrega
+
+- **`tailwind(entryPoint)`**, que valida las clases contra el tema del proyecto
+  con `oxlint-tailwindcss`. El orden no entra ahí: lo arregla `sortTailwindcss`
+  de Oxfmt, y encender los dos reportaría lo mismo dos veces.
+
 ## `@calumet/elise-ui` 0.22.0
 
 Suben también `elise-alerts` 0.3.6, `elise-tables` 0.4.5 y `elise-toasts` 0.4.7,

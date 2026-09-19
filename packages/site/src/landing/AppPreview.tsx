@@ -186,7 +186,7 @@ export function AppPreview() {
             <br />
             {t("titleLine2")}
           </h2>
-          <p className="mt-3 max-w-[600px] text-lg text-muted-foreground text-pretty">
+          <p className="mt-3 max-w-[600px] text-lg text-pretty text-muted-foreground">
             {t("lede")}
           </p>
         </div>
@@ -354,7 +354,7 @@ export function AppPreview() {
         {NOTAS.map((nota) => (
           <div key={nota.paquete} className="border-l-2 border-border-strong pl-3">
             <div className="font-mono text-xs font-medium text-primary">{nota.paquete}</div>
-            <p className="mt-1.5 text-sm text-muted-foreground text-pretty">
+            <p className="mt-1.5 text-sm text-pretty text-muted-foreground">
               <RichText>{t(nota.key)}</RichText>
             </p>
           </div>

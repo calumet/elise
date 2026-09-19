@@ -265,7 +265,7 @@ export function DateField({
                    escribir la fecha entera, así que un segundo tope solo alarga
                    el recorrido del formulario. */
                 tabIndex={-1}
-                className="absolute inset-y-0 end-2 my-auto inline-flex size-6 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
+                className="absolute inset-y-0 end-2 my-auto inline-flex size-6 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <CalendarIcon aria-hidden="true" className="size-4" />
               </button>

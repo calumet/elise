@@ -122,7 +122,7 @@ export const Clickable: React.ForwardRefExoticComponent<
         className={cn(
           "block w-full cursor-pointer text-start transition-[background-color,box-shadow] duration-(--duration-fast) ease-out",
           "hover:bg-state-hover active:bg-state-active",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
           "aria-disabled:pointer-events-none aria-disabled:opacity-50",
           clasesDeCaja({
             padding,

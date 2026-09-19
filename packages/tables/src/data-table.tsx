@@ -204,8 +204,8 @@ function DataTableContent<TData extends RowData>({
      armaba su propia tarjeta con la misma `SUPERFICIE`, y eran dos sitios donde
      arreglar lo mismo. */
   const barraDeFiltros = (
-    <section className="flex justify-between flex-wrap sm:flex-nowrap gap-3">
-      <div className="flex flex-wrap gap-3 items-end">
+    <section className="flex flex-wrap justify-between gap-3 sm:flex-nowrap">
+      <div className="flex flex-wrap items-end gap-3">
         {table.getAllColumns().map((column) => {
           if (!metaDe(column.columnDef).filterVariant) return null;
 
@@ -266,7 +266,7 @@ function DataTableContent<TData extends RowData>({
   );
 
   return (
-    <div className="w-full h-full min-w-0 flex flex-col justify-between">
+    <div className="flex h-full w-full min-w-0 flex-col justify-between">
       <div data-slot="data-table-card" className="min-w-0">
         <Table
           filters={barraDeFiltros}
@@ -282,7 +282,7 @@ function DataTableContent<TData extends RowData>({
           paginationLabel={`${primeraFila}-${ultimaFila} ${labelOf} ${total}`}
           paginationEnd={
             <div className="flex items-center gap-2">
-              <Label htmlFor={id} className="max-sm:sr-only text-xs whitespace-nowrap">
+              <Label htmlFor={id} className="text-xs whitespace-nowrap max-sm:sr-only">
                 {labelRowsPerPage}
               </Label>
               <Select
@@ -348,13 +348,13 @@ function DataTableContent<TData extends RowData>({
                           {{
                             asc: (
                               <ChevronUp
-                                className="shrink-0 opacity-60 size-4"
+                                className="size-4 shrink-0 opacity-60"
                                 aria-hidden="true"
                               />
                             ),
                             desc: (
                               <ChevronDown
-                                className="shrink-0 opacity-60 size-4"
+                                className="size-4 shrink-0 opacity-60"
                                 aria-hidden="true"
                               />
                             ),
@@ -535,9 +535,9 @@ function Filter<TData extends RowData>({
               variant="outline"
               role="combobox"
               aria-expanded={selectOpen}
-              className="bg-background hover:bg-background border-border w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+              className="w-full justify-between border-border bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
             >
-              <div className="flex items-center min-w-0 flex-1">
+              <div className="flex min-w-0 flex-1 items-center">
                 {selectedValues.length > 0 ? (
                   <span className="truncate">{selectedValues.join(", ")}</span>
                 ) : (
@@ -545,13 +545,13 @@ function Filter<TData extends RowData>({
                 )}
               </div>
               <ChevronsUpDown
-                className="size-4 text-muted-foreground/80 shrink-0"
+                className="size-4 shrink-0 text-muted-foreground/80"
                 aria-hidden="true"
               />
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="border-border w-full min-w-(--radix-popper-anchor-width) p-0"
+            className="w-full min-w-(--radix-popper-anchor-width) border-border p-0"
             align="start"
           >
             <Command>
@@ -567,7 +567,7 @@ function Filter<TData extends RowData>({
                     >
                       <span className="truncate">{String(value)}</span>
                       {selectedValues.includes(String(value)) && (
-                        <Check className="size-4 ml-auto" />
+                        <Check className="ml-auto size-4" />
                       )}
                     </CommandItem>
                   ))}
@@ -581,7 +581,7 @@ function Filter<TData extends RowData>({
                         className="w-full justify-start px-3 font-normal"
                         onClick={clearAllSelections}
                       >
-                        <X className="size-4 -ms-1 opacity-60" aria-hidden="true" />
+                        <X className="-ms-1 size-4 opacity-60" aria-hidden="true" />
                         {labelClear}
                       </Button>
                     </CommandGroup>
@@ -607,7 +607,7 @@ function Filter<TData extends RowData>({
           placeholder={labelSearch}
           type="text"
         />
-        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
           <Search className="size-4" />
         </div>
       </div>

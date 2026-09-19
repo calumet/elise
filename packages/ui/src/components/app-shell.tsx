@@ -345,7 +345,7 @@ function AppShellHeaderSearch({
          diferencia de luminosidad no alcanzan a dibujar la caja, y lo que la
          define es el contorno. */
       className={cn(
-        "flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-card text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-card text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
         "w-full min-w-0 flex-1 px-3 md:col-start-2 md:flex-none",
         className,
       )}
@@ -421,7 +421,7 @@ function AppShellHeaderAction({
       data-slot="app-shell-header-action"
       aria-label={label}
       className={cn(
-        "inline-flex size-8 flex-none cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-5",
+        "inline-flex size-8 flex-none cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none [&_svg]:size-5",
         className,
       )}
       {...props}
@@ -470,7 +470,7 @@ function AppShellNavToggle({
          tokens generales y no los de la barra lateral: ahí `--sidebar` resolvería
          en oscuro y quedaría casi negro sobre casi negro. */
       className={cn(
-        "inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden",
+        "inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none md:hidden",
         className,
       )}
       {...props}
@@ -545,7 +545,7 @@ function AppShellNav({
              dónde empieza, la rejilla busca sitio, y en esta fila las dos pistas
              ya las tienen la navegación y el contenido, así que se inventaba una
              tercera y el velo salía de ancho cero al costado. */
-          "col-start-1 col-end-3 row-start-2 z-overlay cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out md:hidden",
+          "z-overlay col-start-1 col-end-3 row-start-2 cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out md:hidden",
           cajonAbierto ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
@@ -749,7 +749,7 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
       fill="none"
       aria-hidden="true"
       focusable="false"
-      className="pointer-events-none absolute top-0 start-2 rtl:-scale-x-100"
+      className="pointer-events-none absolute start-2 top-0 rtl:-scale-x-100"
     >
       {variante === "linea" ? <path d={VERTICAL} className="fill-sidebar-guide" /> : null}
       {variante === "puntero" ? (
@@ -1075,9 +1075,9 @@ function AppShellNavItem({
           <span
             data-slot="app-shell-nav-item-count"
             className={cn(
-              "my-1 ms-2 flex h-5 flex-none items-center pe-0.5 text-xs tabular-nums text-muted-foreground",
+              "my-1 ms-2 flex h-5 flex-none items-center pe-0.5 text-xs text-muted-foreground tabular-nums",
               actions &&
-                "group-hover/fila:invisible group-focus-within/fila:invisible group-has-[[aria-pressed=true]]/fila:invisible",
+                "group-focus-within/fila:invisible group-hover/fila:invisible group-has-[[aria-pressed=true]]/fila:invisible",
             )}
           >
             {count}
@@ -1095,7 +1095,7 @@ function AppShellNavItem({
            manera de ver qué está fijado sin ir fila por fila. */
         <span
           data-slot="app-shell-nav-item-actions"
-          className="pointer-events-none absolute inset-y-0 end-4 flex items-center gap-0.5 opacity-0 transition-opacity duration-(--duration-fast) ease-out group-hover/fila:pointer-events-auto group-hover/fila:opacity-100 group-focus-within/fila:pointer-events-auto group-focus-within/fila:opacity-100 has-[[aria-pressed=true]]:pointer-events-auto has-[[aria-pressed=true]]:opacity-100"
+          className="pointer-events-none absolute inset-y-0 end-4 flex items-center gap-0.5 opacity-0 transition-opacity duration-(--duration-fast) ease-out group-focus-within/fila:pointer-events-auto group-focus-within/fila:opacity-100 group-hover/fila:pointer-events-auto group-hover/fila:opacity-100 has-[[aria-pressed=true]]:pointer-events-auto has-[[aria-pressed=true]]:opacity-100"
         >
           {actions}
         </span>
@@ -1125,7 +1125,7 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
       type="button"
       data-slot="app-shell-nav-action"
       className={cn(
-        "relative inline-flex size-5 flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring [&_svg]:size-4",
+        "relative inline-flex size-5 flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none [&_svg]:size-4",
         className,
       )}
       {...props}

@@ -43,7 +43,7 @@ const MenusHoverDemo = () => {
       </div>
 
       <div>
-        <p className="text-sm font-semibold text-foreground mb-2">Hover Card</p>
+        <p className="mb-2 text-sm font-semibold text-foreground">Hover Card</p>
         <HoverCard>
           <HoverCardTrigger asChild>
             <Button variant="outline">Perfil</Button>

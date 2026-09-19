@@ -93,7 +93,7 @@ export const SegmentedControlItem: React.ForwardRefExoticComponent<
          como una fila de botones primarios. */
       "inline-flex h-8 cursor-pointer items-center justify-center gap-2 rounded-[calc(var(--radius)-2px)] px-3 text-sm font-medium whitespace-nowrap text-muted-foreground transition-[background-color,box-shadow,color] duration-(--duration-fast) ease-out",
       "hover:text-foreground data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-surface",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
       "disabled:pointer-events-none disabled:text-border-strong",
       className,
     )}

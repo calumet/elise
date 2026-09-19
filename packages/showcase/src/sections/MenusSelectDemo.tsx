@@ -120,7 +120,7 @@ const MenusSelectDemo = () => {
         <p className="text-sm font-semibold text-foreground">Context Menu</p>
         <ContextMenu>
           <ContextMenuTrigger asChild>
-            <div className="w-full h-24 border border-dashed border-border flex items-center justify-center">
+            <div className="flex h-24 w-full items-center justify-center border border-dashed border-border">
               <p className="text-sm text-muted-foreground">Clic derecho aqui</p>
             </div>
           </ContextMenuTrigger>

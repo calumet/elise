@@ -36,11 +36,10 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 
 ## Utilidades CSS
 
-| Librería                           | Uso en Elise                                      | Documentación                             |
-| ---------------------------------- | ------------------------------------------------- | ----------------------------------------- |
-| **clsx**                           | Concatenación condicional de clases CSS           | https://github.com/lukeed/clsx            |
-| **tailwind-merge**                 | Resolución de conflictos entre clases de Tailwind | https://github.com/dcastil/tailwind-merge |
-| **class-variance-authority (CVA)** | Manejo de variantes de componentes                | https://cva.style/docs                    |
+| Librería           | Uso en Elise                                      | Documentación                             |
+| ------------------ | ------------------------------------------------- | ----------------------------------------- |
+| **clsx**           | Concatenación condicional de clases CSS           | https://github.com/lukeed/clsx            |
+| **tailwind-merge** | Resolución de conflictos entre clases de Tailwind | https://github.com/dcastil/tailwind-merge |
 
 ## Herramientas de build
 

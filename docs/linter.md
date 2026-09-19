@@ -54,9 +54,24 @@ este repositorio son 114 hallazgos, y encenderla es un trabajo aparte.
 
 ### Tailwind
 
-El preset de Tailwind no existe en esta versión. `eslint-plugin-better-tailwindcss`
-se fue con ESLint, y el reemplazo, `oxlint-tailwindcss`, lee el `@theme` del
-proyecto y por eso no se puede compartir desde aquí sin más.
+`tailwind(entryPoint)` valida las clases contra el tema del proyecto. Como el
+tema es de cada proyecto, el `entryPoint` se pasa al extender; en un monorepo
+acepta un mapeo de rutas a hojas:
+
+```ts
+export default defineConfig({
+  extends: [react],
+  ...tailwind([
+    { files: ["packages/site/**"], use: "packages/site/src/index.css" },
+    { files: ["**"], use: "packages/ui/src/tailwind/elise.css" },
+  ]),
+});
+```
+
+Va esparcido y no dentro de `extends` porque `extends` no fusiona `settings`.
+
+El orden de las clases no entra ahí: lo arregla `sortTailwindcss` de Oxfmt al
+formatear. Encender además `enforce-sort-order` reportaría lo mismo dos veces.
 
 ### Variantes
 

@@ -144,8 +144,8 @@ export function ValueField({
       onClick={() => setAbierto(true)}
       className={cn(
         "flex w-full items-center gap-2.5 rounded-md border border-border bg-card px-3 py-2.5 text-start text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out",
-        "hover:bg-state-hover focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-        "aria-invalid:border-destructive disabled:pointer-events-none disabled:opacity-55",
+        "hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
+        "disabled:pointer-events-none disabled:opacity-55 aria-invalid:border-destructive",
       )}
     >
       <CirclePlus aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />

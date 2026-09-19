@@ -154,7 +154,7 @@ const TableDemo = () => {
                   <button
                     type="button"
                     id={`abrir-${cliente.id.slice(1)}`}
-                    className="cursor-pointer rounded-xs underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="cursor-pointer rounded-xs underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     onClick={() => setPulsaciones((p) => [...p, cliente.nombre])}
                   >
                     {cliente.nombre}

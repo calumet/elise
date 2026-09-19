@@ -272,7 +272,7 @@ const PantallaInicio = () => {
       ) : null}
 
       <Section heading="Plantillas de producto">
-        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(155px,1fr))]">
+        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(155px,1fr))] gap-4">
           {PLANTILLAS.map((plantilla) => (
             <div key={plantilla.id} className="overflow-hidden rounded-lg border border-border">
               <Clickable
@@ -304,7 +304,7 @@ const PantallaInicio = () => {
       </Section>
 
       <Section heading="Novedades">
-        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] gap-4">
           {NOVEDADES.map((novedad) => (
             <div
               key={novedad.titulo}
@@ -328,7 +328,7 @@ const PantallaInicio = () => {
       </Section>
 
       <Section heading="Integraciones recomendadas">
-        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] gap-4">
           {INTEGRACIONES.map((app) => (
             /* La descarga es un botón aparte y no va dentro del `Clickable`:
                un `<button>` dentro de un `<a>` es marcado inválido, y el foco
