@@ -124,15 +124,15 @@ export function AppPreview() {
 
   /* Arranca en una hija y no en el padre: es donde se ve la guía bajar desde el
      icono de «Trabajos de grado» y terminar en codo sobre la entrada elegida. */
-  const [ruta, setRuta] = React.useState("/en-desarrollo");
+  const [route, setRoute] = React.useState("/en-desarrollo");
 
   const go = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    setRuta(target);
+    setRoute(target);
   };
 
   const columns = React.useMemo<ColumnDef<Job>[]>(() => {
-    const date = (valor: Date) => formatDate(valor, { locale, ...SHORT_DATE });
+    const date = (value: Date) => formatDate(value, { locale, ...SHORT_DATE });
 
     return [
       {
@@ -222,7 +222,7 @@ export function AppPreview() {
                 }
               />
               <AppShellUserMenu name="Ana Ruiz" detail={t("app.org")}>
-                <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
+                <DropdownMenuItem onSelect={() => setRoute("/ajustes")}>
                   <Settings aria-hidden="true" />
                   {t("app.nav.settings")}
                 </DropdownMenuItem>
@@ -236,7 +236,7 @@ export function AppPreview() {
                 href="/inicio"
                 icon={<Home />}
                 activeIcon={<Home strokeWidth={2.5} />}
-                active={ruta === "/inicio"}
+                active={route === "/inicio"}
                 onClick={go("/inicio")}
               >
                 {t("app.nav.home")}
@@ -248,8 +248,8 @@ export function AppPreview() {
                   icon={<GraduationCap />}
                   activeIcon={<GraduationCap strokeWidth={2.5} />}
                   count={48}
-                  childActive={["/en-desarrollo", "/sustentados"].includes(ruta)}
-                  active={ruta === "/trabajos"}
+                  childActive={["/en-desarrollo", "/sustentados"].includes(route)}
+                  active={route === "/trabajos"}
                   onClick={go("/trabajos")}
                 >
                   {t("app.nav.works")}
@@ -257,14 +257,14 @@ export function AppPreview() {
                 <AppShellNavSubList>
                   <AppShellNavSubItem
                     href="/en-desarrollo"
-                    active={ruta === "/en-desarrollo"}
+                    active={route === "/en-desarrollo"}
                     onClick={go("/en-desarrollo")}
                   >
                     {t("app.nav.inProgress")}
                   </AppShellNavSubItem>
                   <AppShellNavSubItem
                     href="/sustentados"
-                    active={ruta === "/sustentados"}
+                    active={route === "/sustentados"}
                     onClick={go("/sustentados")}
                   >
                     {t("app.nav.defended")}
@@ -276,7 +276,7 @@ export function AppPreview() {
                 href="/grupos"
                 icon={<Users />}
                 count={12}
-                active={ruta === "/grupos"}
+                active={route === "/grupos"}
                 onClick={go("/grupos")}
               >
                 {t("app.nav.groups")}
@@ -285,7 +285,7 @@ export function AppPreview() {
               <AppShellNavItem
                 href="/empleo"
                 icon={<Briefcase />}
-                active={ruta === "/empleo"}
+                active={route === "/empleo"}
                 onClick={go("/empleo")}
               >
                 {t("app.nav.jobs")}
@@ -295,7 +295,7 @@ export function AppPreview() {
                 <AppShellNavItem
                   href="/aula"
                   icon={<MonitorPlay />}
-                  active={ruta === "/aula"}
+                  active={route === "/aula"}
                   onClick={go("/aula")}
                 >
                   {t("app.nav.classroom")}
@@ -303,7 +303,7 @@ export function AppPreview() {
                 <AppShellNavItem
                   href="/evaluacion"
                   icon={<Star />}
-                  active={ruta === "/evaluacion"}
+                  active={route === "/evaluacion"}
                   onClick={go("/evaluacion")}
                 >
                   {t("app.nav.evaluation")}
@@ -315,7 +315,7 @@ export function AppPreview() {
               <AppShellNavItem
                 href="/ajustes"
                 icon={<Settings />}
-                active={ruta === "/ajustes"}
+                active={route === "/ajustes"}
                 onClick={go("/ajustes")}
               >
                 {t("app.nav.settings")}

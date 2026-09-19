@@ -143,13 +143,13 @@ export const ColorPicker: React.ForwardRefExoticComponent<
 
     const areaKeys = (event: React.KeyboardEvent) => {
       const step = event.shiftKey ? 10 : 1;
-      const mover: Record<string, [number, number]> = {
+      const moves: Record<string, [number, number]> = {
         ArrowLeft: [-step, 0],
         ArrowRight: [step, 0],
         ArrowUp: [0, step],
         ArrowDown: [0, -step],
       };
-      const delta = mover[event.key];
+      const delta = moves[event.key];
       if (!delta) return;
       event.preventDefault();
       emit(

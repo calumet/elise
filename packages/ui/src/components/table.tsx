@@ -67,7 +67,7 @@ type Column = {
 
 type Mode = "table" | "list";
 
-const TablaCtx = React.createContext<{
+const TableCtx = React.createContext<{
   mode: Mode;
   columns: Column[];
   slots: ListSlot[];
@@ -437,7 +437,7 @@ export const Table: React.ForwardRefExoticComponent<
     );
 
     return (
-      <TablaCtx.Provider value={context}>
+      <TableCtx.Provider value={context}>
         {/* Con la tabla inerte, un lector de pantalla ya no llega a sus filas.
             Esto es lo único que queda anunciando que hay algo en curso. */}
         <span role="status" aria-live="polite" className="sr-only">
@@ -453,7 +453,7 @@ export const Table: React.ForwardRefExoticComponent<
           {zone}
           {paginationBar}
         </div>
-      </TablaCtx.Provider>
+      </TableCtx.Provider>
     );
   },
 );
@@ -465,7 +465,7 @@ export const TableHeader: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { mode } = React.useContext(TablaCtx);
+    const { mode } = React.useContext(TableCtx);
     /* En lista el encabezado no se dibuja: sus rótulos ya salen pegados a cada
      valor dentro de la fila. */
     if (mode === "list") return null;
@@ -490,7 +490,7 @@ export const TableBody: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { mode, loading } = React.useContext(TablaCtx);
+    const { mode, loading } = React.useContext(TableCtx);
     /* `divide-y` pone el filete debajo de cada fila menos de la última, así que
      la tabla no cierra con una raya suelta contra el borde del marco. La línea
      bajo el encabezado la pone este `border-t`, y va un tono más firme que los
@@ -519,7 +519,7 @@ export const TableFooter: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { mode } = React.useContext(TablaCtx);
+    const { mode } = React.useContext(TableCtx);
     const shared = "border-t border-border font-semibold text-foreground";
 
     if (mode === "list") {
@@ -544,7 +544,7 @@ const ListRow = React.forwardRef<
   HTMLLIElement,
   React.HTMLAttributes<HTMLLIElement> & { clickDelegate?: string }
 >(({ children, className, clickDelegate, ...props }, ref) => {
-  const { columns, slots } = React.useContext(TablaCtx);
+  const { columns, slots } = React.useContext(TableCtx);
 
   const cells = React.Children.toArray(children).filter(
     (n): n is React.ReactElement<{ children?: React.ReactNode }> => React.isValidElement(n),
@@ -558,14 +558,14 @@ const ListRow = React.forwardRef<
     cells
       .map((cell, i) => ({
         index: i,
-        valor: cell.props.children,
+        value: cell.props.children,
         column: columns[i],
         slot: slots[i],
       }))
       .filter((c) => c.slot === slot);
 
   const kicker = de("kicker");
-  const principal = de("primary");
+  const primary = de("primary");
   const secondary = de("secondary");
 
   return (
@@ -586,12 +586,12 @@ const ListRow = React.forwardRef<
       <div className="flex min-w-40 flex-1 flex-col gap-0.5">
         {kicker ? <span className="truncate text-xs text-muted-foreground">{kicker}</span> : null}
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          {principal ? (
-            <span className="min-w-0 truncate font-medium text-foreground">{principal}</span>
+          {primary ? (
+            <span className="min-w-0 truncate font-medium text-foreground">{primary}</span>
           ) : null}
           {all("inline").map((c) => (
             <span key={c.index} className="shrink-0">
-              {c.valor}
+              {c.value}
             </span>
           ))}
         </div>
@@ -611,7 +611,7 @@ const ListRow = React.forwardRef<
                   isNumeric(c.column?.format) && "tabular-nums",
                 )}
               >
-                {c.valor}
+                {c.value}
               </span>
             </div>
           ))}
@@ -663,7 +663,7 @@ export const TableRow: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TableRowProps> & React.RefAttributes<HTMLTableRowElement>
 > = React.forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, children, clickDelegate, onClick, ...props }, ref) => {
-    const { mode } = React.useContext(TablaCtx);
+    const { mode } = React.useContext(TableCtx);
     const { row, onPress } = useRowDelegate(clickDelegate);
 
     const press = (event: React.MouseEvent<HTMLElement>) => {
@@ -772,7 +772,7 @@ export const TableCell: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableCellElement>
 > = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
   ({ className, ...props }, ref) => {
-    const { columns } = React.useContext(TablaCtx);
+    const { columns } = React.useContext(TableCtx);
     const column = React.useContext(ColumnCtx);
 
     return (
@@ -797,7 +797,7 @@ export const TableCaption: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableCaptionElement>
 > = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HTMLTableCaptionElement>>(
   ({ className, ...props }, ref) => {
-    const { mode } = React.useContext(TablaCtx);
+    const { mode } = React.useContext(TableCtx);
     const shared = "mt-3 mb-2 px-3 text-sm text-muted-foreground";
 
     if (mode === "list") {

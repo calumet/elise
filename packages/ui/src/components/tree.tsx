@@ -220,8 +220,8 @@ export const TreeItem: React.ForwardRefExoticComponent<
             return;
           }
           /* Cerrada o siendo hoja, sube al padre. */
-          const padre = own.current?.parentElement?.closest<HTMLElement>('[role="treeitem"]');
-          padre?.focus();
+          const parent = own.current?.parentElement?.closest<HTMLElement>('[role="treeitem"]');
+          parent?.focus();
           return;
         }
         case "Enter":

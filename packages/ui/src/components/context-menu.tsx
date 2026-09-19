@@ -47,15 +47,15 @@ export const ContextMenuContent: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof ContextMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>
 >(({ className, style, ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
   return (
     <ContextMenuPrimitive.Portal>
       <ContextMenuPrimitive.Content
         data-slot="context-menu-content"
-        style={{ ...tema.variables, ...style }}
+        style={{ ...theme.variables, ...style }}
         ref={ref}
         className={cn(
-          tema.classes,
+          theme.classes,
           "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
           indicatorGutter,
           className,

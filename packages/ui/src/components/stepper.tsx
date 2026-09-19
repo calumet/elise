@@ -95,7 +95,7 @@ function StepperItem({
 }: StepperItemProps): React.JSX.Element {
   const { orientation } = React.useContext(StepperContext);
   const completed = useElLabel("ui", "stepComplete", "Completado");
-  const actual = useElLabel("ui", "stepCurrent", "Paso actual");
+  const current = useElLabel("ui", "stepCurrent", "Paso actual");
   const horizontal = orientation === "horizontal";
 
   return (
@@ -125,7 +125,7 @@ function StepperItem({
             indicator
           )}
           <span className="sr-only">
-            {status === "complete" ? completed : status === "current" ? actual : ""}
+            {status === "complete" ? completed : status === "current" ? current : ""}
           </span>
         </span>
         {last ? null : (

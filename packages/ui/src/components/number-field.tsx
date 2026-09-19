@@ -123,20 +123,20 @@ export const NumberField: React.ForwardRefExoticComponent<
     };
 
     const pass = (direction: 1 | -1) => {
-      const actual = Number(text);
+      const current = Number(text);
       /* Sin valor todavía, el primer paso arranca del mínimo si lo hay; si no,
          de cero. Arrancar de cero con un mínimo de 10 daría un valor inválido
          al primer clic. */
       const base =
-        text.trim() === "" || Number.isNaN(actual) ? (min > -Infinity ? min : 0) : actual;
+        text.trim() === "" || Number.isNaN(current) ? (min > -Infinity ? min : 0) : current;
       const next = clamp(base + step * direction, min, max);
       type(next.toFixed(decimalsOf(step)));
     };
 
-    const numero = Number(text);
-    const hasNumber = text.trim() !== "" && !Number.isNaN(numero);
-    const enElTope = hasNumber && numero >= max;
-    const onTheFloor = hasNumber && numero <= min;
+    const parsed = Number(text);
+    const hasNumber = text.trim() !== "" && !Number.isNaN(parsed);
+    const atCap = hasNumber && parsed >= max;
+    const onTheFloor = hasNumber && parsed <= min;
 
     const keys = (event: React.KeyboardEvent) => {
       if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
@@ -144,11 +144,11 @@ export const NumberField: React.ForwardRefExoticComponent<
       pass(event.key === "ArrowUp" ? 1 : -1);
     };
 
-    const stepButton = (direction: 1 | -1, dimmed: boolean, label: string) => (
+    const stepButton = (direction: 1 | -1, dimmed: boolean, buttonLabel: string) => (
       <button
         type="button"
         tabIndex={-1}
-        aria-label={label}
+        aria-label={buttonLabel}
         disabled={disabled || readOnly || dimmed}
         onClick={() => pass(direction)}
         className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground disabled:pointer-events-none disabled:text-border-strong"
@@ -197,7 +197,7 @@ export const NumberField: React.ForwardRefExoticComponent<
                  decir ARIA: si no, un lector de pantalla no sabe entre qué y qué
                  se mueve ni por dónde va. */
               role="spinbutton"
-              aria-valuenow={hasNumber ? numero : undefined}
+              aria-valuenow={hasNumber ? parsed : undefined}
               aria-valuemin={min > -Infinity ? min : undefined}
               aria-valuemax={max < Infinity ? max : undefined}
               aria-valuetext={hasNumber ? undefined : ""}
@@ -211,7 +211,7 @@ export const NumberField: React.ForwardRefExoticComponent<
             ) : null}
 
             {stepButton(-1, onTheFloor, lessLabel)}
-            {stepButton(1, enElTope, moreLabel)}
+            {stepButton(1, atCap, moreLabel)}
           </div>
         )}
       </Field>

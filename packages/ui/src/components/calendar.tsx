@@ -62,11 +62,11 @@ function Calendar({
     /* Varios idiomas abrevian con punto («dom.», «lun.»); en una columna de
        32px ese punto solo gasta ancho. */
     const noDot = (text: string) => text.replace(/\.$/, "");
-    const mes = withIntl({ month: "long", year: "numeric" });
+    const month = withIntl({ month: "long", year: "numeric" });
     const shortMonth = withIntl({ month: "short" });
     const weekday = withIntl({ weekday: "short" });
     return {
-      mes: (f: Date) => mes.format(f),
+      month: (f: Date) => month.format(f),
       shortMonth: (f: Date) => noDot(shortMonth.format(f)),
       weekday: (f: Date) => noDot(weekday.format(f)),
     };
@@ -83,7 +83,7 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatCaption: names.mes,
+        formatCaption: names.month,
         formatMonthDropdown: names.shortMonth,
         formatWeekdayName: names.weekday,
         ...formatters,

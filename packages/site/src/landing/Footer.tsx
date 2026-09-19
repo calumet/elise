@@ -42,13 +42,13 @@ export function Footer() {
           que lo deja respirar; desde `sm` vuelve a la derecha del aviso legal. */}
       <footer className="flex flex-col gap-6 border-t border-border px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-x-6 sm:px-10">
         <nav className="flex flex-wrap gap-x-5 gap-y-2 sm:order-2">
-          {LINKS.map((enlace) => (
+          {LINKS.map((link) => (
             <a
-              key={enlace.key}
-              href={enlace.href}
+              key={link.key}
+              href={link.href}
               className="text-secondary-foreground transition-colors duration-(--duration-fast) ease-out hover:text-foreground"
             >
-              {t(enlace.key)}
+              {t(link.key)}
             </a>
           ))}
         </nav>

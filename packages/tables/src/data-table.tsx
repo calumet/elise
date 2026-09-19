@@ -77,7 +77,7 @@ export type ColumnDef<TData extends RowData, TValue = unknown> = ColumnDefBase<
 >;
 
 /* El `meta` es opcional, y las tres lecturas quieren un objeto. */
-const metaDe = (columnDef: { meta?: ColumnMeta }): ColumnMeta => columnDef.meta ?? {};
+const metaOf = (columnDef: { meta?: ColumnMeta }): ColumnMeta => columnDef.meta ?? {};
 
 /** Props de {@link DataTable}. */
 interface DataTableProps<TData extends RowData> {
@@ -207,7 +207,7 @@ function DataTableContent<TData extends RowData>({
     <section className="flex flex-wrap justify-between gap-3 sm:flex-nowrap">
       <div className="flex flex-wrap items-end gap-3">
         {table.getAllColumns().map((column) => {
-          if (!metaDe(column.columnDef).filterVariant) return null;
+          if (!metaOf(column.columnDef).filterVariant) return null;
 
           return (
             <div className="w-45" key={column.id}>
@@ -287,7 +287,7 @@ function DataTableContent<TData extends RowData>({
               </Label>
               <Select
                 value={pageSize.toString()}
-                onValueChange={(valor) => table.setPageSize(Number(valor))}
+                onValueChange={(value) => table.setPageSize(Number(value))}
               >
                 <SelectTrigger id={id} className="h-7 w-fit px-2 text-xs">
                   <SelectValue placeholder={labelPageSizePlaceholder} />
@@ -321,7 +321,7 @@ function DataTableContent<TData extends RowData>({
                       className={
                         header.column.id === "actions"
                           ? "w-0 text-center"
-                          : (metaDe(header.column.columnDef).className ?? "")
+                          : (metaOf(header.column.columnDef).className ?? "")
                       }
                     >
                       {header.isPlaceholder ? null : (
@@ -645,7 +645,7 @@ function Filter<TData extends RowData>({
 }: {
   column: Column<Features, TData, unknown>;
 }): React.JSX.Element {
-  const { filterVariant } = metaDe(column.columnDef);
+  const { filterVariant } = metaOf(column.columnDef);
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
   const shared = { column, columnHeader };
 

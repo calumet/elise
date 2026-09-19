@@ -75,13 +75,13 @@ export const AlertDialogOverlay: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, style, ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
   return (
     <AlertDialogPrimitive.Overlay
       data-slot="alert-dialog-overlay"
-      style={{ ...tema.variables, ...style }}
+      style={{ ...theme.variables, ...style }}
       ref={ref}
-      className={cn(tema.classes, DIALOG_OVERLAY, className)}
+      className={cn(theme.classes, DIALOG_OVERLAY, className)}
       {...props}
     />
   );
@@ -116,15 +116,15 @@ export const AlertDialogContent: React.ForwardRefExoticComponent<
     size?: keyof typeof DIALOG_WIDTHS;
   }
 >(({ className, style, size = "sm", ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
-        style={{ ...tema.variables, ...style }}
+        style={{ ...theme.variables, ...style }}
         ref={ref}
-        className={cn(tema.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
+        className={cn(theme.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
         {...props}
       />
     </AlertDialogPortal>

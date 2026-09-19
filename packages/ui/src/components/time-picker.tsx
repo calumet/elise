@@ -26,11 +26,11 @@ import { Field } from "./field";
 import { FIELD_BOX_COMPOSITE, BARE_FIELD, INVALID_FIELD } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-const PATRON = /^(\d{1,2}):(\d{2})$/;
+const PATTERN = /^(\d{1,2}):(\d{2})$/;
 
 /** Minutos desde medianoche, o `null` si no es una hora. */
 const toMinutes = (text: string): number | null => {
-  const parts = PATRON.exec(text.trim());
+  const parts = PATTERN.exec(text.trim());
   if (!parts) return null;
   const hour = Number(parts[1]);
   const minute = Number(parts[2]);
@@ -131,12 +131,12 @@ export const TimePicker: React.ForwardRefExoticComponent<
     };
 
     const from = toMinutes(min) ?? 0;
-    const hasta = toMinutes(max) ?? 1439;
+    const end = toMinutes(max) ?? 1439;
     const options = React.useMemo(() => {
       const output: number[] = [];
-      for (let m = from; m <= hasta; m += Math.max(1, step)) output.push(m);
+      for (let m = from; m <= end; m += Math.max(1, step)) output.push(m);
       return output;
-    }, [from, hasta, step]);
+    }, [from, end, step]);
 
     const selected = toMinutes(hour);
 

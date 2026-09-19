@@ -74,13 +74,13 @@ export const DialogOverlay: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, style, ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
-      style={{ ...tema.variables, ...style }}
+      style={{ ...theme.variables, ...style }}
       ref={ref}
-      className={cn(tema.classes, DIALOG_OVERLAY, className)}
+      className={cn(theme.classes, DIALOG_OVERLAY, className)}
       {...props}
     />
   );
@@ -103,7 +103,7 @@ export const DialogContent: React.ForwardRefExoticComponent<
     size?: keyof typeof DIALOG_WIDTHS;
   }
 >(({ className, style, children, showCloseButton = true, size = "md", ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
 
   const closeLabel = useElLabel("ui", "close", "Cerrar");
   return (
@@ -111,9 +111,9 @@ export const DialogContent: React.ForwardRefExoticComponent<
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
-        style={{ ...tema.variables, ...style }}
+        style={{ ...theme.variables, ...style }}
         ref={ref}
-        className={cn(tema.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
+        className={cn(theme.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
         {...props}
       >
         {showCloseButton ? (

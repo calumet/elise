@@ -63,11 +63,11 @@ export const acceptedType = (file: File, accept?: string): boolean => {
   return accept
     .split(",")
     .map((s) => s.trim().toLowerCase())
-    .some((patron) => {
-      if (!patron) return false;
-      if (patron.startsWith(".")) return file.name.toLowerCase().endsWith(patron);
-      if (patron.endsWith("/*")) return file.type.startsWith(patron.slice(0, -1));
-      return file.type.toLowerCase() === patron;
+    .some((pattern) => {
+      if (!pattern) return false;
+      if (pattern.startsWith(".")) return file.name.toLowerCase().endsWith(pattern);
+      if (pattern.endsWith("/*")) return file.type.startsWith(pattern.slice(0, -1));
+      return file.type.toLowerCase() === pattern;
     });
 };
 

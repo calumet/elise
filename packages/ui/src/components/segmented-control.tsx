@@ -62,7 +62,7 @@ export const SegmentedControl: React.ForwardRefExoticComponent<
       data-slot="segmented-control"
       ref={ref}
       type="single"
-      onValueChange={(valor) => valor && onValueChange?.(valor)}
+      onValueChange={(value) => value && onValueChange?.(value)}
       className={cn(
         "inline-flex max-w-full items-center gap-px rounded-md bg-muted p-0.5",
         "[&>*:not(:first-child)]:rounded-s-none [&>*:not(:last-child)]:rounded-e-none",

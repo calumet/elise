@@ -52,7 +52,7 @@ import { Spinner } from "./spinner";
 type ComboboxContextValue = {
   /** Valores elegidos. En modo simple es un array de cero o un elemento. */
   values: string[];
-  select: (valor: string) => void;
+  select: (value: string) => void;
   open: boolean;
   multiple: boolean;
 };
@@ -645,9 +645,9 @@ function ComboboxField({
   const groups = React.useMemo(() => {
     const map = new Map<string, ComboboxOption[]>();
     for (const o of options) {
-      const clave = o.group ?? "";
-      if (!map.has(clave)) map.set(clave, []);
-      map.get(clave)!.push(o);
+      const groupKey = o.group ?? "";
+      if (!map.has(groupKey)) map.set(groupKey, []);
+      map.get(groupKey)!.push(o);
     }
     return [...map.entries()];
   }, [options]);
@@ -772,16 +772,16 @@ function MultiComboboxField({
     return () => ro.disconnect();
   }, [keys]);
 
-  const tope = maxChips === undefined ? fit : Math.min(fit, maxChips);
-  const visible = selected.slice(0, tope);
+  const cap = maxChips === undefined ? fit : Math.min(fit, maxChips);
+  const visible = selected.slice(0, cap);
   const rest = selected.length - visible.length;
 
   const groups = React.useMemo(() => {
     const map = new Map<string, ComboboxOption[]>();
     for (const o of options) {
-      const clave = o.group ?? "";
-      if (!map.has(clave)) map.set(clave, []);
-      map.get(clave)!.push(o);
+      const groupKey = o.group ?? "";
+      if (!map.has(groupKey)) map.set(groupKey, []);
+      map.get(groupKey)!.push(o);
     }
     return [...map.entries()];
   }, [options]);

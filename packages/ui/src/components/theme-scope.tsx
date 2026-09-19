@@ -24,10 +24,10 @@ export type SectionTheme = {
 };
 
 const NO_THEME: SectionTheme = { classes: "", variables: {} };
-const Tema = React.createContext<SectionTheme>(NO_THEME);
+const ThemeCtx = React.createContext<SectionTheme>(NO_THEME);
 
 /* Solo las custom properties: el resto del `style` es de la caja, no del tema. */
-const variablesDe = (el: HTMLElement): React.CSSProperties => {
+const variablesOf = (el: HTMLElement): React.CSSProperties => {
   const output: Record<string, string> = {};
   for (let i = 0; i < el.style.length; i += 1) {
     const name = el.style.item(i);
@@ -70,7 +70,7 @@ export type ThemeScopeProps = React.ComponentProps<"div"> & {
 export const ThemeScope: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ThemeScopeProps> & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef<HTMLDivElement, ThemeScopeProps>(({ className, theme, ...props }, ref) => {
-  const inherited = React.useContext(Tema);
+  const inherited = React.useContext(ThemeCtx);
   const [node, setNode] = React.useState<HTMLDivElement | null>(null);
   const [inlineVars, setInlineVars] = React.useState<React.CSSProperties>(NO_THEME.variables);
 
@@ -78,13 +78,13 @@ export const ThemeScope: React.ForwardRefExoticComponent<
      `applyTheme` las escribe por su cuenta y después. */
   React.useLayoutEffect(() => {
     if (!node) return;
-    const leer = () =>
+    const read = () =>
       setInlineVars((previous) => {
-        const now = variablesDe(node);
+        const now = variablesOf(node);
         return same(previous, now) ? previous : now;
       });
-    leer();
-    const mo = new MutationObserver(leer);
+    read();
+    const mo = new MutationObserver(read);
     mo.observe(node, { attributes: true, attributeFilter: ["style"] });
     return () => mo.disconnect();
   }, [node]);
@@ -100,7 +100,7 @@ export const ThemeScope: React.ForwardRefExoticComponent<
   );
 
   /* Anidados se suman, que un tema dentro de otro solo redefine lo suyo. */
-  const tema = React.useMemo(
+  const scopeTheme = React.useMemo(
     () => ({
       classes: cn(inherited.classes, theme),
       variables: { ...inherited.variables, ...inlineVars },
@@ -109,12 +109,12 @@ export const ThemeScope: React.ForwardRefExoticComponent<
   );
 
   return (
-    <Tema.Provider value={tema}>
+    <ThemeCtx.Provider value={scopeTheme}>
       <div data-slot="theme-scope" ref={take} className={cn(theme, className)} {...props} />
-    </Tema.Provider>
+    </ThemeCtx.Provider>
   );
 });
 ThemeScope.displayName = "ThemeScope";
 
 /** El tema de la sección en la que estás, para llevarlo a lo que salga por portal. */
-export const useThemeScope = (): SectionTheme => React.useContext(Tema);
+export const useThemeScope = (): SectionTheme => React.useContext(ThemeCtx);

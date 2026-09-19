@@ -355,8 +355,8 @@ function AppShellHeaderSearch({
       <span className="min-w-0 flex-1 truncate text-start text-sm">{children}</span>
       {shortcut?.length ? (
         <span className="hidden items-center gap-1 md:inline-flex">
-          {shortcut.map((tecla) => (
-            <Kbd key={tecla}>{tecla}</Kbd>
+          {shortcut.map((key) => (
+            <Kbd key={key}>{key}</Kbd>
           ))}
         </span>
       ) : null}
@@ -714,7 +714,7 @@ const DESCENT_AND_ELBOW =
   "M9 0H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
 const PEEK_AND_ELBOW =
   "M9 7H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
-const PUNTA = "M17 12L20 15L17 18";
+const TIP = "M17 12L20 15L17 18";
 const STUB = "M9 24.75C9 24.3358 9.33579 24 9.75 24C10.1642 24 10.5 24.3358 10.5 24.75V28H9V24.75Z";
 
 /**
@@ -757,7 +757,7 @@ function NavGuide({ variant }: { variant: Guide | "stub" }) {
         <>
           <path d={DESCENT_AND_ELBOW} className="fill-sidebar-guide" />
           <path
-            d={PUNTA}
+            d={TIP}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -773,7 +773,7 @@ function NavGuide({ variant }: { variant: Guide | "stub" }) {
             className="fill-sidebar-guide-hover"
           />
           <path
-            d={PUNTA}
+            d={TIP}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"

@@ -72,8 +72,8 @@ export const initialsOf = (name: string): string => {
 
   /* Por code point, que una letra puede ocupar dos. */
   const first = [...utils[0]][0] ?? "";
-  const ultima = utils.length > 1 ? ([...utils[utils.length - 1]][0] ?? "") : "";
-  return `${first}${ultima}`.toLocaleUpperCase();
+  const last = utils.length > 1 ? ([...utils[utils.length - 1]][0] ?? "") : "";
+  return `${first}${last}`.toLocaleUpperCase();
 };
 
 /** El contenedor circular de la foto o de las iniciales. */

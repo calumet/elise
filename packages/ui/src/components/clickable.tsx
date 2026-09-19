@@ -101,10 +101,10 @@ export const Clickable: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const esEnlace = href !== undefined;
-    const Component: React.ElementType = asChild ? Slot : esEnlace ? "a" : "button";
+    const isLink = href !== undefined;
+    const Component: React.ElementType = asChild ? Slot : isLink ? "a" : "button";
 
-    const elementProps = esEnlace
+    const elementProps = isLink
       ? {
           href: disabled ? undefined : href,
           target,

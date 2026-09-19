@@ -37,7 +37,7 @@ import { Field } from "./field";
 import { FIELD_BOX, INVALID_FIELD } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-const PATRON = /^(\d{4})-(\d{2})-(\d{2})$/;
+const PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 /**
  * Convierte `YYYY-MM-DD` en una fecha local, o devuelve `null`.
@@ -51,13 +51,13 @@ const PATRON = /^(\d{4})-(\d{2})-(\d{2})$/;
  * señal fiable es que la fecha construida diga lo mismo que se le pidió.
  */
 const toDate = (text: string): Date | null => {
-  const parts = PATRON.exec(text.trim());
+  const parts = PATTERN.exec(text.trim());
   if (!parts) return null;
   const year = Number(parts[1]);
-  const mes = Number(parts[2]);
+  const month = Number(parts[2]);
   const day = Number(parts[3]);
-  const date = new Date(year, mes - 1, day);
-  if (date.getFullYear() !== year || date.getMonth() !== mes - 1 || date.getDate() !== day) {
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
     return null;
   }
   return date;

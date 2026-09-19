@@ -31,13 +31,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         defaultLocale={i18nConfig.defaultLocale}
         fallbackLocale={i18nConfig.fallbackLocale}
       >
-        <Marco>{children}</Marco>
+        <Frame>{children}</Frame>
       </I18nProvider>
     </ThemeProvider>
   );
 }
 
-function Marco({ children }: { children: React.ReactNode }) {
+function Frame({ children }: { children: React.ReactNode }) {
   const { locale } = useLocale();
 
   /* El idioma del documento sigue al del contenido. Es lo que usa el lector de
