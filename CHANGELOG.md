@@ -3,6 +3,44 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.9.0
+
+### Añade
+
+**`elise()`**, un punto de entrada único que trae React, las clases validadas
+contra el tema y las reglas de uso del catálogo:
+
+```ts
+export default defineConfig(elise({ theme: "src/index.css" }));
+```
+
+Antes había que extender `react` y esparcir `tailwind()`, y esparcir dos
+piezas seguidas se pisa `jsPlugins`, `settings` y `rules`, porque Oxlint no
+hereda `settings` por `extends`. Esa fusión la hace ahora el paquete.
+
+**`designSystem()`**, que comprueba cómo se usan los componentes de Elise. Es
+para quien consume el catálogo, no para el catálogo: cuando alguien pisa el
+estilo de un componente, el error dice de quién es esa decisión y qué hacer en
+su lugar. `elise()` ya la incluye; se llama suelta para bajar el nivel en un
+`overrides`, con `severity`.
+
+Lo que comprueba sale de [Reglas de interfaz](docs/reglas-ui.md), que es donde
+ya estaba escrito quién es dueño de cada medida: el ancho de una pantalla es de
+`Container`, el contorno de un marco sale de `SURFACE`, la tipografía es de
+`Text`, y atenuar con `opacity` inventa un número que no responde al tema.
+Cada hallazgo responde con la regla y con dónde leerla.
+
+Vale para todo el catálogo: lo que no tiene contrato propio solo acepta
+`layout`, así que un `<Badge className="bg-purple-600">` o un
+`<Input className="rounded-none">` se reportan igual que un botón.
+
+Lo implementa `@shadcn/lint`, del que enciende cinco de sus seis reglas:
+`no-unknown-classes` la da ya `tailwind()`. Es un peer **opcional**, y el nombre
+del plugin no sale en el del preset: quien lo use pide que se vigile el uso de
+Elise, no una herramienta concreta.
+
+`base`, `react`, `tailwind()` y `designSystem()` siguen exportándose sueltas.
+
 ## `@calumet/elise-ui` 0.25.0
 
 Suben también `elise-tables` 0.7.0, `elise-i18n` 0.3.1, `elise-alerts` 0.3.9 y

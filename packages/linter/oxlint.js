@@ -89,3 +89,100 @@ export const tailwind = (entryPoint) => ({
     "tailwindcss/no-duplicate-classes": "error",
   },
 });
+
+const DENY = ["max-w-*", "opacity-*"];
+
+const DENY_MESSAGE = {
+  layout:
+    "A screen's width belongs to `Container` and its `size`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.",
+  effects:
+    "Effects belong to the component. To dim, `opacity` invents a value that does not follow " +
+    'the theme: the surface already declares its own text pair, so use `tone="muted"`. ' +
+    "See docs/reglas-ui.md#3-lo-que-el-sistema-ya-resuelve.",
+};
+
+const CONTRACTS = [
+  {
+    pattern: "^(Card|Box|Section|Panel)$|(Content|Header|Footer|Body|Group|List)$",
+    allow: ["layout", "spacing"],
+  },
+  { pattern: "^Container$", allow: ["layout", "spacing"], deny: ["opacity-*"] },
+  {
+    pattern: "^(Card|Table|DataTable)$",
+    allow: ["layout", "spacing"],
+    deny: [...DENY, "border-*", "rounded-*", "shadow-*"],
+    message: {
+      ...DENY_MESSAGE,
+      shape:
+        "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.",
+      // `shadow-*` cae en `effects`, igual que `opacity-*`.
+      effects:
+        "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.",
+    },
+  },
+  {
+    pattern: "^(Text|Heading|CardTitle|CardDescription|DialogTitle|DialogDescription)$",
+    allow: ["layout", "typography"],
+  },
+  { pattern: "^(Avatar|Thumbnail|Spinner|Skeleton)$", allow: ["layout", "size-*"] },
+  {
+    pattern: "^Button$",
+    allow: ["layout"],
+    deny: [...DENY, "w-*"],
+    message: {
+      ...DENY_MESSAGE,
+      spacing: "Use a {{component}} `size`: {{sizes|sm, md, lg, xl, icon, icon-sm}}.",
+      default: "Use a {{component}} `variant` or `tone`.",
+    },
+  },
+];
+
+export const designSystem = ({ severity = "error", contracts = [], rules, settings } = {}) => ({
+  jsPlugins: ["@shadcn/lint"],
+  settings: {
+    shadcn: {
+      componentImports: ["^@calumet/elise-(ui|tables|alerts|toasts)(/|$)"],
+      ...settings,
+    },
+  },
+  rules: {
+    "shadcn/no-restyle": [
+      severity,
+      {
+        allow: ["layout"],
+        deny: DENY,
+        message: DENY_MESSAGE,
+        contracts: [...CONTRACTS, ...contracts],
+      },
+    ],
+    "shadcn/no-raw-colors": severity,
+    "shadcn/no-inline-styles": severity,
+    "shadcn/require-static-classes": severity,
+    // Exentas las familias sin escala en el tema, y la tipografía fluida.
+    "shadcn/no-arbitrary-values": [
+      severity,
+      {
+        allow: ["tracking-*", "leading-*", "backdrop-blur-*", "min-h-*", "text-[clamp(*"],
+      },
+    ],
+    // `no-unknown-classes` la da `tailwind()`.
+    ...rules,
+  },
+});
+
+export const elise = ({ theme, designSystem: dsOptions, rules, ...rest } = {}) => {
+  const parts = [
+    theme ? tailwind(theme) : null,
+    dsOptions === false ? null : designSystem(dsOptions),
+  ].filter(Boolean);
+
+  return {
+    plugins: react.plugins,
+    categories: react.categories,
+    env: react.env,
+    jsPlugins: parts.flatMap((p) => p.jsPlugins),
+    settings: Object.assign({}, ...parts.map((p) => p.settings)),
+    rules: Object.assign({}, react.rules, ...parts.map((p) => p.rules), rules),
+    ...rest,
+  };
+};

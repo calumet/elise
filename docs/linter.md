@@ -16,6 +16,25 @@ El config va en `oxlint.config.ts` y no en `.oxlintrc.json`: el formato JSON no
 resuelve imports de paquetes, así que es el único que puede extender una
 configuración compartida. Necesita Node 22.18 o 24 en adelante.
 
+### Lo normal: `elise()`
+
+```ts
+// oxlint.config.ts
+import { elise } from "@calumet/elise-linter/oxlint";
+import { defineConfig } from "oxlint";
+
+export default defineConfig(elise({ theme: "src/index.css" }));
+```
+
+Trae React, las clases validadas contra el tema y las reglas de uso del
+catálogo. `theme` es el CSS con `@import "tailwindcss"`; sin él no se validan
+las clases. Con `designSystem: false` se apagan las reglas de uso.
+
+Va entero y no por `extends` porque Oxlint no hereda `settings`. Juntar las
+piezas a mano es justo donde se pierden, así que eso lo resuelve el paquete.
+
+Abajo están sueltas, por si hace falta armar otra combinación.
+
 ### Opción 1: Base (Node, scripts, librerías sin React)
 
 ```ts
@@ -72,6 +91,87 @@ Va esparcido y no dentro de `extends` porque `extends` no fusiona `settings`.
 
 El orden de las clases no entra ahí: lo arregla `sortTailwindcss` de Oxfmt al
 formatear. Encender además `enforce-sort-order` reportaría lo mismo dos veces.
+
+### Uso del design system
+
+`designSystem()` comprueba cómo se usan los componentes de Elise, no cómo están
+hechos. Es para quien consume el catálogo, y {@link elise} ya la incluye.
+
+Reconoce lo que llega de `@calumet/elise-*` y dice qué hacer en su lugar:
+
+```
+"font-mono" is not allowed on <Button>: <Button> owns its typography.
+```
+
+Lo que comprueba sale de [Reglas de interfaz](reglas-ui.md), que es donde está
+escrito quién es dueño de cada medida:
+
+De [Quién es dueño de cada medida](reglas-ui.md#2-quién-es-dueño-de-cada-medida):
+
+- el ancho de una pantalla es de `Container`, así que `max-w-*` no va en otro
+- `Card`, `Table` y `DataTable` no ponen borde, radio ni sombra: salen de `SURFACE`
+- la tipografía es de `Text` y los suyos; en los demás no pasa
+
+De [Lo que el sistema ya resuelve](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve):
+
+- nada de `opacity-*`: la superficie declara su par de texto, así que va `tone="muted"`
+
+De [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe):
+
+- clases armadas por interpolación
+- una medida cruda que la escala ya tiene: `max-w-[600px]` cuando existe `max-w-150`
+
+Cada uno responde con la regla y dónde leerla, no con un «no se puede»:
+
+```
+A frame's outline comes from `SURFACE`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.
+Use a Button `size`: sm, md, lg, xl, icon, icon-sm.
+```
+
+Los mensajes van en inglés, como el resto de la salida del linter: salen junto
+a los de Oxlint y los del propio plugin, y mezclar idiomas en un mismo flujo
+es peor que elegir cualquiera de los dos. La regla que citan sí está en
+español, que es donde vive la documentación.
+
+Los contratos se amplían con `contracts`.
+
+Esto vale para **todos** los componentes del catálogo, no solo para los que
+aparecen en la tabla. Lo que no tiene contrato propio solo acepta `layout`, así
+que un `<Badge className="bg-purple-600">` o un `<Input className="rounded-none">`
+se reportan igual.
+
+El último se apoya en `no-arbitrary-values`, acotada: [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe) deja `className` para
+una medida fuera de escala, así que la regla solo habla cuando **la escala ya
+tiene ese valor** y puede decir cuál. Van exentas las familias que no tienen
+escala en el tema (`tracking-*`, `leading-*`, `backdrop-blur-*`, `min-h-*`) y
+la tipografía fluida (`text-[clamp(…)]`), que es una decisión y no un descuido.
+`text-[13px]` sí se reporta, porque el tema tiene escala de texto.
+
+De las seis reglas del plugin enciende cinco. `no-unknown-classes` la da ya
+`tailwind()`.
+
+Dos reglas escritas que esto **no** puede comprobar: el segundo juego de
+anchos de [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe) cuando va en un `<div>` suelto, porque la regla solo mira
+componentes del catálogo; y las de [Qué componente para qué trabajo](reglas-ui.md#1-qué-componente-para-qué-trabajo), que son de qué componente elegir y no
+de qué clases lleva.
+
+Para saldar lo que ya había, `severity`:
+
+```ts
+overrides: [{ files: ["src/legacy/**"], rules: designSystem({ severity: "warn" }).rules }];
+```
+
+Va así y no con un `"shadcn/no-restyle": "warn"` suelto, porque bajar el nivel
+de esa forma reemplaza la regla entera y se lleva por delante los contratos.
+
+Las reglas conservan el prefijo `shadcn/`, que es el del plugin que las
+implementa hoy. El preset no: quien lo use pide que se vigile el uso de Elise,
+no un plugin concreto.
+
+Un límite de ese plugin: las sugerencias de variante (`{{variants}}`) solo
+salen en componentes declarados como función. En los que van con
+`React.forwardRef`, que en Elise son 46 de 88 archivos, el mensaje sale sin la
+lista. El resto de la regla funciona igual.
 
 ### Accesibilidad
 
@@ -146,6 +246,7 @@ módulo.
 
 - Oxlint: https://oxc.rs/docs/guide/usage/linter.html
 - Oxfmt: https://oxc.rs/docs/guide/usage/formatter.html
+- shadcn/lint: https://github.com/shadcn-ui/lint
 - Tailwind CSS: https://tailwindcss.com/docs
 
 ---
