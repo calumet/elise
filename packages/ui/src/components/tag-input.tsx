@@ -174,7 +174,7 @@ export const TagInput: React.ForwardRefExoticComponent<
               if (e.target === e.currentTarget) propio.current?.focus();
             }}
             className={cn(
-              "flex min-h-9 w-full flex-wrap items-center gap-1.5 rounded-md border border-input bg-background p-1 ps-1.5 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-border-strong focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background data-disabled:cursor-not-allowed data-disabled:opacity-50",
+              "flex min-h-9 w-full flex-wrap items-center gap-1.5 rounded-md border border-input bg-background p-1 ps-1.5 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background focus-within:outline-none hover:border-border-strong data-disabled:cursor-not-allowed data-disabled:opacity-50",
               CAMPO_INVALIDO,
             )}
           >

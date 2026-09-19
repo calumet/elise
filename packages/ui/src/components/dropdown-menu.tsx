@@ -63,7 +63,7 @@ export const DropdownMenuContent: React.ForwardRefExoticComponent<
         align={align}
         className={cn(
           tema.clases,
-          "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+          "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
           canaletaIndicador,
           className,
         )}
@@ -223,7 +223,7 @@ export const DropdownMenuSubContent: React.ForwardRefExoticComponent<
     data-slot="dropdown-menu-sub-content"
     ref={ref}
     className={cn(
-      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
       canaletaIndicador,
       className,
     )}

@@ -16,7 +16,7 @@ const items = [
 
 export default function CarouselDemo() {
   return (
-    <div className="flex flex-col gap-8 w-full items-center">
+    <div className="flex w-full flex-col items-center gap-8">
       <Carousel className="w-full max-w-sm">
         <CarouselContent>
           {items.map((item, i) => (

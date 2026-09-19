@@ -84,7 +84,7 @@ export const Stat: React.ForwardRefExoticComponent<
 
         <span
           data-slot="stat-value"
-          className="text-2xl font-semibold tabular-nums text-foreground"
+          className="text-2xl font-semibold text-foreground tabular-nums"
         >
           {value}
         </span>

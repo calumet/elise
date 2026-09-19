@@ -132,7 +132,7 @@ const App = () => (
     messages={messages}
   >
     <ThemeProvider attribute="class" defaultTheme="light">
-      <div className="max-w-6xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
+      <div className="mx-auto flex min-h-svh max-w-6xl flex-col gap-8 px-4 py-8">
         <AppHeader />
 
         <NavigationMenu className="justify-start">
@@ -176,7 +176,7 @@ const App = () => (
           <NavigationMenuIndicator />
         </NavigationMenu>
 
-        <main className="flex flex-col flex-1 gap-8 pb-12">
+        <main className="flex flex-1 flex-col gap-8 pb-12">
           <SectionCard title="Date Picker & Range">
             <LazySection>
               <DatePickersDemo />
@@ -199,7 +199,7 @@ const App = () => (
               </TooltipProvider>
             }
           >
-            <div className="flex items-center justify-center min-h-[260px] relative">
+            <div className="relative flex min-h-[260px] items-center justify-center">
               <LazySection>
                 <HelloWorld />
               </LazySection>
@@ -222,7 +222,7 @@ const App = () => (
               </Popover>
             }
           >
-            <div className="flex items-center justify-center min-h-80 relative">
+            <div className="relative flex min-h-80 items-center justify-center">
               <LazySection>
                 <ContactForm />
               </LazySection>
@@ -250,7 +250,7 @@ const App = () => (
               </Dialog>
             }
           >
-            <div className="flex justify-center min-h-80 relative">
+            <div className="relative flex min-h-80 justify-center">
               <LazySection>
                 <ComponentsSampler />
               </LazySection>
@@ -474,7 +474,7 @@ const App = () => (
           </SectionCard>
 
           <SectionCard id="login" title="Tarjeta de login simple.">
-            <div className="flex items-center justify-center min-h-[260px] relative">
+            <div className="relative flex min-h-[260px] items-center justify-center">
               <LazySection>
                 <LoginCard />
               </LazySection>

@@ -143,7 +143,7 @@ function Switch({
         className={cn(
           "inline-flex h-5 w-8 shrink-0 cursor-pointer items-center rounded-full bg-track transition-[background-color] duration-(--duration-fast) ease-out",
           "data-[state=checked]:bg-primary",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
           "disabled:cursor-not-allowed disabled:opacity-50",
         )}
       >

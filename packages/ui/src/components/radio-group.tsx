@@ -215,7 +215,7 @@ function RadioGroupItem({
           "inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-card transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out",
           "data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:shadow-bevel",
           "aria-invalid:border-destructive",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
           "disabled:cursor-not-allowed disabled:opacity-50",
         )}
       >

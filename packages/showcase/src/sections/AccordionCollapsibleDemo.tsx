@@ -43,8 +43,8 @@ const AccordionCollapsibleDemo = () => {
         >
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="text-md font-semibold">Notas rápidas</p>
-              <p className="text-md text-muted-foreground">Expandible con texto auxiliar.</p>
+              <p className="text-base font-semibold">Notas rápidas</p>
+              <p className="text-base text-muted-foreground">Expandible con texto auxiliar.</p>
             </div>
             <CollapsibleTrigger asChild>
               <Button size="sm" variant="outline">

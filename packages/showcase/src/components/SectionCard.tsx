@@ -16,7 +16,7 @@ export const SectionCard = ({ id, title, action, children, className }: SectionC
     >
       {title ? (
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm text-muted-foreground font-semibold sm:pl-1">{title}</h2>
+          <h2 className="text-sm font-semibold text-muted-foreground sm:pl-1">{title}</h2>
           <div className="w-max">{action}</div>
         </div>
       ) : null}

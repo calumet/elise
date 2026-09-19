@@ -140,7 +140,7 @@ export const Rating: React.ForwardRefExoticComponent<
             key={n}
             className={cn(
               "inline-flex cursor-pointer rounded-xs p-0.5",
-              "has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-background",
+              "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-background has-[:focus-visible]:outline-none",
               disabled && "pointer-events-none opacity-50",
             )}
           >

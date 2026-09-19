@@ -70,7 +70,7 @@ export function Decisions() {
         <h2 className="text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.035em]">
           {t("title")}
         </h2>
-        <p className="max-w-[420px] text-lg text-muted-foreground text-pretty sm:text-right">
+        <p className="max-w-[420px] text-lg text-pretty text-muted-foreground sm:text-right">
           {t("lede")}
         </p>
       </div>

@@ -49,3 +49,14 @@ export const react = {
     "react/jsx-no-constructed-context-values": "error",
   },
 };
+
+export const tailwind = (entryPoint) => ({
+  jsPlugins: ["oxlint-tailwindcss"],
+  settings: { tailwindcss: { entryPoint } },
+  rules: {
+    // `.dark` la declara el tema como marcador, no la genera Tailwind.
+    "tailwindcss/no-unknown-classes": ["error", { allowlist: ["dark"] }],
+    "tailwindcss/no-conflicting-classes": "error",
+    "tailwindcss/no-duplicate-classes": "error",
+  },
+});

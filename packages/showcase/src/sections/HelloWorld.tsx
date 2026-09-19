@@ -9,7 +9,7 @@ import {
 const HelloWorld = () => (
   <div className="flex flex-col items-center gap-4 text-center">
     <p className="text-xl font-semibold">Hola, Elise UI 👋</p>
-    <p className="text-base text-muted-foreground max-w-sm">
+    <p className="max-w-sm text-base text-muted-foreground">
       Radix + Tailwind con tokens de color y tipografía listos para usar.
     </p>
     <div className="flex items-center gap-3">

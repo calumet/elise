@@ -74,7 +74,7 @@ export const SelectContent: React.ForwardRefExoticComponent<
         position={position}
         className={cn(
           tema.clases,
-          "z-popover min-w-32 max-h-(--radix-select-content-available-height) overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+          "z-popover max-h-(--radix-select-content-available-height) min-w-32 overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
           position === "popper" && "translate-y-1",
           className,
         )}
@@ -127,7 +127,7 @@ export const SelectItem: React.ForwardRefExoticComponent<
     data-slot="select-item"
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
+      "relative flex w-full cursor-default items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
       className,
     )}
     {...props}

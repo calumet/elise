@@ -26,6 +26,7 @@
     "jsr": "^0.14.3",
     "oxfmt": "^0.68.0",
     "oxlint": "^1.83.0",
+    "oxlint-tailwindcss": "^1.12.0",
     "playwright": "^1.63.0",
     "typescript": "^5.9.3"
   },

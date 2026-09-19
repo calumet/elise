@@ -157,14 +157,14 @@ export const aHex = ({ hsv, alfa }: Color, conAlfa: boolean): string => {
 };
 
 /** Para pintar: el color en CSS, con su alfa. */
-export const aCss = ({ hsv, alfa }: Color) => {
+export const aCss = ({ hsv, alfa }: Color): string => {
   const { r, g, b } = hsvARgb(hsv);
   const e = (n: number) => Math.round(limitar(n, 0, 255));
   return `rgb(${e(r)} ${e(g)} ${e(b)} / ${alfa})`;
 };
 
 /** El tono puro, que es el fondo del área de saturación y brillo. */
-export const tonoPuro = (h: number) => {
+export const tonoPuro = (h: number): string => {
   const { r, g, b } = hsvARgb({ h, s: 100, v: 100 });
   const e = (n: number) => Math.round(limitar(n, 0, 255));
   return `rgb(${e(r)} ${e(g)} ${e(b)})`;
