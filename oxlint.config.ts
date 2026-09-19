@@ -22,9 +22,7 @@ export default defineConfig(
         env: { browser: true },
       },
       {
-        /* Elise es el design system, no quien lo consume: sus componentes son
-           dueños de su apariencia, y componer clases es como lo hacen. Queda
-           `no-raw-colors`, que sí vale adentro: todo color sale del tema. */
+        // Elise es el design system, no quien lo consume. Queda `no-raw-colors`.
         files: ["packages/ui/**", "packages/tables/**", "packages/alerts/**", "packages/toasts/**"],
         rules: {
           "shadcn/no-restyle": "off",
@@ -34,14 +32,12 @@ export default defineConfig(
         },
       },
       {
-        /* La landing es el consumidor que hay dentro del repo, y es de antes
-           que la regla. En aviso mientras se salda. */
+        // En aviso mientras se salda lo que ya había.
         files: ["packages/site/**"],
         rules: designSystem({ severity: "warn" }).rules,
       },
       {
-        /* La vitrina es un banco de pruebas: ejercita los componentes a
-           propósito de formas que una pantalla de verdad no usaría. */
+        // La vitrina es un banco de pruebas.
         files: ["packages/showcase/**"],
         rules: designSystem({ severity: "off" }).rules,
       },

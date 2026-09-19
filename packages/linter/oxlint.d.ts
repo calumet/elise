@@ -43,11 +43,7 @@ export type Contract = {
 
 /** Opciones de {@link designSystem}, que {@link elise} también acepta. */
 export type DesignSystemOptions = {
-  /**
-   * Para bajar el nivel mientras se salda lo que ya había. Va aquí y no como
-   * un `"warn"` en un `overrides`: eso reemplaza la regla entera y se lleva
-   * por delante los contratos.
-   */
+  /** Va aquí y no como un `"warn"` suelto, que reemplaza la regla entera. */
   severity?: "error" | "warn" | "off";
   contracts?: Contract[];
   rules?: Record<string, unknown>;
@@ -55,15 +51,8 @@ export type DesignSystemOptions = {
 };
 
 /**
- * Comprueba cómo se usan los componentes de Elise: quién es dueño de qué
- * estilo, y qué hacer en lugar de pisarlo.
- *
- * Normalmente no hace falta llamarla: {@link elise} ya la incluye. Se usa
- * suelta para bajar el nivel en un `overrides`.
- *
- * ```ts
- * overrides: [{ files: ["src/legacy/**"], rules: designSystem({ severity: "warn" }).rules }]
- * ```
+ * Comprueba cómo se usan los componentes de Elise. {@link elise} ya la
+ * incluye; suelta sirve para bajar el nivel en un `overrides`.
  */
 export declare function designSystem(options?: DesignSystemOptions): OxlintConfig;
 
@@ -78,8 +67,8 @@ export declare function designSystem(options?: DesignSystemOptions): OxlintConfi
  * export default defineConfig(elise({ theme: "src/index.css" }));
  * ```
  *
- * Sin `theme` no se validan las clases contra el tema. Con
- * `designSystem: false` se apagan las reglas de uso del catálogo.
+ * Sin `theme` no se validan las clases. Con `designSystem: false` se apagan
+ * las reglas de uso.
  */
 export declare function elise(options?: {
   /** El CSS con `@import "tailwindcss"`. En un monorepo, el mapeo de rutas. */
