@@ -106,19 +106,25 @@ Reconoce lo que llega de `@calumet/elise-*` y dice qué hacer en su lugar:
 Lo que comprueba sale de [Reglas de interfaz](reglas-ui.md), que es donde está
 escrito quién es dueño de cada medida:
 
-| De dónde                      | Qué se comprueba                                                                      |
-| ----------------------------- | ------------------------------------------------------------------------------------- |
-| § 2, ancho de pantalla        | `max-w-*` solo en `Container`                                                         |
-| § 2, contorno de un marco     | `Card`, `Table` y `DataTable` no ponen borde, radio ni sombra: salen de `SURFACE`     |
-| § 2, tamaño de texto          | la tipografía es de `Text` y los suyos; en los demás no pasa                          |
-| § 3, atenuar                  | nada de `opacity-*`: la superficie declara su par de texto, así que va `tone="muted"` |
-| § 4, clases por interpolación | `require-static-classes`                                                              |
-| § 4, segundo juego de anchos  | una medida cruda que la escala ya tiene: `max-w-[600px]` cuando existe `max-w-150`    |
+De [Quién es dueño de cada medida](reglas-ui.md#2-quién-es-dueño-de-cada-medida):
+
+- el ancho de una pantalla es de `Container`, así que `max-w-*` no va en otro
+- `Card`, `Table` y `DataTable` no ponen borde, radio ni sombra: salen de `SURFACE`
+- la tipografía es de `Text` y los suyos; en los demás no pasa
+
+De [Lo que el sistema ya resuelve](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve):
+
+- nada de `opacity-*`: la superficie declara su par de texto, así que va `tone="muted"`
+
+De [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe):
+
+- clases armadas por interpolación
+- una medida cruda que la escala ya tiene: `max-w-[600px]` cuando existe `max-w-150`
 
 Cada uno responde con la regla y dónde leerla, no con un «no se puede»:
 
 ```
-A frame's outline comes from `SURFACE`. See docs/reglas-ui.md § 2.
+A frame's outline comes from `SURFACE`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.
 Use a Button `size`: sm, md, lg, xl, icon, icon-sm.
 ```
 
@@ -134,7 +140,7 @@ aparecen en la tabla. Lo que no tiene contrato propio solo acepta `layout`, así
 que un `<Badge className="bg-purple-600">` o un `<Input className="rounded-none">`
 se reportan igual.
 
-El último se apoya en `no-arbitrary-values`, acotada: § 4 deja `className` para
+El último se apoya en `no-arbitrary-values`, acotada: [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe) deja `className` para
 una medida fuera de escala, así que la regla solo habla cuando **la escala ya
 tiene ese valor** y puede decir cuál. Van exentas las familias que no tienen
 escala en el tema (`tracking-*`, `leading-*`, `backdrop-blur-*`, `min-h-*`) y
@@ -145,8 +151,8 @@ De las seis reglas del plugin enciende cinco. `no-unknown-classes` la da ya
 `tailwind()`.
 
 Dos reglas escritas que esto **no** puede comprobar: el segundo juego de
-anchos de § 4 cuando va en un `<div>` suelto, porque la regla solo mira
-componentes del catálogo; y las de § 1, que son de qué componente elegir y no
+anchos de [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe) cuando va en un `<div>` suelto, porque la regla solo mira
+componentes del catálogo; y las de [Qué componente para qué trabajo](reglas-ui.md#1-qué-componente-para-qué-trabajo), que son de qué componente elegir y no
 de qué clases lleva.
 
 Para saldar lo que ya había, `severity`:
