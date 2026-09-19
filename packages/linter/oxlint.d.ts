@@ -33,7 +33,7 @@ export declare function tailwind(
 ): OxlintConfig;
 
 /** Un contrato de `shadcn/no-restyle`: qué acepta un componente. */
-export type Contrato = {
+export type Contract = {
   /** Expresión regular contra el nombre del componente. */
   pattern: string;
   allow?: string[];
@@ -58,14 +58,14 @@ export type Contrato = {
  * `no-arbitrary-values`, que choca con las medidas de maquetación de una
  * página; se pide con `rules` si se la quiere.
  */
-export declare function shadcn(opciones?: {
+export declare function shadcn(options?: {
   /**
    * Para bajar el nivel mientras se salda lo que ya había. Va aquí y no como
    * un `"warn"` en un `overrides`: eso reemplaza la regla entera y se lleva
    * por delante los contratos.
    */
   severity?: "error" | "warn" | "off";
-  contracts?: Contrato[];
+  contracts?: Contract[];
   rules?: Record<string, unknown>;
   settings?: Record<string, unknown>;
 }): OxlintConfig;

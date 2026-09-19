@@ -92,7 +92,7 @@ export const tailwind = (entryPoint) => ({
 
 /* Qué acepta cada componente por encima de `layout`. Un contrato reemplaza las
    claves que escribe y hereda el resto, y si varios encajan gana el último. */
-const CONTRATOS = [
+const CONTRACTS = [
   // Los contenedores reparten el espacio de la página, así que su padding y su
   // gap son de quien los coloca.
   {
@@ -136,7 +136,7 @@ export const shadcn = ({ severity = "error", contracts = [], rules, settings } =
   /* `severity` y no un `"warn"` suelto en un `overrides`: bajar el nivel así
      reemplaza la regla entera y se lleva por delante los contratos. */
   rules: {
-    "shadcn/no-restyle": [severity, { allow: ["layout"], contracts: [...CONTRATOS, ...contracts] }],
+    "shadcn/no-restyle": [severity, { allow: ["layout"], contracts: [...CONTRACTS, ...contracts] }],
     "shadcn/no-raw-colors": severity,
     "shadcn/no-inline-styles": severity,
     "shadcn/require-static-classes": severity,
