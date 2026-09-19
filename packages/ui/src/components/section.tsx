@@ -63,23 +63,23 @@ export const Section: React.ForwardRefExoticComponent<
     { className, heading, accessibilityLabel, padding = "base", actions, children, ...props },
     ref,
   ) => {
-    const idDelRotulo = `${React.useId()}-heading`;
-    const sinRelleno = padding === "none";
+    const labelId = `${React.useId()}-heading`;
+    const noPadding = padding === "none";
 
     return (
       <Card
         as="section"
         ref={ref}
         data-slot="section"
-        aria-labelledby={heading ? idDelRotulo : undefined}
+        aria-labelledby={heading ? labelId : undefined}
         aria-label={heading ? undefined : accessibilityLabel}
-        className={cn(sinRelleno && "py-0", className)}
+        className={cn(noPadding && "py-0", className)}
         {...props}
       >
         {heading || actions ? (
-          <CardHeader className={cn(sinRelleno && "pt-6")}>
+          <CardHeader className={cn(noPadding && "pt-6")}>
             {heading ? (
-              <CardTitle as="h2" id={idDelRotulo}>
+              <CardTitle as="h2" id={labelId}>
                 {heading}
               </CardTitle>
             ) : null}
@@ -87,7 +87,7 @@ export const Section: React.ForwardRefExoticComponent<
           </CardHeader>
         ) : null}
 
-        {sinRelleno ? children : <CardContent>{children}</CardContent>}
+        {noPadding ? children : <CardContent>{children}</CardContent>}
       </Card>
     );
   },

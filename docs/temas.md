@@ -119,8 +119,8 @@ pelo y no como raya blanca, y en el riel sale con `--sidebar-border`, que es la
 línea que ya tenía.
 
 Es el mismo mecanismo que usa la cabecera del `AppShell` con `data-theme="dark"`.
-Quien pinte la franja a mano tiene las listas de clases en `SUPERFICIE_INVERSA` y
-`SUPERFICIE_SIDEBAR`, que se exportan desde `@calumet/elise-ui/box`.
+Quien pinte la franja a mano tiene las listas de clases en `INVERSE_SURFACE` y
+`SIDEBAR_SURFACE`, que se exportan desde `@calumet/elise-ui/box`.
 
 ### Estados de los rellenos sólidos
 

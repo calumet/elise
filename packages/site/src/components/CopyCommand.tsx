@@ -8,18 +8,18 @@ import { INSTALL_CMD } from "../config";
 /** El comando de instalación, y al tocarlo va al portapapeles. */
 export function CopyCommand({ className }: { className?: string }) {
   const { t } = useTranslation("common");
-  const [copiado, setCopiado] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
 
   React.useEffect(() => {
-    if (!copiado) return;
-    const id = setTimeout(() => setCopiado(false), 1600);
+    if (!copied) return;
+    const id = setTimeout(() => setCopied(false), 1600);
     return () => clearTimeout(id);
-  }, [copiado]);
+  }, [copied]);
 
-  const copiar = async () => {
+  const copy = async () => {
     try {
       await navigator.clipboard.writeText(INSTALL_CMD);
-      setCopiado(true);
+      setCopied(true);
     } catch {
       // Sin permiso de portapapeles no hay nada que hacer: el comando queda
       // visible en el botón para copiarlo a mano.
@@ -30,7 +30,7 @@ export function CopyCommand({ className }: { className?: string }) {
     <Button
       variant="outline"
       size="lg"
-      onClick={copiar}
+      onClick={copy}
       aria-label={t("copy", { cmd: INSTALL_CMD })}
       /* `outline` no trae relleno, que es lo correcto sobre una página lisa. Acá
          va encima del dither, así que necesita superficie propia o el comando
@@ -38,9 +38,9 @@ export function CopyCommand({ className }: { className?: string }) {
       className={`bg-card/85 font-mono backdrop-blur-[2px] ${className ?? ""}`}
     >
       {INSTALL_CMD}
-      {copiado ? <Check className="text-success" /> : <Copy className="text-muted-foreground" />}
+      {copied ? <Check className="text-success" /> : <Copy className="text-muted-foreground" />}
       <span className="sr-only" aria-live="polite">
-        {copiado ? t("copied") : ""}
+        {copied ? t("copied") : ""}
       </span>
     </Button>
   );

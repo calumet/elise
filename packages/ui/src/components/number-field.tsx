@@ -22,7 +22,7 @@ import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
 import { Field } from "./field";
-import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
+import { FIELD_BOX_COMPOSITE, BARE_FIELD, INVALID_FIELD } from "./input";
 
 /** Props de {@link NumberField}. */
 export type NumberFieldProps = {
@@ -61,13 +61,13 @@ export type NumberFieldProps = {
 };
 
 /** Decimales que hace falta escribir para que el paso no arrastre cola. */
-const decimalesDe = (paso: number) => {
-  const texto = String(paso);
-  const punto = texto.indexOf(".");
-  return punto === -1 ? 0 : texto.length - punto - 1;
+const decimalsOf = (stepButton: number) => {
+  const text = String(stepButton);
+  const dot = text.indexOf(".");
+  return dot === -1 ? 0 : text.length - dot - 1;
 };
 
-const limitar = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
 /**
  * Campo numérico: `min`, `max`, `step`, prefijo, sufijo y el teclado que sale
@@ -110,50 +110,50 @@ export const NumberField: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const etiquetaMenos = useElLabel("ui", "decrement", "Restar");
-    const etiquetaMas = useElLabel("ui", "increment", "Sumar");
+    const lessLabel = useElLabel("ui", "decrement", "Restar");
+    const moreLabel = useElLabel("ui", "increment", "Sumar");
 
-    const [interno, setInterno] = React.useState(defaultValue);
-    const controlado = value !== undefined;
-    const texto = controlado ? value : interno;
+    const [internal, setInternal] = React.useState(defaultValue);
+    const controlled = value !== undefined;
+    const text = controlled ? value : internal;
 
-    const escribir = (siguiente: string) => {
-      if (!controlado) setInterno(siguiente);
-      onValueChange?.(siguiente);
+    const type = (next: string) => {
+      if (!controlled) setInternal(next);
+      onValueChange?.(next);
     };
 
-    const pasar = (direccion: 1 | -1) => {
-      const actual = Number(texto);
+    const pass = (direction: 1 | -1) => {
+      const current = Number(text);
       /* Sin valor todavía, el primer paso arranca del mínimo si lo hay; si no,
          de cero. Arrancar de cero con un mínimo de 10 daría un valor inválido
          al primer clic. */
       const base =
-        texto.trim() === "" || Number.isNaN(actual) ? (min > -Infinity ? min : 0) : actual;
-      const siguiente = limitar(base + step * direccion, min, max);
-      escribir(siguiente.toFixed(decimalesDe(step)));
+        text.trim() === "" || Number.isNaN(current) ? (min > -Infinity ? min : 0) : current;
+      const next = clamp(base + step * direction, min, max);
+      type(next.toFixed(decimalsOf(step)));
     };
 
-    const numero = Number(texto);
-    const hayNumero = texto.trim() !== "" && !Number.isNaN(numero);
-    const enElTope = hayNumero && numero >= max;
-    const enElSuelo = hayNumero && numero <= min;
+    const parsed = Number(text);
+    const hasNumber = text.trim() !== "" && !Number.isNaN(parsed);
+    const atCap = hasNumber && parsed >= max;
+    const onTheFloor = hasNumber && parsed <= min;
 
-    const teclas = (evento: React.KeyboardEvent) => {
-      if (evento.key !== "ArrowUp" && evento.key !== "ArrowDown") return;
-      evento.preventDefault();
-      pasar(evento.key === "ArrowUp" ? 1 : -1);
+    const keys = (event: React.KeyboardEvent) => {
+      if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+      event.preventDefault();
+      pass(event.key === "ArrowUp" ? 1 : -1);
     };
 
-    const paso = (direccion: 1 | -1, apagado: boolean, etiqueta: string) => (
+    const stepButton = (direction: 1 | -1, dimmed: boolean, buttonLabel: string) => (
       <button
         type="button"
         tabIndex={-1}
-        aria-label={etiqueta}
-        disabled={disabled || readOnly || apagado}
-        onClick={() => pasar(direccion)}
+        aria-label={buttonLabel}
+        disabled={disabled || readOnly || dimmed}
+        onClick={() => pass(direction)}
         className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground disabled:pointer-events-none disabled:text-border-strong"
       >
-        {direccion === 1 ? (
+        {direction === 1 ? (
           <Plus className="size-4" aria-hidden />
         ) : (
           <Minus className="size-4" aria-hidden />
@@ -172,7 +172,7 @@ export const NumberField: React.ForwardRefExoticComponent<
       >
         {(control) => (
           <div
-            className={cn(CAJA_CAMPO_COMPUESTA, CAMPO_INVALIDO)}
+            className={cn(FIELD_BOX_COMPOSITE, INVALID_FIELD)}
             aria-invalid={control["aria-invalid"]}
           >
             {prefix ? (
@@ -190,18 +190,18 @@ export const NumberField: React.ForwardRefExoticComponent<
               placeholder={placeholder}
               readOnly={readOnly}
               disabled={disabled}
-              value={texto}
-              onChange={(e) => escribir(e.target.value)}
-              onKeyDown={teclas}
+              value={text}
+              onChange={(e) => type(e.target.value)}
+              onKeyDown={keys}
               /* El campo es de texto, así que el rango y el valor los tiene que
                  decir ARIA: si no, un lector de pantalla no sabe entre qué y qué
                  se mueve ni por dónde va. */
               role="spinbutton"
-              aria-valuenow={hayNumero ? numero : undefined}
+              aria-valuenow={hasNumber ? parsed : undefined}
               aria-valuemin={min > -Infinity ? min : undefined}
               aria-valuemax={max < Infinity ? max : undefined}
-              aria-valuetext={hayNumero ? undefined : ""}
-              className={cn(CAMPO_DESNUDO, "tabular-nums")}
+              aria-valuetext={hasNumber ? undefined : ""}
+              className={cn(BARE_FIELD, "tabular-nums")}
             />
 
             {suffix ? (
@@ -210,8 +210,8 @@ export const NumberField: React.ForwardRefExoticComponent<
               </span>
             ) : null}
 
-            {paso(-1, enElSuelo, etiquetaMenos)}
-            {paso(1, enElTope, etiquetaMas)}
+            {stepButton(-1, onTheFloor, lessLabel)}
+            {stepButton(1, atCap, moreLabel)}
           </div>
         )}
       </Field>

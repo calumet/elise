@@ -23,14 +23,14 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-import { type CajaProps, clasesDeCaja } from "./box";
+import { type BoxStyleProps, boxClasses } from "./box";
 
 /* Los manejadores se tipan contra `HTMLElement` y no contra el botón: el
    componente puede salir como `<a>` o como `<button>`, y el tipo común es lo
    único que encaja en los dos sin que un `onCopy` de uno choque con el del
    otro. */
 /** Props de {@link Clickable}. */
-export type ClickableProps = CajaProps &
+export type ClickableProps = BoxStyleProps &
   React.HTMLAttributes<HTMLElement> & {
     /** Con `href` sale un `<a>`; sin él, un `<button>`. */
     href?: string;
@@ -101,10 +101,10 @@ export const Clickable: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const esEnlace = href !== undefined;
-    const Componente: React.ElementType = asChild ? Slot : esEnlace ? "a" : "button";
+    const isLink = href !== undefined;
+    const Component: React.ElementType = asChild ? Slot : isLink ? "a" : "button";
 
-    const propiasDelElemento = esEnlace
+    const elementProps = isLink
       ? {
           href: disabled ? undefined : href,
           target,
@@ -114,7 +114,7 @@ export const Clickable: React.ForwardRefExoticComponent<
       : { type, disabled };
 
     return (
-      <Componente
+      <Component
         data-slot="clickable"
         ref={ref}
         aria-label={accessibilityLabel}
@@ -124,7 +124,7 @@ export const Clickable: React.ForwardRefExoticComponent<
           "hover:bg-state-hover active:bg-state-active",
           "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
           "aria-disabled:pointer-events-none aria-disabled:opacity-50",
-          clasesDeCaja({
+          boxClasses({
             padding,
             paddingX,
             paddingY,
@@ -136,7 +136,7 @@ export const Clickable: React.ForwardRefExoticComponent<
           }),
           className,
         )}
-        {...propiasDelElemento}
+        {...elementProps}
         {...props}
       />
     );

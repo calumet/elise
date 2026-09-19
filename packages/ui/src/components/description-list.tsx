@@ -32,7 +32,7 @@ export type DescriptionListProps = React.ComponentProps<"dl"> & {
   gap?: "loose" | "tight";
 };
 
-const DentroDeListaApretada: React.Context<boolean> = React.createContext(false);
+const InsideTightList: React.Context<boolean> = React.createContext(false);
 
 /**
  * Lista de pares: un término y lo que vale.
@@ -59,7 +59,7 @@ export const DescriptionList: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<DescriptionListProps> & React.RefAttributes<HTMLDListElement>
 > = React.forwardRef<HTMLDListElement, DescriptionListProps>(
   ({ className, gap = "loose", ...props }, ref) => (
-    <DentroDeListaApretada.Provider value={gap === "tight"}>
+    <InsideTightList.Provider value={gap === "tight"}>
       <div className="@container w-full">
         <dl
           data-slot="description-list"
@@ -72,7 +72,7 @@ export const DescriptionList: React.ForwardRefExoticComponent<
           {...props}
         />
       </div>
-    </DentroDeListaApretada.Provider>
+    </InsideTightList.Provider>
   ),
 );
 DescriptionList.displayName = "DescriptionList";
@@ -87,7 +87,7 @@ DescriptionList.displayName = "DescriptionList";
 export const DescriptionListTerm: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"dt">> & React.RefAttributes<HTMLElement>
 > = React.forwardRef<HTMLElement, React.ComponentProps<"dt">>(({ className, ...props }, ref) => {
-  const apretada = React.useContext(DentroDeListaApretada);
+  const tight = React.useContext(InsideTightList);
   return (
     <dt
       data-slot="description-list-term"
@@ -95,7 +95,7 @@ export const DescriptionListTerm: React.ForwardRefExoticComponent<
       className={cn(
         "font-semibold text-foreground",
         "[&:not(:first-child)]:border-t [&:not(:first-child)]:border-border-subtle",
-        apretada
+        tight
           ? "pt-2 pb-1 @min-[490px]:py-2 @min-[490px]:pe-2"
           : "pt-4 pb-2 @min-[490px]:py-4 @min-[490px]:pe-4",
         className,
@@ -110,7 +110,7 @@ DescriptionListTerm.displayName = "DescriptionListTerm";
 export const DescriptionListDescription: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"dd">> & React.RefAttributes<HTMLElement>
 > = React.forwardRef<HTMLElement, React.ComponentProps<"dd">>(({ className, ...props }, ref) => {
-  const apretada = React.useContext(DentroDeListaApretada);
+  const tight = React.useContext(InsideTightList);
   return (
     <dd
       data-slot="description-list-description"
@@ -118,7 +118,7 @@ export const DescriptionListDescription: React.ForwardRefExoticComponent<
       className={cn(
         "m-0 text-foreground",
         "@min-[490px]:[&:not(:nth-child(2))]:border-t @min-[490px]:[&:not(:nth-child(2))]:border-border-subtle",
-        apretada ? "pb-2 @min-[490px]:py-2" : "pb-4 @min-[490px]:py-4",
+        tight ? "pb-2 @min-[490px]:py-2" : "pb-4 @min-[490px]:py-4",
         className,
       )}
       {...props}

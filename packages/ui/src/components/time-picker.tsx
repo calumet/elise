@@ -23,24 +23,24 @@ import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
 import { Field } from "./field";
-import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
+import { FIELD_BOX_COMPOSITE, BARE_FIELD, INVALID_FIELD } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-const PATRON = /^(\d{1,2}):(\d{2})$/;
+const PATTERN = /^(\d{1,2}):(\d{2})$/;
 
 /** Minutos desde medianoche, o `null` si no es una hora. */
-const aMinutos = (texto: string): number | null => {
-  const partes = PATRON.exec(texto.trim());
-  if (!partes) return null;
-  const hora = Number(partes[1]);
-  const minuto = Number(partes[2]);
-  if (hora > 23 || minuto > 59) return null;
-  return hora * 60 + minuto;
+const toMinutes = (text: string): number | null => {
+  const parts = PATTERN.exec(text.trim());
+  if (!parts) return null;
+  const hour = Number(parts[1]);
+  const minute = Number(parts[2]);
+  if (hour > 23 || minute > 59) return null;
+  return hour * 60 + minute;
 };
 
 /** Escribe minutos desde medianoche en `HH:MM`. */
-export const aTextoHora = (minutos: number): string =>
-  `${String(Math.floor(minutos / 60)).padStart(2, "0")}:${String(minutos % 60).padStart(2, "0")}`;
+export const toTimeText = (minutes: number): string =>
+  `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
 
 /** Props de {@link TimePicker}. */
 export type TimePickerProps = {
@@ -116,29 +116,29 @@ export const TimePicker: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const etiquetaAbrir = useElLabel("ui", "openTimeList", "Ver las horas");
-    const etiquetaLista = useElLabel("ui", "timeList", "Horas");
+    const openLabel = useElLabel("ui", "openTimeList", "Ver las horas");
+    const listLabel = useElLabel("ui", "timeList", "Horas");
 
-    const [interno, setInterno] = React.useState(defaultValue);
-    const [escrito, setEscrito] = React.useState<string | null>(null);
-    const [abierto, setAbierto] = React.useState(false);
-    const controlado = value !== undefined;
-    const hora = controlado ? value : interno;
+    const [internal, setInternal] = React.useState(defaultValue);
+    const [typed, setTyped] = React.useState<string | null>(null);
+    const [open, setOpen] = React.useState(false);
+    const controlled = value !== undefined;
+    const hour = controlled ? value : internal;
 
-    const cambiar = (siguiente: string) => {
-      if (!controlado) setInterno(siguiente);
-      onValueChange?.(siguiente);
+    const change = (next: string) => {
+      if (!controlled) setInternal(next);
+      onValueChange?.(next);
     };
 
-    const desde = aMinutos(min) ?? 0;
-    const hasta = aMinutos(max) ?? 1439;
-    const opciones = React.useMemo(() => {
-      const salida: number[] = [];
-      for (let m = desde; m <= hasta; m += Math.max(1, step)) salida.push(m);
-      return salida;
-    }, [desde, hasta, step]);
+    const from = toMinutes(min) ?? 0;
+    const end = toMinutes(max) ?? 1439;
+    const options = React.useMemo(() => {
+      const output: number[] = [];
+      for (let m = from; m <= end; m += Math.max(1, step)) output.push(m);
+      return output;
+    }, [from, end, step]);
 
-    const elegida = aMinutos(hora);
+    const selected = toMinutes(hour);
 
     return (
       <Field
@@ -152,7 +152,7 @@ export const TimePicker: React.ForwardRefExoticComponent<
       >
         {(control) => (
           <div
-            className={cn(CAJA_CAMPO_COMPUESTA, CAMPO_INVALIDO)}
+            className={cn(FIELD_BOX_COMPOSITE, INVALID_FIELD)}
             aria-invalid={control["aria-invalid"]}
           >
             <input
@@ -164,22 +164,22 @@ export const TimePicker: React.ForwardRefExoticComponent<
               placeholder={placeholder}
               disabled={disabled}
               readOnly={readOnly}
-              value={escrito ?? hora}
-              onChange={(e) => setEscrito(e.target.value)}
+              value={typed ?? hour}
+              onChange={(e) => setTyped(e.target.value)}
               onBlur={() => {
-                if (escrito === null) return;
-                const minutos = aMinutos(escrito);
-                cambiar(minutos === null ? "" : aTextoHora(minutos));
-                setEscrito(null);
+                if (typed === null) return;
+                const minutes = toMinutes(typed);
+                change(minutes === null ? "" : toTimeText(minutes));
+                setTyped(null);
               }}
-              className={cn(CAMPO_DESNUDO, "tabular-nums")}
+              className={cn(BARE_FIELD, "tabular-nums")}
             />
 
-            <Popover open={abierto} onOpenChange={setAbierto}>
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <button
                   type="button"
-                  aria-label={etiquetaAbrir}
+                  aria-label={openLabel}
                   disabled={disabled || readOnly}
                   className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:text-border-strong"
                 >
@@ -193,32 +193,32 @@ export const TimePicker: React.ForwardRefExoticComponent<
                     misma pantalla había dos maneras distintas de desplazar. */}
                 <div
                   role="listbox"
-                  aria-label={etiquetaLista}
+                  aria-label={listLabel}
                   className="flex max-h-56 flex-col overflow-y-auto"
                 >
-                  {opciones.map((minutos) => {
-                    const texto = aTextoHora(minutos);
-                    const puesta = minutos === elegida;
+                  {options.map((minutes) => {
+                    const text = toTimeText(minutes);
+                    const set = minutes === selected;
                     return (
                       <button
-                        key={minutos}
+                        key={minutes}
                         type="button"
                         role="option"
-                        aria-selected={puesta}
+                        aria-selected={set}
                         /* La elegida se enfoca al abrir, así que la lista no
                              arranca siempre en medianoche cuando ya hay hora. */
-                        autoFocus={puesta}
+                        autoFocus={set}
                         onClick={() => {
-                          cambiar(texto);
-                          setEscrito(null);
-                          setAbierto(false);
+                          change(text);
+                          setTyped(null);
+                          setOpen(false);
                         }}
                         className={cn(
                           "cursor-pointer rounded-sm px-2 py-1.5 text-start text-sm tabular-nums transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:bg-muted focus-visible:outline-none",
-                          puesta && "bg-accent text-accent-foreground",
+                          set && "bg-accent text-accent-foreground",
                         )}
                       >
-                        {texto}
+                        {text}
                       </button>
                     );
                   })}

@@ -34,15 +34,15 @@ export function Packages() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {PACKAGES.map((nombre) => (
-          <Card key={nombre} className="relative gap-0 overflow-hidden p-5">
+        {PACKAGES.map((name) => (
+          <Card key={name} className="relative gap-0 overflow-hidden p-5">
             <Dither kind="patch" cell={7} className="absolute top-0 right-0 size-23" />
             <span className="relative font-mono text-xs font-medium text-primary">
-              elise-{nombre}
+              elise-{name}
             </span>
-            <h3 className="relative mt-2.5 text-lg font-semibold">{t(`${nombre}.title`)}</h3>
+            <h3 className="relative mt-2.5 text-lg font-semibold">{t(`${name}.title`)}</h3>
             <p className="relative mt-1.5 text-sm text-muted-foreground">
-              <RichText>{t(`${nombre}.body`)}</RichText>
+              <RichText>{t(`${name}.body`)}</RichText>
             </p>
           </Card>
         ))}

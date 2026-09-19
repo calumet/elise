@@ -27,7 +27,7 @@ import { InlineError } from "./inline-error";
    como la culpable con `invalid`. Sin esto, marcar una opción como inválida
    dejaría el `aria-invalid` apuntando a un mensaje que el lector de pantalla no
    sabría encontrar. */
-const GrupoCtx = React.createContext<{ idError: string; hayError: boolean } | null>(null);
+const GroupCtx = React.createContext<{ errorId: string; hasError: boolean } | null>(null);
 
 /** Props de {@link RadioGroup}. */
 export type RadioGroupProps = {
@@ -86,20 +86,20 @@ function RadioGroup({
   onValueChange,
   children,
 }: RadioGroupProps): React.JSX.Element {
-  const { id, idDescripcion, idError, hayError, control } = useFieldIds({
+  const { id, descriptionId, errorId, hasError, control } = useFieldIds({
     id: idProp,
     description,
     error,
     required,
   });
-  const idRotulo = `${id}-label`;
+  const labelId = `${id}-label`;
 
-  const contexto = React.useMemo(() => ({ idError, hayError }), [idError, hayError]);
+  const context = React.useMemo(() => ({ errorId, hasError }), [errorId, hasError]);
 
   return (
     <div
       data-slot="radio-group-field"
-      data-invalid={hayError ? "" : undefined}
+      data-invalid={hasError ? "" : undefined}
       className={cn("flex flex-col gap-1.5", className)}
     >
       {/* El rótulo del grupo se enlaza con `aria-labelledby` y no con `htmlFor`,
@@ -107,17 +107,17 @@ function RadioGroup({
           quiere un elemento rotulable y aquí solo hay un contenedor. */}
       <span
         data-slot="radio-group-label"
-        id={idRotulo}
+        id={labelId}
         className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
       >
         {label}
         {required ? <FieldRequiredMark /> : null}
       </span>
 
-      <GrupoCtx.Provider value={contexto}>
+      <GroupCtx.Provider value={context}>
         <RadioGroupPrimitive.Root
           data-slot="radio-group"
-          aria-labelledby={idRotulo}
+          aria-labelledby={labelId}
           aria-describedby={control["aria-describedby"]}
           aria-invalid={control["aria-invalid"]}
           aria-required={control["aria-required"]}
@@ -130,20 +130,20 @@ function RadioGroup({
         >
           {children}
         </RadioGroupPrimitive.Root>
-      </GrupoCtx.Provider>
+      </GroupCtx.Provider>
 
       {description ? (
         <p
           data-slot="radio-group-description"
-          id={idDescripcion}
+          id={descriptionId}
           className="text-xs text-muted-foreground"
         >
           {description}
         </p>
       ) : null}
 
-      {hayError ? (
-        <InlineError data-slot="radio-group-error" id={idError}>
+      {hasError ? (
+        <InlineError data-slot="radio-group-error" id={errorId}>
           {error}
         </InlineError>
       ) : null}
@@ -189,14 +189,14 @@ function RadioGroupItem({
   id: idProp,
   className,
 }: RadioGroupItemProps): React.JSX.Element {
-  const grupo = React.useContext(GrupoCtx);
-  const generado = React.useId();
-  const id = idProp ?? generado;
-  const idDescripcion = `${id}-description`;
+  const group = React.useContext(GroupCtx);
+  const generated = React.useId();
+  const id = idProp ?? generated;
+  const descriptionId = `${id}-description`;
 
-  const senalado = Boolean(invalid && grupo?.hayError);
+  const marked = Boolean(invalid && group?.hasError);
   const describedBy =
-    [description ? idDescripcion : null, senalado ? grupo?.idError : null]
+    [description ? descriptionId : null, marked ? group?.errorId : null]
       .filter(Boolean)
       .join(" ") || undefined;
 
@@ -208,7 +208,7 @@ function RadioGroupItem({
         value={value}
         disabled={disabled}
         aria-describedby={describedBy}
-        aria-invalid={senalado || undefined}
+        aria-invalid={marked || undefined}
         /* Los 20px del punto son los mismos que el interlineado del rótulo, así
            que los dos quedan a ras sin empujar ninguno. */
         className={cn(
@@ -240,7 +240,7 @@ function RadioGroupItem({
         {description ? (
           <p
             data-slot="radio-group-item-description"
-            id={idDescripcion}
+            id={descriptionId}
             className="text-xs text-muted-foreground"
           >
             {description}

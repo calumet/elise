@@ -20,16 +20,16 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-type Contexto = {
-  abiertos: Set<string>;
-  alternar: (id: string) => void;
-  elegido: string | undefined;
-  elegir: (id: string) => void;
-  primerId: string | undefined;
+type Context = {
+  open: Set<string>;
+  toggle: (id: string) => void;
+  selected: string | undefined;
+  select: (id: string) => void;
+  firstId: string | undefined;
 };
 
-const TreeCtx = React.createContext<Contexto | null>(null);
-const ProfundidadCtx = React.createContext(1);
+const TreeCtx = React.createContext<Context | null>(null);
+const DepthCtx = React.createContext(1);
 
 /** Props de {@link Tree}. */
 export type TreeProps = Omit<React.ComponentProps<"ul">, "onSelect"> & {
@@ -75,30 +75,29 @@ export const Tree: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const [abiertosInternos, setAbiertosInternos] = React.useState<string[]>(defaultExpanded);
-    const [elegidoInterno, setElegidoInterno] = React.useState<string | undefined>(defaultValue);
-
-    const abiertos = React.useMemo(
-      () => new Set(expanded ?? abiertosInternos),
-      [expanded, abiertosInternos],
+    const [internalOpen, setInternalOpen] = React.useState<string[]>(defaultExpanded);
+    const [internalSelected, setInternalSelected] = React.useState<string | undefined>(
+      defaultValue,
     );
-    const elegido = value ?? elegidoInterno;
 
-    const alternar = React.useCallback(
+    const open = React.useMemo(() => new Set(expanded ?? internalOpen), [expanded, internalOpen]);
+    const selected = value ?? internalSelected;
+
+    const toggle = React.useCallback(
       (id: string) => {
-        const siguiente = new Set(abiertos);
-        if (siguiente.has(id)) siguiente.delete(id);
-        else siguiente.add(id);
-        const lista = [...siguiente];
-        if (expanded === undefined) setAbiertosInternos(lista);
-        onExpandedChange?.(lista);
+        const next = new Set(open);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        const list = [...next];
+        if (expanded === undefined) setInternalOpen(list);
+        onExpandedChange?.(list);
       },
-      [abiertos, expanded, onExpandedChange],
+      [open, expanded, onExpandedChange],
     );
 
-    const elegir = React.useCallback(
+    const select = React.useCallback(
       (id: string) => {
-        if (value === undefined) setElegidoInterno(id);
+        if (value === undefined) setInternalSelected(id);
         onValueChange?.(id);
       },
       [value, onValueChange],
@@ -107,20 +106,20 @@ export const Tree: React.ForwardRefExoticComponent<
     /* La única parada de tabulador es la del nodo elegido, y sin elegido la del
        primero de todos. Se saca de los hijos y no del DOM: leer el DOM durante
        el pintado daría null en el primer paso y ya no volvería a mirarse. */
-    const primerId = React.useMemo(() => {
-      const hijos = React.Children.toArray(children).filter(
+    const firstId = React.useMemo(() => {
+      const childNodes = React.Children.toArray(children).filter(
         React.isValidElement,
       ) as React.ReactElement<{ id?: string }>[];
-      return hijos[0]?.props.id;
+      return childNodes[0]?.props.id;
     }, [children]);
 
-    const contexto = React.useMemo(
-      () => ({ abiertos, alternar, elegido, elegir, primerId }),
-      [abiertos, alternar, elegido, elegir, primerId],
+    const context = React.useMemo(
+      () => ({ open, toggle, selected, select, firstId }),
+      [open, toggle, selected, select, firstId],
     );
 
     return (
-      <TreeCtx.Provider value={contexto}>
+      <TreeCtx.Provider value={context}>
         <ul
           data-slot="tree"
           role="tree"
@@ -151,9 +150,9 @@ export type TreeItemProps = Omit<React.ComponentProps<"li">, "onSelect" | "id"> 
 };
 
 /** Todo lo que se ve ahora mismo, en el orden en que se recorre con las flechas. */
-const visibles = (raiz: HTMLElement | null) =>
-  raiz
-    ? [...raiz.querySelectorAll<HTMLElement>('[role="treeitem"]')].filter(
+const visible = (root: HTMLElement | null) =>
+  root
+    ? [...root.querySelectorAll<HTMLElement>('[role="treeitem"]')].filter(
         (n) => n.offsetParent !== null,
       )
     : [];
@@ -164,99 +163,99 @@ export const TreeItem: React.ForwardRefExoticComponent<
 > = React.forwardRef<HTMLLIElement, TreeItemProps>(
   ({ className, id, label, icon, children, ...props }, ref) => {
     const ctx = React.useContext(TreeCtx);
-    const profundidad = React.useContext(ProfundidadCtx);
-    const propio = React.useRef<HTMLLIElement | null>(null);
+    const depth = React.useContext(DepthCtx);
+    const own = React.useRef<HTMLLIElement | null>(null);
 
     if (!ctx) throw new Error("TreeItem tiene que ir dentro de un Tree");
 
-    const hojas = React.Children.toArray(children).filter(React.isValidElement);
-    const esRama = hojas.length > 0;
-    const abierto = ctx.abiertos.has(id);
-    const elegido = ctx.elegido === id;
+    const leaves = React.Children.toArray(children).filter(React.isValidElement);
+    const isBranch = leaves.length > 0;
+    const open = ctx.open.has(id);
+    const selected = ctx.selected === id;
 
-    const arbol = () => propio.current?.closest<HTMLElement>('[role="tree"]') ?? null;
+    const tree = () => own.current?.closest<HTMLElement>('[role="tree"]') ?? null;
 
-    const irA = (indice: number) => {
-      const lista = visibles(arbol());
-      const destino = lista[Math.max(0, Math.min(lista.length - 1, indice))];
-      destino?.focus();
+    const goTo = (index: number) => {
+      const list = visible(tree());
+      const target = list[Math.max(0, Math.min(list.length - 1, index))];
+      target?.focus();
     };
 
-    const teclas = (evento: React.KeyboardEvent<HTMLLIElement>) => {
+    const keys = (event: React.KeyboardEvent<HTMLLIElement>) => {
       /* Solo responde el nodo enfocado. Sin esto, la tecla la atendería también
          cada antepasado por el que sube el evento. */
-      if (evento.target !== evento.currentTarget) return;
+      if (event.target !== event.currentTarget) return;
 
-      const lista = visibles(arbol());
-      const aqui = lista.indexOf(propio.current as HTMLElement);
+      const list = visible(tree());
+      const here = list.indexOf(own.current as HTMLElement);
 
-      switch (evento.key) {
+      switch (event.key) {
         case "ArrowDown":
-          evento.preventDefault();
-          irA(aqui + 1);
+          event.preventDefault();
+          goTo(here + 1);
           return;
         case "ArrowUp":
-          evento.preventDefault();
-          irA(aqui - 1);
+          event.preventDefault();
+          goTo(here - 1);
           return;
         case "Home":
-          evento.preventDefault();
-          irA(0);
+          event.preventDefault();
+          goTo(0);
           return;
         case "End":
-          evento.preventDefault();
-          irA(lista.length - 1);
+          event.preventDefault();
+          goTo(list.length - 1);
           return;
         case "ArrowRight":
-          evento.preventDefault();
+          event.preventDefault();
           /* Cerrada abre; ya abierta entra a la primera hija. Es lo que hace
              que la flecha derecha sirva para bajar sin cambiar de tecla. */
-          if (esRama && !abierto) ctx.alternar(id);
-          else if (esRama) irA(aqui + 1);
+          if (isBranch && !open) ctx.toggle(id);
+          else if (isBranch) goTo(here + 1);
           return;
         case "ArrowLeft": {
-          evento.preventDefault();
-          if (esRama && abierto) {
-            ctx.alternar(id);
+          event.preventDefault();
+          if (isBranch && open) {
+            ctx.toggle(id);
             return;
           }
           /* Cerrada o siendo hoja, sube al padre. */
-          const padre = propio.current?.parentElement?.closest<HTMLElement>('[role="treeitem"]');
-          padre?.focus();
+          const parent = own.current?.parentElement?.closest<HTMLElement>('[role="treeitem"]');
+          parent?.focus();
           return;
         }
         case "Enter":
         case " ":
-          evento.preventDefault();
-          ctx.elegir(id);
-          if (esRama) ctx.alternar(id);
+          event.preventDefault();
+          ctx.select(id);
+          if (isBranch) ctx.toggle(id);
           return;
         default:
       }
     };
 
-    const primero = !ctx.elegido && ctx.primerId === id;
+    const first = !ctx.selected && ctx.firstId === id;
 
     return (
       <li
         data-slot="tree-item"
-        ref={(nodo) => {
-          propio.current = nodo;
-          if (typeof ref === "function") ref(nodo);
-          else if (ref) ref.current = nodo;
+        ref={(node) => {
+          own.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) ref.current = node;
         }}
         role="treeitem"
-        aria-expanded={esRama ? abierto : undefined}
-        aria-selected={elegido}
-        aria-level={profundidad}
-        tabIndex={elegido || primero ? 0 : -1}
-        onKeyDown={teclas}
-        onClick={(evento) => {
+        aria-expanded={isBranch ? open : undefined}
+        aria-selected={selected}
+        aria-level={depth}
+        tabIndex={selected || first ? 0 : -1}
+        onKeyDown={keys}
+        onClick={(event) => {
           /* El clic de una hija burbujea hasta acá: solo responde la fila propia. */
-          if ((evento.target as HTMLElement).closest('[role="treeitem"]') !== evento.currentTarget)
+          if ((event.target as HTMLElement).closest('[role="treeitem"]') !== event.currentTarget)
             return;
-          ctx.elegir(id);
-          if (esRama) ctx.alternar(id);
+          ctx.select(id);
+          if (isBranch) ctx.toggle(id);
         }}
         className={cn(
           /* El anillo se pinta en la fila y no en el `<li>`, que envuelve
@@ -274,16 +273,16 @@ export const TreeItem: React.ForwardRefExoticComponent<
         <span
           className={cn(
             "relative flex cursor-pointer items-center gap-1.5 rounded-md py-1 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover",
-            elegido && "bg-accent text-accent-foreground",
+            selected && "bg-accent text-accent-foreground",
           )}
-          style={{ paddingInlineStart: `${(profundidad - 1) * 16 + 4}px` }}
+          style={{ paddingInlineStart: `${(depth - 1) * 16 + 4}px` }}
         >
-          {esRama ? (
+          {isBranch ? (
             <ChevronRight
               aria-hidden="true"
               className={cn(
                 "size-4 shrink-0 text-muted-foreground transition-transform duration-(--duration-fast) ease-out",
-                abierto && "rotate-90",
+                open && "rotate-90",
               )}
             />
           ) : (
@@ -297,12 +296,12 @@ export const TreeItem: React.ForwardRefExoticComponent<
           <span className="truncate">{label}</span>
         </span>
 
-        {esRama && abierto ? (
-          <ProfundidadCtx.Provider value={profundidad + 1}>
+        {isBranch && open ? (
+          <DepthCtx.Provider value={depth + 1}>
             <ul role="group" className="m-0 flex list-none flex-col p-0">
               {children}
             </ul>
-          </ProfundidadCtx.Provider>
+          </DepthCtx.Provider>
         ) : null}
       </li>
     );

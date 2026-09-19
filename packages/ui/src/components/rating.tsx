@@ -42,7 +42,7 @@ export type RatingProps = Omit<React.ComponentProps<"div">, "onChange" | "defaul
   size?: "sm" | "md" | "lg";
 };
 
-const tamanos: Record<NonNullable<RatingProps["size"]>, string> = {
+const sizes: Record<NonNullable<RatingProps["size"]>, string> = {
   sm: "size-4",
   md: "size-5",
   lg: "size-6",
@@ -83,29 +83,29 @@ export const Rating: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const generado = React.useId();
-    const plantilla = useElLabel("ui", "ratingValue", "{value} de {max}");
-    const rotulo = (n: number) =>
-      plantilla.replace("{value}", String(n)).replace("{max}", String(max));
+    const generated = React.useId();
+    const template = useElLabel("ui", "ratingValue", "{value} de {max}");
+    const renderLabel = (n: number) =>
+      template.replace("{value}", String(n)).replace("{max}", String(max));
 
-    const [interno, setInterno] = React.useState(defaultValue);
-    const controlado = value !== undefined;
-    const puntos = controlado ? value : interno;
+    const [internal, setInternal] = React.useState(defaultValue);
+    const controlled = value !== undefined;
+    const dots = controlled ? value : internal;
 
-    const elegir = (n: number) => {
-      if (!controlado) setInterno(n);
+    const select = (n: number) => {
+      if (!controlled) setInternal(n);
       onValueChange?.(n);
     };
 
-    const estrellas = Array.from({ length: max }, (_, i) => i + 1);
+    const stars = Array.from({ length: max }, (_, i) => i + 1);
 
-    const estrella = (n: number) => (
+    const star = (n: number) => (
       <Star
         aria-hidden="true"
         className={cn(
-          tamanos[size],
+          sizes[size],
           "transition-[color,fill] duration-(--duration-fast) ease-out",
-          n <= puntos ? "fill-warning text-warning" : "fill-transparent text-border-strong",
+          n <= dots ? "fill-warning text-warning" : "fill-transparent text-border-strong",
         )}
       />
     );
@@ -116,12 +116,12 @@ export const Rating: React.ForwardRefExoticComponent<
           data-slot="rating"
           ref={ref}
           role="img"
-          aria-label={rotulo(puntos)}
+          aria-label={renderLabel(dots)}
           className={cn("inline-flex items-center gap-0.5", className)}
           {...props}
         >
-          {estrellas.map((n) => (
-            <React.Fragment key={n}>{estrella(n)}</React.Fragment>
+          {stars.map((n) => (
+            <React.Fragment key={n}>{star(n)}</React.Fragment>
           ))}
         </div>
       );
@@ -135,7 +135,7 @@ export const Rating: React.ForwardRefExoticComponent<
         className={cn("inline-flex items-center gap-0.5", className)}
         {...props}
       >
-        {estrellas.map((n) => (
+        {stars.map((n) => (
           <label
             key={n}
             className={cn(
@@ -147,14 +147,14 @@ export const Rating: React.ForwardRefExoticComponent<
             <input
               type="radio"
               className="sr-only"
-              name={name ?? generado}
+              name={name ?? generated}
               value={n}
-              checked={n === puntos}
+              checked={n === dots}
               disabled={disabled}
-              onChange={() => elegir(n)}
+              onChange={() => select(n)}
             />
-            <span className="sr-only">{rotulo(n)}</span>
-            {estrella(n)}
+            <span className="sr-only">{renderLabel(n)}</span>
+            {star(n)}
           </label>
         ))}
       </div>

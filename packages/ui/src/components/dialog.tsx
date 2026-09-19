@@ -29,30 +29,30 @@ export const DialogClose: typeof DialogPrimitive.Close = DialogPrimitive.Close;
    una caja suelta de 24 y otro radio. */
 
 /** Las clases del velo. Están sueltas para que Sheet y AlertDialog usen exactamente el mismo. */
-export const VELO_DIALOGO =
+export const DIALOG_OVERLAY =
   "fixed inset-0 z-overlay bg-black/50 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in";
 
 /** Las clases del panel centrado, con su animación de entrada y de salida. */
-export const PANEL_DIALOGO =
+export const DIALOG_PANEL =
   "fixed left-1/2 top-1/2 z-modal flex max-h-[min(90vh,40rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95";
 
 /* Las tres zonas llevan el mismo relleno de 16 en los cuatro lados. Antes eran
    20 a los costados y 16 arriba y abajo, y esos 4px de más eran los únicos de
    todo el diálogo que no salían de la escala. */
 /** Las clases de la cabecera, con el relleno común a las tres zonas. */
-export const CABECERA_DIALOGO =
+export const DIALOG_HEADER =
   "flex shrink-0 flex-col gap-1 border-b border-border bg-muted p-4 text-left";
 /** Las clases del cuerpo, que es la única zona que desplaza. */
-export const CUERPO_DIALOGO = "min-h-0 flex-1 overflow-y-auto p-4";
+export const DIALOG_BODY = "min-h-0 flex-1 overflow-y-auto p-4";
 /* Sin cuerpo la cabecera y el pie se tocan, y el filete de arriba sobra: ya está el de ella. */
 /** Las clases del pie, donde van las acciones. */
-export const PIE_DIALOGO =
+export const DIALOG_FOOTER =
   "flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted p-4 sm:flex-row sm:justify-end [[data-slot$=-header]+&]:border-t-0";
 
 /** Las clases del título. */
-export const TITULO_DIALOGO = "text-lg font-semibold tracking-tight";
+export const DIALOG_TITLE = "text-lg font-semibold tracking-tight";
 /** Las clases de la descripción. */
-export const DESCRIPCION_DIALOGO = "text-base text-muted-foreground leading-relaxed";
+export const DIALOG_DESCRIPTION = "text-base text-muted-foreground leading-relaxed";
 
 /* Tres anchos y no más, para que dos diálogos seguidos no midan cada uno lo
    suyo. `md` es el de por defecto y el que sirve para casi
@@ -60,7 +60,7 @@ export const DESCRIPCION_DIALOGO = "text-base text-muted-foreground leading-rela
    botones se lee como si faltara contenido; `lg` para lo que lleva una tabla o
    un formulario de varias columnas dentro. */
 /** Los tres anchos del panel, cada uno acotado al 90% del viewport. */
-export const ANCHOS_DIALOGO = {
+export const DIALOG_WIDTHS = {
   sm: "w-[min(90vw,380px)]",
   md: "w-[min(90vw,620px)]",
   lg: "w-[min(90vw,980px)]",
@@ -74,13 +74,13 @@ export const DialogOverlay: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, style, ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
-      style={{ ...tema.variables, ...style }}
+      style={{ ...theme.variables, ...style }}
       ref={ref}
-      className={cn(tema.clases, VELO_DIALOGO, className)}
+      className={cn(theme.classes, DIALOG_OVERLAY, className)}
       {...props}
     />
   );
@@ -92,7 +92,7 @@ export const DialogContent: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
       showCloseButton?: boolean;
-      size?: keyof typeof ANCHOS_DIALOGO;
+      size?: keyof typeof DIALOG_WIDTHS;
     }
   > &
     React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Content>>
@@ -100,10 +100,10 @@ export const DialogContent: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
-    size?: keyof typeof ANCHOS_DIALOGO;
+    size?: keyof typeof DIALOG_WIDTHS;
   }
 >(({ className, style, children, showCloseButton = true, size = "md", ...props }, ref) => {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
 
   const closeLabel = useElLabel("ui", "close", "Cerrar");
   return (
@@ -111,9 +111,9 @@ export const DialogContent: React.ForwardRefExoticComponent<
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
-        style={{ ...tema.variables, ...style }}
+        style={{ ...theme.variables, ...style }}
         ref={ref}
-        className={cn(tema.clases, PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
+        className={cn(theme.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
         {...props}
       >
         {showCloseButton ? (
@@ -140,7 +140,7 @@ export const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
   /* El `pe-12` es el hueco del aspa, que va posicionada encima. `AlertDialog`
      no lo lleva porque no tiene aspa: hay que responderlo. */
-  <div data-slot="dialog-header" className={cn(CABECERA_DIALOGO, "pe-12", className)} {...props} />
+  <div data-slot="dialog-header" className={cn(DIALOG_HEADER, "pe-12", className)} {...props} />
 );
 
 /**
@@ -152,7 +152,7 @@ export const DialogBody = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-  <div data-slot="dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
+  <div data-slot="dialog-body" className={cn(DIALOG_BODY, className)} {...props} />
 );
 
 /** El título del modal. Es lo que anuncia el lector de pantalla al abrirlo. */
@@ -166,7 +166,7 @@ export const DialogTitle: React.ForwardRefExoticComponent<
   <DialogPrimitive.Title
     data-slot="dialog-title"
     ref={ref}
-    className={cn(TITULO_DIALOGO, className)}
+    className={cn(DIALOG_TITLE, className)}
     {...props}
   />
 ));
@@ -183,7 +183,7 @@ export const DialogDescription: React.ForwardRefExoticComponent<
   <DialogPrimitive.Description
     data-slot="dialog-description"
     ref={ref}
-    className={cn(DESCRIPCION_DIALOGO, className)}
+    className={cn(DIALOG_DESCRIPTION, className)}
     {...props}
   />
 ));
@@ -201,5 +201,5 @@ export const DialogFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-  <div data-slot="dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
+  <div data-slot="dialog-footer" className={cn(DIALOG_FOOTER, className)} {...props} />
 );

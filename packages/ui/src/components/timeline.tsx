@@ -30,7 +30,7 @@ export type TimelineItemProps = Omit<React.ComponentProps<"li">, "title"> & {
   marker?: React.ReactNode;
 };
 
-const tonos: Record<NonNullable<TimelineItemProps["tone"]>, string> = {
+const tones: Record<NonNullable<TimelineItemProps["tone"]>, string> = {
   neutral: "border-border-strong bg-card",
   success: "border-success bg-success",
   warning: "border-warning bg-warning",
@@ -100,7 +100,7 @@ export const TimelineItem: React.ForwardRefExoticComponent<
         className={cn(
           "absolute start-0 top-0.5 flex size-3 -translate-x-1/2 items-center justify-center rounded-full border-2 rtl:translate-x-1/2",
           marker && "size-6 border-0 bg-transparent",
-          !marker && tonos[tone],
+          !marker && tones[tone],
         )}
       >
         {marker}

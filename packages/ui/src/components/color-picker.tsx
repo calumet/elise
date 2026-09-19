@@ -20,13 +20,13 @@ import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
-import { aCss, aHex, analizar, type Color, limitar, tonoPuro } from "@/lib/color";
+import { toCss, toHex, parse, type Color, clamp, pureTone } from "@/lib/color";
 import { useElLabel } from "@/lib/i18n";
 
-import { CAJA_CAMPO } from "./input";
+import { FIELD_BOX } from "./input";
 
-const CARRIL = "relative h-3 w-full grow overflow-hidden rounded-full";
-const PULGAR =
+const RAIL = "relative h-3 w-full grow overflow-hidden rounded-full";
+const THUMB =
   "block size-4 rounded-full border-2 border-white bg-transparent shadow-md ring-1 ring-black/25 transition-[box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 /** Props de {@link ColorPicker}. */
@@ -84,39 +84,39 @@ export const ColorPicker: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const etiquetaArea = useElLabel("ui", "colorArea", "Saturación y brillo");
-    const etiquetaTono = useElLabel("ui", "colorHue", "Tono");
-    const etiquetaAlfa = useElLabel("ui", "colorAlpha", "Opacidad");
-    const etiquetaHex = useElLabel("ui", "colorHex", "Valor hexadecimal");
+    const areaLabel = useElLabel("ui", "colorArea", "Saturación y brillo");
+    const toneLabel = useElLabel("ui", "colorHue", "Tono");
+    const alphaLabel = useElLabel("ui", "colorAlpha", "Opacidad");
+    const hexLabel = useElLabel("ui", "colorHex", "Valor hexadecimal");
 
     const [color, setColor] = React.useState<Color>(
-      () => analizar(value ?? defaultValue) ?? { hsv: { h: 220, s: 80, v: 87 }, alfa: 1 },
+      () => parse(value ?? defaultValue) ?? { hsv: { h: 220, s: 80, v: 87 }, alpha: 1 },
     );
-    const [escrito, setEscrito] = React.useState<string | null>(null);
+    const [typed, setTyped] = React.useState<string | null>(null);
 
-    const hex = aHex(color, alpha);
+    const hex = toHex(color, alpha);
 
     /* Solo se relee el prop cuando dice algo distinto de lo que este selector
        acaba de emitir. Si se releyera siempre, el tono se perdería al pasar por
        negro: el hex no lo lleva, y volver de #000000 dejaría el área en rojo. */
-    const [ultimoEmitido, setUltimoEmitido] = React.useState(hex);
+    const [lastEmitted, setLastEmitted] = React.useState(hex);
     const [previousValue, setPreviousValue] = React.useState(value);
     if (value !== previousValue) {
       setPreviousValue(value);
-      if (value !== undefined && value !== ultimoEmitido) {
-        const leido = analizar(value);
-        if (leido) setColor(leido);
+      if (value !== undefined && value !== lastEmitted) {
+        const read = parse(value);
+        if (read) setColor(read);
       }
     }
 
-    const emitir = React.useCallback(
-      (siguiente: Color, cerrado: boolean) => {
-        setColor(siguiente);
-        setEscrito(null);
-        const texto = aHex(siguiente, alpha);
-        setUltimoEmitido(texto);
-        onValueChange?.(texto);
-        if (cerrado) onValueCommit?.(texto);
+    const emit = React.useCallback(
+      (next: Color, closed: boolean) => {
+        setColor(next);
+        setTyped(null);
+        const text = toHex(next, alpha);
+        setLastEmitted(text);
+        onValueChange?.(text);
+        if (closed) onValueCommit?.(text);
       },
       [alpha, onValueChange, onValueCommit],
     );
@@ -124,58 +124,58 @@ export const ColorPicker: React.ForwardRefExoticComponent<
     /* Área de saturación y brillo */
     const area = React.useRef<HTMLDivElement | null>(null);
 
-    const desdePuntero = React.useCallback(
-      (evento: { clientX: number; clientY: number }, cerrado: boolean) => {
-        const caja = area.current?.getBoundingClientRect();
-        if (!caja) return;
-        const s = limitar(((evento.clientX - caja.left) / caja.width) * 100, 0, 100);
-        const v = limitar(100 - ((evento.clientY - caja.top) / caja.height) * 100, 0, 100);
-        emitir({ ...color, hsv: { ...color.hsv, s, v } }, cerrado);
+    const fromPointer = React.useCallback(
+      (event: { clientX: number; clientY: number }, closed: boolean) => {
+        const box = area.current?.getBoundingClientRect();
+        if (!box) return;
+        const s = clamp(((event.clientX - box.left) / box.width) * 100, 0, 100);
+        const v = clamp(100 - ((event.clientY - box.top) / box.height) * 100, 0, 100);
+        emit({ ...color, hsv: { ...color.hsv, s, v } }, closed);
       },
-      [color, emitir],
+      [color, emit],
     );
 
-    const arrastrar = (evento: React.PointerEvent<HTMLDivElement>) => {
-      if (evento.button !== 0) return;
-      evento.currentTarget.setPointerCapture(evento.pointerId);
-      desdePuntero(evento, false);
+    const drag = (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.button !== 0) return;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      fromPointer(event, false);
     };
 
-    const teclasDelArea = (evento: React.KeyboardEvent) => {
-      const paso = evento.shiftKey ? 10 : 1;
-      const mover: Record<string, [number, number]> = {
-        ArrowLeft: [-paso, 0],
-        ArrowRight: [paso, 0],
-        ArrowUp: [0, paso],
-        ArrowDown: [0, -paso],
+    const areaKeys = (event: React.KeyboardEvent) => {
+      const step = event.shiftKey ? 10 : 1;
+      const moves: Record<string, [number, number]> = {
+        ArrowLeft: [-step, 0],
+        ArrowRight: [step, 0],
+        ArrowUp: [0, step],
+        ArrowDown: [0, -step],
       };
-      const delta = mover[evento.key];
+      const delta = moves[event.key];
       if (!delta) return;
-      evento.preventDefault();
-      emitir(
+      event.preventDefault();
+      emit(
         {
           ...color,
           hsv: {
             ...color.hsv,
-            s: limitar(color.hsv.s + delta[0], 0, 100),
-            v: limitar(color.hsv.v + delta[1], 0, 100),
+            s: clamp(color.hsv.s + delta[0], 0, 100),
+            v: clamp(color.hsv.v + delta[1], 0, 100),
           },
         },
         true,
       );
     };
 
-    const alEscribirHex = (texto: string) => {
-      setEscrito(texto);
-      const leido = analizar(texto);
-      if (!leido) return;
+    const onTypeHex = (text: string) => {
+      setTyped(text);
+      const read = parse(text);
+      if (!read) return;
       /* Con `alpha` apagado un hex de 8 no puede traer su opacidad consigo. */
-      const siguiente = alpha ? leido : { ...leido, alfa: 1 };
-      setColor(siguiente);
-      const emitido = aHex(siguiente, alpha);
-      setUltimoEmitido(emitido);
-      onValueChange?.(emitido);
-      onValueCommit?.(emitido);
+      const next = alpha ? read : { ...read, alpha: 1 };
+      setColor(next);
+      const emitted = toHex(next, alpha);
+      setLastEmitted(emitted);
+      onValueChange?.(emitted);
+      onValueCommit?.(emitted);
     };
 
     return (
@@ -189,23 +189,23 @@ export const ColorPicker: React.ForwardRefExoticComponent<
           data-slot="color-picker-area"
           ref={area}
           role="application"
-          aria-label={etiquetaArea}
+          aria-label={areaLabel}
           tabIndex={0}
-          onPointerDown={arrastrar}
+          onPointerDown={drag}
           onPointerMove={(e) =>
-            e.currentTarget.hasPointerCapture(e.pointerId) && desdePuntero(e, false)
+            e.currentTarget.hasPointerCapture(e.pointerId) && fromPointer(e, false)
           }
           onPointerUp={(e) =>
-            e.currentTarget.hasPointerCapture(e.pointerId) && desdePuntero(e, true)
+            e.currentTarget.hasPointerCapture(e.pointerId) && fromPointer(e, true)
           }
-          onPointerCancel={() => emitir(color, true)}
-          onKeyDown={teclasDelArea}
+          onPointerCancel={() => emit(color, true)}
+          onKeyDown={areaKeys}
           className="relative h-40 w-full cursor-crosshair touch-none rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           style={{
             /* Blanco de izquierda a derecha y negro de abajo arriba sobre el
                tono puro: eso es exactamente saturación por brillo. */
             backgroundImage: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent)`,
-            backgroundColor: tonoPuro(color.hsv.h),
+            backgroundColor: pureTone(color.hsv.h),
           }}
         >
           <span
@@ -214,7 +214,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
             style={{
               left: `${color.hsv.s}%`,
               top: `${100 - color.hsv.v}%`,
-              backgroundColor: aCss({ ...color, alfa: 1 }),
+              backgroundColor: toCss({ ...color, alpha: 1 }),
             }}
           />
         </div>
@@ -227,57 +227,60 @@ export const ColorPicker: React.ForwardRefExoticComponent<
               "ajedrez",
             )}
           >
-            <span className="block size-full rounded-md" style={{ backgroundColor: aCss(color) }} />
+            <span
+              className="block size-full rounded-md"
+              style={{ backgroundColor: toCss(color) }}
+            />
           </span>
 
           <div className="flex min-w-0 flex-1 flex-col gap-2">
             <SliderPrimitive.Root
               data-slot="color-picker-hue"
-              aria-label={etiquetaTono}
+              aria-label={toneLabel}
               className="relative flex w-full touch-none items-center"
               min={0}
               max={360}
               step={1}
               value={[color.hsv.h]}
-              onValueChange={([h]) => emitir({ ...color, hsv: { ...color.hsv, h } }, false)}
-              onValueCommit={([h]) => emitir({ ...color, hsv: { ...color.hsv, h } }, true)}
+              onValueChange={([h]) => emit({ ...color, hsv: { ...color.hsv, h } }, false)}
+              onValueCommit={([h]) => emit({ ...color, hsv: { ...color.hsv, h } }, true)}
             >
               <SliderPrimitive.Track
-                className={CARRIL}
+                className={RAIL}
                 style={{
                   backgroundImage:
                     "linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)",
                 }}
               />
               <SliderPrimitive.Thumb
-                className={PULGAR}
-                style={{ backgroundColor: tonoPuro(color.hsv.h) }}
+                className={THUMB}
+                style={{ backgroundColor: pureTone(color.hsv.h) }}
               />
             </SliderPrimitive.Root>
 
             {alpha ? (
               <SliderPrimitive.Root
                 data-slot="color-picker-alpha"
-                aria-label={etiquetaAlfa}
+                aria-label={alphaLabel}
                 className="relative flex w-full touch-none items-center"
                 min={0}
                 max={100}
                 step={1}
-                value={[Math.round(color.alfa * 100)]}
-                onValueChange={([a]) => emitir({ ...color, alfa: a / 100 }, false)}
-                onValueCommit={([a]) => emitir({ ...color, alfa: a / 100 }, true)}
+                value={[Math.round(color.alpha * 100)]}
+                onValueChange={([a]) => emit({ ...color, alpha: a / 100 }, false)}
+                onValueCommit={([a]) => emit({ ...color, alpha: a / 100 }, true)}
               >
-                <SliderPrimitive.Track className={cn(CARRIL, "ajedrez")}>
+                <SliderPrimitive.Track className={cn(RAIL, "ajedrez")}>
                   <span
                     className="absolute inset-0"
                     style={{
-                      backgroundImage: `linear-gradient(to right, transparent, ${aCss({ ...color, alfa: 1 })})`,
+                      backgroundImage: `linear-gradient(to right, transparent, ${toCss({ ...color, alpha: 1 })})`,
                     }}
                   />
                 </SliderPrimitive.Track>
                 <SliderPrimitive.Thumb
-                  className={PULGAR}
-                  style={{ backgroundColor: aCss(color) }}
+                  className={THUMB}
+                  style={{ backgroundColor: toCss(color) }}
                 />
               </SliderPrimitive.Root>
             ) : null}
@@ -286,13 +289,13 @@ export const ColorPicker: React.ForwardRefExoticComponent<
 
         <input
           data-slot="color-picker-hex"
-          aria-label={etiquetaHex}
-          value={escrito ?? hex}
-          onChange={(e) => alEscribirHex(e.target.value)}
-          onBlur={() => setEscrito(null)}
+          aria-label={hexLabel}
+          value={typed ?? hex}
+          onChange={(e) => onTypeHex(e.target.value)}
+          onBlur={() => setTyped(null)}
           spellCheck={false}
           autoComplete="off"
-          className={cn(CAJA_CAMPO, "font-mono text-sm")}
+          className={cn(FIELD_BOX, "font-mono text-sm")}
         />
 
         {name ? <input type="hidden" name={name} value={hex} /> : null}

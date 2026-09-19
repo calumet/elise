@@ -39,104 +39,104 @@ import { LocaleSelect } from "../components/LocaleSelect";
 import { RichText } from "../components/RichText";
 import { DOCS_URL } from "../config";
 
-type Trabajo = {
-  estudiante: string;
+type Job = {
+  student: string;
   director: string;
-  radicado: Date;
-  avance: number;
-  estado: "inProgress" | "review" | "approved" | "draft";
+  filing: Date;
+  progress: number;
+  state: "inProgress" | "review" | "approved" | "draft";
 };
 
 /* Fechas y cifras son datos, no texto: se guardan crudos y los formatea Intl
    con el locale activo. Es lo que hace verdadera la nota de al lado. */
-const TRABAJOS: Trabajo[] = [
+const JOBS: Job[] = [
   {
-    estudiante: "Valentina Ardila",
+    student: "Valentina Ardila",
     director: "Dr. Hernán Cadena",
-    radicado: new Date(2026, 2, 9),
-    avance: 0.82,
-    estado: "inProgress",
+    filing: new Date(2026, 2, 9),
+    progress: 0.82,
+    state: "inProgress",
   },
   {
-    estudiante: "Sebastián Peñaloza",
+    student: "Sebastián Peñaloza",
     director: "Dra. Marta Rueda",
-    radicado: new Date(2026, 1, 24),
-    avance: 1,
-    estado: "approved",
+    filing: new Date(2026, 1, 24),
+    progress: 1,
+    state: "approved",
   },
   {
-    estudiante: "Laura Bohórquez",
+    student: "Laura Bohórquez",
     director: "Dr. Iván Quintero",
-    radicado: new Date(2026, 3, 2),
-    avance: 0.65,
-    estado: "review",
+    filing: new Date(2026, 3, 2),
+    progress: 0.65,
+    state: "review",
   },
   {
-    estudiante: "Andrés Villamizar",
+    student: "Andrés Villamizar",
     director: "Dra. Marta Rueda",
-    radicado: new Date(2026, 4, 15),
-    avance: 0.18,
-    estado: "draft",
+    filing: new Date(2026, 4, 15),
+    progress: 0.18,
+    state: "draft",
   },
   {
-    estudiante: "Daniela Serrano",
+    student: "Daniela Serrano",
     director: "Dr. Hernán Cadena",
-    radicado: new Date(2026, 0, 30),
-    avance: 0.94,
-    estado: "review",
+    filing: new Date(2026, 0, 30),
+    progress: 0.94,
+    state: "review",
   },
   {
-    estudiante: "Camilo Fuentes",
+    student: "Camilo Fuentes",
     director: "Dr. Óscar Prada",
-    radicado: new Date(2026, 3, 21),
-    avance: 0.47,
-    estado: "inProgress",
+    filing: new Date(2026, 3, 21),
+    progress: 0.47,
+    state: "inProgress",
   },
   {
-    estudiante: "Mariana Cáceres",
+    student: "Mariana Cáceres",
     director: "Dr. Iván Quintero",
-    radicado: new Date(2026, 2, 17),
-    avance: 1,
-    estado: "approved",
+    filing: new Date(2026, 2, 17),
+    progress: 1,
+    state: "approved",
   },
 ];
 
-const TONOS = {
+const TONES = {
   inProgress: "info",
   review: "warning",
   approved: "success",
   draft: "neutral",
 } as const;
 
-const NOTAS = [
-  { paquete: "elise-ui", key: "note.ui" },
-  { paquete: "elise-tables", key: "note.tables" },
-  { paquete: "elise-i18n", key: "note.i18n" },
-  { paquete: "elise-toasts", key: "note.toasts" },
-  { paquete: "elise-forms + elise-alerts", key: "note.forms" },
-  { paquete: "elise-icons + elise-linter", key: "note.icons" },
+const NOTES = [
+  { pkg: "elise-ui", key: "note.ui" },
+  { pkg: "elise-tables", key: "note.tables" },
+  { pkg: "elise-i18n", key: "note.i18n" },
+  { pkg: "elise-toasts", key: "note.toasts" },
+  { pkg: "elise-forms + elise-alerts", key: "note.forms" },
+  { pkg: "elise-icons + elise-linter", key: "note.icons" },
 ];
 
-const FECHA_CORTA = { day: "numeric", month: "short", year: "numeric" } as const;
+const SHORT_DATE = { day: "numeric", month: "short", year: "numeric" } as const;
 
 export function AppPreview() {
   const { t, locale } = useTranslation("preview");
 
   /* Arranca en una hija y no en el padre: es donde se ve la guía bajar desde el
      icono de «Trabajos de grado» y terminar en codo sobre la entrada elegida. */
-  const [ruta, setRuta] = React.useState("/en-desarrollo");
+  const [route, setRoute] = React.useState("/en-desarrollo");
 
-  const ir = (destino: string) => (e: React.MouseEvent) => {
+  const go = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    setRuta(destino);
+    setRoute(target);
   };
 
-  const columnas = React.useMemo<ColumnDef<Trabajo>[]>(() => {
-    const fecha = (valor: Date) => formatDate(valor, { locale, ...FECHA_CORTA });
+  const columns = React.useMemo<ColumnDef<Job>[]>(() => {
+    const date = (value: Date) => formatDate(value, { locale, ...SHORT_DATE });
 
     return [
       {
-        accessorKey: "estudiante",
+        accessorKey: "student",
         header: t("app.col.student"),
         meta: { filterVariant: "text" },
       },
@@ -146,14 +146,14 @@ export function AppPreview() {
         meta: { filterVariant: "select" },
       },
       {
-        accessorKey: "radicado",
+        accessorKey: "filing",
         header: t("app.col.filed"),
         cell: ({ getValue }) => (
-          <span className="font-mono text-muted-foreground">{fecha(getValue<Date>())}</span>
+          <span className="font-mono text-muted-foreground">{date(getValue<Date>())}</span>
         ),
       },
       {
-        accessorKey: "avance",
+        accessorKey: "progress",
         header: t("app.col.progress"),
         cell: ({ getValue }) => (
           <span className="font-mono tabular-nums">
@@ -162,14 +162,14 @@ export function AppPreview() {
         ),
       },
       {
-        accessorKey: "estado",
+        accessorKey: "state",
         header: t("app.col.status"),
         meta: { filterVariant: "select" },
         cell: ({ getValue }) => {
-          const estado = getValue<Trabajo["estado"]>();
+          const state = getValue<Job["state"]>();
           return (
-            <Badge tone={TONOS[estado]} variant="subtle">
-              {t(`app.status.${estado}`)}
+            <Badge tone={TONES[state]} variant="subtle">
+              {t(`app.status.${state}`)}
             </Badge>
           );
         },
@@ -222,7 +222,7 @@ export function AppPreview() {
                 }
               />
               <AppShellUserMenu name="Ana Ruiz" detail={t("app.org")}>
-                <DropdownMenuItem onSelect={() => setRuta("/ajustes")}>
+                <DropdownMenuItem onSelect={() => setRoute("/ajustes")}>
                   <Settings aria-hidden="true" />
                   {t("app.nav.settings")}
                 </DropdownMenuItem>
@@ -236,8 +236,8 @@ export function AppPreview() {
                 href="/inicio"
                 icon={<Home />}
                 activeIcon={<Home strokeWidth={2.5} />}
-                active={ruta === "/inicio"}
-                onClick={ir("/inicio")}
+                active={route === "/inicio"}
+                onClick={go("/inicio")}
               >
                 {t("app.nav.home")}
               </AppShellNavItem>
@@ -248,24 +248,24 @@ export function AppPreview() {
                   icon={<GraduationCap />}
                   activeIcon={<GraduationCap strokeWidth={2.5} />}
                   count={48}
-                  childActive={["/en-desarrollo", "/sustentados"].includes(ruta)}
-                  active={ruta === "/trabajos"}
-                  onClick={ir("/trabajos")}
+                  childActive={["/en-desarrollo", "/sustentados"].includes(route)}
+                  active={route === "/trabajos"}
+                  onClick={go("/trabajos")}
                 >
                   {t("app.nav.works")}
                 </AppShellNavItem>
                 <AppShellNavSubList>
                   <AppShellNavSubItem
                     href="/en-desarrollo"
-                    active={ruta === "/en-desarrollo"}
-                    onClick={ir("/en-desarrollo")}
+                    active={route === "/en-desarrollo"}
+                    onClick={go("/en-desarrollo")}
                   >
                     {t("app.nav.inProgress")}
                   </AppShellNavSubItem>
                   <AppShellNavSubItem
                     href="/sustentados"
-                    active={ruta === "/sustentados"}
-                    onClick={ir("/sustentados")}
+                    active={route === "/sustentados"}
+                    onClick={go("/sustentados")}
                   >
                     {t("app.nav.defended")}
                   </AppShellNavSubItem>
@@ -276,8 +276,8 @@ export function AppPreview() {
                 href="/grupos"
                 icon={<Users />}
                 count={12}
-                active={ruta === "/grupos"}
-                onClick={ir("/grupos")}
+                active={route === "/grupos"}
+                onClick={go("/grupos")}
               >
                 {t("app.nav.groups")}
               </AppShellNavItem>
@@ -285,8 +285,8 @@ export function AppPreview() {
               <AppShellNavItem
                 href="/empleo"
                 icon={<Briefcase />}
-                active={ruta === "/empleo"}
-                onClick={ir("/empleo")}
+                active={route === "/empleo"}
+                onClick={go("/empleo")}
               >
                 {t("app.nav.jobs")}
               </AppShellNavItem>
@@ -295,16 +295,16 @@ export function AppPreview() {
                 <AppShellNavItem
                   href="/aula"
                   icon={<MonitorPlay />}
-                  active={ruta === "/aula"}
-                  onClick={ir("/aula")}
+                  active={route === "/aula"}
+                  onClick={go("/aula")}
                 >
                   {t("app.nav.classroom")}
                 </AppShellNavItem>
                 <AppShellNavItem
                   href="/evaluacion"
                   icon={<Star />}
-                  active={ruta === "/evaluacion"}
-                  onClick={ir("/evaluacion")}
+                  active={route === "/evaluacion"}
+                  onClick={go("/evaluacion")}
                 >
                   {t("app.nav.evaluation")}
                 </AppShellNavItem>
@@ -315,8 +315,8 @@ export function AppPreview() {
               <AppShellNavItem
                 href="/ajustes"
                 icon={<Settings />}
-                active={ruta === "/ajustes"}
-                onClick={ir("/ajustes")}
+                active={route === "/ajustes"}
+                onClick={go("/ajustes")}
               >
                 {t("app.nav.settings")}
               </AppShellNavItem>
@@ -344,18 +344,18 @@ export function AppPreview() {
             </div>
 
             <div className="mt-4">
-              <DataTable columns={columnas} data={TRABAJOS} exportTo initialPageSize={5} />
+              <DataTable columns={columns} data={JOBS} exportTo initialPageSize={5} />
             </div>
           </AppShellMain>
         </AppShell>
       </div>
 
       <div className="mt-8 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-        {NOTAS.map((nota) => (
-          <div key={nota.paquete} className="border-l-2 border-border-strong pl-3">
-            <div className="font-mono text-xs font-medium text-primary">{nota.paquete}</div>
+        {NOTES.map((note) => (
+          <div key={note.pkg} className="border-l-2 border-border-strong pl-3">
+            <div className="font-mono text-xs font-medium text-primary">{note.pkg}</div>
             <p className="mt-1.5 text-sm text-pretty text-muted-foreground">
-              <RichText>{t(nota.key)}</RichText>
+              <RichText>{t(note.key)}</RichText>
             </p>
           </div>
         ))}

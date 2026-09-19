@@ -3,6 +3,47 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.25.0
+
+Suben también `elise-tables` 0.7.0, `elise-i18n` 0.3.1, `elise-alerts` 0.3.9 y
+`elise-toasts` 0.4.10.
+
+### Rompe
+
+**Todo el código pasa a inglés.** La API tenía nombres en español mezclados con
+los ingleses; ahora es solo inglés. La documentación sigue en español.
+
+Lo que cambia de nombre en `@calumet/elise-ui`:
+
+| Antes                                                                         | Ahora                                                                 |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `SUPERFICIE`, `SUPERFICIE_INVERSA`, `SUPERFICIE_SIDEBAR`                      | `SURFACE`, `INVERSE_SURFACE`, `SIDEBAR_SURFACE`                       |
+| `ANCHOS_DIALOGO`, `CABECERA_DIALOGO`, `CUERPO_DIALOGO`, `DESCRIPCION_DIALOGO` | `DIALOG_WIDTHS`, `DIALOG_HEADER`, `DIALOG_BODY`, `DIALOG_DESCRIPTION` |
+| `PANEL_DIALOGO`, `PIE_DIALOGO`, `TITULO_DIALOGO`, `VELO_DIALOGO`              | `DIALOG_PANEL`, `DIALOG_FOOTER`, `DIALOG_TITLE`, `DIALOG_OVERLAY`     |
+| `CAJA_CAMPO`, `CAJA_CAMPO_COMPUESTA`, `CAMPO_DESNUDO`, `CAMPO_INVALIDO`       | `FIELD_BOX`, `COMPOSITE_FIELD_BOX`, `BARE_FIELD`, `INVALID_FIELD`     |
+| `TAMANOS_CAMPO`, `TamanoCampo`                                                | `FIELD_SIZES`, `FieldSize`                                            |
+| `CajaProps`, `clasesDeCaja`, `clasesToggle`                                   | `BoxStyleProps`, `boxClasses`, `toggleClasses`                        |
+| `inicialesDe`, `formatearTamano`, `tipoAceptado`, `aTextoHora`, `aTextoISO`   | `initialsOf`, `formatSize`, `acceptedType`, `toTimeText`, `toISOText` |
+| `TemaDeSeccion`, `DentroDeToggleGroup`                                        | `SectionTheme`, `InsideToggleGroup`                                   |
+| El campo `alfa` de `Color`, y `aHex`, `aCss`, `rgbAHsv`, `hsvARgb`            | `alpha`, `toHex`, `toCss`, `rgbToHsv`, `hsvToRgb`                     |
+| Lo que devuelve `useFieldIds`: `idDescripcion`                                | `descriptionId`                                                       |
+
+En `@calumet/elise-tables`, el tipo `MetaDeColumna` pasa a `ColumnMeta`.
+
+Ningún componente, prop ni valor de prop cambia de nombre: lo que cambia son
+constantes de clases, utilidades y tipos. Si solo usás componentes, no hay nada
+que tocar.
+
+### Cambia
+
+- **Los 1050 identificadores internos** pasan también a inglés, en los siete
+  paquetes. No cambia el comportamiento: son renombres.
+
+- **Cinco atributos `data-*`** pasan a inglés, y con ellos sus selectores:
+  `data-fila`, `data-guia`, `data-respaldo`, `data-sin-medir` y `data-visibles`
+  son ahora `data-row`, `data-guide`, `data-fallback`, `data-unmeasured` y
+  `data-visible`. Solo importan si los mirabas desde fuera.
+
 ## `@calumet/elise-ui` 0.24.0
 
 Suben también `elise-alerts` 0.3.8 y `elise-toasts` 0.4.9, que no cambian por

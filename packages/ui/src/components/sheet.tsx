@@ -12,11 +12,11 @@ import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
 import {
-  CABECERA_DIALOGO,
-  CUERPO_DIALOGO,
-  DESCRIPCION_DIALOGO,
-  PIE_DIALOGO,
-  TITULO_DIALOGO,
+  DIALOG_HEADER,
+  DIALOG_BODY,
+  DIALOG_DESCRIPTION,
+  DIALOG_FOOTER,
+  DIALOG_TITLE,
 } from "./dialog";
 import { useThemeScope } from "./theme-scope";
 
@@ -48,14 +48,14 @@ function SheetOverlay({
   style,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
 
   return (
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
-      style={{ ...tema.variables, ...style }}
+      style={{ ...theme.variables, ...style }}
       className={cn(
-        tema.clases,
+        theme.classes,
         "fixed inset-0 z-overlay bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
         className,
       )}
@@ -74,7 +74,7 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
 }): React.JSX.Element {
-  const tema = useThemeScope();
+  const theme = useThemeScope();
 
   const closeLabel = useElLabel("ui", "close", "Cerrar");
   return (
@@ -82,9 +82,9 @@ function SheetContent({
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
-        style={{ ...tema.variables, ...style }}
+        style={{ ...theme.variables, ...style }}
         className={cn(
-          tema.clases,
+          theme.classes,
           /* Sin hueco entre las zonas y sobre la superficie de tarjeta, que es
              lo que hace el panel del diálogo: los filetes de la cabecera y del
              pie son lo que las separa, y el cuerpo no trae fondo propio. */
@@ -116,7 +116,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">): Reac
   /* El `pe-12` es el hueco del aspa, que va posicionada encima, igual que en
      `DialogHeader`. */
   return (
-    <div data-slot="sheet-header" className={cn(CABECERA_DIALOGO, "pe-12", className)} {...props} />
+    <div data-slot="sheet-header" className={cn(DIALOG_HEADER, "pe-12", className)} {...props} />
   );
 }
 
@@ -126,12 +126,12 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">): Reac
  * buscarlas al final.
  */
 function SheetBody({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
-  return <div data-slot="sheet-body" className={cn(CUERPO_DIALOGO, className)} {...props} />;
+  return <div data-slot="sheet-body" className={cn(DIALOG_BODY, className)} {...props} />;
 }
 
 /** El pie fijo, donde van las acciones. */
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
-  return <div data-slot="sheet-footer" className={cn(PIE_DIALOGO, className)} {...props} />;
+  return <div data-slot="sheet-footer" className={cn(DIALOG_FOOTER, className)} {...props} />;
 }
 
 /** El título del panel, que anuncia el lector de pantalla al abrirlo. */
@@ -142,7 +142,7 @@ function SheetTitle({
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn(TITULO_DIALOGO, "text-foreground", className)}
+      className={cn(DIALOG_TITLE, "text-foreground", className)}
       {...props}
     />
   );
@@ -156,7 +156,7 @@ function SheetDescription({
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn(DESCRIPCION_DIALOGO, className)}
+      className={cn(DIALOG_DESCRIPTION, className)}
       {...props}
     />
   );

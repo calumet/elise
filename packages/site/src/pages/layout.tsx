@@ -3,8 +3,8 @@ import { I18nProvider, useLocale } from "@calumet/elise-i18n";
 import { Toaster } from "@calumet/elise-toasts";
 import { ThemeProvider } from "@calumet/elise-ui/theme";
 import { Head } from "@calumet/suamox-head";
-import geistLatino from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2";
-import monoLatino from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2";
+import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2";
+import monoLatin from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2";
 import * as React from "react";
 
 import { i18nConfig } from "../config";
@@ -22,14 +22,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           petición del preload no se comparte con la de la fuente y el archivo se
           descarga dos veces. */}
       <Head>
-        <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          href={geistLatino}
-          crossOrigin="anonymous"
-        />
-        <link rel="preload" as="font" type="font/woff2" href={monoLatino} crossOrigin="anonymous" />
+        <link rel="preload" as="font" type="font/woff2" href={geistLatin} crossOrigin="anonymous" />
+        <link rel="preload" as="font" type="font/woff2" href={monoLatin} crossOrigin="anonymous" />
         <script type="module" src="/dither.js" />
       </Head>
       <I18nProvider
@@ -37,13 +31,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         defaultLocale={i18nConfig.defaultLocale}
         fallbackLocale={i18nConfig.fallbackLocale}
       >
-        <Marco>{children}</Marco>
+        <Frame>{children}</Frame>
       </I18nProvider>
     </ThemeProvider>
   );
 }
 
-function Marco({ children }: { children: React.ReactNode }) {
+function Frame({ children }: { children: React.ReactNode }) {
   const { locale } = useLocale();
 
   /* El idioma del documento sigue al del contenido. Es lo que usa el lector de

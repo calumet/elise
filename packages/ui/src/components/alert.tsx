@@ -44,7 +44,7 @@ const toneClasses: Record<NonNullable<AlertProps["tone"]>, string> = {
   danger: "bg-destructive-subtle text-destructive-subtle-foreground",
 };
 
-const barraClasses: Record<NonNullable<AlertProps["tone"]>, string> = {
+const barClasses: Record<NonNullable<AlertProps["tone"]>, string> = {
   info: "bg-info text-info-foreground",
   success: "bg-success text-success-foreground",
   warning: "bg-warning text-warning-foreground",
@@ -59,7 +59,7 @@ const toneIcons: Record<NonNullable<AlertProps["tone"]>, React.ElementType> = {
 };
 
 /* El `-my` da el área táctil sin que la barra crezca por el botón. */
-const BOTON_CERRAR =
+const CLOSE_BUTTON =
   "-my-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-current transition-[background-color] duration-(--duration-fast) ease-out hover:bg-current/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1 focus-visible:ring-offset-transparent";
 
 /**
@@ -86,39 +86,39 @@ function Alert({
   const dismissLabel = useElLabel("ui", "dismiss", "Descartar");
   const ToneIcon = toneIcons[tone];
   const showIcon = icon !== null;
-  const rol = tone === "danger" || tone === "warning" ? "alert" : "status";
+  const role = tone === "danger" || tone === "warning" ? "alert" : "status";
 
   /* El título sube a la barra y el resto se queda en el cuerpo. Se reparte aquí
      y no con dos props para que la composición siga siendo la misma escriba
      quien escriba: `<Alert><AlertTitle/>…</Alert>` en los dos casos. */
-  const titulo: React.ReactNode[] = [];
-  const cuerpo: React.ReactNode[] = [];
-  React.Children.forEach(children, (hijo) => {
-    const tipo = React.isValidElement(hijo) ? (hijo.type as { displayName?: string }) : null;
-    if (tipo?.displayName === "AlertTitle") titulo.push(hijo);
-    else cuerpo.push(hijo);
+  const title: React.ReactNode[] = [];
+  const body: React.ReactNode[] = [];
+  React.Children.forEach(children, (child) => {
+    const kind = React.isValidElement(child) ? (child.type as { displayName?: string }) : null;
+    if (kind?.displayName === "AlertTitle") title.push(child);
+    else body.push(child);
   });
 
-  const cierre = onDismiss ? (
-    <button type="button" data-slot="alert-dismiss" onClick={onDismiss} className={BOTON_CERRAR}>
+  const close = onDismiss ? (
+    <button type="button" data-slot="alert-dismiss" onClick={onDismiss} className={CLOSE_BUTTON}>
       <X className="size-4" aria-hidden="true" />
       <span className="sr-only">{dismissLabel}</span>
     </button>
   ) : null;
 
-  const marcaIcono = (claseExtra?: string) =>
+  const brandIcon = (extraClass?: string) =>
     showIcon ? (
-      <span data-slot="alert-icon" className={cn("shrink-0 [&>svg]:size-4", claseExtra)}>
+      <span data-slot="alert-icon" className={cn("shrink-0 [&>svg]:size-4", extraClass)}>
         {icon ?? <ToneIcon aria-hidden="true" />}
       </span>
     ) : null;
 
-  if (titulo.length > 0) {
+  if (title.length > 0) {
     return (
       <div
         data-slot="alert"
         data-tone={tone}
-        role={rol}
+        role={role}
         className={cn(
           "w-full overflow-hidden rounded-xl border border-border bg-card text-sm text-card-foreground",
           className,
@@ -129,21 +129,21 @@ function Alert({
           data-slot="alert-bar"
           className={cn(
             "flex items-center gap-2 px-3 py-2 has-[[data-slot=alert-dismiss]]:pe-1.5",
-            barraClasses[tone],
+            barClasses[tone],
           )}
         >
-          {marcaIcono()}
-          {titulo}
+          {brandIcon()}
+          {title}
           <span className="ms-auto" />
-          {cierre}
+          {close}
         </div>
-        {cuerpo.length > 0 ? (
+        {body.length > 0 ? (
           /* El cuerpo va en flujo normal y separa sus bloques con margen, no
              como columna flex. En flex, una frase con un enlace dentro se parte
              en un renglón por trozo, que es lo que hace cualquier aviso que
              remate en «mirá la documentación». */
           <div data-slot="alert-body" className="min-w-0 px-4 py-3 [&>*+*]:mt-1">
-            {cuerpo}
+            {body}
           </div>
         ) : null}
       </div>
@@ -154,7 +154,7 @@ function Alert({
     <div
       data-slot="alert"
       data-tone={tone}
-      role={rol}
+      role={role}
       className={cn(
         "flex w-full items-start gap-3 rounded-xl px-4 py-3 text-sm",
         toneClasses[tone],
@@ -162,11 +162,11 @@ function Alert({
       )}
       {...props}
     >
-      {marcaIcono("mt-px")}
+      {brandIcon("mt-px")}
       <div data-slot="alert-body" className="flex min-w-0 flex-1 flex-col gap-1">
-        {cuerpo}
+        {body}
       </div>
-      {cierre}
+      {close}
     </div>
   );
 }

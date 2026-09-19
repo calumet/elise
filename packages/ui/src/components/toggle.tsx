@@ -16,7 +16,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-import { DentroDeToggleGroup, ToggleGroupItem, clasesToggle } from "./toggle-group";
+import { InsideToggleGroup, ToggleGroupItem, toggleClasses } from "./toggle-group";
 
 /** Props de {@link Toggle}. */
 export type ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root> & {
@@ -35,17 +35,17 @@ export type ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root> & {
  * estado.
  */
 function Toggle({ className, value, ...props }: ToggleProps): React.JSX.Element {
-  const enGrupo = React.useContext(DentroDeToggleGroup);
+  const inGroup = React.useContext(InsideToggleGroup);
 
-  if (enGrupo) {
+  if (inGroup) {
     /* En un grupo el valor lo lleva el grupo, así que las props de estado
        propio no aplican y se descartan en vez de quedar sin efecto. */
-    const { pressed: _p, defaultPressed: _d, onPressedChange: _o, ...resto } = props;
-    return <ToggleGroupItem value={value ?? ""} className={className} {...resto} />;
+    const { pressed: _p, defaultPressed: _d, onPressedChange: _o, ...rest } = props;
+    return <ToggleGroupItem value={value ?? ""} className={className} {...rest} />;
   }
 
   return (
-    <TogglePrimitive.Root data-slot="toggle" className={cn(clasesToggle, className)} {...props} />
+    <TogglePrimitive.Root data-slot="toggle" className={cn(toggleClasses, className)} {...props} />
   );
 }
 

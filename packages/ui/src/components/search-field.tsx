@@ -19,7 +19,7 @@ import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
 import { Field } from "./field";
-import { CAJA_CAMPO_COMPUESTA, CAMPO_DESNUDO, CAMPO_INVALIDO } from "./input";
+import { FIELD_BOX_COMPOSITE, BARE_FIELD, INVALID_FIELD } from "./input";
 
 /** Props de {@link SearchField}. */
 export type SearchFieldProps = {
@@ -88,24 +88,24 @@ export const SearchField: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const etiquetaVaciar = useElLabel("ui", "clearSearch", "Vaciar la búsqueda");
+    const clearLabel = useElLabel("ui", "clearSearch", "Vaciar la búsqueda");
 
-    const [interno, setInterno] = React.useState(defaultValue);
-    const controlado = value !== undefined;
-    const texto = controlado ? value : interno;
-    const propio = React.useRef<HTMLInputElement | null>(null);
+    const [internal, setInternal] = React.useState(defaultValue);
+    const controlled = value !== undefined;
+    const text = controlled ? value : internal;
+    const own = React.useRef<HTMLInputElement | null>(null);
 
-    const escribir = (siguiente: string) => {
-      if (!controlado) setInterno(siguiente);
-      onValueChange?.(siguiente);
+    const type = (next: string) => {
+      if (!controlled) setInternal(next);
+      onValueChange?.(next);
     };
 
-    const vaciar = () => {
-      escribir("");
+    const clear = () => {
+      type("");
       /* El foco vuelve al campo: quien vacía casi siempre va a escribir otra
          cosa, y dejarlo en un botón que acaba de desaparecer lo manda al
          principio del documento. */
-      propio.current?.focus();
+      own.current?.focus();
     };
 
     return (
@@ -120,17 +120,17 @@ export const SearchField: React.ForwardRefExoticComponent<
       >
         {(control) => (
           <div
-            className={cn(CAJA_CAMPO_COMPUESTA, CAMPO_INVALIDO)}
+            className={cn(FIELD_BOX_COMPOSITE, INVALID_FIELD)}
             aria-invalid={control["aria-invalid"]}
           >
             <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
 
             <input
               {...control}
-              ref={(nodo) => {
-                propio.current = nodo;
-                if (typeof ref === "function") ref(nodo);
-                else if (ref) ref.current = nodo;
+              ref={(node) => {
+                own.current = node;
+                if (typeof ref === "function") ref(node);
+                else if (ref) ref.current = node;
               }}
               type="search"
               name={name}
@@ -139,19 +139,19 @@ export const SearchField: React.ForwardRefExoticComponent<
               disabled={disabled}
               maxLength={maxLength}
               minLength={minLength}
-              value={texto}
-              onChange={(e) => escribir(e.target.value)}
+              value={text}
+              onChange={(e) => type(e.target.value)}
               className={cn(
-                CAMPO_DESNUDO,
+                BARE_FIELD,
                 "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
               )}
             />
 
-            {texto && !disabled && !readOnly ? (
+            {text && !disabled && !readOnly ? (
               <button
                 type="button"
-                aria-label={etiquetaVaciar}
-                onClick={vaciar}
+                aria-label={clearLabel}
+                onClick={clear}
                 className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 <X className="size-4" aria-hidden />

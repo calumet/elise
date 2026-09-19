@@ -23,14 +23,14 @@ export type AvatarProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.
 
 /* El radio del cuadrado va emparejado con el tamaño y no es uno fijo: un radio
    de 10 sobre 24px es casi un círculo, y sobre 48 apenas se nota. */
-const tamanos: Record<NonNullable<AvatarProps["size"]>, string> = {
+const sizes: Record<NonNullable<AvatarProps["size"]>, string> = {
   xs: "size-6 text-2xs",
   sm: "size-8 text-xs",
   md: "size-10 text-base",
   lg: "size-12 text-lg",
 };
 
-const cuadrados: Record<NonNullable<AvatarProps["size"]>, string> = {
+const squares: Record<NonNullable<AvatarProps["size"]>, string> = {
   xs: "rounded-sm",
   sm: "rounded-md",
   md: "rounded-lg",
@@ -38,7 +38,7 @@ const cuadrados: Record<NonNullable<AvatarProps["size"]>, string> = {
 };
 
 /* Unen dos apellidos pero no son ninguno, así que no dan letra. */
-const PARTICULAS = new Set([
+const PARTICLES = new Set([
   "de",
   "del",
   "la",
@@ -64,16 +64,16 @@ const PARTICULAS = new Set([
  * última, en mayúscula. «María de los Ángeles Pérez» da «MP», y un nombre de
  * una sola palabra da una sola letra.
  */
-export const inicialesDe = (nombre: string): string => {
-  const palabras = nombre.split(/\s+/).filter(Boolean);
-  const propias = palabras.filter((p) => !PARTICULAS.has(p.toLocaleLowerCase()));
-  const utiles = propias.length > 0 ? propias : palabras;
-  if (utiles.length === 0) return "";
+export const initialsOf = (name: string): string => {
+  const words = name.split(/\s+/).filter(Boolean);
+  const own = words.filter((p) => !PARTICLES.has(p.toLocaleLowerCase()));
+  const utils = own.length > 0 ? own : words;
+  if (utils.length === 0) return "";
 
   /* Por code point, que una letra puede ocupar dos. */
-  const primera = [...utiles[0]][0] ?? "";
-  const ultima = utiles.length > 1 ? ([...utiles[utiles.length - 1]][0] ?? "") : "";
-  return `${primera}${ultima}`.toLocaleUpperCase();
+  const first = [...utils[0]][0] ?? "";
+  const last = utils.length > 1 ? ([...utils[utils.length - 1]][0] ?? "") : "";
+  return `${first}${last}`.toLocaleUpperCase();
 };
 
 /** El contenedor circular de la foto o de las iniciales. */
@@ -87,8 +87,8 @@ export const Avatar: React.ForwardRefExoticComponent<
       ref={ref}
       className={cn(
         "relative flex shrink-0 overflow-hidden border border-border bg-muted",
-        tamanos[size],
-        shape === "circle" ? "rounded-full" : cuadrados[size],
+        sizes[size],
+        shape === "circle" ? "rounded-full" : squares[size],
         className,
       )}
       {...props}

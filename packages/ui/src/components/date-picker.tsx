@@ -11,8 +11,8 @@ import { cn } from "@/lib/cn";
 import { useElLabel } from "@/lib/i18n";
 
 import { Calendar } from "./calendar";
-import { aTextoISO } from "./date-field";
-import { CAJA_CAMPO } from "./input";
+import { toISOText } from "./date-field";
+import { FIELD_BOX } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 /**
@@ -27,18 +27,18 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
  * Sin caret. Un caret anuncia una lista de opciones; aquí lo que se abre es un
  * calendario, y decirlo con su propio icono ahorra la promesa equivocada.
  */
-function DisparadorFecha({
-  etiqueta,
-  vacio,
+function DateTrigger({
+  label,
+  empty,
   ...props
-}: React.ComponentProps<"button"> & { etiqueta: string; vacio: boolean }) {
+}: React.ComponentProps<"button"> & { label: string; empty: boolean }) {
   return (
     <button
       type="button"
-      className={cn(CAJA_CAMPO, "cursor-pointer items-center justify-between gap-2 text-start")}
+      className={cn(FIELD_BOX, "cursor-pointer items-center justify-between gap-2 text-start")}
       {...props}
     >
-      <span className={cn("min-w-0 truncate", vacio && "text-muted-foreground")}>{etiqueta}</span>
+      <span className={cn("min-w-0 truncate", empty && "text-muted-foreground")}>{label}</span>
       <CalendarIcon aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
     </button>
   );
@@ -56,13 +56,13 @@ export function DatePicker({ value, onChange, formatLabel }: DatePickerProps): R
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
 
   const isValidDate = value && !isNaN(value.getTime());
-  const label = formatLabel ? formatLabel(value) : isValidDate ? aTextoISO(value!) : placeholder;
+  const label = formatLabel ? formatLabel(value) : isValidDate ? toISOText(value!) : placeholder;
 
   return (
     <div data-slot="date-picker" className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <DisparadorFecha etiqueta={label} vacio={!isValidDate} />
+          <DateTrigger label={label} empty={!isValidDate} />
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           {/* Rótulo de mes, no desplegables: se navega con las flechas y el
@@ -98,20 +98,20 @@ export function DateRangePicker({
 }: DateRangePickerProps): React.JSX.Element {
   const placeholder = useElLabel("ui", "selectDate", "Seleccionar fecha");
   const range: DateRangeValue = value ?? { from: undefined, to: undefined };
-  const completo = Boolean(range?.from && range?.to);
+  const full = Boolean(range?.from && range?.to);
   /* El mismo formato que `DateField`, con doble guion entre las dos fechas:
      `YYYY-MM-DD--YYYY-MM-DD`. Un rango escrito con dos formatos locales y un
      guion suelto no se puede ni leer ni teclear de vuelta, porque el separador
      se confunde con el de la propia fecha. */
   const label =
     formatLabel?.(range) ??
-    (completo ? `${aTextoISO(range.from!)}--${aTextoISO(range.to!)}` : placeholder);
+    (full ? `${toISOText(range.from!)}--${toISOText(range.to!)}` : placeholder);
 
   return (
     <div data-slot="date-range-picker" className="w-full">
       <Popover>
         <PopoverTrigger asChild>
-          <DisparadorFecha etiqueta={label} vacio={!completo} />
+          <DateTrigger label={label} empty={!full} />
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar

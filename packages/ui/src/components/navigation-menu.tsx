@@ -17,35 +17,33 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsib
 const SELECTOR_ITEM = '[data-slot="navigation-menu-item"],[data-slot="navigation-menu-overflow"]';
 
 /* Lo que separa el panel del canto de la barra, igual que del borde de abajo. */
-const RESPIRO = 6;
+const ROOM = 6;
 
 /* En una secuencia el panel no flota: cae en el flujo y se abre en alto. */
-type Secuencia = "grupo" | "cajon";
+type Sequence = "group" | "drawer";
 
-const DentroDeUnaSecuencia: React.Context<Secuencia | null> = React.createContext<Secuencia | null>(
-  null,
-);
+const InsideASequence: React.Context<Sequence | null> = React.createContext<Sequence | null>(null);
 
 /* Radix solo alterna en la raíz: el `onItemSelect` de un `Sub` asigna sin
    comparar, y la sección no se cierra sola. */
-const CerrarLaSeccion = React.createContext<(() => void) | null>(null);
+const CloseTheSection = React.createContext<(() => void) | null>(null);
 
-type ContextoNavegacion = {
-  desplegado: boolean;
-  setDesplegado: (v: boolean) => void;
+type NavigationContext = {
+  expanded: boolean;
+  setExpanded: (v: boolean) => void;
 };
 
-const Navegacion = React.createContext<ContextoNavegacion | null>(null);
+const Navigation = React.createContext<NavigationContext | null>(null);
 
-const BOTON_DESPLIEGUE =
+const EXPAND_BUTTON =
   "group relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 /* La caja de Radix alrededor de la fila, que quien usa el componente no alcanza. */
-const CAJA_DE_LA_FILA =
+const ROW_BOX =
   "[&_div:has(>[data-slot=navigation-menu-list])]:min-w-0 [&_div:has(>[data-slot=navigation-menu-list])]:flex-1";
 
 /* El reparto en JS plano, para correr al parsear el HTML del servidor, antes de pintar. */
-const REPARTO_AL_PARSEAR = `(function(){var s=document.currentScript,r=s&&s.parentElement;if(!r)return;var filas=r.querySelectorAll('[data-slot="navigation-menu-list"]');for(var k=0;k<filas.length;k++){var u=filas[k];if(!u.getClientRects().length)continue;var c=u.parentElement,g=null,li=[];for(var i=0;i<u.children.length;i++){var e=u.children[i];if(e.tagName!=="LI")continue;if(e.getAttribute("data-slot")==="navigation-menu-overflow")g=e;else li.push(e)}if(!g||!c)continue;var w=function(e){return e.getBoundingClientRect().width},p=function(e,q){var t=getComputedStyle(e);return parseFloat(t[q+"Left"])+parseFloat(t[q+"Right"])};g.hidden=false;var ag=w(g);g.hidden=true;var a=li.map(w),d=w(c)-p(c,"padding")-p(u,"padding")-p(u,"margin"),n=li.length,o=function(m){var t=0;for(var j=0;j<m;j++)t+=a[j];return t+(m<li.length?ag:0)};while(n>0&&o(n)>d)n--;for(i=0;i<li.length;i++)li[i].hidden=i>=n;g.hidden=n===li.length;u.removeAttribute("data-sin-medir");u.setAttribute("data-visibles",String(n))}})();`;
+const LAYOUT_ON_PARSE = `(function(){var s=document.currentScript,r=s&&s.parentElement;if(!r)return;var rows=r.querySelectorAll('[data-slot="navigation-menu-list"]');for(var k=0;k<rows.length;k++){var u=rows[k];if(!u.getClientRects().length)continue;var c=u.parentElement,g=null,li=[];for(var i=0;i<u.children.length;i++){var e=u.children[i];if(e.tagName!=="LI")continue;if(e.getAttribute("data-slot")==="navigation-menu-overflow")g=e;else li.push(e)}if(!g||!c)continue;var w=function(e){return e.getBoundingClientRect().width},p=function(e,q){var t=getComputedStyle(e);return parseFloat(t[q+"Left"])+parseFloat(t[q+"Right"])};g.hidden=false;var ag=w(g);g.hidden=true;var a=li.map(w),d=w(c)-p(c,"padding")-p(u,"padding")-p(u,"margin"),n=li.length,o=function(m){var t=0;for(var j=0;j<m;j++)t+=a[j];return t+(m<li.length?ag:0)};while(n>0&&o(n)>d)n--;for(i=0;i<li.length;i++)li[i].hidden=i>=n;g.hidden=n===li.length;u.removeAttribute("data-unmeasured");u.setAttribute("data-visible",String(n))}})();`;
 
 /**
  * Raíz del menú de navegación, para la barra principal de un sitio. Envolvé con
@@ -65,36 +63,36 @@ export const NavigationMenu: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
 >(({ className, children, nonce, ...props }, ref) => {
-  const [desplegado, setDesplegado] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
-  const ctx = React.useMemo(() => ({ desplegado, setDesplegado }), [desplegado]);
+  const ctx = React.useMemo(() => ({ expanded, setExpanded }), [expanded]);
 
   return (
-    <Navegacion.Provider value={ctx}>
-      <Collapsible open={desplegado} onOpenChange={setDesplegado} asChild>
+    <Navigation.Provider value={ctx}>
+      <Collapsible open={expanded} onOpenChange={setExpanded} asChild>
         <NavigationMenuPrimitive.Root
           data-slot="navigation-menu"
           ref={ref}
           className={cn(
             "group/navigation-menu relative flex w-full min-w-0 flex-col",
-            CAJA_DE_LA_FILA,
+            ROW_BOX,
             className,
           )}
           {...props}
         >
           {children}
           {/* Lo que crea React no se ejecuta. */}
-          <script nonce={nonce} dangerouslySetInnerHTML={{ __html: REPARTO_AL_PARSEAR }} />
+          <script nonce={nonce} dangerouslySetInnerHTML={{ __html: LAYOUT_ON_PARSE }} />
         </NavigationMenuPrimitive.Root>
       </Collapsible>
-    </Navegacion.Provider>
+    </Navigation.Provider>
   );
 });
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName;
 
-const useNavegacion = (quien: string): ContextoNavegacion => {
-  const ctx = React.useContext(Navegacion);
-  if (!ctx) throw new Error(`${quien} tiene que ir dentro de un NavigationMenu.`);
+const useNavigation = (who: string): NavigationContext => {
+  const ctx = React.useContext(Navigation);
+  if (!ctx) throw new Error(`${who} tiene que ir dentro de un NavigationMenu.`);
   return ctx;
 };
 
@@ -109,26 +107,26 @@ export const NavigationMenuToggle: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentProps<"button">> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, ...props }, ref) => {
-    useNavegacion("NavigationMenuToggle");
+    useNavigation("NavigationMenuToggle");
     /* El `-me` descuenta la holgura de la caja. El botón cierra una cabecera, y
        ahí el glifo tiene que caer donde abre la marca; `me-0` lo anula. */
-    return <BotonDespliegue ref={ref} className={cn("-me-2 md:hidden", className)} {...props} />;
+    return <ExpandButton ref={ref} className={cn("-me-2 md:hidden", className)} {...props} />;
   },
 );
 NavigationMenuToggle.displayName = "NavigationMenuToggle";
 
-const BotonDespliegue = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
+const ExpandButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
   ({ className, ...props }, ref) => {
-    const etiqueta = useElLabel("ui", "navigation", "Navegación");
+    const label = useElLabel("ui", "navigation", "Navegación");
 
     return (
       <CollapsibleTrigger asChild>
         <button
           type="button"
           data-slot="navigation-menu-toggle"
-          aria-label={etiqueta}
+          aria-label={label}
           ref={ref}
-          className={cn(BOTON_DESPLIEGUE, className)}
+          className={cn(EXPAND_BUTTON, className)}
           {...props}
         >
           <Menu
@@ -144,38 +142,38 @@ const BotonDespliegue = React.forwardRef<HTMLButtonElement, React.ComponentProps
     );
   },
 );
-BotonDespliegue.displayName = "BotonDespliegue";
+ExpandButton.displayName = "ExpandButton";
 
 /* La cuenta que dejo el script del servidor, si corrio. */
-const cuentaAlParsear = (id: string, total: number): number | undefined => {
+const countOnParse = (id: string, total: number): number | undefined => {
   if (typeof document === "undefined") return undefined;
-  for (const el of document.querySelectorAll('[data-slot="navigation-menu-list"][data-visibles]')) {
-    if (el.getAttribute("data-fila") !== id) continue;
-    const n = Number(el.getAttribute("data-visibles"));
+  for (const el of document.querySelectorAll('[data-slot="navigation-menu-list"][data-visible]')) {
+    if (el.getAttribute("data-row") !== id) continue;
+    const n = Number(el.getAttribute("data-visible"));
     return Number.isInteger(n) && n >= 0 && n <= total ? n : undefined;
   }
   return undefined;
 };
 
 /* El `Sub` va controlado: es de donde el disparador vacía la sección. */
-const Secuencia = ({
-  variante,
+const Sequence = ({
+  variant,
   children,
 }: {
-  variante: Secuencia;
+  variant: Sequence;
   children: React.ReactNode;
 }): React.JSX.Element => {
-  const [abierta, setAbierta] = React.useState("");
-  const cerrar = React.useCallback(() => setAbierta(""), []);
+  const [open, setOpen] = React.useState("");
+  const close = React.useCallback(() => setOpen(""), []);
 
   return (
-    <DentroDeUnaSecuencia.Provider value={variante}>
-      <CerrarLaSeccion.Provider value={cerrar}>
+    <InsideASequence.Provider value={variant}>
+      <CloseTheSection.Provider value={close}>
         <NavigationMenuPrimitive.Sub
           data-slot="navigation-menu-sub"
           orientation="vertical"
-          value={abierta}
-          onValueChange={setAbierta}
+          value={open}
+          onValueChange={setOpen}
           className="w-full"
         >
           <NavigationMenuPrimitive.List
@@ -183,17 +181,17 @@ const Secuencia = ({
               "flex w-full list-none flex-col gap-0",
               /* La sangría deja sitio a la pastilla sin mover el rótulo, y el
                  ancho automático la ensancha en vez de correrla. */
-              variante === "cajon" && "gap-0.5",
+              variant === "drawer" && "gap-0.5",
             )}
           >
             {children}
           </NavigationMenuPrimitive.List>
         </NavigationMenuPrimitive.Sub>
-      </CerrarLaSeccion.Provider>
-    </DentroDeUnaSecuencia.Provider>
+      </CloseTheSection.Provider>
+    </InsideASequence.Provider>
   );
 };
-Secuencia.displayName = "Secuencia";
+Sequence.displayName = "Sequence";
 
 /** Props de {@link NavigationMenuList}. */
 export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
@@ -223,93 +221,93 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof NavigationMenuPrimitive.List>,
   NavigationMenuListProps
 >(({ className, children, overflowLabel, ...props }, ref) => {
-  const mas = useElLabel("ui", "more", "Más");
-  const rotuloGrupo = overflowLabel ?? mas;
-  const { setDesplegado } = useNavegacion("NavigationMenuList");
+  const more = useElLabel("ui", "more", "Más");
+  const groupLabel = overflowLabel ?? more;
+  const { setExpanded } = useNavigation("NavigationMenuList");
 
-  const secciones = React.useMemo(
+  const sections = React.useMemo(
     () => React.Children.toArray(children).filter(React.isValidElement),
     [children],
   );
 
   const id = React.useId();
-  const fila = React.useRef<HTMLUListElement | null>(null);
-  const repartir = React.useRef<() => void>(undefined);
+  const row = React.useRef<HTMLUListElement | null>(null);
+  const assign = React.useRef<() => void>(undefined);
   /* Si el script del servidor ya repartio, se arranca de su cuenta. */
-  const [alParsear] = React.useState(() => cuentaAlParsear(id, secciones.length));
-  const [visibles, setVisibles] = React.useState(alParsear ?? secciones.length);
+  const [onParse] = React.useState(() => countOnParse(id, sections.length));
+  const [visible, setVisible] = React.useState(onParse ?? sections.length);
   /* Sin medir aun, la fila recorta: el servidor la pinta entera. */
-  const [medido, setMedido] = React.useState(alParsear !== undefined);
+  const [measured, setMeasured] = React.useState(onParse !== undefined);
 
   React.useLayoutEffect(() => {
-    const lista = fila.current;
+    const list = row.current;
     /* La caja de la fila, que es contra la que se resuelve su ancho: entre ella y
        la raiz puede haber relleno, y ese relleno tambien le quita sitio. */
-    const caja = lista?.parentElement;
-    if (!lista || !caja) return;
+    const box = list?.parentElement;
+    if (!list || !box) return;
 
-    const ancho = (el: Element) => el.getBoundingClientRect().width;
-    const aLosLados = (el: HTMLElement, cual: "padding" | "margin") => {
+    const width = (el: Element) => el.getBoundingClientRect().width;
+    const toTheSides = (el: HTMLElement, which: "padding" | "margin") => {
       const e = getComputedStyle(el) as unknown as Record<string, string>;
-      return parseFloat(e[`${cual}Left`]) + parseFloat(e[`${cual}Right`]);
+      return parseFloat(e[`${which}Left`]) + parseFloat(e[`${which}Right`]);
     };
 
-    repartir.current = () => {
+    assign.current = () => {
       /* En movil no se pinta, y sin pintar mide ceros. */
-      if (!lista.getClientRects().length) return;
-      const grupo = lista.querySelector<HTMLElement>(
+      if (!list.getClientRects().length) return;
+      const group = list.querySelector<HTMLElement>(
         ':scope > [data-slot="navigation-menu-overflow"]',
       );
-      const items = [...lista.children].filter(
-        (el): el is HTMLElement => el.tagName === "LI" && el !== grupo,
+      const items = [...list.children].filter(
+        (el): el is HTMLElement => el.tagName === "LI" && el !== group,
       );
-      if (!grupo || items.length !== secciones.length) return;
+      if (!group || items.length !== sections.length) return;
 
       /* Lo escondido mide cero: se destapa lo justo para medirlo. */
-      const tapados = [...items, grupo].filter((el) => el.hidden);
-      for (const el of tapados) el.hidden = false;
-      const anchos = items.map(ancho);
-      const anchoGrupo = ancho(grupo);
-      for (const el of tapados) el.hidden = true;
+      const covered = [...items, group].filter((el) => el.hidden);
+      for (const el of covered) el.hidden = false;
+      const widths = items.map(width);
+      const groupWidth = width(group);
+      for (const el of covered) el.hidden = true;
 
       /* La caja y no la fila, que a la fila la encoge su contenido. */
-      const disponible =
-        ancho(caja) -
-        aLosLados(caja, "padding") -
-        aLosLados(lista, "padding") -
-        aLosLados(lista, "margin");
+      const available =
+        width(box) -
+        toTheSides(box, "padding") -
+        toTheSides(list, "padding") -
+        toTheSides(list, "margin");
 
       /* Lo que ocupan las primeras `n`, contando el grupo solo si queda alguna
          fuera. Se baja desde todas: la ultima que entra hace desaparecer el
          grupo, asi que no crece de forma pareja y no vale buscar de abajo. */
-      const ocupado = (n: number) =>
-        anchos.slice(0, n).reduce((a, b) => a + b, 0) + (n < secciones.length ? anchoGrupo : 0);
+      const taken = (n: number) =>
+        widths.slice(0, n).reduce((a, b) => a + b, 0) + (n < sections.length ? groupWidth : 0);
 
-      let caben = secciones.length;
-      while (caben > 0 && ocupado(caben) > disponible) caben -= 1;
-      setMedido(true);
-      setVisibles(caben);
+      let fit = sections.length;
+      while (fit > 0 && taken(fit) > available) fit -= 1;
+      setMeasured(true);
+      setVisible(fit);
     };
 
-    const ro = new ResizeObserver(() => repartir.current?.());
-    ro.observe(caja);
+    const ro = new ResizeObserver(() => assign.current?.());
+    ro.observe(box);
     /* Cruzar el breakpoint enciende la fila sin que la barra cambie. */
-    ro.observe(lista);
-    repartir.current();
+    ro.observe(list);
+    assign.current();
     /* El ancho del rotulo cambia con la tipografia, y eso no lo ve el observer. */
-    void document.fonts?.ready.then(() => repartir.current?.());
+    void document.fonts?.ready.then(() => assign.current?.());
     return () => {
       ro.disconnect();
-      repartir.current = undefined;
+      assign.current = undefined;
     };
-  }, [secciones.length]);
+  }, [sections.length]);
 
   /* Un cambio de rotulo no lo ve el observer. */
-  React.useLayoutEffect(() => repartir.current?.(), [secciones]);
+  React.useLayoutEffect(() => assign.current?.(), [sections]);
 
-  const dentro = secciones.map((seccion, i) =>
-    React.cloneElement(seccion as React.ReactElement<{ hidden?: boolean }>, {
-      hidden: i >= visibles,
+  const inside = sections.map((section, i) =>
+    React.cloneElement(section as React.ReactElement<{ hidden?: boolean }>, {
+      hidden: i >= visible,
     }),
   );
 
@@ -318,11 +316,11 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       {/* El de respaldo. Lo esconde el CSS: en servidor no se sabe si hay otro. */}
       <div
         className={cn(
-          "flex items-center group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:hidden md:hidden",
+          "flex items-center group-has-[[data-slot=navigation-menu-toggle]:not([data-fallback])]/navigation-menu:hidden md:hidden",
           className,
         )}
       >
-        <BotonDespliegue data-respaldo="" />
+        <ExpandButton data-fallback="" />
       </div>
 
       {/* Un clic en un enlace cierra el despliegue; abrir una sección, no. */}
@@ -332,43 +330,43 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
            y desde dentro le cortaría las esquinas a la pastilla. */
         className="order-last -mx-2.5 basis-[calc(100%+1.25rem)] md:hidden"
         onClick={(e) => {
-          if ((e.target as HTMLElement).closest("a")) setDesplegado(false);
+          if ((e.target as HTMLElement).closest("a")) setExpanded(false);
         }}
       >
         {/* Sin el `className` de la fila: describe una fila, y con un `flex`
             dentro el submenu se encoge a su contenido. */}
-        <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-respaldo])]/navigation-menu:border-t-0">
-          <Secuencia variante="cajon">{secciones}</Secuencia>
+        <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-fallback])]/navigation-menu:border-t-0">
+          <Sequence variant="drawer">{sections}</Sequence>
         </div>
       </CollapsibleContent>
 
       <NavigationMenuPrimitive.List
         data-slot="navigation-menu-list"
-        data-fila={id}
-        data-sin-medir={medido ? undefined : ""}
-        data-visibles={medido ? visibles : undefined}
-        ref={(nodo) => {
-          fila.current = nodo;
-          if (typeof ref === "function") ref(nodo);
-          else if (ref) ref.current = nodo;
+        data-row={id}
+        data-unmeasured={measured ? undefined : ""}
+        data-visible={measured ? visible : undefined}
+        ref={(node) => {
+          row.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) ref.current = node;
         }}
         /* El `-mx` descuenta la pastilla: lo que alinea es el rótulo. */
         /* Sin medir, lo que no cabe pasa a una segunda linea recortada. */
         className={cn(
-          "group -mx-2.5 flex flex-1 list-none items-center gap-0 data-[sin-medir]:max-h-9 data-[sin-medir]:flex-wrap data-[sin-medir]:overflow-hidden max-md:hidden",
+          "group -mx-2.5 flex flex-1 list-none items-center gap-0 data-[unmeasured]:max-h-9 data-[unmeasured]:flex-wrap data-[unmeasured]:overflow-hidden max-md:hidden",
           className,
         )}
         {...props}
       >
-        {dentro}
+        {inside}
         <NavigationMenuPrimitive.Item
           data-slot="navigation-menu-overflow"
-          hidden={visibles >= secciones.length}
+          hidden={visible >= sections.length}
           className="relative shrink-0"
         >
-          <NavigationMenuTrigger>{rotuloGrupo}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{groupLabel}</NavigationMenuTrigger>
           <NavigationMenuContent className="max-h-[min(70vh,30rem)] overflow-y-auto">
-            <Secuencia variante="grupo">{secciones.slice(visibles)}</Secuencia>
+            <Sequence variant="group">{sections.slice(visible)}</Sequence>
           </NavigationMenuContent>
         </NavigationMenuPrimitive.Item>
       </NavigationMenuPrimitive.List>
@@ -402,10 +400,10 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
 >(({ className, onClick, onPointerEnter, onPointerMove, ...props }, ref) => {
-  const secuencia = React.useContext(DentroDeUnaSecuencia);
-  const cerrar = React.useContext(CerrarLaSeccion);
+  const sequence = React.useContext(InsideASequence);
+  const close = React.useContext(CloseTheSection);
   /* El mismo pestillo que Radix lleva en la raíz, que acá no llega a ponerse. */
-  const cerradoPorClic = React.useRef(false);
+  const closedByClick = React.useRef(false);
 
   return (
     <NavigationMenuPrimitive.Trigger
@@ -413,28 +411,28 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
       ref={ref}
       onClick={(e) => {
         onClick?.(e);
-        if (e.defaultPrevented || !cerrar) return;
+        if (e.defaultPrevented || !close) return;
         if (e.currentTarget.dataset.state !== "open") return;
         /* Corta el `onItemSelect` de Radix, que volvería a seleccionarla. */
         e.preventDefault();
-        cerradoPorClic.current = true;
-        cerrar();
+        closedByClick.current = true;
+        close();
       }}
       onPointerEnter={(e) => {
         onPointerEnter?.(e);
-        cerradoPorClic.current = false;
+        closedByClick.current = false;
       }}
       onPointerMove={(e) => {
         onPointerMove?.(e);
         /* El puntero encima la reabriría al primer temblor. */
-        if (cerradoPorClic.current && e.pointerType === "mouse") e.preventDefault();
+        if (closedByClick.current && e.pointerType === "mouse") e.preventDefault();
       }}
       className={cn(
         "group inline-flex items-center rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
-        secuencia
+        sequence
           ? "min-h-9 w-full justify-between text-start font-semibold whitespace-normal"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        secuencia === "cajon" && "min-h-11 px-2.5",
+        sequence === "drawer" && "min-h-11 px-2.5",
         className,
       )}
       {...props}
@@ -444,7 +442,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         className={cn(
           "relative top-px ml-1 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180",
           /* En una secuencia encabeza una fila alta, y a 12px se pierde. */
-          secuencia ? "size-4" : "size-3",
+          sequence ? "size-4" : "size-3",
         )}
         aria-hidden
       />
@@ -465,7 +463,7 @@ export type NavigationMenuContentProps = React.ComponentPropsWithoutRef<
   align?: "start" | "end" | "full";
 };
 
-const ALINEACION: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
+const ALIGNMENT: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
   /* El ajuste lo mete hacia adentro si se pasa del borde. `w-max` es lo que le
      deja ser mas ancho que su seccion. */
   start:
@@ -475,7 +473,7 @@ const ALINEACION: Record<NonNullable<NavigationMenuContentProps["align"]>, strin
 };
 
 /* El megamenú ocupa la barra entera y con el marco de un menú se ve apretado. */
-const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
+const SLACK: Record<NonNullable<NavigationMenuContentProps["align"]>, string> = {
   start: "p-3",
   end: "p-3",
   full: "px-[var(--el-nav-sangria,0.875rem)] py-5",
@@ -488,18 +486,18 @@ const HOLGURA: Record<NonNullable<NavigationMenuContentProps["align"]>, string> 
 /* El reparto de los grupos lo pone el panel. Va con `:has` para no tocar a
    quien monta su propia caja dentro del panel, y literal porque Tailwind no ve
    una clase interpolada. */
-const APILADOS =
+const STACKED =
   "has-[>[data-slot=navigation-menu-group]]:flex has-[>[data-slot=navigation-menu-group]]:flex-col has-[>[data-slot=navigation-menu-group]]:gap-4";
-const EN_COLUMNAS =
+const IN_COLUMNS =
   "has-[>[data-slot=navigation-menu-group]]:grid has-[>[data-slot=navigation-menu-group]]:gap-6 sm:has-[>[data-slot=navigation-menu-group]]:grid-cols-2 lg:has-[>[data-slot=navigation-menu-group]]:grid-cols-3";
 
-const PANEL_FLOTANTE =
+const PANEL_FLOATING =
   "absolute top-full left-[var(--el-nav-corrimiento,0px)] z-popover mt-1.5 transition-none w-[var(--el-nav-ancho,100%)] rounded-xl border border-border bg-popover shadow-lg duration-(--duration-fast) ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 sm:min-w-64";
 
 /* El relleno va en el div de adentro: animar un alto con relleno vertical
    aprieta el texto durante la transición. */
 /* La contencion lo mide por su contenedor: el grupo no cambia de ancho. */
-const PANEL_EN_SECUENCIA =
+const PANEL_IN_SEQUENCE =
   "static w-full overflow-hidden [contain:inline-size] data-[state=open]:animate-nav-down data-[state=closed]:animate-nav-up";
 
 /** El panel de una sección. */
@@ -512,79 +510,79 @@ export const NavigationMenuContent: React.ForwardRefExoticComponent<
 >(({ className, align = "start", children, ...props }, ref) => {
   /* En estado y no en una referencia: el panel se monta al abrirse. */
   const [panel, setPanel] = React.useState<HTMLDivElement | null>(null);
-  const secuencia = React.useContext(DentroDeUnaSecuencia);
+  const sequence = React.useContext(InsideASequence);
 
   /* Se mide el hijo: el panel esta animando su alto. */
   React.useLayoutEffect(() => {
-    const caja = panel;
-    const dentro = caja?.firstElementChild;
-    if (!secuencia || !caja || !dentro) return;
+    const box = panel;
+    const inside = box?.firstElementChild;
+    if (!sequence || !box || !inside) return;
 
-    const medir = () => caja.style.setProperty("--el-nav-alto", `${caja.scrollHeight}px`);
-    medir();
-    const ro = new ResizeObserver(medir);
-    ro.observe(dentro);
+    const measure = () => box.style.setProperty("--el-nav-alto", `${box.scrollHeight}px`);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(inside);
     return () => ro.disconnect();
-  }, [panel, secuencia]);
+  }, [panel, sequence]);
 
   /* Nada de esto se escribe en CSS: hay que medir la barra y el item. */
   React.useLayoutEffect(() => {
-    const caja = panel;
-    const barra = caja?.closest<HTMLElement>('[data-slot="navigation-menu"]');
-    const item = caja?.closest<HTMLElement>(SELECTOR_ITEM);
-    const fila = barra?.querySelector<HTMLElement>('[data-slot="navigation-menu-list"]');
-    if (secuencia || !caja || !barra || !item) return;
+    const box = panel;
+    const bar = box?.closest<HTMLElement>('[data-slot="navigation-menu"]');
+    const item = box?.closest<HTMLElement>(SELECTOR_ITEM);
+    const row = bar?.querySelector<HTMLElement>('[data-slot="navigation-menu-list"]');
+    if (sequence || !box || !bar || !item) return;
 
-    const colocar = () => {
-      const b = barra.getBoundingClientRect();
+    const place = () => {
+      const b = bar.getBoundingClientRect();
       const i = item.getBoundingClientRect();
-      caja.style.setProperty("--el-nav-corrimiento", `${b.left - i.left}px`);
-      caja.style.setProperty("--el-nav-ancho", `${b.width}px`);
+      box.style.setProperty("--el-nav-corrimiento", `${b.left - i.left}px`);
+      box.style.setProperty("--el-nav-ancho", `${b.width}px`);
       /* Al ancho de la barra se sangra como la fila, para caer a plomo. */
-      if (fila) {
-        const f = fila.getBoundingClientRect();
-        const sangria = f.left + parseFloat(getComputedStyle(fila).paddingLeft) - b.left;
-        caja.style.setProperty("--el-nav-sangria", `${sangria}px`);
+      if (row) {
+        const f = row.getBoundingClientRect();
+        const indent = f.left + parseFloat(getComputedStyle(row).paddingLeft) - b.left;
+        box.style.setProperty("--el-nav-sangria", `${indent}px`);
       }
       /* Se arrima hasta el respiro, y nunca mas alla del otro canto. */
-      const fuera = i.left + caja.offsetWidth - (b.right - RESPIRO);
-      const arrimo = Math.min(Math.max(0, fuera), Math.max(0, i.left - b.left));
-      caja.style.setProperty("--el-nav-ajuste", `${arrimo}px`);
+      const outside = i.left + box.offsetWidth - (b.right - ROOM);
+      const snap = Math.min(Math.max(0, outside), Math.max(0, i.left - b.left));
+      box.style.setProperty("--el-nav-ajuste", `${snap}px`);
     };
 
-    colocar();
-    const ro = new ResizeObserver(colocar);
-    ro.observe(barra);
-    ro.observe(caja);
+    place();
+    const ro = new ResizeObserver(place);
+    ro.observe(bar);
+    ro.observe(box);
     return () => ro.disconnect();
-  }, [panel, secuencia]);
+  }, [panel, sequence]);
 
   return (
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       data-align={align}
-      ref={(nodo) => {
-        setPanel(nodo);
-        if (typeof ref === "function") ref(nodo);
-        else if (ref) ref.current = nodo;
+      ref={(node) => {
+        setPanel(node);
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
       }}
       className={cn(
-        secuencia
-          ? PANEL_EN_SECUENCIA
+        sequence
+          ? PANEL_IN_SEQUENCE
           : cn(
-              PANEL_FLOTANTE,
-              HOLGURA[align],
-              ALINEACION[align],
-              align === "full" ? EN_COLUMNAS : APILADOS,
+              PANEL_FLOATING,
+              SLACK[align],
+              ALIGNMENT[align],
+              align === "full" ? IN_COLUMNS : STACKED,
             ),
         className,
       )}
       {...props}
     >
-      {secuencia ? (
+      {sequence ? (
         /* En el grupo la sangría dice de qué cuelga. Apilado y no en columnas:
            acá el panel es tan ancho como la fila que lo abre. */
-        <div className={cn("pb-2", APILADOS, secuencia === "grupo" && "ps-3")}>{children}</div>
+        <div className={cn("pb-2", STACKED, sequence === "group" && "ps-3")}>{children}</div>
       ) : (
         children
       )}
@@ -609,7 +607,7 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
   React.ComponentRef<typeof NavigationMenuPrimitive.Link>,
   NavigationMenuLinkProps
 >(({ className, description, children, ...props }, ref) => {
-  const secuencia = React.useContext(DentroDeUnaSecuencia);
+  const sequence = React.useContext(InsideASequence);
 
   return (
     <NavigationMenuPrimitive.Link
@@ -617,8 +615,8 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       ref={ref}
       className={cn(
         "inline-flex h-9 w-max items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
-        secuencia && "whitespace-normal",
-        secuencia === "cajon" && "min-h-11 px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
+        sequence && "whitespace-normal",
+        sequence === "drawer" && "min-h-11 px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
         description && "flex-col items-start justify-center gap-0.5",
         className,
       )}

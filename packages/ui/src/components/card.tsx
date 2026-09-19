@@ -7,7 +7,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
-import { SUPERFICIE } from "@/lib/superficie";
+import { SURFACE } from "@/lib/surface";
 
 /* La `ref` se ensancha a `HTMLElement` porque con `as` la tarjeta puede salir
    como cualquier etiqueta, y atarla al `<div>` le mentiría a quien la use como
@@ -23,7 +23,7 @@ function Card({ className, as: Comp = "div", ...props }: CardProps): React.JSX.E
   return (
     <Comp
       data-slot="card"
-      className={cn(SUPERFICIE, "flex flex-col gap-3 py-4 text-card-foreground", className)}
+      className={cn(SURFACE, "flex flex-col gap-3 py-4 text-card-foreground", className)}
       {...props}
     />
   );

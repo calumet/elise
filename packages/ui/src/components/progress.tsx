@@ -28,8 +28,8 @@ export type ProgressProps = React.ComponentProps<typeof ProgressPrimitive.Root>;
  * Para una espera sin barra está `Spinner`.
  */
 function Progress({ className, value = 0, max = 100, ...props }: ProgressProps): React.JSX.Element {
-  const indeterminado = value === null || value === undefined;
-  const porcentaje = indeterminado ? 0 : (Math.min(Math.max(value, 0), max) / max) * 100;
+  const indeterminate = value === null || value === undefined;
+  const percent = indeterminate ? 0 : (Math.min(Math.max(value, 0), max) / max) * 100;
 
   return (
     <ProgressPrimitive.Root
@@ -44,14 +44,14 @@ function Progress({ className, value = 0, max = 100, ...props }: ProgressProps):
         /* Una barra indeterminada detenida no comunica que algo esté pasando,
            que es el mismo caso del Spinner, así que la marca de motion esencial
            la exime de `prefers-reduced-motion`. */
-        data-motion={indeterminado ? "essential" : undefined}
+        data-motion={indeterminate ? "essential" : undefined}
         className={cn(
           "h-full w-full flex-1 bg-primary",
-          indeterminado
+          indeterminate
             ? "w-1/3 animate-progress-indeterminate"
             : "transition-transform duration-(--duration-base) ease-out",
         )}
-        style={indeterminado ? undefined : { transform: `translateX(-${100 - porcentaje}%)` }}
+        style={indeterminate ? undefined : { transform: `translateX(-${100 - percent}%)` }}
       />
     </ProgressPrimitive.Root>
   );

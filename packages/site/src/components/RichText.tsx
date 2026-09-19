@@ -12,20 +12,20 @@ import * as React from "react";
 export function RichText({ children }: { children: string }) {
   // La clave es dónde empieza el trozo en la cadena: no se repite y no depende
   // de la posición en el array.
-  let desde = 0;
-  const partes = children.split("`").map((texto) => {
-    const inicio = desde;
-    desde += texto.length + 1;
-    return { texto, inicio };
+  let from = 0;
+  const parts = children.split("`").map((text) => {
+    const home = from;
+    from += text.length + 1;
+    return { text, home };
   });
 
   return (
     <>
-      {partes.map(({ texto, inicio }, i) =>
+      {parts.map(({ text, home }, i) =>
         i % 2 === 1 ? (
-          <Code key={inicio}>{texto}</Code>
+          <Code key={home}>{text}</Code>
         ) : (
-          <React.Fragment key={inicio}>{texto}</React.Fragment>
+          <React.Fragment key={home}>{text}</React.Fragment>
         ),
       )}
     </>

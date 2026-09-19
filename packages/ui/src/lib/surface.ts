@@ -15,14 +15,14 @@
  * del sistema: la tarjeta, la tabla y la tabla de datos. Repartido, uno se
  * queda atrás y acaban conviviendo dos contornos en la misma pantalla.
  */
-export const SUPERFICIE =
+export const SURFACE =
   "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
 
 /* Caen fuera de la escala de la raíz, así que declaran la suya en el propio
    elemento y lo de adentro resuelve contra la superficie sin saber dónde está. */
 
 /** La franja invertida: la capa que va encima de todo, como un toast. */
-export const SUPERFICIE_INVERSA: string = [
+export const INVERSE_SURFACE: string = [
   "bg-inverse text-foreground",
   "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
@@ -32,7 +32,7 @@ export const SUPERFICIE_INVERSA: string = [
 ].join(" ");
 
 /** El riel de la navegación. */
-export const SUPERFICIE_SIDEBAR: string = [
+export const SIDEBAR_SURFACE: string = [
   "bg-sidebar text-foreground",
   "[--foreground:var(--sidebar-foreground)] [--muted-foreground:var(--sidebar-muted-foreground)]",
   "[--border:var(--sidebar-border)]",
