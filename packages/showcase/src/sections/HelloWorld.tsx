@@ -31,6 +31,9 @@ const HelloWorld = () => (
       <Button variant="ghost" tone="success" data-testid="ghost-success">
         Ghost success
       </Button>
+      <Button variant="surface" data-testid="surface">
+        Surface
+      </Button>
     </div>
   </div>
 );

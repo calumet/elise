@@ -28,16 +28,13 @@ export function CopyCommand({ className }: { className?: string }) {
 
   return (
     <Button
-      variant="outline"
+      variant="surface"
       size="lg"
       onClick={copy}
       aria-label={t("copy", { cmd: INSTALL_CMD })}
-      /* `outline` no trae relleno, que es lo correcto sobre una página lisa. Acá
-         va encima del dither, así que necesita superficie propia o el comando
-         queda ilegible. */
-      className={`bg-card/85 font-mono backdrop-blur-[2px] ${className ?? ""}`}
+      className={className}
     >
-      {INSTALL_CMD}
+      <code>{INSTALL_CMD}</code>
       {copied ? <Check className="text-success" /> : <Copy className="text-muted-foreground" />}
       <span className="sr-only" aria-live="polite">
         {copied ? t("copied") : ""}

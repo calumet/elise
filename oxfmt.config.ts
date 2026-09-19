@@ -1,8 +1,8 @@
-import formato from "@calumet/elise-linter/oxfmt";
+import format from "@calumet/elise-linter/oxfmt";
 import { defineConfig } from "oxfmt";
 
 export default defineConfig({
-  ...formato,
+  ...format,
   sortTailwindcss: {
     stylesheet: "packages/ui/src/tailwind/elise.css",
     functions: ["cn"],

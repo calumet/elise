@@ -270,6 +270,10 @@ costados no, porque la caja de un botón la marca el rótulo y la de un campo el
 valor que se escribe dentro. La escala vive en `FIELD_SIZES`, dentro de
 `input`, y de ahí la toman los otros.
 
+En una barra, `SelectTrigger` acepta además `variant="toolbar"`: queda
+transparente, más ceñido y con el borde marcado, porque ahí no es un campo que
+se rellene ni se valide, y con la caja de campo compite con los que sí lo son.
+
 #### Los seis campos compuestos
 
 `NumberField`, `SearchField`, `TagInput`, `Rating`, `TimePicker` y `DateField`
@@ -1028,7 +1032,12 @@ import { Button } from "@calumet/elise-ui/button";
 <Button variant="solid">Solido</Button>    // Fondo de color
 <Button variant="outline">Contorno</Button> // Solo borde
 <Button variant="ghost">Fantasma</Button>   // Sin fondo ni borde
+<Button variant="surface">Encima</Button>   // Borde y superficie de tarjeta
 ```
+
+`surface` es `outline` con la superficie de tarjeta detrás, traslúcida y con
+desenfoque. Es para cuando debajo no hay una página lisa sino una imagen o una
+textura, donde `outline` deja el rótulo ilegible.
 
 ### Tamaños
 
@@ -1049,12 +1058,12 @@ import { Button } from "@calumet/elise-ui/button";
 
 ### Props
 
-| Prop      | Tipo                                 | Default   | Descripción                               |
-| --------- | ------------------------------------ | --------- | ----------------------------------------- |
-| `variant` | `"solid" \| "outline" \| "ghost"`    | `"solid"` | Estilo visual                             |
-| `size`    | `"sm" \| "md" \| "lg" \| "icon"`     | `"md"`    | Tamaño                                    |
-| `tone`    | `"success" \| "warning" \| "danger"` | —         | Color semántico (sobreescribe el variant) |
-| `asChild` | `boolean`                            | `false`   | Renderiza el hijo en lugar de `<button>`  |
+| Prop      | Tipo                                                  | Default   | Descripción                               |
+| --------- | ----------------------------------------------------- | --------- | ----------------------------------------- |
+| `variant` | `"solid" \| "outline" \| "ghost" \| "surface"`        | `"solid"` | Estilo visual                             |
+| `size`    | `"sm" \| "md" \| "lg" \| "xl" \| "icon" \| "icon-sm"` | `"md"`    | Tamaño                                    |
+| `tone`    | `"success" \| "warning" \| "danger"`                  | —         | Color semántico (sobreescribe el variant) |
+| `asChild` | `boolean`                                             | `false`   | Renderiza el hijo en lugar de `<button>`  |
 
 Además, acepta todas las props nativas de `<button>` (onClick, disabled, type, etc.).
 

@@ -31,7 +31,7 @@ archivo. La estructura de módulos se conserva, así que JSR sigue viendo un
 entrypoint por componente con sus docs; el JSX ya viene resuelto a `_jsx()`, así
 que la transformación de especificadores funciona; y los tipos viajan en los
 `.d.ts`, atados a su `.js` por el pragma `@ts-self-types` que pone
-[`scripts/preparar-jsr.mjs`](../scripts/preparar-jsr.mjs). Deno no resuelve
+[`scripts/prepare-jsr.mjs`](../scripts/prepare-jsr.mjs). Deno no resuelve
 declaraciones por convención de nombre, de ahí el pragma.
 
 La consecuencia práctica: **el build tiene que correr antes que `jsr publish`**,

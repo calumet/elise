@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-tables",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": false,
   "description": "DataTable (TanStack React Table) y utilidades de filtrado/exportación para Elise.",
   "repository": {
@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "build": "tsdown --dts && pnpm build:jsr",
-    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/preparar-jsr.mjs jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/prepare-jsr.mjs jsr",
     "dev": "tsdown --watch --dts",
     "lint": "tsc --noEmit",
     "clean": "rimraf dist jsr"

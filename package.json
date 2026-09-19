@@ -14,11 +14,11 @@
     "lint:fix": "oxlint . --fix",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "audit:visual": "node scripts/audit-visual.mjs -- --tema=ambos",
+    "audit:visual": "node scripts/visual-audit.mjs -- --theme=both",
     "clean": "pnpm -r clean",
     "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks",
-    "check:versiones": "node scripts/verificar-versiones.mjs",
-    "jsr:check": "node scripts/verificar-versiones.mjs && jsr publish --dry-run --allow-dirty"
+    "check:versions": "node scripts/check-versions.mjs",
+    "jsr:check": "node scripts/check-versions.mjs && jsr publish --dry-run --allow-dirty"
   },
   "devDependencies": {
     "@calumet/elise-linter": "workspace:*",

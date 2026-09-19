@@ -178,7 +178,7 @@ export function AppPreview() {
   }, [t, locale]);
 
   return (
-    <section id="pantalla" className="mx-auto w-full max-w-[1200px] px-6 pt-20 sm:px-10">
+    <section id="pantalla" className="mx-auto w-full max-w-300 px-6 pt-20 sm:px-10">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div>
           <h2 className="text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.035em]">
@@ -186,9 +186,7 @@ export function AppPreview() {
             <br />
             {t("titleLine2")}
           </h2>
-          <p className="mt-3 max-w-[600px] text-lg text-pretty text-muted-foreground">
-            {t("lede")}
-          </p>
+          <p className="mt-3 max-w-150 text-lg text-pretty text-muted-foreground">{t("lede")}</p>
         </div>
         <a
           href={DOCS_URL}
@@ -199,7 +197,7 @@ export function AppPreview() {
         </a>
       </div>
 
-      <div className="mt-8 h-[640px] overflow-hidden rounded-xl border border-border shadow-lg">
+      <div className="mt-8 h-160 overflow-hidden rounded-xl border border-border shadow-lg">
         <AppShell className="h-full">
           <AppShellHeader>
             <AppShellNavToggle />

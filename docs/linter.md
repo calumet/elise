@@ -196,7 +196,7 @@ Lo que en ESLint era concatenar arrays, aquí son tres cosas:
 - **Añadir o pisar una regla**: un `rules` junto al `extends`. Gana siempre el
   que extiende sobre lo extendido.
 - **Cambiar reglas para unas rutas**: un `overrides`, con su `files`. Es lo que
-  hace este repositorio para declarar que `scripts/sonda-visual.js` corre en el
+  hace este repositorio para declarar que `scripts/visual-probe.js` corre en el
   navegador.
 - **Cambiar reglas para una carpeta**: un `oxlint.config.ts` o un
   `.oxlintrc.json` dentro de ella. Oxlint los carga solo; el flag

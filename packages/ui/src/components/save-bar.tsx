@@ -56,7 +56,7 @@ export type SaveBarProps = Omit<React.ComponentProps<"div">, "children"> & {
  * cabecera. Suelta sirve igual en un formulario que no viva en un marco.
  *
  * **Descartar destruye lo editado**, así que pasa por `AlertDialog` y no por el
- * botón a secas, como fija `reglas-ui.md` § 1.4.
+ * botón a secas, como fija `reglas-ui.md#14-contarle-algo-al-usuario`.
  *
  * `retain` cubre la mitad que es del navegador: cerrar la pestaña, recargar o
  * escribir otra dirección. La otra mitad, navegar dentro de la aplicación, no

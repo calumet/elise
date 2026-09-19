@@ -20,10 +20,20 @@ export const SelectGroup: typeof SelectPrimitive.Group = SelectPrimitive.Group;
 /** Muestra la opción elegida dentro del disparador, o el `placeholder` si no hay ninguna. */
 export const SelectValue: typeof SelectPrimitive.Value = SelectPrimitive.Value;
 
+/* El disparador de una barra no es un campo aunque se le parezca: no se rellena
+   ni se valida, y con la caja de campo alrededor compite con los controles que
+   sí lo son. */
+const TRIGGER_VARIANTS = {
+  field: "",
+  toolbar: "gap-1 border-border-strong bg-transparent px-2",
+};
+
 /** Props de {@link SelectTrigger}. */
 export type SelectTriggerProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
   /** Por defecto `md`, 36px de alto. */
   size?: FieldSize;
+  /** Por defecto `field`. `toolbar` lo deja transparente y más ceñido, para una cabecera. */
+  variant?: keyof typeof TRIGGER_VARIANTS;
 };
 
 /** El control que abre la lista. */
@@ -31,7 +41,7 @@ export const SelectTrigger: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<SelectTriggerProps> &
     React.RefAttributes<React.ComponentRef<typeof SelectPrimitive.Trigger>>
 > = React.forwardRef<React.ComponentRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
-  ({ className, children, size = "md", ...props }, ref) => (
+  ({ className, children, size = "md", variant = "field", ...props }, ref) => (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       ref={ref}
@@ -41,6 +51,7 @@ export const SelectTrigger: React.ForwardRefExoticComponent<
       className={cn(
         FIELD_BOX,
         FIELD_SIZES[size],
+        TRIGGER_VARIANTS[variant],
         "items-center justify-between data-placeholder:text-muted-foreground",
         INVALID_FIELD,
         className,

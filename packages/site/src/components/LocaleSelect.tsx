@@ -23,7 +23,9 @@ export function LocaleSelect({ className }: { className?: string }) {
     <Select value={locale} onValueChange={setLocale}>
       <SelectTrigger
         aria-label={t("language")}
-        className={`h-8 w-auto gap-1 border-border-strong bg-transparent px-2 ${className ?? ""}`}
+        size="sm"
+        variant="toolbar"
+        className={`w-auto ${className ?? ""}`}
       >
         {/* El rótulo va escrito y no deducido del item elegido. Radix solo monta
             los items al abrir el desplegable, así que sin esto el disparador

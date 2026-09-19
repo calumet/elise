@@ -36,7 +36,7 @@
   ],
   "scripts": {
     "build": "tsdown --dts && pnpm build:jsr",
-    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/preparar-jsr.mjs jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/prepare-jsr.mjs jsr",
     "dev": "tsdown --watch --dts",
     "lint": "tsc --noEmit",
     "clean": "rimraf dist jsr"

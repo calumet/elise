@@ -171,7 +171,7 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
 - No republiques una versión existente.
 - Para cualquier cambio publicable, incrementa la versión **en el `package.json`
   y en el `deno.json`** del paquete antes de publicar. Si se desincronizan, JSR
-  se queda en la versión vieja sin avisar; `pnpm check:versiones` lo detecta y
+  se queda en la versión vieja sin avisar; `pnpm check:versions` lo detecta y
   CI lo corre.
 - Política de versionado:
   - `patch` para correcciones (`0.1.0 -> 0.1.1`)

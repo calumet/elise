@@ -16,10 +16,10 @@ pnpm --filter showcase dev
 
 # 2. en otra terminal
 pnpm audit:visual                                    # claro y oscuro, tres anchos
-node scripts/audit-visual.mjs -- --tema=claro        # un solo tema
-node scripts/audit-visual.mjs -- --anchos=360        # un solo ancho
-node scripts/audit-visual.mjs -- --abrir             # ademas abre cada panel
-node scripts/audit-visual.mjs -- --url=http://…      # contra otra URL
+node scripts/visual-audit.mjs -- --theme=light        # un solo tema
+node scripts/visual-audit.mjs -- --widths=360        # un solo ancho
+node scripts/visual-audit.mjs -- --open             # ademas abre cada panel
+node scripts/visual-audit.mjs -- --url=http://…      # contra otra URL
 ```
 
 Sale con código 1 si hay hallazgos, para poder colgarlo de CI.
@@ -30,7 +30,7 @@ nada; las piezas caben de sobra y el defecto aparece cuando dejan de caber. El
 informe se queda con la primera vez que ve cada hallazgo, o sea el ancho más
 estrecho donde se nota.
 
-`--abrir` es el modo que importa antes de dar por hecho un componente con panel,
+`--open` es el modo que importa antes de dar por hecho un componente con panel,
 porque la mitad de los defectos de alineación y de recorte solo existen con el
 menú desplegado.
 
@@ -38,8 +38,8 @@ Si el entorno ya trae un Chromium, `CHROMIUM_PATH` evita que Playwright
 descargue el suyo.
 
 Son dos archivos porque son dos programas en dos runtimes.
-`scripts/audit-visual.mjs` es el conductor y corre en Node: abre el navegador,
-recorre temas y anchos e imprime el informe. `scripts/sonda-visual.js` es lo que
+`scripts/visual-audit.mjs` es el conductor y corre en Node: abre el navegador,
+recorre temas y anchos e imprime el informe. `scripts/visual-probe.js` es lo que
 mide, se inyecta en la página y corre dentro del navegador, con una función por
 chequeo.
 

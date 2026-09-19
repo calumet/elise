@@ -115,9 +115,9 @@ const CONTRACTS = [
       ...DENY_MESSAGE,
       shape:
         "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.",
-      // `shadow-*` cae en `effects`, igual que `opacity-*`.
       effects:
-        "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.",
+        'A frame\'s shadow comes from `SURFACE`; to dim, use `tone="muted"`. ' +
+        "See docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida.",
     },
   },
   {
@@ -128,7 +128,7 @@ const CONTRACTS = [
   {
     pattern: "^Button$",
     allow: ["layout"],
-    deny: [...DENY, "w-*"],
+    deny: DENY,
     message: {
       ...DENY_MESSAGE,
       spacing: "Use a {{component}} `size`: {{sizes|sm, md, lg, xl, icon, icon-sm}}.",

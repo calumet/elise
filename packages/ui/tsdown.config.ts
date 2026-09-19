@@ -1,6 +1,6 @@
 import { defineConfig } from "tsdown";
 
-export default defineConfig((opciones) => ({
+export default defineConfig((options) => ({
   entry: ["src/index.ts"],
   format: ["esm", "cjs"],
   banner: { js: '"use client";' },
@@ -11,7 +11,7 @@ export default defineConfig((opciones) => ({
     dts: ".d.ts",
   }),
   // En watch no se limpia: la vitrina resuelve contra dist mientras arranca.
-  clean: !opciones.watch,
+  clean: !options.watch,
   treeshake: true,
   outputOptions: { comments: { legal: true, annotation: true, jsdoc: false } },
   minify: false,
