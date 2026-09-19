@@ -175,9 +175,9 @@ export const designSystem = ({ severity = "error", contracts = [], rules, settin
     "shadcn/no-raw-colors": severity,
     "shadcn/no-inline-styles": severity,
     "shadcn/require-static-classes": severity,
-    // `no-unknown-classes` la da ya `tailwindcss/no-unknown-classes`, y
-    // `no-arbitrary-values` choca con las medidas de maquetación de una
-    // página, que no son deuda: se encienden pidiéndolas.
+    // `no-unknown-classes` la da ya `tailwindcss/no-unknown-classes`.
+    // `no-arbitrary-values` queda fuera porque `reglas-ui.md` §4 dice que para
+    // una medida fuera de escala está `className`. Se encienden pidiéndolas.
     ...rules,
   },
 });
