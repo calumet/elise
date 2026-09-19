@@ -125,6 +125,47 @@ const LazySection = ({ children }: { children: React.ReactNode }) => (
   <React.Suspense fallback={<SectionFallback />}>{children}</React.Suspense>
 );
 
+/* Las secciones que solo son título y demo. Las que llevan algo más (un `id`,
+   una acción en la cabecera, un envoltorio) siguen escritas abajo. */
+const SECCIONES: { title: string; Demo: React.ComponentType }[] = [
+  { title: "Dialog & Alert Dialog", Demo: DialogsDemo },
+  { title: "Alert Dialog (standalone)", Demo: AlertDialogStandalone },
+  { title: "Accordion & Collapsible", Demo: AccordionCollapsibleDemo },
+  { title: "Progress & Skeleton", Demo: ProgressSkeletonDemo },
+  { title: "AppShell: marco de aplicacion", Demo: AppShellDemo },
+  { title: "Clickable: la caja entera que se pulsa", Demo: ClickableDemo },
+  { title: "Image y Thumbnail", Demo: ImageDemo },
+  { title: "Section: el grupo con su rotulo", Demo: SectionDemo },
+  { title: "CheckboxGroup, ButtonGroup y List", Demo: GruposDemo },
+  { title: "Los dos vacios de un listado", Demo: VaciosDemo },
+  { title: "Pantalla de inicio", Demo: PantallaInicio },
+  { title: "Pantalla de listado", Demo: PantallaListado },
+  { title: "Tema por seccion", Demo: TemaPorSeccionDemo },
+  { title: "Portal: cabecera", Demo: PortalHeaderDemo },
+  { title: "Pantalla de registro unico", Demo: PantallaRegistroUnico },
+  { title: "Pantalla de ficha", Demo: PantallaFicha },
+  { title: "Pantalla de ajustes", Demo: PantallaAjustes },
+  { title: "Field: rotulo, error y accesibilidad enlazada", Demo: FieldDemo },
+  { title: "MultiSelect, FileUpload y Stepper", Demo: CatalogoDemo },
+  { title: "Combobox: select con busqueda", Demo: ComboboxDemo },
+  { title: "Primitivas: Box, Stack, Grid, Bleed y Text", Demo: PrimitivesDemo },
+  { title: "Badge, Alert, Spinner y Empty State", Demo: FeedbackDemo },
+  { title: "Menubar, Context Menu y Select", Demo: MenusSelectDemo },
+  { title: "Dropdown & Hover Card", Demo: MenusHoverDemo },
+  { title: "La escala de los campos y los botones", Demo: TamanosDemo },
+  { title: "Form controls (Radio, Switch, Slider)", Demo: FormControlsDemo },
+  { title: "Media Card, Avatar y Aspect Ratio", Demo: MediaCardDemo },
+  { title: "Command Palette", Demo: CommandDemo },
+  { title: "Stat, AvatarGroup, DescriptionList, Timeline y Tree", Demo: DisplayDemo },
+  { title: "Number, Search, Segmented, Tags, Rating y Time", Demo: FormControlsExtraDemo },
+  { title: "Color Picker", Demo: ColorPickerDemo },
+  { title: "Table", Demo: TableDemo },
+  { title: "Data Table (filtros y exportacion)", Demo: DataTableDemo },
+  { title: "Carousel", Demo: CarouselDemo },
+  { title: "Scroll & Toolbar", Demo: ScrollToolbarDemo },
+  { title: "Toast", Demo: ToastDemo },
+];
+
 const App = () => (
   <I18nProvider
     defaultLocale={i18nConfig.defaultLocale}
@@ -257,222 +298,13 @@ const App = () => (
             </div>
           </SectionCard>
 
-          <SectionCard title="Dialog & Alert Dialog">
-            <LazySection>
-              <DialogsDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Alert Dialog (standalone)">
-            <LazySection>
-              <AlertDialogStandalone />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Accordion & Collapsible">
-            <LazySection>
-              <AccordionCollapsibleDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Progress & Skeleton">
-            <LazySection>
-              <ProgressSkeletonDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="AppShell: marco de aplicacion">
-            <LazySection>
-              <AppShellDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Clickable: la caja entera que se pulsa">
-            <LazySection>
-              <ClickableDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Image y Thumbnail">
-            <LazySection>
-              <ImageDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Section: el grupo con su rotulo">
-            <LazySection>
-              <SectionDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="CheckboxGroup, ButtonGroup y List">
-            <LazySection>
-              <GruposDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Los dos vacios de un listado">
-            <LazySection>
-              <VaciosDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Pantalla de inicio">
-            <LazySection>
-              <PantallaInicio />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Pantalla de listado">
-            <LazySection>
-              <PantallaListado />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Tema por seccion">
-            <LazySection>
-              <TemaPorSeccionDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Portal: cabecera">
-            <LazySection>
-              <PortalHeaderDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Pantalla de registro unico">
-            <LazySection>
-              <PantallaRegistroUnico />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Pantalla de ficha">
-            <LazySection>
-              <PantallaFicha />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Pantalla de ajustes">
-            <LazySection>
-              <PantallaAjustes />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Field: rotulo, error y accesibilidad enlazada">
-            <LazySection>
-              <FieldDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="MultiSelect, FileUpload y Stepper">
-            <LazySection>
-              <CatalogoDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Combobox: select con busqueda">
-            <LazySection>
-              <ComboboxDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Primitivas: Box, Stack, Grid, Bleed y Text">
-            <LazySection>
-              <PrimitivesDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Badge, Alert, Spinner y Empty State">
-            <LazySection>
-              <FeedbackDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Menubar, Context Menu y Select">
-            <LazySection>
-              <MenusSelectDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Dropdown & Hover Card">
-            <LazySection>
-              <MenusHoverDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="La escala de los campos y los botones">
-            <LazySection>
-              <TamanosDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Form controls (Radio, Switch, Slider)">
-            <LazySection>
-              <FormControlsDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Media Card, Avatar y Aspect Ratio">
-            <LazySection>
-              <MediaCardDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Command Palette">
-            <LazySection>
-              <CommandDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Stat, AvatarGroup, DescriptionList, Timeline y Tree">
-            <LazySection>
-              <DisplayDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Number, Search, Segmented, Tags, Rating y Time">
-            <LazySection>
-              <FormControlsExtraDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Color Picker">
-            <LazySection>
-              <ColorPickerDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Table">
-            <LazySection>
-              <TableDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Data Table (filtros y exportacion)">
-            <LazySection>
-              <DataTableDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Carousel">
-            <LazySection>
-              <CarouselDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Scroll & Toolbar">
-            <LazySection>
-              <ScrollToolbarDemo />
-            </LazySection>
-          </SectionCard>
-
-          <SectionCard title="Toast">
-            <LazySection>
-              <ToastDemo />
-            </LazySection>
-          </SectionCard>
-
+          {SECCIONES.map(({ title, Demo }) => (
+            <SectionCard key={title} title={title}>
+              <LazySection>
+                <Demo />
+              </LazySection>
+            </SectionCard>
+          ))}
           <SectionCard id="login" title="Tarjeta de login simple.">
             <div className="relative flex min-h-[260px] items-center justify-center">
               <LazySection>

@@ -14,6 +14,8 @@ import { UserMenu } from "@calumet/elise-ui/user-menu";
 
 type Entrada = string | { rotulo: string; detalle: string };
 
+const rotuloDe = (entrada: Entrada) => (typeof entrada === "string" ? entrada : entrada.rotulo);
+
 type Seccion = {
   nombre: string;
   columnas: { titulo?: string; entradas: Entrada[] }[];
@@ -90,8 +92,11 @@ const PortalHeaderDemo = (): React.JSX.Element => (
             <NavigationMenuItem key={seccion.nombre}>
               <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
               <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
-                {seccion.columnas.map((columna, i) => (
-                  <NavigationMenuGroup key={columna.titulo ?? i} label={columna.titulo}>
+                {seccion.columnas.map((columna) => (
+                  <NavigationMenuGroup
+                    key={columna.titulo ?? columna.entradas.map(rotuloDe).join("|")}
+                    label={columna.titulo}
+                  >
                     {columna.entradas.map((entrada) => {
                       const suelta = typeof entrada === "string";
                       return (

@@ -144,11 +144,11 @@ export const TagInput: React.ForwardRefExoticComponent<
       if (trozos.length < 2) return;
       evento.preventDefault();
       const siguientes = [...etiquetas];
-      const vistas = new Set(siguientes);
+      const seen = new Set(siguientes);
       for (const t of trozos) {
-        if (siguientes.length >= max || vistas.has(t)) continue;
+        if (siguientes.length >= max || seen.has(t)) continue;
         siguientes.push(t);
-        vistas.add(t);
+        seen.add(t);
       }
       cambiar(siguientes);
       setTexto("");

@@ -258,7 +258,7 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
 /* Se mide el hueco disponible, o sea el padre, y no lo que ocupa la tabla: una
    tabla que no cabe empuja a su propio contenedor, así que midiéndola a ella el
    ancho siempre daría de sobra y nunca pasaría a lista. */
-function useCabeLaTabla(variant: TableProps["variant"]): {
+function useTableFits(variant: TableProps["variant"]): {
   contenedor: React.RefObject<HTMLDivElement | null>;
   cabe: boolean;
 } {
@@ -280,7 +280,7 @@ function useCabeLaTabla(variant: TableProps["variant"]): {
 }
 
 /* La franja de paginado, con sus cuatro controles opcionales. */
-function FranjaDePaginado({
+function PaginationBar({
   loading,
   paginationEnd,
   paginationLabel,
@@ -365,7 +365,7 @@ export const Table: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const { contenedor, cabe } = useCabeLaTabla(variant);
+    const { contenedor, cabe } = useTableFits(variant);
     const modo: Modo = variant === "auto" ? (cabe ? "table" : "list") : variant;
 
     const columnas = React.useMemo(() => recogerColumnas(children), [children]);
@@ -395,7 +395,7 @@ export const Table: React.ForwardRefExoticComponent<
 
     const franja =
       paginate && !vacia ? (
-        <FranjaDePaginado
+        <PaginationBar
           loading={loading}
           paginationEnd={paginationEnd}
           paginationLabel={paginationLabel}
@@ -558,7 +558,7 @@ const FilaDeLista = React.forwardRef<
   const todas = (ranura: ListSlot) =>
     celdas
       .map((celda, i) => ({
-        indice: i,
+        index: i,
         valor: celda.props.children,
         columna: columnas[i],
         ranura: ranuras[i],
@@ -593,7 +593,7 @@ const FilaDeLista = React.forwardRef<
             <span className="min-w-0 truncate font-medium text-foreground">{principal}</span>
           ) : null}
           {todas("inline").map((c) => (
-            <span key={c.indice} className="shrink-0">
+            <span key={c.index} className="shrink-0">
               {c.valor}
             </span>
           ))}
@@ -604,7 +604,7 @@ const FilaDeLista = React.forwardRef<
       {todas("labeled").length > 0 ? (
         <div className="flex flex-wrap items-start justify-end gap-x-4 gap-y-1">
           {todas("labeled").map((c) => (
-            <div key={c.indice} className="flex flex-col items-end gap-0.5">
+            <div key={c.index} className="flex flex-col items-end gap-0.5">
               <span className="text-xs whitespace-nowrap text-muted-foreground">
                 {c.columna?.encabezado}
               </span>
@@ -644,7 +644,7 @@ export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
 const INTERACTIVOS =
   "a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=checkbox],[contenteditable=true]";
 
-const useDelegado = (clickDelegate: string | undefined) => {
+const useRowDelegate = (clickDelegate: string | undefined) => {
   const fila = React.useRef<HTMLElement | null>(null);
 
   const alPulsar = (evento: React.MouseEvent<HTMLElement>) => {
@@ -667,7 +667,7 @@ export const TableRow: React.ForwardRefExoticComponent<
 > = React.forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, children, clickDelegate, onClick, ...props }, ref) => {
     const { modo } = React.useContext(TablaCtx);
-    const { fila, alPulsar } = useDelegado(clickDelegate);
+    const { fila, alPulsar } = useRowDelegate(clickDelegate);
 
     const pulsar = (evento: React.MouseEvent<HTMLElement>) => {
       onClick?.(evento as React.MouseEvent<HTMLTableRowElement>);
@@ -693,8 +693,7 @@ export const TableRow: React.ForwardRefExoticComponent<
        tabla tenga que repetir el formato celda por celda. */
     const numeradas = React.Children.toArray(children).map((hijo, i) =>
       React.isValidElement(hijo) ? (
-        // react-doctor-disable-next-line no-array-index-as-key
-        <ColumnaCtx.Provider key={hijo.key ?? i} value={i}>
+        <ColumnaCtx.Provider key={hijo.key} value={i}>
           {hijo}
         </ColumnaCtx.Provider>
       ) : (

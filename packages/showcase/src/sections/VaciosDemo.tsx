@@ -1,4 +1,4 @@
-import { Plus, Search } from "@calumet/elise-icons";
+import { Plus } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import {
   EmptyState,
@@ -19,6 +19,8 @@ import {
 } from "@calumet/elise-ui/table";
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
+
+import { SinResultados } from "../components/SinResultados";
 
 const PEDIDOS = [
   { id: "#1042", cliente: "Marina Ferreyra", estado: "Pagado" },
@@ -85,20 +87,11 @@ const VaciosDemo = () => {
             }
             empty={
               sinResultados ? (
-                <EmptyState size="sm">
-                  <EmptyStateMedia>
-                    <Search className="size-6" aria-hidden />
-                  </EmptyStateMedia>
-                  <EmptyStateTitle>Sin pedidos de «{busqueda}»</EmptyStateTitle>
-                  <EmptyStateDescription>
-                    Los pedidos siguen ahí; lo que no encuentra nada es este filtro.
-                  </EmptyStateDescription>
-                  <EmptyStateActions>
-                    <Button size="sm" variant="outline" onClick={() => setBusqueda("")}>
-                      Quitar el filtro
-                    </Button>
-                  </EmptyStateActions>
-                </EmptyState>
+                <SinResultados
+                  cosas="pedidos"
+                  busqueda={busqueda}
+                  onQuitar={() => setBusqueda("")}
+                />
               ) : undefined
             }
           >

@@ -86,34 +86,34 @@ const colores: Record<NonNullable<ChipProps["color"]>, string> = {
  * ```
  */
 /* Los tres modos de `removeAs` viven acá y no repartidos por el chip. */
-function BotonQuitar({
-  modo,
+function RemoveButton({
+  mode,
   disabled,
   nombre,
   onRemove,
 }: {
-  modo: NonNullable<ChipProps["removeAs"]>;
+  mode: NonNullable<ChipProps["removeAs"]>;
   disabled?: boolean;
   nombre?: string;
   onRemove: () => void;
 }): React.JSX.Element {
   const quitar = useElLabel("ui", "remove", "Quitar");
   const etiqueta = nombre ? `${quitar}: ${nombre}` : quitar;
-  const inerte = modo === "presentation";
-  const Elemento = modo === "button" ? "button" : "span";
+  const inert = mode === "presentation";
+  const Tag = mode === "button" ? "button" : "span";
 
-  const propios =
-    modo === "button"
+  const attrs =
+    mode === "button"
       ? { type: "button" as const, disabled, "aria-label": etiqueta }
-      : modo === "span"
+      : mode === "span"
         ? { role: "button", tabIndex: -1, "aria-label": etiqueta }
         : { "aria-hidden": true };
 
   return (
-    <Elemento
-      {...propios}
+    <Tag
+      {...attrs}
       onClick={
-        inerte
+        inert
           ? undefined
           : (evento: React.MouseEvent) => {
               if (disabled) return;
@@ -127,13 +127,13 @@ function BotonQuitar({
       }
       className={cn(
         "relative inline-flex size-4 shrink-0 items-center justify-center rounded-xs text-muted-foreground before:absolute before:-inset-1 before:content-['']",
-        !inerte &&
+        !inert &&
           "cursor-pointer transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-        (disabled || inerte) && "pointer-events-none",
+        (disabled || inert) && "pointer-events-none",
       )}
     >
       <X className="size-3" aria-hidden="true" />
-    </Elemento>
+    </Tag>
   );
 }
 
@@ -168,8 +168,8 @@ export const Chip: React.ForwardRefExoticComponent<
       >
         <span className="truncate">{children}</span>
         {onRemove ? (
-          <BotonQuitar
-            modo={removeAs}
+          <RemoveButton
+            mode={removeAs}
             disabled={disabled}
             nombre={accessibilityLabel ?? (typeof children === "string" ? children : undefined)}
             onRemove={onRemove}

@@ -251,6 +251,13 @@ export const TreeItem: React.ForwardRefExoticComponent<
         aria-level={profundidad}
         tabIndex={elegido || primero ? 0 : -1}
         onKeyDown={teclas}
+        onClick={(evento) => {
+          /* El clic de una hija burbujea hasta acá: solo responde la fila propia. */
+          if ((evento.target as HTMLElement).closest('[role="treeitem"]') !== evento.currentTarget)
+            return;
+          ctx.elegir(id);
+          if (esRama) ctx.alternar(id);
+        }}
         className={cn(
           /* El anillo se pinta en la fila y no en el `<li>`, que envuelve
              también a las ramas hijas. Va por hijo directo: con un selector de
@@ -264,14 +271,7 @@ export const TreeItem: React.ForwardRefExoticComponent<
         )}
         {...props}
       >
-        {/* El teclado lo lleva el <li role="treeitem"> de arriba, con su tabIndex y su onKeyDown. */}
-        {/* react-doctor-disable-next-line click-events-have-key-events */}
-        {/* react-doctor-disable-next-line no-static-element-interactions */}
         <span
-          onClick={() => {
-            ctx.elegir(id);
-            if (esRama) ctx.alternar(id);
-          }}
           className={cn(
             "relative flex cursor-pointer items-center gap-1.5 rounded-md py-1 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover",
             elegido && "bg-accent text-accent-foreground",

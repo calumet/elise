@@ -1027,6 +1027,7 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
 function AppShellNavItem({
   className,
   active,
+  href,
   icon,
   activeIcon,
   count,
@@ -1041,9 +1042,9 @@ function AppShellNavItem({
 
   const fila = (
     <div className="group/fila relative px-3">
-      {/* react-doctor-disable-next-line no-static-element-interactions */}
       <a
         data-slot="app-shell-nav-item"
+        href={href}
         aria-current={active ? "page" : undefined}
         aria-expanded={grupo ? grupo.abierto : undefined}
         aria-controls={grupo ? grupo.idLista : undefined}

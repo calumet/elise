@@ -532,7 +532,7 @@ export type ComboboxOption = {
 };
 
 /* La lista es la misma en `ComboboxField` y en `MultiComboboxField`. */
-function ListaDeOpciones({
+function OptionList({
   align,
   contentClassName,
   searchPlaceholder,
@@ -666,7 +666,7 @@ function ComboboxField({
 
       {name ? <input type="hidden" name={name} value={value} /> : null}
 
-      <ListaDeOpciones
+      <OptionList
         align={align}
         contentClassName={contentClassName}
         searchPlaceholder={searchPlaceholder}
@@ -840,7 +840,7 @@ function MultiComboboxField({
 
       {name ? valores.map((v) => <input key={v} type="hidden" name={name} value={v} />) : null}
 
-      <ListaDeOpciones
+      <OptionList
         align={align}
         contentClassName={contentClassName}
         searchPlaceholder={searchPlaceholder}

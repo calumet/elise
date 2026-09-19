@@ -57,7 +57,7 @@ import {
 import React, { Fragment, useCallback, useId, useMemo } from "react";
 
 import { caracteristicas, type Caracteristicas, type MetaDeColumna } from "./features";
-import { cn, dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters";
+import { dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters";
 import { useElLabel } from "./i18n";
 
 export type { MetaDeColumna };
@@ -394,15 +394,15 @@ function DataTableContent<TData extends RowData>({
   );
 }
 
-type PropsDeFiltro<TData extends RowData> = {
+type FilterProps<TData extends RowData> = {
   column: Column<Caracteristicas, TData, unknown>;
   columnHeader: string;
 };
 
-function FiltroRango<TData extends RowData>({
+function RangeFilter<TData extends RowData>({
   column,
   columnHeader,
-}: PropsDeFiltro<TData>): React.JSX.Element {
+}: FilterProps<TData>): React.JSX.Element {
   const id = useId();
   const columnFilterValue = column.getFilterValue();
   const labelMin = useElLabel("tables", "min", "Min");
@@ -445,10 +445,10 @@ function FiltroRango<TData extends RowData>({
   );
 }
 
-function FiltroRangoDeFechas<TData extends RowData>({
+function DateRangeFilter<TData extends RowData>({
   column,
   columnHeader,
-}: PropsDeFiltro<TData>): React.JSX.Element {
+}: FilterProps<TData>): React.JSX.Element {
   const columnFilterValue = column.getFilterValue();
 
   const rangeValue = isDateRangePickerValue(columnFilterValue) ? columnFilterValue : undefined;
@@ -461,10 +461,10 @@ function FiltroRangoDeFechas<TData extends RowData>({
   );
 }
 
-function FiltroFecha<TData extends RowData>({
+function DateFilter<TData extends RowData>({
   column,
   columnHeader,
-}: PropsDeFiltro<TData>): React.JSX.Element {
+}: FilterProps<TData>): React.JSX.Element {
   const columnFilterValue = column.getFilterValue();
 
   const dateValue = columnFilterValue instanceof Date ? columnFilterValue : undefined;
@@ -477,10 +477,10 @@ function FiltroFecha<TData extends RowData>({
   );
 }
 
-function FiltroSeleccion<TData extends RowData>({
+function SelectFilter<TData extends RowData>({
   column,
   columnHeader,
-}: PropsDeFiltro<TData>): React.JSX.Element {
+}: FilterProps<TData>): React.JSX.Element {
   const columnFilterValue = column.getFilterValue();
   const [selectOpen, setSelectOpen] = React.useState(false);
   const idLista = React.useId();
@@ -605,10 +605,10 @@ function FiltroSeleccion<TData extends RowData>({
   );
 }
 
-function FiltroTexto<TData extends RowData>({
+function TextFilter<TData extends RowData>({
   column,
   columnHeader,
-}: PropsDeFiltro<TData>): React.JSX.Element {
+}: FilterProps<TData>): React.JSX.Element {
   const id = useId();
   const columnFilterValue = column.getFilterValue();
   const labelSearch = useElLabel(
@@ -647,13 +647,13 @@ function Filter<TData extends RowData>({
 }): React.JSX.Element {
   const { filterVariant } = metaDe(column.columnDef);
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
-  const comunes = { column, columnHeader };
+  const shared = { column, columnHeader };
 
-  if (filterVariant === "range") return <FiltroRango {...comunes} />;
-  if (filterVariant === "daterange") return <FiltroRangoDeFechas {...comunes} />;
-  if (filterVariant === "date") return <FiltroFecha {...comunes} />;
-  if (filterVariant === "select") return <FiltroSeleccion {...comunes} />;
-  return <FiltroTexto {...comunes} />;
+  if (filterVariant === "range") return <RangeFilter {...shared} />;
+  if (filterVariant === "daterange") return <DateRangeFilter {...shared} />;
+  if (filterVariant === "date") return <DateFilter {...shared} />;
+  if (filterVariant === "select") return <SelectFilter {...shared} />;
+  return <TextFilter {...shared} />;
 }
 
 /**

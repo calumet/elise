@@ -100,9 +100,9 @@ export const ColorPicker: React.ForwardRefExoticComponent<
        acaba de emitir. Si se releyera siempre, el tono se perdería al pasar por
        negro: el hex no lo lleva, y volver de #000000 dejaría el área en rojo. */
     const [ultimoEmitido, setUltimoEmitido] = React.useState(hex);
-    const [valuePrevio, setValuePrevio] = React.useState(value);
-    if (value !== valuePrevio) {
-      setValuePrevio(value);
+    const [previousValue, setPreviousValue] = React.useState(value);
+    if (value !== previousValue) {
+      setPreviousValue(value);
       if (value !== undefined && value !== ultimoEmitido) {
         const leido = analizar(value);
         if (leido) setColor(leido);

@@ -38,7 +38,7 @@ const PASOS = [
 
 const CatalogoDemo = () => {
   const [stack, setStack] = useState<string[]>(["react", "node"]);
-  const [archivos, setArchivos] = useState<File[]>([]);
+  const [archivos, setArchivos] = useState<{ id: string; file: File }[]>([]);
   const [rechazados, setRechazados] = useState<RejectedFile[]>([]);
   const [paso, setPaso] = useState(1);
 
@@ -81,7 +81,10 @@ const CatalogoDemo = () => {
           maxSize={1024 * 1024}
           hint="Imágenes o PDF, hasta 1 MB por archivo"
           onFiles={(aceptados, noAceptados) => {
-            setArchivos((previos) => [...previos, ...aceptados]);
+            setArchivos((previos) => [
+              ...previos,
+              ...aceptados.map((file) => ({ id: crypto.randomUUID(), file })),
+            ]);
             setRechazados(noAceptados);
           }}
         />
@@ -99,12 +102,12 @@ const CatalogoDemo = () => {
         ) : null}
         {archivos.length > 0 ? (
           <FileUploadList>
-            {archivos.map((f, i) => (
+            {archivos.map(({ id, file }) => (
               <FileUploadItem
-                key={`${f.name}-${i}`}
-                name={f.name}
-                size={f.size}
-                onRemove={() => setArchivos((p) => p.filter((_, j) => j !== i))}
+                key={id}
+                name={file.name}
+                size={file.size}
+                onRemove={() => setArchivos((p) => p.filter((a) => a.id !== id))}
               />
             ))}
           </FileUploadList>

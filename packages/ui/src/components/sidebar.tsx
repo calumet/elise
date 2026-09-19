@@ -498,26 +498,26 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">): R
   );
 }
 
-type VarianteMenu = "default" | "outline";
-type TamanoMenu = "default" | "sm" | "lg";
+type MenuVariant = "default" | "outline";
+type MenuSize = "default" | "sm" | "lg";
 
-const BASE_MENU =
+const MENU_BASE =
   "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring transition-[width,height,padding] outline-hidden group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0";
 
-const VARIANTES_MENU: Record<VarianteMenu, string> = {
+const MENU_VARIANTS: Record<MenuVariant, string> = {
   default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
   outline:
     "bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]",
 };
 
-const TAMANOS_MENU: Record<TamanoMenu, string> = {
+const MENU_SIZES: Record<MenuSize, string> = {
   default: "h-8 text-sm",
   sm: "h-7 text-xs",
   lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
 };
 
-const clasesMenu = (variant: VarianteMenu, size: TamanoMenu): string =>
-  cn(BASE_MENU, VARIANTES_MENU[variant], TAMANOS_MENU[size]);
+const menuClasses = (variant: MenuVariant, size: MenuSize): string =>
+  cn(MENU_BASE, MENU_VARIANTS[variant], MENU_SIZES[size]);
 
 /** El enlace en sí. Marcá el actual con `isActive`, y con `tooltip` sigue siendo legible en modo icono. */
 function SidebarMenuButton({
@@ -532,8 +532,8 @@ function SidebarMenuButton({
   asChild?: boolean;
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
-  variant?: VarianteMenu;
-  size?: TamanoMenu;
+  variant?: MenuVariant;
+  size?: MenuSize;
 }): React.JSX.Element {
   const Comp = asChild ? Slot : "button";
   const { isMobile, state } = useSidebar();
@@ -544,7 +544,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(clasesMenu(variant, size), className)}
+      className={cn(menuClasses(variant, size), className)}
       {...props}
     />
   );
@@ -636,9 +636,9 @@ function SidebarMenuSkeleton({
   // El ancho varía para que la lista no parezca una grilla, y sale del `id`
   // porque en SSR tiene que dar lo mismo en el servidor y en el cliente.
   const id = React.useId();
-  let suma = 0;
-  for (const c of id) suma += c.charCodeAt(0);
-  const width = `${(suma % 41) + 50}%`;
+  let sum = 0;
+  for (const c of id) sum += c.charCodeAt(0);
+  const width = `${(sum % 41) + 50}%`;
 
   return (
     <div

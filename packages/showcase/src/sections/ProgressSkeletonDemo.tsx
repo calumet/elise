@@ -5,21 +5,13 @@ import { useEffect, useState } from "react";
 
 const ProgressSkeletonDemo = () => {
   const [value, setValue] = useState(15);
-  const [loading, setLoading] = useState(false);
+  const [running, setRunning] = useState(false);
+  // Deja de cargar al llegar a 100, y con eso el efecto limpia su intervalo.
+  const loading = running && value < 100;
 
   useEffect(() => {
     if (!loading) return;
-    const id = setInterval(() => {
-      setValue((v) => {
-        const next = v + 20;
-        if (next >= 100) {
-          clearInterval(id);
-          setLoading(false);
-          return 100;
-        }
-        return next;
-      });
-    }, 500);
+    const id = setInterval(() => setValue((v) => Math.min(v + 20, 100)), 500);
     return () => clearInterval(id);
   }, [loading]);
 
@@ -32,7 +24,7 @@ const ProgressSkeletonDemo = () => {
           variant="outline"
           onClick={() => {
             setValue(0);
-            setLoading(true);
+            setRunning(true);
           }}
         >
           Cargar
