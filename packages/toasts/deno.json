@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-toasts",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "license": "MIT",
   "exports": "./jsr/index.js",
   "publish": {

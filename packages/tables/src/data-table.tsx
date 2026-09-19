@@ -326,21 +326,21 @@ function DataTableContent<TData extends RowData>({
                     >
                       {header.isPlaceholder ? null : (
                         <div
-                          className={cn(
-                            header.column.getCanSort() &&
-                              "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
-                          )}
-                          onClick={header.column.getToggleSortingHandler()}
-                          onKeyDown={(e) => {
-                            if (
-                              header.column.getCanSort() &&
-                              (e.key === "Enter" || e.key === " ")
-                            ) {
-                              e.preventDefault();
-                              header.column.getToggleSortingHandler()?.(e);
-                            }
-                          }}
-                          tabIndex={header.column.getCanSort() ? 0 : undefined}
+                          {...(header.column.getCanSort()
+                            ? {
+                                role: "button" as const,
+                                tabIndex: 0,
+                                className:
+                                  "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
+                                onClick: header.column.getToggleSortingHandler(),
+                                onKeyDown: (e: React.KeyboardEvent) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    header.column.getToggleSortingHandler()?.(e);
+                                  }
+                                },
+                              }
+                            : {})}
                         >
                           <span className="truncate">
                             {flexRender(header.column.columnDef.header, header.getContext())}
@@ -404,6 +404,7 @@ function Filter<TData extends RowData>({
   const { filterVariant } = metaDe(column.columnDef);
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
   const [selectOpen, setSelectOpen] = React.useState(false);
+  const idLista = React.useId();
 
   const labelMin = useElLabel("tables", "min", "Min");
   const labelMax = useElLabel("tables", "max", "Max");
@@ -535,6 +536,7 @@ function Filter<TData extends RowData>({
               variant="outline"
               role="combobox"
               aria-expanded={selectOpen}
+              aria-controls={idLista}
               className="w-full justify-between border-border bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
             >
               <div className="flex min-w-0 flex-1 items-center">
@@ -551,6 +553,7 @@ function Filter<TData extends RowData>({
             </Button>
           </PopoverTrigger>
           <PopoverContent
+            id={idLista}
             className="w-full min-w-(--radix-popper-anchor-width) border-border p-0"
             align="start"
           >
