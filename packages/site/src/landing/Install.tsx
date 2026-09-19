@@ -3,11 +3,11 @@ import { Card } from "@calumet/elise-ui/card";
 
 import { Dither } from "../components/Dither";
 
-function Panel({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <Card className="gap-0 overflow-hidden p-0">
       <div className="border-b border-border px-4 py-3 font-mono text-2xs font-medium tracking-[0.06em] text-muted-foreground uppercase">
-        {titulo}
+        {title}
       </div>
       <pre className="overflow-x-auto px-4 py-4 font-mono text-sm/7 text-card-foreground">
         {children}
@@ -35,12 +35,12 @@ export function Install() {
         <p className="mt-3 max-w-[540px] text-lg text-pretty text-muted-foreground">{t("lede")}</p>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <Panel titulo={t("panel.terminal")}>
+          <Panel title={t("panel.terminal")}>
             <span className="text-muted-foreground">$</span> pnpm add @calumet/elise-ui{"\n"}
             <span className="text-muted-foreground">$</span> pnpm add -D tailwindcss
             @tailwindcss/vite
           </Panel>
-          <Panel titulo={t("panel.css")}>
+          <Panel title={t("panel.css")}>
             <span className="text-muted-foreground">@import</span>{" "}
             <span className="text-primary">&quot;@calumet/elise-ui/tailwind/fonts.css&quot;</span>;
             {"\n"}

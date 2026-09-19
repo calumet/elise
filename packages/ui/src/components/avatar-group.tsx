@@ -38,13 +38,13 @@ export type AvatarGroupProps = React.ComponentProps<"div"> & {
    la mayoría de los avatares acaban siendo dos iniciales centradas, y un solape
    fijo de 8px se come media letra en el de 24px y ninguna en el de 40. Un sexto
    del ancho deja el texto entero en los tres. */
-const tamanos: Record<NonNullable<AvatarGroupProps["size"]>, string> = {
+const sizes: Record<NonNullable<AvatarGroupProps["size"]>, string> = {
   sm: "size-6 text-2xs -ms-1",
   md: "size-8 text-sm -ms-1.5",
   lg: "size-10 text-base -ms-2",
 };
 
-type ConClase = React.ReactElement<{ className?: string; style?: React.CSSProperties }>;
+type WithClass = React.ReactElement<{ className?: string; style?: React.CSSProperties }>;
 
 /**
  * Varios avatares solapados.
@@ -65,11 +65,11 @@ export const AvatarGroup: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<AvatarGroupProps> & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
   ({ className, children, max = 4, size = "md", ...props }, ref) => {
-    const plantilla = useElLabel("ui", "avatarGroupMore", "y {count} más");
+    const template = useElLabel("ui", "avatarGroupMore", "y {count} más");
 
-    const todos = React.Children.toArray(children).filter(React.isValidElement) as ConClase[];
-    const visibles = todos.slice(0, max);
-    const sobran = todos.length - visibles.length;
+    const all = React.Children.toArray(children).filter(React.isValidElement) as WithClass[];
+    const visible = all.slice(0, max);
+    const extra = all.length - visible.length;
 
     return (
       <div
@@ -78,28 +78,28 @@ export const AvatarGroup: React.ForwardRefExoticComponent<
         className={cn("flex items-center", className)}
         {...props}
       >
-        {visibles.map((hijo, i) =>
-          React.cloneElement(hijo, {
-            key: hijo.key ?? i,
-            style: { zIndex: visibles.length - i, ...hijo.props.style },
+        {visible.map((child, i) =>
+          React.cloneElement(child, {
+            key: child.key ?? i,
+            style: { zIndex: visible.length - i, ...child.props.style },
             className: cn(
               "relative ring-2 ring-background first:ms-0",
-              tamanos[size],
-              hijo.props.className,
+              sizes[size],
+              child.props.className,
             ),
           }),
         )}
 
-        {sobran > 0 ? (
+        {extra > 0 ? (
           <span
             data-slot="avatar-group-more"
             className={cn(
               "relative z-0 inline-flex shrink-0 items-center justify-center rounded-full border border-border bg-muted font-medium text-muted-foreground ring-2 ring-background",
-              tamanos[size],
+              sizes[size],
             )}
           >
-            <span aria-hidden="true">+{sobran}</span>
-            <span className="sr-only">{plantilla.replace("{count}", String(sobran))}</span>
+            <span aria-hidden="true">+{extra}</span>
+            <span className="sr-only">{template.replace("{count}", String(extra))}</span>
           </span>
         ) : null}
       </div>

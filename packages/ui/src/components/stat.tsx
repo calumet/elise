@@ -47,13 +47,13 @@ export type StatProps = Omit<React.ComponentProps<"div">, "title"> & {
   description?: React.ReactNode;
 };
 
-const tonos: Record<NonNullable<StatProps["trend"]>, string> = {
+const tones: Record<NonNullable<StatProps["trend"]>, string> = {
   up: "text-success-subtle-foreground",
   down: "text-destructive-subtle-foreground",
   flat: "text-muted-foreground",
 };
 
-const flechas = { up: ArrowUp, down: ArrowDown, flat: Minus };
+const arrows = { up: ArrowUp, down: ArrowDown, flat: Minus };
 
 /**
  * Una cifra con su rótulo y, si hace falta, cuánto cambió.
@@ -74,7 +74,7 @@ export const Stat: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<StatProps> & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef<HTMLDivElement, StatProps>(
   ({ className, label, value, change, trend = "flat", description, ...props }, ref) => {
-    const Flecha = flechas[trend];
+    const Arrow = arrows[trend];
 
     return (
       <div data-slot="stat" ref={ref} className={cn("flex flex-col gap-1", className)} {...props}>
@@ -97,10 +97,10 @@ export const Stat: React.ForwardRefExoticComponent<
                 data-trend={trend}
                 className={cn(
                   "inline-flex items-center gap-0.5 font-medium tabular-nums",
-                  tonos[trend],
+                  tones[trend],
                 )}
               >
-                <Flecha className="size-3.5 shrink-0" aria-hidden="true" />
+                <Arrow className="size-3.5 shrink-0" aria-hidden="true" />
                 {change}
               </span>
             ) : null}

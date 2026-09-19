@@ -99,7 +99,7 @@ function Checkbox({
   defaultChecked,
   onCheckedChange,
 }: CheckboxProps): React.JSX.Element {
-  const { id, idDescripcion, idError, hayError, control } = useFieldIds({
+  const { id, descriptionId, errorId, hasError, control } = useFieldIds({
     id: idProp,
     description,
     error,
@@ -109,7 +109,7 @@ function Checkbox({
   return (
     <div
       data-slot="checkbox-field"
-      data-invalid={hayError ? "" : undefined}
+      data-invalid={hasError ? "" : undefined}
       className={cn("flex items-start gap-2", className)}
     >
       <CheckboxPrimitive.Root
@@ -165,15 +165,15 @@ function Checkbox({
         {description ? (
           <p
             data-slot="checkbox-description"
-            id={idDescripcion}
+            id={descriptionId}
             className="text-xs text-muted-foreground"
           >
             {description}
           </p>
         ) : null}
 
-        {hayError ? (
-          <InlineError data-slot="checkbox-error" id={idError}>
+        {hasError ? (
+          <InlineError data-slot="checkbox-error" id={errorId}>
             {error}
           </InlineError>
         ) : null}

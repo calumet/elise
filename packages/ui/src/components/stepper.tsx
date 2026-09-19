@@ -72,13 +72,13 @@ export type StepperItemProps = React.ComponentProps<"li"> & {
   last?: boolean;
 };
 
-const indicadorPorEstado: Record<StepStatus, string> = {
+const indicatorByState: Record<StepStatus, string> = {
   complete: "border-primary bg-primary text-primary-foreground shadow-bevel",
   current: "border-primary bg-background text-accent-foreground",
   upcoming: "border-border-strong bg-background text-muted-foreground",
 };
 
-const lineaPorEstado: Record<StepStatus, string> = {
+const lineByState: Record<StepStatus, string> = {
   complete: "bg-primary",
   current: "bg-border-strong",
   upcoming: "bg-border-strong",
@@ -94,7 +94,7 @@ function StepperItem({
   ...props
 }: StepperItemProps): React.JSX.Element {
   const { orientation } = React.useContext(StepperContext);
-  const completado = useElLabel("ui", "stepComplete", "Completado");
+  const completed = useElLabel("ui", "stepComplete", "Completado");
   const actual = useElLabel("ui", "stepCurrent", "Paso actual");
   const horizontal = orientation === "horizontal";
 
@@ -116,7 +116,7 @@ function StepperItem({
           data-slot="stepper-indicator"
           className={cn(
             "flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
-            indicadorPorEstado[status],
+            indicatorByState[status],
           )}
         >
           {status === "complete" && indicator === undefined ? (
@@ -125,7 +125,7 @@ function StepperItem({
             indicator
           )}
           <span className="sr-only">
-            {status === "complete" ? completado : status === "current" ? actual : ""}
+            {status === "complete" ? completed : status === "current" ? actual : ""}
           </span>
         </span>
         {last ? null : (
@@ -135,7 +135,7 @@ function StepperItem({
             className={cn(
               "shrink-0 rounded-full",
               horizontal ? "h-0.5 w-full min-w-6 flex-1" : "min-h-6 w-0.5 flex-1",
-              lineaPorEstado[status],
+              lineByState[status],
             )}
           />
         )}

@@ -11,14 +11,14 @@ import { cn } from "@/lib/cn";
 
 import { buttonVariants, type ButtonProps } from "./button";
 import {
-  ANCHOS_DIALOGO,
-  CABECERA_DIALOGO,
-  CUERPO_DIALOGO,
-  DESCRIPCION_DIALOGO,
-  PANEL_DIALOGO,
-  PIE_DIALOGO,
-  TITULO_DIALOGO,
-  VELO_DIALOGO,
+  DIALOG_WIDTHS,
+  DIALOG_HEADER,
+  DIALOG_BODY,
+  DIALOG_DESCRIPTION,
+  DIALOG_PANEL,
+  DIALOG_FOOTER,
+  DIALOG_TITLE,
+  DIALOG_OVERLAY,
 } from "./dialog";
 import { useThemeScope } from "./theme-scope";
 
@@ -81,7 +81,7 @@ export const AlertDialogOverlay: React.ForwardRefExoticComponent<
       data-slot="alert-dialog-overlay"
       style={{ ...tema.variables, ...style }}
       ref={ref}
-      className={cn(tema.clases, VELO_DIALOGO, className)}
+      className={cn(tema.classes, DIALOG_OVERLAY, className)}
       {...props}
     />
   );
@@ -106,14 +106,14 @@ AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 export const AlertDialogContent: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<
     React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
-      size?: keyof typeof ANCHOS_DIALOGO;
+      size?: keyof typeof DIALOG_WIDTHS;
     }
   > &
     React.RefAttributes<React.ComponentRef<typeof AlertDialogPrimitive.Content>>
 > = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
-    size?: keyof typeof ANCHOS_DIALOGO;
+    size?: keyof typeof DIALOG_WIDTHS;
   }
 >(({ className, style, size = "sm", ...props }, ref) => {
   const tema = useThemeScope();
@@ -124,7 +124,7 @@ export const AlertDialogContent: React.ForwardRefExoticComponent<
         data-slot="alert-dialog-content"
         style={{ ...tema.variables, ...style }}
         ref={ref}
-        className={cn(tema.clases, PANEL_DIALOGO, ANCHOS_DIALOGO[size], className)}
+        className={cn(tema.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
         {...props}
       />
     </AlertDialogPortal>
@@ -137,7 +137,7 @@ export const AlertDialogHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-  <div data-slot="alert-dialog-header" className={cn(CABECERA_DIALOGO, className)} {...props} />
+  <div data-slot="alert-dialog-header" className={cn(DIALOG_HEADER, className)} {...props} />
 );
 
 /**
@@ -151,7 +151,7 @@ export const AlertDialogBody = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-  <div data-slot="alert-dialog-body" className={cn(CUERPO_DIALOGO, className)} {...props} />
+  <div data-slot="alert-dialog-body" className={cn(DIALOG_BODY, className)} {...props} />
 );
 
 /** El título, que es lo que anuncia el lector de pantalla al abrir. */
@@ -165,7 +165,7 @@ export const AlertDialogTitle: React.ForwardRefExoticComponent<
   <AlertDialogPrimitive.Title
     data-slot="alert-dialog-title"
     ref={ref}
-    className={cn(TITULO_DIALOGO, className)}
+    className={cn(DIALOG_TITLE, className)}
     {...props}
   />
 ));
@@ -182,7 +182,7 @@ export const AlertDialogDescription: React.ForwardRefExoticComponent<
   <AlertDialogPrimitive.Description
     data-slot="alert-dialog-description"
     ref={ref}
-    className={cn(DESCRIPCION_DIALOGO, className)}
+    className={cn(DIALOG_DESCRIPTION, className)}
     {...props}
   />
 ));
@@ -193,5 +193,5 @@ export const AlertDialogFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-  <div data-slot="alert-dialog-footer" className={cn(PIE_DIALOGO, className)} {...props} />
+  <div data-slot="alert-dialog-footer" className={cn(DIALOG_FOOTER, className)} {...props} />
 );

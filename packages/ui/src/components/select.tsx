@@ -10,7 +10,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-import { CAJA_CAMPO, CAMPO_INVALIDO, TAMANOS_CAMPO, type TamanoCampo } from "./input";
+import { FIELD_BOX, INVALID_FIELD, FIELD_SIZES, type FieldSize } from "./input";
 import { useThemeScope } from "./theme-scope";
 
 /** Raíz del selector. Guarda el valor elegido. */
@@ -23,7 +23,7 @@ export const SelectValue: typeof SelectPrimitive.Value = SelectPrimitive.Value;
 /** Props de {@link SelectTrigger}. */
 export type SelectTriggerProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
   /** Por defecto `md`, 36px de alto. */
-  size?: TamanoCampo;
+  size?: FieldSize;
 };
 
 /** El control que abre la lista. */
@@ -39,10 +39,10 @@ export const SelectTrigger: React.ForwardRefExoticComponent<
        selector y el campo de al lado ya se habían desincronizado en el borde y
        en el foco. */
       className={cn(
-        CAJA_CAMPO,
-        TAMANOS_CAMPO[size],
+        FIELD_BOX,
+        FIELD_SIZES[size],
         "items-center justify-between data-placeholder:text-muted-foreground",
-        CAMPO_INVALIDO,
+        INVALID_FIELD,
         className,
       )}
       {...props}
@@ -73,7 +73,7 @@ export const SelectContent: React.ForwardRefExoticComponent<
         ref={ref}
         position={position}
         className={cn(
-          tema.clases,
+          tema.classes,
           "z-popover max-h-(--radix-select-content-available-height) min-w-32 overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
           position === "popper" && "translate-y-1",
           className,

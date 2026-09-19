@@ -120,28 +120,28 @@ export function ValueField({
   children,
   ...props
 }: ValueFieldProps): React.JSX.Element {
-  const [abierto, setAbierto] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const rotuloAgregar = useElLabel("ui", "valueFieldAdd", "Agregar");
-  const rotuloEditar = useElLabel("ui", "valueFieldEdit", "Editar");
-  const rotuloCancelar = useElLabel("ui", "valueFieldCancel", "Cancelar");
-  const rotuloListo = useElLabel("ui", "valueFieldDone", "Listo");
-  const rotuloVaciar = useElLabel("ui", "valueFieldClear", "Vaciar");
+  const defaultAddLabel = useElLabel("ui", "valueFieldAdd", "Agregar");
+  const editLabel = useElLabel("ui", "valueFieldEdit", "Editar");
+  const cancelLabel = useElLabel("ui", "valueFieldCancel", "Cancelar");
+  const doneLabel = useElLabel("ui", "valueFieldDone", "Listo");
+  const defaultClearLabel = useElLabel("ui", "valueFieldClear", "Vaciar");
 
-  const lleno = Boolean(lines?.length);
+  const full = Boolean(lines?.length);
 
-  const cerrar = (confirmando: boolean) => {
-    if (confirmando) onDone?.();
+  const close = (confirming: boolean) => {
+    if (confirming) onDone?.();
     else onCancel?.();
-    setAbierto(false);
+    setOpen(false);
   };
 
-  const vacio = (control: FieldControlProps) => (
+  const empty = (control: FieldControlProps) => (
     <button
       type="button"
       {...control}
       disabled={disabled}
-      onClick={() => setAbierto(true)}
+      onClick={() => setOpen(true)}
       className={cn(
         "flex w-full items-center gap-2.5 rounded-md border border-border bg-card px-3 py-2.5 text-start text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out",
         "hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
@@ -149,7 +149,7 @@ export function ValueField({
       )}
     >
       <CirclePlus aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
-      <span className="min-w-0 flex-1 truncate">{addLabel ?? rotuloAgregar}</span>
+      <span className="min-w-0 flex-1 truncate">{addLabel ?? defaultAddLabel}</span>
       {/* Sin caret cuando no se puede abrir: no lleva a ninguna parte. */}
       {disabled ? null : (
         <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
@@ -157,7 +157,7 @@ export function ValueField({
     </button>
   );
 
-  const resumen = (control: FieldControlProps) => (
+  const summary = (control: FieldControlProps) => (
     <div
       className={cn(
         "flex items-start gap-3 rounded-md border border-border bg-card p-3",
@@ -166,10 +166,12 @@ export function ValueField({
       )}
     >
       <div className="min-w-0 flex-1 text-base leading-snug">
-        {lines?.map((linea, indice) => (
-          // Las líneas son un resumen y no una lista reordenable: el índice basta.
-          <p key={indice} className={cn("truncate", indice > 0 ? "text-muted-foreground" : null)}>
-            {linea}
+        {lines?.map((line, index) => (
+          // Un resumen de solo lectura que quien llama arma por posición: no se
+          // reordena ni se filtra, así que el índice es la identidad.
+          // react-doctor-disable-next-line no-array-index-as-key
+          <p key={index} className={cn("truncate", index > 0 ? "text-muted-foreground" : null)}>
+            {line}
           </p>
         ))}
       </div>
@@ -178,8 +180,8 @@ export function ValueField({
         variant="ghost"
         size="icon"
         disabled={disabled}
-        aria-label={`${rotuloEditar}: ${typeof label === "string" ? label : ""}`.trim()}
-        onClick={() => setAbierto(true)}
+        aria-label={`${editLabel}: ${typeof label === "string" ? label : ""}`.trim()}
+        onClick={() => setOpen(true)}
       >
         <Pencil aria-hidden="true" className="size-4" />
       </Button>
@@ -195,21 +197,18 @@ export function ValueField({
         error={error}
         required={required}
         action={
-          lleno && onClear ? (
+          full && onClear ? (
             <Button variant="ghost" size="sm" disabled={disabled} onClick={onClear}>
-              {clearLabel ?? rotuloVaciar}
+              {clearLabel ?? defaultClearLabel}
             </Button>
           ) : null
         }
         {...props}
       >
-        {(control) => (lleno ? resumen(control) : vacio(control))}
+        {(control) => (full ? summary(control) : empty(control))}
       </Field>
 
-      <Dialog
-        open={abierto}
-        onOpenChange={(siguiente) => (siguiente ? setAbierto(true) : cerrar(false))}
-      >
+      <Dialog open={open} onOpenChange={(next) => (next ? setOpen(true) : close(false))}>
         <DialogContent size={size}>
           <DialogHeader>
             <DialogTitle>{label}</DialogTitle>
@@ -217,10 +216,10 @@ export function ValueField({
           </DialogHeader>
           <DialogBody>{children}</DialogBody>
           <DialogFooter>
-            <Button variant="outline" onClick={() => cerrar(false)}>
-              {rotuloCancelar}
+            <Button variant="outline" onClick={() => close(false)}>
+              {cancelLabel}
             </Button>
-            <Button onClick={() => cerrar(true)}>{rotuloListo}</Button>
+            <Button onClick={() => close(true)}>{doneLabel}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

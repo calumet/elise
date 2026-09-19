@@ -63,7 +63,7 @@ export type ChipProps = Omit<React.ComponentProps<"span">, "color"> & {
    `base` se separan por el color del texto, no por el relleno: dos grises de
    fondo tan cercanos no se distinguirían, y lo que cambia entre una ficha
    secundaria y una normal es cuánto pide que la leas. */
-const colores: Record<NonNullable<ChipProps["color"]>, string> = {
+const colors: Record<NonNullable<ChipProps["color"]>, string> = {
   subdued: "bg-muted text-muted-foreground",
   base: "bg-muted text-foreground",
   strong: "bg-fill-tertiary text-foreground",
@@ -89,24 +89,24 @@ const colores: Record<NonNullable<ChipProps["color"]>, string> = {
 function RemoveButton({
   mode,
   disabled,
-  nombre,
+  name,
   onRemove,
 }: {
   mode: NonNullable<ChipProps["removeAs"]>;
   disabled?: boolean;
-  nombre?: string;
+  name?: string;
   onRemove: () => void;
 }): React.JSX.Element {
-  const quitar = useElLabel("ui", "remove", "Quitar");
-  const etiqueta = nombre ? `${quitar}: ${nombre}` : quitar;
+  const remove = useElLabel("ui", "remove", "Quitar");
+  const label = name ? `${remove}: ${name}` : remove;
   const inert = mode === "presentation";
   const Tag = mode === "button" ? "button" : "span";
 
   const attrs =
     mode === "button"
-      ? { type: "button" as const, disabled, "aria-label": etiqueta }
+      ? { type: "button" as const, disabled, "aria-label": label }
       : mode === "span"
-        ? { role: "button", tabIndex: -1, "aria-label": etiqueta }
+        ? { role: "button", tabIndex: -1, "aria-label": label }
         : { "aria-hidden": true };
 
   return (
@@ -115,13 +115,13 @@ function RemoveButton({
       onClick={
         inert
           ? undefined
-          : (evento: React.MouseEvent) => {
+          : (event: React.MouseEvent) => {
               if (disabled) return;
               /* Una ficha vive dentro de cosas que también responden al click,
                  como el disparador de un combobox: sin esto, quitarla abriría
                  la lista al mismo tiempo. */
-              evento.preventDefault();
-              evento.stopPropagation();
+              event.preventDefault();
+              event.stopPropagation();
               onRemove();
             }
       }
@@ -160,7 +160,7 @@ export const Chip: React.ForwardRefExoticComponent<
         className={cn(
           "inline-flex h-6 max-w-full shrink-0 items-center gap-1 rounded-sm text-sm",
           onRemove ? "ps-2 pe-1" : "px-2",
-          colores[color],
+          colors[color],
           disabled && "opacity-50",
           className,
         )}
@@ -171,7 +171,7 @@ export const Chip: React.ForwardRefExoticComponent<
           <RemoveButton
             mode={removeAs}
             disabled={disabled}
-            nombre={accessibilityLabel ?? (typeof children === "string" ? children : undefined)}
+            name={accessibilityLabel ?? (typeof children === "string" ? children : undefined)}
             onRemove={onRemove}
           />
         ) : null}

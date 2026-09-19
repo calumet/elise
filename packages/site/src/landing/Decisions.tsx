@@ -13,28 +13,28 @@ import { i18nConfig } from "../config";
 
 const TOKENS = ["--primary", "--success", "--warning", "--destructive"];
 
-const VERSIONES = [
-  { nombre: "elise-ui", version: "2.0.0", vivo: true },
-  { nombre: "elise-tables", version: "1.4.2", vivo: true },
-  { nombre: "elise-i18n", version: "1.1.0", vivo: true },
-  { nombre: "elise-linter", version: "0.9.4", vivo: false },
+const VERSIONS = [
+  { name: "elise-ui", version: "2.0.0", live: true },
+  { name: "elise-tables", version: "1.4.2", live: true },
+  { name: "elise-i18n", version: "1.1.0", live: true },
+  { name: "elise-linter", version: "0.9.4", live: false },
 ];
 
-const AVANCE = 0.82;
-const FECHA = new Date(2026, 2, 9);
-const FECHA_CORTA = { day: "numeric", month: "short", year: "numeric" } as const;
+const PROGRESS = 0.82;
+const DATE = new Date(2026, 2, 9);
+const SHORT_DATE = { day: "numeric", month: "short", year: "numeric" } as const;
 
-function Titulo({ children }: { children: React.ReactNode }) {
+function Title({ children }: { children: React.ReactNode }) {
   return <p className="text-lg font-semibold text-card-foreground">{children}</p>;
 }
 
 /** Muestra del tema: la misma Card con los mismos controles, claro y oscuro. */
-function Muestra({ etiqueta, guardar, brand, ok }: Record<string, string>) {
+function Sample({ label, save, brand, ok }: Record<string, string>) {
   return (
     <Card className="gap-2.5 p-3.5">
-      <span className="font-mono text-xs text-muted-foreground">{etiqueta}</span>
+      <span className="font-mono text-xs text-muted-foreground">{label}</span>
       <Button size="sm" className="w-full">
-        {guardar}
+        {save}
       </Button>
       <div className="flex gap-1.5">
         <Badge tone="brand" variant="subtle" size="sm">
@@ -49,12 +49,14 @@ function Muestra({ etiqueta, guardar, brand, ok }: Record<string, string>) {
 }
 
 /** El mismo dato formateado con un locale concreto. */
-function Dato({ locale, atenuado }: { locale: string; atenuado?: boolean }) {
+function Value({ locale, dimmed }: { locale: string; dimmed?: boolean }) {
   return (
-    <Card lang={locale} className={atenuado ? "gap-0 p-3 opacity-60" : "gap-0 p-3"}>
-      <div className="text-xl font-semibold tabular-nums">{formatPercent(AVANCE, { locale })}</div>
+    <Card lang={locale} className={dimmed ? "gap-0 p-3 opacity-60" : "gap-0 p-3"}>
+      <div className="text-xl font-semibold tabular-nums">
+        {formatPercent(PROGRESS, { locale })}
+      </div>
       <div className="mt-1 font-mono text-xs text-muted-foreground">
-        {formatDate(FECHA, { locale, ...FECHA_CORTA })}
+        {formatDate(DATE, { locale, ...SHORT_DATE })}
       </div>
     </Card>
   );
@@ -62,7 +64,7 @@ function Dato({ locale, atenuado }: { locale: string; atenuado?: boolean }) {
 
 export function Decisions() {
   const { t, locale } = useTranslation("decisions");
-  const otroLocale = i18nConfig.locales.find((code) => code !== locale) ?? i18nConfig.locales[1];
+  const otherLocale = i18nConfig.locales.find((code) => code !== locale) ?? i18nConfig.locales[1];
 
   return (
     <section id="decisiones" className="mx-auto w-full max-w-[1200px] px-6 py-20 sm:px-10">
@@ -77,20 +79,20 @@ export function Decisions() {
 
       <div className="mt-8 grid gap-4 lg:grid-cols-12">
         <Card className="gap-3.5 bg-secondary p-5 lg:col-span-5">
-          <Titulo>{t("theme.title")}</Titulo>
+          <Title>{t("theme.title")}</Title>
           <div className="grid gap-2.5 sm:grid-cols-2">
-            <Muestra
-              etiqueta={t("theme.light")}
-              guardar={t("theme.save")}
+            <Sample
+              label={t("theme.light")}
+              save={t("theme.save")}
               brand={t("theme.brand")}
               ok={t("theme.ok")}
             />
             {/* Mismo markup, tokens invertidos: no hay una segunda copia del
                 componente para el modo oscuro. */}
             <div className="dark">
-              <Muestra
-                etiqueta={t("theme.dark")}
-                guardar={t("theme.save")}
+              <Sample
+                label={t("theme.dark")}
+                save={t("theme.save")}
                 brand={t("theme.brand")}
                 ok={t("theme.ok")}
               />
@@ -111,15 +113,15 @@ export function Decisions() {
         </Card>
 
         <Card className="gap-3.5 p-5 lg:col-span-4">
-          <Titulo>{t("copy.title")}</Titulo>
+          <Title>{t("copy.title")}</Title>
           {/* Un árbol de archivos es un dibujo, no un componente: no hay nada en
               Elise que lo represente y forzarlo sería peor. */}
           <div className="flex flex-col gap-1.5 rounded-lg border border-dashed border-border-strong bg-muted p-3 font-mono text-xs">
             <span className="text-secondary-foreground">components/ui/</span>
-            {["button.tsx", "dialog.tsx", "data-table.tsx"].map((archivo) => (
-              <span key={archivo} className="flex items-center gap-2 text-muted-foreground">
+            {["button.tsx", "dialog.tsx", "data-table.tsx"].map((file) => (
+              <span key={file} className="flex items-center gap-2 text-muted-foreground">
                 <span aria-hidden className="size-1 rounded-xs bg-track" />
-                {archivo}
+                {file}
               </span>
             ))}
             <span className="flex items-center justify-between gap-2 text-destructive">
@@ -133,15 +135,15 @@ export function Decisions() {
         </Card>
 
         <Card className="gap-3.5 p-5 lg:col-span-3">
-          <Titulo>{t("locale.title")}</Titulo>
+          <Title>{t("locale.title")}</Title>
           <div className="flex flex-col gap-2.5">
-            <Dato locale={locale} />
-            <Dato locale={otroLocale} atenuado />
+            <Value locale={locale} />
+            <Value locale={otherLocale} dimmed />
           </div>
         </Card>
 
         <Card className="gap-3.5 p-5 lg:col-span-5">
-          <Titulo>{t("form.title")}</Titulo>
+          <Title>{t("form.title")}</Title>
           <div className="grid items-start gap-3 sm:grid-cols-2">
             {/* `Field` ata el rótulo, la descripción y el error al control: el
                 `id`, el `aria-describedby` y el `aria-invalid` los pone él. */}
@@ -162,7 +164,7 @@ export function Decisions() {
         </Card>
 
         <Card className="gap-3.5 p-5 lg:col-span-3">
-          <Titulo>{t("imperative.title")}</Titulo>
+          <Title>{t("imperative.title")}</Title>
           {/* Los dos botones llaman de verdad a `toast()` y a `openAlert()`. Un
               aviso dibujado dentro de la tarjeta demostraría lo contrario de lo
               que dice el título. */}
@@ -200,17 +202,17 @@ export function Decisions() {
         </Card>
 
         <Card className="gap-3.5 p-5 lg:col-span-4">
-          <Titulo>{t("versions.title")}</Titulo>
+          <Title>{t("versions.title")}</Title>
           <Code>extends: [&quot;@calumet/elise-linter&quot;]</Code>
           <div className="flex flex-col gap-2.5">
-            {VERSIONES.map((paquete) => (
-              <div key={paquete.nombre} className="flex items-center gap-2.5 font-mono text-xs">
+            {VERSIONS.map((pkg) => (
+              <div key={pkg.name} className="flex items-center gap-2.5 font-mono text-xs">
                 <span
                   aria-hidden
-                  className={`size-1.5 rounded-full ${paquete.vivo ? "bg-success" : "bg-track"}`}
+                  className={`size-1.5 rounded-full ${pkg.live ? "bg-success" : "bg-track"}`}
                 />
-                <span className="flex-1 text-secondary-foreground">{paquete.nombre}</span>
-                <span className="text-muted-foreground tabular-nums">{paquete.version}</span>
+                <span className="flex-1 text-secondary-foreground">{pkg.name}</span>
+                <span className="text-muted-foreground tabular-nums">{pkg.version}</span>
               </div>
             ))}
           </div>

@@ -28,7 +28,7 @@ import { Button, buttonVariants } from "./button";
 /* `DayPickerProps` es una unión discriminada por `mode`, y un `Omit` normal la
    colapsa en un solo miembro: `selected` deja de existir. Distribuyendo sobre
    cada miembro, la unión sobrevive. */
-type SinLocale<T> = T extends unknown ? Omit<T, "locale"> : never;
+type WithoutLocale<T> = T extends unknown ? Omit<T, "locale"> : never;
 
 /** El calendario, sobre react-day-picker. Es lo que dibujan por dentro `DatePicker` y `DateRangePicker`. */
 function Calendar({
@@ -41,7 +41,7 @@ function Calendar({
   formatters,
   components,
   ...props
-}: SinLocale<React.ComponentProps<typeof DayPicker>> & {
+}: WithoutLocale<React.ComponentProps<typeof DayPicker>> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
 
   /**
@@ -56,19 +56,19 @@ function Calendar({
      escribe «August» dentro de una interfaz en español. Se formatea con `Intl`
      y no con un paquete de idiomas para no arrastrar uno por cada lengua: el
      navegador ya sabe escribir fechas en la suya. */
-  const nombres = React.useMemo(() => {
-    const conIntl = (opciones: Intl.DateTimeFormatOptions) =>
-      new Intl.DateTimeFormat(locale, opciones);
+  const names = React.useMemo(() => {
+    const withIntl = (options: Intl.DateTimeFormatOptions) =>
+      new Intl.DateTimeFormat(locale, options);
     /* Varios idiomas abrevian con punto («dom.», «lun.»); en una columna de
        32px ese punto solo gasta ancho. */
-    const sinPunto = (texto: string) => texto.replace(/\.$/, "");
-    const mes = conIntl({ month: "long", year: "numeric" });
-    const mesCorto = conIntl({ month: "short" });
-    const diaSemana = conIntl({ weekday: "short" });
+    const noDot = (text: string) => text.replace(/\.$/, "");
+    const mes = withIntl({ month: "long", year: "numeric" });
+    const shortMonth = withIntl({ month: "short" });
+    const weekday = withIntl({ weekday: "short" });
     return {
       mes: (f: Date) => mes.format(f),
-      mesCorto: (f: Date) => sinPunto(mesCorto.format(f)),
-      diaSemana: (f: Date) => sinPunto(diaSemana.format(f)),
+      shortMonth: (f: Date) => noDot(shortMonth.format(f)),
+      weekday: (f: Date) => noDot(weekday.format(f)),
     };
   }, [locale]);
 
@@ -83,9 +83,9 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatCaption: nombres.mes,
-        formatMonthDropdown: nombres.mesCorto,
-        formatWeekdayName: nombres.diaSemana,
+        formatCaption: names.mes,
+        formatMonthDropdown: names.shortMonth,
+        formatWeekdayName: names.weekday,
         ...formatters,
       }}
       classNames={{

@@ -9,7 +9,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
-import { SUPERFICIE_INVERSA, SUPERFICIE_SIDEBAR } from "@/lib/superficie";
+import { INVERSE_SURFACE, SIDEBAR_SURFACE } from "@/lib/surface";
 
 /** Escala de espaciado compartida por Box, los Stack y Grid. */
 export type SpaceScale = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
@@ -93,8 +93,8 @@ const backgroundClasses: Record<NonNullable<BoxProps["background"]>, string> = {
   muted: "bg-muted",
   secondary: "bg-secondary text-secondary-foreground",
   accent: "bg-accent text-accent-foreground",
-  sidebar: SUPERFICIE_SIDEBAR,
-  inverse: SUPERFICIE_INVERSA,
+  sidebar: SIDEBAR_SURFACE,
+  inverse: INVERSE_SURFACE,
 };
 
 const radiusClasses: Record<NonNullable<BoxProps["radius"]>, string> = {
@@ -116,7 +116,7 @@ const shadowClasses: Record<NonNullable<BoxProps["shadow"]>, string> = {
 };
 
 /** Las propiedades visuales de una caja, sin lo que la hace un `<div>`. */
-export type CajaProps = Pick<
+export type BoxStyleProps = Pick<
   BoxProps,
   | "padding"
   | "paddingX"
@@ -133,7 +133,7 @@ export type CajaProps = Pick<
  * una caja pero no un `<div>`, como `Clickable`, no vuelva a escribir los mapas
  * y se le vaya la escala por su lado.
  */
-export const clasesDeCaja = ({
+export const boxClasses = ({
   padding,
   paddingX,
   paddingY,
@@ -142,7 +142,7 @@ export const clasesDeCaja = ({
   radius,
   shadow,
   overflowHidden,
-}: CajaProps): string =>
+}: BoxStyleProps): string =>
   cn(
     padding !== undefined && paddingClasses[padding],
     paddingX !== undefined && paddingXClasses[paddingX],
@@ -176,7 +176,7 @@ function Box({
     <Comp
       data-slot="box"
       className={cn(
-        clasesDeCaja({
+        boxClasses({
           padding,
           paddingX,
           paddingY,
@@ -195,4 +195,4 @@ function Box({
 
 export { Box };
 
-export { SUPERFICIE_INVERSA, SUPERFICIE_SIDEBAR };
+export { INVERSE_SURFACE, SIDEBAR_SURFACE };

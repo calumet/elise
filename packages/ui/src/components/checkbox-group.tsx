@@ -75,23 +75,23 @@ function CheckboxGroup({
   className,
   children,
 }: CheckboxGroupProps): React.JSX.Element {
-  const { id, idDescripcion, idError, hayError, control } = useFieldIds({
+  const { id, descriptionId, errorId, hasError, control } = useFieldIds({
     id: idProp,
     description,
     error,
     required,
   });
-  const idRotulo = `${id}-label`;
+  const labelId = `${id}-label`;
 
   return (
     <div
       data-slot="checkbox-group-field"
-      data-invalid={hayError ? "" : undefined}
+      data-invalid={hasError ? "" : undefined}
       className={cn("flex flex-col gap-1.5", className)}
     >
       <span
         data-slot="checkbox-group-label"
-        id={idRotulo}
+        id={labelId}
         className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
       >
         {label}
@@ -101,7 +101,7 @@ function CheckboxGroup({
       <div
         data-slot="checkbox-group"
         role="group"
-        aria-labelledby={idRotulo}
+        aria-labelledby={labelId}
         aria-describedby={control["aria-describedby"]}
         className="grid gap-3"
       >
@@ -111,15 +111,15 @@ function CheckboxGroup({
       {description ? (
         <p
           data-slot="checkbox-group-description"
-          id={idDescripcion}
+          id={descriptionId}
           className="text-xs text-muted-foreground"
         >
           {description}
         </p>
       ) : null}
 
-      {hayError ? (
-        <InlineError data-slot="checkbox-group-error" id={idError}>
+      {hasError ? (
+        <InlineError data-slot="checkbox-group-error" id={errorId}>
           {error}
         </InlineError>
       ) : null}

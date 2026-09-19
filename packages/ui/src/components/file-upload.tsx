@@ -41,7 +41,7 @@ export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
   validator?: (file: File) => boolean;
 
   /** Recibe siempre las dos listas, aceptados y rechazados. */
-  onFiles?: (aceptados: File[], rechazados: RejectedFile[]) => void;
+  onFiles?: (accepted: File[], rejected: RejectedFile[]) => void;
 
   /** Texto principal del área. */
   label?: string;
@@ -51,14 +51,14 @@ export type FileUploadProps = Omit<React.ComponentProps<"div">, "onDrop"> & {
 };
 
 /** Formatea un tamaño en bytes a la unidad que le queda cómoda, por ejemplo `"1,2 MB"`. */
-export const formatearTamano = (bytes: number): string => {
+export const formatSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
 /** Comprueba un archivo contra el atributo `accept` nativo. */
-export const tipoAceptado = (file: File, accept?: string): boolean => {
+export const acceptedType = (file: File, accept?: string): boolean => {
   if (!accept) return true;
   return accept
     .split(",")
@@ -93,57 +93,57 @@ function FileUpload({
   hint,
   ...props
 }: FileUploadProps): React.JSX.Element {
-  const [arrastrando, setArrastrando] = React.useState(false);
+  const [dragging, setDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const contador = React.useRef(0);
+  const counter = React.useRef(0);
 
-  const etiqueta = useElLabel("ui", "fileUpload", "Arrastra archivos o haz clic para elegir");
-  const etiquetaBoton = useElLabel("ui", "fileUploadBrowse", "Elegir archivos");
+  const defaultLabel = useElLabel("ui", "fileUpload", "Arrastra archivos o haz clic para elegir");
+  const buttonLabel = useElLabel("ui", "fileUploadBrowse", "Elegir archivos");
 
-  const repartir = (lista: FileList | null) => {
-    if (!lista) return;
-    const aceptados: File[] = [];
-    const rechazados: RejectedFile[] = [];
-    for (const file of Array.from(lista)) {
-      if (!tipoAceptado(file, accept)) rechazados.push({ file, reason: "type" });
+  const assign = (list: FileList | null) => {
+    if (!list) return;
+    const accepted: File[] = [];
+    const rejected: RejectedFile[] = [];
+    for (const file of Array.from(list)) {
+      if (!acceptedType(file, accept)) rejected.push({ file, reason: "type" });
       else if (maxSize !== undefined && file.size > maxSize)
-        rechazados.push({ file, reason: "size" });
-      else if (validator && !validator(file)) rechazados.push({ file, reason: "custom" });
-      else aceptados.push(file);
+        rejected.push({ file, reason: "size" });
+      else if (validator && !validator(file)) rejected.push({ file, reason: "custom" });
+      else accepted.push(file);
     }
-    onFiles?.(multiple ? aceptados : aceptados.slice(0, 1), rechazados);
+    onFiles?.(multiple ? accepted : accepted.slice(0, 1), rejected);
   };
 
   /* dragenter/dragleave se disparan también al pasar sobre los hijos. Un
      contador evita que el área parpadee mientras el cursor la recorre. */
-  const alEntrar = (e: React.DragEvent) => {
+  const onEnter = (e: React.DragEvent) => {
     e.preventDefault();
     if (disabled) return;
-    contador.current += 1;
-    setArrastrando(true);
+    counter.current += 1;
+    setDragging(true);
   };
-  const alSalir = (e: React.DragEvent) => {
+  const onLeave = (e: React.DragEvent) => {
     e.preventDefault();
-    contador.current -= 1;
-    if (contador.current <= 0) setArrastrando(false);
+    counter.current -= 1;
+    if (counter.current <= 0) setDragging(false);
   };
-  const alSoltar = (e: React.DragEvent) => {
+  const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    contador.current = 0;
-    setArrastrando(false);
+    counter.current = 0;
+    setDragging(false);
     if (disabled) return;
-    repartir(e.dataTransfer.files);
+    assign(e.dataTransfer.files);
   };
 
   return (
     <div
       data-slot="file-upload"
-      data-dragging={arrastrando ? "" : undefined}
+      data-dragging={dragging ? "" : undefined}
       data-invalid={invalid ? "" : undefined}
-      onDragEnter={alEntrar}
+      onDragEnter={onEnter}
       onDragOver={(e) => e.preventDefault()}
-      onDragLeave={alSalir}
-      onDrop={alSoltar}
+      onDragLeave={onLeave}
+      onDrop={onDrop}
       className={cn(
         "flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong bg-card px-6 py-8 text-center transition-[background-color,border-color] duration-(--duration-fast) ease-out",
         !disabled && "hover:border-primary hover:bg-accent/40",
@@ -157,13 +157,13 @@ function FileUpload({
       <input
         ref={inputRef}
         type="file"
-        aria-label={etiquetaBoton}
+        aria-label={buttonLabel}
         accept={accept}
         multiple={multiple}
         disabled={disabled}
         className="sr-only"
         onChange={(e) => {
-          repartir(e.target.files);
+          assign(e.target.files);
           /* Permite volver a elegir el mismo archivo después de quitarlo. */
           e.target.value = "";
         }}
@@ -171,7 +171,7 @@ function FileUpload({
       <span className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground">
         <Upload className="size-4" aria-hidden="true" />
       </span>
-      <span className="text-sm text-foreground">{label ?? etiqueta}</span>
+      <span className="text-sm text-foreground">{label ?? defaultLabel}</span>
       {hint ? <span className="text-xs text-muted-foreground">{hint}</span> : null}
       <button
         type="button"
@@ -179,7 +179,7 @@ function FileUpload({
         onClick={() => inputRef.current?.click()}
         className="mt-1 inline-flex h-8 cursor-pointer items-center rounded-md border border-border-strong bg-background px-3 text-sm font-semibold text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed"
       >
-        {etiquetaBoton}
+        {buttonLabel}
       </button>
     </div>
   );
@@ -209,7 +209,7 @@ function FileUploadItem({
   onRemove,
   ...props
 }: FileUploadItemProps): React.JSX.Element {
-  const quitarLabel = useElLabel("ui", "remove", "Quitar");
+  const removeLabel = useElLabel("ui", "remove", "Quitar");
   return (
     <li
       data-slot="file-upload-item"
@@ -223,14 +223,14 @@ function FileUploadItem({
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="truncate text-sm text-foreground">{name}</span>
         {size !== undefined ? (
-          <span className="text-xs text-muted-foreground">{formatearTamano(size)}</span>
+          <span className="text-xs text-muted-foreground">{formatSize(size)}</span>
         ) : null}
       </span>
       {onRemove ? (
         <button
           type="button"
           onClick={onRemove}
-          aria-label={`${quitarLabel} ${name}`}
+          aria-label={`${removeLabel} ${name}`}
           className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
         >
           <X className="size-3.5" aria-hidden="true" />
@@ -240,4 +240,4 @@ function FileUploadItem({
   );
 }
 
-export { FileUpload, FileUploadList, FileUploadItem, formatearTamano as formatFileSize };
+export { FileUpload, FileUploadList, FileUploadItem, formatSize as formatFileSize };

@@ -12,7 +12,7 @@ import { useElLabel } from "@/lib/i18n";
 
 import { Button } from "./button";
 import { Field } from "./field";
-import { formatearTamano, tipoAceptado, type RejectedFile } from "./file-upload";
+import { formatSize, acceptedType, type RejectedFile } from "./file-upload";
 
 /** Un archivo que ya estaba guardado, tal como lo devuelve el servidor. */
 export type StoredFile = {
@@ -42,7 +42,7 @@ export type FileFieldProps = Omit<React.ComponentProps<"div">, "children" | "onC
   maxSize?: number;
 
   /** Se llama con lo que no pasó el filtro, en vez de descartarlo en silencio. */
-  onReject?: (rechazado: RejectedFile) => void;
+  onReject?: (rejected: RejectedFile) => void;
 
   /** De 0 a 100 mientras la app lo sube. La barra reemplaza al peso. */
   progress?: number;
@@ -112,17 +112,17 @@ export function FileField({
   emptyLabel,
   ...props
 }: FileFieldProps): React.JSX.Element {
-  const entrada = React.useRef<HTMLInputElement>(null);
-  const [arrastrando, setArrastrando] = React.useState(false);
+  const entry = React.useRef<HTMLInputElement>(null);
+  const [dragging, setDragging] = React.useState(false);
 
-  const rotuloSubir = useElLabel("ui", "fileFieldUpload", "Subir");
-  const rotuloReemplazar = useElLabel("ui", "fileFieldReplace", "Reemplazar");
-  const rotuloQuitar = useElLabel("ui", "fileFieldRemove", "Quitar");
-  const rotuloVacio = useElLabel("ui", "fileFieldEmpty", "Todavía no hay nada");
-  const rotuloSoltar = useElLabel("ui", "fileFieldDrop", "Soltá para subirlo");
-  const rotuloCancelar = useElLabel("ui", "fileFieldCancel", "Cancelar la subida");
+  const uploadLabel = useElLabel("ui", "fileFieldUpload", "Subir");
+  const replaceLabel = useElLabel("ui", "fileFieldReplace", "Reemplazar");
+  const removeLabel = useElLabel("ui", "fileFieldRemove", "Quitar");
+  const defaultEmptyLabel = useElLabel("ui", "fileFieldEmpty", "Todavía no hay nada");
+  const dropLabel = useElLabel("ui", "fileFieldDrop", "Soltá para subirlo");
+  const cancelLabel = useElLabel("ui", "fileFieldCancel", "Cancelar la subida");
 
-  const subiendo = typeof progress === "number";
+  const uploading = typeof progress === "number";
 
   // Crear y revocar el `objectURL` van de a pares, y el par vive en el efecto.
   const [urlLocal, setUrlLocal] = React.useState<string>();
@@ -138,10 +138,10 @@ export function FileField({
     return () => URL.revokeObjectURL(url);
   }, [value]);
 
-  const elegir = (file: File | undefined) => {
+  const select = (file: File | undefined) => {
     if (!file) return;
 
-    if (!tipoAceptado(file, accept)) {
+    if (!acceptedType(file, accept)) {
       onReject?.({ file, reason: "type" });
       return;
     }
@@ -152,25 +152,25 @@ export function FileField({
     onChange?.(file);
   };
 
-  const nombre = value instanceof File ? value.name : value?.name;
-  const tamano = value instanceof File ? value.size : value?.size;
-  const urlVista = value instanceof File ? urlLocal : value?.url;
+  const name = value instanceof File ? value.name : value?.name;
+  const size = value instanceof File ? value.size : value?.size;
+  const previewUrl = value instanceof File ? urlLocal : value?.url;
 
   // Un archivo que el navegador no pinta deja el cuadro en blanco, que se lee
   // como que no hay nada.
   const [failedUrl, setFailedUrl] = React.useState<string>();
-  const vistaFallo = urlVista !== undefined && urlVista === failedUrl;
+  const previewFailed = previewUrl !== undefined && previewUrl === failedUrl;
 
-  const miniatura = () => {
-    if (arrastrando) {
+  const thumbnail = () => {
+    if (dragging) {
       return <Upload aria-hidden="true" className="size-5 text-accent-foreground" />;
     }
-    if (urlVista && !vistaFallo) {
+    if (previewUrl && !previewFailed) {
       return (
         <img
-          src={urlVista}
+          src={previewUrl}
           alt=""
-          onError={() => setFailedUrl(urlVista)}
+          onError={() => setFailedUrl(previewUrl)}
           className="max-h-full max-w-full object-contain"
           style={{ borderRadius: 4 }}
         />
@@ -190,9 +190,9 @@ export function FileField({
       error={error}
       required={required}
       action={
-        value && !subiendo && !disabled ? (
+        value && !uploading && !disabled ? (
           <Button variant="ghost" size="sm" onClick={() => onChange?.(null)}>
-            {rotuloQuitar}
+            {removeLabel}
           </Button>
         ) : null
       }
@@ -201,20 +201,20 @@ export function FileField({
       {(control) => (
         <div
           onDragOver={(e) => {
-            if (disabled || subiendo) return;
+            if (disabled || uploading) return;
             e.preventDefault();
-            setArrastrando(true);
+            setDragging(true);
           }}
-          onDragLeave={() => setArrastrando(false)}
+          onDragLeave={() => setDragging(false)}
           onDrop={(e) => {
-            if (disabled || subiendo) return;
+            if (disabled || uploading) return;
             e.preventDefault();
-            setArrastrando(false);
-            elegir(e.dataTransfer.files[0]);
+            setDragging(false);
+            select(e.dataTransfer.files[0]);
           }}
           className={cn(
             "flex items-center gap-2.5 rounded-md border p-2 transition-[background-color,border-color] duration-(--duration-fast) ease-out",
-            arrastrando ? "border-primary bg-accent" : "border-border bg-card",
+            dragging ? "border-primary bg-accent" : "border-border bg-card",
             error ? "border-destructive" : null,
             disabled ? "opacity-55" : null,
           )}
@@ -222,21 +222,21 @@ export function FileField({
           <div
             className={cn(
               "flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-sm bg-muted",
-              value || arrastrando
+              value || dragging
                 ? "border border-border"
                 : "border border-dashed border-border-strong",
             )}
           >
-            {miniatura()}
+            {thumbnail()}
           </div>
 
           <div className="flex min-w-0 flex-1 flex-col gap-px">
-            {arrastrando ? (
-              <span className="text-sm font-medium text-accent-foreground">{rotuloSoltar}</span>
+            {dragging ? (
+              <span className="text-sm font-medium text-accent-foreground">{dropLabel}</span>
             ) : value ? (
               <>
-                <span className="truncate text-sm font-medium">{nombre}</span>
-                {subiendo ? (
+                <span className="truncate text-sm font-medium">{name}</span>
+                {uploading ? (
                   <div className="mt-1 h-1 overflow-hidden rounded-full bg-border">
                     <div
                       className="h-full rounded-full bg-primary transition-[width] duration-(--duration-base) ease-out"
@@ -245,34 +245,36 @@ export function FileField({
                   </div>
                 ) : (
                   <span className="text-xs text-muted-foreground">
-                    {tamano === undefined ? null : formatearTamano(tamano)}
+                    {size === undefined ? null : formatSize(size)}
                   </span>
                 )}
               </>
             ) : (
-              <span className="text-sm text-muted-foreground">{emptyLabel ?? rotuloVacio}</span>
+              <span className="text-sm text-muted-foreground">
+                {emptyLabel ?? defaultEmptyLabel}
+              </span>
             )}
           </div>
 
           <input
             {...control}
-            ref={entrada}
+            ref={entry}
             type="file"
             accept={accept}
             disabled={disabled}
             className="sr-only"
             onChange={(e) => {
-              elegir(e.target.files?.[0]);
+              select(e.target.files?.[0]);
               // Sin esto, volver a elegir el mismo archivo no dispara nada.
               e.target.value = "";
             }}
           />
 
-          {subiendo && onCancel ? (
+          {uploading && onCancel ? (
             <Button
               variant="ghost"
               size="icon"
-              aria-label={rotuloCancelar}
+              aria-label={cancelLabel}
               onClick={onCancel}
               className="shrink-0"
             >
@@ -282,11 +284,11 @@ export function FileField({
             <Button
               variant="outline"
               size="sm"
-              disabled={disabled || subiendo}
-              onClick={() => entrada.current?.click()}
+              disabled={disabled || uploading}
+              onClick={() => entry.current?.click()}
               className="shrink-0"
             >
-              {value ? rotuloReemplazar : rotuloSubir}
+              {value ? replaceLabel : uploadLabel}
             </Button>
           )}
         </div>

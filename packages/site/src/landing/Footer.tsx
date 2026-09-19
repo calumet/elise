@@ -6,7 +6,7 @@ import { CopyCommand } from "../components/CopyCommand";
 import { Dither } from "../components/Dither";
 import { COPYRIGHT_YEAR, REPO_URL } from "../config";
 
-const ENLACES = [
+const LINKS = [
   { key: "link.start", href: `${REPO_URL}/tree/master/docs/guia-inicio.md` },
   { key: "link.architecture", href: `${REPO_URL}/tree/master/docs/arquitectura.md` },
   { key: "link.themes", href: `${REPO_URL}/tree/master/docs/temas.md` },
@@ -42,7 +42,7 @@ export function Footer() {
           que lo deja respirar; desde `sm` vuelve a la derecha del aviso legal. */}
       <footer className="flex flex-col gap-6 border-t border-border px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-x-6 sm:px-10">
         <nav className="flex flex-wrap gap-x-5 gap-y-2 sm:order-2">
-          {ENLACES.map((enlace) => (
+          {LINKS.map((enlace) => (
             <a
               key={enlace.key}
               href={enlace.href}

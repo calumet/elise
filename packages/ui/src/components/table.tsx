@@ -29,7 +29,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
-import { SUPERFICIE } from "@/lib/superficie";
+import { SURFACE } from "@/lib/surface";
 
 import {
   Pagination,
@@ -43,7 +43,7 @@ import {
 } from "./pagination";
 
 /** Las clases de la superficie que comparten `Card` y `Table`, para que las dos cajas del sistema no se separen. */
-export { SUPERFICIE };
+export { SURFACE };
 
 /**
  * Papel que juega una columna cuando la tabla se lee como lista.
@@ -59,44 +59,44 @@ export type ListSlot = "primary" | "secondary" | "inline" | "kicker" | "labeled"
 /** `numeric` y `currency` alinean a la derecha y numeran a ancho fijo. */
 export type ColumnFormat = "base" | "numeric" | "currency";
 
-type Columna = {
+type Column = {
   listSlot?: ListSlot;
   format: ColumnFormat;
-  encabezado: React.ReactNode;
+  header: React.ReactNode;
 };
 
-type Modo = "table" | "list";
+type Mode = "table" | "list";
 
 const TablaCtx = React.createContext<{
-  modo: Modo;
-  columnas: Columna[];
-  ranuras: ListSlot[];
-  cargando: boolean;
+  mode: Mode;
+  columns: Column[];
+  slots: ListSlot[];
+  loading: boolean;
 }>({
-  modo: "table",
-  columnas: [],
-  ranuras: [],
-  cargando: false,
+  mode: "table",
+  columns: [],
+  slots: [],
+  loading: false,
 });
 
 /* Lo que se apaga mientras carga. Una tabla con la que no se puede interactuar
    es contenido inhabilitado, y 0.35 es la opacidad a la que el texto llega al
    gris con el que se pinta lo inhabilitado: sobre blanco, 48 acaba en 181. */
-const APAGADO = "opacity-35 transition-opacity duration-(--duration-fast) ease-out";
+const DIMMED = "opacity-35 transition-opacity duration-(--duration-fast) ease-out";
 
 /** Índice de la columna en la que cae una celda, puesto por su fila. */
-const ColumnaCtx = React.createContext(0);
+const ColumnCtx = React.createContext(0);
 
-const esNumerica = (format: ColumnFormat | undefined) =>
+const isNumeric = (format: ColumnFormat | undefined) =>
   format === "numeric" || format === "currency";
 
 /* El corte para pasar de tabla a lista. Por debajo de esto, tres columnas ya
    no caben sin apretar el texto hasta partirlo por letras. */
-const ANCHO_MINIMO_DE_TABLA = 490;
+const MIN_TABLE_WIDTH = 490;
 
-const primero = <P,>(nodos: React.ReactNode, tipo: unknown) =>
-  React.Children.toArray(nodos).find(
-    (n): n is React.ReactElement<P> => React.isValidElement(n) && n.type === tipo,
+const first = <P,>(nodes: React.ReactNode, kind: unknown) =>
+  React.Children.toArray(nodes).find(
+    (n): n is React.ReactElement<P> => React.isValidElement(n) && n.type === kind,
   );
 
 /**
@@ -107,17 +107,16 @@ const primero = <P,>(nodos: React.ReactNode, tipo: unknown) =>
  * Se lee del árbol y no de un prop aparte porque la información ya está escrita
  * una vez en el encabezado: repetirla en un prop es lo que se quiere evitar.
  */
-const recogerColumnas = (hijos: React.ReactNode): Columna[] => {
-  const encabezado = primero<{ children?: React.ReactNode }>(hijos, TableHeader);
-  const fila =
-    encabezado && primero<{ children?: React.ReactNode }>(encabezado.props.children, TableRow);
-  if (!fila) return [];
-  return React.Children.toArray(fila.props.children)
+const collectColumns = (childNodes: React.ReactNode): Column[] => {
+  const header = first<{ children?: React.ReactNode }>(childNodes, TableHeader);
+  const row = header && first<{ children?: React.ReactNode }>(header.props.children, TableRow);
+  if (!row) return [];
+  return React.Children.toArray(row.props.children)
     .filter((n): n is React.ReactElement<TableHeadProps> => React.isValidElement(n))
-    .map((celda) => ({
-      listSlot: celda.props.listSlot,
-      format: celda.props.format ?? "base",
-      encabezado: celda.props.children,
+    .map((cell) => ({
+      listSlot: cell.props.listSlot,
+      format: cell.props.format ?? "base",
+      header: cell.props.children,
     }));
 };
 
@@ -130,23 +129,23 @@ const recogerColumnas = (hijos: React.ReactNode): Columna[] => {
  * principal: sin eso una tabla que no sepa nada de listas sale como un montón
  * de pares sin nada que los encabece.
  */
-const repartirRanuras = (columnas: Columna[]): ListSlot[] => {
-  const tomadas = new Set<ListSlot>();
-  const ranuras: (ListSlot | undefined)[] = columnas.map((columna) => {
-    const ranura = columna.listSlot;
-    if (!ranura) return undefined;
-    if (ranura === "inline" || ranura === "labeled") return ranura;
-    if (tomadas.has(ranura)) return "labeled";
-    tomadas.add(ranura);
-    return ranura;
+const assignSlots = (columns: Column[]): ListSlot[] => {
+  const taken = new Set<ListSlot>();
+  const slots: (ListSlot | undefined)[] = columns.map((column) => {
+    const slot = column.listSlot;
+    if (!slot) return undefined;
+    if (slot === "inline" || slot === "labeled") return slot;
+    if (taken.has(slot)) return "labeled";
+    taken.add(slot);
+    return slot;
   });
 
-  if (!ranuras.includes("primary")) {
-    const libre = ranuras.indexOf(undefined);
-    if (libre >= 0) ranuras[libre] = "primary";
+  if (!slots.includes("primary")) {
+    const free = slots.indexOf(undefined);
+    if (free >= 0) slots[free] = "primary";
   }
 
-  return ranuras.map((ranura) => ranura ?? "labeled");
+  return slots.map((slot) => slot ?? "labeled");
 };
 
 /** Props de {@link Table}. */
@@ -259,24 +258,24 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
    tabla que no cabe empuja a su propio contenedor, así que midiéndola a ella el
    ancho siempre daría de sobra y nunca pasaría a lista. */
 function useTableFits(variant: TableProps["variant"]): {
-  contenedor: React.RefObject<HTMLDivElement | null>;
-  cabe: boolean;
+  container: React.RefObject<HTMLDivElement | null>;
+  fits: boolean;
 } {
-  const [cabe, setCabe] = React.useState(true);
-  const contenedor = React.useRef<HTMLDivElement | null>(null);
+  const [fits, setFits] = React.useState(true);
+  const container = React.useRef<HTMLDivElement | null>(null);
 
   React.useLayoutEffect(() => {
     if (variant !== "auto") return;
-    const hueco = contenedor.current?.parentElement;
-    if (!hueco) return;
-    const observador = new ResizeObserver(([entrada]) => {
-      setCabe(entrada.contentRect.width >= ANCHO_MINIMO_DE_TABLA);
+    const gap = container.current?.parentElement;
+    if (!gap) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setFits(entry.contentRect.width >= MIN_TABLE_WIDTH);
     });
-    observador.observe(hueco);
-    return () => observador.disconnect();
+    observer.observe(gap);
+    return () => observer.disconnect();
   }, [variant]);
 
-  return { contenedor, cabe };
+  return { container, fits };
 }
 
 /* La franja de paginado, con sus cuatro controles opcionales. */
@@ -305,7 +304,7 @@ function PaginationBar({
   return (
     <Pagination
       variant="table"
-      className={cn("rounded-b-[inherit]", loading && APAGADO)}
+      className={cn("rounded-b-[inherit]", loading && DIMMED)}
       end={paginationEnd}
       inert={loading || undefined}
     >
@@ -365,18 +364,18 @@ export const Table: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const { contenedor, cabe } = useTableFits(variant);
-    const modo: Modo = variant === "auto" ? (cabe ? "table" : "list") : variant;
+    const { container, fits } = useTableFits(variant);
+    const mode: Mode = variant === "auto" ? (fits ? "table" : "list") : variant;
 
-    const columnas = React.useMemo(() => recogerColumnas(children), [children]);
-    const ranuras = React.useMemo(() => repartirRanuras(columnas), [columnas]);
-    const contexto = React.useMemo(
-      () => ({ modo, columnas, ranuras, cargando: loading }),
-      [modo, columnas, ranuras, loading],
+    const columns = React.useMemo(() => collectColumns(children), [children]);
+    const slots = React.useMemo(() => assignSlots(columns), [columns]);
+    const context = React.useMemo(
+      () => ({ mode, columns, slots, loading: loading }),
+      [mode, columns, slots, loading],
     );
 
-    const cuerpo =
-      modo === "list" ? (
+    const body =
+      mode === "list" ? (
         <div data-slot="table-list" className={cn("w-full text-sm text-foreground", className)}>
           {children}
         </div>
@@ -391,10 +390,10 @@ export const Table: React.ForwardRefExoticComponent<
         </table>
       );
 
-    const vacia = empty !== undefined && empty !== null;
+    const isEmpty = empty !== undefined && empty !== null;
 
-    const franja =
-      paginate && !vacia ? (
+    const paginationBar =
+      paginate && !isEmpty ? (
         <PaginationBar
           loading={loading}
           paginationEnd={paginationEnd}
@@ -408,10 +407,10 @@ export const Table: React.ForwardRefExoticComponent<
         />
       ) : null;
 
-    const barra = filters ? (
+    const filterBar = filters ? (
       <div
         data-slot="table-filters"
-        className={cn("border-b border-border px-3 py-3", loading && APAGADO)}
+        className={cn("border-b border-border px-3 py-3", loading && DIMMED)}
         inert={loading || undefined}
       >
         {filters}
@@ -425,34 +424,34 @@ export const Table: React.ForwardRefExoticComponent<
        El encabezado no se apaga. Es el rótulo de las columnas, no dato que esté
        cambiando, y dejarlo firme es lo que mantiene la tabla legible mientras
        llega la página siguiente. */
-    const zona = vacia ? (
-      <div data-slot="table-empty" className={cn("w-full", loading && APAGADO)}>
+    const zone = isEmpty ? (
+      <div data-slot="table-empty" className={cn("w-full", loading && DIMMED)}>
         {empty}
       </div>
     ) : (
       <div className="relative overflow-hidden rounded-[inherit]">
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
-          {cuerpo}
+          {body}
         </div>
       </div>
     );
 
     return (
-      <TablaCtx.Provider value={contexto}>
+      <TablaCtx.Provider value={context}>
         {/* Con la tabla inerte, un lector de pantalla ya no llega a sus filas.
             Esto es lo único que queda anunciando que hay algo en curso. */}
         <span role="status" aria-live="polite" className="sr-only">
           {loading ? loadingLabel : null}
         </span>
         <div
-          ref={contenedor}
+          ref={container}
           data-slot={bare ? "table-bare" : "table-frame"}
           aria-busy={loading || undefined}
-          className={cn(!bare && SUPERFICIE, "w-full", frameClassName)}
+          className={cn(!bare && SURFACE, "w-full", frameClassName)}
         >
-          {barra}
-          {zona}
-          {franja}
+          {filterBar}
+          {zone}
+          {paginationBar}
         </div>
       </TablaCtx.Provider>
     );
@@ -466,10 +465,10 @@ export const TableHeader: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { modo } = React.useContext(TablaCtx);
+    const { mode } = React.useContext(TablaCtx);
     /* En lista el encabezado no se dibuja: sus rótulos ya salen pegados a cada
      valor dentro de la fila. */
-    if (modo === "list") return null;
+    if (mode === "list") return null;
     return (
       <thead
         data-slot="table-header"
@@ -491,25 +490,25 @@ export const TableBody: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { modo, cargando } = React.useContext(TablaCtx);
+    const { mode, loading } = React.useContext(TablaCtx);
     /* `divide-y` pone el filete debajo de cada fila menos de la última, así que
      la tabla no cierra con una raya suelta contra el borde del marco. La línea
      bajo el encabezado la pone este `border-t`, y va un tono más firme que los
      separadores: cierra la banda del encabezado, mientras que los de entre filas
      solo tienen que dejar contar. */
-    const filetes = cn("divide-y divide-border-subtle border-t border-border", cargando && APAGADO);
+    const rules = cn("divide-y divide-border-subtle border-t border-border", loading && DIMMED);
 
-    if (modo === "list") {
+    if (mode === "list") {
       return (
         <ul
           data-slot="table-body"
-          className={cn("list-none", filetes, className)}
+          className={cn("list-none", rules, className)}
           {...(props as React.HTMLAttributes<HTMLUListElement>)}
         />
       );
     }
 
-    return <tbody data-slot="table-body" ref={ref} className={cn(filetes, className)} {...props} />;
+    return <tbody data-slot="table-body" ref={ref} className={cn(rules, className)} {...props} />;
   },
 );
 TableBody.displayName = "TableBody";
@@ -520,54 +519,54 @@ export const TableFooter: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { modo } = React.useContext(TablaCtx);
-    const comunes = "border-t border-border font-semibold text-foreground";
+    const { mode } = React.useContext(TablaCtx);
+    const shared = "border-t border-border font-semibold text-foreground";
 
-    if (modo === "list") {
+    if (mode === "list") {
       return (
         <div
           data-slot="table-footer"
-          className={cn(comunes, "px-3 py-2", className)}
+          className={cn(shared, "px-3 py-2", className)}
           {...(props as React.HTMLAttributes<HTMLDivElement>)}
         />
       );
     }
 
     return (
-      <tfoot data-slot="table-footer" ref={ref} className={cn(comunes, className)} {...props} />
+      <tfoot data-slot="table-footer" ref={ref} className={cn(shared, className)} {...props} />
     );
   },
 );
 TableFooter.displayName = "TableFooter";
 
 /** Reparte las celdas de una fila por el papel que tenga su columna. */
-const FilaDeLista = React.forwardRef<
+const ListRow = React.forwardRef<
   HTMLLIElement,
   React.HTMLAttributes<HTMLLIElement> & { clickDelegate?: string }
 >(({ children, className, clickDelegate, ...props }, ref) => {
-  const { columnas, ranuras } = React.useContext(TablaCtx);
+  const { columns, slots } = React.useContext(TablaCtx);
 
-  const celdas = React.Children.toArray(children).filter(
+  const cells = React.Children.toArray(children).filter(
     (n): n is React.ReactElement<{ children?: React.ReactNode }> => React.isValidElement(n),
   );
 
-  const de = (ranura: ListSlot) => {
-    const i = ranuras.indexOf(ranura);
-    return i >= 0 ? celdas[i]?.props.children : undefined;
+  const de = (slot: ListSlot) => {
+    const i = slots.indexOf(slot);
+    return i >= 0 ? cells[i]?.props.children : undefined;
   };
-  const todas = (ranura: ListSlot) =>
-    celdas
-      .map((celda, i) => ({
+  const all = (slot: ListSlot) =>
+    cells
+      .map((cell, i) => ({
         index: i,
-        valor: celda.props.children,
-        columna: columnas[i],
-        ranura: ranuras[i],
+        valor: cell.props.children,
+        column: columns[i],
+        slot: slots[i],
       }))
-      .filter((c) => c.ranura === ranura);
+      .filter((c) => c.slot === slot);
 
-  const antetitulo = de("kicker");
+  const kicker = de("kicker");
   const principal = de("primary");
-  const secundaria = de("secondary");
+  const secondary = de("secondary");
 
   return (
     /* Envuelve a dos niveles: los pares de rótulo y valor se reparten entre
@@ -585,33 +584,31 @@ const FilaDeLista = React.forwardRef<
       {...props}
     >
       <div className="flex min-w-40 flex-1 flex-col gap-0.5">
-        {antetitulo ? (
-          <span className="truncate text-xs text-muted-foreground">{antetitulo}</span>
-        ) : null}
+        {kicker ? <span className="truncate text-xs text-muted-foreground">{kicker}</span> : null}
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           {principal ? (
             <span className="min-w-0 truncate font-medium text-foreground">{principal}</span>
           ) : null}
-          {todas("inline").map((c) => (
+          {all("inline").map((c) => (
             <span key={c.index} className="shrink-0">
               {c.valor}
             </span>
           ))}
         </div>
-        {secundaria ? <span className="truncate text-muted-foreground">{secundaria}</span> : null}
+        {secondary ? <span className="truncate text-muted-foreground">{secondary}</span> : null}
       </div>
 
-      {todas("labeled").length > 0 ? (
+      {all("labeled").length > 0 ? (
         <div className="flex flex-wrap items-start justify-end gap-x-4 gap-y-1">
-          {todas("labeled").map((c) => (
+          {all("labeled").map((c) => (
             <div key={c.index} className="flex flex-col items-end gap-0.5">
               <span className="text-xs whitespace-nowrap text-muted-foreground">
-                {c.columna?.encabezado}
+                {c.column?.header}
               </span>
               <span
                 className={cn(
                   "whitespace-nowrap text-foreground",
-                  esNumerica(c.columna?.format) && "tabular-nums",
+                  isNumeric(c.column?.format) && "tabular-nums",
                 )}
               >
                 {c.valor}
@@ -623,7 +620,7 @@ const FilaDeLista = React.forwardRef<
     </li>
   );
 });
-FilaDeLista.displayName = "FilaDeLista";
+ListRow.displayName = "ListRow";
 
 /** Props de {@link TableRow}. */
 export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
@@ -641,24 +638,24 @@ export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
 
 /* Elementos que ya hacen algo por su cuenta: un clic ahí se queda ahí, y no
    pasa a la fila. */
-const INTERACTIVOS =
+const INTERACTIVE =
   "a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=checkbox],[contenteditable=true]";
 
 const useRowDelegate = (clickDelegate: string | undefined) => {
-  const fila = React.useRef<HTMLElement | null>(null);
+  const row = React.useRef<HTMLElement | null>(null);
 
-  const alPulsar = (evento: React.MouseEvent<HTMLElement>) => {
-    if (!clickDelegate || evento.defaultPrevented || evento.button !== 0) return;
-    if ((evento.target as HTMLElement | null)?.closest(INTERACTIVOS)) return;
+  const onPress = (event: React.MouseEvent<HTMLElement>) => {
+    if (!clickDelegate || event.defaultPrevented || event.button !== 0) return;
+    if ((event.target as HTMLElement | null)?.closest(INTERACTIVE)) return;
     /* Arrastrar para seleccionar texto termina en un clic sobre la fila, y no
        es lo mismo que pulsarla. */
     if (!(window.getSelection()?.isCollapsed ?? true)) return;
 
-    const dentro = fila.current?.querySelector<HTMLElement>(`#${CSS.escape(clickDelegate)}`);
-    (dentro ?? document.getElementById(clickDelegate))?.click();
+    const inside = row.current?.querySelector<HTMLElement>(`#${CSS.escape(clickDelegate)}`);
+    (inside ?? document.getElementById(clickDelegate))?.click();
   };
 
-  return { fila, alPulsar };
+  return { row, onPress };
 };
 
 /** Una fila. */
@@ -666,50 +663,50 @@ export const TableRow: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TableRowProps> & React.RefAttributes<HTMLTableRowElement>
 > = React.forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, children, clickDelegate, onClick, ...props }, ref) => {
-    const { modo } = React.useContext(TablaCtx);
-    const { fila, alPulsar } = useRowDelegate(clickDelegate);
+    const { mode } = React.useContext(TablaCtx);
+    const { row, onPress } = useRowDelegate(clickDelegate);
 
-    const pulsar = (evento: React.MouseEvent<HTMLElement>) => {
-      onClick?.(evento as React.MouseEvent<HTMLTableRowElement>);
-      alPulsar(evento);
+    const press = (event: React.MouseEvent<HTMLElement>) => {
+      onClick?.(event as React.MouseEvent<HTMLTableRowElement>);
+      onPress(event);
     };
 
-    if (modo === "list") {
+    if (mode === "list") {
       return (
-        <FilaDeLista
-          ref={fila as React.Ref<HTMLLIElement>}
+        <ListRow
+          ref={row as React.Ref<HTMLLIElement>}
           className={className}
           clickDelegate={clickDelegate}
-          onClick={pulsar}
+          onClick={press}
           {...(props as React.HTMLAttributes<HTMLLIElement>)}
         >
           {children}
-        </FilaDeLista>
+        </ListRow>
       );
     }
 
     /* Cada celda recibe el número de columna en la que cae. Es lo que le permite
        alinearse sola cuando su columna es numérica, sin que quien escribe la
        tabla tenga que repetir el formato celda por celda. */
-    const numeradas = React.Children.toArray(children).map((hijo, i) =>
-      React.isValidElement(hijo) ? (
-        <ColumnaCtx.Provider key={hijo.key} value={i}>
-          {hijo}
-        </ColumnaCtx.Provider>
+    const numbered = React.Children.toArray(children).map((child, i) =>
+      React.isValidElement(child) ? (
+        <ColumnCtx.Provider key={child.key} value={i}>
+          {child}
+        </ColumnCtx.Provider>
       ) : (
-        hijo
+        child
       ),
     );
 
     return (
       <tr
         data-slot="table-row"
-        ref={(nodo) => {
-          fila.current = nodo;
-          if (typeof ref === "function") ref(nodo);
-          else if (ref) ref.current = nodo;
+        ref={(node) => {
+          row.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) ref.current = node;
         }}
-        onClick={pulsar}
+        onClick={press}
         /* Apuntar una fila la deja del mismo tono que el encabezado: un solo valor
            para «superficie que no es la del contenido». Elegida baja un paso más,
            para que se distinga de la que solo se apunta.
@@ -731,7 +728,7 @@ export const TableRow: React.ForwardRefExoticComponent<
         )}
         {...props}
       >
-        {numeradas}
+        {numbered}
       </tr>
     );
   },
@@ -760,7 +757,7 @@ export const TableHead: React.ForwardRefExoticComponent<
          banda, que salía cuatro píxeles más baja que una fila. */
       className={cn(
         "bg-muted px-1.5 py-2 text-left align-middle text-sm font-medium whitespace-nowrap text-muted-foreground first:ps-3 last:pe-3",
-        esNumerica(format) && "text-end",
+        isNumeric(format) && "text-end",
         className,
       )}
       {...props}
@@ -775,8 +772,8 @@ export const TableCell: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableCellElement>
 > = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
   ({ className, ...props }, ref) => {
-    const { columnas } = React.useContext(TablaCtx);
-    const columna = React.useContext(ColumnaCtx);
+    const { columns } = React.useContext(TablaCtx);
+    const column = React.useContext(ColumnCtx);
 
     return (
       <td
@@ -784,7 +781,7 @@ export const TableCell: React.ForwardRefExoticComponent<
         ref={ref}
         className={cn(
           "px-1.5 py-2 align-middle text-sm text-foreground first:ps-3 last:pe-3",
-          esNumerica(columnas[columna]?.format) && "text-end tabular-nums",
+          isNumeric(columns[column]?.format) && "text-end tabular-nums",
           className,
         )}
         {...props}
@@ -800,21 +797,21 @@ export const TableCaption: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableCaptionElement>
 > = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HTMLTableCaptionElement>>(
   ({ className, ...props }, ref) => {
-    const { modo } = React.useContext(TablaCtx);
-    const comunes = "mt-3 mb-2 px-3 text-sm text-muted-foreground";
+    const { mode } = React.useContext(TablaCtx);
+    const shared = "mt-3 mb-2 px-3 text-sm text-muted-foreground";
 
-    if (modo === "list") {
+    if (mode === "list") {
       return (
         <div
           data-slot="table-caption"
-          className={cn(comunes, className)}
+          className={cn(shared, className)}
           {...(props as React.HTMLAttributes<HTMLDivElement>)}
         />
       );
     }
 
     return (
-      <caption data-slot="table-caption" ref={ref} className={cn(comunes, className)} {...props} />
+      <caption data-slot="table-caption" ref={ref} className={cn(shared, className)} {...props} />
     );
   },
 );

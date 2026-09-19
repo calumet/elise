@@ -50,7 +50,7 @@ function TooltipContent({
         style={{ ...tema.variables, ...style }}
         sideOffset={sideOffset}
         className={cn(
-          tema.clases,
+          tema.classes,
           "z-tooltip w-max max-w-[calc(100vw-1rem)] rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-[state=instant-open]:animate-in data-[state=instant-open]:fade-in-0",
           className,
         )}

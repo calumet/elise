@@ -22,7 +22,7 @@ const baseItem =
    La canaleta se reserva solo cuando el menú de verdad trae una fila con
    indicador, que es para lo que sirve data-slot. Un menú de puras acciones se
    queda sin sangría y no gana un hueco vacío a la izquierda. */
-const canaletaIndicador =
+const indicatorGutter =
   "[&:has([data-slot=context-menu-checkbox-item],[data-slot=context-menu-radio-item])_[data-slot=context-menu-item]]:pl-7 [&:has([data-slot=context-menu-checkbox-item],[data-slot=context-menu-radio-item])_[data-slot=context-menu-sub-trigger]]:pl-7";
 
 /** Raíz de el menú contextual. Guarda qué está abierto; no dibuja nada por sí sola. */
@@ -55,9 +55,9 @@ export const ContextMenuContent: React.ForwardRefExoticComponent<
         style={{ ...tema.variables, ...style }}
         ref={ref}
         className={cn(
-          tema.clases,
+          tema.classes,
           "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
-          canaletaIndicador,
+          indicatorGutter,
           className,
         )}
         {...props}
@@ -217,7 +217,7 @@ export const ContextMenuSubContent: React.ForwardRefExoticComponent<
     ref={ref}
     className={cn(
       "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
-      canaletaIndicador,
+      indicatorGutter,
       className,
     )}
     {...props}

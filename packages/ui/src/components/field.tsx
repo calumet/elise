@@ -57,36 +57,36 @@ export type FieldIdsOptions = {
  */
 export function useFieldIds({ id: idProp, description, error, required }: FieldIdsOptions): {
   id: string;
-  idDescripcion: string;
-  idError: string;
-  hayError: boolean;
+  descriptionId: string;
+  errorId: string;
+  hasError: boolean;
   control: FieldControlProps;
 } {
-  const generado = React.useId();
-  const id = idProp ?? generado;
-  const idDescripcion = `${id}-description`;
-  const idError = `${id}-error`;
-  const hayError = Boolean(error);
+  const generated = React.useId();
+  const id = idProp ?? generated;
+  const descriptionId = `${id}-description`;
+  const errorId = `${id}-error`;
+  const hasError = Boolean(error);
 
   /* La ayuda sigue enlazada aunque haya error, para no perderla justo cuando
      el usuario más la necesita. */
   const describedBy =
-    [description ? idDescripcion : null, hayError ? idError : null].filter(Boolean).join(" ") ||
+    [description ? descriptionId : null, hasError ? errorId : null].filter(Boolean).join(" ") ||
     undefined;
 
   const control: FieldControlProps = {
     id,
     "aria-describedby": describedBy,
-    "aria-invalid": hayError || undefined,
+    "aria-invalid": hasError || undefined,
     "aria-required": required || undefined,
   };
 
-  return { id, idDescripcion, idError, hayError, control };
+  return { id, descriptionId, errorId, hasError, control };
 }
 
 /** El asterisco de obligatorio, con su lectura para lectores de pantalla. */
 export function FieldRequiredMark(): React.JSX.Element {
-  const requeridoLabel = useElLabel("ui", "required", "obligatorio");
+  const requiredLabel = useElLabel("ui", "required", "obligatorio");
 
   return (
     <>
@@ -95,7 +95,7 @@ export function FieldRequiredMark(): React.JSX.Element {
       <span aria-hidden="true" className="ml-0.5 text-destructive-subtle-foreground">
         *
       </span>
-      <span className="sr-only"> ({requeridoLabel})</span>
+      <span className="sr-only"> ({requiredLabel})</span>
     </>
   );
 }
@@ -173,14 +173,14 @@ function Field({
   children,
   ...props
 }: FieldProps): React.JSX.Element {
-  const { id, idDescripcion, idError, hayError, control } = useFieldIds({
+  const { id, descriptionId, errorId, hasError, control } = useFieldIds({
     id: idProp,
     description,
     error,
     required,
   });
 
-  const etiqueta = (
+  const labelNode = (
     <label
       data-slot="field-label"
       htmlFor={id}
@@ -194,20 +194,20 @@ function Field({
   return (
     <div
       data-slot="field"
-      data-invalid={hayError ? "" : undefined}
+      data-invalid={hasError ? "" : undefined}
       className={cn("flex flex-col gap-1.5", className)}
       {...props}
     >
       {action ? (
         <div className="flex items-center justify-between gap-2">
-          {etiqueta}
+          {labelNode}
           {/* El margen negativo se come lo que el control de la acción mide de
               más que el rótulo, así la fila ocupa lo mismo que uno pelado y el
               campo conserva el ritmo de los demás. */}
           <div className="-my-1.5 flex items-center">{action}</div>
         </div>
       ) : (
-        etiqueta
+        labelNode
       )}
 
       {children(control)}
@@ -215,15 +215,15 @@ function Field({
       {description ? (
         <p
           data-slot="field-description"
-          id={idDescripcion}
+          id={descriptionId}
           className="text-xs text-muted-foreground"
         >
           {description}
         </p>
       ) : null}
 
-      {hayError ? (
-        <InlineError data-slot="field-error" id={idError}>
+      {hasError ? (
+        <InlineError data-slot="field-error" id={errorId}>
           {error}
         </InlineError>
       ) : null}

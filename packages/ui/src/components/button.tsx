@@ -157,7 +157,7 @@ export const Button: React.ForwardRefExoticComponent<
     /* Con `asChild` el contenido pasa intacto: `Slot` admite un solo hijo, así
        que envolverlo rompería la composición. Ahí el estado lo anuncia
        `aria-busy` y el hijo pinta lo que quiera. */
-    const cargando = loading && !asChild;
+    const isLoading = loading && !asChild;
     /* El default de HTML para `type` es "submit", así que un Button dentro de un
        form lo enviaba aunque solo llevara onClick. Quien envíe tiene que pedir
        `type="submit"` explícitamente. Con `asChild` no se fuerza nada, porque el
@@ -167,7 +167,7 @@ export const Button: React.ForwardRefExoticComponent<
         data-slot="button"
         ref={ref}
         type={asChild ? type : (type ?? "button")}
-        disabled={disabled || cargando || undefined}
+        disabled={disabled || isLoading || undefined}
         data-loading={loading ? "" : undefined}
         aria-busy={loading || undefined}
         className={cn(buttonVariants({ variant, size, tone }), className)}
@@ -176,7 +176,7 @@ export const Button: React.ForwardRefExoticComponent<
         {/* Las dos capas del estado de carga van dentro de una sola expresión:
             `Slot` cuenta un `null` suelto como un hijo más, y con `asChild` eso
             rompe su `Children.only`. */}
-        {cargando ? (
+        {isLoading ? (
           <>
             <span
               aria-hidden="true"

@@ -114,7 +114,7 @@ function Switch({
   defaultChecked,
   onCheckedChange,
 }: SwitchProps): React.JSX.Element {
-  const { id, idDescripcion, idError, hayError, control } = useFieldIds({
+  const { id, descriptionId, errorId, hasError, control } = useFieldIds({
     id: idProp,
     description,
     error,
@@ -124,7 +124,7 @@ function Switch({
   return (
     <div
       data-slot="switch-field"
-      data-invalid={hayError ? "" : undefined}
+      data-invalid={hasError ? "" : undefined}
       className={cn("flex items-start gap-2", className)}
     >
       <SwitchPrimitive.Root
@@ -170,15 +170,15 @@ function Switch({
         {description ? (
           <p
             data-slot="switch-description"
-            id={idDescripcion}
+            id={descriptionId}
             className="text-xs text-muted-foreground"
           >
             {description}
           </p>
         ) : null}
 
-        {hayError ? (
-          <InlineError data-slot="switch-error" id={idError}>
+        {hasError ? (
+          <InlineError data-slot="switch-error" id={errorId}>
             {error}
           </InlineError>
         ) : null}

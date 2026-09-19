@@ -40,7 +40,7 @@ import type {
 } from "@tanstack/react-table";
 
 /** Ajustes de columna que lee `DataTable`, en el `meta` de cada columna. */
-export type MetaDeColumna = {
+export type ColumnMeta = {
   /** Control que se dibuja en la barra de filtros. Sin esto no hay filtro. */
   filterVariant?: "text" | "range" | "select" | "date" | "daterange";
   className?: string;
@@ -65,7 +65,7 @@ export type MetaDeColumna = {
    `columnMeta` es una ranura de solo tipo: de ahí sale el tipo de
    `columnDef.meta` para toda la tabla. Antes eso pedía un `declare module` sobre
    `ColumnMeta` de TanStack, que JSR rechaza por ampliar un módulo desde fuera. */
-export type Caracteristicas = {
+export type Features = {
   columnFacetingFeature: TableFeature;
   columnFilteringFeature: TableFeature;
   columnVisibilityFeature: TableFeature;
@@ -104,10 +104,10 @@ export type Caracteristicas = {
     datetime: CreatedSortFn<TableFeatures, RowData>;
     text: CreatedSortFn<TableFeatures, RowData>;
   };
-  columnMeta: MetaDeColumna;
+  columnMeta: ColumnMeta;
 };
 
-export const caracteristicas: Caracteristicas = tableFeatures({
+export const features: Features = tableFeatures({
   columnFacetingFeature,
   columnFilteringFeature,
   columnVisibilityFeature,
@@ -133,5 +133,5 @@ export const caracteristicas: Caracteristicas = tableFeatures({
     datetime: sortFn_datetime,
     text: sortFn_text,
   },
-  columnMeta: metaHelper<MetaDeColumna>(),
+  columnMeta: metaHelper<ColumnMeta>(),
 });

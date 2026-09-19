@@ -24,7 +24,7 @@ import { useElLabel } from "@/lib/i18n";
  * aprovecharía el foco, y pasarlo por ahí obligaría a deshacer con `border:
  * none` y `box-shadow: none` casi todo lo demás que pone.
  */
-const CAJA =
+const BOX =
   "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover active:bg-state-active focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background aria-disabled:pointer-events-none aria-disabled:text-border-strong disabled:pointer-events-none disabled:text-border-strong";
 
 /** Props de {@link Pagination}. */
@@ -132,7 +132,7 @@ function PaginationLink({ className, isActive, ...props }: PaginationLinkProps):
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
-      className={cn(CAJA, "text-sm", isActive && "bg-fill-tertiary font-medium", className)}
+      className={cn(BOX, "text-sm", isActive && "bg-fill-tertiary font-medium", className)}
       {...props}
     />
   );
@@ -149,7 +149,7 @@ const PaginationStep: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<PaginationButtonProps> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, PaginationButtonProps>(
   ({ className, type = "button", ...props }, ref) => (
-    <button ref={ref} type={type} className={cn(CAJA, "bg-fill-tertiary", className)} {...props} />
+    <button ref={ref} type={type} className={cn(BOX, "bg-fill-tertiary", className)} {...props} />
   ),
 );
 PaginationStep.displayName = "PaginationStep";

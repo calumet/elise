@@ -43,7 +43,7 @@ export type ImageProps = Omit<React.ComponentProps<"img">, "width" | "height"> &
   fill?: boolean;
 };
 
-const ajustes: Record<NonNullable<ImageProps["objectFit"]>, string> = {
+const settings: Record<NonNullable<ImageProps["objectFit"]>, string> = {
   cover: "object-cover",
   contain: "object-contain",
 };
@@ -96,7 +96,7 @@ export const Image: React.ForwardRefExoticComponent<
       className={cn(
         "block max-w-full",
         fill && "w-full",
-        ajustes[objectFit],
+        settings[objectFit],
         radius && radios[radius],
         border && (border === "strong" ? "border border-border-strong" : "border border-border"),
         className,
@@ -113,7 +113,7 @@ export type ThumbnailProps = Omit<ImageProps, "aspectRatio" | "fill" | "radius">
 };
 
 /* 24, 40, 60 y 80. Los cuatro caen en la rejilla de 4px del sistema. */
-const tamanos: Record<NonNullable<ThumbnailProps["size"]>, string> = {
+const sizes: Record<NonNullable<ThumbnailProps["size"]>, string> = {
   xs: "size-6",
   sm: "size-10",
   md: "size-15",
@@ -144,7 +144,7 @@ export const Thumbnail: React.ForwardRefExoticComponent<
       ref={ref}
       border
       radius="md"
-      className={cn("shrink-0", tamanos[size], className)}
+      className={cn("shrink-0", sizes[size], className)}
       {...props}
     />
   ),

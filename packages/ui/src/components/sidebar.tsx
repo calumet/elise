@@ -13,7 +13,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
-import { SUPERFICIE_SIDEBAR } from "@/lib/superficie";
+import { SIDEBAR_SURFACE } from "@/lib/surface";
 
 import { Button } from "./button";
 import { Input } from "./input";
@@ -181,7 +181,7 @@ function Sidebar({
     return (
       <div
         data-slot="sidebar"
-        className={cn(SUPERFICIE_SIDEBAR, "flex h-full w-(--sidebar-width) flex-col", className)}
+        className={cn(SIDEBAR_SURFACE, "flex h-full w-(--sidebar-width) flex-col", className)}
         {...props}
       >
         {children}
@@ -196,7 +196,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className={cn(SUPERFICIE_SIDEBAR, "w-(--sidebar-width) p-0 [&>button]:hidden")}
+          className={cn(SIDEBAR_SURFACE, "w-(--sidebar-width) p-0 [&>button]:hidden")}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,

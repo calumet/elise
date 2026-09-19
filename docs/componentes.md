@@ -267,7 +267,7 @@ fuera.
 
 El alto y el texto son los mismos en los cuatro controles; el relleno a los
 costados no, porque la caja de un botón la marca el rótulo y la de un campo el
-valor que se escribe dentro. La escala vive en `TAMANOS_CAMPO`, dentro de
+valor que se escribe dentro. La escala vive en `FIELD_SIZES`, dentro de
 `input`, y de ahí la toman los otros.
 
 #### Los seis campos compuestos
@@ -748,7 +748,7 @@ buscarlos al final.
 </SheetContent>
 ```
 
-Las clases salen de `CABECERA_DIALOGO`, `CUERPO_DIALOGO` y `PIE_DIALOGO`, que
+Las clases salen de `DIALOG_HEADER`, `DIALOG_BODY` y `DIALOG_FOOTER`, que
 `dialog` exporta sueltas para que las tres superficies usen exactamente las
 mismas. Un panel o un diálogo sin su zona de cuerpo pierde el desplazamiento y
 las tres zonas se leen como contenido que se quedó arriba y abajo.
@@ -776,7 +776,7 @@ lo pone el hijo entero.
 
 | Componente                                                              | Import                           | Radix / Externo                                                      |
 | ----------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------- |
-| Avatar, AvatarImage, AvatarFallback, inicialesDe                        | `@calumet/elise-ui/avatar`       | [Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) |
+| Avatar, AvatarImage, AvatarFallback, initialsOf                         | `@calumet/elise-ui/avatar`       | [Avatar](https://www.radix-ui.com/primitives/docs/components/avatar) |
 | AvatarGroup                                                             | `@calumet/elise-ui/avatar-group` | —                                                                    |
 | Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext | `@calumet/elise-ui/carousel`     | [Embla Carousel](https://www.embla-carousel.com/)                    |
 | Calendar                                                                | `@calumet/elise-ui/calendar`     | [react-day-picker](https://daypicker.dev/)                           |

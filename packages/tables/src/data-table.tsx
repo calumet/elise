@@ -56,11 +56,11 @@ import {
 } from "@tanstack/react-table";
 import React, { Fragment, useCallback, useId, useMemo } from "react";
 
-import { caracteristicas, type Caracteristicas, type MetaDeColumna } from "./features";
+import { features, type Features, type ColumnMeta } from "./features";
 import { dateRangeFilterFn, multiSelectFilterFn, exportToCSV, exportToJSON } from "./filters";
 import { useElLabel } from "./i18n";
 
-export type { MetaDeColumna };
+export type { ColumnMeta };
 
 /* El `meta` ya no viaja en una intersección propia: sale de la ranura
    `columnMeta` de `features.ts`, que tipa el `meta` de esta tabla sin ampliar un
@@ -71,13 +71,13 @@ export type { MetaDeColumna };
  * juego de características en cada columna.
  */
 export type ColumnDef<TData extends RowData, TValue = unknown> = ColumnDefBase<
-  Caracteristicas,
+  Features,
   TData,
   TValue
 >;
 
 /* El `meta` es opcional, y las tres lecturas quieren un objeto. */
-const metaDe = (columnDef: { meta?: MetaDeColumna }): MetaDeColumna => columnDef.meta ?? {};
+const metaDe = (columnDef: { meta?: ColumnMeta }): ColumnMeta => columnDef.meta ?? {};
 
 /** Props de {@link DataTable}. */
 interface DataTableProps<TData extends RowData> {
@@ -139,13 +139,13 @@ function DataTableContent<TData extends RowData>({
       if (column.meta?.filterVariant === "select") {
         return {
           ...column,
-          filterFn: multiSelectFilterFn as FilterFn<Caracteristicas, TData>,
+          filterFn: multiSelectFilterFn as FilterFn<Features, TData>,
         };
       }
       if (column.meta?.filterVariant === "daterange") {
         return {
           ...column,
-          filterFn: dateRangeFilterFn as FilterFn<Caracteristicas, TData>,
+          filterFn: dateRangeFilterFn as FilterFn<Features, TData>,
         };
       }
       return column;
@@ -155,7 +155,7 @@ function DataTableContent<TData extends RowData>({
   /* Sin selector, `useTable` se suscribe a todas las rebanadas de estado, que es
      lo que hacía la v8 y lo que espera el resto del componente. */
   const table = useTable({
-    features: caracteristicas,
+    features: features,
     data,
     columns: enhancedColumns,
     onSortingChange: setSorting,
@@ -179,8 +179,8 @@ function DataTableContent<TData extends RowData>({
 
   const { pageIndex, pageSize } = table.state.pagination;
   const total = table.getRowCount();
-  const primeraFila = total === 0 ? 0 : pageIndex * pageSize + 1;
-  const ultimaFila = Math.min(pageIndex * pageSize + pageSize, total);
+  const firstRow = total === 0 ? 0 : pageIndex * pageSize + 1;
+  const lastRow = Math.min(pageIndex * pageSize + pageSize, total);
 
   const getExportData = useCallback(() => {
     return table.getFilteredRowModel().rows.map((row) => {
@@ -203,7 +203,7 @@ function DataTableContent<TData extends RowData>({
      `Table` por su cuenta, con `filters`, `paginate` y `loading`. Antes esto
      armaba su propia tarjeta con la misma `SUPERFICIE`, y eran dos sitios donde
      arreglar lo mismo. */
-  const barraDeFiltros = (
+  const filterBar = (
     <section className="flex flex-wrap justify-between gap-3 sm:flex-nowrap">
       <div className="flex flex-wrap items-end gap-3">
         {table.getAllColumns().map((column) => {
@@ -269,7 +269,7 @@ function DataTableContent<TData extends RowData>({
     <div className="flex h-full w-full min-w-0 flex-col justify-between">
       <div data-slot="data-table-card" className="min-w-0">
         <Table
-          filters={barraDeFiltros}
+          filters={filterBar}
           loading={isLoading}
           loadingLabel={labelLoading}
           paginate
@@ -279,7 +279,7 @@ function DataTableContent<TData extends RowData>({
           onNextPage={() => table.nextPage()}
           onFirstPage={() => table.firstPage()}
           onLastPage={() => table.lastPage()}
-          paginationLabel={`${primeraFila}-${ultimaFila} ${labelOf} ${total}`}
+          paginationLabel={`${firstRow}-${lastRow} ${labelOf} ${total}`}
           paginationEnd={
             <div className="flex items-center gap-2">
               <Label htmlFor={id} className="text-xs whitespace-nowrap max-sm:sr-only">
@@ -293,9 +293,9 @@ function DataTableContent<TData extends RowData>({
                   <SelectValue placeholder={labelPageSizePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
-                  {pageOptions.map((opcion) => (
-                    <SelectItem key={opcion} value={opcion.toString()}>
-                      {opcion}
+                  {pageOptions.map((option) => (
+                    <SelectItem key={option} value={option.toString()}>
+                      {option}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -395,7 +395,7 @@ function DataTableContent<TData extends RowData>({
 }
 
 type FilterProps<TData extends RowData> = {
-  column: Column<Caracteristicas, TData, unknown>;
+  column: Column<Features, TData, unknown>;
   columnHeader: string;
 };
 
@@ -483,7 +483,7 @@ function SelectFilter<TData extends RowData>({
 }: FilterProps<TData>): React.JSX.Element {
   const columnFilterValue = column.getFilterValue();
   const [selectOpen, setSelectOpen] = React.useState(false);
-  const idLista = React.useId();
+  const listId = React.useId();
 
   const labelSelectPlaceholder = useElLabel("tables", "selectPlaceholder", "Select...");
   const labelNoOptions = useElLabel("tables", "noOptions", "No options found.");
@@ -521,7 +521,7 @@ function SelectFilter<TData extends RowData>({
     : columnFilterValue
       ? [String(columnFilterValue)]
       : [];
-  const elegidas = new Set(selectedValues);
+  const selected = new Set(selectedValues);
 
   const toggleSelection = (value: string) => {
     const newValue = selectedValues.includes(value)
@@ -545,7 +545,7 @@ function SelectFilter<TData extends RowData>({
             variant="outline"
             role="combobox"
             aria-expanded={selectOpen}
-            aria-controls={idLista}
+            aria-controls={listId}
             className="w-full justify-between border-border bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
           >
             <div className="flex min-w-0 flex-1 items-center">
@@ -562,7 +562,7 @@ function SelectFilter<TData extends RowData>({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          id={idLista}
+          id={listId}
           className="w-full min-w-(--radix-popper-anchor-width) border-border p-0"
           align="start"
         >
@@ -578,7 +578,7 @@ function SelectFilter<TData extends RowData>({
                     onSelect={() => toggleSelection(String(value))}
                   >
                     <span className="truncate">{String(value)}</span>
-                    {elegidas.has(String(value)) && <Check className="ml-auto size-4" />}
+                    {selected.has(String(value)) && <Check className="ml-auto size-4" />}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -643,7 +643,7 @@ function TextFilter<TData extends RowData>({
 function Filter<TData extends RowData>({
   column,
 }: {
-  column: Column<Caracteristicas, TData, unknown>;
+  column: Column<Features, TData, unknown>;
 }): React.JSX.Element {
   const { filterVariant } = metaDe(column.columnDef);
   const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";

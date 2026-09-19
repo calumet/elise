@@ -1,5 +1,5 @@
 import { TriangleAlert, Info, CircleX, X, CircleCheck } from "@calumet/elise-icons";
-import { SUPERFICIE_INVERSA } from "@calumet/elise-ui/box";
+import { INVERSE_SURFACE } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
 import {
   Toast,
@@ -76,7 +76,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
              y otra tarjeta blanca más se confunde con ellas.
              Invertirlo lo despega sin recurrir a un color de estado, que aquí
              significaría otra cosa. Radio de 8px y 12 de relleno. */
-          className={`${SUPERFICIE_INVERSA} group relative flex w-full max-w-md flex-col gap-2 rounded-md p-3 pr-12 shadow-lg transition data-[state=closed]:animate-out data-[state=open]:animate-in data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x)`}
+          className={`${INVERSE_SURFACE} group relative flex w-full max-w-md flex-col gap-2 rounded-md p-3 pr-12 shadow-lg transition data-[state=closed]:animate-out data-[state=open]:animate-in data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:duration-200 data-[swipe=end]:animate-swipe-out data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x)`}
         >
           <div className="flex items-start gap-2 pr-2">
             <ToastIcon variant={toastItem.variant} />

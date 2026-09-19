@@ -41,7 +41,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "./command";
-import { TAMANOS_CAMPO, type TamanoCampo } from "./input";
+import { FIELD_SIZES, type FieldSize } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Spinner } from "./spinner";
 
@@ -51,17 +51,17 @@ import { Spinner } from "./spinner";
 
 type ComboboxContextValue = {
   /** Valores elegidos. En modo simple es un array de cero o un elemento. */
-  valores: string[];
-  elegir: (valor: string) => void;
-  abierto: boolean;
+  values: string[];
+  select: (valor: string) => void;
+  open: boolean;
   multiple: boolean;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
 
-const useCombobox = (parte: string) => {
+const useCombobox = (part: string) => {
   const ctx = React.useContext(ComboboxContext);
-  if (!ctx) throw new Error(`<${parte}> debe usarse dentro de <Combobox>`);
+  if (!ctx) throw new Error(`<${part}> debe usarse dentro de <Combobox>`);
   return ctx;
 };
 
@@ -122,39 +122,39 @@ function Combobox({
   modal,
   children,
 }: ComboboxProps): React.JSX.Element {
-  const [valorInterno, setValorInterno] = React.useState(defaultValue ?? "");
-  const [abiertoInterno, setAbiertoInterno] = React.useState(defaultOpen ?? false);
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen ?? false);
 
-  const valorControlado = valueProp !== undefined;
-  const abiertoControlado = openProp !== undefined;
-  const value = valorControlado ? valueProp : valorInterno;
-  const abierto = abiertoControlado ? openProp : abiertoInterno;
+  const controlledValue = valueProp !== undefined;
+  const controlledOpen = openProp !== undefined;
+  const value = controlledValue ? valueProp : internalValue;
+  const open = controlledOpen ? openProp : internalOpen;
 
-  const cambiarApertura = React.useCallback(
-    (siguiente: boolean) => {
-      if (!abiertoControlado) setAbiertoInterno(siguiente);
-      onOpenChange?.(siguiente);
+  const changeOpening = React.useCallback(
+    (next: boolean) => {
+      if (!controlledOpen) setInternalOpen(next);
+      onOpenChange?.(next);
     },
-    [abiertoControlado, onOpenChange],
+    [controlledOpen, onOpenChange],
   );
 
-  const elegir = React.useCallback(
-    (nuevo: string) => {
-      if (!valorControlado) setValorInterno(nuevo);
-      onValueChange?.(nuevo);
-      if (closeOnSelect) cambiarApertura(false);
+  const select = React.useCallback(
+    (newValue: string) => {
+      if (!controlledValue) setInternalValue(newValue);
+      onValueChange?.(newValue);
+      if (closeOnSelect) changeOpening(false);
     },
-    [valorControlado, onValueChange, closeOnSelect, cambiarApertura],
+    [controlledValue, onValueChange, closeOnSelect, changeOpening],
   );
 
   const ctx = React.useMemo(
-    () => ({ valores: value ? [value] : [], elegir, abierto, multiple: false }),
-    [value, elegir, abierto],
+    () => ({ values: value ? [value] : [], select, open, multiple: false }),
+    [value, select, open],
   );
 
   return (
     <ComboboxContext.Provider value={ctx}>
-      <Popover open={abierto} onOpenChange={cambiarApertura} modal={modal}>
+      <Popover open={open} onOpenChange={changeOpening} modal={modal}>
         {children}
       </Popover>
     </ComboboxContext.Provider>
@@ -187,42 +187,42 @@ function MultiCombobox({
   modal,
   children,
 }: MultiComboboxProps): React.JSX.Element {
-  const [valoresInternos, setValoresInternos] = React.useState<string[]>(defaultValue ?? []);
-  const [abiertoInterno, setAbiertoInterno] = React.useState(defaultOpen ?? false);
+  const [internalValues, setInternalValues] = React.useState<string[]>(defaultValue ?? []);
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen ?? false);
 
-  const valorControlado = valueProp !== undefined;
-  const abiertoControlado = openProp !== undefined;
-  const valores = valorControlado ? valueProp : valoresInternos;
-  const abierto = abiertoControlado ? openProp : abiertoInterno;
+  const controlledValue = valueProp !== undefined;
+  const controlledOpen = openProp !== undefined;
+  const values = controlledValue ? valueProp : internalValues;
+  const open = controlledOpen ? openProp : internalOpen;
 
-  const cambiarApertura = React.useCallback(
-    (siguiente: boolean) => {
-      if (!abiertoControlado) setAbiertoInterno(siguiente);
-      onOpenChange?.(siguiente);
+  const changeOpening = React.useCallback(
+    (next: boolean) => {
+      if (!controlledOpen) setInternalOpen(next);
+      onOpenChange?.(next);
     },
-    [abiertoControlado, onOpenChange],
+    [controlledOpen, onOpenChange],
   );
 
-  const elegir = React.useCallback(
-    (nuevo: string) => {
-      const siguiente = valores.includes(nuevo)
-        ? valores.filter((v) => v !== nuevo)
-        : [...valores, nuevo];
-      if (!valorControlado) setValoresInternos(siguiente);
-      onValueChange?.(siguiente);
-      if (closeOnSelect) cambiarApertura(false);
+  const select = React.useCallback(
+    (newValue: string) => {
+      const next = values.includes(newValue)
+        ? values.filter((v) => v !== newValue)
+        : [...values, newValue];
+      if (!controlledValue) setInternalValues(next);
+      onValueChange?.(next);
+      if (closeOnSelect) changeOpening(false);
     },
-    [valores, valorControlado, onValueChange, closeOnSelect, cambiarApertura],
+    [values, controlledValue, onValueChange, closeOnSelect, changeOpening],
   );
 
   const ctx = React.useMemo(
-    () => ({ valores, elegir, abierto, multiple: true }),
-    [valores, elegir, abierto],
+    () => ({ values, select, open, multiple: true }),
+    [values, select, open],
   );
 
   return (
     <ComboboxContext.Provider value={ctx}>
-      <Popover open={abierto} onOpenChange={cambiarApertura} modal={modal}>
+      <Popover open={open} onOpenChange={changeOpening} modal={modal}>
         {children}
       </Popover>
     </ComboboxContext.Provider>
@@ -232,7 +232,7 @@ function MultiCombobox({
 /** Props de {@link ComboboxTrigger}. */
 export type ComboboxTriggerProps = React.ComponentProps<"button"> & {
   /** Por defecto `md`, 36px de alto. */
-  size?: TamanoCampo;
+  size?: FieldSize;
 
   /** Muestra una X que devuelve el combobox a "sin selección". */
   onClear?: () => void;
@@ -247,9 +247,9 @@ function ComboboxTrigger({
   disabled,
   ...props
 }: ComboboxTriggerProps): React.JSX.Element {
-  const { abierto } = useCombobox("ComboboxTrigger");
-  const limpiarLabel = useElLabel("ui", "clear", "Limpiar seleccion");
-  const mostrarLimpiar = Boolean(onClear) && !disabled;
+  const { open } = useCombobox("ComboboxTrigger");
+  const clearLabel = useElLabel("ui", "clear", "Limpiar seleccion");
+  const showClear = Boolean(onClear) && !disabled;
 
   return (
     /* El botón de limpiar va como hermano del disparador, porque un <button>
@@ -260,26 +260,26 @@ function ComboboxTrigger({
           type="button"
           disabled={disabled}
           data-slot="combobox-trigger"
-          data-state={abierto ? "open" : "closed"}
+          data-state={open ? "open" : "closed"}
           className={cn(
             "flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-input bg-background text-foreground transition-[border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-            TAMANOS_CAMPO[size],
+            FIELD_SIZES[size],
             className,
           )}
           {...props}
         >
           {/* El hueco para la X va en el contenido. Con el padding puesto en el
               botón, el chevron se corre hacia adentro y queda debajo. */}
-          <span className={cn("min-w-0 flex-1 truncate text-left", mostrarLimpiar && "pr-6")}>
+          <span className={cn("min-w-0 flex-1 truncate text-left", showClear && "pr-6")}>
             {children}
           </span>
           <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         </button>
       </PopoverTrigger>
-      {mostrarLimpiar ? (
+      {showClear ? (
         <button
           type="button"
-          aria-label={limpiarLabel}
+          aria-label={clearLabel}
           onClick={onClear}
           className="absolute top-1/2 right-8 inline-flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
         >
@@ -309,16 +309,16 @@ function ComboboxValue({
   children,
   ...props
 }: ComboboxValueProps): React.JSX.Element {
-  const phDefecto = useElLabel("ui", "comboboxPlaceholder", "Seleccionar…");
-  const vacio = children === undefined || children === null || children === "";
+  const defaultPlaceholder = useElLabel("ui", "comboboxPlaceholder", "Seleccionar…");
+  const empty = children === undefined || children === null || children === "";
   return (
     <span
       data-slot="combobox-value"
-      data-placeholder={vacio ? "" : undefined}
+      data-placeholder={empty ? "" : undefined}
       className={cn("truncate data-placeholder:text-muted-foreground", className)}
       {...props}
     >
-      {vacio ? (placeholder ?? phDefecto) : children}
+      {empty ? (placeholder ?? defaultPlaceholder) : children}
     </span>
   );
 }
@@ -356,11 +356,11 @@ function ComboboxInput({
   placeholder,
   ...props
 }: React.ComponentProps<typeof CommandInput>): React.JSX.Element {
-  const phDefecto = useElLabel("ui", "comboboxSearch", "Buscar…");
+  const defaultPlaceholder = useElLabel("ui", "comboboxSearch", "Buscar…");
   return (
     <CommandInput
       data-slot="combobox-input"
-      placeholder={placeholder ?? phDefecto}
+      placeholder={placeholder ?? defaultPlaceholder}
       wrapperClassName="h-10"
       className={className}
       {...props}
@@ -381,10 +381,10 @@ function ComboboxEmpty({
   children,
   ...props
 }: React.ComponentProps<typeof CommandEmpty>): React.JSX.Element {
-  const porDefecto = useElLabel("ui", "comboboxEmpty", "Sin resultados");
+  const byDefault = useElLabel("ui", "comboboxEmpty", "Sin resultados");
   return (
     <CommandEmpty data-slot="combobox-empty" {...props}>
-      {children ?? porDefecto}
+      {children ?? byDefault}
     </CommandEmpty>
   );
 }
@@ -406,7 +406,7 @@ export type ComboboxLoadingProps = React.ComponentProps<"div"> & { label?: strin
 
 /** Fila de carga, para listas que se piden al servidor mientras se escribe. */
 function ComboboxLoading({ className, label, ...props }: ComboboxLoadingProps): React.JSX.Element {
-  const porDefecto = useElLabel("ui", "loading", "Cargando");
+  const byDefault = useElLabel("ui", "loading", "Cargando");
   return (
     <div
       data-slot="combobox-loading"
@@ -417,7 +417,7 @@ function ComboboxLoading({ className, label, ...props }: ComboboxLoadingProps): 
       {...props}
     >
       <Spinner size="sm" />
-      {label ?? porDefecto}
+      {label ?? byDefault}
     </div>
   );
 }
@@ -462,8 +462,8 @@ function ComboboxItem({
   children,
   ...props
 }: ComboboxItemProps): React.JSX.Element {
-  const { valores, elegir } = useCombobox("ComboboxItem");
-  const elegido = valores.includes(value);
+  const { values, select } = useCombobox("ComboboxItem");
+  const selected = values.includes(value);
 
   return (
     <CommandItem
@@ -475,13 +475,13 @@ function ComboboxItem({
       value={value}
       keywords={keywords}
       onSelect={() => {
-        elegir(value);
+        select(value);
         onSelect?.(value);
       }}
       /* El fondo de cmdk (`data-selected`) marca el resaltado del teclado, que
          se mueve con las flechas. El *elegido* se distingue por peso, para que
          ambos estados se lean a la vez. */
-      className={cn("justify-between", elegido && "font-semibold", className)}
+      className={cn("justify-between", selected && "font-semibold", className)}
       {...props}
     >
       {/* La sangría va en el contenido y no en la fila: sobre la fila
@@ -494,7 +494,7 @@ function ComboboxItem({
         {icon}
         {children}
       </span>
-      {elegido ? (
+      {selected ? (
         <Check className="size-4 shrink-0 text-accent-foreground" aria-hidden="true" />
       ) : null}
     </CommandItem>
@@ -537,21 +537,21 @@ function OptionList({
   contentClassName,
   searchPlaceholder,
   emptyMessage,
-  grupos,
+  groups,
 }: {
   align?: ComboboxContentProps["align"];
   contentClassName?: string;
   searchPlaceholder?: string;
   emptyMessage?: string;
-  grupos: Array<[string, ComboboxOption[]]>;
+  groups: Array<[string, ComboboxOption[]]>;
 }): React.JSX.Element {
   return (
     <ComboboxContent align={align} className={contentClassName}>
       <ComboboxInput placeholder={searchPlaceholder} />
       <ComboboxList>
         <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
-        {grupos.map(([grupo, items]) => (
-          <ComboboxGroup key={grupo || "sin-grupo"} heading={grupo || undefined}>
+        {groups.map(([group, items]) => (
+          <ComboboxGroup key={group || "sin-grupo"} heading={group || undefined}>
             {items.map((o) => (
               <ComboboxItem
                 key={o.value}
@@ -630,38 +630,38 @@ function ComboboxField({
   align = "start",
   ...props
 }: ComboboxFieldProps): React.JSX.Element {
-  const [interno, setInterno] = React.useState(defaultValue ?? "");
-  const controlado = valueProp !== undefined;
-  const value = controlado ? valueProp : interno;
+  const [internal, setInternal] = React.useState(defaultValue ?? "");
+  const controlled = valueProp !== undefined;
+  const value = controlled ? valueProp : internal;
 
-  const cambiar = (nuevo: string) => {
-    if (!controlado) setInterno(nuevo);
-    onValueChange?.(nuevo);
+  const change = (newValue: string) => {
+    if (!controlled) setInternal(newValue);
+    onValueChange?.(newValue);
   };
 
-  const seleccionada = options.find((o) => o.value === value);
+  const selected = options.find((o) => o.value === value);
 
   /* Preserva el orden de aparición de los grupos en `options`. */
-  const grupos = React.useMemo(() => {
-    const mapa = new Map<string, ComboboxOption[]>();
+  const groups = React.useMemo(() => {
+    const map = new Map<string, ComboboxOption[]>();
     for (const o of options) {
       const clave = o.group ?? "";
-      if (!mapa.has(clave)) mapa.set(clave, []);
-      mapa.get(clave)!.push(o);
+      if (!map.has(clave)) map.set(clave, []);
+      map.get(clave)!.push(o);
     }
-    return [...mapa.entries()];
+    return [...map.entries()];
   }, [options]);
 
   return (
-    <Combobox value={value} onValueChange={cambiar} modal={modal}>
+    <Combobox value={value} onValueChange={change} modal={modal}>
       <ComboboxTrigger
         size={size}
         disabled={disabled}
         className={className}
-        onClear={clearable && seleccionada ? () => cambiar("") : undefined}
+        onClear={clearable && selected ? () => change("") : undefined}
         {...props}
       >
-        <ComboboxValue placeholder={placeholder}>{seleccionada?.label}</ComboboxValue>
+        <ComboboxValue placeholder={placeholder}>{selected?.label}</ComboboxValue>
       </ComboboxTrigger>
 
       {name ? <input type="hidden" name={name} value={value} /> : null}
@@ -671,7 +671,7 @@ function ComboboxField({
         contentClassName={contentClassName}
         searchPlaceholder={searchPlaceholder}
         emptyMessage={emptyMessage}
-        grupos={grupos}
+        groups={groups}
       />
     </Combobox>
   );
@@ -700,16 +700,16 @@ export type MultiComboboxFieldProps = Omit<
  * Los anchos se miden sobre una fila aparte que siempre lleva todos los chips,
  * de modo que el cálculo no dependa de su propio resultado.
  */
-const cuantosCaben = (anchos: number[], anchoContador: number, disponible: number, gap: number) => {
-  let usado = 0;
-  for (let i = 0; i < anchos.length; i++) {
-    const sumaChip = anchos[i] + (i > 0 ? gap : 0);
-    const sobranDespues = anchos.length - i - 1;
-    const reserva = sobranDespues > 0 ? gap + anchoContador : 0;
-    if (usado + sumaChip + reserva > disponible) return i;
-    usado += sumaChip;
+const howManyFit = (widths: number[], counterWidth: number, available: number, gap: number) => {
+  let used = 0;
+  for (let i = 0; i < widths.length; i++) {
+    const overflowChip = widths[i] + (i > 0 ? gap : 0);
+    const extraAfter = widths.length - i - 1;
+    const reserve = extraAfter > 0 ? gap + counterWidth : 0;
+    if (used + overflowChip + reserve > available) return i;
+    used += overflowChip;
   }
-  return anchos.length;
+  return widths.length;
 };
 
 /**
@@ -734,86 +734,86 @@ function MultiComboboxField({
   align = "start",
   ...props
 }: MultiComboboxFieldProps): React.JSX.Element {
-  const [internos, setInternos] = React.useState<string[]>(defaultValue ?? []);
-  const controlado = valueProp !== undefined;
-  const valores = controlado ? valueProp : internos;
+  const [internal, setInternal] = React.useState<string[]>(defaultValue ?? []);
+  const controlled = valueProp !== undefined;
+  const values = controlled ? valueProp : internal;
 
-  const cambiar = (siguiente: string[]) => {
-    if (!controlado) setInternos(siguiente);
-    onValueChange?.(siguiente);
+  const change = (next: string[]) => {
+    if (!controlled) setInternal(next);
+    onValueChange?.(next);
   };
 
-  const elegidas = valores
+  const selected = values
     .map((v) => options.find((o) => o.value === v))
     .filter((o): o is ComboboxOption => Boolean(o));
 
-  const filaRef = React.useRef<HTMLSpanElement>(null);
-  const medidorRef = React.useRef<HTMLSpanElement>(null);
-  const [caben, setCaben] = React.useState(elegidas.length);
+  const rowRef = React.useRef<HTMLSpanElement>(null);
+  const meterRef = React.useRef<HTMLSpanElement>(null);
+  const [fit, setFit] = React.useState(selected.length);
 
-  const claves = elegidas.map((o) => o.value).join("|");
+  const keys = selected.map((o) => o.value).join("|");
   React.useLayoutEffect(() => {
-    const fila = filaRef.current;
-    const medidor = medidorRef.current;
-    if (!fila || !medidor) return;
+    const row = rowRef.current;
+    const meter = meterRef.current;
+    if (!row || !meter) return;
 
-    const medir = () => {
-      const hijos = [...medidor.children] as HTMLElement[];
-      if (hijos.length === 0) return;
-      const anchoContador = hijos[hijos.length - 1].getBoundingClientRect().width;
-      const anchos = hijos.slice(0, -1).map((c) => c.getBoundingClientRect().width);
-      const gap = parseFloat(getComputedStyle(fila).columnGap) || 4;
-      setCaben(Math.max(1, cuantosCaben(anchos, anchoContador, fila.clientWidth, gap)));
+    const measure = () => {
+      const childNodes = [...meter.children] as HTMLElement[];
+      if (childNodes.length === 0) return;
+      const counterWidth = childNodes[childNodes.length - 1].getBoundingClientRect().width;
+      const widths = childNodes.slice(0, -1).map((c) => c.getBoundingClientRect().width);
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 4;
+      setFit(Math.max(1, howManyFit(widths, counterWidth, row.clientWidth, gap)));
     };
 
-    medir();
-    const ro = new ResizeObserver(medir);
-    ro.observe(fila);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(row);
     return () => ro.disconnect();
-  }, [claves]);
+  }, [keys]);
 
-  const tope = maxChips === undefined ? caben : Math.min(caben, maxChips);
-  const visibles = elegidas.slice(0, tope);
-  const resto = elegidas.length - visibles.length;
+  const tope = maxChips === undefined ? fit : Math.min(fit, maxChips);
+  const visible = selected.slice(0, tope);
+  const rest = selected.length - visible.length;
 
-  const grupos = React.useMemo(() => {
-    const mapa = new Map<string, ComboboxOption[]>();
+  const groups = React.useMemo(() => {
+    const map = new Map<string, ComboboxOption[]>();
     for (const o of options) {
       const clave = o.group ?? "";
-      if (!mapa.has(clave)) mapa.set(clave, []);
-      mapa.get(clave)!.push(o);
+      if (!map.has(clave)) map.set(clave, []);
+      map.get(clave)!.push(o);
     }
-    return [...mapa.entries()];
+    return [...map.entries()];
   }, [options]);
 
   return (
-    <MultiCombobox value={valores} onValueChange={cambiar} modal={modal}>
+    <MultiCombobox value={values} onValueChange={change} modal={modal}>
       <ComboboxTrigger
         size={size}
         disabled={disabled}
         className={className}
-        onClear={elegidas.length > 0 && !disabled ? () => cambiar([]) : undefined}
+        onClear={selected.length > 0 && !disabled ? () => change([]) : undefined}
         {...props}
       >
-        {elegidas.length === 0 ? (
+        {selected.length === 0 ? (
           <ComboboxValue placeholder={placeholder} />
         ) : (
-          <span ref={filaRef} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
+          <span ref={rowRef} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
             {/* `removeAs="span"` porque el disparador ya es un `<button>` y
                 anidar otro sería HTML inválido. */}
-            {visibles.map((o) => (
+            {visible.map((o) => (
               <Chip
                 key={o.value}
                 accessibilityLabel={o.label}
                 removeAs="span"
-                onRemove={() => cambiar(valores.filter((v) => v !== o.value))}
+                onRemove={() => change(values.filter((v) => v !== o.value))}
               >
                 {o.label}
               </Chip>
             ))}
-            {resto > 0 ? (
+            {rest > 0 ? (
               <Badge tone="neutral" size="sm" variant="outline" className="shrink-0">
-                +{resto}
+                +{rest}
               </Badge>
             ) : null}
 
@@ -821,31 +821,31 @@ function MultiComboboxField({
                 su ancho natural y fuera del flujo. De aquí salen los anchos que
                 deciden cuántas entran. */}
             <span
-              ref={medidorRef}
+              ref={meterRef}
               aria-hidden="true"
               className="pointer-events-none absolute top-0 left-0 flex w-max items-center gap-1 opacity-0"
             >
-              {elegidas.map((o) => (
+              {selected.map((o) => (
                 <Chip key={o.value} removeAs="presentation" onRemove={() => {}}>
                   {o.label}
                 </Chip>
               ))}
               <Badge tone="neutral" size="sm" variant="outline">
-                +{elegidas.length}
+                +{selected.length}
               </Badge>
             </span>
           </span>
         )}
       </ComboboxTrigger>
 
-      {name ? valores.map((v) => <input key={v} type="hidden" name={name} value={v} />) : null}
+      {name ? values.map((v) => <input key={v} type="hidden" name={name} value={v} />) : null}
 
       <OptionList
         align={align}
         contentClassName={contentClassName}
         searchPlaceholder={searchPlaceholder}
         emptyMessage={emptyMessage}
-        grupos={grupos}
+        groups={groups}
       />
     </MultiCombobox>
   );

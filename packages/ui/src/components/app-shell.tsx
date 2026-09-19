@@ -26,7 +26,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
-import { SUPERFICIE_SIDEBAR } from "@/lib/superficie";
+import { SIDEBAR_SURFACE } from "@/lib/surface";
 
 import { Kbd } from "./kbd";
 import { SaveBar, type SaveBarProps } from "./save-bar";
@@ -36,7 +36,7 @@ import { UserMenu, type UserMenuProps } from "./user-menu";
    igual que el de plegar y el caret de sección: son parte del chasis, no
    contenido que quien la use elija, y así el marco no arrastra una dependencia
    de iconos para tres trazos. */
-const Lupa = () => (
+const Magnifier = () => (
   <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true" focusable="false">
     <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
     <path d="M10.2 10.2L13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -48,22 +48,22 @@ const Lupa = () => (
  * ------------------------------------------------------------------ */
 
 type AppShellContextValue = {
-  cajonAbierto: boolean;
-  setCajonAbierto: (abierto: boolean) => void;
+  drawerOpen: boolean;
+  setDrawerOpen: (isOpen: boolean) => void;
 
   /** Por debajo del breakpoint, que es donde el cajón existe. */
-  esMovil: boolean;
+  isMobile: boolean;
 
   /** Hay una `AppShellNav` montada. Un marco de un solo registro puede no tenerla. */
-  hayNav: boolean;
-  registrarNav: () => () => void;
+  hasNav: boolean;
+  registerNav: () => () => void;
 };
 
 const AppShellContext = React.createContext<AppShellContextValue | null>(null);
 
-const useAppShell = (parte: string) => {
+const useAppShell = (part: string) => {
   const ctx = React.useContext(AppShellContext);
-  if (!ctx) throw new Error(`<${parte}> debe usarse dentro de <AppShell>`);
+  if (!ctx) throw new Error(`<${part}> debe usarse dentro de <AppShell>`);
   return ctx;
 };
 
@@ -103,49 +103,49 @@ function AppShell({
   children,
   ...props
 }: AppShellProps): React.JSX.Element {
-  const [interno, setInterno] = React.useState(defaultNavOpen);
-  const controlado = navOpen !== undefined;
-  const esMovil = useIsMobile();
+  const [internal, setInternal] = React.useState(defaultNavOpen);
+  const controlled = navOpen !== undefined;
+  const isMobile = useIsMobile();
 
   /* El cajón solo existe por debajo del breakpoint. Por encima se cierra en el
      propio render, que es donde React admite ajustar el estado de uno mismo, y
      además se deriva del ancho: así el overlay no existe en escritorio ni
      siquiera montando ya ancho, que antes dejaba el contenido tapado e inerte. */
-  if (!esMovil && interno) setInterno(false);
-  const abierto = (controlado ? navOpen : interno) === true && esMovil;
+  if (!isMobile && internal) setInternal(false);
+  const isOpen = (controlled ? navOpen : internal) === true && isMobile;
 
-  const setCajonAbierto = React.useCallback(
-    (siguiente: boolean) => {
-      if (!controlado) setInterno(siguiente);
-      onNavOpenChange?.(siguiente);
+  const setDrawerOpen = React.useCallback(
+    (next: boolean) => {
+      if (!controlled) setInternal(next);
+      onNavOpenChange?.(next);
     },
-    [controlado, onNavOpenChange],
+    [controlled, onNavOpenChange],
   );
 
   React.useEffect(() => {
-    if (!abierto) return;
-    const alTeclear = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setCajonAbierto(false);
+    if (!isOpen) return;
+    const onType = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDrawerOpen(false);
     };
-    document.addEventListener("keydown", alTeclear);
-    return () => document.removeEventListener("keydown", alTeclear);
-  }, [abierto, setCajonAbierto]);
+    document.addEventListener("keydown", onType);
+    return () => document.removeEventListener("keydown", onType);
+  }, [isOpen, setDrawerOpen]);
 
-  const [navsMontadas, setNavsMontadas] = React.useState(0);
-  const registrarNav = React.useCallback(() => {
-    setNavsMontadas((n) => n + 1);
-    return () => setNavsMontadas((n) => n - 1);
+  const [mountedNavs, setMountedNavs] = React.useState(0);
+  const registerNav = React.useCallback(() => {
+    setMountedNavs((n) => n + 1);
+    return () => setMountedNavs((n) => n - 1);
   }, []);
 
   const ctx = React.useMemo(
     () => ({
-      cajonAbierto: abierto,
-      setCajonAbierto,
-      esMovil,
-      hayNav: navsMontadas > 0,
-      registrarNav,
+      drawerOpen: isOpen,
+      setDrawerOpen,
+      isMobile,
+      hasNav: mountedNavs > 0,
+      registerNav,
     }),
-    [abierto, setCajonAbierto, esMovil, navsMontadas, registrarNav],
+    [isOpen, setDrawerOpen, isMobile, mountedNavs, registerNav],
   );
 
   return (
@@ -351,7 +351,7 @@ function AppShellHeaderSearch({
       )}
       {...props}
     >
-      <Lupa />
+      <Magnifier />
       <span className="min-w-0 flex-1 truncate text-start text-sm">{children}</span>
       {shortcut?.length ? (
         <span className="hidden items-center gap-1 md:inline-flex">
@@ -451,18 +451,18 @@ function AppShellNavToggle({
   children,
   ...props
 }: AppShellNavToggleProps): React.JSX.Element | null {
-  const { cajonAbierto, setCajonAbierto, hayNav } = useAppShell("AppShellNavToggle");
-  const etiqueta = useElLabel("ui", "toggleNavigation", "Alternar navegación");
+  const { drawerOpen, setDrawerOpen, hasNav } = useAppShell("AppShellNavToggle");
+  const defaultLabel = useElLabel("ui", "toggleNavigation", "Alternar navegación");
 
-  if (!hayNav) return null;
+  if (!hasNav) return null;
 
   return (
     <button
       type="button"
       data-slot="app-shell-nav-toggle"
-      aria-label={etiqueta}
-      aria-expanded={cajonAbierto}
-      onClick={() => setCajonAbierto(!cajonAbierto)}
+      aria-label={defaultLabel}
+      aria-expanded={drawerOpen}
+      onClick={() => setDrawerOpen(!drawerOpen)}
       /* Sin fondo propio: es un icono en la barra, como los demás, y el fondo
          solo aparece al apuntarlo. Con `bg-card` fijo se dibujaba un cuadrado
          alrededor que no lleva ningún otro control de la cabecera.
@@ -521,13 +521,13 @@ function AppShellNav({
   label,
   ...props
 }: AppShellNavProps): React.JSX.Element {
-  const { cajonAbierto, setCajonAbierto, esMovil, registrarNav } = useAppShell("AppShellNav");
-  const cerrar = useElLabel("ui", "closeNavigation", "Cerrar navegación");
-  const etiqueta = useElLabel("ui", "navigation", "Navegación");
+  const { drawerOpen, setDrawerOpen, isMobile, registerNav } = useAppShell("AppShellNav");
+  const close = useElLabel("ui", "closeNavigation", "Cerrar navegación");
+  const defaultLabel = useElLabel("ui", "navigation", "Navegación");
 
   /* Antes de pintar y no después: el botón del cajón se dibuja según esto, y con
      un efecto normal aparecería un cuadro más tarde. */
-  React.useLayoutEffect(() => registrarNav(), [registrarNav]);
+  React.useLayoutEffect(() => registerNav(), [registerNav]);
 
   return (
     <>
@@ -536,17 +536,17 @@ function AppShellNav({
       <button
         type="button"
         data-slot="app-shell-nav-overlay"
-        aria-label={cerrar}
-        tabIndex={cajonAbierto ? undefined : -1}
-        aria-hidden={cajonAbierto ? undefined : true}
-        onClick={() => setCajonAbierto(false)}
+        aria-label={close}
+        tabIndex={drawerOpen ? undefined : -1}
+        aria-hidden={drawerOpen ? undefined : true}
+        onClick={() => setDrawerOpen(false)}
         className={cn(
           /* Las dos columnas por sus extremos y no con `col-span-2`: sin decir
              dónde empieza, la rejilla busca sitio, y en esta fila las dos pistas
              ya las tienen la navegación y el contenido, así que se inventaba una
              tercera y el velo salía de ancho cero al costado. */
           "z-overlay col-start-1 col-end-3 row-start-2 cursor-default bg-black/50 transition-opacity duration-(--duration-base) ease-out md:hidden",
-          cajonAbierto ? "opacity-100" : "pointer-events-none opacity-0",
+          drawerOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
 
@@ -554,12 +554,12 @@ function AppShellNav({
       {/* react-doctor-disable-next-line no-noninteractive-element-interactions */}
       <nav
         data-slot="app-shell-nav"
-        aria-label={label ?? etiqueta}
-        inert={esMovil && !cajonAbierto}
+        aria-label={label ?? defaultLabel}
+        inert={isMobile && !drawerOpen}
         onClick={(e) => {
           /* Un clic en un enlace cierra el cajón; plegar un grupo, no. Solo
              donde hay cajón: en escritorio no hay nada que cerrar. */
-          if (esMovil && (e.target as HTMLElement).closest("a")) setCajonAbierto(false);
+          if (isMobile && (e.target as HTMLElement).closest("a")) setDrawerOpen(false);
         }}
         /* Lo del cajón va acotado a `max-md` y no compensado con `md:` encima.
            Escrito al revés, el `rtl:` de la posición cerrada le ganaba al
@@ -567,10 +567,10 @@ function AppShellNav({
            orden del fichero), y en escritorio RTL la barra se iba entera fuera
            del marco. Por debajo del breakpoint no hay nada que anular. */
         className={cn(
-          SUPERFICIE_SIDEBAR,
+          SIDEBAR_SURFACE,
           "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto border-e border-sidebar-border py-3",
           "max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
-          cajonAbierto
+          drawerOpen
             ? "max-md:translate-x-0"
             : "max-md:-translate-x-full max-md:rtl:translate-x-full",
           className,
@@ -644,11 +644,11 @@ function AppShellNavSection({
   /* Un punto por debajo del resto de la barra y en tono tenue: el rótulo
      ordena, no compite con las entradas que agrupa. El margen sube a 6px para
      que la fila siga midiendo 28px con un interlineado de 16. */
-  const rotulo = (claseExtra?: string) => (
-    <span className={cn("my-1.5 min-w-0 truncate text-start", claseExtra)}>{title}</span>
+  const renderLabel = (extraClass?: string) => (
+    <span className={cn("my-1.5 min-w-0 truncate text-start", extraClass)}>{title}</span>
   );
 
-  const ROTULO = "ps-2 text-xs font-medium text-muted-foreground";
+  const LABEL = "ps-2 text-xs font-medium text-muted-foreground";
 
   return (
     <li data-slot="app-shell-nav-section" className={cn("list-none pt-3", className)} {...props}>
@@ -659,12 +659,12 @@ function AppShellNavSection({
             data-slot="app-shell-nav-section-action"
             onClick={onAction}
             className={cn(
-              FILA,
-              ROTULO,
+              ROW,
+              LABEL,
               "cursor-pointer hover:bg-sidebar-hover hover:text-sidebar-foreground",
             )}
           >
-            {rotulo()}
+            {renderLabel()}
             {/* El caret va pegado al rótulo, no al borde: es parte de la
                 etiqueta, no un control alineado a la derecha. Se dibuja aquí en
                 vez de tomar un icono del catálogo porque los del catálogo son
@@ -683,8 +683,8 @@ function AppShellNavSection({
             </span>
           </button>
         ) : (
-          <p data-slot="app-shell-nav-section-title" className={cn(FILA, ROTULO)}>
-            {rotulo("flex-1")}
+          <p data-slot="app-shell-nav-section-title" className={cn(ROW, LABEL)}>
+            {renderLabel("flex-1")}
           </p>
         )}
       </div>
@@ -696,27 +696,26 @@ function AppShellNavSection({
 /**
  * Tramo de guía que le toca a una hija según dónde cae respecto de la activa.
  *
- * - `linea`: queda por encima de la activa, así que la vertical la atraviesa.
- * - `puntero`: es la activa. La vertical llega hasta el codo y ahí termina.
- * - `ninguna`: queda por debajo de la activa. La rama ya acabó.
+ * - `line`: queda por encima de la activa, así que la vertical la atraviesa.
+ * - `pointer`: es la activa. La vertical llega hasta el codo y ahí termina.
+ * - `none`: queda por debajo de la activa. La rama ya acabó.
  */
-type Guia = "linea" | "puntero" | "ninguna";
+type Guide = "line" | "pointer" | "none";
 
 /* La fila mide 28px exactos y la guía también, así que una encaja sobre la otra
    sin cuadrar nada a mano. La altura sale del margen del texto, no de un padding
    en la fila: con padding, el fondo del estado activo crecería con ella. */
-const FILA =
+const ROW =
   "relative flex w-full items-start rounded-md pe-1 text-sm transition-[background-color,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar";
 
 const VERTICAL = "M9 0H10.5V28H9V0Z";
-const CODO = "M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
-const BAJADA_Y_CODO =
+const ELBOW = "M10.5 10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
+const DESCENT_AND_ELBOW =
   "M9 0H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
-const ASOMO_Y_CODO =
+const PEEK_AND_ELBOW =
   "M9 7H10.5V10.2A4.05 4.05 0 0 0 14.55 14.25H19V15.75H14.55A5.55 5.55 0 0 1 9 10.2Z";
 const PUNTA = "M17 12L20 15L17 18";
-const MUNON =
-  "M9 24.75C9 24.3358 9.33579 24 9.75 24C10.1642 24 10.5 24.3358 10.5 24.75V28H9V24.75Z";
+const STUB = "M9 24.75C9 24.3358 9.33579 24 9.75 24C10.1642 24 10.5 24.3358 10.5 24.75V28H9V24.75Z";
 
 /**
  * Guía de continuidad entre una entrada y sus hijas.
@@ -740,8 +739,8 @@ const MUNON =
  * vertical donde estaba, a 8px del inicio, porque está a la misma distancia de
  * los dos costados.
  */
-function GuiaNav({ variante }: { variante: Guia | "munion" }) {
-  const alApuntar = "opacity-0 transition-opacity duration-(--duration-fast) ease-out";
+function NavGuide({ variant }: { variant: Guide | "stub" }) {
+  const onHover = "opacity-0 transition-opacity duration-(--duration-fast) ease-out";
 
   return (
     <svg
@@ -753,10 +752,10 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
       focusable="false"
       className="pointer-events-none absolute start-2 top-0 rtl:-scale-x-100"
     >
-      {variante === "linea" ? <path d={VERTICAL} className="fill-sidebar-guide" /> : null}
-      {variante === "puntero" ? (
+      {variant === "line" ? <path d={VERTICAL} className="fill-sidebar-guide" /> : null}
+      {variant === "pointer" ? (
         <>
-          <path d={BAJADA_Y_CODO} className="fill-sidebar-guide" />
+          <path d={DESCENT_AND_ELBOW} className="fill-sidebar-guide" />
           <path
             d={PUNTA}
             strokeWidth="1.5"
@@ -767,10 +766,10 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
         </>
       ) : null}
 
-      {variante === "linea" || variante === "ninguna" ? (
-        <g className={cn(alApuntar, "group-hover:opacity-100 group-focus-visible:opacity-100")}>
+      {variant === "line" || variant === "none" ? (
+        <g className={cn(onHover, "group-hover:opacity-100 group-focus-visible:opacity-100")}>
           <path
-            d={variante === "linea" ? CODO : ASOMO_Y_CODO}
+            d={variant === "line" ? ELBOW : PEEK_AND_ELBOW}
             className="fill-sidebar-guide-hover"
           />
           <path
@@ -785,7 +784,7 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
 
       {/* Muñón: el arranque de la vertical, en la fila del padre. Sin él, la
           línea de las hijas nace despegada del icono del que cuelga. */}
-      {variante === "munion" ? <path d={MUNON} className="fill-sidebar-guide" /> : null}
+      {variant === "stub" ? <path d={STUB} className="fill-sidebar-guide" /> : null}
     </svg>
   );
 }
@@ -794,13 +793,13 @@ function GuiaNav({ variante }: { variante: Guia | "munion" }) {
  * Grupo: una entrada con hijas
  * ------------------------------------------------------------------ */
 
-type GrupoContextValue = {
-  idLista: string;
-  abierto: boolean;
-  alternar: () => void;
+type GroupContextValue = {
+  listId: string;
+  isOpen: boolean;
+  toggle: () => void;
 };
 
-const GrupoContext = React.createContext<GrupoContextValue | null>(null);
+const GroupContext = React.createContext<GroupContextValue | null>(null);
 
 /** Props de {@link AppShellNavGroup}. */
 export type AppShellNavGroupProps = Omit<React.ComponentProps<"li">, "onToggle"> & {
@@ -838,25 +837,25 @@ function AppShellNavGroup({
   onOpenChange,
   ...props
 }: AppShellNavGroupProps): React.JSX.Element {
-  const idLista = React.useId();
-  const [interno, setInterno] = React.useState(defaultOpen);
-  const controlado = open !== undefined;
-  const abierto = controlado ? open : interno;
+  const listId = React.useId();
+  const [internal, setInternal] = React.useState(defaultOpen);
+  const controlled = open !== undefined;
+  const isOpen = controlled ? open : internal;
 
-  const alternar = React.useCallback(() => {
-    const siguiente = !abierto;
-    if (!controlado) setInterno(siguiente);
-    onOpenChange?.(siguiente);
-  }, [abierto, controlado, onOpenChange]);
+  const toggle = React.useCallback(() => {
+    const next = !isOpen;
+    if (!controlled) setInternal(next);
+    onOpenChange?.(next);
+  }, [isOpen, controlled, onOpenChange]);
 
-  const ctx = React.useMemo(() => ({ idLista, abierto, alternar }), [idLista, abierto, alternar]);
+  const ctx = React.useMemo(() => ({ listId, isOpen, toggle }), [listId, isOpen, toggle]);
 
   return (
-    <GrupoContext.Provider value={ctx}>
+    <GroupContext.Provider value={ctx}>
       <li data-slot="app-shell-nav-group" className={cn("list-none", className)} {...props}>
         {children}
       </li>
-    </GrupoContext.Provider>
+    </GroupContext.Provider>
   );
 }
 
@@ -875,8 +874,8 @@ function AppShellNavSubItem({
   children,
   ...props
 }: AppShellNavSubItemProps): React.JSX.Element {
-  const { "data-guia": guia = "ninguna", ...resto } = props as AppShellNavSubItemProps & {
-    "data-guia"?: Guia;
+  const { "data-guide": guide = "none", ...rest } = props as AppShellNavSubItemProps & {
+    "data-guide"?: Guide;
   };
 
   return (
@@ -885,16 +884,16 @@ function AppShellNavSubItem({
         data-slot="app-shell-nav-sub-item"
         aria-current={active ? "page" : undefined}
         className={cn(
-          FILA,
+          ROW,
           "group ps-9",
           active
             ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
             : "font-normal text-muted-foreground hover:bg-sidebar-hover hover:text-sidebar-foreground active:bg-sidebar-accent",
           className,
         )}
-        {...resto}
+        {...rest}
       >
-        <GuiaNav variante={guia} />
+        <NavGuide variant={guide} />
         <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
       </a>
     </li>
@@ -921,29 +920,29 @@ function AppShellNavSubList({
   children,
   ...props
 }: AppShellNavSubListProps): React.JSX.Element {
-  const grupo = React.useContext(GrupoContext);
-  const hijas = React.Children.toArray(children).filter(React.isValidElement);
-  const activa = hijas.findIndex((h) => (h.props as AppShellNavSubItemProps).active === true);
+  const group = React.useContext(GroupContext);
+  const childNodes = React.Children.toArray(children).filter(React.isValidElement);
+  const active = childNodes.findIndex((h) => (h.props as AppShellNavSubItemProps).active === true);
 
-  const lista = (
+  const list = (
     <ul
       data-slot="app-shell-nav-sub-list"
-      id={grupo?.idLista}
-      className={cn(grupo ? "list-none" : "mb-2 list-none", className)}
+      id={group?.listId}
+      className={cn(group ? "list-none" : "mb-2 list-none", className)}
       {...props}
     >
-      {hijas.map((h, i) => {
-        const guia: Guia =
-          activa === -1 || i > activa ? "ninguna" : i === activa ? "puntero" : "linea";
-        return React.cloneElement(h as React.ReactElement<{ "data-guia"?: Guia }>, {
+      {childNodes.map((h, i) => {
+        const guide: Guide =
+          active === -1 || i > active ? "none" : i === active ? "pointer" : "line";
+        return React.cloneElement(h as React.ReactElement<{ "data-guide"?: Guide }>, {
           key: h.key ?? i,
-          "data-guia": guia,
+          "data-guide": guide,
         });
       })}
     </ul>
   );
 
-  if (!grupo) return lista;
+  if (!group) return list;
 
   return (
     <div
@@ -951,16 +950,16 @@ function AppShellNavSubList({
          árbol de accesibilidad, así que se llegaba a enlaces invisibles y
          `aria-expanded="false"` prometía algo que no era. `inert` la saca de
          los dos sin desmontarla, que es lo que deja que la salida se anime. */
-      inert={!grupo.abierto}
+      inert={!group.isOpen}
       className={cn(
         "mb-2 grid transition-[grid-template-rows] duration-(--duration-fast) ease-out motion-reduce:transition-none",
-        grupo.abierto ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        group.isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
       )}
     >
       {/* El `overflow-hidden` es lo que hace que la fila de 0fr recorte en vez
           de desbordar, y va aquí y no en la rejilla para que las hijas sigan
           pudiendo dibujar su guía fuera de su propia caja. */}
-      <div className="overflow-hidden">{lista}</div>
+      <div className="overflow-hidden">{list}</div>
     </div>
   );
 }
@@ -1037,23 +1036,23 @@ function AppShellNavItem({
   onClick,
   ...props
 }: AppShellNavItemProps): React.JSX.Element {
-  const grupo = React.useContext(GrupoContext);
-  const glifo = active ? (activeIcon ?? icon) : icon;
+  const group = React.useContext(GroupContext);
+  const glyph = active ? (activeIcon ?? icon) : icon;
 
-  const fila = (
+  const row = (
     <div className="group/fila relative px-3">
       <a
         data-slot="app-shell-nav-item"
         href={href}
         aria-current={active ? "page" : undefined}
-        aria-expanded={grupo ? grupo.abierto : undefined}
-        aria-controls={grupo ? grupo.idLista : undefined}
+        aria-expanded={group ? group.isOpen : undefined}
+        aria-controls={group ? group.listId : undefined}
         onClick={(e) => {
-          grupo?.alternar();
+          group?.toggle();
           onClick?.(e);
         }}
         className={cn(
-          FILA,
+          ROW,
           /* El peso no cambia al elegirla: la de primer nivel se marca solo con
              el fondo. Solo las hijas suben de peso, porque ahí el fondo tiene
              que competir con la guía y no basta por sí solo. */
@@ -1065,13 +1064,13 @@ function AppShellNavItem({
         )}
         {...props}
       >
-        {childActive ? <GuiaNav variante="munion" /> : null}
-        {glifo ? (
+        {childActive ? <NavGuide variant="stub" /> : null}
+        {glyph ? (
           <span
             aria-hidden="true"
             className="my-1 me-2 flex size-5 flex-none items-center justify-center [&_svg]:size-4"
           >
-            {glifo}
+            {glyph}
           </span>
         ) : null}
         <span className="my-1 min-w-0 flex-1 truncate">{children}</span>
@@ -1112,7 +1111,7 @@ function AppShellNavItem({
 
   /* Dentro de un grupo el `<li>` ya lo puso el grupo. Fuera, lo pone aquí: una
      entrada suelta sigue siendo un elemento de la lista. */
-  return grupo ? fila : <li className="list-none">{fila}</li>;
+  return group ? row : <li className="list-none">{row}</li>;
 }
 
 /** Props de {@link AppShellNavAction}. */
@@ -1154,14 +1153,14 @@ export type AppShellMainProps = React.ComponentProps<"main">;
  * velo que lo tape, así que dejarlo inerte lo haría inalcanzable a plena vista.
  */
 function AppShellMain({ className, children, ...props }: AppShellMainProps): React.JSX.Element {
-  const { cajonAbierto, esMovil, hayNav } = useAppShell("AppShellMain");
+  const { drawerOpen, isMobile, hasNav } = useAppShell("AppShellMain");
 
   return (
     <main
       data-slot="app-shell-main"
       /* Sin navegación no hay cajón que lo tape, así que dejarlo inerte lo
          volvía inalcanzable sin nada a la vista que explicara por qué. */
-      inert={cajonAbierto && esMovil && hayNav}
+      inert={drawerOpen && isMobile && hasNav}
       /* El lienzo, no el fondo de la página: va un punto por encima de la barra
          de navegación y por debajo de las tarjetas que se apoyan en él. Con el
          fondo general las tres superficies quedaban a menos de un 2% entre sí y

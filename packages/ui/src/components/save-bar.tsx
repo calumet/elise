@@ -84,29 +84,29 @@ export function SaveBar({
   className,
   ...props
 }: SaveBarProps): React.JSX.Element | null {
-  const [confirmando, setConfirmando] = React.useState(false);
+  const [confirming, setConfirming] = React.useState(false);
 
-  const rotulo = useElLabel("ui", "saveBarMessage", "Cambios sin guardar");
-  const rotuloDescartar = useElLabel("ui", "saveBarDiscard", "Descartar");
-  const rotuloGuardar = useElLabel("ui", "saveBarSave", "Guardar");
-  const tituloConfirmar = useElLabel("ui", "saveBarConfirmTitle", "¿Descartar los cambios?");
-  const textoConfirmar = useElLabel(
+  const renderLabel = useElLabel("ui", "saveBarMessage", "Cambios sin guardar");
+  const dismissLabel = useElLabel("ui", "saveBarDiscard", "Descartar");
+  const saveLabel = useElLabel("ui", "saveBarSave", "Guardar");
+  const confirmTitle = useElLabel("ui", "saveBarConfirmTitle", "¿Descartar los cambios?");
+  const confirmText = useElLabel(
     "ui",
     "saveBarConfirmDescription",
     "Lo que editaste se pierde y no se puede recuperar.",
   );
-  const rotuloSeguir = useElLabel("ui", "saveBarKeepEditing", "Seguir editando");
+  const followLabel = useElLabel("ui", "saveBarKeepEditing", "Seguir editando");
 
   React.useEffect(() => {
     if (!dirty || !retain) return;
 
-    const alSalir = (evento: BeforeUnloadEvent) => {
-      evento.preventDefault();
-      evento.returnValue = "";
+    const onLeave = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
     };
 
-    window.addEventListener("beforeunload", alSalir);
-    return () => window.removeEventListener("beforeunload", alSalir);
+    window.addEventListener("beforeunload", onLeave);
+    return () => window.removeEventListener("beforeunload", onLeave);
   }, [dirty, retain]);
 
   if (!dirty) return null;
@@ -128,7 +128,7 @@ export function SaveBar({
         <InlineStack gap={2} align="center" wrap={false}>
           <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
           <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
-            {message ?? rotulo}
+            {message ?? renderLabel}
           </Text>
           <InlineStack gap={1} align="center" wrap={false} className="shrink-0">
             <Button
@@ -136,9 +136,9 @@ export function SaveBar({
               variant="outline"
               disabled={saving}
               className="bg-state-hover"
-              onClick={() => setConfirmando(true)}
+              onClick={() => setConfirming(true)}
             >
-              {rotuloDescartar}
+              {dismissLabel}
             </Button>
             <Button
               size="sm"
@@ -146,28 +146,28 @@ export function SaveBar({
               className="bg-foreground text-inverse shadow-none hover:bg-foreground/90 active:bg-foreground/80"
               onClick={onSave}
             >
-              {rotuloGuardar}
+              {saveLabel}
             </Button>
           </InlineStack>
         </InlineStack>
       </Box>
 
-      <AlertDialog open={confirmando} onOpenChange={setConfirmando}>
+      <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{tituloConfirmar}</AlertDialogTitle>
-            <AlertDialogDescription>{textoConfirmar}</AlertDialogDescription>
+            <AlertDialogTitle>{confirmTitle}</AlertDialogTitle>
+            <AlertDialogDescription>{confirmText}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{rotuloSeguir}</AlertDialogCancel>
+            <AlertDialogCancel>{followLabel}</AlertDialogCancel>
             <AlertDialogAction
               tone="danger"
               onClick={() => {
-                setConfirmando(false);
+                setConfirming(false);
                 onDiscard();
               }}
             >
-              {rotuloDescartar}
+              {dismissLabel}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

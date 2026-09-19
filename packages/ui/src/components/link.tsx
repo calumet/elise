@@ -40,7 +40,7 @@ export type LinkProps = React.ComponentProps<"a"> & {
   asChild?: boolean;
 };
 
-const tonos: Record<NonNullable<LinkProps["tone"]>, string> = {
+const tones: Record<NonNullable<LinkProps["tone"]>, string> = {
   auto: "text-link hover:text-link-hover active:text-link-active",
   neutral: "text-inherit",
   critical:
@@ -65,17 +65,17 @@ export const Link: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<LinkProps> & React.RefAttributes<HTMLAnchorElement>
 > = React.forwardRef<HTMLAnchorElement, LinkProps>(
   ({ className, tone = "auto", asChild = false, target, rel, ...props }, ref) => {
-    const Componente = asChild ? Slot : "a";
+    const Component = asChild ? Slot : "a";
 
     return (
-      <Componente
+      <Component
         data-slot="link"
         ref={ref}
         target={target}
         rel={rel ?? (target === "_blank" ? "noreferrer noopener" : undefined)}
         className={cn(
           "inline cursor-pointer rounded-xs underline underline-offset-2 transition-[color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
-          tonos[tone],
+          tones[tone],
           className,
         )}
         {...props}

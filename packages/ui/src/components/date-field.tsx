@@ -34,7 +34,7 @@ import { useElLabel } from "@/lib/i18n";
 
 import { Calendar } from "./calendar";
 import { Field } from "./field";
-import { CAJA_CAMPO, CAMPO_INVALIDO } from "./input";
+import { FIELD_BOX, INVALID_FIELD } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 const PATRON = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -50,17 +50,17 @@ const PATRON = /^(\d{4})-(\d{2})-(\d{2})$/;
  * con un día que no existe: lo desborda al mes siguiente, así que la única
  * señal fiable es que la fecha construida diga lo mismo que se le pidió.
  */
-const aFecha = (texto: string): Date | null => {
-  const partes = PATRON.exec(texto.trim());
-  if (!partes) return null;
-  const anio = Number(partes[1]);
-  const mes = Number(partes[2]);
-  const dia = Number(partes[3]);
-  const fecha = new Date(anio, mes - 1, dia);
-  if (fecha.getFullYear() !== anio || fecha.getMonth() !== mes - 1 || fecha.getDate() !== dia) {
+const toDate = (text: string): Date | null => {
+  const parts = PATRON.exec(text.trim());
+  if (!parts) return null;
+  const year = Number(parts[1]);
+  const mes = Number(parts[2]);
+  const day = Number(parts[3]);
+  const date = new Date(year, mes - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== mes - 1 || date.getDate() !== day) {
     return null;
   }
-  return fecha;
+  return date;
 };
 
 /**
@@ -71,11 +71,11 @@ const aFecha = (texto: string): Date | null => {
  * según el idioma del navegador, y un rango quedaba en dos formatos distintos
  * dentro de la misma frase.
  */
-export const aTextoISO = (fecha: Date): string =>
+export const toISOText = (date: Date): string =>
   [
-    String(fecha.getFullYear()).padStart(4, "0"),
-    String(fecha.getMonth() + 1).padStart(2, "0"),
-    String(fecha.getDate()).padStart(2, "0"),
+    String(date.getFullYear()).padStart(4, "0"),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
   ].join("-");
 
 /** Props de {@link DateField}. */
@@ -168,63 +168,63 @@ export function DateField({
   max,
   isDateDisabled,
 }: DateFieldProps): React.JSX.Element {
-  const controlado = value !== undefined;
-  const [interno, setInterno] = React.useState(defaultValue);
-  const texto = controlado ? value : interno;
+  const controlled = value !== undefined;
+  const [internal, setInternal] = React.useState(defaultValue);
+  const text = controlled ? value : internal;
 
-  const [abierto, setAbierto] = React.useState(false);
-  const campo = React.useRef<HTMLInputElement>(null);
+  const [open, setOpen] = React.useState(false);
+  const field = React.useRef<HTMLInputElement>(null);
 
-  const abrirCalendario = useElLabel("ui", "openCalendar", "Abrir calendario");
-  const formato = useElLabel("ui", "dateFormat", "AAAA-MM-DD");
+  const openCalendar = useElLabel("ui", "openCalendar", "Abrir calendario");
+  const format = useElLabel("ui", "dateFormat", "AAAA-MM-DD");
 
-  const escribir = React.useCallback(
-    (siguiente: string) => {
-      if (!controlado) setInterno(siguiente);
-      onValueChange?.(siguiente);
+  const type = React.useCallback(
+    (next: string) => {
+      if (!controlled) setInternal(next);
+      onValueChange?.(next);
     },
-    [controlado, onValueChange],
+    [controlled, onValueChange],
   );
 
-  const limiteMin = min ? aFecha(min) : null;
-  const limiteMax = max ? aFecha(max) : null;
+  const minLimit = min ? toDate(min) : null;
+  const maxLimit = max ? toDate(max) : null;
 
-  const admitida = React.useCallback(
-    (fecha: Date) => {
-      if (limiteMin && fecha < limiteMin) return false;
-      if (limiteMax && fecha > limiteMax) return false;
-      return !isDateDisabled?.(fecha);
+  const allowed = React.useCallback(
+    (date: Date) => {
+      if (minLimit && date < minLimit) return false;
+      if (maxLimit && date > maxLimit) return false;
+      return !isDateDisabled?.(date);
     },
-    [limiteMin, limiteMax, isDateDisabled],
+    [minLimit, maxLimit, isDateDisabled],
   );
 
   /* Una fecha a medio escribir no debe mover el calendario ni pintarse como
      elegida, así que solo cuenta la que ya está completa y admitida. */
-  const elegida = React.useMemo(() => {
-    const fecha = aFecha(texto);
-    return fecha && admitida(fecha) ? fecha : undefined;
-  }, [texto, admitida]);
+  const selected = React.useMemo(() => {
+    const date = toDate(text);
+    return date && allowed(date) ? date : undefined;
+  }, [text, allowed]);
 
-  const cerrarEdicion = () => {
-    if (texto === "") return;
-    const fecha = aFecha(texto);
-    if (!fecha || !admitida(fecha)) {
-      onInvalid?.(texto);
+  const closeEdit = () => {
+    if (text === "") return;
+    const date = toDate(text);
+    if (!date || !allowed(date)) {
+      onInvalid?.(text);
       return;
     }
     /* Se normaliza antes de confirmar, para que «2026-8-3» y «2026-08-03» no
        lleguen al consumidor como dos valores distintos. */
-    const normalizado = aTextoISO(fecha);
-    if (normalizado !== texto) escribir(normalizado);
-    onValueCommit?.(normalizado);
+    const normalized = toISOText(date);
+    if (normalized !== text) type(normalized);
+    onValueCommit?.(normalized);
   };
 
-  const elegirEnCalendario = (fecha?: Date) => {
-    const siguiente = fecha ? aTextoISO(fecha) : "";
-    escribir(siguiente);
-    onValueCommit?.(siguiente);
-    setAbierto(false);
-    campo.current?.focus();
+  const selectInCalendar = (date?: Date) => {
+    const next = date ? toISOText(date) : "";
+    type(next);
+    onValueCommit?.(next);
+    setOpen(false);
+    field.current?.focus();
   };
 
   return (
@@ -240,7 +240,7 @@ export function DateField({
         <div data-slot="date-field" className="relative">
           <input
             {...control}
-            ref={campo}
+            ref={field}
             name={name}
             type="text"
             inputMode="numeric"
@@ -248,18 +248,18 @@ export function DateField({
             spellCheck={false}
             disabled={disabled}
             readOnly={readOnly}
-            value={texto}
-            placeholder={placeholder ?? formato}
-            onChange={(e) => escribir(e.target.value)}
-            onBlur={cerrarEdicion}
-            className={cn(CAJA_CAMPO, "pe-9 placeholder:text-muted-foreground", CAMPO_INVALIDO)}
+            value={text}
+            placeholder={placeholder ?? format}
+            onChange={(e) => type(e.target.value)}
+            onBlur={closeEdit}
+            className={cn(FIELD_BOX, "pe-9 placeholder:text-muted-foreground", INVALID_FIELD)}
           />
 
-          <Popover open={abierto} onOpenChange={setAbierto}>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <button
                 type="button"
-                aria-label={abrirCalendario}
+                aria-label={openCalendar}
                 disabled={disabled || readOnly}
                 /* Fuera del tabulador: el campo ya es alcanzable y se puede
                    escribir la fecha entera, así que un segundo tope solo alarga
@@ -273,10 +273,10 @@ export function DateField({
             <PopoverContent className="w-auto overflow-hidden p-0" align="start">
               <Calendar
                 mode="single"
-                selected={elegida}
-                defaultMonth={elegida}
-                disabled={(fecha) => !admitida(fecha)}
-                onSelect={elegirEnCalendario}
+                selected={selected}
+                defaultMonth={selected}
+                disabled={(date) => !allowed(date)}
+                onSelect={selectInCalendar}
               />
             </PopoverContent>
           </Popover>

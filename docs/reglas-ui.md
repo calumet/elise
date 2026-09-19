@@ -85,7 +85,7 @@ medida, la toma de quien la posee.
 | Medida                | Dueño               | Valores                                                                       |
 | --------------------- | ------------------- | ----------------------------------------------------------------------------- |
 | Ancho de una pantalla | `Container`         | `sm` 672, `md` 896, `lg` 1152, `xl` 1280, `full`                              |
-| Contorno de un marco  | `SUPERFICIE`        | Lo comparten `Card`, `Table` y `DataTable`                                    |
+| Contorno de un marco  | `SURFACE`           | Lo comparten `Card`, `Table` y `DataTable`                                    |
 | Espaciado             | `Box` y los `Stack` | 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16                                            |
 | Tamaño de texto       | `Text`              | 11, 12, 13, 14, 16, 20, 24, 30 px                                             |
 | Tamaño de icono       | La escala del tema  | 12, 14, 16, 20, 24 px                                                         |

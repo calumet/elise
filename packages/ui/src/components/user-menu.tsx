@@ -15,7 +15,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-import { Avatar, AvatarFallback, inicialesDe } from "./avatar";
+import { Avatar, AvatarFallback, initialsOf } from "./avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu";
 
 /** Props de {@link UserMenu}. */
@@ -64,13 +64,13 @@ function UserMenu({
   className,
   children,
 }: UserMenuProps): React.JSX.Element {
-  const letras = initials ?? inicialesDe(name);
+  const letters = initials ?? initialsOf(name);
 
-  const cara = (size: "xs" | "sm") => (
+  const face = (size: "xs" | "sm") => (
     <Avatar size={size} shape="square" className="border-0">
       {avatar ?? (
         <AvatarFallback className="bg-primary font-bold text-primary-foreground">
-          {letras}
+          {letters}
         </AvatarFallback>
       )}
     </Avatar>
@@ -99,7 +99,7 @@ function UserMenu({
           ) : (
             <span className="sr-only">{name}</span>
           )}
-          {cara("xs")}
+          {face("xs")}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
@@ -107,7 +107,7 @@ function UserMenu({
             suyo menos el píxel del borde, que si no la esquina teñida asoma por
             fuera de la curva. */}
         <div className="-mx-1 -mt-1 mb-1 flex items-center gap-2.5 rounded-t-[11px] border-b border-border bg-muted px-3 py-2.5">
-          {cara("sm")}
+          {face("sm")}
           <span className="flex min-w-0 flex-col">
             <span className="truncate text-sm font-semibold text-foreground">{name}</span>
             {detail ? (
