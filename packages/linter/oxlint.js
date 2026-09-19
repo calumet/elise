@@ -90,14 +90,41 @@ export const tailwind = (entryPoint) => ({
   },
 });
 
+/* Lo que ninguna pantalla escribe, de `docs/reglas-ui.md`. Un `deny` quita la
+   clase de lo que `allow` dejaba pasar, y un contrato que no escribe `deny` lo
+   hereda de aquí. */
+const DENY = ["max-w-*", "opacity-*"];
+
+const DENY_MESSAGE = {
+  layout: "El ancho de una pantalla lo pone `Container` con su `size`. Ver docs/reglas-ui.md §2.",
+  effects:
+    "Atenuar con `opacity` inventa un número que no responde al tema: la superficie declara " +
+    'su par de texto, así que va `tone="muted"`. Ver docs/reglas-ui.md §3.',
+};
+
 /* Qué acepta cada componente por encima de `layout`. Un contrato reemplaza las
    claves que escribe y hereda el resto, y si varios encajan gana el último. */
 const CONTRACTS = [
   // Los contenedores reparten el espacio de la página, así que su padding y su
   // gap son de quien los coloca.
   {
-    pattern: "^(Card|Box|Container|Section|Panel)$|(Content|Header|Footer|Body|Group|List)$",
+    pattern: "^(Card|Box|Section|Panel)$|(Content|Header|Footer|Body|Group|List)$",
     allow: ["layout", "spacing"],
+  },
+  // §2: el ancho de una pantalla es suyo, y es el único que lo pone.
+  { pattern: "^Container$", allow: ["layout", "spacing"], deny: ["opacity-*"] },
+  // §2: el contorno de un marco sale de `SURFACE`, que estos tres comparten.
+  {
+    pattern: "^(Card|Table|DataTable)$",
+    allow: ["layout", "spacing"],
+    deny: [...DENY, "border-*", "rounded-*", "shadow-*"],
+    message: {
+      ...DENY_MESSAGE,
+      shape: "El contorno de un marco sale de `SURFACE`. Ver docs/reglas-ui.md §2.",
+      // La sombra del bisel también es del marco, y cae en `effects` igual que
+      // el `opacity` del que habla el mensaje de arriba.
+      effects: "El contorno de un marco sale de `SURFACE`. Ver docs/reglas-ui.md §2.",
+    },
   },
   // El texto se compone: quien lo usa elige el tamaño y el peso.
   {
@@ -110,9 +137,9 @@ const CONTRACTS = [
   {
     pattern: "^Button$",
     allow: ["layout"],
-    deny: ["w-*"],
+    deny: [...DENY, "w-*"],
     message: {
-      layout: "El ancho de un botón lo pone su contenedor.",
+      ...DENY_MESSAGE,
       spacing: "Usá un `size` de {{component}}: {{sizes|sm, md, lg, xl, icon, icon-sm}}.",
       default: "Usá una `variant` o un `tone` de {{component}}.",
     },
@@ -136,7 +163,15 @@ export const designSystem = ({ severity = "error", contracts = [], rules, settin
   /* `severity` y no un `"warn"` suelto en un `overrides`: bajar el nivel así
      reemplaza la regla entera y se lleva por delante los contratos. */
   rules: {
-    "shadcn/no-restyle": [severity, { allow: ["layout"], contracts: [...CONTRACTS, ...contracts] }],
+    "shadcn/no-restyle": [
+      severity,
+      {
+        allow: ["layout"],
+        deny: DENY,
+        message: DENY_MESSAGE,
+        contracts: [...CONTRACTS, ...contracts],
+      },
+    ],
     "shadcn/no-raw-colors": severity,
     "shadcn/no-inline-styles": severity,
     "shadcn/require-static-classes": severity,

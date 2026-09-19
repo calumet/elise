@@ -24,9 +24,11 @@ estilo de un componente, el error dice de quién es esa decisión y qué hacer e
 su lugar. `elise()` ya la incluye; se llama suelta para bajar el nivel en un
 `overrides`, con `severity`.
 
-Reconoce lo que llega de `@calumet/elise-*` y trae un contrato por familia: los
-contenedores admiten espaciado, los de texto admiten tipografía, `Avatar` y
-compañía solo `size-*`, y un botón no fija su propio ancho.
+Lo que comprueba sale de [Reglas de interfaz](docs/reglas-ui.md), que es donde
+ya estaba escrito quién es dueño de cada medida: el ancho de una pantalla es de
+`Container`, el contorno de un marco sale de `SURFACE`, la tipografía es de
+`Text`, y atenuar con `opacity` inventa un número que no responde al tema.
+Cada hallazgo responde con la regla y con dónde leerla.
 
 Lo implementa `@shadcn/lint`, del que enciende cuatro de sus seis reglas:
 `no-unknown-classes` la da ya `tailwind()`, y `no-arbitrary-values` choca con

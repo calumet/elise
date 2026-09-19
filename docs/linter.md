@@ -103,14 +103,29 @@ Reconoce lo que llega de `@calumet/elise-*` y dice qué hacer en su lugar:
 "font-mono" is not allowed on <Button>: <Button> owns its typography.
 ```
 
-Trae un contrato por familia, que es lo que cada una acepta por encima de
-`layout`: los contenedores admiten espaciado, los de texto admiten tipografía,
-`Avatar` y compañía solo `size-*`, y un botón no fija su propio ancho. Se le
-añaden más con `contracts`.
+Lo que comprueba sale de [Reglas de interfaz](reglas-ui.md), que es donde está
+escrito quién es dueño de cada medida:
+
+| De dónde                     | Qué se comprueba                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------- |
+| §2, ancho de pantalla        | `max-w-*` solo en `Container`                                                         |
+| §2, contorno de un marco     | `Card`, `Table` y `DataTable` no ponen borde, radio ni sombra: salen de `SURFACE`     |
+| §2, tamaño de texto          | la tipografía es de `Text` y los suyos; en los demás no pasa                          |
+| §3, atenuar                  | nada de `opacity-*`: la superficie declara su par de texto, así que va `tone="muted"` |
+| §4, clases por interpolación | `require-static-classes`                                                              |
+
+Cada uno responde con la regla y dónde leerla, no con un «no se puede».
+Los contratos se amplían con `contracts`.
 
 De las seis reglas del plugin enciende cuatro. `no-unknown-classes` la da ya
-`tailwind()`, y `no-arbitrary-values` choca con las medidas de maquetación de
-una página, que no son deuda; se pide con `rules` si se la quiere.
+`tailwind()`. Y `no-arbitrary-values` queda fuera a propósito, porque §4 dice
+que para una medida que no está en la escala **está `className`**, «que deja el
+valor a la vista de quien revise»; se pide con `rules` si se la quiere.
+
+Dos reglas escritas que esto **no** puede comprobar: el segundo juego de
+anchos de §4 cuando va en un `<div>` suelto, porque la regla solo mira
+componentes del catálogo; y las de §1, que son de qué componente elegir y no
+de qué clases lleva.
 
 Para saldar lo que ya había, `severity`:
 
