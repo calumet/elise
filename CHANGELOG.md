@@ -3,6 +3,40 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.26.0
+
+Suben también `elise-tables` 0.7.1, `elise-alerts` 0.3.10 y `elise-toasts`
+0.4.11, que no cambian por dentro.
+
+### Rompe
+
+**`ValueField` recibe `lines` como objeto.** Era `React.ReactNode[]` y pasa a
+`Record<string, React.ReactNode>`: la clave nombra el campo y el orden es el de
+escritura. Así cada línea tiene identidad propia y deja de depender de su
+posición.
+
+```tsx
+// antes
+lines={direccion && [direccion.nombre, direccion.calle, direccion.ciudad, direccion.pais]}
+
+// después, y si el registro es justo lo que se muestra, se pasa entero
+lines={direccion}
+```
+
+### Corrige
+
+**La fila vacía de `ValueField` se anunciaba con el nombre del campo** y no con
+su acción: se veía «Agregar dirección» y se oía «Dirección comercial». Un
+`<button>` es labelable, así que el `<label for>` de `Field` le ganaba a su
+texto, que es un fallo de [WCAG 2.5.3 Label in
+Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html). Ahora se
+anuncia «Agregar dirección: Dirección comercial», como ya hacía el botón de
+editar.
+
+Los demás campos pasan `control` a un `<input>`, donde que el `<label>` lo
+nombre es lo correcto. Este era el único componente que se lo daba a un botón
+con texto.
+
 ## `@calumet/elise-linter` 0.9.0
 
 ### Añade

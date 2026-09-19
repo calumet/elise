@@ -27,10 +27,10 @@ export type ValueFieldProps = Omit<React.ComponentProps<"div">, "children" | "on
   label: React.ReactNode;
 
   /**
-   * El resumen del valor, una línea por elemento. Sin líneas el campo sale
-   * vacío, con la fila que abre el editor.
+   * El resumen del valor, una línea por entrada y en el orden en que se
+   * escriben. Sin líneas el campo sale vacío, con la fila que abre el editor.
    */
-  lines?: React.ReactNode[];
+  lines?: Record<string, React.ReactNode>;
 
   /** Texto de ayuda. Sigue visible aunque haya error. */
   description?: React.ReactNode;
@@ -91,7 +91,7 @@ export type ValueFieldProps = Omit<React.ComponentProps<"div">, "children" | "on
  *   label="Dirección de envío"
  *   description="Es la que sale en la factura."
  *   addLabel="Agregar dirección"
- *   lines={direccion && [direccion.calle, direccion.ciudad, direccion.pais]}
+ *   lines={direccion}
  *   onDone={() => form.trigger("direccion")}
  * >
  *   <Field label="Calle">{(c) => <Input {...c} {...form.register("direccion.calle")} />}</Field>
@@ -128,7 +128,8 @@ export function ValueField({
   const doneLabel = useElLabel("ui", "valueFieldDone", "Listo");
   const defaultClearLabel = useElLabel("ui", "valueFieldClear", "Vaciar");
 
-  const full = Boolean(lines?.length);
+  const entries = lines ? Object.entries(lines) : [];
+  const full = entries.length > 0;
 
   const close = (confirming: boolean) => {
     if (confirming) onDone?.();
@@ -140,6 +141,8 @@ export function ValueField({
     <button
       type="button"
       {...control}
+      // Un `<button>` es labelable: sin esto, el `<label for>` de `Field` gana.
+      aria-label={`${addLabel ?? defaultAddLabel}: ${typeof label === "string" ? label : ""}`.trim()}
       disabled={disabled}
       onClick={() => setOpen(true)}
       className={cn(
@@ -166,9 +169,8 @@ export function ValueField({
       )}
     >
       <div className="min-w-0 flex-1 text-base leading-snug">
-        {lines?.map((line, index) => (
-          // Las líneas son un resumen y no una lista reordenable: el índice basta.
-          <p key={index} className={cn("truncate", index > 0 ? "text-muted-foreground" : null)}>
+        {entries.map(([name, line], index) => (
+          <p key={name} className={cn("truncate", index > 0 ? "text-muted-foreground" : null)}>
             {line}
           </p>
         ))}
