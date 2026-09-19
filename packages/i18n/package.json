@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-i18n",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "private": false,
   "description": "Internacionalización (provider + hooks) y formateo localizado (Intl) para Elise.",
   "repository": {

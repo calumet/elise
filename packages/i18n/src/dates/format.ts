@@ -7,6 +7,8 @@ export type DateFormatOptions = Intl.DateTimeFormatOptions & { locale?: Locale }
 /** Rango de fechas con los dos extremos opcionales. */
 export type DateRange = { from?: Date; to?: Date };
 
+import { formateadorDeFecha } from "../formateadores";
+
 const defaultOptions: Intl.DateTimeFormatOptions = {
   year: "numeric",
   month: "short",
@@ -19,7 +21,7 @@ const defaultOptions: Intl.DateTimeFormatOptions = {
  */
 export const formatDate = (date: Date, options?: DateFormatOptions): string => {
   const { locale, ...fmt } = options || {};
-  return new Intl.DateTimeFormat(locale, { ...defaultOptions, ...fmt }).format(date);
+  return formateadorDeFecha(locale, { ...defaultOptions, ...fmt }).format(date);
 };
 
 /**

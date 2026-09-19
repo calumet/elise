@@ -198,6 +198,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
           onPointerUp={(e) =>
             e.currentTarget.hasPointerCapture(e.pointerId) && desdePuntero(e, true)
           }
+          onPointerCancel={() => emitir(color, true)}
           onKeyDown={teclasDelArea}
           className="relative h-40 w-full cursor-crosshair touch-none rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           style={{

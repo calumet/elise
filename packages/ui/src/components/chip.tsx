@@ -85,6 +85,58 @@ const colores: Record<NonNullable<ChipProps["color"]>, string> = {
  * <Chip onRemove={() => quitar(valor)}>{valor}</Chip>
  * ```
  */
+/* Los tres modos de `removeAs` viven acá y no repartidos por el chip. */
+function BotonQuitar({
+  modo,
+  disabled,
+  nombre,
+  onRemove,
+}: {
+  modo: NonNullable<ChipProps["removeAs"]>;
+  disabled?: boolean;
+  nombre?: string;
+  onRemove: () => void;
+}): React.JSX.Element {
+  const quitar = useElLabel("ui", "remove", "Quitar");
+  const etiqueta = nombre ? `${quitar}: ${nombre}` : quitar;
+  const inerte = modo === "presentation";
+  const Elemento = modo === "button" ? "button" : "span";
+
+  const propios =
+    modo === "button"
+      ? { type: "button" as const, disabled, "aria-label": etiqueta }
+      : modo === "span"
+        ? { role: "button", tabIndex: -1, "aria-label": etiqueta }
+        : { "aria-hidden": true };
+
+  return (
+    <Elemento
+      {...propios}
+      onClick={
+        inerte
+          ? undefined
+          : (evento: React.MouseEvent) => {
+              if (disabled) return;
+              /* Una ficha vive dentro de cosas que también responden al click,
+                 como el disparador de un combobox: sin esto, quitarla abriría
+                 la lista al mismo tiempo. */
+              evento.preventDefault();
+              evento.stopPropagation();
+              onRemove();
+            }
+      }
+      className={cn(
+        "relative inline-flex size-4 shrink-0 items-center justify-center rounded-xs text-muted-foreground before:absolute before:-inset-1 before:content-['']",
+        !inerte &&
+          "cursor-pointer transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+        (disabled || inerte) && "pointer-events-none",
+      )}
+    >
+      <X className="size-3" aria-hidden="true" />
+    </Elemento>
+  );
+}
+
 export const Chip: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ChipProps> & React.RefAttributes<HTMLSpanElement>
 > = React.forwardRef<HTMLSpanElement, ChipProps>(
@@ -101,21 +153,6 @@ export const Chip: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const quitar = useElLabel("ui", "remove", "Quitar");
-    const nombre = accessibilityLabel ?? (typeof children === "string" ? children : undefined);
-    const Quitar = removeAs === "button" ? "button" : "span";
-
-    const propsQuitar =
-      removeAs === "button"
-        ? {
-            type: "button" as const,
-            disabled,
-            "aria-label": nombre ? `${quitar}: ${nombre}` : quitar,
-          }
-        : removeAs === "span"
-          ? { role: "button", tabIndex: -1, "aria-label": nombre ? `${quitar}: ${nombre}` : quitar }
-          : { "aria-hidden": true };
-
     return (
       <span
         data-slot="chip"
@@ -130,32 +167,13 @@ export const Chip: React.ForwardRefExoticComponent<
         {...props}
       >
         <span className="truncate">{children}</span>
-
         {onRemove ? (
-          <Quitar
-            {...propsQuitar}
-            onClick={
-              removeAs === "presentation"
-                ? undefined
-                : (evento: React.MouseEvent) => {
-                    if (disabled) return;
-                    /* Una ficha vive dentro de cosas que también responden al
-                       click, como el disparador de un combobox: sin esto,
-                       quitarla abriría la lista al mismo tiempo. */
-                    evento.preventDefault();
-                    evento.stopPropagation();
-                    onRemove();
-                  }
-            }
-            className={cn(
-              "relative inline-flex size-4 shrink-0 items-center justify-center rounded-xs text-muted-foreground before:absolute before:-inset-1 before:content-['']",
-              removeAs !== "presentation" &&
-                "cursor-pointer transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-              (disabled || removeAs === "presentation") && "pointer-events-none",
-            )}
-          >
-            <X className="size-3" aria-hidden="true" />
-          </Quitar>
+          <BotonQuitar
+            modo={removeAs}
+            disabled={disabled}
+            nombre={accessibilityLabel ?? (typeof children === "string" ? children : undefined)}
+            onRemove={onRemove}
+          />
         ) : null}
       </span>
     );

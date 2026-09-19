@@ -531,6 +531,52 @@ export type ComboboxOption = {
   level?: number;
 };
 
+/* La lista es la misma en `ComboboxField` y en `MultiComboboxField`. */
+function ListaDeOpciones({
+  align,
+  contentClassName,
+  searchPlaceholder,
+  emptyMessage,
+  grupos,
+}: {
+  align?: ComboboxContentProps["align"];
+  contentClassName?: string;
+  searchPlaceholder?: string;
+  emptyMessage?: string;
+  grupos: Array<[string, ComboboxOption[]]>;
+}): React.JSX.Element {
+  return (
+    <ComboboxContent align={align} className={contentClassName}>
+      <ComboboxInput placeholder={searchPlaceholder} />
+      <ComboboxList>
+        <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
+        {grupos.map(([grupo, items]) => (
+          <ComboboxGroup key={grupo || "sin-grupo"} heading={grupo || undefined}>
+            {items.map((o) => (
+              <ComboboxItem
+                key={o.value}
+                value={o.value}
+                keywords={[o.label, ...(o.keywords ?? [])]}
+                disabled={o.disabled}
+                level={o.level}
+              >
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate">{o.label}</span>
+                  {o.description ? (
+                    <span className="truncate text-xs font-normal text-muted-foreground">
+                      {o.description}
+                    </span>
+                  ) : null}
+                </span>
+              </ComboboxItem>
+            ))}
+          </ComboboxGroup>
+        ))}
+      </ComboboxList>
+    </ComboboxContent>
+  );
+}
+
 /** Props de {@link ComboboxField}. */
 export type ComboboxFieldProps = {
   options: ComboboxOption[];
@@ -620,34 +666,13 @@ function ComboboxField({
 
       {name ? <input type="hidden" name={name} value={value} /> : null}
 
-      <ComboboxContent align={align} className={contentClassName}>
-        <ComboboxInput placeholder={searchPlaceholder} />
-        <ComboboxList>
-          <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
-          {grupos.map(([grupo, items]) => (
-            <ComboboxGroup key={grupo || "sin-grupo"} heading={grupo || undefined}>
-              {items.map((o) => (
-                <ComboboxItem
-                  key={o.value}
-                  value={o.value}
-                  keywords={[o.label, ...(o.keywords ?? [])]}
-                  disabled={o.disabled}
-                  level={o.level}
-                >
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate">{o.label}</span>
-                    {o.description ? (
-                      <span className="truncate text-xs font-normal text-muted-foreground">
-                        {o.description}
-                      </span>
-                    ) : null}
-                  </span>
-                </ComboboxItem>
-              ))}
-            </ComboboxGroup>
-          ))}
-        </ComboboxList>
-      </ComboboxContent>
+      <ListaDeOpciones
+        align={align}
+        contentClassName={contentClassName}
+        searchPlaceholder={searchPlaceholder}
+        emptyMessage={emptyMessage}
+        grupos={grupos}
+      />
     </Combobox>
   );
 }
@@ -815,34 +840,13 @@ function MultiComboboxField({
 
       {name ? valores.map((v) => <input key={v} type="hidden" name={name} value={v} />) : null}
 
-      <ComboboxContent align={align} className={contentClassName}>
-        <ComboboxInput placeholder={searchPlaceholder} />
-        <ComboboxList>
-          <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
-          {grupos.map(([grupo, items]) => (
-            <ComboboxGroup key={grupo || "sin-grupo"} heading={grupo || undefined}>
-              {items.map((o) => (
-                <ComboboxItem
-                  key={o.value}
-                  value={o.value}
-                  keywords={[o.label, ...(o.keywords ?? [])]}
-                  disabled={o.disabled}
-                  level={o.level}
-                >
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate">{o.label}</span>
-                    {o.description ? (
-                      <span className="truncate text-xs font-normal text-muted-foreground">
-                        {o.description}
-                      </span>
-                    ) : null}
-                  </span>
-                </ComboboxItem>
-              ))}
-            </ComboboxGroup>
-          ))}
-        </ComboboxList>
-      </ComboboxContent>
+      <ListaDeOpciones
+        align={align}
+        contentClassName={contentClassName}
+        searchPlaceholder={searchPlaceholder}
+        emptyMessage={emptyMessage}
+        grupos={grupos}
+      />
     </MultiCombobox>
   );
 }

@@ -264,6 +264,9 @@ export const TreeItem: React.ForwardRefExoticComponent<
         )}
         {...props}
       >
+        {/* El teclado lo lleva el <li role="treeitem"> de arriba, con su tabIndex y su onKeyDown. */}
+        {/* react-doctor-disable-next-line click-events-have-key-events */}
+        {/* react-doctor-disable-next-line no-static-element-interactions */}
         <span
           onClick={() => {
             ctx.elegir(id);

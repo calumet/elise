@@ -96,6 +96,10 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api || !setApi) return;
+    // Embla es el sistema externo: su instancia no existe hasta después del montaje.
+    // react-doctor-disable-next-line no-pass-data-to-parent
+    // react-doctor-disable-next-line no-pass-live-state-to-parent
+    // react-doctor-disable-next-line no-prop-callback-in-effect
     setApi(api);
   }, [api, setApi]);
 

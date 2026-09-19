@@ -394,42 +394,110 @@ function DataTableContent<TData extends RowData>({
   );
 }
 
-function Filter<TData extends RowData>({
-  column,
-}: {
+type PropsDeFiltro<TData extends RowData> = {
   column: Column<Caracteristicas, TData, unknown>;
-}) {
+  columnHeader: string;
+};
+
+function FiltroRango<TData extends RowData>({
+  column,
+  columnHeader,
+}: PropsDeFiltro<TData>): React.JSX.Element {
   const id = useId();
   const columnFilterValue = column.getFilterValue();
-  const { filterVariant } = metaDe(column.columnDef);
-  const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
+  const labelMin = useElLabel("tables", "min", "Min");
+  const labelMax = useElLabel("tables", "max", "Max");
+
+  return (
+    <div className="*:not-first:mt-1">
+      <Label>{columnHeader}</Label>
+      <div className="flex">
+        <Input
+          id={`${id}-range-1`}
+          className="flex-1 rounded-e-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+          value={(columnFilterValue as [number, number])?.[0] ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old: [number, number]) => [
+              e.target.value ? Number(e.target.value) : undefined,
+              old?.[1],
+            ])
+          }
+          placeholder={labelMin}
+          type="number"
+          aria-label={`${columnHeader} ${labelMin}`}
+        />
+        <Input
+          id={`${id}-range-2`}
+          className="-ms-px flex-1 rounded-s-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+          value={(columnFilterValue as [number, number])?.[1] ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old: [number, number]) => [
+              old?.[0],
+              e.target.value ? Number(e.target.value) : undefined,
+            ])
+          }
+          placeholder={labelMax}
+          type="number"
+          aria-label={`${columnHeader} ${labelMax}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function FiltroRangoDeFechas<TData extends RowData>({
+  column,
+  columnHeader,
+}: PropsDeFiltro<TData>): React.JSX.Element {
+  const columnFilterValue = column.getFilterValue();
+
+  const rangeValue = isDateRangePickerValue(columnFilterValue) ? columnFilterValue : undefined;
+
+  return (
+    <div className="*:not-first:mt-1">
+      <Label>{columnHeader}</Label>
+      <DateRangePicker value={rangeValue} onChange={(value) => column.setFilterValue(value)} />
+    </div>
+  );
+}
+
+function FiltroFecha<TData extends RowData>({
+  column,
+  columnHeader,
+}: PropsDeFiltro<TData>): React.JSX.Element {
+  const columnFilterValue = column.getFilterValue();
+
+  const dateValue = columnFilterValue instanceof Date ? columnFilterValue : undefined;
+
+  return (
+    <div className="*:not-first:mt-1">
+      <Label>{columnHeader}</Label>
+      <DatePicker value={dateValue} onChange={(value) => column.setFilterValue(value)} />
+    </div>
+  );
+}
+
+function FiltroSeleccion<TData extends RowData>({
+  column,
+  columnHeader,
+}: PropsDeFiltro<TData>): React.JSX.Element {
+  const columnFilterValue = column.getFilterValue();
   const [selectOpen, setSelectOpen] = React.useState(false);
   const idLista = React.useId();
 
-  const labelMin = useElLabel("tables", "min", "Min");
-  const labelMax = useElLabel("tables", "max", "Max");
   const labelSelectPlaceholder = useElLabel("tables", "selectPlaceholder", "Select...");
   const labelNoOptions = useElLabel("tables", "noOptions", "No options found.");
   const labelClear = useElLabel("tables", "clear", "Clear");
-  const columnVar = { column: columnHeader.toLowerCase() };
   const labelSearchInColumn = useElLabel(
     "tables",
     "searchInColumn",
     `Search ${columnHeader.toLowerCase()}...`,
-    columnVar,
-  );
-  const labelSearch = useElLabel(
-    "tables",
-    "searchByColumn",
-    `Buscar ${columnHeader.toLowerCase()}`,
-    columnVar,
+    { column: columnHeader.toLowerCase() },
   );
 
   const facetedUniqueValues = column.getFacetedUniqueValues();
 
   const sortedUniqueValues = useMemo(() => {
-    if (filterVariant === "range" || filterVariant === "daterange") return [];
-
     const flattenedValues: string[] = [];
 
     for (const value of facetedUniqueValues.keys()) {
@@ -446,157 +514,111 @@ function Filter<TData extends RowData>({
     }
 
     return Array.from(new Set(flattenedValues)).sort((a, b) => a.localeCompare(b));
-  }, [facetedUniqueValues, filterVariant]);
+  }, [facetedUniqueValues]);
 
-  if (filterVariant === "range") {
-    return (
-      <div className="*:not-first:mt-1">
-        <Label>{columnHeader}</Label>
-        <div className="flex">
-          <Input
-            id={`${id}-range-1`}
-            className="flex-1 rounded-e-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-            value={(columnFilterValue as [number, number])?.[0] ?? ""}
-            onChange={(e) =>
-              column.setFilterValue((old: [number, number]) => [
-                e.target.value ? Number(e.target.value) : undefined,
-                old?.[1],
-              ])
-            }
-            placeholder={labelMin}
-            type="number"
-            aria-label={`${columnHeader} ${labelMin}`}
-          />
-          <Input
-            id={`${id}-range-2`}
-            className="-ms-px flex-1 rounded-s-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-            value={(columnFilterValue as [number, number])?.[1] ?? ""}
-            onChange={(e) =>
-              column.setFilterValue((old: [number, number]) => [
-                old?.[0],
-                e.target.value ? Number(e.target.value) : undefined,
-              ])
-            }
-            placeholder={labelMax}
-            type="number"
-            aria-label={`${columnHeader} ${labelMax}`}
-          />
-        </div>
-      </div>
-    );
-  }
+  const selectedValues = Array.isArray(columnFilterValue)
+    ? columnFilterValue.map((value) => String(value))
+    : columnFilterValue
+      ? [String(columnFilterValue)]
+      : [];
+  const elegidas = new Set(selectedValues);
 
-  if (filterVariant === "daterange") {
-    const rangeValue = isDateRangePickerValue(columnFilterValue) ? columnFilterValue : undefined;
+  const toggleSelection = (value: string) => {
+    const newValue = selectedValues.includes(value)
+      ? selectedValues.filter((v) => v !== value)
+      : [...selectedValues, value];
 
-    return (
-      <div className="*:not-first:mt-1">
-        <Label>{columnHeader}</Label>
-        <DateRangePicker value={rangeValue} onChange={(value) => column.setFilterValue(value)} />
-      </div>
-    );
-  }
+    column.setFilterValue(newValue.length === 0 ? undefined : newValue);
+  };
 
-  if (filterVariant === "date") {
-    const dateValue = columnFilterValue instanceof Date ? columnFilterValue : undefined;
+  const clearAllSelections = () => {
+    column.setFilterValue(undefined);
+    setSelectOpen(false);
+  };
 
-    return (
-      <div className="*:not-first:mt-1">
-        <Label>{columnHeader}</Label>
-        <DatePicker value={dateValue} onChange={(value) => column.setFilterValue(value)} />
-      </div>
-    );
-  }
-  if (filterVariant === "select") {
-    const selectedValues = Array.isArray(columnFilterValue)
-      ? columnFilterValue.map((value) => String(value))
-      : columnFilterValue
-        ? [String(columnFilterValue)]
-        : [];
-
-    const toggleSelection = (value: string) => {
-      const newValue = selectedValues.includes(value)
-        ? selectedValues.filter((v) => v !== value)
-        : [...selectedValues, value];
-
-      column.setFilterValue(newValue.length === 0 ? undefined : newValue);
-    };
-
-    const clearAllSelections = () => {
-      column.setFilterValue(undefined);
-      setSelectOpen(false);
-    };
-
-    return (
-      <div className="*:not-first:mt-1">
-        <Label>{columnHeader}</Label>
-        <Popover open={selectOpen} onOpenChange={setSelectOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={selectOpen}
-              aria-controls={idLista}
-              className="w-full justify-between border-border bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
-            >
-              <div className="flex min-w-0 flex-1 items-center">
-                {selectedValues.length > 0 ? (
-                  <span className="truncate">{selectedValues.join(", ")}</span>
-                ) : (
-                  <span className="text-muted-foreground">{labelSelectPlaceholder}</span>
-                )}
-              </div>
-              <ChevronsUpDown
-                className="size-4 shrink-0 text-muted-foreground/80"
-                aria-hidden="true"
-              />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            id={idLista}
-            className="w-full min-w-(--radix-popper-anchor-width) border-border p-0"
-            align="start"
+  return (
+    <div className="*:not-first:mt-1">
+      <Label>{columnHeader}</Label>
+      <Popover open={selectOpen} onOpenChange={setSelectOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={selectOpen}
+            aria-controls={idLista}
+            className="w-full justify-between border-border bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
           >
-            <Command>
-              <CommandInput placeholder={labelSearchInColumn} />
-              <CommandList>
-                <CommandEmpty>{labelNoOptions}</CommandEmpty>
-                <CommandGroup>
-                  {sortedUniqueValues.map((value) => (
-                    <CommandItem
-                      key={String(value)}
-                      value={String(value)}
-                      onSelect={() => toggleSelection(String(value))}
+            <div className="flex min-w-0 flex-1 items-center">
+              {selectedValues.length > 0 ? (
+                <span className="truncate">{selectedValues.join(", ")}</span>
+              ) : (
+                <span className="text-muted-foreground">{labelSelectPlaceholder}</span>
+              )}
+            </div>
+            <ChevronsUpDown
+              className="size-4 shrink-0 text-muted-foreground/80"
+              aria-hidden="true"
+            />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          id={idLista}
+          className="w-full min-w-(--radix-popper-anchor-width) border-border p-0"
+          align="start"
+        >
+          <Command>
+            <CommandInput placeholder={labelSearchInColumn} />
+            <CommandList>
+              <CommandEmpty>{labelNoOptions}</CommandEmpty>
+              <CommandGroup>
+                {sortedUniqueValues.map((value) => (
+                  <CommandItem
+                    key={String(value)}
+                    value={String(value)}
+                    onSelect={() => toggleSelection(String(value))}
+                  >
+                    <span className="truncate">{String(value)}</span>
+                    {elegidas.has(String(value)) && <Check className="ml-auto size-4" />}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              {selectedValues.length > 0 && (
+                <Fragment>
+                  <CommandSeparator />
+                  <CommandGroup>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start px-3 font-normal"
+                      onClick={clearAllSelections}
                     >
-                      <span className="truncate">{String(value)}</span>
-                      {selectedValues.includes(String(value)) && (
-                        <Check className="ml-auto size-4" />
-                      )}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                {selectedValues.length > 0 && (
-                  <Fragment>
-                    <CommandSeparator />
-                    <CommandGroup>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start px-3 font-normal"
-                        onClick={clearAllSelections}
-                      >
-                        <X className="-ms-1 size-4 opacity-60" aria-hidden="true" />
-                        {labelClear}
-                      </Button>
-                    </CommandGroup>
-                  </Fragment>
-                )}
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      </div>
-    );
-  }
+                      <X className="-ms-1 size-4 opacity-60" aria-hidden="true" />
+                      {labelClear}
+                    </Button>
+                  </CommandGroup>
+                </Fragment>
+              )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+function FiltroTexto<TData extends RowData>({
+  column,
+  columnHeader,
+}: PropsDeFiltro<TData>): React.JSX.Element {
+  const id = useId();
+  const columnFilterValue = column.getFilterValue();
+  const labelSearch = useElLabel(
+    "tables",
+    "searchByColumn",
+    `Buscar ${columnHeader.toLowerCase()}`,
+    {
+      column: columnHeader.toLowerCase(),
+    },
+  );
 
   return (
     <div className="*:not-first:mt-1">
@@ -616,6 +638,22 @@ function Filter<TData extends RowData>({
       </div>
     </div>
   );
+}
+
+function Filter<TData extends RowData>({
+  column,
+}: {
+  column: Column<Caracteristicas, TData, unknown>;
+}): React.JSX.Element {
+  const { filterVariant } = metaDe(column.columnDef);
+  const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
+  const comunes = { column, columnHeader };
+
+  if (filterVariant === "range") return <FiltroRango {...comunes} />;
+  if (filterVariant === "daterange") return <FiltroRangoDeFechas {...comunes} />;
+  if (filterVariant === "date") return <FiltroFecha {...comunes} />;
+  if (filterVariant === "select") return <FiltroSeleccion {...comunes} />;
+  return <FiltroTexto {...comunes} />;
 }
 
 /**

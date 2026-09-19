@@ -550,6 +550,8 @@ function AppShellNav({
         )}
       />
 
+      {/* Delegación: el clic llega burbujeando de un <a>, que ya responde al teclado. */}
+      {/* react-doctor-disable-next-line no-noninteractive-element-interactions */}
       <nav
         data-slot="app-shell-nav"
         aria-label={label ?? etiqueta}
@@ -1039,6 +1041,7 @@ function AppShellNavItem({
 
   const fila = (
     <div className="group/fila relative px-3">
+      {/* react-doctor-disable-next-line no-static-element-interactions */}
       <a
         data-slot="app-shell-nav-item"
         aria-current={active ? "page" : undefined}
