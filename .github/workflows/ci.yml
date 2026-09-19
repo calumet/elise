@@ -81,4 +81,4 @@ jobs:
           timeout 60 bash -c 'until curl -sf http://localhost:5173 >/dev/null; do sleep 1; done'
 
       - name: Auditar
-        run: node scripts/audit-visual.mjs -- --tema=ambos --abrir
+        run: node scripts/visual-audit.mjs -- --theme=both --open

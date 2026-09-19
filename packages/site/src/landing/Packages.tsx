@@ -14,7 +14,7 @@ export function Packages() {
   const { t } = useTranslation("packages");
 
   return (
-    <section id="paquetes" className="mx-auto w-full max-w-[1200px] px-6 pt-20 sm:px-10">
+    <section id="paquetes" className="mx-auto w-full max-w-300 px-6 pt-20 sm:px-10">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
         <div>
           <h2 className="text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.035em]">
@@ -22,7 +22,7 @@ export function Packages() {
             <br />
             {t("titleLine2")}
           </h2>
-          <p className="mt-2.5 max-w-[560px] text-lg text-muted-foreground">{t("lede")}</p>
+          <p className="mt-2.5 max-w-140 text-lg text-muted-foreground">{t("lede")}</p>
         </div>
         <a
           href={DOCS_URL}

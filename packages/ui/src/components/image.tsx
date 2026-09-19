@@ -48,7 +48,7 @@ const settings: Record<NonNullable<ImageProps["objectFit"]>, string> = {
   contain: "object-contain",
 };
 
-const radios: Record<NonNullable<BoxProps["radius"]>, string> = {
+const radii: Record<NonNullable<BoxProps["radius"]>, string> = {
   none: "rounded-none",
   sm: "rounded-sm",
   md: "rounded-md",
@@ -97,7 +97,7 @@ export const Image: React.ForwardRefExoticComponent<
         "block max-w-full",
         fill && "w-full",
         settings[objectFit],
-        radius && radios[radius],
+        radius && radii[radius],
         border && (border === "strong" ? "border border-border-strong" : "border border-border"),
         className,
       )}

@@ -28,11 +28,11 @@ export function Install() {
       className="dark relative isolate mt-20 overflow-hidden bg-background py-20 text-foreground"
     >
       <Dither kind="dark" className="absolute inset-0 size-full" />
-      <div className="relative mx-auto w-full max-w-[1200px] px-6 sm:px-10">
+      <div className="relative mx-auto w-full max-w-300 px-6 sm:px-10">
         <h2 className="text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.035em]">
           {t("title")}
         </h2>
-        <p className="mt-3 max-w-[540px] text-lg text-pretty text-muted-foreground">{t("lede")}</p>
+        <p className="mt-3 max-w-135 text-lg text-pretty text-muted-foreground">{t("lede")}</p>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <Panel title={t("panel.terminal")}>

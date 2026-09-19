@@ -13,7 +13,7 @@ import { Spinner } from "./spinner";
 
 /** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "solid" | "outline" | "ghost";
+  variant?: "solid" | "outline" | "ghost" | "surface";
   size?: "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
@@ -66,6 +66,11 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
     "border border-border-strong text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   ghost:
     "text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset",
+  /* Trae consigo la superficie de tarjeta, para cuando detrás no hay una página
+     lisa sino una imagen o una textura. `outline` ahí queda ilegible, y el
+     desenfoque separa el rótulo de lo que se mueva debajo. */
+  surface:
+    "border border-border-strong bg-card/85 text-foreground backdrop-blur-[2px] hover:bg-card active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-card data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
 };
 
 const toneOverrides: Record<
@@ -79,6 +84,8 @@ const toneOverrides: Record<
       "border-success text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     ghost:
       "text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
+    surface:
+      "border-success bg-card/85 text-success-subtle-foreground hover:bg-success-subtle active:bg-success-subtle",
   },
   warning: {
     solid:
@@ -87,6 +94,8 @@ const toneOverrides: Record<
       "border-warning text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     ghost:
       "text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
+    surface:
+      "border-warning bg-card/85 text-warning-subtle-foreground hover:bg-warning-subtle active:bg-warning-subtle",
   },
   danger: {
     solid:
@@ -95,6 +104,8 @@ const toneOverrides: Record<
       "border-destructive text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     ghost:
       "text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
+    surface:
+      "border-destructive bg-card/85 text-destructive-subtle-foreground hover:bg-destructive-subtle active:bg-destructive-subtle",
   },
 };
 
@@ -134,7 +145,7 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
-/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. */
+/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una imagen o una textura. */
 export const Button: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, ButtonProps>(

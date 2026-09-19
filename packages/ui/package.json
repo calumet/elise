@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-ui",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "private": false,
   "description": "Design system personalizado basado en Radix primitives y Tailwind CSS.",
   "repository": {
@@ -479,7 +479,7 @@
     "dev": "tsdown --watch --dts",
     "build": "tsdown --dts && pnpm build:css && pnpm build:jsr",
     "build:css": "tailwindcss -i src/tailwind/standalone.css -o dist/elise.css --minify",
-    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/preparar-jsr.mjs jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/prepare-jsr.mjs jsr",
     "lint": "tsc --noEmit",
     "clean": "rimraf dist jsr"
   },

@@ -3,6 +3,35 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.27.0
+
+Suben también `elise-tables` 0.7.2, `elise-alerts` 0.3.11 y `elise-toasts`
+0.4.12, que no cambian por dentro.
+
+### Añade
+
+**`Button` con `variant="surface"`:** el peso de `outline` con la superficie de
+tarjeta detrás, traslúcida y con desenfoque. Es para cuando debajo no hay una
+página lisa sino una imagen o una textura, donde `outline` no trae relleno y el
+rótulo queda ilegible.
+
+```tsx
+<Button variant="surface">pnpm add @calumet/elise-ui</Button>
+```
+
+**`SelectTrigger` con `variant="toolbar"`:** transparente, más ceñido y con el
+borde marcado. El selector de una cabecera no es un campo aunque se le parezca:
+no se rellena ni se valida, y con la caja de campo alrededor compite con los
+que sí lo son.
+
+```tsx
+<SelectTrigger size="sm" variant="toolbar" aria-label="Idioma" />
+```
+
+Las dos salen de [Quién es dueño de cada
+medida](docs/reglas-ui.md#2-quién-es-dueño-de-cada-medida): la landing las
+escribía en `className`, que es lo que la regla manda resolver con una variante.
+
 ## `@calumet/elise-ui` 0.26.0
 
 Suben también `elise-tables` 0.7.1, `elise-alerts` 0.3.10 y `elise-toasts`
@@ -404,7 +433,7 @@ no alcanza a la 0.19.0.
   `UseFormReturn` de react-hook-form, así que `formState.isDirty` ya está ahí.
 
   **Descartar destruye lo editado, así que pasa por `AlertDialog`** y no por el
-  botón a secas, como fija `reglas-ui.md` § 1.4.
+  botón a secas, como fija `reglas-ui.md#14-contarle-algo-al-usuario`.
 
   **Dentro del marco va `AppShellSaveBar`,** que ocupa el sitio del buscador y
   deja a los lados el botón del cajón y las acciones, que siguen haciendo falta

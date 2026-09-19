@@ -114,6 +114,15 @@ const MenusSelectDemo = () => {
             <SelectItem value="op3">Opcion 3</SelectItem>
           </SelectContent>
         </Select>
+        <Select defaultValue="es">
+          <SelectTrigger size="sm" variant="toolbar" aria-label="Idioma" className="w-auto">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="es">ES</SelectItem>
+            <SelectItem value="en">EN</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2 rounded-sm lg:col-span-2">

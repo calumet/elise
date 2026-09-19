@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-tables",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "license": "MIT",
   "exports": "./jsr/index.js",
   "publish": {

@@ -21,7 +21,7 @@ export function Header() {
 
   return (
     <div className="absolute inset-x-0 top-2.5 z-10 flex justify-center px-4 sm:px-10">
-      <header className="flex h-12 w-full max-w-[1180px] items-center justify-between rounded-lg border border-card/70 bg-card/30 py-0 pr-2 pl-4 shadow-lg backdrop-blur-[2px]">
+      <header className="flex h-12 w-full max-w-295 items-center justify-between rounded-lg border border-card/70 bg-card/30 py-0 pr-2 pl-4 shadow-lg backdrop-blur-[2px]">
         <div className="flex items-center gap-6">
           <a href="#top" aria-label={t("home")} className="text-lg font-semibold">
             Elise

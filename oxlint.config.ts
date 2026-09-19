@@ -18,7 +18,7 @@ export default defineConfig(
     ],
     overrides: [
       {
-        files: ["scripts/sonda-visual.js"],
+        files: ["scripts/visual-probe.js"],
         env: { browser: true },
       },
       {

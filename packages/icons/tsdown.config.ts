@@ -1,6 +1,6 @@
 import { defineConfig } from "tsdown";
 
-export default defineConfig((opciones) => ({
+export default defineConfig((options) => ({
   entry: ["src/index.ts"],
   format: ["esm", "cjs"],
   outExtensions: ({ format }) => ({
@@ -10,7 +10,7 @@ export default defineConfig((opciones) => ({
   dts: true,
   sourcemap: true,
   // En watch no se limpia: la vitrina resuelve contra dist mientras arranca.
-  clean: !opciones.watch,
+  clean: !options.watch,
   treeshake: true,
   // El JSDoc ya viaja en el `.d.ts`, que es de donde lo lee el editor.
   outputOptions: { comments: { legal: true, annotation: true, jsdoc: false } },

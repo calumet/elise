@@ -36,7 +36,7 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="mt-7 max-w-[620px] text-[clamp(1rem,1.6vw,1.1875rem)] leading-relaxed text-pretty text-secondary-foreground">
+          <p className="mt-7 max-w-155 text-[clamp(1rem,1.6vw,1.1875rem)] leading-relaxed text-pretty text-secondary-foreground">
             {t("lede")}
           </p>
 
@@ -53,20 +53,16 @@ export function Hero() {
       </section>
 
       <div className="border-b border-border bg-card">
-        <div className="mx-auto grid w-full max-w-[1200px] grid-cols-2 px-6 sm:px-10 md:grid-cols-4">
+        <div className="mx-auto grid w-full max-w-300 grid-cols-2 px-6 sm:px-10 md:grid-cols-4">
           {STATS.map((stat) => (
-            <Stat
+            /* Las separaciones van por posición y no por orden: en móvil son
+               dos filas de dos. */
+            <div
               key={stat.key}
-              label={t(stat.key)}
-              value={stat.value}
-              /* Al revés que el Stat de una pantalla de datos: acá la cifra es
-                 el titular y el rótulo el pie.
-
-                 Las separaciones van por posición en la rejilla y no por orden,
-                 porque en el móvil son dos filas de dos y la celda que abre fila
-                 es la impar, no solo la primera. */
-              className="flex-col-reverse gap-1.5 border-border px-7 py-6 odd:pl-0 even:border-l even:pr-0 md:border-t-0 md:border-l md:first:border-l-0 md:first:pl-0 md:last:pr-0 md:odd:pl-7 md:even:pr-7 [&:nth-child(n+3)]:border-t"
-            />
+              className="border-border px-7 py-6 odd:pl-0 even:border-l even:pr-0 md:border-t-0 md:border-l md:first:border-l-0 md:first:pl-0 md:last:pr-0 md:odd:pl-7 md:even:pr-7 [&:nth-child(n+3)]:border-t"
+            >
+              <Stat label={t(stat.key)} value={stat.value} className="flex-col-reverse" />
+            </div>
           ))}
         </div>
       </div>
