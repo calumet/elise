@@ -67,7 +67,6 @@ function Pagination({
   const label = useElLabel("ui", "pagination", "Paginación");
   return (
     <nav
-      role="navigation"
       aria-label={label}
       data-slot="pagination"
       data-variant={variant}

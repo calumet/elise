@@ -157,6 +157,7 @@ function FileUpload({
       <input
         ref={inputRef}
         type="file"
+        aria-label={etiquetaBoton}
         accept={accept}
         multiple={multiple}
         disabled={disabled}

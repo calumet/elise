@@ -10,17 +10,24 @@ import * as React from "react";
  * markup y quien traduce dejaría de ver la oración completa.
  */
 export function RichText({ children }: { children: string }) {
+  // La clave es dónde empieza el trozo en la cadena: no se repite y no depende
+  // de la posición en el array.
+  let desde = 0;
+  const partes = children.split("`").map((texto) => {
+    const inicio = desde;
+    desde += texto.length + 1;
+    return { texto, inicio };
+  });
+
   return (
     <>
-      {children
-        .split("`")
-        .map((parte, i) =>
-          i % 2 === 1 ? (
-            <Code key={i}>{parte}</Code>
-          ) : (
-            <React.Fragment key={i}>{parte}</React.Fragment>
-          ),
-        )}
+      {partes.map(({ texto, inicio }, i) =>
+        i % 2 === 1 ? (
+          <Code key={inicio}>{texto}</Code>
+        ) : (
+          <React.Fragment key={inicio}>{texto}</React.Fragment>
+        ),
+      )}
     </>
   );
 }

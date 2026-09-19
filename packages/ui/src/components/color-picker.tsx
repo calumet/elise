@@ -100,9 +100,9 @@ export const ColorPicker: React.ForwardRefExoticComponent<
        acaba de emitir. Si se releyera siempre, el tono se perdería al pasar por
        negro: el hex no lo lleva, y volver de #000000 dejaría el área en rojo. */
     const [ultimoEmitido, setUltimoEmitido] = React.useState(hex);
-    const [valuePrevio, setValuePrevio] = React.useState(value);
-    if (value !== valuePrevio) {
-      setValuePrevio(value);
+    const [previousValue, setPreviousValue] = React.useState(value);
+    if (value !== previousValue) {
+      setPreviousValue(value);
       if (value !== undefined && value !== ultimoEmitido) {
         const leido = analizar(value);
         if (leido) setColor(leido);
@@ -198,6 +198,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
           onPointerUp={(e) =>
             e.currentTarget.hasPointerCapture(e.pointerId) && desdePuntero(e, true)
           }
+          onPointerCancel={() => emitir(color, true)}
           onKeyDown={teclasDelArea}
           className="relative h-40 w-full cursor-crosshair touch-none rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           style={{

@@ -158,8 +158,8 @@ export function FileField({
 
   // Un archivo que el navegador no pinta deja el cuadro en blanco, que se lee
   // como que no hay nada.
-  const [urlFallida, setUrlFallida] = React.useState<string>();
-  const vistaFallo = urlVista !== undefined && urlVista === urlFallida;
+  const [failedUrl, setFailedUrl] = React.useState<string>();
+  const vistaFallo = urlVista !== undefined && urlVista === failedUrl;
 
   const miniatura = () => {
     if (arrastrando) {
@@ -170,7 +170,7 @@ export function FileField({
         <img
           src={urlVista}
           alt=""
-          onError={() => setUrlFallida(urlVista)}
+          onError={() => setFailedUrl(urlVista)}
           className="max-h-full max-w-full object-contain"
           style={{ borderRadius: 4 }}
         />

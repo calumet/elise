@@ -19,8 +19,8 @@ export default function CarouselDemo() {
     <div className="flex w-full flex-col items-center gap-8">
       <Carousel className="w-full max-w-sm">
         <CarouselContent>
-          {items.map((item, i) => (
-            <CarouselItem key={i}>
+          {items.map((item) => (
+            <CarouselItem key={item.title}>
               <div
                 className={`${item.color} flex aspect-square items-center justify-center rounded-md`}
               >
@@ -35,8 +35,8 @@ export default function CarouselDemo() {
 
       <Carousel className="w-full max-w-sm" opts={{ align: "start" }}>
         <CarouselContent className="-ml-2">
-          {items.map((item, i) => (
-            <CarouselItem key={i} className="basis-1/3 pl-2">
+          {items.map((item) => (
+            <CarouselItem key={item.title} className="basis-1/3 pl-2">
               <div
                 className={`${item.color} flex aspect-square items-center justify-center rounded-md`}
               >

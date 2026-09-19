@@ -82,22 +82,22 @@ const BusquedaAsincrona = () => {
   const [abierto, setAbierto] = useState(false);
   const [texto, setTexto] = useState("");
   const [resultados, setResultados] = useState<string[]>([]);
-  const [consultado, setConsultado] = useState<string | null>(null);
+  const [queried, setQueried] = useState<string | null>(null);
   const [elegido, setElegido] = useState("");
 
-  const consulta = texto.trim().toLowerCase();
+  const query = texto.trim().toLowerCase();
 
   useEffect(() => {
     if (!abierto) return;
     const id = setTimeout(() => {
-      setResultados(CATALOGO.filter((p) => p.includes(consulta)));
-      setConsultado(consulta);
+      setResultados(CATALOGO.filter((p) => p.includes(query)));
+      setQueried(query);
     }, 450);
     return () => clearTimeout(id);
-  }, [consulta, abierto]);
+  }, [query, abierto]);
 
   // Está cargando mientras lo que se ve no corresponde a lo que hay escrito.
-  const cargando = abierto && consultado !== consulta;
+  const cargando = abierto && queried !== query;
 
   return (
     <Combobox value={elegido} onValueChange={setElegido} open={abierto} onOpenChange={setAbierto}>

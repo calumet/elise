@@ -255,9 +255,92 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
  * `display`, que deja el contenido bien pero le quita a un lector de pantalla
  * las relaciones de fila y columna sin poner nada en su lugar.
  */
+/* Se mide el hueco disponible, o sea el padre, y no lo que ocupa la tabla: una
+   tabla que no cabe empuja a su propio contenedor, así que midiéndola a ella el
+   ancho siempre daría de sobra y nunca pasaría a lista. */
+function useTableFits(variant: TableProps["variant"]): {
+  contenedor: React.RefObject<HTMLDivElement | null>;
+  cabe: boolean;
+} {
+  const [cabe, setCabe] = React.useState(true);
+  const contenedor = React.useRef<HTMLDivElement | null>(null);
+
+  React.useLayoutEffect(() => {
+    if (variant !== "auto") return;
+    const hueco = contenedor.current?.parentElement;
+    if (!hueco) return;
+    const observador = new ResizeObserver(([entrada]) => {
+      setCabe(entrada.contentRect.width >= ANCHO_MINIMO_DE_TABLA);
+    });
+    observador.observe(hueco);
+    return () => observador.disconnect();
+  }, [variant]);
+
+  return { contenedor, cabe };
+}
+
+/* La franja de paginado, con sus cuatro controles opcionales. */
+function PaginationBar({
+  loading,
+  paginationEnd,
+  paginationLabel,
+  hasPreviousPage,
+  hasNextPage,
+  onFirstPage,
+  onPreviousPage,
+  onNextPage,
+  onLastPage,
+}: Pick<
+  TableProps,
+  | "loading"
+  | "paginationEnd"
+  | "paginationLabel"
+  | "hasPreviousPage"
+  | "hasNextPage"
+  | "onFirstPage"
+  | "onPreviousPage"
+  | "onNextPage"
+  | "onLastPage"
+>): React.JSX.Element {
+  return (
+    <Pagination
+      variant="table"
+      className={cn("rounded-b-[inherit]", loading && APAGADO)}
+      end={paginationEnd}
+      inert={loading || undefined}
+    >
+      <PaginationContent>
+        {onFirstPage ? (
+          <PaginationItem>
+            <PaginationFirst disabled={!hasPreviousPage} onClick={onFirstPage} />
+          </PaginationItem>
+        ) : null}
+        <PaginationItem>
+          <PaginationPrevious disabled={!hasPreviousPage} onClick={onPreviousPage} />
+        </PaginationItem>
+        {paginationLabel ? (
+          <PaginationItem>
+            <PaginationLabel>{paginationLabel}</PaginationLabel>
+          </PaginationItem>
+        ) : null}
+        <PaginationItem>
+          <PaginationNext disabled={!hasNextPage} onClick={onNextPage} />
+        </PaginationItem>
+        {onLastPage ? (
+          <PaginationItem>
+            <PaginationLast disabled={!hasNextPage} onClick={onLastPage} />
+          </PaginationItem>
+        ) : null}
+      </PaginationContent>
+    </Pagination>
+  );
+}
+
 export const Table: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TableProps> & React.RefAttributes<HTMLTableElement>
 > = React.forwardRef<HTMLTableElement, TableProps>(
+  // Lo que queda es componer partes opcionales, no lógica que se pueda mudar.
+  // react-doctor-disable-next-line no-high-complexity-react-function
   (
     {
       className,
@@ -282,23 +365,7 @@ export const Table: React.ForwardRefExoticComponent<
     },
     ref,
   ) => {
-    const [cabe, setCabe] = React.useState(true);
-    const contenedor = React.useRef<HTMLDivElement | null>(null);
-
-    React.useLayoutEffect(() => {
-      if (variant !== "auto") return;
-      /* Se mide el hueco disponible, o sea el padre, y no lo que ocupa la tabla: una
-         tabla que no cabe empuja a su propio contenedor, así que midiéndola a
-         ella el ancho siempre daría de sobra y nunca pasaría a lista. */
-      const hueco = contenedor.current?.parentElement;
-      if (!hueco) return;
-      const observador = new ResizeObserver(([entrada]) => {
-        setCabe(entrada.contentRect.width >= ANCHO_MINIMO_DE_TABLA);
-      });
-      observador.observe(hueco);
-      return () => observador.disconnect();
-    }, [variant]);
-
+    const { contenedor, cabe } = useTableFits(variant);
     const modo: Modo = variant === "auto" ? (cabe ? "table" : "list") : variant;
 
     const columnas = React.useMemo(() => recogerColumnas(children), [children]);
@@ -328,36 +395,17 @@ export const Table: React.ForwardRefExoticComponent<
 
     const franja =
       paginate && !vacia ? (
-        <Pagination
-          variant="table"
-          className={cn("rounded-b-[inherit]", loading && APAGADO)}
-          end={paginationEnd}
-          inert={loading || undefined}
-        >
-          <PaginationContent>
-            {onFirstPage ? (
-              <PaginationItem>
-                <PaginationFirst disabled={!hasPreviousPage} onClick={onFirstPage} />
-              </PaginationItem>
-            ) : null}
-            <PaginationItem>
-              <PaginationPrevious disabled={!hasPreviousPage} onClick={onPreviousPage} />
-            </PaginationItem>
-            {paginationLabel ? (
-              <PaginationItem>
-                <PaginationLabel>{paginationLabel}</PaginationLabel>
-              </PaginationItem>
-            ) : null}
-            <PaginationItem>
-              <PaginationNext disabled={!hasNextPage} onClick={onNextPage} />
-            </PaginationItem>
-            {onLastPage ? (
-              <PaginationItem>
-                <PaginationLast disabled={!hasNextPage} onClick={onLastPage} />
-              </PaginationItem>
-            ) : null}
-          </PaginationContent>
-        </Pagination>
+        <PaginationBar
+          loading={loading}
+          paginationEnd={paginationEnd}
+          paginationLabel={paginationLabel}
+          hasPreviousPage={hasPreviousPage}
+          hasNextPage={hasNextPage}
+          onFirstPage={onFirstPage}
+          onPreviousPage={onPreviousPage}
+          onNextPage={onNextPage}
+          onLastPage={onLastPage}
+        />
       ) : null;
 
     const barra = filters ? (
@@ -396,29 +444,16 @@ export const Table: React.ForwardRefExoticComponent<
         <span role="status" aria-live="polite" className="sr-only">
           {loading ? loadingLabel : null}
         </span>
-        {bare ? (
-          <div
-            ref={contenedor}
-            data-slot="table-bare"
-            aria-busy={loading || undefined}
-            className={cn("w-full", frameClassName)}
-          >
-            {barra}
-            {zona}
-            {franja}
-          </div>
-        ) : (
-          <div
-            ref={contenedor}
-            data-slot="table-frame"
-            aria-busy={loading || undefined}
-            className={cn(SUPERFICIE, "w-full", frameClassName)}
-          >
-            {barra}
-            {zona}
-            {franja}
-          </div>
-        )}
+        <div
+          ref={contenedor}
+          data-slot={bare ? "table-bare" : "table-frame"}
+          aria-busy={loading || undefined}
+          className={cn(!bare && SUPERFICIE, "w-full", frameClassName)}
+        >
+          {barra}
+          {zona}
+          {franja}
+        </div>
       </TablaCtx.Provider>
     );
   },
@@ -523,6 +558,7 @@ const FilaDeLista = React.forwardRef<
   const todas = (ranura: ListSlot) =>
     celdas
       .map((celda, i) => ({
+        index: i,
         valor: celda.props.children,
         columna: columnas[i],
         ranura: ranuras[i],
@@ -556,8 +592,8 @@ const FilaDeLista = React.forwardRef<
           {principal ? (
             <span className="min-w-0 truncate font-medium text-foreground">{principal}</span>
           ) : null}
-          {todas("inline").map((c, i) => (
-            <span key={i} className="shrink-0">
+          {todas("inline").map((c) => (
+            <span key={c.index} className="shrink-0">
               {c.valor}
             </span>
           ))}
@@ -567,8 +603,8 @@ const FilaDeLista = React.forwardRef<
 
       {todas("labeled").length > 0 ? (
         <div className="flex flex-wrap items-start justify-end gap-x-4 gap-y-1">
-          {todas("labeled").map((c, i) => (
-            <div key={i} className="flex flex-col items-end gap-0.5">
+          {todas("labeled").map((c) => (
+            <div key={c.index} className="flex flex-col items-end gap-0.5">
               <span className="text-xs whitespace-nowrap text-muted-foreground">
                 {c.columna?.encabezado}
               </span>
@@ -608,7 +644,7 @@ export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
 const INTERACTIVOS =
   "a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=checkbox],[contenteditable=true]";
 
-const useDelegado = (clickDelegate: string | undefined) => {
+const useRowDelegate = (clickDelegate: string | undefined) => {
   const fila = React.useRef<HTMLElement | null>(null);
 
   const alPulsar = (evento: React.MouseEvent<HTMLElement>) => {
@@ -631,7 +667,7 @@ export const TableRow: React.ForwardRefExoticComponent<
 > = React.forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, children, clickDelegate, onClick, ...props }, ref) => {
     const { modo } = React.useContext(TablaCtx);
-    const { fila, alPulsar } = useDelegado(clickDelegate);
+    const { fila, alPulsar } = useRowDelegate(clickDelegate);
 
     const pulsar = (evento: React.MouseEvent<HTMLElement>) => {
       onClick?.(evento as React.MouseEvent<HTMLTableRowElement>);
@@ -657,7 +693,7 @@ export const TableRow: React.ForwardRefExoticComponent<
        tabla tenga que repetir el formato celda por celda. */
     const numeradas = React.Children.toArray(children).map((hijo, i) =>
       React.isValidElement(hijo) ? (
-        <ColumnaCtx.Provider key={hijo.key ?? i} value={i}>
+        <ColumnaCtx.Provider key={hijo.key} value={i}>
           {hijo}
         </ColumnaCtx.Provider>
       ) : (

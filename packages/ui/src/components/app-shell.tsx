@@ -550,6 +550,8 @@ function AppShellNav({
         )}
       />
 
+      {/* Delegación: el clic llega burbujeando de un <a>, que ya responde al teclado. */}
+      {/* react-doctor-disable-next-line no-noninteractive-element-interactions */}
       <nav
         data-slot="app-shell-nav"
         aria-label={label ?? etiqueta}
@@ -1025,6 +1027,7 @@ export type AppShellNavItemProps = React.ComponentProps<"a"> & {
 function AppShellNavItem({
   className,
   active,
+  href,
   icon,
   activeIcon,
   count,
@@ -1041,6 +1044,7 @@ function AppShellNavItem({
     <div className="group/fila relative px-3">
       <a
         data-slot="app-shell-nav-item"
+        href={href}
         aria-current={active ? "page" : undefined}
         aria-expanded={grupo ? grupo.abierto : undefined}
         aria-controls={grupo ? grupo.idLista : undefined}

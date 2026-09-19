@@ -1,4 +1,4 @@
-import { Plus, Search } from "@calumet/elise-icons";
+import { Plus } from "@calumet/elise-icons";
 import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
 import { ButtonGroup } from "@calumet/elise-ui/button-group";
@@ -26,6 +26,7 @@ import {
 import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
+import { SinResultados } from "../../components/SinResultados";
 import { muestra } from "./muestra";
 
 const PRODUCTOS = [
@@ -124,20 +125,11 @@ const PantallaListado = () => {
             }
             empty={
               filtrado && filas.length === 0 ? (
-                <EmptyState size="sm">
-                  <EmptyStateMedia>
-                    <Search className="size-6" aria-hidden />
-                  </EmptyStateMedia>
-                  <EmptyStateTitle>Sin productos de «{busqueda}»</EmptyStateTitle>
-                  <EmptyStateDescription>
-                    El catálogo sigue ahí; lo que no encuentra nada es este filtro.
-                  </EmptyStateDescription>
-                  <EmptyStateActions>
-                    <Button size="sm" variant="outline" onClick={() => setBusqueda("")}>
-                      Quitar el filtro
-                    </Button>
-                  </EmptyStateActions>
-                </EmptyState>
+                <SinResultados
+                  cosas="productos"
+                  busqueda={busqueda}
+                  onQuitar={() => setBusqueda("")}
+                />
               ) : undefined
             }
           >

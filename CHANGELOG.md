@@ -3,6 +3,46 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.24.0
+
+Suben también `elise-alerts` 0.3.8 y `elise-toasts` 0.4.9, que no cambian por
+dentro: dependen por caret y `^0.23.0` no alcanza a la 0.24.0.
+
+### Corrige
+
+- **La variante `outline` de `SidebarMenuButton`** ya estaba arreglada; ahora
+  van las que faltaban: `<nav role="navigation">` era redundante en
+  `Pagination`, el `<input type="file">` de `FileUpload` no tenía nombre
+  accesible, y el tramo actual de `Breadcrumb` decía `role="link"` cuando su
+  propia documentación dice que no es un enlace.
+
+- **Dos recorridos cuadráticos**, en `TagInput` al pegar varias etiquetas y en
+  el filtro de selección de la tabla.
+
+- **Claves por índice** en las filas en modo lista de `Table`.
+
+### Cambia
+
+- **`Chip`, `Table` y `Combobox` sueltan piezas internas.** El botón de quitar,
+  la medición de ancho, la franja de paginado y la lista de opciones pasan a ser
+  componentes propios. Sin cambios de API ni de aspecto.
+
+## `@calumet/elise-tables` 0.6.0
+
+### Corrige
+
+- **El filtro de columna se parte en uno por variante.** Era un despachador de
+  220 líneas; ahora cada variante es su propio componente y solo pide los hooks
+  que usa. Mismas cinco variantes y misma API.
+
+## `@calumet/elise-i18n` 0.3.0
+
+### Corrige
+
+- **Los formateadores de `Intl` se reutilizan.** Cada llamada a `formatDate`,
+  `formatNumber`, `formatCurrency` y `formatPercent` construía uno nuevo, que es
+  la parte cara, y se llaman una vez por celda de tabla.
+
 ## `@calumet/elise-ui` 0.23.0
 
 Suben también `elise-alerts` 0.3.7 y `elise-toasts` 0.4.8, que no cambian por
