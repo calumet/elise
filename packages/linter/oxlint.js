@@ -93,11 +93,11 @@ export const tailwind = (entryPoint) => ({
 const DENY = ["max-w-*", "opacity-*"];
 
 const DENY_MESSAGE = {
-  layout: "A screen's width belongs to `Container` and its `size`. See docs/reglas-ui.md §2.",
+  layout: "A screen's width belongs to `Container` and its `size`. See docs/reglas-ui.md § 2.",
   effects:
     "Effects belong to the component. To dim, `opacity` invents a value that does not follow " +
     'the theme: the surface already declares its own text pair, so use `tone="muted"`. ' +
-    "See docs/reglas-ui.md §3.",
+    "See docs/reglas-ui.md § 3.",
 };
 
 const CONTRACTS = [
@@ -112,9 +112,9 @@ const CONTRACTS = [
     deny: [...DENY, "border-*", "rounded-*", "shadow-*"],
     message: {
       ...DENY_MESSAGE,
-      shape: "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md §2.",
+      shape: "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md § 2.",
       // `shadow-*` cae en `effects`, igual que `opacity-*`.
-      effects: "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md §2.",
+      effects: "A frame's outline comes from `SURFACE`. See docs/reglas-ui.md § 2.",
     },
   },
   {
