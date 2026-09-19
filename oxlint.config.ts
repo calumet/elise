@@ -30,6 +30,7 @@ export default defineConfig(
           "shadcn/no-restyle": "off",
           "shadcn/no-inline-styles": "off",
           "shadcn/require-static-classes": "off",
+          "shadcn/no-arbitrary-values": "off",
         },
       },
       {

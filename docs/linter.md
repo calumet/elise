@@ -113,14 +113,25 @@ escrito quién es dueño de cada medida:
 | §2, tamaño de texto          | la tipografía es de `Text` y los suyos; en los demás no pasa                          |
 | §3, atenuar                  | nada de `opacity-*`: la superficie declara su par de texto, así que va `tone="muted"` |
 | §4, clases por interpolación | `require-static-classes`                                                              |
+| §4, segundo juego de anchos  | una medida cruda que la escala ya tiene: `max-w-[600px]` cuando existe `max-w-150`    |
 
 Cada uno responde con la regla y dónde leerla, no con un «no se puede».
 Los contratos se amplían con `contracts`.
 
-De las seis reglas del plugin enciende cuatro. `no-unknown-classes` la da ya
-`tailwind()`. Y `no-arbitrary-values` queda fuera a propósito, porque §4 dice
-que para una medida que no está en la escala **está `className`**, «que deja el
-valor a la vista de quien revise»; se pide con `rules` si se la quiere.
+Esto vale para **todos** los componentes del catálogo, no solo para los que
+aparecen en la tabla. Lo que no tiene contrato propio solo acepta `layout`, así
+que un `<Badge className="bg-purple-600">` o un `<Input className="rounded-none">`
+se reportan igual.
+
+El último se apoya en `no-arbitrary-values`, acotada: §4 deja `className` para
+una medida fuera de escala, así que la regla solo habla cuando **la escala ya
+tiene ese valor** y puede decir cuál. Van exentas las familias que no tienen
+escala en el tema (`tracking-*`, `leading-*`, `backdrop-blur-*`, `min-h-*`) y
+la tipografía fluida (`text-[clamp(…)]`), que es una decisión y no un descuido.
+`text-[13px]` sí se reporta, porque el tema tiene escala de texto.
+
+De las seis reglas del plugin enciende cinco. `no-unknown-classes` la da ya
+`tailwind()`.
 
 Dos reglas escritas que esto **no** puede comprobar: el segundo juego de
 anchos de §4 cuando va en un `<div>` suelto, porque la regla solo mira

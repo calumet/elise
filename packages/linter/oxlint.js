@@ -95,11 +95,15 @@ export const tailwind = (entryPoint) => ({
    hereda de aquí. */
 const DENY = ["max-w-*", "opacity-*"];
 
+/* `layout` solo se alcanza por el `deny` de `max-w-*`, porque el resto de esa
+   categoría está permitido. `effects` se alcanza entera, así que su texto vale
+   tanto para una sombra como para el `opacity` del que habla §3. */
 const DENY_MESSAGE = {
   layout: "El ancho de una pantalla lo pone `Container` con su `size`. Ver docs/reglas-ui.md §2.",
   effects:
-    "Atenuar con `opacity` inventa un número que no responde al tema: la superficie declara " +
-    'su par de texto, así que va `tone="muted"`. Ver docs/reglas-ui.md §3.',
+    "Los efectos son del componente. Si es para atenuar, `opacity` inventa un número que no " +
+    'responde al tema: la superficie ya declara su par de texto, así que va `tone="muted"`. ' +
+    "Ver docs/reglas-ui.md §3.",
 };
 
 /* Qué acepta cada componente por encima de `layout`. Un contrato reemplaza las
@@ -175,9 +179,17 @@ export const designSystem = ({ severity = "error", contracts = [], rules, settin
     "shadcn/no-raw-colors": severity,
     "shadcn/no-inline-styles": severity,
     "shadcn/require-static-classes": severity,
+    /* §4 permite `className` para una medida fuera de escala, así que esta
+       regla solo mira las que la escala ya tiene: es el «segundo juego de
+       anchos». Van exentas las familias sin escala en el tema, y la tipografía
+       fluida, que es una decisión y no un descuido. */
+    "shadcn/no-arbitrary-values": [
+      severity,
+      {
+        allow: ["tracking-*", "leading-*", "backdrop-blur-*", "min-h-*", "text-[clamp(*"],
+      },
+    ],
     // `no-unknown-classes` la da ya `tailwindcss/no-unknown-classes`.
-    // `no-arbitrary-values` queda fuera porque `reglas-ui.md` §4 dice que para
-    // una medida fuera de escala está `className`. Se encienden pidiéndolas.
     ...rules,
   },
 });

@@ -30,9 +30,12 @@ ya estaba escrito quién es dueño de cada medida: el ancho de una pantalla es d
 `Text`, y atenuar con `opacity` inventa un número que no responde al tema.
 Cada hallazgo responde con la regla y con dónde leerla.
 
-Lo implementa `@shadcn/lint`, del que enciende cuatro de sus seis reglas:
-`no-unknown-classes` la da ya `tailwind()`, y `no-arbitrary-values` choca con
-las medidas de maquetación de una página. Es un peer **opcional**, y el nombre
+Vale para todo el catálogo: lo que no tiene contrato propio solo acepta
+`layout`, así que un `<Badge className="bg-purple-600">` o un
+`<Input className="rounded-none">` se reportan igual que un botón.
+
+Lo implementa `@shadcn/lint`, del que enciende cinco de sus seis reglas:
+`no-unknown-classes` la da ya `tailwind()`. Es un peer **opcional**, y el nombre
 del plugin no sale en el del preset: quien lo use pide que se vigile el uso de
 Elise, no una herramienta concreta.
 
