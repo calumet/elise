@@ -115,11 +115,7 @@ const PantallaAjustes = () => {
             description="La que sale en las facturas."
             addLabel="Agregar dirección"
             editorDescription="Se guarda con el resto de los ajustes."
-            lines={
-              direccion
-                ? [direccion.nombre, direccion.calle, direccion.ciudad, direccion.pais]
-                : undefined
-            }
+            lines={direccion ?? undefined}
             onDone={() => setDireccion(borrador)}
             onClear={() => setDireccion(null)}
           >
