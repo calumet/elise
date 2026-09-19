@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@calumet/elise-linter": "workspace:*",
+    "@shadcn/lint": "^0.1.1",
     "@types/node": "^24.13.4",
     "jsr": "^0.14.3",
     "oxfmt": "^0.68.0",

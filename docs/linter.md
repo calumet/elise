@@ -73,6 +73,52 @@ Va esparcido y no dentro de `extends` porque `extends` no fusiona `settings`.
 El orden de las clases no entra ahí: lo arregla `sortTailwindcss` de Oxfmt al
 formatear. Encender además `enforce-sort-order` reportaría lo mismo dos veces.
 
+### Uso del design system
+
+`shadcn()` comprueba cómo se usan los componentes de Elise, no cómo están
+hechos. Es para quien consume el catálogo:
+
+```ts
+export default defineConfig({
+  extends: [react],
+  ...shadcn(),
+});
+```
+
+Reconoce lo que llega de `@calumet/elise-*` y dice qué hacer en su lugar:
+
+```
+"font-mono" is not allowed on <Button>: <Button> owns its typography.
+```
+
+Trae un contrato por familia, que es lo que cada una acepta por encima de
+`layout`: los contenedores admiten espaciado, los de texto admiten tipografía,
+`Avatar` y compañía solo `size-*`, y un botón no fija su propio ancho. Se le
+añaden más con `contracts`.
+
+De las seis reglas del plugin enciende cuatro. `no-unknown-classes` la da ya
+`tailwind()`, y `no-arbitrary-values` choca con las medidas de maquetación de
+una página, que no son deuda; se pide con `rules` si se la quiere.
+
+Para saldar lo que ya había, `severity`:
+
+```ts
+overrides: [{ files: ["src/legacy/**"], rules: shadcn({ severity: "warn" }).rules }];
+```
+
+Va así y no con un `"shadcn/no-restyle": "warn"` suelto, porque bajar el nivel
+de esa forma reemplaza la regla entera y se lleva por delante los contratos.
+
+**Dos avisos.** Oxlint no hereda `settings` por `extends`, así que `tailwind()`
+y `shadcn()` van esparcidos, y esparcir uno detrás de otro pisa las claves del
+primero: hay que fusionar `jsPlugins`, `settings` y `rules` a mano, como hace
+el `oxlint.config.ts` de este repositorio.
+
+Y las sugerencias de variante (`{{variants}}`) solo salen en componentes
+declarados como función. En los que van con `React.forwardRef`, que en Elise
+son 46 de 88 archivos, el mensaje sale sin la lista. El resto de la regla
+funciona igual.
+
 ### Accesibilidad
 
 El preset `react` enciende 28 de las 35 reglas de `jsx-a11y`. Las siete que
@@ -146,6 +192,7 @@ módulo.
 
 - Oxlint: https://oxc.rs/docs/guide/usage/linter.html
 - Oxfmt: https://oxc.rs/docs/guide/usage/formatter.html
+- shadcn/lint: https://github.com/shadcn-ui/lint
 - Tailwind CSS: https://tailwindcss.com/docs
 
 ---

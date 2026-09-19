@@ -51,6 +51,7 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 | **@tailwindcss/vite** | Integración de Tailwind CSS v4 en Vite (sin PostCSS) | https://tailwindcss.com/docs/installation/framework-guides/vite |
 | **Oxlint**            | Linter de código, en Rust                            | https://oxc.rs/docs/guide/usage/linter.html                     |
 | **Oxfmt**             | Formateador de código, en Rust                       | https://oxc.rs/docs/guide/usage/formatter.html                  |
+| **@shadcn/lint**      | Reglas de uso del design system, como plugin de Oxlint | https://github.com/shadcn-ui/lint                             |
 
 ## Design systems de referencia
 

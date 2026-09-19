@@ -89,3 +89,60 @@ export const tailwind = (entryPoint) => ({
     "tailwindcss/no-duplicate-classes": "error",
   },
 });
+
+/* Qué acepta cada componente por encima de `layout`. Un contrato reemplaza las
+   claves que escribe y hereda el resto, y si varios encajan gana el último. */
+const CONTRATOS = [
+  // Los contenedores reparten el espacio de la página, así que su padding y su
+  // gap son de quien los coloca.
+  {
+    pattern: "^(Card|Box|Container|Section|Panel)$|(Content|Header|Footer|Body|Group|List)$",
+    allow: ["layout", "spacing"],
+  },
+  // El texto se compone: quien lo usa elige el tamaño y el peso.
+  {
+    pattern: "^(Text|Heading|CardTitle|CardDescription|DialogTitle|DialogDescription)$",
+    allow: ["layout", "typography"],
+  },
+  // Las piezas de tamaño fijo solo admiten que se las redimensione.
+  { pattern: "^(Avatar|Thumbnail|Spinner|Skeleton)$", allow: ["layout", "size-*"] },
+  // El ancho de un botón lo decide la caja que lo contiene, no él.
+  {
+    pattern: "^Button$",
+    allow: ["layout"],
+    deny: ["w-*"],
+    message: {
+      layout: "El ancho de un botón lo pone su contenedor.",
+      spacing: "Usá un `size` de {{component}}: {{sizes|sm, md, lg, xl, icon, icon-sm}}.",
+      default: "Usá una `variant` o un `tone` de {{component}}.",
+    },
+  },
+];
+
+/**
+ * Reglas de uso del design system, para quien consume Elise.
+ *
+ * No va en `extends`: Oxlint no hereda `settings` por ahí, igual que con
+ * {@link tailwind}.
+ */
+export const shadcn = ({ severity = "error", contracts = [], rules, settings } = {}) => ({
+  jsPlugins: ["@shadcn/lint"],
+  settings: {
+    shadcn: {
+      componentImports: ["^@calumet/elise-(ui|tables|alerts|toasts)(/|$)"],
+      ...settings,
+    },
+  },
+  /* `severity` y no un `"warn"` suelto en un `overrides`: bajar el nivel así
+     reemplaza la regla entera y se lleva por delante los contratos. */
+  rules: {
+    "shadcn/no-restyle": [severity, { allow: ["layout"], contracts: [...CONTRATOS, ...contracts] }],
+    "shadcn/no-raw-colors": severity,
+    "shadcn/no-inline-styles": severity,
+    "shadcn/require-static-classes": severity,
+    // `no-unknown-classes` la da ya `tailwindcss/no-unknown-classes`, y
+    // `no-arbitrary-values` choca con las medidas de maquetación de una
+    // página, que no son deuda: se encienden pidiéndolas.
+    ...rules,
+  },
+});
