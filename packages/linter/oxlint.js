@@ -122,10 +122,10 @@ const CONTRACTS = [
 /**
  * Reglas de uso del design system, para quien consume Elise.
  *
- * No va en `extends`: Oxlint no hereda `settings` por ahí, igual que con
- * {@link tailwind}.
+ * Hoy las da `@shadcn/lint`, pero eso es un detalle de implementación: quien
+ * lo use pide «que vigile cómo se usa Elise», no un plugin concreto.
  */
-export const shadcn = ({ severity = "error", contracts = [], rules, settings } = {}) => ({
+export const designSystem = ({ severity = "error", contracts = [], rules, settings } = {}) => ({
   jsPlugins: ["@shadcn/lint"],
   settings: {
     shadcn: {
@@ -146,3 +146,29 @@ export const shadcn = ({ severity = "error", contracts = [], rules, settings } =
     ...rules,
   },
 });
+
+/**
+ * Todo lo de Elise en una llamada: React, las clases contra el tema y el uso
+ * del design system.
+ *
+ * Va entero y no por `extends` porque Oxlint no hereda `settings`, y juntar
+ * las piezas a mano es donde se pierden: dos objetos esparcidos uno detrás de
+ * otro se pisan `jsPlugins`, `settings` y `rules`. Eso lo resuelve aquí el
+ * paquete en vez de dejárselo a quien lo usa.
+ */
+export const elise = ({ theme, designSystem: dsOptions, rules, ...rest } = {}) => {
+  const parts = [
+    theme ? tailwind(theme) : null,
+    dsOptions === false ? null : designSystem(dsOptions),
+  ].filter(Boolean);
+
+  return {
+    plugins: react.plugins,
+    categories: react.categories,
+    env: react.env,
+    jsPlugins: parts.flatMap((p) => p.jsPlugins),
+    settings: Object.assign({}, ...parts.map((p) => p.settings)),
+    rules: Object.assign({}, react.rules, ...parts.map((p) => p.rules), rules),
+    ...rest,
+  };
+};

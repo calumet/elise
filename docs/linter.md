@@ -16,6 +16,25 @@ El config va en `oxlint.config.ts` y no en `.oxlintrc.json`: el formato JSON no
 resuelve imports de paquetes, así que es el único que puede extender una
 configuración compartida. Necesita Node 22.18 o 24 en adelante.
 
+### Lo normal: `elise()`
+
+```ts
+// oxlint.config.ts
+import { elise } from "@calumet/elise-linter/oxlint";
+import { defineConfig } from "oxlint";
+
+export default defineConfig(elise({ theme: "src/index.css" }));
+```
+
+Trae React, las clases validadas contra el tema y las reglas de uso del
+catálogo. `theme` es el CSS con `@import "tailwindcss"`; sin él no se validan
+las clases. Con `designSystem: false` se apagan las reglas de uso.
+
+Va entero y no por `extends` porque Oxlint no hereda `settings`. Juntar las
+piezas a mano es justo donde se pierden, así que eso lo resuelve el paquete.
+
+Abajo están sueltas, por si hace falta armar otra combinación.
+
 ### Opción 1: Base (Node, scripts, librerías sin React)
 
 ```ts
@@ -75,15 +94,8 @@ formatear. Encender además `enforce-sort-order` reportaría lo mismo dos veces.
 
 ### Uso del design system
 
-`shadcn()` comprueba cómo se usan los componentes de Elise, no cómo están
-hechos. Es para quien consume el catálogo:
-
-```ts
-export default defineConfig({
-  extends: [react],
-  ...shadcn(),
-});
-```
+`designSystem()` comprueba cómo se usan los componentes de Elise, no cómo están
+hechos. Es para quien consume el catálogo, y {@link elise} ya la incluye.
 
 Reconoce lo que llega de `@calumet/elise-*` y dice qué hacer en su lugar:
 
@@ -103,21 +115,20 @@ una página, que no son deuda; se pide con `rules` si se la quiere.
 Para saldar lo que ya había, `severity`:
 
 ```ts
-overrides: [{ files: ["src/legacy/**"], rules: shadcn({ severity: "warn" }).rules }];
+overrides: [{ files: ["src/legacy/**"], rules: designSystem({ severity: "warn" }).rules }];
 ```
 
 Va así y no con un `"shadcn/no-restyle": "warn"` suelto, porque bajar el nivel
 de esa forma reemplaza la regla entera y se lleva por delante los contratos.
 
-**Dos avisos.** Oxlint no hereda `settings` por `extends`, así que `tailwind()`
-y `shadcn()` van esparcidos, y esparcir uno detrás de otro pisa las claves del
-primero: hay que fusionar `jsPlugins`, `settings` y `rules` a mano, como hace
-el `oxlint.config.ts` de este repositorio.
+Las reglas conservan el prefijo `shadcn/`, que es el del plugin que las
+implementa hoy. El preset no: quien lo use pide que se vigile el uso de Elise,
+no un plugin concreto.
 
-Y las sugerencias de variante (`{{variants}}`) solo salen en componentes
-declarados como función. En los que van con `React.forwardRef`, que en Elise
-son 46 de 88 archivos, el mensaje sale sin la lista. El resto de la regla
-funciona igual.
+Un límite de ese plugin: las sugerencias de variante (`{{variants}}`) solo
+salen en componentes declarados como función. En los que van con
+`React.forwardRef`, que en Elise son 46 de 88 archivos, el mensaje sale sin la
+lista. El resto de la regla funciona igual.
 
 ### Accesibilidad
 

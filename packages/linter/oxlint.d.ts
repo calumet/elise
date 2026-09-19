@@ -32,7 +32,7 @@ export declare function tailwind(
   entryPoint: string | Array<{ files: string[]; use: string }>,
 ): OxlintConfig;
 
-/** Un contrato de `shadcn/no-restyle`: qué acepta un componente. */
+/** Un contrato del design system: qué clases acepta un componente. */
 export type Contract = {
   /** Expresión regular contra el nombre del componente. */
   pattern: string;
@@ -41,24 +41,8 @@ export type Contract = {
   message?: string | Record<string, string>;
 };
 
-/**
- * Reglas de uso del design system, para quien consume Elise. Reconoce los
- * componentes que llegan de `@calumet/elise-*` y trae un contrato por familia.
- *
- * Va esparcido y no dentro de `extends`, porque Oxlint no hereda `settings`.
- *
- * ```ts
- * export default defineConfig({
- *   extends: [react],
- *   ...shadcn(),
- * });
- * ```
- *
- * `no-unknown-classes` no se enciende aquí: la da {@link tailwind}. Tampoco
- * `no-arbitrary-values`, que choca con las medidas de maquetación de una
- * página; se pide con `rules` si se la quiere.
- */
-export declare function shadcn(options?: {
+/** Opciones de {@link designSystem}, que {@link elise} también acepta. */
+export type DesignSystemOptions = {
   /**
    * Para bajar el nivel mientras se salda lo que ya había. Va aquí y no como
    * un `"warn"` en un `overrides`: eso reemplaza la regla entera y se lleva
@@ -68,4 +52,40 @@ export declare function shadcn(options?: {
   contracts?: Contract[];
   rules?: Record<string, unknown>;
   settings?: Record<string, unknown>;
+};
+
+/**
+ * Comprueba cómo se usan los componentes de Elise: quién es dueño de qué
+ * estilo, y qué hacer en lugar de pisarlo.
+ *
+ * Normalmente no hace falta llamarla: {@link elise} ya la incluye. Se usa
+ * suelta para bajar el nivel en un `overrides`.
+ *
+ * ```ts
+ * overrides: [{ files: ["src/legacy/**"], rules: designSystem({ severity: "warn" }).rules }]
+ * ```
+ */
+export declare function designSystem(options?: DesignSystemOptions): OxlintConfig;
+
+/**
+ * Todo lo de Elise en una llamada: React, las clases contra el tema y el uso
+ * del design system.
+ *
+ * ```ts
+ * import { elise } from "@calumet/elise-linter/oxlint";
+ * import { defineConfig } from "oxlint";
+ *
+ * export default defineConfig(elise({ theme: "src/index.css" }));
+ * ```
+ *
+ * Sin `theme` no se validan las clases contra el tema. Con
+ * `designSystem: false` se apagan las reglas de uso del catálogo.
+ */
+export declare function elise(options?: {
+  /** El CSS con `@import "tailwindcss"`. En un monorepo, el mapeo de rutas. */
+  theme?: string | Array<{ files: string[]; use: string }>;
+  designSystem?: DesignSystemOptions | false;
+  rules?: Record<string, unknown>;
+  ignorePatterns?: string[];
+  overrides?: unknown[];
 }): OxlintConfig;

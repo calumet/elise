@@ -7,29 +7,34 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Añade
 
-**`shadcn()`**, que comprueba cómo se usan los componentes de Elise. Es para
-quien consume el catálogo, no para el catálogo: cuando alguien pisa el estilo
-de un componente, el error dice de quién es esa decisión y qué hacer en su
-lugar.
+**`elise()`**, un punto de entrada único que trae React, las clases validadas
+contra el tema y las reglas de uso del catálogo:
 
 ```ts
-export default defineConfig({ extends: [react], ...shadcn() });
+export default defineConfig(elise({ theme: "src/index.css" }));
 ```
+
+Antes había que extender `react` y esparcir `tailwind()`, y esparcir dos
+piezas seguidas se pisa `jsPlugins`, `settings` y `rules`, porque Oxlint no
+hereda `settings` por `extends`. Esa fusión la hace ahora el paquete.
+
+**`designSystem()`**, que comprueba cómo se usan los componentes de Elise. Es
+para quien consume el catálogo, no para el catálogo: cuando alguien pisa el
+estilo de un componente, el error dice de quién es esa decisión y qué hacer en
+su lugar. `elise()` ya la incluye; se llama suelta para bajar el nivel en un
+`overrides`, con `severity`.
 
 Reconoce lo que llega de `@calumet/elise-*` y trae un contrato por familia: los
 contenedores admiten espaciado, los de texto admiten tipografía, `Avatar` y
 compañía solo `size-*`, y un botón no fija su propio ancho.
 
-De las seis reglas de `@shadcn/lint` enciende cuatro. `no-unknown-classes` la
-da ya `tailwind()`, y `no-arbitrary-values` choca con las medidas de
-maquetación de una página.
+Lo implementa `@shadcn/lint`, del que enciende cuatro de sus seis reglas:
+`no-unknown-classes` la da ya `tailwind()`, y `no-arbitrary-values` choca con
+las medidas de maquetación de una página. Es un peer **opcional**, y el nombre
+del plugin no sale en el del preset: quien lo use pide que se vigile el uso de
+Elise, no una herramienta concreta.
 
-`@shadcn/lint` es un peer opcional: solo hace falta si se usa `shadcn()`.
-
-Dos cosas que conviene saber, y están en [la documentación](docs/linter.md):
-`tailwind()` y `shadcn()` van esparcidos y hay que fusionarlos a mano, porque
-Oxlint no hereda `settings`; y para bajar el nivel se usa `severity`, no un
-`"warn"` suelto, que reemplaza la regla entera y se lleva los contratos.
+`base`, `react`, `tailwind()` y `designSystem()` siguen exportándose sueltas.
 
 ## `@calumet/elise-ui` 0.25.0
 
