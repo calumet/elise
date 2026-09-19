@@ -167,9 +167,7 @@ export function ValueField({
     >
       <div className="min-w-0 flex-1 text-base leading-snug">
         {lines?.map((line, index) => (
-          // Un resumen de solo lectura que quien llama arma por posición: no se
-          // reordena ni se filtra, así que el índice es la identidad.
-          // react-doctor-disable-next-line no-array-index-as-key
+          // Las líneas son un resumen y no una lista reordenable: el índice basta.
           <p key={index} className={cn("truncate", index > 0 ? "text-muted-foreground" : null)}>
             {line}
           </p>
