@@ -3,6 +3,28 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.30.0
+
+Suben también `elise-tables` 0.7.6, `elise-alerts` 0.3.14 y `elise-toasts`
+0.4.15, que no cambian por dentro.
+
+### Añade
+
+**`<NavigationMenu variant="plain">`**, para una navegación que se marca con el
+texto y no con una superficie. La fila apuntada no se pinta, ni la abierta
+tampoco; dentro del panel la pastilla se queda, que ahí es lo único que dice
+sobre qué entrada está el puntero.
+
+```tsx
+<NavigationMenu variant="plain">
+  <NavigationMenuList>…</NavigationMenuList>
+</NavigationMenu>
+```
+
+Por defecto sigue siendo `surface`, o sea lo de siempre. Sale de un portal que
+tapaba la pastilla con `hover:bg-transparent!` en cada fila: con la variante la
+clase ya no se emite, así que no hay dos compitiendo y el `!important` sobra.
+
 ## `@calumet/elise-ui` 0.29.2
 
 ### Corrige

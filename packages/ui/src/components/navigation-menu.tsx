@@ -28,9 +28,27 @@ const InsideASequence: React.Context<Sequence | null> = React.createContext<Sequ
    comparar, y la sección no se cierra sola. */
 const CloseTheSection = React.createContext<(() => void) | null>(null);
 
+/* La navegación de una aplicación marca la fila apuntada con una superficie,
+   que es lo que hace el resto de sus controles. La de un sitio la marca con el
+   texto, y ahí la pastilla estorba al tratamiento que traiga quien la usa. */
+/* `plain` no tapa la pastilla con `bg-transparent`: no la emite. Tapándola
+   quedan las dos clases en la fila y gana la que el CSS ponga última, que es de
+   donde salen los `!important` de quien la usa.
+
+   Dentro del panel se queda igual: ahí es lo único que dice sobre qué entrada
+   está el puntero, porque la fila de arriba ya no la marca. */
+const ROW_HOVER = {
+  surface: "hover:bg-state-hover",
+  plain: "in-data-[slot=navigation-menu-content]:hover:bg-state-hover",
+};
+
+/** Cómo marca la fila apuntada. Por defecto `surface`. */
+export type NavigationMenuVariant = keyof typeof ROW_HOVER;
+
 type NavigationContext = {
   expanded: boolean;
   setExpanded: (v: boolean) => void;
+  variant: NavigationMenuVariant;
 };
 
 const Navigation = React.createContext<NavigationContext | null>(null);
@@ -56,38 +74,45 @@ const LAYOUT_ON_PARSE = `(function(){var s=document.currentScript,r=s&&s.parentE
  * Con HTML del servidor, un `<script>` inline al final de la raíz reparte la fila
  * antes de pintar: lo que comparta línea con la fila va dentro. `nonce` es para CSP.
  */
+/** Props de {@link NavigationMenu}. */
+export type NavigationMenuProps = React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Root
+> & {
+  /** Por defecto `surface`. `plain` deja la fila sin superficie, ni al apuntarla ni abierta. */
+  variant?: NavigationMenuVariant;
+};
+
 export const NavigationMenu: React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>> &
+  React.PropsWithoutRef<NavigationMenuProps> &
     React.RefAttributes<React.ComponentRef<typeof NavigationMenuPrimitive.Root>>
-> = React.forwardRef<
-  React.ComponentRef<typeof NavigationMenuPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
->(({ className, children, nonce, ...props }, ref) => {
-  const [expanded, setExpanded] = React.useState(false);
+> = React.forwardRef<React.ComponentRef<typeof NavigationMenuPrimitive.Root>, NavigationMenuProps>(
+  ({ className, children, nonce, variant = "surface", ...props }, ref) => {
+    const [expanded, setExpanded] = React.useState(false);
 
-  const ctx = React.useMemo(() => ({ expanded, setExpanded }), [expanded]);
+    const ctx = React.useMemo(() => ({ expanded, setExpanded, variant }), [expanded, variant]);
 
-  return (
-    <Navigation.Provider value={ctx}>
-      <Collapsible open={expanded} onOpenChange={setExpanded} asChild>
-        <NavigationMenuPrimitive.Root
-          data-slot="navigation-menu"
-          ref={ref}
-          className={cn(
-            "group/navigation-menu relative flex w-full min-w-0 flex-col",
-            ROW_BOX,
-            className,
-          )}
-          {...props}
-        >
-          {children}
-          {/* Lo que crea React no se ejecuta. */}
-          <script nonce={nonce} dangerouslySetInnerHTML={{ __html: LAYOUT_ON_PARSE }} />
-        </NavigationMenuPrimitive.Root>
-      </Collapsible>
-    </Navigation.Provider>
-  );
-});
+    return (
+      <Navigation.Provider value={ctx}>
+        <Collapsible open={expanded} onOpenChange={setExpanded} asChild>
+          <NavigationMenuPrimitive.Root
+            data-slot="navigation-menu"
+            ref={ref}
+            className={cn(
+              "group/navigation-menu relative flex w-full min-w-0 flex-col",
+              ROW_BOX,
+              className,
+            )}
+            {...props}
+          >
+            {children}
+            {/* Lo que crea React no se ejecuta. */}
+            <script nonce={nonce} dangerouslySetInnerHTML={{ __html: LAYOUT_ON_PARSE }} />
+          </NavigationMenuPrimitive.Root>
+        </Collapsible>
+      </Navigation.Provider>
+    );
+  },
+);
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName;
 
 const useNavigation = (who: string): NavigationContext => {
@@ -454,6 +479,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
 >(({ className, onClick, onPointerEnter, onPointerMove, ...props }, ref) => {
   const sequence = React.useContext(InsideASequence);
   const close = React.useContext(CloseTheSection);
+  const { variant } = useNavigation("NavigationMenuTrigger");
   /* El mismo pestillo que Radix lleva en la raíz, que acá no llega a ponerse. */
   const closedByClick = React.useRef(false);
 
@@ -480,10 +506,12 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         if (closedByClick.current && e.pointerType === "mouse") e.preventDefault();
       }}
       className={cn(
-        "group inline-flex items-center rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
+        "group inline-flex items-center rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
+        ROW_HOVER[variant],
         sequence
           ? "min-h-9 w-full justify-between text-start font-semibold whitespace-normal"
-          : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
+          : "h-9 w-max justify-center",
+        !sequence && variant === "surface" && "data-[state=open]:bg-state-hover",
         sequence === "drawer" && "min-h-touch px-2.5",
         className,
       )}
@@ -660,13 +688,15 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
   NavigationMenuLinkProps
 >(({ className, description, children, ...props }, ref) => {
   const sequence = React.useContext(InsideASequence);
+  const { variant } = useNavigation("NavigationMenuLink");
 
   return (
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       ref={ref}
       className={cn(
-        "inline-flex h-9 w-max items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
+        "inline-flex h-9 w-max items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
+        ROW_HOVER[variant],
         sequence && "whitespace-normal",
         sequence === "drawer" &&
           "min-h-touch px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
