@@ -16,7 +16,20 @@ import { useThemeScope } from "./theme-scope";
    son 24px, y estiraba la fila. El `:not([class*=size-])` deja pasar al que sí
    trae medida propia. */
 const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-icon-md [&_svg:not([class*='text-'])]:text-muted-foreground";
+  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-icon-md";
+
+/* El color sale del tono y no de la base: tapándolo desde fuera quedan las dos
+   clases en la fila y gana la que el CSS ponga última. Y el icono sigue al
+   texto, que en una fila que borra no puede quedarse gris. */
+const ITEM_TONES = {
+  neutral:
+    "text-foreground data-highlighted:bg-state-hover data-highlighted:text-foreground [&_svg:not([class*='text-'])]:text-muted-foreground",
+  danger:
+    "text-destructive data-highlighted:bg-destructive-subtle data-highlighted:text-destructive-subtle-foreground [&_svg:not([class*='text-'])]:text-destructive",
+};
+
+/** El tono de una opción. Por defecto `neutral`. */
+export type DropdownMenuItemTone = keyof typeof ITEM_TONES;
 
 /* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
    modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
@@ -74,21 +87,28 @@ export const DropdownMenuContent: React.ForwardRefExoticComponent<
 });
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
+/** Props de {@link DropdownMenuItem}. */
+export type DropdownMenuItemProps = React.ComponentPropsWithoutRef<
+  typeof DropdownMenuPrimitive.Item
+> & {
+  /** Por defecto `neutral`. `danger` es para la opción que borra o revoca. */
+  tone?: DropdownMenuItemTone;
+};
+
 /** Una opción. `inset` la alinea con las que llevan casilla. */
 export const DropdownMenuItem: React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>> &
+  React.PropsWithoutRef<DropdownMenuItemProps> &
     React.RefAttributes<React.ComponentRef<typeof DropdownMenuPrimitive.Item>>
-> = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    data-slot="dropdown-menu-item"
-    ref={ref}
-    className={cn(baseItem, className)}
-    {...props}
-  />
-));
+> = React.forwardRef<React.ComponentRef<typeof DropdownMenuPrimitive.Item>, DropdownMenuItemProps>(
+  ({ className, tone = "neutral", ...props }, ref) => (
+    <DropdownMenuPrimitive.Item
+      data-slot="dropdown-menu-item"
+      ref={ref}
+      className={cn(baseItem, ITEM_TONES[tone], className)}
+      {...props}
+    />
+  ),
+);
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
 /** Opción con casilla, para un ajuste que se prende y se apaga. */
@@ -102,7 +122,7 @@ export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<
   <DropdownMenuPrimitive.CheckboxItem
     data-slot="dropdown-menu-checkbox-item"
     ref={ref}
-    className={cn(baseItem, "pl-7", className)}
+    className={cn(baseItem, ITEM_TONES.neutral, "pl-7", className)}
     checked={checked}
     {...props}
   >
@@ -136,7 +156,7 @@ export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<
   <DropdownMenuPrimitive.RadioItem
     data-slot="dropdown-menu-radio-item"
     ref={ref}
-    className={cn(baseItem, "pl-7", className)}
+    className={cn(baseItem, ITEM_TONES.neutral, "pl-7", className)}
     {...props}
   >
     <span className="absolute left-2 flex size-icon-sm items-center justify-center">
@@ -194,7 +214,7 @@ export const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<
   <DropdownMenuPrimitive.SubTrigger
     data-slot="dropdown-menu-sub-trigger"
     ref={ref}
-    className={cn(baseItem, className)}
+    className={cn(baseItem, ITEM_TONES.neutral, className)}
     {...props}
   >
     {children}

@@ -3,6 +3,25 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.31.0
+
+Suben también `elise-tables` 0.7.7, `elise-alerts` 0.3.15 y `elise-toasts`
+0.4.16, que no cambian por dentro.
+
+### Añade
+
+**`<DropdownMenuItem tone="danger">`**, para la opción que borra o revoca. El
+texto va en `destructive`, el resaltado en `destructive-subtle`, y el icono
+sigue al texto en vez de quedarse gris.
+
+```tsx
+<DropdownMenuItem tone="danger">Eliminar</DropdownMenuItem>
+```
+
+Por defecto sigue siendo `neutral`, o sea lo de siempre. Hasta ahora un
+«Eliminar» no tenía manera soportada de ser rojo: `Button` y `Badge` ya tenían
+`tone`, y el sitio donde esa opción vive en cualquier aplicación no tenía nada.
+
 ## `@calumet/elise-ui` 0.30.0
 
 Suben también `elise-tables` 0.7.6, `elise-alerts` 0.3.14 y `elise-toasts`
