@@ -3,6 +3,20 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-tables` 0.7.5
+
+### Corrige
+
+**`initialPageSize` ya no parpadea.** Se aplicaba con un efecto que llamaba a
+`table.setPageSize`, y los efectos corren después de pintar: la tabla salía
+primero con las 10 filas por defecto de TanStack y se encogía en el siguiente
+pintado. Cada vez que la tabla se monta, o sea cada cambio de pestaña que la
+desmonta y la vuelve a montar.
+
+Ahora va como `initialState` de la tabla, así que el primer pintado ya sale con
+el tamaño pedido. Se ve en el HTML del servidor del site, que con
+`initialPageSize={5}` emitía 7 filas y ahora emite 5.
+
 ## `@calumet/elise-ui` 0.29.1
 
 ### Corrige
