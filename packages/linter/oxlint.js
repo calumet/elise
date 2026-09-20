@@ -1,5 +1,26 @@
 // @ts-self-types="./oxlint.d.ts"
 
+/**
+ * Ruta del plugin, resuelta desde acá.
+ *
+ * Oxlint resuelve el nombre de un `jsPlugin` desde la raíz del proyecto, no
+ * desde quien lo declara, así que con el nombre pelado el plugin tiene que
+ * estar colgando del proyecto. Con pnpm eso no pasa por traerlo el preset: sus
+ * dependencias viven anidadas y oxlint no las ve.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+const plugin = (name) => {
+  try {
+    return import.meta.resolve(name);
+  } catch {
+    throw new Error(
+      `@calumet/elise-linter no encuentra "${name}". Instálalo en el proyecto: pnpm add -D ${name}`,
+    );
+  }
+};
+
 export const base = {
   plugins: ["typescript", "import"],
   categories: {
@@ -80,7 +101,7 @@ export const react = {
 };
 
 export const tailwind = (entryPoint) => ({
-  jsPlugins: ["oxlint-tailwindcss"],
+  jsPlugins: [plugin("oxlint-tailwindcss")],
   settings: { tailwindcss: { entryPoint } },
   rules: {
     // `.dark` la declara el tema como marcador, no la genera Tailwind.
@@ -138,7 +159,7 @@ const CONTRACTS = [
 ];
 
 export const designSystem = ({ severity = "error", contracts = [], rules, settings } = {}) => ({
-  jsPlugins: ["@shadcn/lint"],
+  jsPlugins: [plugin("@shadcn/lint")],
   settings: {
     shadcn: {
       componentImports: ["^@calumet/elise-(ui|tables|alerts|toasts)(/|$)"],

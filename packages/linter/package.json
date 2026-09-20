@@ -33,11 +33,17 @@
     "lint": "echo \"Config package, no lint\""
   },
   "peerDependencies": {
+    "@shadcn/lint": ">=0.1.0",
     "oxfmt": ">=0.68.0",
-    "oxlint": ">=1.80.0"
+    "oxlint": ">=1.80.0",
+    "oxlint-tailwindcss": ">=1.12.0"
   },
-  "dependencies": {
-    "@shadcn/lint": "^0.1.1",
-    "oxlint-tailwindcss": "^1.12.0"
+  "peerDependenciesMeta": {
+    "@shadcn/lint": {
+      "optional": true
+    },
+    "oxlint-tailwindcss": {
+      "optional": true
+    }
   }
 }

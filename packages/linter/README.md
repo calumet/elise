@@ -11,6 +11,21 @@ pnpm add -D @calumet/elise-linter       # GitHub Packages
 
 Requiere Oxlint 1.80 y Oxfmt 0.68. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
 
+Dos de los presets cargan un plugin de oxlint, y ese plugin tiene que colgar del
+proyecto: oxlint resuelve los `jsPlugins` desde ahí, no desde quien los declara.
+Se instalan solo si se usan.
+
+| Preset                           | Plugin               |
+| -------------------------------- | -------------------- |
+| `tailwind()`, `elise({ theme })` | `oxlint-tailwindcss` |
+| `designSystem()`, `elise()`      | `@shadcn/lint`       |
+
+```bash
+pnpm add -D oxlint-tailwindcss @shadcn/lint
+```
+
+Con `base` o `react` a secas no hacen falta ninguno.
+
 ## Oxlint
 
 Dos configuraciones, la de React construida sobre la base:

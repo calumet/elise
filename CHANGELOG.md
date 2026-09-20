@@ -7,17 +7,21 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Corrige
 
-**Los plugins que cargan los presets pasan a ser dependencias.** `tailwind()`
-carga `oxlint-tailwindcss` y `designSystem()` carga `@shadcn/lint`, los dos por
-nombre. El primero no estaba declarado en ninguna parte y el segundo era un peer
-opcional, que pnpm no instala ni reclama. Con `elise({ theme })`, que es la
-llamada de la guía y trae los dos activados, el proyecto se quedaba sin ellos y
-oxlint moría con `Cannot find module 'oxlint-tailwindcss'` en la primera
-ejecución.
+**Los presets dicen qué plugin les falta en vez de morir con `Cannot find
+module`.** `tailwind()` carga `oxlint-tailwindcss` y `designSystem()` carga
+`@shadcn/lint`. El primero no estaba declarado en ninguna parte y el segundo era
+un peer opcional, así que con `elise({ theme })` —la llamada de la guía, que
+trae los dos activados— el proyecto se quedaba sin ellos y oxlint moría en la
+primera ejecución sin decir de dónde salía el nombre.
 
-No son paquetes que quien consume importe: los carga el preset. Como
-dependencias vienen con él y no hay nada que instalar aparte. `oxlint` y
-`oxfmt` siguen siendo peers, que esos sí los ejecuta el proyecto.
+Los dos quedan como peers opcionales, declarados y documentados, y el preset
+avisa con qué instalar si no los encuentra. Quien extiende solo `base` o `react`
+no necesita ninguno y no se lleva ni Tailwind ni el parser de TS-ESLint.
+
+**Hecho de paso:** el preset resuelve la ruta del plugin desde sí mismo. Oxlint
+resuelve el nombre de un `jsPlugin` desde la raíz del proyecto, de modo que
+declararlos como dependencias del preset no habría servido: con pnpm quedan
+anidados y oxlint no los ve.
 
 ## `@calumet/elise-ui` 0.34.1
 
