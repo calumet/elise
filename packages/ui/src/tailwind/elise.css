@@ -792,4 +792,5 @@
 }
 
 @source "../../dist";
+@source not "../../dist/**/*.css";
 @source "../../jsr";

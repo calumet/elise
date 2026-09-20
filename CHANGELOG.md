@@ -3,6 +3,25 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.34.1
+
+### Corrige
+
+**La hoja ya compilada deja de escanearse.** `elise.css` trae
+`@source "../../dist"` para leer las clases de los componentes compilados, y ahí
+dentro está también `dist/elise.css`, que es esta misma hoja ya compilada.
+Tailwind registra como dependencia lo que escanea, así que entraba en el grafo
+de módulos del consumidor y acababa servida como un `<link>` más, con su propia
+copia de `@layer utilities`.
+
+Dos copias en el mismo documento se pisan: la que llega después vuelve a
+declarar la utilidad base y le gana a la variante responsiva de la anterior. En
+una app con SSR eso dura hasta que el bundle inyecta su copia completa, y
+durante esa ventana `hidden sm:block` se queda escondido y `px-3 sm:px-0` se
+queda con el relleno de móvil.
+
+Se excluye con `@source not`, que es lo que Tailwind ofrece para esto.
+
 ## `@calumet/elise-ui` 0.34.0
 
 Suben también `elise-tables` 0.8.1, `elise-alerts` 0.3.18 y `elise-toasts`
