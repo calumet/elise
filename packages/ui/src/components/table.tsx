@@ -159,11 +159,8 @@ const assignSlots = (columns: Column[]): ListSlot[] => {
 export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   /**
    * Quita el marco propio para meter la tabla dentro de una tarjeta que ya lo
-   * pone. Con los dos salen dos bordes concéntricos.
-   *
-   * El radio lo hereda de esa tarjeta, que es lo que deja el recorte de la
-   * tabla siguiendo su contorno. Sin heredarlo, el encabezado y las filas con
-   * fondo le cuadran las esquinas.
+   * pone. Con los dos salen dos bordes concéntricos. El radio lo hereda de esa
+   * tarjeta.
    */
   bare?: boolean;
 

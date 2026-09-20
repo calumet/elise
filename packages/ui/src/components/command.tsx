@@ -50,8 +50,6 @@ function CommandDialog({
         showCloseButton={false}
         className={cn("overflow-hidden border border-border p-0 shadow-none", className)}
       >
-        {/* El nombre y la descripción que pide el diálogo, sin la banda de
-            `DialogHeader`: la paleta se presenta con su propio campo. */}
         <div className="sr-only">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
