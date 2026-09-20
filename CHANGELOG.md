@@ -3,6 +3,31 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.34.2
+
+### Corrige
+
+**El título del `CommandDialog` se colaba en la página.** Iba fuera del
+`DialogContent`, y la raíz de un diálogo no es un portal: el nodo se quedaba en
+el flujo del documento, montado y ocupando sitio aunque la paleta estuviera
+cerrada. Además llevaba `DialogHeader` con `sr-only`, que no lo esconde, porque
+el relleno, el filete y el fondo que el encabezado pone por su cuenta le ganan a
+la clase. El resultado eran 33px de banda invisible en toda página que montara
+una paleta, con su barra de scroll.
+
+Ahora el nombre y la descripción van dentro del contenido, en una caja
+`sr-only` sin la banda. El diálogo se sigue anunciando igual.
+
+**`Table` con `bare` cuadraba las esquinas de la tarjeta que la envuelve.** El
+recorte que ajusta la tabla al marco toma el radio del marco, y con `bare` ese
+marco se queda sin ninguno, así que el recorte salía a cero: el encabezado y
+cualquier fila con fondo pintaban una esquina cuadrada sobre la curva de la
+tarjeta. Ahora el marco hereda el radio de quien lo envuelve, que es justo el
+caso para el que existe `bare`.
+
+Se veía en la composición que documenta la tabla de índice, `Section` con
+`padding="none"` más `Table` con `bare`.
+
 ## `@calumet/elise-ui` 0.34.1
 
 ### Corrige
