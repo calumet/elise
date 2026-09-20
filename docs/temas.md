@@ -53,6 +53,7 @@ Los temas se implementan vía CSS custom properties definidas en `@calumet/elise
 | -------------------------- | ----------------------------- | --------------------------------------------- |
 | `--background`             | `bg-background`               | Fondo principal de la página                  |
 | `--foreground`             | `text-foreground`             | Texto principal                               |
+| `--canvas`                 | `bg-canvas`                   | Lienzo del marco, bajo las tarjetas           |
 | `--card`                   | `bg-card`                     | Fondo de tarjetas y superficies elevadas      |
 | `--card-foreground`        | `text-card-foreground`        | Texto sobre superficies card                  |
 | `--popover`                | `bg-popover`                  | Fondo de menús flotantes, dropdowns, popovers |
@@ -414,6 +415,7 @@ apenas perceptible se lee como elegido.
 | ----------------------------- | ------------------------ |
 | background                    | `oklch(0.984 0.002 265)` |
 | foreground                    | `oklch(0.21 0.012 265)`  |
+| canvas                        | `oklch(0.958 0.002 265)` |
 | card                          | `oklch(1 0 0)`           |
 | card-foreground               | `oklch(0.21 0.012 265)`  |
 | popover                       | `oklch(1 0 0)`           |
