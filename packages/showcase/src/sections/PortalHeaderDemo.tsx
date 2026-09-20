@@ -86,7 +86,7 @@ const SECCIONES: Seccion[] = [
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
-    <NavigationMenu>
+    <NavigationMenu variant="plain">
       <div className="flex flex-wrap items-center gap-3 px-4 py-3">
         <Text weight="bold" size="lg" className="shrink-0">
           EISI
