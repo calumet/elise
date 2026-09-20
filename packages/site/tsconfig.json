@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["vite/client", "node"],
+    "types": ["@calumet/suamox-vite-plugin-pages/client", "node"],
     "noEmit": true,
     "declaration": false,
     "isolatedDeclarations": false
