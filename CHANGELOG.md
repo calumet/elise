@@ -3,6 +3,34 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.33.0
+
+Suben también `elise-tables` 0.7.9, `elise-alerts` 0.3.17 y `elise-toasts`
+0.4.18, que no cambian por dentro.
+
+### Rompe
+
+- **El vacío de `Table` pasa de la prop `empty` a `<TableEmpty>`.** La prop
+  recibía el nodo, así que la pantalla tenía que resolver ahí dentro si había
+  filas, y el ternario quedaba en medio de la apertura de la etiqueta, lejos del
+  cuerpo con el que se turna. Ahora las dos partes se declaran una al lado de la
+  otra y `empty` dice cuál sale.
+
+  ```diff
+  - <Table empty={filas.length === 0 ? <EmptyState … /> : undefined}>
+  + <Table empty={filas.length === 0}>
+      <TableHeader>…</TableHeader>
+      <TableBody>…</TableBody>
+  +   <TableEmpty>
+  +     <EmptyState size="sm">…</EmptyState>
+  +   </TableEmpty>
+    </Table>
+  ```
+
+  `empty` ahora es un booleano y sigue siendo lo que esconde la franja de
+  paginar. `TableEmpty` tiene que ser hijo directo de `Table`, que lo busca por
+  tipo igual que ya buscaba al `TableHeader` para leer las columnas.
+
 ## `@calumet/elise-ui` 0.32.0
 
 Suben también `elise-tables` 0.7.8, `elise-alerts` 0.3.16 y `elise-toasts`

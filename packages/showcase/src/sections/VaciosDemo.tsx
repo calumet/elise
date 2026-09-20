@@ -13,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableEmpty,
   TableHead,
   TableHeader,
   TableRow,
@@ -85,15 +86,7 @@ const VaciosDemo = () => {
                 className="max-w-72"
               />
             }
-            empty={
-              sinResultados ? (
-                <SinResultados
-                  cosas="pedidos"
-                  busqueda={busqueda}
-                  onQuitar={() => setBusqueda("")}
-                />
-              ) : undefined
-            }
+            empty={sinResultados}
           >
             <TableHeader>
               <TableRow>
@@ -111,6 +104,9 @@ const VaciosDemo = () => {
                 </TableRow>
               ))}
             </TableBody>
+            <TableEmpty>
+              <SinResultados cosas="pedidos" busqueda={busqueda} onQuitar={() => setBusqueda("")} />
+            </TableEmpty>
           </Table>
         </Section>
       )}

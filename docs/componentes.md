@@ -871,13 +871,13 @@ lo pone el hijo entero.
 
 ### Datos
 
-| Componente                                                    | Import                               | Radix |
-| ------------------------------------------------------------- | ------------------------------------ | ----- |
-| Table, TableHeader, TableBody, TableRow, TableHead, TableCell | `@calumet/elise-ui/table`            | —     |
-| Stat, StatLabel, StatValue, StatChange                        | `@calumet/elise-ui/stat`             | —     |
-| DescriptionList, DescriptionListItem                          | `@calumet/elise-ui/description-list` | —     |
-| Timeline, TimelineItem                                        | `@calumet/elise-ui/timeline`         | —     |
-| Tree, TreeItem                                                | `@calumet/elise-ui/tree`             | —     |
+| Componente                                                                | Import                               | Radix |
+| ------------------------------------------------------------------------- | ------------------------------------ | ----- |
+| Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableEmpty | `@calumet/elise-ui/table`            | —     |
+| Stat, StatLabel, StatValue, StatChange                                    | `@calumet/elise-ui/stat`             | —     |
+| DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list` | —     |
+| Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`         | —     |
+| Tree, TreeItem                                                            | `@calumet/elise-ui/tree`             | —     |
 
 `DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
 relación entre el rótulo y su valor está en el marcado y un lector de pantalla

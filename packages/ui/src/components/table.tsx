@@ -99,6 +99,9 @@ const first = <P,>(nodes: React.ReactNode, kind: unknown) =>
     (n): n is React.ReactElement<P> => React.isValidElement(n) && n.type === kind,
   );
 
+const without = (nodes: React.ReactNode, kind: unknown) =>
+  React.Children.toArray(nodes).filter((n) => !(React.isValidElement(n) && n.type === kind));
+
 /**
  * Saca de la fila de encabezado el papel, el formato y el rótulo de cada
  * columna. La lista los necesita: sin ellos no hay forma de saber cuál es el
@@ -216,17 +219,12 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   loadingLabel?: React.ReactNode;
 
   /**
-   * Lo que ocupa el sitio de las filas cuando no hay ninguna. La barra de
-   * filtros se queda en pie, que es de donde se sale de un filtro que no
-   * devuelve nada; puesto debajo del marco, el aviso dice «no hay resultados»
-   * mientras el filtro que los esconde queda arriba y sin explicación.
-   *
-   * La franja de paginar no se pinta, ya que sin filas no hay páginas.
-   *
-   * Para la tabla de algo que todavía no se creó, el estado vacío va en lugar
-   * de la tabla entera y no acá dentro.
+   * No hay filas que mostrar. Saca el {@link TableEmpty} en lugar de la tabla y
+   * no pinta la franja de paginar, que sin filas no hay páginas. La barra de
+   * filtros se queda en pie, que es de donde se sale de un filtro sin
+   * resultados.
    */
-  empty?: React.ReactNode;
+  empty?: boolean;
 };
 
 /**
@@ -358,7 +356,7 @@ export const Table: React.ForwardRefExoticComponent<
       filters,
       loading = false,
       loadingLabel,
-      empty,
+      empty = false,
       children,
       ...props
     },
@@ -374,10 +372,15 @@ export const Table: React.ForwardRefExoticComponent<
       [mode, columns, slots, loading],
     );
 
+    /* El vacío se declara al lado del cuerpo y sale cuando le toca. Fuera de su
+       turno no entra en la tabla: un <div> dentro de un <table> no es válido. */
+    const emptyZone = first(children, TableEmpty);
+    const rows = React.useMemo(() => without(children, TableEmpty), [children]);
+
     const body =
       mode === "list" ? (
         <div data-slot="table-list" className={cn("w-full text-sm text-foreground", className)}>
-          {children}
+          {rows}
         </div>
       ) : (
         <table
@@ -386,14 +389,14 @@ export const Table: React.ForwardRefExoticComponent<
           className={cn("w-full border-collapse text-sm text-foreground", className)}
           {...props}
         >
-          {children}
+          {rows}
         </table>
       );
 
-    const isEmpty = empty !== undefined && empty !== null;
+    const isEmpty = empty && emptyZone !== undefined;
 
     const paginationBar =
-      paginate && !isEmpty ? (
+      paginate && !empty ? (
         <PaginationBar
           loading={loading}
           paginationEnd={paginationEnd}
@@ -425,9 +428,7 @@ export const Table: React.ForwardRefExoticComponent<
        cambiando, y dejarlo firme es lo que mantiene la tabla legible mientras
        llega la página siguiente. */
     const zone = isEmpty ? (
-      <div data-slot="table-empty" className={cn("w-full", loading && DIMMED)}>
-        {empty}
-      </div>
+      emptyZone
     ) : (
       <div className="relative overflow-hidden rounded-[inherit]">
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
@@ -458,6 +459,40 @@ export const Table: React.ForwardRefExoticComponent<
   },
 );
 Table.displayName = "Table";
+
+/** Props de {@link TableEmpty}. */
+export type TableEmptyProps = React.ComponentProps<"div">;
+
+/**
+ * Ocupa el sitio de la tabla cuando no hay filas. Se declara al lado del
+ * cuerpo, y quien decide cuál de los dos sale es `empty`:
+ *
+ * ```tsx
+ * <Table empty={filas.length === 0}>
+ *   <TableHeader>…</TableHeader>
+ *   <TableBody>…</TableBody>
+ *   <TableEmpty>
+ *     <EmptyState size="sm">…</EmptyState>
+ *   </TableEmpty>
+ * </Table>
+ * ```
+ *
+ * Para la tabla de algo que todavía no se creó, el vacío va en lugar de la
+ * tabla entera y no acá dentro.
+ *
+ * `Table` lo busca entre sus hijos por tipo, igual que al `TableHeader`, así
+ * que tiene que ser hijo directo: envuelto en otro componente no se encuentra.
+ */
+export function TableEmpty({ className, ...props }: TableEmptyProps): React.JSX.Element {
+  const { loading } = React.useContext(TableCtx);
+  return (
+    <div
+      data-slot="table-empty"
+      className={cn("w-full", loading && DIMMED, className)}
+      {...props}
+    />
+  );
+}
 
 /** El `<thead>`. */
 export const TableHeader: React.ForwardRefExoticComponent<
