@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.35.2
+
+### Corrige
+
+**`UserMenu` deja de bloquear la página.** Montaba su `DropdownMenu` sin
+`modal`, o sea con el `true` de Radix, y eso trae el bloqueo de scroll de
+`react-remove-scroll` para un menú de cuenta de dos opciones. Medido en la
+vitrina con el menú abierto: `data-scroll-locked` en el `body`,
+`pointer-events: none`, `overflow: hidden` y `margin-right: 11px`.
+
+El trato de ese bloqueo es que el `overflow: hidden` del `body` se propague al
+viewport y el margen rellene el hueco de la barra. Donde la página impide esa
+propagación, y basta un `html { overflow-x: clip }`, la barra se queda y los
+11px son pérdida limpia: la página entera se corre al abrir el menú.
+
+Un menú de cuenta no es un modal. Con `modal={false}` no aparece ninguna de
+las cuatro declaraciones y el ancho útil no cambia al abrirlo.
+
 ## `@calumet/elise-ui` 0.35.1
 
 ### Corrige
