@@ -151,11 +151,11 @@ export function ValueField({
         "disabled:pointer-events-none disabled:opacity-55 aria-invalid:border-destructive",
       )}
     >
-      <CirclePlus aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
+      <CirclePlus aria-hidden="true" className="size-icon-lg shrink-0 text-muted-foreground" />
       <span className="min-w-0 flex-1 truncate">{addLabel ?? defaultAddLabel}</span>
       {/* Sin caret cuando no se puede abrir: no lleva a ninguna parte. */}
       {disabled ? null : (
-        <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
+        <ChevronRight aria-hidden="true" className="size-icon-md shrink-0 text-muted-foreground" />
       )}
     </button>
   );
@@ -183,7 +183,7 @@ export function ValueField({
         aria-label={`${editLabel}: ${typeof label === "string" ? label : ""}`.trim()}
         onClick={() => setOpen(true)}
       >
-        <Pencil aria-hidden="true" className="size-4" />
+        <Pencil aria-hidden="true" className="size-icon-md" />
       </Button>
     </div>
   );

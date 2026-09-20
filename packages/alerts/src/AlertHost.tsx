@@ -85,7 +85,7 @@ export const AlertHost: React.FC = () => {
         {current.description ? (
           <AlertDialogBody className="flex flex-row items-start gap-3">
             {React.createElement(variantIcon[current.variant], {
-              className: "size-5 shrink-0",
+              className: "size-icon-lg shrink-0",
               style: { color: iconColor[current.variant] },
               "aria-hidden": true,
             })}

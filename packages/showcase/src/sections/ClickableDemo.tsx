@@ -38,7 +38,7 @@ const ClickableDemo = () => {
               accessibilityLabel={`Abrir ${fila.titulo}`}
               className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3"
             >
-              <fila.icono className="size-5 text-muted-foreground" aria-hidden />
+              <fila.icono className="size-icon-lg text-muted-foreground" aria-hidden />
               <div className="flex min-w-0 flex-col">
                 <Text size="sm" weight="semibold">
                   {fila.titulo}
@@ -47,7 +47,7 @@ const ClickableDemo = () => {
                   {fila.detalle}
                 </Text>
               </div>
-              <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
+              <ChevronRight className="size-icon-md text-muted-foreground" aria-hidden />
             </Clickable>
           </div>
         ))}

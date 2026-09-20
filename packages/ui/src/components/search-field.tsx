@@ -123,7 +123,7 @@ export const SearchField: React.ForwardRefExoticComponent<
             className={cn(FIELD_BOX_COMPOSITE, INVALID_FIELD)}
             aria-invalid={control["aria-invalid"]}
           >
-            <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+            <Search className="size-icon-md shrink-0 text-muted-foreground" aria-hidden="true" />
 
             <input
               {...control}
@@ -154,7 +154,7 @@ export const SearchField: React.ForwardRefExoticComponent<
                 onClick={clear}
                 className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
-                <X className="size-4" aria-hidden />
+                <X className="size-icon-md" aria-hidden />
               </button>
             ) : null}
           </div>

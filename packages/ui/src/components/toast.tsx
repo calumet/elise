@@ -111,7 +111,7 @@ export const ToastClose: React.ForwardRefExoticComponent<
       )}
       {...props}
     >
-      <X className="size-4" aria-hidden />
+      <X className="size-icon-md" aria-hidden />
       <span className="sr-only">{closeLabel}</span>
     </ToastPrimitive.Close>
   );

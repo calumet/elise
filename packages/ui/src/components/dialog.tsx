@@ -118,7 +118,7 @@ export const DialogContent: React.ForwardRefExoticComponent<
       >
         {showCloseButton ? (
           <DialogClose className="absolute top-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none">
-            <X className="size-4" aria-hidden />
+            <X className="size-icon-md" aria-hidden />
             <span className="sr-only">{closeLabel}</span>
           </DialogClose>
         ) : null}

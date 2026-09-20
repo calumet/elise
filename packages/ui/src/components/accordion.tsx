@@ -74,7 +74,7 @@ function AccordionTrigger({
       >
         {children}
         <ChevronDown
-          className="ml-2 size-4 shrink-0 transition-transform duration-(--duration-fast) ease-out group-data-[state=open]:rotate-180"
+          className="ml-2 size-icon-md shrink-0 transition-transform duration-(--duration-fast) ease-out group-data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </AccordionPrimitive.Trigger>

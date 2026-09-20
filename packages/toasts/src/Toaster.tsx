@@ -101,7 +101,7 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
               className="absolute top-2 right-2 inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-1 focus-visible:ring-offset-transparent focus-visible:outline-none"
               aria-label={closeLabel}
             >
-              <X className="h-4 w-4" aria-hidden />
+              <X className="size-icon-md" aria-hidden />
             </ToastClose>
           </div>
         </Toast>
@@ -129,7 +129,7 @@ function ToastIcon({ variant }: { variant: ToastEvent["variant"] }) {
       style={{ backgroundColor: `color-mix(in oklch, ${color} 15%, transparent)` }}
       aria-hidden
     >
-      <Icon className="h-5 w-5" style={{ color }} />
+      <Icon className="size-icon-lg" style={{ color }} />
     </div>
   );
 }

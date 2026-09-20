@@ -183,7 +183,7 @@ export const TimePicker: React.ForwardRefExoticComponent<
                   disabled={disabled || readOnly}
                   className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:text-border-strong"
                 >
-                  <Clock className="size-4" aria-hidden />
+                  <Clock className="size-icon-md" aria-hidden />
                 </button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-32 p-1">

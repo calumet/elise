@@ -126,7 +126,7 @@ export function SaveBar({
         {...props}
       >
         <InlineStack gap={2} align="center" wrap={false}>
-          <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
+          <AlertCircle aria-hidden="true" className="size-icon-md shrink-0" />
           <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
             {message ?? renderLabel}
           </Text>

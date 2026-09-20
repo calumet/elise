@@ -44,7 +44,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
    sueltas el rótulo se parte en dos renglones y el recorte se lleva el segundo.
    Es la misma pareja que ya llevan `Badge` y `SegmentedControl`. */
 const baseClasses =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight whitespace-nowrap rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 text-center font-medium tracking-tight whitespace-nowrap rounded-md border border-transparent overflow-hidden transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-icon-md";
 
 /* El apagado es un cambio de tokens, no una capa de opacidad encima: sumar las
    dos apaga dos veces y el rótulo baja de contraste más de lo que se pretendía.
@@ -140,7 +140,7 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   /* El paso táctil: 44px es el mínimo de área de toque, y ninguno de los otros
      tres llega. Los campos tienen el suyo del mismo alto, para que un botón y
      un campo en la misma fila sigan cuadrando también acá. */
-  xl: "h-11 px-6 text-base",
+  xl: "h-touch px-6 text-base",
   icon: "size-9",
   "icon-sm": "size-8",
 };

@@ -70,7 +70,7 @@ export const MenubarTrigger: React.ForwardRefExoticComponent<
   >
     {props.children}
     <ChevronDown
-      className="-mr-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]:rotate-180"
+      className="-mr-1 size-icon-md shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]:rotate-180"
       aria-hidden
     />
   </MenubarPrimitive.Trigger>
@@ -147,7 +147,7 @@ export const MenubarCheckboxItem: React.ForwardRefExoticComponent<
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
           <polyline
@@ -183,9 +183,9 @@ export const MenubarRadioItem: React.ForwardRefExoticComponent<
     className={cn(baseItem, "pl-7", className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
-        <Circle className="h-3 w-3" />
+        <Circle className="size-icon-xs" />
       </MenubarPrimitive.ItemIndicator>
     </span>
     {children}
@@ -245,7 +245,7 @@ export const MenubarSubTrigger: React.ForwardRefExoticComponent<
     {...props}
   >
     {children}
-    <svg viewBox="0 0 16 16" className="ml-auto h-3.5 w-3.5" aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 16 16" className="ml-auto size-icon-sm" aria-hidden="true" focusable="false">
       <path
         d="M6 3l4 5-4 5"
         stroke="currentColor"

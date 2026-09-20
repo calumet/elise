@@ -125,9 +125,9 @@ const PantallaInicio = () => {
                 onClick={() => setAbierta((a) => !a)}
               >
                 {abierta ? (
-                  <ChevronUp className="size-4" aria-hidden />
+                  <ChevronUp className="size-icon-md" aria-hidden />
                 ) : (
-                  <ChevronDown className="size-4" aria-hidden />
+                  <ChevronDown className="size-icon-md" aria-hidden />
                 )}
               </Button>
               <Button
@@ -136,7 +136,7 @@ const PantallaInicio = () => {
                 aria-label="Descartar la guía"
                 onClick={() => setVisible({ ...visible, guia: false })}
               >
-                <X className="size-4" aria-hidden />
+                <X className="size-icon-md" aria-hidden />
               </Button>
             </ButtonGroup>
           }
@@ -166,9 +166,9 @@ const PantallaInicio = () => {
                       onClick={() => setAbierto((a) => (a === paso.id ? null : paso.id))}
                     >
                       {abierto === paso.id ? (
-                        <ChevronUp className="size-4" aria-hidden />
+                        <ChevronUp className="size-icon-md" aria-hidden />
                       ) : (
-                        <ChevronDown className="size-4" aria-hidden />
+                        <ChevronDown className="size-icon-md" aria-hidden />
                       )}
                     </Button>
                   </div>
@@ -265,7 +265,7 @@ const PantallaInicio = () => {
               aria-label="Descartar el anuncio"
               onClick={() => setVisible({ ...visible, anuncio: false })}
             >
-              <X className="size-4" aria-hidden />
+              <X className="size-icon-md" aria-hidden />
             </Button>
           </div>
         </Section>
@@ -354,7 +354,7 @@ const PantallaInicio = () => {
                 <Text size="sm">{app.detalle}</Text>
               </Clickable>
               <Button size="icon-sm" variant="outline" aria-label={`Instalar ${app.nombre}`}>
-                <Download className="size-4" aria-hidden />
+                <Download className="size-icon-md" aria-hidden />
               </Button>
             </div>
           ))}

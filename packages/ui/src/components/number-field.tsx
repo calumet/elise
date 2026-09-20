@@ -154,9 +154,9 @@ export const NumberField: React.ForwardRefExoticComponent<
         className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground disabled:pointer-events-none disabled:text-border-strong"
       >
         {direction === 1 ? (
-          <Plus className="size-4" aria-hidden />
+          <Plus className="size-icon-md" aria-hidden />
         ) : (
-          <Minus className="size-4" aria-hidden />
+          <Minus className="size-icon-md" aria-hidden />
         )}
       </button>
     );

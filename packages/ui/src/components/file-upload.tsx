@@ -169,7 +169,7 @@ function FileUpload({
         }}
       />
       <span className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground">
-        <Upload className="size-4" aria-hidden="true" />
+        <Upload className="size-icon-md" aria-hidden="true" />
       </span>
       <span className="text-sm text-foreground">{label ?? defaultLabel}</span>
       {hint ? <span className="text-xs text-muted-foreground">{hint}</span> : null}
@@ -219,7 +219,7 @@ function FileUploadItem({
       )}
       {...props}
     >
-      <FileIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+      <FileIcon className="size-icon-md shrink-0 text-muted-foreground" aria-hidden="true" />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="truncate text-sm text-foreground">{name}</span>
         {size !== undefined ? (
@@ -233,7 +233,7 @@ function FileUploadItem({
           aria-label={`${removeLabel} ${name}`}
           className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
         >
-          <X className="size-3.5" aria-hidden="true" />
+          <X className="size-icon-sm" aria-hidden="true" />
         </button>
       ) : null}
     </li>

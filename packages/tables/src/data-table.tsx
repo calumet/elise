@@ -222,7 +222,7 @@ function DataTableContent<TData extends RowData>({
             }}
             variant="outline"
           >
-            <X className="size-4" />
+            <X className="size-icon-md" />
           </Button>
         )}
       </div>
@@ -231,7 +231,7 @@ function DataTableContent<TData extends RowData>({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">
-                <Download className="size-4" />
+                <Download className="size-icon-md" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -241,7 +241,7 @@ function DataTableContent<TData extends RowData>({
                   exportToCSV(getExportData(), exportName);
                 }}
               >
-                <FileText className="size-4" />
+                <FileText className="size-icon-md" />
                 CSV (.csv)
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -250,7 +250,7 @@ function DataTableContent<TData extends RowData>({
                   exportToJSON(getExportData(), exportName);
                 }}
               >
-                <FileText className="size-4" />
+                <FileText className="size-icon-md" />
                 JSON (.json)
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -258,7 +258,7 @@ function DataTableContent<TData extends RowData>({
         )}
         {refresh && (
           <Button onClick={refresh} variant="outline">
-            <RefreshCw className="size-4" />
+            <RefreshCw className="size-icon-md" />
           </Button>
         )}
       </div>
@@ -348,13 +348,13 @@ function DataTableContent<TData extends RowData>({
                           {{
                             asc: (
                               <ChevronUp
-                                className="size-4 shrink-0 opacity-60"
+                                className="size-icon-md shrink-0 opacity-60"
                                 aria-hidden="true"
                               />
                             ),
                             desc: (
                               <ChevronDown
-                                className="size-4 shrink-0 opacity-60"
+                                className="size-icon-md shrink-0 opacity-60"
                                 aria-hidden="true"
                               />
                             ),
@@ -556,7 +556,7 @@ function SelectFilter<TData extends RowData>({
               )}
             </div>
             <ChevronsUpDown
-              className="size-4 shrink-0 text-muted-foreground/80"
+              className="size-icon-md shrink-0 text-muted-foreground/80"
               aria-hidden="true"
             />
           </Button>
@@ -578,7 +578,7 @@ function SelectFilter<TData extends RowData>({
                     onSelect={() => toggleSelection(String(value))}
                   >
                     <span className="truncate">{String(value)}</span>
-                    {selected.has(String(value)) && <Check className="ml-auto size-4" />}
+                    {selected.has(String(value)) && <Check className="ml-auto size-icon-md" />}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -591,7 +591,7 @@ function SelectFilter<TData extends RowData>({
                       className="w-full justify-start px-3 font-normal"
                       onClick={clearAllSelections}
                     >
-                      <X className="-ms-1 size-4 opacity-60" aria-hidden="true" />
+                      <X className="-ms-1 size-icon-md opacity-60" aria-hidden="true" />
                       {labelClear}
                     </Button>
                   </CommandGroup>
@@ -633,7 +633,7 @@ function TextFilter<TData extends RowData>({
           type="text"
         />
         <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
-          <Search className="size-4" />
+          <Search className="size-icon-md" />
         </div>
       </div>
     </div>

@@ -130,11 +130,11 @@ const ExpandButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"b
           {...props}
         >
           <Menu
-            className="size-5 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0"
+            className="size-icon-lg transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0"
             aria-hidden
           />
           <X
-            className="absolute size-5 -rotate-90 opacity-0 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-0 group-data-[state=open]:opacity-100"
+            className="absolute size-icon-lg -rotate-90 opacity-0 transition-[opacity,rotate] duration-(--duration-fast) ease-out group-data-[state=open]:rotate-0 group-data-[state=open]:opacity-100"
             aria-hidden
           />
         </button>
@@ -432,7 +432,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         sequence
           ? "min-h-9 w-full justify-between text-start font-semibold whitespace-normal"
           : "h-9 w-max justify-center data-[state=open]:bg-state-hover",
-        sequence === "drawer" && "min-h-11 px-2.5",
+        sequence === "drawer" && "min-h-touch px-2.5",
         className,
       )}
       {...props}
@@ -442,7 +442,7 @@ export const NavigationMenuTrigger: React.ForwardRefExoticComponent<
         className={cn(
           "relative top-px ml-1 shrink-0 transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-180",
           /* En una secuencia encabeza una fila alta, y a 12px se pierde. */
-          sequence ? "size-4" : "size-3",
+          sequence ? "size-icon-md" : "size-icon-xs",
         )}
         aria-hidden
       />
@@ -616,7 +616,8 @@ export const NavigationMenuLink: React.ForwardRefExoticComponent<
       className={cn(
         "inline-flex h-9 w-max items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-base font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out select-none hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none in-data-[slot=navigation-menu-content]:h-auto in-data-[slot=navigation-menu-content]:w-full in-data-[slot=navigation-menu-content]:justify-start",
         sequence && "whitespace-normal",
-        sequence === "drawer" && "min-h-11 px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
+        sequence === "drawer" &&
+          "min-h-touch px-2.5 in-data-[slot=navigation-menu-content]:min-h-9",
         description && "flex-col items-start justify-center gap-0.5",
         className,
       )}

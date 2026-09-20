@@ -19,7 +19,7 @@ export type BadgeProps = React.ComponentProps<"span"> & {
 };
 
 const baseClasses =
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-transparent font-semibold [&>svg]:size-3 [&>svg]:shrink-0";
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-transparent font-semibold [&>svg]:size-icon-xs [&>svg]:shrink-0";
 
 const sizeClasses: Record<NonNullable<BadgeProps["size"]>, string> = {
   sm: "h-5 px-2 text-2xs",

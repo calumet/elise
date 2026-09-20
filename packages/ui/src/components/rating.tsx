@@ -43,9 +43,9 @@ export type RatingProps = Omit<React.ComponentProps<"div">, "onChange" | "defaul
 };
 
 const sizes: Record<NonNullable<RatingProps["size"]>, string> = {
-  sm: "size-4",
-  md: "size-5",
-  lg: "size-6",
+  sm: "size-icon-md",
+  md: "size-icon-lg",
+  lg: "size-icon-xl",
 };
 
 /**

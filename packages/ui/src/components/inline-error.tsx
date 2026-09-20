@@ -60,7 +60,7 @@ export const InlineError: React.ForwardRefExoticComponent<
         )}
         {...props}
       >
-        <AlertCircle aria-hidden="true" className="mt-px size-3.5 shrink-0" />
+        <AlertCircle aria-hidden="true" className="mt-px size-icon-sm shrink-0" />
         <span className="min-w-0">{children}</span>
       </p>
     );

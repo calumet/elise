@@ -100,7 +100,7 @@ export const Stat: React.ForwardRefExoticComponent<
                   tones[trend],
                 )}
               >
-                <Arrow className="size-3.5 shrink-0" aria-hidden="true" />
+                <Arrow className="size-icon-sm shrink-0" aria-hidden="true" />
                 {change}
               </span>
             ) : null}

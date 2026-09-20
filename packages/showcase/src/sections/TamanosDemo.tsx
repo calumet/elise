@@ -1,3 +1,4 @@
+import { Check } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import { ComboboxField, type ComboboxOption } from "@calumet/elise-ui/combobox";
 import { Input } from "@calumet/elise-ui/input";
@@ -62,6 +63,28 @@ const TamanosDemo = () => (
         </div>
       </BlockStack>
     ))}
+
+    <Text size="xs" tone="muted">
+      Con <code>data-density=&quot;compact&quot;</code> la misma fila se aprieta sin tocar ningún{" "}
+      <code>size</code>. Los iconos y el paso táctil no se mueven.
+    </Text>
+    <div data-density="compact" className="flex flex-wrap items-center gap-2">
+      <Input defaultValue="Café Andes" aria-label="Nombre, compacto" className="w-40" />
+      <Select defaultValue="central">
+        <SelectTrigger aria-label="Depósito, compacto" className="w-44">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="central">Depósito central</SelectItem>
+          <SelectItem value="norte">Sucursal norte</SelectItem>
+        </SelectContent>
+      </Select>
+      <Button>
+        <Check />
+        Guardar
+      </Button>
+      <Button size="xl">Táctil</Button>
+    </div>
   </BlockStack>
 );
 
