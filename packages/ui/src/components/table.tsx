@@ -102,6 +102,10 @@ const first = <P,>(nodes: React.ReactNode, kind: unknown) =>
 const without = (nodes: React.ReactNode, kind: unknown) =>
   React.Children.toArray(nodes).filter((n) => !(React.isValidElement(n) && n.type === kind));
 
+/** Cantos del recorte que coinciden con los del marco, que son los que lleva redondeados. */
+const zoneRadius = (hasFilters: boolean, hasPagination: boolean) =>
+  cn(!hasFilters && "rounded-t-[inherit]", !hasPagination && "rounded-b-[inherit]");
+
 /**
  * Saca de la fila de encabezado el papel, el formato y el rótulo de cada
  * columna. La lista los necesita: sin ellos no hay forma de saber cuál es el
@@ -430,13 +434,7 @@ export const Table: React.ForwardRefExoticComponent<
     const zone = isEmpty ? (
       emptyZone
     ) : (
-      <div
-        className={cn(
-          "relative overflow-hidden",
-          !filterBar && "rounded-t-[inherit]",
-          !paginationBar && "rounded-b-[inherit]",
-        )}
-      >
+      <div className={cn("relative overflow-hidden", zoneRadius(!!filterBar, !!paginationBar))}>
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
           {body}
         </div>
