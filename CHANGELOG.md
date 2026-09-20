@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.29.1
+
+### Corrige
+
+**El panel del diálogo vuelve a la escala de radios.** Usaba `rounded-2xl`, y
+el tema define `--radius-sm`, `--radius-md`, `--radius-lg` y `--radius-xl`, así
+que ese escalón caía al valor por defecto de Tailwind: el modal se quedaba en
+16px aunque el tema pidiera esquinas rectas. Ahora usa `rounded-xl`, el mismo
+que el popover, el menú desplegable y los demás paneles flotantes. `AlertDialog`
+lo hereda.
+
+Con el tema por defecto el panel pasa de 16px a 12px.
+
 ## `@calumet/elise-ui` 0.29.0
 
 Suben también `elise-tables` 0.7.4, `elise-alerts` 0.3.13 y `elise-toasts`
