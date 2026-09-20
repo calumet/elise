@@ -38,7 +38,7 @@ const LoginCard = () => {
             <PasswordField value={password} onChange={(e) => setPassword(e.target.value)} />
           </FormControl>
         </FormField>
-        <Button type="submit" className="w-full">
+        <Button type="submit" fullWidth>
           Entrar
         </Button>
       </Form>

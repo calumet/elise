@@ -3,6 +3,27 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.32.0
+
+Suben también `elise-tables` 0.7.8, `elise-alerts` 0.3.16 y `elise-toasts`
+0.4.17, que no cambian por dentro.
+
+### Añade
+
+**`<Button fullWidth>`**, para el envío de un formulario angosto o la acción al
+pie de un panel. `buttonVariants` recibe la misma opción, para el enlace que se
+pinta como botón.
+
+```tsx
+<Button type="submit" fullWidth>
+  Entrar
+</Button>
+```
+
+Hasta ahora eso se escribía `className="w-full"`, que es justo lo que el linter
+marca: el ancho de un control del sistema no se decide desde afuera. La propia
+vitrina lo hacía en su tarjeta de acceso.
+
 ## `@calumet/elise-ui` 0.31.0
 
 Suben también `elise-tables` 0.7.7, `elise-alerts` 0.3.15 y `elise-toasts`
