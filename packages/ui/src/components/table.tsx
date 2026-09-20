@@ -159,7 +159,8 @@ const assignSlots = (columns: Column[]): ListSlot[] => {
 export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   /**
    * Quita el marco propio para meter la tabla dentro de una tarjeta que ya lo
-   * pone. Con los dos salen dos bordes concéntricos.
+   * pone. Con los dos salen dos bordes concéntricos. El radio lo hereda de esa
+   * tarjeta.
    */
   bare?: boolean;
 
@@ -452,7 +453,7 @@ export const Table: React.ForwardRefExoticComponent<
           ref={container}
           data-slot={bare ? "table-bare" : "table-frame"}
           aria-busy={loading || undefined}
-          className={cn(!bare && SURFACE, "w-full", frameClassName)}
+          className={cn(bare ? "rounded-[inherit]" : SURFACE, "w-full", frameClassName)}
         >
           {filterBar}
           {zone}
