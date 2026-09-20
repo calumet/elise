@@ -37,7 +37,7 @@ const MenusHoverDemo = () => {
             <DropdownMenuItem>Nuevo</DropdownMenuItem>
             <DropdownMenuItem>Duplicar</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
+            <DropdownMenuItem tone="danger">Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
