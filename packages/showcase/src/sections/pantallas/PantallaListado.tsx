@@ -19,6 +19,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableEmpty,
   TableHead,
   TableHeader,
   TableRow,
@@ -123,15 +124,7 @@ const PantallaListado = () => {
                 className="max-w-72"
               />
             }
-            empty={
-              filtrado && filas.length === 0 ? (
-                <SinResultados
-                  cosas="productos"
-                  busqueda={busqueda}
-                  onQuitar={() => setBusqueda("")}
-                />
-              ) : undefined
-            }
+            empty={filtrado && filas.length === 0}
           >
             <TableHeader>
               <TableRow>
@@ -174,6 +167,13 @@ const PantallaListado = () => {
                 </TableRow>
               ))}
             </TableBody>
+            <TableEmpty>
+              <SinResultados
+                cosas="productos"
+                busqueda={busqueda}
+                onQuitar={() => setBusqueda("")}
+              />
+            </TableEmpty>
           </Table>
         </Section>
       )}
