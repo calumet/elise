@@ -3,6 +3,46 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.29.2
+
+### Corrige
+
+**El lienzo del marco deja de depender de `--secondary`.** `AppShellMain` lo
+pintaba con `bg-secondary`. En el tema de Elise `secondary` es un gris claro y
+el resultado se veía bien, pero `secondary` es un color de componente: el de
+los botones secundarios, y un tema puede darle un color de marca. En un portal
+real cuyo administrador lo puso en `#080014`, el área de contenido salía casi
+negra con el texto en `--foreground`, o sea negro sobre negro.
+
+Nace **`--canvas`**, con los valores que tenía `secondary`, así que el marco no
+cambia de aspecto con el tema por defecto. Es la superficie entre la barra de
+navegación y las tarjetas que se apoyan en ella, y lleva contenido corriente:
+su texto es `--foreground`, igual que `--background`, y no tiene un
+`--canvas-foreground` propio.
+
+|        | barra   | lienzo  | tarjeta |
+| ------ | ------- | ------- | ------- |
+| claro  | `0.94`  | `0.958` | `1.0`   |
+| oscuro | `0.196` | `0.206` | `0.216` |
+
+Un tema que quiera otro lienzo ya puede darle el suyo sin tocar los botones
+secundarios.
+
+**`--radius: 0` por fin da esquinas rectas.** La escala sumaba píxeles fijos
+(`radius - 2px`, `radius + 2px`, `radius + 4px`), así que un tema que pedía
+esquinas rectas seguía sacando tarjetas de 2px y desplegables de 4px. Ahora
+multiplica, y con el radio por defecto los cuatro escalones dan lo mismo que
+antes:
+
+| utilidad     | fórmula                      | por defecto | con `--radius: 0` |
+| ------------ | ---------------------------- | ----------- | ----------------- |
+| `rounded-sm` | `calc(var(--radius) * 0.75)` | 6px         | 0px               |
+| `rounded-md` | `var(--radius)`              | 8px         | 0px               |
+| `rounded-lg` | `calc(var(--radius) * 1.25)` | 10px        | 0px               |
+| `rounded-xl` | `calc(var(--radius) * 1.5)`  | 12px        | 0px               |
+
+Un tema con otro radio sí cambia: con `1rem` pasa de 14/16/18/20 a 12/16/20/24.
+
 ## `@calumet/elise-tables` 0.7.5
 
 ### Corrige

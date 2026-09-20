@@ -1166,7 +1166,7 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps): Rea
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
          el marco se leía como una sola plancha. */
       className={cn(
-        "col-start-2 row-start-2 flex min-w-0 flex-col overflow-y-auto bg-secondary p-5",
+        "col-start-2 row-start-2 flex min-w-0 flex-col overflow-y-auto bg-canvas p-5",
         className,
       )}
       {...props}
