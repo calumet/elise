@@ -3,6 +3,20 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.35.1
+
+### Corrige
+
+**La barra de desplazamiento deja de mover la página al aparecer.** El sistema
+declara `scrollbar-width: thin`, y con eso la barra deja de ser superpuesta y
+pasa a ocupar ancho. Una pantalla que carga corta y luego crece encoge de golpe
+cuando la barra aparece: medidos 11px en Chromium, sobre el ancho entero de la
+página, así que se mueve todo, no solo lo que desplaza.
+
+`html` gana `scrollbar-gutter: stable`, que reserva el hueco desde el principio.
+Aislado en un iframe de 400px: con la página corta el ancho útil pasa de 400 a
+389, y con la larga son 389 en los dos casos, o sea que el salto desaparece.
+
 ## `@calumet/elise-ui` 0.35.0
 
 Suben también `elise-tables` 0.8.2, `elise-alerts` 0.3.19 y `elise-toasts`
