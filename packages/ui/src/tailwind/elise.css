@@ -219,6 +219,11 @@
      tarjeta encima el contorno se leía más pesado al costado del encabezado que
      al del cuerpo. */
   --muted: oklch(0.976 0.004 265);
+  /* Banda de una página larga: separa un bloque del fondo sin meterlo en una
+     tarjeta. Comparte valor con --muted igual que --canvas con --secondary,
+     porque son el mismo tono con otro trabajo, y es el token que un portal
+     repinta con su marca sin tocar el resto de la escala. */
+  --surface: oklch(0.976 0.004 265);
   /* El techo AA lo marca --secondary (0.539), que es el fondo más oscuro donde
      se lee este color; sobre --muted queda margen de sobra. */
   --muted-foreground: oklch(0.525 0.016 265);
@@ -412,6 +417,10 @@
   --shadow-surface-bevel:
     inset 1px 0 0 0 oklch(0 0 0 / 0.13), inset -1px 0 0 0 oklch(0 0 0 / 0.13),
     inset 0 -1px 0 0 oklch(0 0 0 / 0.17), inset 0 1px 0 0 oklch(0.845 0 0 / 0.5);
+  /* Viñeta de arranque de página: dice que el contenido pasa por debajo de la
+     cabecera. Los biseles de arriba son de control, y a este ancho se leen como
+     una raya, que es justo lo contrario. */
+  --shadow-page-inset: inset 0 6px 12px -6px oklch(0 0 0 / 0.0627);
 }
 
 .dark,
@@ -437,6 +446,7 @@
   --secondary: oklch(0.206 0.011 265);
   --secondary-foreground: oklch(0.93 0.005 265);
   --muted: oklch(0.262 0.012 265);
+  --surface: oklch(0.262 0.012 265);
   --muted-foreground: oklch(0.685 0.014 265);
   /* Los tres salen de trasladar aquí los saltos del tema claro: 0.07, 0.145 y
      0.175 por encima de la superficie. Quedan entre --muted y --border-strong,
@@ -536,6 +546,7 @@
   --shadow-surface-bevel:
     inset 1px 0 0 0 oklch(0.845 0 0 / 0.08), inset -1px 0 0 0 oklch(0.845 0 0 / 0.08),
     inset 0 -1px 0 0 oklch(0.845 0 0 / 0.08), inset 0 1px 0 0 oklch(0.845 0 0 / 0.16);
+  --shadow-page-inset: inset 0 6px 12px -6px oklch(0 0 0 / 0.35);
 }
 
 /* El paso baja de 4px a 3px, y con él el relleno, los huecos y los altos. */
@@ -570,6 +581,7 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
+  --color-surface: var(--surface);
   --color-muted-foreground: var(--muted-foreground);
   --color-fill-tertiary: var(--fill-tertiary);
   --color-fill-tertiary-hover: var(--fill-tertiary-hover);
@@ -655,6 +667,7 @@
   --shadow-surface: var(--shadow-surface);
   --shadow-surface-bevel: var(--shadow-surface-bevel);
   --shadow-bevel-inset: var(--shadow-bevel-inset);
+  --shadow-page-inset: var(--shadow-page-inset);
 }
 
 /* Tailwind no tiene espacio de nombres de tema para z-index, así que las capas

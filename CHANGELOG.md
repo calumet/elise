@@ -3,6 +3,27 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.36.0
+
+Suben también `elise-tables` 0.8.3, `elise-alerts` 0.3.20 y `elise-toasts`
+0.4.21, que no cambian por dentro.
+
+### Añade
+
+**`--surface`**, la banda con la que una página larga separa un bloque del
+fondo sin meterlo en una tarjeta. Comparte valor con `--muted`, igual que
+`--canvas` con `--secondary`: es el mismo tono con otro trabajo, y es el que un
+portal repinta con su marca sin tocar el resto de la escala.
+
+**`--shadow-page-inset`**, la viñeta de arranque que dice que el contenido pasa
+por debajo de la cabecera. Los biseles que había son de control y a ese ancho
+se leen como una raya.
+
+Los dos salen de un portal que los tenía declarados en su propio `@theme` por
+no existir aquí. Eso además apaga los avisos de `no-raw-colors` que producía:
+el lector de CSS del linter lee la hoja del sistema, así que un token que el
+consumidor declara por su cuenta no lo ve. Medido en ese portal: 3 avisos a 0.
+
 ## `@calumet/elise-ui` 0.35.1
 
 ### Corrige

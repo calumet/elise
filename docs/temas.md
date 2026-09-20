@@ -63,6 +63,7 @@ Los temas se implementan vía CSS custom properties definidas en `@calumet/elise
 | `--secondary`              | `bg-secondary`                | Fondos secundarios                            |
 | `--secondary-foreground`   | `text-secondary-foreground`   | Texto sobre fondo secundario                  |
 | `--muted`                  | `bg-muted`                    | Fondos sutiles, hovers                        |
+| `--surface`                | `bg-surface`                  | Banda de sección en una página larga          |
 | `--muted-foreground`       | `text-muted-foreground`       | Texto secundario/gris                         |
 | `--accent`                 | `bg-accent`                   | Color de acento                               |
 | `--accent-foreground`      | `text-accent-foreground`      | Texto sobre fondo de acento                   |
@@ -241,6 +242,7 @@ de campo obligatorio de `Field`.
 | `--shadow-2xl`         | `shadow-2xl`                                           | Sombra máxima                                             |
 | `--shadow-bevel`       | `shadow-bevel`                                         | Bisel `inset` para rellenos sólidos                       |
 | `--shadow-bevel-inset` | `shadow-bevel-inset`                                   | Bisel invertido: estado presionado                        |
+| `--shadow-page-inset`  | `shadow-page-inset`                                    | Viñeta de arranque: el contenido pasa bajo la cabecera    |
 | `--font-sans`          | `font-sans`                                            | Geist, system-ui                                          |
 | `--font-serif`         | `font-serif`                                           | Source Serif 4, serif                                     |
 | `--font-mono`          | `font-mono`                                            | JetBrains Mono, monospace                                 |
@@ -425,6 +427,7 @@ apenas perceptible se lee como elegido.
 | secondary                     | `oklch(0.968 0.004 265)` |
 | secondary-foreground          | `oklch(0.37 0.02 265)`   |
 | muted                         | `oklch(0.965 0.004 265)` |
+| surface                       | `oklch(0.976 0.004 265)` |
 | muted-foreground              | `oklch(0.548 0.016 265)` |
 | accent                        | `oklch(0.955 0.025 250)` |
 | accent-foreground             | `oklch(0.38 0.14 262)`   |
@@ -466,6 +469,7 @@ vez de compartir su valor.
 | secondary                     | `oklch(0.262 0.012 265)` |
 | secondary-foreground          | `oklch(0.93 0.005 265)`  |
 | muted                         | `oklch(0.262 0.012 265)` |
+| surface                       | `oklch(0.262 0.012 265)` |
 | muted-foreground              | `oklch(0.685 0.014 265)` |
 | accent                        | `oklch(0.33 0.09 262)`   |
 | accent-foreground             | `oklch(0.89 0.06 255)`   |
