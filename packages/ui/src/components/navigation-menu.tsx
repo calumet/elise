@@ -193,6 +193,47 @@ const Sequence = ({
 };
 Sequence.displayName = "Sequence";
 
+/* La sangría es la de los items del cajón: lo de adentro arranca en su vertical. */
+const DRAWER_BAND = "flex flex-wrap items-center gap-2 px-2.5 py-3";
+
+/**
+ * Una banda al principio del cajón de móvil, antes de las secciones. Es para lo
+ * que una cabecera de portal lleva además del menú: las redes, los botones de
+ * sesión, un aviso.
+ *
+ * No es una sección: no entra en la fila de escritorio ni en la cuenta de lo que
+ * cabe. En escritorio no se pinta, porque ahí ese contenido tiene su sitio en la
+ * barra.
+ */
+export const NavigationMenuDrawerHeader: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"div">> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      data-slot="navigation-menu-drawer-header"
+      ref={ref}
+      className={cn(DRAWER_BAND, "border-t border-b border-border", className)}
+      {...props}
+    />
+  ),
+);
+NavigationMenuDrawerHeader.displayName = "NavigationMenuDrawerHeader";
+
+/** La misma banda, al final del cajón y después de las secciones. */
+export const NavigationMenuDrawerFooter: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<React.ComponentProps<"div">> & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      data-slot="navigation-menu-drawer-footer"
+      ref={ref}
+      className={cn(DRAWER_BAND, "border-t border-border", className)}
+      {...props}
+    />
+  ),
+);
+NavigationMenuDrawerFooter.displayName = "NavigationMenuDrawerFooter";
+
 /** Props de {@link NavigationMenuList}. */
 export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.List
@@ -225,10 +266,19 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
   const groupLabel = overflowLabel ?? more;
   const { setExpanded } = useNavigation("NavigationMenuList");
 
-  const sections = React.useMemo(
-    () => React.Children.toArray(children).filter(React.isValidElement),
-    [children],
-  );
+  /* Dentro del reparto se les mediría el ancho para decidir qué cabe en la fila. */
+  const { sections, bands } = React.useMemo(() => {
+    const nodes = React.Children.toArray(children).filter(React.isValidElement);
+    const isBand = (node: React.ReactElement) =>
+      node.type === NavigationMenuDrawerHeader || node.type === NavigationMenuDrawerFooter;
+    return {
+      sections: nodes.filter((node) => !isBand(node)),
+      bands: {
+        header: nodes.filter((node) => node.type === NavigationMenuDrawerHeader),
+        footer: nodes.filter((node) => node.type === NavigationMenuDrawerFooter),
+      },
+    };
+  }, [children]);
 
   const id = React.useId();
   const row = React.useRef<HTMLUListElement | null>(null);
@@ -335,8 +385,10 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       >
         {/* Sin el `className` de la fila: describe una fila, y con un `flex`
             dentro el submenu se encoge a su contenido. */}
-        <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-fallback])]/navigation-menu:border-t-0">
+        <div className="w-full border-t border-border group-has-[[data-slot=navigation-menu-toggle]:not([data-fallback])]/navigation-menu:border-t-0 has-[>[data-slot=navigation-menu-drawer-header]]:border-t-0">
+          {bands.header}
           <Sequence variant="drawer">{sections}</Sequence>
+          {bands.footer}
         </div>
       </CollapsibleContent>
 
