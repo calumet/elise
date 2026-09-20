@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Reglas compartidas de Oxlint/Oxfmt para Elise.",
   "keywords": [
     "elise",
@@ -35,10 +35,14 @@
   "peerDependencies": {
     "@shadcn/lint": ">=0.1.0",
     "oxfmt": ">=0.68.0",
-    "oxlint": ">=1.80.0"
+    "oxlint": ">=1.80.0",
+    "oxlint-tailwindcss": ">=1.12.0"
   },
   "peerDependenciesMeta": {
     "@shadcn/lint": {
+      "optional": true
+    },
+    "oxlint-tailwindcss": {
       "optional": true
     }
   }
