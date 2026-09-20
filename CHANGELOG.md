@@ -3,6 +3,22 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.9.1
+
+### Corrige
+
+**Los plugins que cargan los presets pasan a ser dependencias.** `tailwind()`
+carga `oxlint-tailwindcss` y `designSystem()` carga `@shadcn/lint`, los dos por
+nombre. El primero no estaba declarado en ninguna parte y el segundo era un peer
+opcional, que pnpm no instala ni reclama. Con `elise({ theme })`, que es la
+llamada de la guía y trae los dos activados, el proyecto se quedaba sin ellos y
+oxlint moría con `Cannot find module 'oxlint-tailwindcss'` en la primera
+ejecución.
+
+No son paquetes que quien consume importe: los carga el preset. Como
+dependencias vienen con él y no hay nada que instalar aparte. `oxlint` y
+`oxfmt` siguen siendo peers, que esos sí los ejecuta el proyecto.
+
 ## `@calumet/elise-ui` 0.34.1
 
 ### Corrige
