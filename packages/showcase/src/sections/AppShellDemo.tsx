@@ -71,6 +71,9 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
 
   const [guardando, setGuardando] = useState(false);
   const [sucio, setSucio] = useState(false);
+
+  const [aLoAlto, setALoAlto] = useState(false);
+
   const guardar = () => {
     setGuardando(true);
     setTimeout(() => {
@@ -276,44 +279,76 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
           </AppShellNavFooter>
         </AppShellNav>
 
-        <AppShellMain>
-          <Text size="xl" weight="bold">
-            {ruta}
-          </Text>
-          <Text size="sm" tone="muted" className="mt-1">
-            La guía baja desde el icono del padre y termina en codo sobre la hija activa; por debajo
-            de ella ya no sigue. Al apuntar otra hija se asoma el codo que tendría si la eligieras.
-            El caret de la sección es una acción, no un desplegable, así que no gira.
-          </Text>
-          <div className="mt-4 flex items-center gap-2">
-            <Button loading={guardando} onClick={guardar}>
-              Guardar cambios
-            </Button>
-            <Button variant="outline" onClick={() => setSucio(false)}>
-              Descartar
-            </Button>
-            <Button variant="ghost" disabled>
-              No disponible
-            </Button>
-            <Button variant="outline" onClick={() => setSucio(true)}>
-              Ensuciar el formulario
-            </Button>
-          </div>
-          <Text size="xs" tone="muted" className="mt-2">
-            Pulsa «Ensuciar el formulario»: la barra de cambios sin guardar toma el sitio del
-            buscador y deja a los lados el botón del cajón y las acciones. Al apretar el ancho el
-            rótulo cede y se recorta; los botones no.
-          </Text>
-          <Text size="xs" tone="muted" className="mt-2">
-            Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva su
-            ancho y no empuja a los de al lado.
-          </Text>
-          {aviso ? (
-            <Text size="sm" className="mt-4" data-testid="aviso-cabecera">
-              Última acción de la cabecera: <strong>{aviso}</strong>
+        {aLoAlto ? (
+          <AppShellMain fill>
+            <div className="flex shrink-0 items-center gap-2 border-b border-border bg-background px-5 py-2.5">
+              <Text size="sm" weight="bold">
+                {ruta}
+              </Text>
+              <Button
+                size="sm"
+                variant="outline"
+                className="ms-auto"
+                onClick={() => setALoAlto(false)}
+              >
+                Volver a la pantalla que fluye
+              </Button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto p-5">
+              {Array.from({ length: 40 }, (_, i) => (
+                <Text key={i} size="sm" tone="muted">
+                  Fila {i + 1}. La barra de arriba no se mueve y esta lista se desplaza sola.
+                </Text>
+              ))}
+            </div>
+          </AppShellMain>
+        ) : (
+          <AppShellMain>
+            <Text size="xl" weight="bold">
+              {ruta}
             </Text>
-          ) : null}
-        </AppShellMain>
+            <Text size="sm" tone="muted" className="mt-1">
+              La guía baja desde el icono del padre y termina en codo sobre la hija activa; por
+              debajo de ella ya no sigue. Al apuntar otra hija se asoma el codo que tendría si la
+              eligieras. El caret de la sección es una acción, no un desplegable, así que no gira.
+            </Text>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <Button loading={guardando} onClick={guardar}>
+                Guardar cambios
+              </Button>
+              <Button variant="outline" onClick={() => setSucio(false)}>
+                Descartar
+              </Button>
+              <Button variant="ghost" disabled>
+                No disponible
+              </Button>
+              <Button variant="outline" onClick={() => setSucio(true)}>
+                Ensuciar el formulario
+              </Button>
+              <Button variant="outline" onClick={() => setALoAlto(true)}>
+                Ver la pantalla a lo alto
+              </Button>
+            </div>
+            <Text size="xs" tone="muted" className="mt-2">
+              Pulsa «Ensuciar el formulario»: la barra de cambios sin guardar toma el sitio del
+              buscador y deja a los lados el botón del cajón y las acciones. Al apretar el ancho el
+              rótulo cede y se recorta; los botones no.
+            </Text>
+            <Text size="xs" tone="muted" className="mt-2">
+              Pulsa «Guardar cambios»: el rótulo se apaga pero no se va, así que el botón conserva
+              su ancho y no empuja a los de al lado.
+            </Text>
+            <Text size="xs" tone="muted" className="mt-2">
+              Pulsa «Ver la pantalla a lo alto»: con `fill` el área cede el relleno y el
+              desplazamiento, y quien se desplaza pasa a ser la pantalla.
+            </Text>
+            {aviso ? (
+              <Text size="sm" className="mt-4" data-testid="aviso-cabecera">
+                Última acción de la cabecera: <strong>{aviso}</strong>
+              </Text>
+            ) : null}
+          </AppShellMain>
+        )}
 
         {/* Lo que abre el buscador de la cabecera: una paleta con su propio
             campo dentro, que es la razón de que allá arriba sea un botón y no

@@ -1140,10 +1140,20 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
 }
 
 /** Props de {@link AppShellMain}. */
-export type AppShellMainProps = React.ComponentProps<"main">;
+export type AppShellMainProps = React.ComponentProps<"main"> & {
+  /**
+   * Cede el relleno y el desplazamiento a la pantalla, que pasa a ocupar el
+   * área entera. Para la que se organiza a lo alto en vez de fluir hacia abajo:
+   * un editor con su panel de resultados, una consola, un maestro-detalle.
+   */
+  fill?: boolean;
+};
 
 /**
  * Área de contenido.
+ *
+ * Por defecto es quien se desplaza y quien pone el margen de la pantalla. Con
+ * `fill` cede las dos cosas, para la pantalla que se organiza a lo alto.
  *
  * Con el cajón abierto queda detrás del velo, así que sale del tabulador y del
  * árbol de accesibilidad. La cabecera se queda alcanzable a propósito, que ahí
@@ -1152,7 +1162,12 @@ export type AppShellMainProps = React.ComponentProps<"main">;
  * Solo se vuelve inerte donde el cajón existe. Por encima del breakpoint no hay
  * velo que lo tape, así que dejarlo inerte lo haría inalcanzable a plena vista.
  */
-function AppShellMain({ className, children, ...props }: AppShellMainProps): React.JSX.Element {
+function AppShellMain({
+  className,
+  fill,
+  children,
+  ...props
+}: AppShellMainProps): React.JSX.Element {
   const { drawerOpen, isMobile, hasNav } = useAppShell("AppShellMain");
 
   return (
@@ -1166,7 +1181,8 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps): Rea
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
          el marco se leía como una sola plancha. */
       className={cn(
-        "col-start-2 row-start-2 flex min-w-0 flex-col overflow-y-auto bg-canvas p-5",
+        "col-start-2 row-start-2 flex min-w-0 flex-col bg-canvas",
+        fill ? "overflow-hidden" : "overflow-y-auto p-5",
         className,
       )}
       {...props}

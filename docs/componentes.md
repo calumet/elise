@@ -1020,26 +1020,26 @@ import {
 
 ### Las partes
 
-| Parte                   | Qué es                                                      |
-| ----------------------- | ----------------------------------------------------------- |
-| `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho   |
-| `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola             |
-| `AppShellSaveBar`       | Toma el sitio del buscador mientras haya sin guardar        |
-| `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                          |
-| `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                  |
-| `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta        |
-| `AppShellHeaderAction`  | Una acción de solo icono                                    |
-| `AppShellUserMenu`      | La cuenta. Es `UserMenu`, que también sirve fuera del shell |
-| `AppShellNavToggle`     | Abre y cierra el cajón. Solo donde la barra está plegada    |
-| `AppShellNav`           | La navegación lateral                                       |
-| `AppShellNavSection`    | Grupo de entradas con su rótulo                             |
-| `AppShellNavGroup`      | Una entrada con hijas, plegable                             |
-| `AppShellNavItem`       | Una entrada                                                 |
-| `AppShellNavAction`     | Acción que aparece al apuntar una entrada                   |
-| `AppShellNavSubList`    | La lista de hijas, con su guía                              |
-| `AppShellNavSubItem`    | Una hija                                                    |
-| `AppShellNavFooter`     | Zona fija al pie de la navegación                           |
-| `AppShellMain`          | El área de contenido                                        |
+| Parte                   | Qué es                                                       |
+| ----------------------- | ------------------------------------------------------------ |
+| `AppShell`              | El marco. Lleva el estado del cajón y el guardia de ancho    |
+| `AppShellHeader`        | La barra superior. Reparte sus tres bandas sola              |
+| `AppShellSaveBar`       | Toma el sitio del buscador mientras haya sin guardar         |
+| `AppShellHeaderBrand`   | Logo y nombre. Se va donde no cabe                           |
+| `AppShellHeaderSearch`  | El disparador de la búsqueda, con su atajo                   |
+| `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta         |
+| `AppShellHeaderAction`  | Una acción de solo icono                                     |
+| `AppShellUserMenu`      | La cuenta. Es `UserMenu`, que también sirve fuera del shell  |
+| `AppShellNavToggle`     | Abre y cierra el cajón. Solo donde la barra está plegada     |
+| `AppShellNav`           | La navegación lateral                                        |
+| `AppShellNavSection`    | Grupo de entradas con su rótulo                              |
+| `AppShellNavGroup`      | Una entrada con hijas, plegable                              |
+| `AppShellNavItem`       | Una entrada                                                  |
+| `AppShellNavAction`     | Acción que aparece al apuntar una entrada                    |
+| `AppShellNavSubList`    | La lista de hijas, con su guía                               |
+| `AppShellNavSubItem`    | Una hija                                                     |
+| `AppShellNavFooter`     | Zona fija al pie de la navegación                            |
+| `AppShellMain`          | El área de contenido. Con `fill` cede el scroll y el relleno |
 
 ### Cómo se comporta
 
@@ -1064,6 +1064,23 @@ distinguirlos.
 **`AppShellMain` solo se vuelve inerte donde el cajón existe.** Por encima del
 breakpoint no hay velo que lo tape, así que dejarlo inerte lo haría inalcanzable
 a plena vista.
+
+**`AppShellMain` es quien se desplaza y quien pone el margen**, salvo con `fill`.
+La pantalla que se organiza a lo alto (un editor con su panel de resultados, una
+consola, un maestro-detalle) los quiere para sí: sus franjas van de canto a
+canto y lo que se desplaza es cada panel. Con el relleno puesto quedan flotando
+sobre el lienzo, con los filetes muriendo a 20px del borde, y salen dos barras
+de scroll.
+
+```tsx
+<AppShellMain fill>
+  <BarraDeEjecutar />
+  <Editor />
+  <div className="min-h-0 flex-1 overflow-y-auto">
+    <Resultados />
+  </div>
+</AppShellMain>
+```
 
 **Las entradas con hijas van en `AppShellNavGroup`**, que es el dueño del `<li>`.
 Dentro de un `<ul>` solo pueden ir `<li>`, así que la lista de hijas tiene que

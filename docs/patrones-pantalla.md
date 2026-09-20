@@ -50,6 +50,12 @@ El contenido de las cuatro se reparte en `Section`, una por grupo. Una pantalla
 que ponga contenido suelto entre secciones pierde el ritmo vertical y deja
 huérfano lo que no está en ninguna.
 
+**La pantalla que no fluye hacia abajo lleva `AppShellMain fill`.** Un editor
+con su panel de resultados, una consola, un maestro-detalle de dos paneles: no
+son ninguna de las cuatro, porque el usuario no viene a recorrerlas sino a
+trabajar dentro. Ahí no hay `Container` que tope el ancho, las franjas van de
+canto a canto y lo que se desplaza es cada panel.
+
 ## 2. Inicio
 
 El usuario viene a enterarse del estado general y a seguir a otra pantalla.

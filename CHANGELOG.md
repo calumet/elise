@@ -3,6 +3,48 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.34.0
+
+Suben también `elise-tables` 0.8.1, `elise-alerts` 0.3.18 y `elise-toasts`
+0.4.19, que no cambian por dentro.
+
+### Añade
+
+**`<AppShellMain fill>`**, para la pantalla que se organiza a lo alto en vez de
+fluir hacia abajo: un editor con su panel de resultados, una consola, un
+maestro-detalle de dos paneles. El área cede el relleno y el desplazamiento, que
+pasan a ser de la pantalla.
+
+```tsx
+<AppShellMain fill>
+  <BarraDeEjecutar />
+  <Editor />
+  <div className="min-h-0 flex-1 overflow-y-auto">
+    <Resultados />
+  </div>
+</AppShellMain>
+```
+
+Con el relleno puesto, esas franjas quedan flotando sobre el lienzo con sus
+filetes muriendo a 20px del borde, y salen dos barras de scroll, la de la
+pantalla y la del área. Escribirlo con `className="overflow-hidden p-0"` no era
+opción: el relleno del área es suyo y el linter lo marca.
+
+Por defecto no cambia nada. El área sigue siendo quien se desplaza y quien pone
+el margen, que es lo que pide la pantalla que fluye hacia abajo.
+
+### Arregla
+
+**El radio del recorte de `Table` mordía el encabezado.** El recorte que ajusta
+las esquinas de la tabla al marco se llevaba el radio en las cuatro, y solo cae
+sobre las del marco cuando no hay nada encima ni debajo. Con `filters`, ese
+canto queda a media tarjeta y el radio abría un hueco de fondo de tarjeta entre
+el filete de la barra de filtros y el fondo del encabezado; con `paginate`,
+igual por abajo. Ahora redondea solo el canto que coincide con el del marco.
+
+Se veía en toda tabla con barra de filtros o con paginación, y en las cuatro
+esquinas de cualquier `DataTable`, que siempre pasa las dos.
+
 ## `@calumet/elise-ui` 0.33.0 y `elise-tables` 0.8.0
 
 Suben también `elise-alerts` 0.3.17 y `elise-toasts` 0.4.18, que no cambian por
