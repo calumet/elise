@@ -30,6 +30,12 @@ export const FIELD_SIZES: Record<FieldSize, string> = {
 export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
   /** Por defecto `md`, 36px de alto. */
   size?: FieldSize;
+
+  /**
+   * `mono` para lo que se escribe carácter a carácter y se revisa igual: una
+   * ruta, un host, un nombre de contenedor, una clave.
+   */
+  family?: "sans" | "mono";
 };
 
 /**
@@ -87,7 +93,7 @@ export const BARE_FIELD =
 export const Input: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<InputProps> & React.RefAttributes<HTMLInputElement>
 > = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = "text", size = "md", ...props }, ref) => (
+  ({ className, type = "text", size = "md", family = "sans", ...props }, ref) => (
     <input
       data-slot="input"
       ref={ref}
@@ -95,6 +101,7 @@ export const Input: React.ForwardRefExoticComponent<
       className={cn(
         FIELD_BOX,
         FIELD_SIZES[size],
+        family === "mono" && "font-mono",
         "placeholder:text-muted-foreground",
         INVALID_FIELD,
         className,

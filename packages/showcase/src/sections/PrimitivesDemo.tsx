@@ -25,7 +25,7 @@ const PrimitivesDemo = () => (
       <BlockStack gap={2}>
         {tamanos.map((size) => (
           <InlineStack key={size} gap={4} align="baseline">
-            <Text size="2xs" tone="muted" className="w-10 shrink-0 font-mono">
+            <Text size="2xs" tone="muted" family="mono" className="w-10 shrink-0">
               {size}
             </Text>
             <Text size={size} weight={size === "3xl" || size === "2xl" ? "bold" : "normal"}>
@@ -43,7 +43,7 @@ const PrimitivesDemo = () => (
       <BlockStack gap={2}>
         {niveles.map((level) => (
           <InlineStack key={level} gap={4} align="baseline">
-            <Text size="2xs" tone="muted" className="w-10 shrink-0 font-mono">
+            <Text size="2xs" tone="muted" family="mono" className="w-10 shrink-0">
               h{level}
             </Text>
             <Heading level={level}>Plataforma frontend de Calumet</Heading>
@@ -237,6 +237,25 @@ const PrimitivesDemo = () => (
             <Code>listSlot=&quot;primary&quot;</Code>, y no se confunde con una tecla: para eso está{" "}
             <Kbd>Ctrl</Kbd> <Kbd>K</Kbd>, que va en relieve.
           </Text>
+        </BlockStack>
+      </Box>
+    </BlockStack>
+
+    <BlockStack gap={3}>
+      <Text size="sm" weight="semibold">
+        Un dato de máquina: con caja dentro de una frase, sin ella suelto
+      </Text>
+      <Box padding={4} background="card" border radius="xl">
+        <BlockStack gap={3}>
+          <Text size="base">
+            El contenedor <Code>coma_test1</Code> no responde.
+          </Text>
+          <BlockStack gap={1}>
+            <Text size="2xs" tone="muted">
+              Ruta del despliegue
+            </Text>
+            <Text family="mono">/srv/app/coma_test1</Text>
+          </BlockStack>
         </BlockStack>
       </Box>
     </BlockStack>

@@ -23,6 +23,13 @@ export type TextProps = React.ComponentProps<"p"> & {
   tone?: "default" | "muted" | "primary" | "success" | "warning" | "danger" | "info";
   align?: "start" | "center" | "end";
 
+  /**
+   * `mono` para un dato de máquina que se lee carácter a carácter: una ruta, un
+   * host, un identificador, una expresión cron. Para uno metido dentro de una
+   * frase está `Code`, que además lo encierra en una caja.
+   */
+  family?: "sans" | "mono";
+
   /** Corta en una línea con elipsis. */
   truncate?: boolean;
 
@@ -44,6 +51,11 @@ const sizeClasses: Record<NonNullable<TextProps["size"]>, string> = {
   xl: "text-xl",
   "2xl": "text-2xl",
   "3xl": "text-3xl",
+};
+
+const familyClasses: Record<NonNullable<TextProps["family"]>, string> = {
+  sans: "font-sans",
+  mono: "font-mono",
 };
 
 const weightClasses: Record<NonNullable<TextProps["weight"]>, string> = {
@@ -89,6 +101,7 @@ function Text({
   size = "base",
   weight = "normal",
   tone = "default",
+  family = "sans",
   align,
   truncate,
   lines,
@@ -102,6 +115,7 @@ function Text({
         sizeClasses[size],
         weightClasses[weight],
         toneClasses[tone],
+        familyClasses[family],
         align && alignClasses[align],
         lines ? lineClasses[lines] : truncate && "truncate",
         balance && "text-balance",

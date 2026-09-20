@@ -3,6 +3,39 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.35.0
+
+Suben también `elise-tables` 0.8.2, `elise-alerts` 0.3.19 y `elise-toasts`
+0.4.20, que no cambian por dentro.
+
+### Añade
+
+**Monoespaciada para los datos de máquina.** El catálogo solo tenía `Code`, que
+es para un identificador metido dentro de una frase y por eso lleva caja además
+de la fuente. Suelto, en una columna de tabla o en un campo, esa caja estorba, y
+lo que se acababa escribiendo era `className="font-mono"` contra el linter.
+
+Tres formas, según dónde esté el dato:
+
+```tsx
+<Text size="xs" family="mono">/srv/app/coma_test1</Text>
+
+<TableHead format="code">Contenedor</TableHead>
+
+<Input family="mono" {...form.register("containerName")} />
+```
+
+- **`Text` gana `family`**, con `sans` y `mono`. Es la primitiva: un dato suelto,
+  su propio renglón o bloque.
+- **`ColumnFormat` gana `code`**, al lado de `numeric` y `currency`. Se declara
+  una vez en el `TableHead` y cae sobre toda la columna, también en modo lista.
+  El rótulo se queda en texto corriente, que es una palabra y no un dato.
+- **`Input` y `Textarea` ganan `family`**, para lo que se escribe carácter a
+  carácter y se revisa igual.
+
+`Code` no cambia y sigue siendo lo correcto dentro de una frase. Cuál va en cada
+sitio está en [Reglas de interfaz](docs/reglas-ui.md#14-un-dato-de-máquina).
+
 ## `@calumet/elise-linter` 0.9.1
 
 ### Corrige

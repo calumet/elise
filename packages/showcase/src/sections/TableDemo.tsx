@@ -83,7 +83,7 @@ const TableDemo = () => {
           <TableRow>
             <TableHead>Proyecto</TableHead>
             <TableHead>Estado</TableHead>
-            <TableHead>Versión</TableHead>
+            <TableHead format="code">Versión</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

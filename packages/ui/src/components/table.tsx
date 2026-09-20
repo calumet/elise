@@ -56,8 +56,12 @@ export { SURFACE };
  */
 export type ListSlot = "primary" | "secondary" | "inline" | "kicker" | "labeled";
 
-/** `numeric` y `currency` alinean a la derecha y numeran a ancho fijo. */
-export type ColumnFormat = "base" | "numeric" | "currency";
+/**
+ * `numeric` y `currency` alinean a la derecha y numeran a ancho fijo. `code`
+ * pone los valores en monoespaciada, para una columna de datos de máquina; el
+ * rótulo no, que ese es texto corriente.
+ */
+export type ColumnFormat = "base" | "numeric" | "currency" | "code";
 
 type Column = {
   listSlot?: ListSlot;
@@ -89,6 +93,8 @@ const ColumnCtx = React.createContext(0);
 
 const isNumeric = (format: ColumnFormat | undefined) =>
   format === "numeric" || format === "currency";
+
+const isCode = (format: ColumnFormat | undefined) => format === "code";
 
 /* El corte para pasar de tabla a lista. Por debajo de esto, tres columnas ya
    no caben sin apretar el texto hasta partirlo por letras. */
@@ -592,7 +598,7 @@ const ListRow = React.forwardRef<
 
   const de = (slot: ListSlot) => {
     const i = slots.indexOf(slot);
-    return i >= 0 ? cells[i]?.props.children : undefined;
+    return i >= 0 ? { value: cells[i]?.props.children, column: columns[i] } : undefined;
   };
   const all = (slot: ListSlot) =>
     cells
@@ -624,18 +630,43 @@ const ListRow = React.forwardRef<
       {...props}
     >
       <div className="flex min-w-40 flex-1 flex-col gap-0.5">
-        {kicker ? <span className="truncate text-xs text-muted-foreground">{kicker}</span> : null}
+        {kicker ? (
+          <span
+            className={cn(
+              "truncate text-xs text-muted-foreground",
+              isCode(kicker.column?.format) && "font-mono",
+            )}
+          >
+            {kicker.value}
+          </span>
+        ) : null}
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           {primary ? (
-            <span className="min-w-0 truncate font-medium text-foreground">{primary}</span>
+            <span
+              className={cn(
+                "min-w-0 truncate font-medium text-foreground",
+                isCode(primary.column?.format) && "font-mono",
+              )}
+            >
+              {primary.value}
+            </span>
           ) : null}
           {all("inline").map((c) => (
-            <span key={c.index} className="shrink-0">
+            <span key={c.index} className={cn("shrink-0", isCode(c.column?.format) && "font-mono")}>
               {c.value}
             </span>
           ))}
         </div>
-        {secondary ? <span className="truncate text-muted-foreground">{secondary}</span> : null}
+        {secondary ? (
+          <span
+            className={cn(
+              "truncate text-muted-foreground",
+              isCode(secondary.column?.format) && "font-mono",
+            )}
+          >
+            {secondary.value}
+          </span>
+        ) : null}
       </div>
 
       {all("labeled").length > 0 ? (
@@ -649,6 +680,7 @@ const ListRow = React.forwardRef<
                 className={cn(
                   "whitespace-nowrap text-foreground",
                   isNumeric(c.column?.format) && "tabular-nums",
+                  isCode(c.column?.format) && "font-mono",
                 )}
               >
                 {c.value}
@@ -822,6 +854,7 @@ export const TableCell: React.ForwardRefExoticComponent<
         className={cn(
           "px-1.5 py-2 align-middle text-sm text-foreground first:ps-3 last:pe-3",
           isNumeric(columns[column]?.format) && "text-end tabular-nums",
+          isCode(columns[column]?.format) && "font-mono",
           className,
         )}
         {...props}

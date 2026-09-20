@@ -155,6 +155,7 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 <Text as="h2" size="xl" weight="bold" balance>Plan Empresa</Text>
 <Text size="sm" tone="muted">Renueva el 14 de septiembre</Text>
 <Text size="sm" lines={2}>Descripcion larga que se corta a dos lineas…</Text>
+<Text size="xs" family="mono">/srv/app/coma_test1</Text>
 ```
 
 | Prop       | Tipo                                                                                | Default     |
@@ -163,6 +164,7 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 | `size`     | `"2xs" \| "xs" \| "sm" \| "base" \| "lg" \| "xl" \| "2xl" \| "3xl"`                 | `"base"`    |
 | `weight`   | `"normal" \| "medium" \| "semibold" \| "bold"`                                      | `"normal"`  |
 | `tone`     | `"default" \| "muted" \| "primary" \| "success" \| "warning" \| "danger" \| "info"` | `"default"` |
+| `family`   | `"sans" \| "mono"`                                                                  | `"sans"`    |
 | `align`    | `"start" \| "center" \| "end"`                                                      | —           |
 | `truncate` | `boolean`                                                                           | —           |
 | `lines`    | `2 \| 3 \| 4`                                                                       | —           |
@@ -170,6 +172,11 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 
 `as` y `size` son independientes a propósito, de modo que un `h2` puede verse
 pequeño sin dejar de ser un `h2` para el lector de pantalla.
+
+`family="mono"` es para un dato de máquina que se lee carácter a carácter: una
+ruta, un host, un identificador, una expresión cron. Para uno metido dentro de
+una frase está `Code`, que además lo encierra en una caja; ver
+[Reglas de interfaz](reglas-ui.md#14-un-dato-de-máquina).
 
 #### Heading
 
@@ -905,7 +912,7 @@ contorno, su encabezado fijo y su pie de paginación. `DataTable` de
 | --------------- | ----------------------------- | -------- | ----------------------------------------- |
 | `variant`       | `"auto" \| "table" \| "list"` | `"auto"` | Cómo se dibuja cuando el ancho aprieta    |
 | `listSlot`      | por columna                   | —        | Dónde cae esa columna en el modo lista    |
-| `format`        | por columna                   | —        | Alineación y formato de la celda          |
+| `format`        | por columna                   | `"base"` | `numeric`, `currency` o `code`            |
 | `paginate`      | `boolean`                     | `false`  | Enciende la franja del pie                |
 | `loading`       | `boolean`                     | `false`  | Atenúa las filas mientras llega la página |
 | `clickDelegate` | en `TableRow`                 | —        | Toda la fila lleva a un sitio             |
@@ -916,6 +923,16 @@ propio hueco y no la ventana, porque la misma tabla puede ir a lo ancho de una
 página o dentro de una tarjeta estrecha. El corte está en 490px. En modo lista
 cada fila deja de ser una rejilla de celdas y pasa a ser un bloque, y `listSlot`
 dice qué papel juega cada columna ahí.
+
+**`format`.** Se declara una vez en el `TableHead` y cae sobre toda la columna,
+también en modo lista. `numeric` y `currency` alinean a la derecha y numeran a
+ancho fijo; `code` pone los valores en monoespaciada, para una columna de rutas,
+hosts o identificadores. El rótulo se queda en texto corriente: es una palabra,
+no un dato. Ver [Reglas de interfaz](reglas-ui.md#14-un-dato-de-máquina).
+
+```tsx
+<TableHead format="code">Contenedor</TableHead>
+```
 
 **Paginación.** La franja del pie es un `Pagination` con `variant="table"`: se
 reparte en tres bandas para que los pasos queden centrados aunque los extremos
