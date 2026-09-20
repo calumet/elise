@@ -738,6 +738,7 @@
      tokens, así que la barra sigue al tema. */
   html {
     scrollbar-color: var(--color-border-strong) transparent;
+    scrollbar-gutter: stable;
   }
 
   /* El grosor va en `*` y el color en `html` porque no se heredan igual:
