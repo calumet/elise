@@ -3,6 +3,47 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.29.0
+
+Suben también `elise-tables` 0.7.4, `elise-alerts` 0.3.13 y `elise-toasts`
+0.4.14, que no cambian por dentro.
+
+### Añade
+
+**`NavigationMenuDrawerHeader` y `NavigationMenuDrawerFooter`**, para lo que una
+cabecera de portal lleva además del menú: una franja de redes, los botones de
+sesión, un aviso. Se escriben dentro de `NavigationMenuList` y solo se ven en el
+cajón de móvil.
+
+```tsx
+<NavigationMenuList>
+  <NavigationMenuDrawerHeader>
+    <Redes />
+    <Button size="sm">Ingresar</Button>
+  </NavigationMenuDrawerHeader>
+
+  <NavigationMenuItem>…</NavigationMenuItem>
+</NavigationMenuList>
+```
+
+Antes no había dónde ponerlo. El cajón pintaba exactamente los hijos de
+`NavigationMenuList` y los trataba a todos como secciones de la fila, así que un
+hijo que no lo fuera entraba igual en el reparto: se le clonaba un `hidden`, se
+le medía el ancho para decidir qué cabía y se le volvía a montar dentro del
+submenú. Estos dos salen del reparto antes de contar. Cierra [#73].
+
+Ver [Lo que no es una sección, en el cajón de
+móvil](docs/componentes.md#lo-que-no-es-una-sección-en-el-cajón-de-móvil).
+
+[#73]: https://github.com/calumet/elise/issues/73
+
+### Corrige
+
+**Las entradas de fuente por familia no se publicaban en JSR.** La 0.28.0 las
+añadió a `files`, que es lo de npm, pero no a `publish.include`, que es lo de
+JSR. Como `fonts.css` pasó a importarlas, en JSR quedó importando tres archivos
+que no viajaban. En npm nunca falló.
+
 ## `@calumet/elise-ui` 0.28.0
 
 Suben también `elise-tables` 0.7.3, `elise-alerts` 0.3.12 y `elise-toasts`

@@ -1,7 +1,11 @@
+import { AtSign, Share2 } from "@calumet/elise-icons";
+import { Button } from "@calumet/elise-ui/button";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
+  NavigationMenuDrawerFooter,
+  NavigationMenuDrawerHeader,
   NavigationMenuGroup,
   NavigationMenuItem,
   NavigationMenuLink,
@@ -88,6 +92,21 @@ const PortalHeaderDemo = (): React.JSX.Element => (
           EISI
         </Text>
         <NavigationMenuList>
+          <NavigationMenuDrawerHeader>
+            <Button variant="ghost" size="icon-sm" aria-label="Redes">
+              <Share2 />
+            </Button>
+            <Button variant="ghost" size="icon-sm" aria-label="Escribinos">
+              <AtSign />
+            </Button>
+            <div className="ms-auto flex items-center gap-2">
+              <Button variant="outline" size="sm">
+                Registrarse
+              </Button>
+              <Button size="sm">Ingresar</Button>
+            </div>
+          </NavigationMenuDrawerHeader>
+
           {SECCIONES.map((seccion) => (
             <NavigationMenuItem key={seccion.nombre}>
               <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
@@ -114,6 +133,12 @@ const PortalHeaderDemo = (): React.JSX.Element => (
               </NavigationMenuContent>
             </NavigationMenuItem>
           ))}
+
+          <NavigationMenuDrawerFooter>
+            <Text size="xs" tone="muted">
+              Universidad Industrial de Santander
+            </Text>
+          </NavigationMenuDrawerFooter>
         </NavigationMenuList>
         <UserMenu name="Juan Lipez" detail="Estudiante de pregrado">
           <DropdownMenuItem>Mi perfil</DropdownMenuItem>

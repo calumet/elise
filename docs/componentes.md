@@ -627,6 +627,42 @@ estado con texto para lectores de pantalla.
 | Pagination, PaginationContent, PaginationItem                | `@calumet/elise-ui/pagination`      | —                                                                                     |
 | UserMenu                                                     | `@calumet/elise-ui/user-menu`       | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
 
+#### Lo que no es una sección, en el cajón de móvil
+
+Una cabecera de portal casi siempre lleva algo más que el menú: una franja de
+redes, los botones de sesión, un aviso. Eso va en
+`NavigationMenuDrawerHeader` y `NavigationMenuDrawerFooter`, que se escriben
+dentro de `NavigationMenuList` y salen del reparto de la fila.
+
+```tsx
+<NavigationMenuList>
+  <NavigationMenuDrawerHeader>
+    <Redes />
+    <Button variant="outline" size="sm">
+      Registrarse
+    </Button>
+    <Button size="sm">Ingresar</Button>
+  </NavigationMenuDrawerHeader>
+
+  <NavigationMenuItem>…</NavigationMenuItem>
+
+  <NavigationMenuDrawerFooter>
+    <Text size="xs" tone="muted">
+      Universidad Industrial de Santander
+    </Text>
+  </NavigationMenuDrawerFooter>
+</NavigationMenuList>
+```
+
+Solo se ven en el cajón. En escritorio no se pintan, porque ahí ese contenido
+tiene su sitio en la barra, y tampoco entran en la cuenta de lo que cabe en la
+fila: no se les clona el `hidden`, no se les mide el ancho ni se vuelven a
+montar dentro del grupo de desbordamiento.
+
+Los dos son `div` y aceptan `className`, así que el contenido y su reparto son
+de quien los escribe. La banda trae la sangría de los items del cajón, para que
+lo de adentro arranque en la misma vertical que las secciones.
+
 ### Feedback
 
 | Componente                                                                             | Import                           | Radix                                                                           |
