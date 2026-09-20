@@ -150,6 +150,38 @@ la tipografía fluida (`text-[clamp(…)]`), que es una decisión y no un descui
 De las seis reglas del plugin enciende cinco. `no-unknown-classes` la da ya
 `tailwind()`.
 
+#### Dónde busca la paleta, si el tema viene de Elise
+
+`no-raw-colors` no lee el `theme` de `elise()`: saca la hoja del design system
+del `components.json` del proyecto, de la clave `tailwind.css`, y si no hay
+ninguno la descubre sola.
+
+Eso importa a quien recibe el tema por un `@import` de paquete, que es el caso
+normal fuera de este repositorio:
+
+```css
+/* src/styles/global.css */
+@import "tailwindcss";
+@import "@calumet/elise-ui/tailwind/elise.css";
+```
+
+El plugin sigue los `@import` **relativos**, pero no resuelve especificadores de
+paquete, así que apuntándolo a ese archivo solo ve los tokens escritos ahí y da
+por no declarado todo lo que venga de Elise. En un portal real fueron 676
+hallazgos, todos falsos.
+
+La salida es apuntarlo directamente a la hoja de Elise:
+
+```json
+{ "tailwind": { "css": "node_modules/@calumet/elise-ui/src/tailwind/elise.css" } }
+```
+
+Con eso la regla ve la paleta entera. Lo que se pierde son los tokens propios
+del proyecto, los que declare en su `@theme inline`: quedan reportados como
+color crudo. Si son pocos, sale a cuenta.
+
+Es un límite de `@shadcn/lint` 0.1.1, que es la última publicada.
+
 Dos reglas escritas que esto **no** puede comprobar: el segundo juego de
 anchos de [Lo que no se escribe](reglas-ui.md#4-lo-que-no-se-escribe) cuando va en un `<div>` suelto, porque la regla solo mira
 componentes del catálogo; y las de [Qué componente para qué trabajo](reglas-ui.md#1-qué-componente-para-qué-trabajo), que son de qué componente elegir y no
