@@ -160,17 +160,14 @@ function DataTableContent<TData extends RowData>({
     columns: enhancedColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    initialState: initialPageSize
+      ? { pagination: { pageIndex: 0, pageSize: initialPageSize } }
+      : undefined,
     state: {
       sorting,
       columnFilters,
     },
   });
-
-  React.useEffect(() => {
-    if (initialPageSize) {
-      table.setPageSize(initialPageSize);
-    }
-  }, [initialPageSize, table]);
 
   const pageOptions = React.useMemo(() => {
     const base = initialPageSize ? [...pageSizeOptions, initialPageSize] : pageSizeOptions;
