@@ -17,6 +17,9 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
+  /** Estira el botón hasta el ancho de su contenedor. */
+  fullWidth?: boolean;
+
   asChild?: boolean;
 
   /**
@@ -114,10 +117,12 @@ export const buttonVariants = ({
   variant = "solid",
   size = "md",
   tone,
+  fullWidth,
 }: {
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
   tone?: ButtonProps["tone"];
+  fullWidth?: ButtonProps["fullWidth"];
 } = {}): string =>
   cn(
     baseClasses,
@@ -125,6 +130,7 @@ export const buttonVariants = ({
     variantClasses[variant],
     tone ? toneOverrides[tone][variant] : undefined,
     sizeClasses[size],
+    fullWidth && "w-full",
   );
 
 /* Un escalón por debajo de lo que traía Elise, sin bajar a los 28px de un
@@ -155,6 +161,7 @@ export const Button: React.ForwardRefExoticComponent<
       variant = "solid",
       size = "md",
       tone,
+      fullWidth,
       asChild = false,
       loading = false,
       disabled,
@@ -181,7 +188,7 @@ export const Button: React.ForwardRefExoticComponent<
         disabled={disabled || isLoading || undefined}
         data-loading={loading ? "" : undefined}
         aria-busy={loading || undefined}
-        className={cn(buttonVariants({ variant, size, tone }), className)}
+        className={cn(buttonVariants({ variant, size, tone, fullWidth }), className)}
         {...props}
       >
         {/* Las dos capas del estado de carga van dentro de una sola expresión:
