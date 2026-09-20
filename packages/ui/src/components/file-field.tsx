@@ -163,7 +163,7 @@ export function FileField({
 
   const thumbnail = () => {
     if (dragging) {
-      return <Upload aria-hidden="true" className="size-5 text-accent-foreground" />;
+      return <Upload aria-hidden="true" className="size-icon-lg text-accent-foreground" />;
     }
     if (previewUrl && !previewFailed) {
       return (
@@ -177,9 +177,9 @@ export function FileField({
       );
     }
     if (!value) {
-      return <ImageIcon aria-hidden="true" className="size-5 text-muted-foreground" />;
+      return <ImageIcon aria-hidden="true" className="size-icon-lg text-muted-foreground" />;
     }
-    return <FileIcon aria-hidden="true" className="size-5 text-muted-foreground" />;
+    return <FileIcon aria-hidden="true" className="size-icon-lg text-muted-foreground" />;
   };
 
   return (
@@ -278,7 +278,7 @@ export function FileField({
               onClick={onCancel}
               className="shrink-0"
             >
-              <X aria-hidden="true" className="size-4" />
+              <X aria-hidden="true" className="size-icon-md" />
             </Button>
           ) : (
             <Button

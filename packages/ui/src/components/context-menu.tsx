@@ -99,7 +99,7 @@ export const ContextMenuCheckboxItem: React.ForwardRefExoticComponent<
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <ContextMenuPrimitive.ItemIndicator>
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
           <polyline
@@ -132,7 +132,7 @@ export const ContextMenuRadioItem: React.ForwardRefExoticComponent<
     className={cn(baseItem, "pl-7", className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <ContextMenuPrimitive.ItemIndicator>
         <span className="h-2 w-2 rounded-full bg-foreground" />
       </ContextMenuPrimitive.ItemIndicator>
@@ -191,7 +191,7 @@ export const ContextMenuSubTrigger: React.ForwardRefExoticComponent<
     {...props}
   >
     {children}
-    <svg viewBox="0 0 16 16" className="ml-auto h-3.5 w-3.5" aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 16 16" className="ml-auto size-icon-sm" aria-hidden="true" focusable="false">
       <path
         d="M6 3l4 5-4 5"
         stroke="currentColor"

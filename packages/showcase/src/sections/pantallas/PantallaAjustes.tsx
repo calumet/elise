@@ -208,7 +208,7 @@ const PantallaAjustes = () => {
                 accessibilityLabel={`Abrir ${destino.titulo}`}
                 className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3"
               >
-                <destino.icono className="size-5 text-muted-foreground" aria-hidden />
+                <destino.icono className="size-icon-lg text-muted-foreground" aria-hidden />
                 <div className="flex min-w-0 flex-col">
                   <Text size="sm" weight="semibold">
                     {destino.titulo}
@@ -217,7 +217,7 @@ const PantallaAjustes = () => {
                     {destino.detalle}
                   </Text>
                 </div>
-                <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
+                <ChevronRight className="size-icon-md text-muted-foreground" aria-hidden />
               </Clickable>
             </div>
           ))}

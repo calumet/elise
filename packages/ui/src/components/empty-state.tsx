@@ -52,7 +52,7 @@ function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">): 
       data-slot="empty-state-media"
       aria-hidden="true"
       className={cn(
-        "flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground [&>svg]:size-5",
+        "flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground [&>svg]:size-icon-lg",
         className,
       )}
       {...props}

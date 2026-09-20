@@ -1,5 +1,5 @@
 /*
- * Tipografias de Elise, autoalojadas.
+ * Las tres tipografias por defecto de Elise, autoalojadas.
  *
  * Importalo *antes* de `elise.css`. Es un archivo aparte a propósito: si tu app
  * ya carga Geist por su cuenta (por ejemplo con `geist/font` en Next.js), no lo
@@ -12,8 +12,12 @@
  *
  * Sin este import, Elise cae en la fuente del sistema (`ui-sans-serif`) y se ve
  * distinto en cada sistema operativo.
+ *
+ * Para emparejar otras familias, importá solo las que uses desde
+ * `@calumet/elise-ui/tailwind/fonts/<familia>.css` en vez de este archivo. Ver
+ * docs/temas.md#emparejar-dos-familias.
  */
 
-@import "@fontsource-variable/geist/index.css";
-@import "@fontsource-variable/jetbrains-mono/index.css";
-@import "@fontsource-variable/source-serif-4/index.css";
+@import "./fonts/geist.css";
+@import "./fonts/jetbrains-mono.css";
+@import "./fonts/source-serif-4.css";

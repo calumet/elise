@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-ui",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "private": false,
   "description": "Design system personalizado basado en Radix primitives y Tailwind CSS.",
   "repository": {
@@ -210,6 +210,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./heading": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./hover-card": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
@@ -399,6 +404,7 @@
     },
     "./tailwind/elise.css": "./src/tailwind/elise.css",
     "./tailwind/fonts.css": "./src/tailwind/fonts.css",
+    "./tailwind/fonts/*.css": "./src/tailwind/fonts/*.css",
     "./theme-scope": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
@@ -473,7 +479,8 @@
   "files": [
     "dist",
     "src/tailwind/elise.css",
-    "src/tailwind/fonts.css"
+    "src/tailwind/fonts.css",
+    "src/tailwind/fonts"
   ],
   "scripts": {
     "dev": "tsdown --watch --dts",
@@ -546,5 +553,14 @@
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "optionalDependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/ibm-plex-sans": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource-variable/newsreader": "^5.3.0",
+    "@fontsource-variable/public-sans": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0"
   }
 }

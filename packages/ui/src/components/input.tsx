@@ -23,7 +23,7 @@ export const FIELD_SIZES: Record<FieldSize, string> = {
   sm: "h-8 px-3 py-1 text-sm",
   md: "h-9 px-3 py-2 text-base",
   lg: "h-10 px-4 py-2 text-base",
-  xl: "h-11 px-4 py-2.5 text-base",
+  xl: "h-touch px-4 py-2.5 text-base",
 };
 
 /** Props de {@link Input}. */

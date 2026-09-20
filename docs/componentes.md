@@ -1,6 +1,6 @@
 # Componentes
 
-`@calumet/elise-ui` exporta 78 subrutas, la mayoría construidas sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
+`@calumet/elise-ui` exporta 91 subrutas de componente, la mayoría construidas sobre [Radix UI Primitives](https://www.radix-ui.com/primitives). Todos son accesibles y se estilizan con Tailwind CSS. Los más antiguos usan `React.forwardRef`; los nuevos son funciones planas al estilo de React 19, donde `ref` llega como prop normal (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 > Antes de usar los componentes, completa el setup de Tailwind CSS v4 (Vite + `@tailwindcss/vite`) de la [Guía de inicio](guia-inicio.md).
 
@@ -41,6 +41,7 @@ system debería evitar.
 | Container               | `@calumet/elise-ui/container` | Ancho máximo + centrado + gutter responsive     |
 | Bleed                   | `@calumet/elise-ui/bleed`     | Rompe el padding del contenedor padre           |
 | Text                    | `@calumet/elise-ui/text`      | Primitiva tipográfica                           |
+| Heading                 | `@calumet/elise-ui/heading`   | El titular de una sección                       |
 | Link                    | `@calumet/elise-ui/link`      | Enlace, con `tone` y `rel` automático           |
 | Code                    | `@calumet/elise-ui/code`      | Un identificador dentro de la frase             |
 | Kbd                     | `@calumet/elise-ui/kbd`       | Una tecla, en relieve                           |
@@ -169,6 +170,38 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 
 `as` y `size` son independientes a propósito, de modo que un `h2` puede verse
 pequeño sin dejar de ser un `h2` para el lector de pantalla.
+
+#### Heading
+
+El titular de una sección. Es el único componente que sale en la familia de
+titular del tema, `--font-display`, que cae en `--font-sans` mientras no se
+defina; un proyecto con una sola fuente ve lo mismo que con un `Text` en
+negrita.
+
+```tsx
+import { Heading } from "@calumet/elise-ui/heading";
+
+<Heading level={1}>Trabajos de grado</Heading>
+<Heading level={2}>En desarrollo</Heading>
+<Heading level={2} size="lg">Un h2 que se ve chico</Heading>
+```
+
+`level` pone la etiqueta y de ahí sale el tamaño, para que un `h2` no tenga que
+elegirlo cada pantalla. Los tres últimos niveles se juntan en el cuerpo: por
+debajo de `lg` lo que separa a un titular de su párrafo es el peso, no el
+tamaño.
+
+| `level` | Etiqueta | `size` |
+| ------- | -------- | ------ |
+| 1       | `h1`     | `3xl`  |
+| 2       | `h2`     | `2xl`  |
+| 3       | `h3`     | `xl`   |
+| 4       | `h4`     | `lg`   |
+| 5       | `h5`     | `base` |
+| 6       | `h6`     | `base` |
+
+Acepta lo mismo que `Text` menos `as`, `truncate` y `lines`. `weight` sale en
+`semibold` y `balance` viene puesto, que es lo que un titular quiere.
 
 ### Layout
 

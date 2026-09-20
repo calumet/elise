@@ -45,6 +45,7 @@ export * from "./list";
 export * from "./file-upload";
 export * from "./form";
 export * from "./grid";
+export * from "./heading";
 export * from "./hover-card";
 export * from "./image";
 export * from "./input";

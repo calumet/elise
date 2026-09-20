@@ -16,7 +16,7 @@ import { useThemeScope } from "./theme-scope";
    son 24px, y estiraba la fila. El `:not([class*=size-])` deja pasar al que sí
    trae medida propia. */
 const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground";
+  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-icon-md [&_svg:not([class*='text-'])]:text-muted-foreground";
 
 /* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
    modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
@@ -106,7 +106,7 @@ export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
           <polyline
@@ -139,7 +139,7 @@ export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<
     className={cn(baseItem, "pl-7", className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
         <span className="h-2 w-2 rounded-full bg-foreground" />
       </DropdownMenuPrimitive.ItemIndicator>
@@ -198,7 +198,7 @@ export const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<
     {...props}
   >
     {children}
-    <svg viewBox="0 0 16 16" className="ml-auto h-3.5 w-3.5" aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 16 16" className="ml-auto size-icon-sm" aria-hidden="true" focusable="false">
       <path
         d="M6 3l4 5-4 5"
         stroke="currentColor"

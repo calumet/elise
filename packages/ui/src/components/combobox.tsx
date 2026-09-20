@@ -273,7 +273,10 @@ function ComboboxTrigger({
           <span className={cn("min-w-0 flex-1 truncate text-left", showClear && "pr-6")}>
             {children}
           </span>
-          <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+          <ChevronsUpDown
+            className="size-icon-md shrink-0 text-muted-foreground"
+            aria-hidden="true"
+          />
         </button>
       </PopoverTrigger>
       {showClear ? (
@@ -283,7 +286,7 @@ function ComboboxTrigger({
           onClick={onClear}
           className="absolute top-1/2 right-8 inline-flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
         >
-          <X className="size-3.5" aria-hidden="true" />
+          <X className="size-icon-sm" aria-hidden="true" />
         </button>
       ) : null}
     </div>
@@ -495,7 +498,7 @@ function ComboboxItem({
         {children}
       </span>
       {selected ? (
-        <Check className="size-4 shrink-0 text-accent-foreground" aria-hidden="true" />
+        <Check className="size-icon-md shrink-0 text-accent-foreground" aria-hidden="true" />
       ) : null}
     </CommandItem>
   );

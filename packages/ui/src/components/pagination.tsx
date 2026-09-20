@@ -159,7 +159,7 @@ function PaginationPrevious({ className, ...props }: PaginationButtonProps): Rea
   const ariaLabel = useElLabel("ui", "previousPage", "Ir a la página anterior");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
-      <ChevronLeft className="size-4" aria-hidden />
+      <ChevronLeft className="size-icon-md" aria-hidden />
     </PaginationStep>
   );
 }
@@ -169,7 +169,7 @@ function PaginationNext({ className, ...props }: PaginationButtonProps): React.J
   const ariaLabel = useElLabel("ui", "nextPage", "Ir a la página siguiente");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
-      <ChevronRight className="size-4" aria-hidden />
+      <ChevronRight className="size-icon-md" aria-hidden />
     </PaginationStep>
   );
 }
@@ -179,7 +179,7 @@ function PaginationFirst({ className, ...props }: PaginationButtonProps): React.
   const ariaLabel = useElLabel("ui", "firstPage", "Ir a la primera página");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
-      <ChevronsLeft className="size-4" aria-hidden />
+      <ChevronsLeft className="size-icon-md" aria-hidden />
     </PaginationStep>
   );
 }
@@ -189,7 +189,7 @@ function PaginationLast({ className, ...props }: PaginationButtonProps): React.J
   const ariaLabel = useElLabel("ui", "lastPage", "Ir a la última página");
   return (
     <PaginationStep aria-label={ariaLabel} className={className} {...props}>
-      <ChevronsRight className="size-4" aria-hidden />
+      <ChevronsRight className="size-icon-md" aria-hidden />
     </PaginationStep>
   );
 }
@@ -222,7 +222,7 @@ function PaginationEllipsis({
       className={cn("flex size-7 items-center justify-center text-muted-foreground", className)}
       {...props}
     >
-      <Ellipsis className="size-4" />
+      <Ellipsis className="size-icon-md" />
     </span>
   );
 }

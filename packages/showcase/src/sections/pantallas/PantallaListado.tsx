@@ -92,7 +92,7 @@ const PantallaListado = () => {
         <Section accessibilityLabel="Sin productos">
           <EmptyState>
             <EmptyStateMedia>
-              <Plus className="size-6" aria-hidden />
+              <Plus className="size-icon-xl" aria-hidden />
             </EmptyStateMedia>
             <EmptyStateTitle>Empezá a cargar productos</EmptyStateTitle>
             <EmptyStateDescription>

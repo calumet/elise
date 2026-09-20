@@ -120,7 +120,7 @@ function StepperItem({
           )}
         >
           {status === "complete" && indicator === undefined ? (
-            <Check className="size-3.5" aria-hidden="true" />
+            <Check className="size-icon-sm" aria-hidden="true" />
           ) : (
             indicator
           )}

@@ -132,7 +132,7 @@ function RemoveButton({
         (disabled || inert) && "pointer-events-none",
       )}
     >
-      <X className="size-3" aria-hidden="true" />
+      <X className="size-icon-xs" aria-hidden="true" />
     </Tag>
   );
 }

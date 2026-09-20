@@ -3,6 +3,73 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.28.0
+
+Suben también `elise-tables` 0.7.3, `elise-alerts` 0.3.12 y `elise-toasts`
+0.4.13, que solo cambian por dentro.
+
+### Añade
+
+**`data-density="compact"`**, que aprieta todo lo que cuelgue de ese elemento:
+el paso de espaciado baja de 4px a 3px y con él el relleno, los huecos y los
+altos. Una fila de controles pasa de 36px a 27px sin tocar ningún `size`, y
+alcanza a lo que no tiene `size`, que son las filas de una tabla, los items de
+un menú y las pestañas.
+
+```tsx
+<div data-density="compact">
+  <DataTable columns={columns} data={rows} />
+</div>
+```
+
+**La escala de los iconos, aparte de la de espaciado.** `--spacing-icon-xs` a
+`--spacing-icon-xl` (12, 14, 16, 20 y 24px), que se piden con `size-icon-md` y
+sus hermanas. Un icono no es una medida de la caja: colgando de la escala de
+espaciado se encogía con la densidad, y a 12px ya está en el mínimo legible.
+
+**`--spacing-touch`**, 44px con cualquier densidad, que es el mínimo de área de
+toque. Se pide con `h-touch` y es lo que usa el `size` `xl` de `Button` y de los
+campos.
+
+**`Heading`**, el titular de una sección. `level` pone la etiqueta y de ahí sale
+el tamaño; `size` los separa, como en `Text`.
+
+```tsx
+<Heading level={1}>Trabajos de grado</Heading>
+```
+
+**`--font-display`**, la familia de los titulares, que usa `Heading` y nadie
+más. Cae en `--font-sans` mientras no se defina, así que un proyecto con una
+sola fuente no ve ningún cambio.
+
+**Siete familias variables más, cada una en su entrada:** Bricolage Grotesque,
+Manrope, IBM Plex Sans, Space Grotesk, Public Sans, Newsreader y Archivo. Van
+como dependencias opcionales, y se importan sueltas desde
+`@calumet/elise-ui/tailwind/fonts/<familia>.css` en vez de `fonts.css`, para
+emparejar dos familias sin cargar las diez. `fonts.css` sigue trayendo las tres
+de siempre.
+
+```css
+@import "@calumet/elise-ui/tailwind/fonts/bricolage-grotesque.css";
+@import "@calumet/elise-ui/tailwind/fonts/manrope.css";
+
+:root {
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, sans-serif;
+  --font-sans: "Manrope Variable", ui-sans-serif, sans-serif;
+}
+```
+
+Ver [Temas](docs/temas.md#tipografías) y [Pedir una densidad
+compacta](docs/temas.md#pedir-una-densidad-compacta).
+
+### Corrige
+
+**Un icono escrito con `size-4` dentro de un componente de Elise se encogía** en
+cuanto la rama pedía densidad compacta. Los del catálogo pasan a `size-icon-*`,
+así que ninguno de los 174 que pinta la vitrina cambia de tamaño entre
+densidades. Quien escriba iconos propios dentro de un componente de Elise usa la
+misma escala.
+
 ## `@calumet/elise-ui` 0.27.0
 
 Suben también `elise-tables` 0.7.2, `elise-alerts` 0.3.11 y `elise-toasts`

@@ -101,14 +101,14 @@ function Alert({
 
   const close = onDismiss ? (
     <button type="button" data-slot="alert-dismiss" onClick={onDismiss} className={CLOSE_BUTTON}>
-      <X className="size-4" aria-hidden="true" />
+      <X className="size-icon-md" aria-hidden="true" />
       <span className="sr-only">{dismissLabel}</span>
     </button>
   ) : null;
 
   const brandIcon = (extraClass?: string) =>
     showIcon ? (
-      <span data-slot="alert-icon" className={cn("shrink-0 [&>svg]:size-4", extraClass)}>
+      <span data-slot="alert-icon" className={cn("shrink-0 [&>svg]:size-icon-md", extraClass)}>
         {icon ?? <ToneIcon aria-hidden="true" />}
       </span>
     ) : null;

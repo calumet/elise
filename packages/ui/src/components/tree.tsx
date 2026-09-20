@@ -281,15 +281,18 @@ export const TreeItem: React.ForwardRefExoticComponent<
             <ChevronRight
               aria-hidden="true"
               className={cn(
-                "size-4 shrink-0 text-muted-foreground transition-transform duration-(--duration-fast) ease-out",
+                "size-icon-md shrink-0 text-muted-foreground transition-transform duration-(--duration-fast) ease-out",
                 open && "rotate-90",
               )}
             />
           ) : (
-            <span aria-hidden="true" className="size-4 shrink-0" />
+            <span aria-hidden="true" className="size-icon-md shrink-0" />
           )}
           {icon ? (
-            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+            <span
+              aria-hidden="true"
+              className="flex size-icon-md shrink-0 items-center justify-center"
+            >
               {icon}
             </span>
           ) : null}

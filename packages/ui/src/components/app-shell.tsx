@@ -37,7 +37,7 @@ import { UserMenu, type UserMenuProps } from "./user-menu";
    contenido que quien la use elija, y así el marco no arrastra una dependencia
    de iconos para tres trazos. */
 const Magnifier = () => (
-  <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true" focusable="false">
+  <svg viewBox="0 0 16 16" className="size-icon-md shrink-0" aria-hidden="true" focusable="false">
     <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
     <path d="M10.2 10.2L13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
@@ -421,7 +421,7 @@ function AppShellHeaderAction({
       data-slot="app-shell-header-action"
       aria-label={label}
       className={cn(
-        "inline-flex size-8 flex-none cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none [&_svg]:size-5",
+        "inline-flex size-8 flex-none cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none [&_svg]:size-icon-lg",
         className,
       )}
       {...props}
@@ -476,7 +476,7 @@ function AppShellNavToggle({
       {...props}
     >
       {children ?? (
-        <svg viewBox="0 0 16 16" className="size-5" aria-hidden="true" focusable="false">
+        <svg viewBox="0 0 16 16" className="size-icon-lg" aria-hidden="true" focusable="false">
           <path
             d="M2 4h12M2 8h12M2 12h12"
             stroke="currentColor"
@@ -1068,7 +1068,7 @@ function AppShellNavItem({
         {glyph ? (
           <span
             aria-hidden="true"
-            className="my-1 me-2 flex size-5 flex-none items-center justify-center [&_svg]:size-4"
+            className="my-1 me-2 flex size-icon-lg flex-none items-center justify-center [&_svg]:size-icon-md"
           >
             {glyph}
           </span>
@@ -1131,7 +1131,7 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
       type="button"
       data-slot="app-shell-nav-action"
       className={cn(
-        "relative inline-flex size-5 flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none [&_svg]:size-4",
+        "relative inline-flex size-icon-lg flex-none cursor-pointer items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-0.5 before:content-[''] hover:bg-sidebar-hover hover:text-sidebar-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none [&_svg]:size-icon-md",
         className,
       )}
       {...props}

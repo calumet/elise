@@ -129,7 +129,7 @@ function Calendar({
           "font-medium select-none",
           captionLayout === "label"
             ? "text-sm"
-            : "flex h-8 items-center gap-1 rounded-sm pr-1 pl-2 text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground",
+            : "flex h-8 items-center gap-1 rounded-sm pr-1 pl-2 text-sm [&>svg]:size-icon-sm [&>svg]:text-muted-foreground",
           defaultClassNames.caption_label,
         ),
         /* Las filas se quedan como filas de tabla en vez de pasar a `flex`.
@@ -182,14 +182,14 @@ function Calendar({
         },
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
-            return <ChevronLeft className={cn("size-4", className)} {...props} />;
+            return <ChevronLeft className={cn("size-icon-md", className)} {...props} />;
           }
 
           if (orientation === "right") {
-            return <ChevronRight className={cn("size-4", className)} {...props} />;
+            return <ChevronRight className={cn("size-icon-md", className)} {...props} />;
           }
 
-          return <ChevronDown className={cn("size-4", className)} {...props} />;
+          return <ChevronDown className={cn("size-icon-md", className)} {...props} />;
         },
         DayButton: CalendarDayButton,
         WeekNumber: ({ children, ...props }) => {

@@ -6,6 +6,7 @@ import { Button } from "@calumet/elise-ui/button";
 import { Chip } from "@calumet/elise-ui/chip";
 import { Code } from "@calumet/elise-ui/code";
 import { Grid } from "@calumet/elise-ui/grid";
+import { Heading } from "@calumet/elise-ui/heading";
 import { Kbd } from "@calumet/elise-ui/kbd";
 import { Link } from "@calumet/elise-ui/link";
 import { Separator } from "@calumet/elise-ui/separator";
@@ -13,6 +14,7 @@ import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
 import { Text } from "@calumet/elise-ui/text";
 
 const tamanos = ["3xl", "2xl", "xl", "lg", "base", "sm", "xs", "2xs"] as const;
+const niveles = [1, 2, 3, 4, 5, 6] as const;
 
 const PrimitivesDemo = () => (
   <BlockStack gap={8} className="w-full">
@@ -32,6 +34,26 @@ const PrimitivesDemo = () => (
           </InlineStack>
         ))}
       </BlockStack>
+    </BlockStack>
+
+    <BlockStack gap={3}>
+      <Text size="sm" weight="semibold">
+        Heading, con la etiqueta y el tamaño atados a level
+      </Text>
+      <BlockStack gap={2}>
+        {niveles.map((level) => (
+          <InlineStack key={level} gap={4} align="baseline">
+            <Text size="2xs" tone="muted" className="w-10 shrink-0 font-mono">
+              h{level}
+            </Text>
+            <Heading level={level}>Plataforma frontend de Calumet</Heading>
+          </InlineStack>
+        ))}
+      </BlockStack>
+      <Text size="xs" tone="muted">
+        Sale en <code>--font-display</code>, que cae en <code>--font-sans</code> mientras el tema no
+        empareje dos familias.
+      </Text>
     </BlockStack>
 
     <BlockStack gap={3}>
@@ -76,7 +98,7 @@ const PrimitivesDemo = () => (
               </Text>
               <Separator />
               <InlineStack gap={2} align="center">
-                <CircleCheck className="size-4 text-success-subtle-foreground" aria-hidden />
+                <CircleCheck className="size-icon-md text-success-subtle-foreground" aria-hidden />
                 <Text size="sm">Tinta de estado</Text>
               </InlineStack>
             </BlockStack>

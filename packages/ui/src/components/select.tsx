@@ -60,7 +60,7 @@ export const SelectTrigger: React.ForwardRefExoticComponent<
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+        <ChevronDown className="size-icon-md shrink-0 opacity-70" aria-hidden />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   ),
@@ -143,7 +143,7 @@ export const SelectItem: React.ForwardRefExoticComponent<
     )}
     {...props}
   >
-    <SelectPrimitive.ItemIndicator className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <SelectPrimitive.ItemIndicator className="absolute left-2 flex size-icon-sm items-center justify-center">
       <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
         <polyline
           points="3.5 8.5 6.5 11.5 12.5 4.5"

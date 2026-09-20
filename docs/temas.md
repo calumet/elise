@@ -262,7 +262,52 @@ cuenta:
 --font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, …;
 --font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
 --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, …;
+--font-display: var(--font-sans);
 ```
+
+`--font-display` es la familia de los titulares, y la usa `Heading` y nadie más.
+Cae en `--font-sans` mientras no se defina, así que un proyecto con una sola
+fuente no tiene que tocarla.
+
+#### Emparejar dos familias
+
+Un portal que deja elegir el emparejamiento tipográfico necesita más de las tres
+que vienen. Además de las tres, el paquete trae siete familias variables más,
+cada una en su propia entrada:
+
+| Entrada                                    | Registra                       |
+| ------------------------------------------ | ------------------------------ |
+| `…/tailwind/fonts/geist.css`               | `Geist Variable`               |
+| `…/tailwind/fonts/jetbrains-mono.css`      | `JetBrains Mono Variable`      |
+| `…/tailwind/fonts/source-serif-4.css`      | `Source Serif 4 Variable`      |
+| `…/tailwind/fonts/bricolage-grotesque.css` | `Bricolage Grotesque Variable` |
+| `…/tailwind/fonts/manrope.css`             | `Manrope Variable`             |
+| `…/tailwind/fonts/ibm-plex-sans.css`       | `IBM Plex Sans Variable`       |
+| `…/tailwind/fonts/space-grotesk.css`       | `Space Grotesk Variable`       |
+| `…/tailwind/fonts/public-sans.css`         | `Public Sans Variable`         |
+| `…/tailwind/fonts/newsreader.css`          | `Newsreader Variable`          |
+| `…/tailwind/fonts/archivo.css`             | `Archivo Variable`             |
+
+Se importan las que se usen, en vez de `fonts.css`:
+
+```css
+@import "@calumet/elise-ui/tailwind/fonts/bricolage-grotesque.css";
+@import "@calumet/elise-ui/tailwind/fonts/manrope.css";
+@import "@calumet/elise-ui/tailwind/fonts/jetbrains-mono.css";
+@import "@calumet/elise-ui/tailwind/elise.css";
+
+:root {
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, sans-serif;
+  --font-sans: "Manrope Variable", ui-sans-serif, sans-serif;
+}
+```
+
+Las siete van como dependencias opcionales, así que no se instalan en quien no
+las va a servir. Van sueltas y no todas dentro de `fonts.css` porque cada
+`@font-face` de Fontsource lleva su `unicode-range` y el navegador no pide el
+binario de una familia que ninguna regla usa, pero el CSS sí viaja entero: las
+diez juntas son unos 55 bloques y 21 KB en el camino crítico del render, para
+una app que usa tres.
 
 En la escala de sombras el blur, el spread negativo y la opacidad crecen juntos, y
 el modo oscuro define su propio juego de valores (una sombra negra al 10% es
@@ -577,6 +622,39 @@ Las escalas derivadas se separan ±2px:
 | `rounded-md` | `var(--radius)`             | 8px                  |
 | `rounded-lg` | `calc(var(--radius) + 2px)` | 10px                 |
 | `rounded-xl` | `calc(var(--radius) + 4px)` | 12px                 |
+
+### Pedir una densidad compacta
+
+`data-density="compact"` aprieta todo lo que cuelgue de ese elemento. El paso de
+espaciado baja de 4px a 3px, y con él el relleno, los huecos y los altos: una
+fila de controles pasa de 36px a 27px sin tocar ningún `size`.
+
+```tsx
+<div data-density="compact">
+  <DataTable columns={columns} data={rows} />
+</div>
+```
+
+Alcanza también a lo que no tiene prop `size`, que son las filas de una tabla,
+los items de un menú y las pestañas, que es donde una pantalla de datos se nota
+apretada.
+
+Dos cosas no se mueven, porque no son medidas de la caja:
+
+- **Los iconos.** Viven en `--spacing-icon-xs` a `--spacing-icon-xl` (12, 14,
+  16, 20 y 24px) y se piden con `size-icon-md` y sus hermanas. A 12px un icono
+  ya está en el mínimo legible, y encogiéndolo con el relleno se sale de la
+  escala y cae en medio píxel.
+- **El paso táctil.** `--spacing-touch` son 44px con cualquier densidad, que es
+  el mínimo de área de toque. Se pide con `h-touch`, y es lo que usa el `size`
+  `xl` de `Button` y de los campos.
+
+Quien escriba un icono propio dentro de un componente de Elise usa la misma
+escala, o el icono se le encogerá en una rama compacta:
+
+```tsx
+<ChevronRight className="size-icon-md" aria-hidden />
+```
 
 ## Personalización con `applyTheme()`
 

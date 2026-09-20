@@ -22,7 +22,7 @@ export function SinResultados({
   return (
     <EmptyState size="sm">
       <EmptyStateMedia>
-        <Search className="size-6" aria-hidden />
+        <Search className="size-icon-xl" aria-hidden />
       </EmptyStateMedia>
       <EmptyStateTitle>
         Sin {cosas} de «{busqueda}»

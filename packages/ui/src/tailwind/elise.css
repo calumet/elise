@@ -7,8 +7,19 @@
 @theme {
   /* Escala de espaciado global (debe vivir en @theme, no en :root,
      para que Tailwind la conozca en build). 0.25rem mantiene la escala
-     en píxeles enteros: h-9 = 36px, size-4 = 16px. */
+     en píxeles enteros: h-9 = 36px, p-4 = 16px. */
   --spacing: 0.25rem;
+
+  /* Aparte de la escala de espaciado, para que la densidad no encoja un icono
+     por debajo del mínimo legible. Se piden con `size-icon-*`. */
+  --spacing-icon-xs: 0.75rem; /* 12px */
+  --spacing-icon-sm: 0.875rem; /* 14px */
+  --spacing-icon-md: 1rem; /* 16px */
+  --spacing-icon-lg: 1.25rem; /* 20px */
+  --spacing-icon-xl: 1.5rem; /* 24px */
+
+  /* 44px con cualquier densidad, o deja de ser un mínimo. */
+  --spacing-touch: 2.75rem; /* 44px */
 
   /* Escala tipográfica propia. Cada tamaño empaqueta su interlineado y su
      tracking, que se aprieta progresivamente al crecer el tamaño por corrección
@@ -317,6 +328,11 @@
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
+
+  /* La familia de los titulares, que es la única que `Heading` usa. Cae en
+     `--font-sans` mientras el tema no la defina, así que un proyecto que no
+     empareje dos fuentes no ve ningún cambio. */
+  --font-display: var(--font-sans);
   --font-mono:
     "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
@@ -517,6 +533,11 @@
     inset 0 -1px 0 0 oklch(0.845 0 0 / 0.08), inset 0 1px 0 0 oklch(0.845 0 0 / 0.16);
 }
 
+/* El paso baja de 4px a 3px, y con él el relleno, los huecos y los altos. */
+[data-density="compact"] {
+  --spacing: 0.1875rem;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -606,6 +627,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+  --font-display: var(--font-display);
 
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);

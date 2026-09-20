@@ -39,7 +39,7 @@ function DateTrigger({
       {...props}
     >
       <span className={cn("min-w-0 truncate", empty && "text-muted-foreground")}>{label}</span>
-      <CalendarIcon aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
+      <CalendarIcon aria-hidden="true" className="size-icon-md shrink-0 text-muted-foreground" />
     </button>
   );
 }

@@ -57,7 +57,7 @@ const VaciosDemo = () => {
         <Section accessibilityLabel="Sin pedidos">
           <EmptyState>
             <EmptyStateMedia>
-              <Plus className="size-6" aria-hidden />
+              <Plus className="size-icon-xl" aria-hidden />
             </EmptyStateMedia>
             <EmptyStateTitle>Todavía no hay pedidos</EmptyStateTitle>
             <EmptyStateDescription>

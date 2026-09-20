@@ -42,7 +42,7 @@ const PantallaFicha = () => (
     <header className="flex flex-col gap-1">
       <div>
         <Link href="#pantallas" tone="neutral" className="inline-flex items-center gap-1 text-sm">
-          <ChevronLeft className="size-4" aria-hidden />
+          <ChevronLeft className="size-icon-md" aria-hidden />
           Productos
         </Link>
       </div>
@@ -137,7 +137,7 @@ const PantallaFicha = () => (
                           variant="ghost"
                           aria-label={`Quitar ${variante.nombre}`}
                         >
-                          <X className="size-4" aria-hidden />
+                          <X className="size-icon-md" aria-hidden />
                         </Button>
                       </div>
                     </TableCell>

@@ -140,9 +140,12 @@ function Checkbox({
           {/* El indicador se monta en los dos estados marcados, así que el glifo
               lo elige el `data-state` de la raíz y no hace falta leer `checked`,
               que en modo no controlado no llega por props. */}
-          <Check className="hidden size-3 group-data-[state=checked]:block" aria-hidden="true" />
+          <Check
+            className="hidden size-icon-xs group-data-[state=checked]:block"
+            aria-hidden="true"
+          />
           <Minus
-            className="hidden size-3 group-data-[state=indeterminate]:block"
+            className="hidden size-icon-xs group-data-[state=indeterminate]:block"
             aria-hidden="true"
           />
         </CheckboxPrimitive.Indicator>
