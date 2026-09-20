@@ -53,7 +53,27 @@ usuario teñido de rojo no significa nada.
 El rótulo, la ayuda y el error viven en el grupo y no en cada opción. Un error
 como «elegí una forma de envío» no pertenece a ninguna respuesta en particular.
 
-### 1.4. Contarle algo al usuario
+### 1.4. Un dato de máquina
+
+Una ruta, un host, un identificador, un puerto, una expresión cron, una
+consulta. Se lee carácter a carácter, así que va en monoespaciada. Dónde está
+decide con qué:
+
+| Dónde está                              | Qué se usa                               |
+| --------------------------------------- | ---------------------------------------- |
+| Metido dentro de una frase              | `Code`                                   |
+| Suelto, como su propio bloque o renglón | `Text` con `family="mono"`               |
+| Toda una columna de una tabla           | `TableHead` con `format="code"`          |
+| Se escribe en un campo                  | `Input` o `Textarea` con `family="mono"` |
+
+`Code` lleva caja además de la fuente, y esa es la diferencia: dentro de una
+frase, solo la fuente no separa el identificador del texto de alrededor. Suelto
+no hay de qué separarlo, y la caja pasa a estorbar.
+
+En una tabla el formato se declara una vez en la columna, no celda por celda.
+El rótulo sigue en texto corriente: es una palabra, no un dato.
+
+### 1.5. Contarle algo al usuario
 
 | Cuándo aparece                               | Componente    | Dónde vive               |
 | -------------------------------------------- | ------------- | ------------------------ |
@@ -66,7 +86,7 @@ como «elegí una forma de envío» no pertenece a ninguna respuesta en particul
 Un aviso que el usuario tiene que poder releer no va en un toast, porque el
 toast se va solo.
 
-### 1.5. Agrupar contenido
+### 1.6. Agrupar contenido
 
 | Trabajo                                          | Componente |
 | ------------------------------------------------ | ---------- |
