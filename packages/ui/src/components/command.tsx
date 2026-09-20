@@ -10,7 +10,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/cn";
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "./dialog";
 
 /** Raíz de la paleta de comandos. Filtra y recorre con el teclado. */
 function Command({
@@ -46,14 +46,16 @@ function CommandDialog({
 }): React.JSX.Element {
   return (
     <Dialog {...props}>
-      <DialogHeader className="sr-only">
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{description}</DialogDescription>
-      </DialogHeader>
       <DialogContent
         showCloseButton={false}
         className={cn("overflow-hidden border border-border p-0 shadow-none", className)}
       >
+        {/* El nombre y la descripción que pide el diálogo, sin la banda de
+            `DialogHeader`: la paleta se presenta con su propio campo. */}
+        <div className="sr-only">
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </div>
         <Command className="**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group]]:px-2 **:[[cmdk-input]]:h-12 **:[[cmdk-item]]:px-2 **:[[cmdk-item]]:py-3">
           {children}
         </Command>
