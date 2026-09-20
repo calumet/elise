@@ -27,6 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@calumet/elise-ui/dropdown-menu";
+import { EmptyState, EmptyStateTitle } from "@calumet/elise-ui/empty-state";
 import { Input } from "@calumet/elise-ui/input";
 import { Label } from "@calumet/elise-ui/label";
 import {
@@ -40,6 +41,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableEmpty,
   TableHead,
   TableHeader,
   TableRow,
@@ -266,6 +268,7 @@ function DataTableContent<TData extends RowData>({
     <div className="flex h-full w-full min-w-0 flex-col justify-between">
       <div data-slot="data-table-card" className="min-w-0">
         <Table
+          empty={table.getRowModel().rows.length === 0}
           filters={filterBar}
           loading={isLoading}
           loadingLabel={labelLoading}
@@ -365,26 +368,23 @@ function DataTableContent<TData extends RowData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                {/* Solo «no hay datos»: mientras carga, el aviso lo baja
-                      `Table` sobre las filas que ya estuvieran. */}
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  {labelNoData}
-                </TableCell>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
+            ))}
           </TableBody>
+          {/* Solo «no hay datos»: mientras carga, el aviso lo baja `Table`
+              sobre las filas que ya estuvieran. */}
+          <TableEmpty>
+            <EmptyState size="sm">
+              <EmptyStateTitle>{labelNoData}</EmptyStateTitle>
+            </EmptyState>
+          </TableEmpty>
         </Table>
       </div>
     </div>

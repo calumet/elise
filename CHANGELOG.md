@@ -3,10 +3,10 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.33.0
+## `@calumet/elise-ui` 0.33.0 y `elise-tables` 0.8.0
 
-Suben también `elise-tables` 0.7.9, `elise-alerts` 0.3.17 y `elise-toasts`
-0.4.18, que no cambian por dentro.
+Suben también `elise-alerts` 0.3.17 y `elise-toasts` 0.4.18, que no cambian por
+dentro.
 
 ### Rompe
 
@@ -30,6 +30,12 @@ Suben también `elise-tables` 0.7.9, `elise-alerts` 0.3.17 y `elise-toasts`
   `empty` ahora es un booleano y sigue siendo lo que esconde la franja de
   paginar. `TableEmpty` tiene que ser hijo directo de `Table`, que lo busca por
   tipo igual que ya buscaba al `TableHeader` para leer las columnas.
+
+- **`DataTable` sin filas usa ese mismo hueco.** Traía su «no hay datos» como
+  una fila más, con un `colSpan` a lo ancho y alto fijo, así que la tabla vacía
+  seguía dibujando su encabezado y su franja de paginar sobre cero filas. Ahora
+  pasa por `TableEmpty` con un `EmptyState`, como cualquier otra tabla del
+  catálogo. El texto es el mismo, el de la clave `tables.noData`.
 
 ## `@calumet/elise-ui` 0.32.0
 
