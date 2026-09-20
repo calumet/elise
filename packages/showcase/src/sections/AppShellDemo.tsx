@@ -72,8 +72,6 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
   const [guardando, setGuardando] = useState(false);
   const [sucio, setSucio] = useState(false);
 
-  /* Las dos formas del área de contenido: la que fluye hacia abajo y la que se
-     organiza a lo alto con `fill`. */
   const [aLoAlto, setALoAlto] = useState(false);
 
   const guardar = () => {
@@ -282,9 +280,6 @@ const AppShellDemo = ({ pantallaCompleta = false }: { pantallaCompleta?: boolean
         </AppShellNav>
 
         {aLoAlto ? (
-          /* La variante densa: la barra se queda arriba, la lista se desplaza
-             por dentro y llega a los bordes. Con el área desplazándose y con su
-             relleno no saldría ninguna de las tres cosas. */
           <AppShellMain fill>
             <div className="flex shrink-0 items-center gap-2 border-b border-border bg-background px-5 py-2.5">
               <Text size="sm" weight="bold">

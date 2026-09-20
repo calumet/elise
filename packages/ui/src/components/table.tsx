@@ -430,7 +430,13 @@ export const Table: React.ForwardRefExoticComponent<
     const zone = isEmpty ? (
       emptyZone
     ) : (
-      <div className="relative overflow-hidden rounded-[inherit]">
+      <div
+        className={cn(
+          "relative overflow-hidden",
+          !filterBar && "rounded-t-[inherit]",
+          !paginationBar && "rounded-b-[inherit]",
+        )}
+      >
         <div className="w-full overflow-x-auto" inert={loading || undefined}>
           {body}
         </div>

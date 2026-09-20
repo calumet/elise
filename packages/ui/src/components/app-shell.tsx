@@ -1142,14 +1142,9 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
 /** Props de {@link AppShellMain}. */
 export type AppShellMainProps = React.ComponentProps<"main"> & {
   /**
-   * La pantalla ocupa el área entera y se encarga de su propio desplazamiento:
-   * sin relleno y sin barra de scroll acá.
-   *
-   * Es para la pantalla que se organiza a lo alto en vez de fluir hacia abajo:
-   * un editor con su panel de resultados, una consola, un maestro-detalle de
-   * dos paneles. Ahí las franjas llegan de canto a canto y lo que se desplaza
-   * es cada panel. Con el relleno puesto quedan flotando sobre el lienzo, con
-   * sus filetes muriendo a 20px del borde, y salen dos barras de scroll.
+   * Cede el relleno y el desplazamiento a la pantalla, que pasa a ocupar el
+   * área entera. Para la que se organiza a lo alto en vez de fluir hacia abajo:
+   * un editor con su panel de resultados, una consola, un maestro-detalle.
    */
   fill?: boolean;
 };
@@ -1187,9 +1182,6 @@ function AppShellMain({
          el marco se leía como una sola plancha. */
       className={cn(
         "col-start-2 row-start-2 flex min-w-0 flex-col bg-canvas",
-        /* overflow-hidden y no visible: la celda de la rejilla es el tope duro
-           del alto, y sin recorte el contenido de los scrollers de la pantalla
-           se escapa hasta el body y aparece un scroll de página. */
         fill ? "overflow-hidden" : "overflow-y-auto p-5",
         className,
       )}
