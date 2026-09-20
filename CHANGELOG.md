@@ -28,6 +28,21 @@ su texto es `--foreground`, igual que `--background`, y no tiene un
 Un tema que quiera otro lienzo ya puede darle el suyo sin tocar los botones
 secundarios.
 
+**`--radius: 0` por fin da esquinas rectas.** La escala sumaba píxeles fijos
+(`radius - 2px`, `radius + 2px`, `radius + 4px`), así que un tema que pedía
+esquinas rectas seguía sacando tarjetas de 2px y desplegables de 4px. Ahora
+multiplica, y con el radio por defecto los cuatro escalones dan lo mismo que
+antes:
+
+| utilidad     | fórmula                      | por defecto | con `--radius: 0` |
+| ------------ | ---------------------------- | ----------- | ----------------- |
+| `rounded-sm` | `calc(var(--radius) * 0.75)` | 6px         | 0px               |
+| `rounded-md` | `var(--radius)`              | 8px         | 0px               |
+| `rounded-lg` | `calc(var(--radius) * 1.25)` | 10px        | 0px               |
+| `rounded-xl` | `calc(var(--radius) * 1.5)`  | 12px        | 0px               |
+
+Un tema con otro radio sí cambia: con `1rem` pasa de 14/16/18/20 a 12/16/20/24.
+
 ## `@calumet/elise-tables` 0.7.5
 
 ### Corrige

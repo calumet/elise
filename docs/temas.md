@@ -230,7 +230,7 @@ de campo obligatorio de `Field`.
 
 | Token CSS              | Utilidad Tailwind                                      | Descripción                                               |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
-| `--radius`             | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | Radio base (0.5rem). Las escalas se calculan con `calc()` |
+| `--radius`             | `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` | Radio base (0.5rem). La escala lo multiplica con `calc()` |
 | `--shadow-2xs`         | `shadow-2xs`                                           | Sombra mínima                                             |
 | `--shadow-xs`          | `shadow-xs`                                            | Sombra extra-pequeña                                      |
 | `--shadow-sm`          | `shadow-sm`                                            | Sombra pequeña (tarjetas)                                 |
@@ -616,14 +616,18 @@ al radio de un control. Cambiarlo ajusta toda la escala:
 }
 ```
 
-Las escalas derivadas se separan ±2px:
+Las escalas derivadas multiplican el radio base, así que `--radius: 0` deja las
+cuatro en cero y el tema sale con las esquinas rectas de verdad:
 
-| Utilidad     | Formula                     | Valor con el default |
-| ------------ | --------------------------- | -------------------- |
-| `rounded-sm` | `calc(var(--radius) - 2px)` | 6px                  |
-| `rounded-md` | `var(--radius)`             | 8px                  |
-| `rounded-lg` | `calc(var(--radius) + 2px)` | 10px                 |
-| `rounded-xl` | `calc(var(--radius) + 4px)` | 12px                 |
+| Utilidad     | Formula                      | Con el default | Con `--radius: 0` |
+| ------------ | ---------------------------- | -------------- | ----------------- |
+| `rounded-sm` | `calc(var(--radius) * 0.75)` | 6px            | 0px               |
+| `rounded-md` | `var(--radius)`              | 8px            | 0px               |
+| `rounded-lg` | `calc(var(--radius) * 1.25)` | 10px           | 0px               |
+| `rounded-xl` | `calc(var(--radius) * 1.5)`  | 12px           | 0px               |
+
+`rounded-2xl` y `rounded-3xl` no están en la escala: caen al valor por defecto
+de Tailwind y no siguen al tema. Usa los cuatro de arriba.
 
 ### Pedir una densidad compacta
 

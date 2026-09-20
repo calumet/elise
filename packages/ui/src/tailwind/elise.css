@@ -635,10 +635,13 @@
   --font-serif: var(--font-serif);
   --font-display: var(--font-display);
 
-  --radius-sm: calc(var(--radius) - 2px);
+  /* Los escalones multiplican y no suman: sumando píxeles fijos, un tema con
+     `--radius: 0` seguía sacando tarjetas de 2px y desplegables de 4px. Con el
+     radio por defecto los cuatro dan lo mismo que antes. */
+  --radius-sm: calc(var(--radius) * 0.75);
   --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 2px);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-lg: calc(var(--radius) * 1.25);
+  --radius-xl: calc(var(--radius) * 1.5);
 
   --shadow-2xs: var(--shadow-2xs);
   --shadow-xs: var(--shadow-xs);
