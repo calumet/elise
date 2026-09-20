@@ -1140,10 +1140,25 @@ function AppShellNavAction({ className, ...props }: AppShellNavActionProps): Rea
 }
 
 /** Props de {@link AppShellMain}. */
-export type AppShellMainProps = React.ComponentProps<"main">;
+export type AppShellMainProps = React.ComponentProps<"main"> & {
+  /**
+   * La pantalla ocupa el área entera y se encarga de su propio desplazamiento:
+   * sin relleno y sin barra de scroll acá.
+   *
+   * Es para la pantalla que se organiza a lo alto en vez de fluir hacia abajo:
+   * un editor con su panel de resultados, una consola, un maestro-detalle de
+   * dos paneles. Ahí las franjas llegan de canto a canto y lo que se desplaza
+   * es cada panel. Con el relleno puesto quedan flotando sobre el lienzo, con
+   * sus filetes muriendo a 20px del borde, y salen dos barras de scroll.
+   */
+  fill?: boolean;
+};
 
 /**
  * Área de contenido.
+ *
+ * Por defecto es quien se desplaza y quien pone el margen de la pantalla. Con
+ * `fill` cede las dos cosas, para la pantalla que se organiza a lo alto.
  *
  * Con el cajón abierto queda detrás del velo, así que sale del tabulador y del
  * árbol de accesibilidad. La cabecera se queda alcanzable a propósito, que ahí
@@ -1152,7 +1167,12 @@ export type AppShellMainProps = React.ComponentProps<"main">;
  * Solo se vuelve inerte donde el cajón existe. Por encima del breakpoint no hay
  * velo que lo tape, así que dejarlo inerte lo haría inalcanzable a plena vista.
  */
-function AppShellMain({ className, children, ...props }: AppShellMainProps): React.JSX.Element {
+function AppShellMain({
+  className,
+  fill,
+  children,
+  ...props
+}: AppShellMainProps): React.JSX.Element {
   const { drawerOpen, isMobile, hasNav } = useAppShell("AppShellMain");
 
   return (
@@ -1166,7 +1186,11 @@ function AppShellMain({ className, children, ...props }: AppShellMainProps): Rea
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
          el marco se leía como una sola plancha. */
       className={cn(
-        "col-start-2 row-start-2 flex min-w-0 flex-col overflow-y-auto bg-canvas p-5",
+        "col-start-2 row-start-2 flex min-w-0 flex-col bg-canvas",
+        /* overflow-hidden y no visible: la celda de la rejilla es el tope duro
+           del alto, y sin recorte el contenido de los scrollers de la pantalla
+           se escapa hasta el body y aparece un scroll de página. */
+        fill ? "overflow-hidden" : "overflow-y-auto p-5",
         className,
       )}
       {...props}
