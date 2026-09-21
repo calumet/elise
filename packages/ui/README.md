@@ -68,9 +68,9 @@ Cada componente tiene además su propio subpath, por si preferís importar de a 
 
 ## Temas
 
-`ThemeProvider` alterna entre claro y oscuro. Según su prop `attribute` usa la clase `.elise-dark` o `data-theme="dark"`, y guarda la preferencia en `localStorage`. `useTheme` devuelve `theme` y `setTheme`.
+Los colores salen de `elise.css`. Para cambiarlos en caliente, alternar entre claro y oscuro o construir un editor de temas, están en [`@calumet/elise-themes`](../themes/README.md): `ThemeProvider`, `applyTheme`, `themeToCss` y los tokens de la hoja ya generados.
 
-Los colores salen de `elise.css`. Para reemplazarlos, `applyTheme` escribe cualquier `EliseTheme` como variables CSS sobre un elemento, y `defaultLightTheme` con `defaultDarkTheme` son los dos temas ya armados.
+`ThemeScope` se queda aquí, porque es una caja: da tema propio a una sección y se lo lleva a lo que salga por portal.
 
 ## Convenciones
 

@@ -1,7 +1,7 @@
 import { AlertHost } from "@calumet/elise-alerts";
 import { I18nProvider, useLocale } from "@calumet/elise-i18n";
+import { ThemeProvider } from "@calumet/elise-themes";
 import { Toaster } from "@calumet/elise-toasts";
-import { ThemeProvider } from "@calumet/elise-ui/theme";
 import { Head } from "@calumet/suamox-head";
 import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2";
 import monoLatin from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2";

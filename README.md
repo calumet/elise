@@ -11,6 +11,7 @@ Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind C
 | [`@calumet/elise-tables`](packages/tables) | `DataTable` con filtros, ordenamiento, paginación y export (TanStack React Table) |
 | [`@calumet/elise-toasts`](packages/toasts) | Sistema de toasts (event bus + `Toaster`)                                         |
 | [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                              |
+| [`@calumet/elise-themes`](packages/themes) | Los tokens del tema como objeto: `ThemeProvider`, `applyTheme` y `themeToCss`     |
 | [`@calumet/elise-i18n`](packages/i18n)     | Internacionalización: `I18nProvider`, hooks y formateo `Intl` (dates, numbers)    |
 | [`@calumet/elise-icons`](packages/icons)   | Re-export de [Lucide Icons](https://lucide.dev/icons/)                            |
 | [`@calumet/elise-linter`](packages/linter) | Configuración compartida de Oxlint y Oxfmt                                        |
@@ -114,7 +115,7 @@ elise/
 ## Inicio rápido
 
 ```tsx
-import { ThemeProvider } from "@calumet/elise-ui";
+import { ThemeProvider } from "@calumet/elise-themes";
 import { Button } from "@calumet/elise-ui/button";
 
 function App() {

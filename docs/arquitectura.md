@@ -25,6 +25,7 @@ elise/
 │   ├── tables/       @calumet/elise-tables    DataTable (TanStack)
 │   ├── toasts/       @calumet/elise-toasts    Sistema de toasts
 │   ├── alerts/       @calumet/elise-alerts    Sistema de alertas
+│   ├── themes/       @calumet/elise-themes    Tokens del tema y ThemeProvider
 │   ├── i18n/         @calumet/elise-i18n      Internacionalizacion (Intl)
 │   ├── icons/        @calumet/elise-icons     Iconos (Lucide)
 │   ├── linter/       @calumet/elise-linter    Config Oxlint + Oxfmt

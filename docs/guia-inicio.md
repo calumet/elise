@@ -167,10 +167,10 @@ pnpm dev:showcase  # Levanta todos los paquetes + app demo en localhost:5173
 
 ## Configurar el ThemeProvider
 
-Envuelve tu aplicación con `ThemeProvider` para habilitar el sistema de temas:
+Envuelve tu aplicación con `ThemeProvider`, que viene en `@calumet/elise-themes`, para habilitar el sistema de temas:
 
 ```tsx
-import { ThemeProvider } from "@calumet/elise-ui";
+import { ThemeProvider } from "@calumet/elise-themes";
 
 function App() {
   return (
@@ -193,7 +193,7 @@ function App() {
 ## Tu primer componente
 
 ```tsx
-import { ThemeProvider } from "@calumet/elise-ui";
+import { ThemeProvider } from "@calumet/elise-themes";
 import { Button } from "@calumet/elise-ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@calumet/elise-ui/card";
 

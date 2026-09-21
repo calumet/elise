@@ -1,5 +1,6 @@
 import { AlertHost } from "@calumet/elise-alerts";
 import { I18nProvider, useTranslation } from "@calumet/elise-i18n";
+import { ThemeProvider, useTheme } from "@calumet/elise-themes";
 import { Toaster } from "@calumet/elise-toasts";
 import { Button } from "@calumet/elise-ui/button";
 import {
@@ -19,7 +20,6 @@ import {
   NavigationMenuTrigger,
 } from "@calumet/elise-ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
-import { ThemeProvider, useTheme } from "@calumet/elise-ui/theme";
 import {
   Tooltip,
   TooltipContent,

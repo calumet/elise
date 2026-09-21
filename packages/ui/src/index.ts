@@ -9,7 +9,3 @@
  */
 
 export * from "./components";
-/** Da el tema activo y `setTheme`. Ver `@calumet/elise-ui/theme`. */
-/** Alterna entre el tema claro y el oscuro. Ver `@calumet/elise-ui/theme`. */
-export { ThemeProvider, useTheme } from "./theme/theme-provider";
-export { defaultLightTheme, defaultDarkTheme, applyTheme, type EliseTheme } from "./themes";
