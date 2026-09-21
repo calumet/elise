@@ -11,6 +11,7 @@ import * as React from "react";
 
 import { DecisionControl } from "./decision-control";
 import { clear, DECISIONS, type Decision, type DecisionGroup } from "./decisions";
+import { useLabel } from "./i18n";
 import type { EliseTheme } from "./theme";
 import { lightTheme, type EliseVar } from "./tokens.generated";
 
@@ -29,10 +30,32 @@ export type ThemeEditorProps = {
 };
 
 const GROUPS: readonly { id: DecisionGroup; label: string }[] = [
-  { id: "colors", label: "Colores" },
-  { id: "shape", label: "Forma" },
-  { id: "text", label: "Texto" },
+  { id: "colors", label: "Colour" },
+  { id: "shape", label: "Shape" },
+  { id: "text", label: "Type" },
 ];
+
+const GroupLabel = ({ group }: { group: { id: DecisionGroup; label: string } }) => (
+  <span className="px-1 pt-1 text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
+    {useLabel(`group.${group.id}`, group.label)}
+  </span>
+);
+
+const CardHead = ({ decision }: { decision: Decision }) => {
+  const label = useLabel(`${decision.card}.card.label`, decision.cardLabel ?? decision.label);
+  const help = useLabel(
+    `${decision.card}.card.description`,
+    decision.cardDescription ?? decision.description,
+  );
+  return (
+    <span className="flex flex-col gap-0.5">
+      <span className="text-sm font-semibold text-foreground">{label}</span>
+      {decision.cardDescription ? (
+        <span className="text-xs leading-snug text-muted-foreground">{help}</span>
+      ) : null}
+    </span>
+  );
+};
 
 const FOOT_BUTTON =
   "inline-flex h-8 cursor-pointer items-center rounded-md border border-input bg-card px-2.5 text-xs text-foreground transition-[border-color] duration-(--duration-fast) hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
@@ -78,6 +101,12 @@ export const ThemeEditor = ({
 }: ThemeEditorProps): React.JSX.Element => {
   const [failed, setFailed] = React.useState(false);
   const file = React.useRef<HTMLInputElement>(null);
+  const title = useLabel("editor.title", "How the portal looks");
+  const subtitle = useLabel("editor.subtitle", "Every change is drawn here. Nothing is saved yet.");
+  const reset = useLabel("editor.reset", "Back to how it was");
+  const exportLabel = useLabel("editor.export", "Export");
+  const importLabel = useLabel("editor.import", "Import");
+  const badFile = useLabel("editor.badFile", "That file is not a theme.");
   const cards = React.useMemo(() => cardsOf(decisions), [decisions]);
   const shown = React.useMemo(() => cards.flat(), [cards]);
 
@@ -114,10 +143,8 @@ export const ThemeEditor = ({
       className={`flex min-h-0 flex-col bg-background ${className ?? ""}`}
     >
       <div className="flex shrink-0 flex-col gap-0.5 border-b border-border bg-card px-5 py-4">
-        <span className="text-base font-semibold text-foreground">Apariencia del portal</span>
-        <span className="text-xs leading-snug text-muted-foreground">
-          Cada cambio se dibuja aquí mismo. Nada se guarda hasta que lo confirmes.
-        </span>
+        <span className="text-base font-semibold text-foreground">{title}</span>
+        <span className="text-xs leading-snug text-muted-foreground">{subtitle}</span>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
@@ -127,9 +154,7 @@ export const ThemeEditor = ({
 
           return (
             <React.Fragment key={id}>
-              <span className="px-1 pt-1 text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
-                {label}
-              </span>
+              <GroupLabel group={{ id, label }} />
               {here.map((card) => (
                 <div
                   key={card[0].card}
@@ -137,26 +162,28 @@ export const ThemeEditor = ({
                 >
                   {card.length > 1 ? (
                     <>
-                      <span className="flex flex-col gap-0.5">
-                        <span className="text-sm font-semibold text-foreground">
-                          {card[0].cardLabel ?? card[0].label}
-                        </span>
-                        {card[0].cardDescription ? (
-                          <span className="text-xs leading-snug text-muted-foreground">
-                            {card[0].cardDescription}
-                          </span>
-                        ) : null}
-                      </span>
-                      <div className="grid grid-cols-2 gap-2 rounded-md border border-border-subtle bg-muted p-3.5">
-                        {card.map((decision) => (
+                      <CardHead decision={card[0]} />
+                      {card[0].compact ? (
+                        <div className="grid grid-cols-2 gap-2 rounded-md border border-border-subtle bg-muted p-3.5">
+                          {card.map((decision) => (
+                            <DecisionControl
+                              key={decision.id}
+                              decision={decision}
+                              value={value}
+                              onChange={onChange}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        card.map((decision) => (
                           <DecisionControl
                             key={decision.id}
                             decision={decision}
                             value={value}
                             onChange={onChange}
                           />
-                        ))}
-                      </div>
+                        ))
+                      )}
                     </>
                   ) : (
                     <DecisionControl decision={card[0]} value={value} onChange={onChange} />
@@ -171,14 +198,14 @@ export const ThemeEditor = ({
       <div className="flex shrink-0 flex-col gap-2 border-t border-border bg-card px-4 py-3.5">
         <div className="flex items-center gap-2">
           <button type="button" className={FOOT_BUTTON} onClick={resetAll}>
-            Volver a lo de antes
+            {reset}
           </button>
           <span className="flex-1" />
           <button type="button" className={FOOT_BUTTON} onClick={exportTheme}>
-            Exportar
+            {exportLabel}
           </button>
           <button type="button" className={FOOT_BUTTON} onClick={() => file.current?.click()}>
-            Importar
+            {importLabel}
           </button>
           <input
             ref={file}
@@ -192,9 +219,7 @@ export const ThemeEditor = ({
             }}
           />
         </div>
-        {failed ? (
-          <span className="text-xs text-destructive">Ese archivo no es un tema.</span>
-        ) : null}
+        {failed ? <span className="text-xs text-destructive">{badFile}</span> : null}
       </div>
     </div>
   );

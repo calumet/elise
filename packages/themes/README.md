@@ -45,9 +45,22 @@ import { ThemeEditor } from "@calumet/elise-themes";
 <ThemeEditor value={tema} onChange={setTema} decisions={["brand", "corners", "density"]} />;
 ```
 
-Lo que enseña no son las 110 variables sino nueve decisiones con nombre: el color de la escuela, el tono del papel, el menú lateral, los colores de los avisos, las esquinas, qué tan apretado, el relieve y los títulos. Cada una escribe entre una y dieciocho variables, y la de encima nunca se elige: sale por contraste del color de abajo, así que un amarillo lleva letra oscura sin que nadie lo decida.
+Lo que enseña no son las 110 variables sino doce decisiones con nombre: el color de la escuela, el color de la página, el menú lateral, los cuatro colores de aviso, las esquinas, el espaciado, el relieve y las dos tipografías. Cada una escribe entre una y dieciocho variables, y la tinta de encima nunca se elige: sale por contraste del color de abajo, así que un amarillo lleva letra oscura sin que nadie lo decida.
+
+El color de la página es un color libre, no una lista de tonos, y de ahí sale todo el plano: las tarjetas, los bordes y la tinta. **Un color oscuro da un tema oscuro entero**, porque los escalones salen medidos de los dos temas de la hoja y no de una tabla escrita a mano.
+
+Los rótulos viven en inglés y pasan por `@calumet/elise-i18n` bajo el espacio `themes`, con la clave `<decisión>.label`, `<decisión>.description` y `<decisión>.<opción>`. Sin Provider montado se ven en inglés; un portal en español los traduce una vez en su catálogo.
 
 La aplicación pone la vista previa. El paquete no trae pantalla, ni presets, ni guardado.
+
+### Las tipografías
+
+`FONT_FAMILIES` son las diez familias que `@calumet/elise-ui` lleva autoalojadas. La aplicación importa las que vaya a ofrecer, porque una familia que no se importa se ve con la fuente del sistema:
+
+```css
+@import "@calumet/elise-ui/tailwind/fonts/manrope.css";
+@import "@calumet/elise-ui/tailwind/fonts/newsreader.css";
+```
 
 `DecisionControl` es una sola de esas decisiones, sin caja alrededor, para armar otra disposición:
 

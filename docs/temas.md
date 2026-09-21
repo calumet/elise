@@ -712,7 +712,9 @@ import { ThemeEditor } from "@calumet/elise-themes";
 <ThemeEditor value={tema} onChange={setTema} decisions={["brand", "corners"]} />;
 ```
 
-No enseña variables sino nueve decisiones con nombre, porque nadie elige doce sombras: elige una. Cada opción se dibuja con lo que ella misma escribe, así que la miniatura de «esquinas redondas» sale redonda porque su valor es el radio. La prop `decisions` recorta la lista para una app con menos margen que un portal multiinquilino.
+No enseña variables sino doce decisiones con nombre, porque nadie elige doce sombras: elige una. Cada opción se dibuja con lo que ella misma escribe, así que la miniatura de «esquinas redondas» sale redonda porque su valor es el radio. La prop `decisions` recorta la lista para una app con menos margen que un portal multiinquilino.
+
+El color de la página es libre y de ahí sale el plano entero, así que un color oscuro da un tema oscuro sin que haya una decisión de claro contra oscuro. Los rótulos están en inglés y pasan por `@calumet/elise-i18n` en el espacio `themes`.
 
 ### Lo que trae la hoja
 

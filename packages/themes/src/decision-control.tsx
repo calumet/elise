@@ -16,6 +16,7 @@ import * as React from "react";
 
 import { format, parse, toHex } from "./color";
 import { set, type ChoiceDecision, type ColorDecision, type Decision } from "./decisions";
+import { useLabel } from "./i18n";
 import type { EliseTheme } from "./theme";
 import { lightTheme, type EliseVar } from "./tokens.generated";
 
@@ -27,21 +28,8 @@ export type DecisionControlProps = {
   onChange: (theme: EliseTheme) => void;
 };
 
-/* La forma con la que se dibuja cada decisión de escoger. Es lo único que el
-   control sabe de cada una, y solo porque un radio y una sombra no se enseñan
-   con el mismo dibujo. */
-const SHAPES: Record<string, "corner" | "rows" | "card" | "page" | "rail" | "type"> = {
-  corners: "corner",
-  density: "rows",
-  depth: "card",
-  paper: "page",
-  sidebar: "rail",
-  headings: "type",
-};
-
 const LABEL = "text-sm font-semibold text-foreground";
 const HELP = "text-xs leading-snug text-muted-foreground";
-const SAMPLE = "rounded-md border border-border-subtle bg-muted p-4";
 
 const REFERENCE = /^var\((--[a-z0-9-]+)\)$/;
 
@@ -110,13 +98,18 @@ const Preview = ({
         style={{ background: of("--canvas") }}
       >
         <span
-          className="h-3 rounded-xs border"
+          className="flex h-3.5 items-center gap-1 rounded-xs border px-1"
           style={{ background: of("--card"), borderColor: of("--border") }}
-        />
+        >
+          <span className="h-1 w-1/3 rounded-xs" style={{ background: of("--foreground") }} />
+        </span>
         <span
-          className="flex-1 rounded-xs border"
+          className="flex flex-1 flex-col justify-center gap-1 rounded-xs border px-1"
           style={{ background: of("--card"), borderColor: of("--border") }}
-        />
+        >
+          <span className="h-1 w-3/4 rounded-xs" style={{ background: of("--muted-foreground") }} />
+          <span className="h-1 w-1/2 rounded-xs" style={{ background: of("--muted-foreground") }} />
+        </span>
       </span>
     );
   }
@@ -146,22 +139,42 @@ const Preview = ({
     );
   }
 
+  /* La familia sale del fragmento y no del tema: la miniatura de cada opción
+     tiene que enseñar su propia letra, sea la del texto o la de los títulos. */
+  const family = vars["--font-display"] ?? vars["--font-sans"] ?? of("--font-sans");
   return (
     <span className="flex h-11 items-center justify-center rounded-md bg-muted">
-      <span
-        className="text-xl font-semibold text-foreground"
-        style={{ fontFamily: of("--font-display") }}
-      >
+      <span className="text-xl font-semibold text-foreground" style={{ fontFamily: family }}>
         Aa
       </span>
     </span>
   );
 };
 
-const Head = ({ decision }: { decision: Decision }) => (
-  <span className="flex flex-col gap-0.5">
-    <span className={LABEL}>{decision.label}</span>
-    {decision.description ? <span className={HELP}>{decision.description}</span> : null}
+const Head = ({ decision }: { decision: Decision }) => {
+  const label = useLabel(`${decision.id}.label`, decision.label);
+  const help = useLabel(`${decision.id}.description`, decision.description);
+  return (
+    <span className="flex flex-col gap-0.5">
+      <span className={LABEL}>{label}</span>
+      {decision.description ? <span className={HELP}>{help}</span> : null}
+    </span>
+  );
+};
+
+const OptionLabel = ({
+  decision,
+  option,
+  selected,
+}: {
+  decision: Decision;
+  option: { id: string; label: string };
+  selected: boolean;
+}) => (
+  <span
+    className={`text-2xs ${selected ? "font-medium text-foreground" : "text-muted-foreground"}`}
+  >
+    {useLabel(`${decision.id}.${option.id}`, option.label)}
   </span>
 );
 
@@ -171,14 +184,15 @@ const Choice = ({
   onChange,
 }: DecisionControlProps & { decision: ChoiceDecision }) => {
   const chosen = decision.read(value);
-  const shape = SHAPES[decision.id] ?? "card";
 
   return (
     <div className="flex flex-col gap-3">
       <Head decision={decision} />
       <div
         className="grid gap-2"
-        style={{ gridTemplateColumns: `repeat(${decision.options.length}, minmax(0, 1fr))` }}
+        style={{
+          gridTemplateColumns: `repeat(${decision.columns ?? decision.options.length}, minmax(0, 1fr))`,
+        }}
       >
         {decision.options.map((option) => {
           const selected = option.id === chosen;
@@ -194,12 +208,12 @@ const Choice = ({
                   : "border-border hover:border-border-strong"
               }`}
             >
-              <Preview shape={shape} vars={decision.apply(option.id, value)} theme={value} />
-              <span
-                className={`text-2xs ${selected ? "font-medium text-foreground" : "text-muted-foreground"}`}
-              >
-                {option.label}
-              </span>
+              <Preview
+                shape={decision.shape ?? "card"}
+                vars={decision.apply(option.id, value)}
+                theme={value}
+              />
+              <OptionLabel decision={decision} option={option} selected={selected} />
             </button>
           );
         })}
@@ -215,6 +229,7 @@ const Swatch = ({
   children,
 }: DecisionControlProps & { decision: ColorDecision; children: React.ReactNode }) => {
   const current = decision.read(value);
+
   const hex = React.useMemo(() => {
     const parsed = parse(current);
     return parsed ? toHex(parsed) : "#000000";
@@ -240,8 +255,16 @@ const Color = ({
   value,
   onChange,
 }: DecisionControlProps & { decision: ColorDecision }) => {
-  const [fill, ink, accent] = decision.preview;
+  const [fill, inkVar, accent] = decision.preview;
   const of = (name: EliseVar) => value[name] ?? lightTheme[name];
+  const label = useLabel(`${decision.id}.label`, decision.label);
+  const change = useLabel("change", "Change");
+  const action = useLabel("sample.action", "Sign me up");
+  const link = useLabel("sample.link", "Read the rules");
+  const hex = React.useMemo(() => {
+    const parsed = parse(decision.read(value));
+    return parsed ? toHex(parsed) : "";
+  }, [decision, value]);
 
   if (decision.compact) {
     return (
@@ -249,14 +272,14 @@ const Color = ({
         <button
           type="button"
           className="flex cursor-pointer items-center gap-2 rounded-full border px-2.5 py-1.5 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-          style={{ background: of(fill), color: of(ink), borderColor: of(ink) + "33" }}
+          style={{ background: of(fill), color: of(inkVar), borderColor: `${of(inkVar)}33` }}
         >
           <span
             className="size-2 shrink-0 rounded-full"
             style={{ background: of(accent) }}
             aria-hidden="true"
           />
-          {decision.label}
+          {label}
         </button>
       </Swatch>
     );
@@ -265,17 +288,21 @@ const Color = ({
   return (
     <div className="flex flex-col gap-3">
       <Head decision={decision} />
-      <div className={`flex items-center gap-3.5 ${SAMPLE}`}>
-        <span
-          className="inline-flex h-8 items-center rounded-md px-3.5 text-sm font-medium"
-          style={{ background: of(fill), color: of(ink) }}
-        >
-          Inscribirme
-        </span>
-        <span className="text-sm" style={{ color: of(accent) }}>
-          Ver el reglamento
-        </span>
-      </div>
+      {decision.shape && decision.shape !== "swatch" ? (
+        <Preview shape={decision.shape} vars={value} theme={value} />
+      ) : (
+        <div className="flex items-center gap-3.5 rounded-md border border-border-subtle bg-muted p-4">
+          <span
+            className="inline-flex h-8 items-center rounded-md px-3.5 text-sm font-medium"
+            style={{ background: of(fill), color: of(inkVar) }}
+          >
+            {action}
+          </span>
+          <span className="text-sm" style={{ color: of(accent) }}>
+            {link}
+          </span>
+        </div>
+      )}
       <Swatch decision={decision} value={value} onChange={onChange}>
         <button
           type="button"
@@ -287,18 +314,13 @@ const Color = ({
             aria-hidden="true"
           />
           <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground uppercase">
-            {hexOf(decision.read(value))}
+            {hex}
           </span>
-          <span className="shrink-0 pr-1.5 text-xs font-medium text-foreground">Cambiar</span>
+          <span className="shrink-0 pr-1.5 text-xs font-medium text-foreground">{change}</span>
         </button>
       </Swatch>
     </div>
   );
-};
-
-const hexOf = (value: string) => {
-  const parsed = parse(value);
-  return parsed ? toHex(parsed) : value;
 };
 
 /**
