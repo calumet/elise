@@ -207,10 +207,14 @@ export const ThemeEditor = ({
           <button type="button" className={FOOT_BUTTON} onClick={() => file.current?.click()}>
             {importLabel}
           </button>
+          {/* Lo dispara el botón de al lado, así que sale del orden de
+              tabulación: `sr-only` esconde pero no quita el foco. */}
           <input
             ref={file}
             type="file"
             accept="application/json,.json"
+            aria-label={importLabel}
+            tabIndex={-1}
             className="sr-only"
             onChange={(event) => {
               const chosen = event.target.files?.[0];
