@@ -13,7 +13,7 @@ import { DecisionControl } from "./decision-control";
 import { clear, DECISIONS, type Decision, type DecisionGroup } from "./decisions";
 import { useLabel } from "./i18n";
 import type { EliseTheme } from "./theme";
-import { lightTheme, type EliseVar } from "./tokens.generated";
+import type { EliseVar } from "./tokens.generated";
 
 /** Props de {@link ThemeEditor}. */
 export type ThemeEditorProps = {
@@ -21,11 +21,10 @@ export type ThemeEditorProps = {
   value: EliseTheme;
   onChange: (theme: EliseTheme) => void;
   /**
-   * Las decisiones que se enseñan, por su id y en su orden. Sin esto salen
-   * todas, que es lo que quiere una app donde el inquilino manda; una con
-   * menos margen pasa las suyas.
+   * Las decisiones que se enseñan, en su orden: el id de una de Elise, o una
+   * escrita por el consumidor. Sin esto salen todas.
    */
-  decisions?: readonly string[];
+  decisions?: readonly (string | Decision)[];
   className?: string;
 };
 
@@ -60,20 +59,27 @@ const CardHead = ({ decision }: { decision: Decision }) => {
 const FOOT_BUTTON =
   "inline-flex h-8 cursor-pointer items-center rounded-md border border-input bg-card px-2.5 text-xs text-foreground transition-[border-color] duration-(--duration-fast) hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
-/* Un tema de un archivo es texto de fuera: solo entra lo que la hoja declara. */
+const CUSTOM_PROPERTY = /^--[a-z0-9-]+$/;
+
+/* Un tema de un archivo es texto de fuera, pero las variables del consumidor
+   son suyas: se filtra por la forma del nombre, no por las que Elise conoce. */
 const asTheme = (parsed: unknown): EliseTheme | null => {
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return null;
   const theme: EliseTheme = {};
   for (const [name, value] of Object.entries(parsed)) {
-    if (typeof value === "string" && name in lightTheme) theme[name as EliseVar] = value;
+    if (typeof value === "string" && CUSTOM_PROPERTY.test(name)) theme[name as EliseVar] = value;
   }
   return Object.keys(theme).length > 0 ? theme : null;
 };
 
 /** Las decisiones pedidas, agrupadas por tarjeta sin perder el orden. */
-const cardsOf = (ids: readonly string[] | undefined) => {
-  const wanted = ids
-    ? ids.map((id) => DECISIONS.find((decision) => decision.id === id)).filter(Boolean)
+const cardsOf = (asked: readonly (string | Decision)[] | undefined) => {
+  const wanted = asked
+    ? asked
+        .map((one) =>
+          typeof one === "string" ? DECISIONS.find((decision) => decision.id === one) : one,
+        )
+        .filter(Boolean)
     : DECISIONS;
   const cards = new Map<string, Decision[]>();
   for (const decision of wanted as Decision[]) {

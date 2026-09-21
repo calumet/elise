@@ -7,8 +7,12 @@
 
 import type { EliseVar } from "./tokens.generated";
 
-/** Un tema: cualquier subconjunto de las variables de Elise. */
-export type EliseTheme = Partial<Record<EliseVar, string>>;
+/**
+ * Un tema: cualquier subconjunto de las variables de Elise, más las que ponga
+ * el consumidor. El `& {}` es lo que evita que el patrón se coma la unión y con
+ * ella el autocompletado de las 110.
+ */
+export type EliseTheme = Partial<Record<EliseVar | (`--${string}` & {}), string>>;
 
 /* El valor sale de la base de datos y acaba dentro de un `<style>`: esto cierra la etiqueta. */
 const UNSAFE = /[<>{};]|\/\*/;

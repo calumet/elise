@@ -1,4 +1,10 @@
-import { applyTheme, ThemeEditor, ThemeTokenEditor, type EliseTheme } from "@calumet/elise-themes";
+import {
+  applyTheme,
+  ThemeEditor,
+  ThemeTokenEditor,
+  type CustomToken,
+  type EliseTheme,
+} from "@calumet/elise-themes";
 import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
 import { Input } from "@calumet/elise-ui/input";
@@ -6,10 +12,18 @@ import { Text } from "@calumet/elise-ui/text";
 import { ThemeScope } from "@calumet/elise-ui/theme-scope";
 import * as React from "react";
 
-/**
- * El editor con su vista previa al lado, que es lo que le toca a la aplicación:
- * el paquete trae el editor y nada más.
- */
+/* Un token que no es de Elise y que sigue al acento, como el del portal de grupos. */
+const PROPIOS: CustomToken[] = [
+  {
+    name: "--surface",
+    label: "Superficie",
+    kind: "color",
+    value: "color-mix(in oklab, var(--accent) 40%, transparent)",
+    note: "La banda sobre la que se apoyan las tarjetas de esta app.",
+  },
+];
+
+/** El editor con su vista previa al lado, que es lo que le toca a la aplicación. */
 const EditorDeTemaDemo = (): React.JSX.Element => {
   const [tema, setTema] = React.useState<EliseTheme>({});
   const [avanzado, setAvanzado] = React.useState(false);
@@ -45,7 +59,7 @@ const EditorDeTemaDemo = (): React.JSX.Element => {
         </div>
         <div className="h-160 overflow-hidden rounded-xl border border-border">
           {avanzado ? (
-            <ThemeTokenEditor value={tema} onChange={setTema} className="h-full" />
+            <ThemeTokenEditor value={tema} onChange={setTema} extra={PROPIOS} className="h-full" />
           ) : (
             <ThemeEditor value={tema} onChange={setTema} className="h-full" />
           )}

@@ -30,7 +30,13 @@ import { nameOf, noteOf, OWNED, TOKEN_GROUPS } from "./catalog";
 import { contrast, parse, toHex } from "./color";
 import { useLabel } from "./i18n";
 import type { EliseTheme } from "./theme";
-import { FONT_FAMILIES, lightTheme, tokenKinds, type EliseVar } from "./tokens.generated";
+import {
+  FONT_FAMILIES,
+  lightTheme,
+  tokenKinds,
+  type EliseVar,
+  type TokenKind,
+} from "./tokens.generated";
 import { formatShadow, formatSize, linkedTo, parseShadow, parseSize, type Shadow } from "./values";
 
 /** Props de {@link ThemeTokenEditor}. */
@@ -38,6 +44,8 @@ export type ThemeTokenEditorProps = {
   /** El mismo tema que edita `ThemeEditor`: los dos escriben el mismo objeto. */
   value: EliseTheme;
   onChange: (theme: EliseTheme) => void;
+  /** Variables del consumidor, que salen en un grupo aparte al final. */
+  extra?: readonly CustomToken[];
   className?: string;
 };
 
@@ -235,18 +243,26 @@ const Family = ({ current, write }: { current: string; write: Write }) => {
   );
 };
 
-const Row = ({
-  name,
-  value,
-  onChange,
-}: {
-  name: EliseVar;
+/** Una variable del consumidor, para que salga en el editor con su control. */
+export type CustomToken = {
+  name: string;
+  label: string;
+  kind: TokenKind;
+  /** De partida. Un `color-mix` con `var(--x)` la deja siguiendo a esa otra. */
+  value: string;
+  note?: string;
+};
+
+type RowProps = {
+  token: CustomToken;
   value: EliseTheme;
   onChange: (theme: EliseTheme) => void;
-}) => {
+};
+
+const Row = ({ token, value, onChange }: RowProps) => {
   const derived = useLabel("advanced.derived", "The simple editor also sets this one.");
-  const note = noteOf(name);
-  const current = value[name] ?? lightTheme[name];
+  const name = token.name as EliseVar;
+  const current = value[name] ?? token.value;
 
   const write: Write = (next) => {
     const theme = { ...value };
@@ -255,21 +271,22 @@ const Row = ({
     onChange(theme);
   };
 
-  const kind = tokenKinds[name];
   const isFamily = name.startsWith("--font-");
 
   return (
     <div className="flex flex-col gap-1.5 py-3">
       <div className="flex items-baseline gap-2">
-        <span className="text-xs font-medium text-foreground">{nameOf(name)}</span>
+        <span className="text-xs font-medium text-foreground">{token.label}</span>
         <span className="flex-1" />
         <Legibility name={name} theme={value} />
       </div>
-      {note ? <span className="text-2xs leading-snug text-muted-foreground">{note}</span> : null}
+      {token.note ? (
+        <span className="text-2xs leading-snug text-muted-foreground">{token.note}</span>
+      ) : null}
 
-      {kind === "color" ? <Colour current={current} write={write} /> : null}
-      {kind === "shadow" ? <Shadows name={name} current={current} write={write} /> : null}
-      {kind === "size" || (kind === "other" && !isFamily) ? (
+      {token.kind === "color" ? <Colour current={current} write={write} /> : null}
+      {token.kind === "shadow" ? <Shadows name={name} current={current} write={write} /> : null}
+      {token.kind === "size" || (token.kind === "other" && !isFamily) ? (
         <Sizes name={name} current={current} write={write} />
       ) : null}
       {isFamily ? <Family current={current} write={write} /> : null}
@@ -278,6 +295,14 @@ const Row = ({
     </div>
   );
 };
+
+const tokenOf = (name: EliseVar): CustomToken => ({
+  name,
+  label: nameOf(name),
+  kind: tokenKinds[name],
+  value: lightTheme[name],
+  note: noteOf(name),
+});
 
 /**
  * Todas las variables del tema, cada una con el control que le corresponde.
@@ -293,27 +318,38 @@ const Row = ({
 export const ThemeTokenEditor = ({
   value,
   onChange,
+  extra,
   className,
 }: ThemeTokenEditorProps): React.JSX.Element => {
   const [query, setQuery] = React.useState("");
   const search = useLabel("advanced.search", "Search");
   const title = useLabel("advanced.title", "Everything else");
+  const mine = useLabel("advanced.extra", "This app");
+  const mineNote = useLabel("advanced.extraNote", "Variables this app added on top of Elise.");
   const subtitle = useLabel(
     "advanced.subtitle",
     "Here you can change anything, one thing at a time. Nothing is corrected for you.",
   );
 
   const groups = React.useMemo(() => {
+    const all = [
+      ...TOKEN_GROUPS.map((group) => ({ ...group, tokens: group.vars.map(tokenOf) })),
+      ...(extra?.length
+        ? [{ id: "extra", label: mine, description: mineNote, tokens: extra }]
+        : []),
+    ];
     const needle = query.trim().toLowerCase();
-    if (!needle) return TOKEN_GROUPS;
-    return TOKEN_GROUPS.map((group) => ({
-      ...group,
-      /* También por el nombre de la variable, aunque no se enseñe. */
-      vars: group.vars.filter(
-        (name) => name.includes(needle) || nameOf(name).toLowerCase().includes(needle),
-      ),
-    })).filter((group) => group.vars.length > 0);
-  }, [query]);
+    if (!needle) return all;
+    return all
+      .map((group) => ({
+        ...group,
+        /* También por el nombre de la variable, aunque no se enseñe. */
+        tokens: group.tokens.filter(
+          (token) => token.name.includes(needle) || token.label.toLowerCase().includes(needle),
+        ),
+      }))
+      .filter((group) => group.tokens.length > 0);
+  }, [query, extra, mine, mineNote]);
 
   return (
     <div
@@ -347,8 +383,8 @@ export const ThemeTokenEditor = ({
                 {group.description}
               </span>
             </div>
-            {group.vars.map((name) => (
-              <Row key={name} name={name} value={value} onChange={onChange} />
+            {group.tokens.map((token) => (
+              <Row key={token.name} token={token} value={value} onChange={onChange} />
             ))}
           </div>
         ))}
