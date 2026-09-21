@@ -12,7 +12,7 @@
  * @module
  */
 
-import { at, format, parse, readableOn, step, type Oklch } from "./color";
+import { at, format, lighten, parse, readableOn, step, type Oklch } from "./color";
 import type { EliseTheme } from "./theme";
 import { darkTheme, lightTheme, type EliseVar } from "./tokens.generated";
 
@@ -49,6 +49,8 @@ export type ColorDecision = Common & {
   kind: "color";
   /** Las variables con las que el control se dibuja: el relleno, la tinta de encima y el acento. */
   preview: readonly [EliseVar, EliseVar, EliseVar];
+  /** Lo que sale del color elegido, para enseñarlo al lado de la muestra. */
+  ramp: readonly EliseVar[];
 };
 
 /** Una decisión de escoger entre opciones dibujadas. */
@@ -155,10 +157,10 @@ const paperVars = (paper: Oklch): Vars => {
   const vars: Vars = { ...LINKED, "--background": format(paper), "--foreground": format(text) };
 
   for (const [name, offset] of SURFACE_STEPS[side]) {
-    vars[name] = format({ ...paper, l: paper.l + offset });
+    vars[name] = format(lighten(paper, offset));
   }
   for (const [name, offset] of INK_STEPS[side]) {
-    vars[name] = format({ ...text, l: text.l + offset });
+    vars[name] = format(lighten(text, offset));
   }
   return vars;
 };
@@ -326,6 +328,7 @@ const color = (
   common: Omit<Common, "writes" | "apply" | "read"> & {
     source: EliseVar;
     preview: readonly [EliseVar, EliseVar, EliseVar];
+    ramp: readonly EliseVar[];
     derive: (base: Oklch, theme: EliseTheme) => Vars;
   },
 ): ColorDecision => {
@@ -353,6 +356,7 @@ const status = (
   label: string,
   source: EliseVar,
   preview: readonly [EliseVar, EliseVar, EliseVar],
+  ramp: readonly EliseVar[],
 ): ColorDecision =>
   color({
     id,
@@ -363,6 +367,7 @@ const status = (
     compact: true,
     source,
     preview,
+    ramp,
     derive: (base) => statusVars(prefix, base),
   });
 
@@ -376,6 +381,7 @@ export const DECISIONS: readonly Decision[] = [
     card: "brand",
     source: "--primary",
     preview: ["--primary", "--primary-foreground", "--link"],
+    ramp: ["--primary", "--primary-hover", "--primary-active", "--primary-foreground", "--link"],
     derive: (base) => brandVars(base),
   }),
 
@@ -385,9 +391,9 @@ export const DECISIONS: readonly Decision[] = [
     description: "What everything sits on. A dark colour turns the whole portal dark.",
     group: "colors",
     card: "paper",
-    shape: "page",
     source: "--background",
     preview: ["--background", "--foreground", "--card"],
+    ramp: ["--background", "--canvas", "--card", "--border", "--muted-foreground", "--foreground"],
     derive: (base) => paperVars(base),
   }),
 
@@ -405,29 +411,41 @@ export const DECISIONS: readonly Decision[] = [
   }),
 
   {
-    ...status("status-success", "success", "All good", "--success", [
-      "--success-subtle",
-      "--success-subtle-foreground",
+    ...status(
+      "status-success",
+      "success",
+      "All good",
       "--success",
-    ]),
+      ["--success-subtle", "--success-subtle-foreground", "--success"],
+      ["--success", "--success-hover", "--success-foreground"],
+    ),
     cardLabel: "Alert colours",
     cardDescription: "Tap any of them to change it.",
   },
-  status("status-warning", "warning", "Careful", "--warning", [
-    "--warning-subtle",
-    "--warning-subtle-foreground",
+  status(
+    "status-warning",
+    "warning",
+    "Careful",
     "--warning",
-  ]),
-  status("status-danger", "destructive", "Error", "--destructive", [
-    "--destructive-subtle",
-    "--destructive-subtle-foreground",
+    ["--warning-subtle", "--warning-subtle-foreground", "--warning"],
+    ["--warning", "--warning-hover", "--warning-foreground"],
+  ),
+  status(
+    "status-danger",
+    "destructive",
+    "Error",
     "--destructive",
-  ]),
-  status("status-info", "info", "Note", "--info", [
-    "--info-subtle",
-    "--info-subtle-foreground",
+    ["--destructive-subtle", "--destructive-subtle-foreground", "--destructive"],
+    ["--destructive", "--destructive-hover", "--destructive-foreground"],
+  ),
+  status(
+    "status-info",
+    "info",
+    "Note",
     "--info",
-  ]),
+    ["--info-subtle", "--info-subtle-foreground", "--info"],
+    ["--info", "--info-hover", "--info-foreground"],
+  ),
 
   choice({
     id: "corners",

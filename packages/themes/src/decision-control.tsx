@@ -12,6 +12,13 @@
 
 import { ColorPicker } from "@calumet/elise-ui/color-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@calumet/elise-ui/select";
 import * as React from "react";
 
 import { format, parse, toHex } from "./color";
@@ -178,12 +185,49 @@ const OptionLabel = ({
   </span>
 );
 
+/* Con muchas opciones las fichas dejan de ayudar: diez familias son diez
+   tarjetas que no caben en un sidebar, y el nombre de la letra ya se lee en su
+   propia letra dentro de la lista. */
+const MANY = 6;
+
+const FromList = ({
+  decision,
+  value,
+  onChange,
+}: DecisionControlProps & { decision: ChoiceDecision }) => {
+  const chosen = decision.read(value);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <Head decision={decision} />
+      <Select value={chosen} onValueChange={(next) => onChange(set(decision, value, next))}>
+        <SelectTrigger className="w-full">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {decision.options.map((option) => (
+            <SelectItem key={option.id} value={option.id}>
+              <span style={{ fontFamily: Object.values(decision.apply(option.id, value))[0] }}>
+                {option.label}
+              </span>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
+
 const Choice = ({
   decision,
   value,
   onChange,
 }: DecisionControlProps & { decision: ChoiceDecision }) => {
   const chosen = decision.read(value);
+
+  if (decision.options.length > MANY) {
+    return <FromList decision={decision} value={value} onChange={onChange} />;
+  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -259,8 +303,6 @@ const Color = ({
   const of = (name: EliseVar) => value[name] ?? lightTheme[name];
   const label = useLabel(`${decision.id}.label`, decision.label);
   const change = useLabel("change", "Change");
-  const action = useLabel("sample.action", "Sign me up");
-  const link = useLabel("sample.link", "Read the rules");
   const hex = React.useMemo(() => {
     const parsed = parse(decision.read(value));
     return parsed ? toHex(parsed) : "";
@@ -288,35 +330,32 @@ const Color = ({
   return (
     <div className="flex flex-col gap-3">
       <Head decision={decision} />
-      {decision.shape && decision.shape !== "swatch" ? (
-        <Preview shape={decision.shape} vars={value} theme={value} />
-      ) : (
-        <div className="flex items-center gap-3.5 rounded-md border border-border-subtle bg-muted p-4">
-          <span
-            className="inline-flex h-8 items-center rounded-md px-3.5 text-sm font-medium"
-            style={{ background: of(fill), color: of(inkVar) }}
-          >
-            {action}
-          </span>
-          <span className="text-sm" style={{ color: of(accent) }}>
-            {link}
-          </span>
-        </div>
-      )}
       <Swatch decision={decision} value={value} onChange={onChange}>
         <button
           type="button"
-          className="flex w-full cursor-pointer items-center gap-2.5 rounded-md border border-input bg-card p-1.5 text-left transition-[border-color] duration-(--duration-fast) hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="flex w-full cursor-pointer items-center gap-3 rounded-md border border-input bg-card p-2 text-left transition-[border-color] duration-(--duration-fast) hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <span
-            className="size-7 shrink-0 rounded-sm border border-border-strong"
-            style={{ background: of(fill) }}
+            className="size-9 shrink-0 rounded-sm border border-border-strong"
+            style={{ background: of(decision.ramp[0]) }}
             aria-hidden="true"
           />
-          <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground uppercase">
-            {hex}
+          <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <span className="truncate font-mono text-xs text-muted-foreground uppercase">
+              {hex}
+            </span>
+            {/* Lo que sale del color elegido, que es lo que el editor hace por vos. */}
+            <span className="flex gap-1" aria-hidden="true">
+              {decision.ramp.slice(1).map((name) => (
+                <span
+                  key={name}
+                  className="size-3 rounded-xs border border-border-subtle"
+                  style={{ background: of(name) }}
+                />
+              ))}
+            </span>
           </span>
-          <span className="shrink-0 pr-1.5 text-xs font-medium text-foreground">{change}</span>
+          <span className="shrink-0 pr-1 text-xs font-medium text-foreground">{change}</span>
         </button>
       </Swatch>
     </div>

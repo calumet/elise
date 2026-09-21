@@ -133,4 +133,14 @@ export const step = (color: Oklch, amount: number): Oklch => {
 };
 
 /** El mismo tono llevado a una luminosidad y un croma dados. */
-export const at = (color: Oklch, l: number, c: number): Oklch => ({ l, c, h: color.h });
+export const at = (color: Oklch, l: number, c: number): Oklch => ({
+  l: clamp(l, 0, 1),
+  c,
+  h: color.h,
+});
+
+/** Suma a la luminosidad sin salirse de la escala, que `oklch(1.016 …)` no es un color. */
+export const lighten = (color: Oklch, amount: number): Oklch => ({
+  ...color,
+  l: clamp(color.l + amount, 0, 1),
+});
