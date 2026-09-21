@@ -11,14 +11,17 @@
  */
 
 import { ColorPicker } from "@calumet/elise-ui/color-picker";
-import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@calumet/elise-ui/select";
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "@calumet/elise-ui/combobox";
+import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
 import * as React from "react";
 
 import { format, parse, toHex } from "./color";
@@ -205,24 +208,39 @@ const FromList = ({
   onChange,
 }: DecisionControlProps & { decision: ChoiceDecision }) => {
   const chosen = decision.read(value);
+  const current = decision.options.find((option) => option.id === chosen);
+  const search = useLabel("list.search", "Type to search");
+  const empty = useLabel("list.empty", "Nothing matches");
+
+  /* La familia que escribe cada opción, para enseñar cada nombre en su propia
+     letra dentro de la lista y también en el disparador. */
+  const familyOf = (id: string) => Object.values(decision.apply(id, value))[0];
 
   return (
     <div className="flex flex-col gap-3">
       <Head decision={decision} />
-      <Select value={chosen} onValueChange={(next) => onChange(set(decision, value, next))}>
-        <SelectTrigger className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {decision.options.map((option) => (
-            <SelectItem key={option.id} value={option.id}>
-              <span style={{ fontFamily: Object.values(decision.apply(option.id, value))[0] }}>
-                {option.label}
-              </span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <Combobox value={chosen} onValueChange={(next) => onChange(set(decision, value, next))}>
+        <ComboboxTrigger>
+          <ComboboxValue>
+            <span style={{ fontFamily: current ? familyOf(current.id) : undefined }}>
+              {current?.label}
+            </span>
+          </ComboboxValue>
+        </ComboboxTrigger>
+        <ComboboxContent>
+          <ComboboxInput placeholder={search} />
+          <ComboboxList>
+            <ComboboxEmpty>{empty}</ComboboxEmpty>
+            {decision.options.map((option) => (
+              /* El valor es el id, así que el nombre entra como término extra
+                 para que «Source Serif» encuentre a `source-serif-4`. */
+              <ComboboxItem key={option.id} value={option.id} keywords={[option.label]}>
+                <span style={{ fontFamily: familyOf(option.id) }}>{option.label}</span>
+              </ComboboxItem>
+            ))}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
     </div>
   );
 };
