@@ -22,7 +22,7 @@ export type ThemeEditorProps = {
   onChange: (theme: EliseTheme) => void;
   /**
    * Las decisiones que se enseñan, por su id y en su orden. Sin esto salen
-   * todas, que es lo que quiere un portal donde el inquilino manda; una app con
+   * todas, que es lo que quiere una app donde el inquilino manda; una con
    * menos margen pasa las suyas.
    */
   decisions?: readonly string[];
@@ -101,7 +101,7 @@ export const ThemeEditor = ({
 }: ThemeEditorProps): React.JSX.Element => {
   const [failed, setFailed] = React.useState(false);
   const file = React.useRef<HTMLInputElement>(null);
-  const title = useLabel("editor.title", "How the portal looks");
+  const title = useLabel("editor.title", "Appearance");
   const subtitle = useLabel("editor.subtitle", "Every change is drawn here. Nothing is saved yet.");
   const reset = useLabel("editor.reset", "Back to how it was");
   const exportLabel = useLabel("editor.export", "Export");

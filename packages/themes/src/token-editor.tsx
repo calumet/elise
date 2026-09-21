@@ -1,24 +1,38 @@
 /**
- * El editor avanzado: una variable, un campo.
+ * El editor avanzado: avanzado porque deja cambiarlo todo, no porque pida saber
+ * CSS. No hay nombres de variable en pantalla ni campos donde escribir código:
+ * un color se elige, un tamaño se desliza y una sombra se arma con sus números.
  *
  * El otro editor promete que el contraste se arregla solo; este no puede
  * prometerlo, porque su razón de ser es dejar poner lo que sea. Lo que hace es
- * enseñar la razón de contraste al lado de cada par de fondo y tinta: quien
- * entra aquí sabe lo que hace, pero que lo vea.
+ * decir en voz alta si el texto se va a leer.
  *
  * @module
  */
 
 import { ColorPicker } from "@calumet/elise-ui/color-picker";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "@calumet/elise-ui/combobox";
 import { Input } from "@calumet/elise-ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
+import { Slider } from "@calumet/elise-ui/slider";
 import * as React from "react";
 
 import { nameOf, noteOf, OWNED, TOKEN_GROUPS } from "./catalog";
-import { contrast, format, parse, toHex } from "./color";
+import { contrast, parse, toHex } from "./color";
+import { FONT_FAMILIES } from "./decisions";
 import { useLabel } from "./i18n";
 import type { EliseTheme } from "./theme";
 import { lightTheme, tokenKinds, type EliseVar } from "./tokens.generated";
+import { formatShadow, formatSize, linkedTo, parseShadow, parseSize, type Shadow } from "./values";
 
 /** Props de {@link ThemeTokenEditor}. */
 export type ThemeTokenEditorProps = {
@@ -27,6 +41,8 @@ export type ThemeTokenEditorProps = {
   onChange: (theme: EliseTheme) => void;
   className?: string;
 };
+
+type Write = (next: string) => void;
 
 /* Un `-foreground` se lee encima de la variable de la que cuelga, y
    `--foreground` encima del papel. Con eso sale el par que se mide. */
@@ -37,7 +53,12 @@ const backdropOf = (name: EliseVar): EliseVar | null => {
   return base in lightTheme ? base : null;
 };
 
-const Ratio = ({ name, theme }: { name: EliseVar; theme: EliseTheme }) => {
+/* Los umbrales de la WCAG para texto corriente: 4.5 pasa y 7 pasa de sobra. */
+const Legibility = ({ name, theme }: { name: EliseVar; theme: EliseTheme }) => {
+  const good = useLabel("legible.good", "Easy to read");
+  const fair = useLabel("legible.fair", "Readable, but only just");
+  const poor = useLabel("legible.poor", "Hard to read");
+
   const backdrop = backdropOf(name);
   if (!backdrop) return null;
 
@@ -46,45 +67,176 @@ const Ratio = ({ name, theme }: { name: EliseVar; theme: EliseTheme }) => {
   if (!ink || !under) return null;
 
   const ratio = contrast(ink, under);
-  const poor = ratio < 4.5;
+  const tone =
+    ratio >= 7 ? "text-success" : ratio >= 4.5 ? "text-muted-foreground" : "text-warning";
+  const words = ratio >= 7 ? good : ratio >= 4.5 ? fair : poor;
+
   return (
-    <span
-      className={`shrink-0 font-mono text-2xs ${poor ? "text-warning" : "text-muted-foreground"}`}
-      title={`${nameOf(name)} / ${nameOf(backdrop)}`}
-    >
-      {ratio.toFixed(1)}:1
+    <span className={`shrink-0 text-2xs ${tone}`}>
+      {words} · {ratio.toFixed(1)}:1
     </span>
   );
 };
 
-const Swatch = ({
-  value,
-  onCommit,
-}: {
-  value: string;
-  onCommit: (next: string) => void;
-}): React.JSX.Element => {
-  const parsed = parse(value);
+const Colour = ({ current, write }: { current: string; write: Write }) => {
+  const pick = useLabel("advanced.pick", "Pick a colour");
+  const follows = useLabel("advanced.follows", "follows {name}");
+  const linked = linkedTo(current);
+  const parsed = linked ? null : parse(current);
+  const hex = parsed ? toHex(parsed) : "";
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          aria-label={useLabel("advanced.pick", "Pick a colour")}
-          className="size-8 shrink-0 cursor-pointer rounded-sm border border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-          style={{ background: value }}
+    <div className="flex items-center gap-2">
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-label={pick}
+            className="size-8 shrink-0 cursor-pointer rounded-sm border border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+            style={{ background: current }}
+          />
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-3" align="start">
+          <ColorPicker value={hex || "#000000"} onValueCommit={write} />
+        </PopoverContent>
+      </Popover>
+      {linked ? (
+        /* Un valor atado a otra variable no tiene hex que enseñar, y decir su
+           fórmula no ayuda a nadie: se dice a quién sigue. */
+        <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+          {follows.replace("{name}", nameOf(linked as EliseVar))}
+        </span>
+      ) : (
+        <Input
+          size="sm"
+          aria-label={pick}
+          value={hex}
+          onChange={(event) => write(event.target.value)}
+          className="min-w-0 flex-1 font-mono text-xs uppercase"
         />
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-3" align="start">
-        <ColorPicker
-          value={parsed ? toHex(parsed) : "#000000"}
-          onValueCommit={(next) => {
-            const read = parse(next);
-            if (read) onCommit(format(read));
-          }}
+      )}
+    </div>
+  );
+};
+
+/* Los topes de cada tamaño, en la unidad en la que viene. El radio llega a una
+   esquina completamente redonda y el paso, a un portal que respira. */
+const LIMITS: Record<string, { max: number; step: number }> = {
+  "--radius": { max: 2, step: 0.0625 },
+  "--spacing": { max: 0.4, step: 0.01 },
+};
+
+const Sizes = ({ name, current, write }: { name: EliseVar; current: string; write: Write }) => {
+  const size = parseSize(current);
+  if (!size) return null;
+
+  const limits =
+    LIMITS[name] ?? (size.unit === "ms" ? { max: 600, step: 10 } : { max: 4, step: 0.05 });
+
+  return (
+    <div className="flex items-center gap-3">
+      <Slider
+        aria-label={nameOf(name)}
+        value={[size.value]}
+        min={0}
+        max={limits.max}
+        step={limits.step}
+        onValueChange={([next]) => write(formatSize({ ...size, value: next }))}
+        className="flex-1"
+      />
+      <span className="w-16 shrink-0 text-right font-mono text-xs text-muted-foreground">
+        {formatSize(size)}
+      </span>
+    </div>
+  );
+};
+
+const SHADOW_PARTS = [
+  { key: "x", label: "Sideways", min: -24, max: 24, step: 1 },
+  { key: "y", label: "Down", min: -24, max: 24, step: 1 },
+  { key: "blur", label: "Softness", min: 0, max: 64, step: 1 },
+  { key: "alpha", label: "Strength", min: 0, max: 1, step: 0.01 },
+] as const;
+
+const ShadowPart = ({
+  part,
+  name,
+  shadow,
+  write,
+}: {
+  part: (typeof SHADOW_PARTS)[number];
+  name: EliseVar;
+  shadow: Shadow;
+  write: Write;
+}) => {
+  const label = useLabel(`shadow.${part.key}`, part.label);
+  return (
+    <div className="flex items-center gap-2">
+      <span className="w-16 shrink-0 text-2xs text-muted-foreground">{label}</span>
+      <Slider
+        aria-label={`${nameOf(name)}, ${label}`}
+        value={[shadow[part.key]]}
+        min={part.min}
+        max={part.max}
+        step={part.step}
+        onValueChange={([next]) => write(formatShadow({ ...shadow, [part.key]: next }))}
+        className="flex-1"
+      />
+    </div>
+  );
+};
+
+const Shadows = ({ name, current, write }: { name: EliseVar; current: string; write: Write }) => {
+  const shadow = parseShadow(current);
+  if (!shadow) return null;
+
+  return (
+    <div className="flex items-start gap-3">
+      <span className="flex size-14 shrink-0 items-center justify-center rounded-md bg-muted">
+        <span
+          className="size-8 rounded-sm border border-border bg-card"
+          style={{ boxShadow: current }}
         />
-      </PopoverContent>
-    </Popover>
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        {SHADOW_PARTS.map((part) => (
+          <ShadowPart key={part.key} part={part} name={name} shadow={shadow} write={write} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Family = ({ current, write }: { current: string; write: Write }) => {
+  const search = useLabel("list.search", "Type to search");
+  const empty = useLabel("list.empty", "Nothing matches");
+  const chosen = FONT_FAMILIES.find((family) => current.includes(family.label));
+
+  return (
+    <Combobox
+      value={chosen?.id ?? ""}
+      onValueChange={(next) => {
+        const family = FONT_FAMILIES.find((item) => item.id === next);
+        if (family) write(family.stack);
+      }}
+    >
+      <ComboboxTrigger>
+        <ComboboxValue placeholder={search}>
+          <span style={{ fontFamily: current }}>{chosen?.label}</span>
+        </ComboboxValue>
+      </ComboboxTrigger>
+      <ComboboxContent>
+        <ComboboxInput placeholder={search} />
+        <ComboboxList>
+          <ComboboxEmpty>{empty}</ComboboxEmpty>
+          {FONT_FAMILIES.map((family) => (
+            <ComboboxItem key={family.id} value={family.id} keywords={[family.label]}>
+              <span style={{ fontFamily: family.stack }}>{family.label}</span>
+            </ComboboxItem>
+          ))}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 };
 
@@ -97,45 +249,43 @@ const Row = ({
   value: EliseTheme;
   onChange: (theme: EliseTheme) => void;
 }) => {
-  const derived = useLabel("advanced.derived", "set by the simple editor");
+  const derived = useLabel("advanced.derived", "The simple editor also sets this one.");
   const note = noteOf(name);
   const current = value[name] ?? lightTheme[name];
-  const changed = value[name] !== undefined;
 
-  const write = (next: string) => {
+  const write: Write = (next) => {
     const theme = { ...value };
-    /* Vaciar el campo saca la variable del tema, que es volver a la hoja. */
     if (next.trim() === "") delete theme[name];
     else theme[name] = next;
     onChange(theme);
   };
 
+  const kind = tokenKinds[name];
+  const isFamily = name.startsWith("--font-");
+
   return (
-    <div className="flex flex-col gap-1.5 py-2.5">
+    <div className="flex flex-col gap-1.5 py-3">
       <div className="flex items-baseline gap-2">
         <span className="text-xs font-medium text-foreground">{nameOf(name)}</span>
-        <code className="font-mono text-2xs text-muted-foreground">{name}</code>
         <span className="flex-1" />
-        <Ratio name={name} theme={value} />
+        <Legibility name={name} theme={value} />
       </div>
       {note ? <span className="text-2xs leading-snug text-muted-foreground">{note}</span> : null}
-      <div className="flex items-center gap-2">
-        {tokenKinds[name] === "color" ? <Swatch value={current} onCommit={write} /> : null}
-        <Input
-          size="sm"
-          aria-label={nameOf(name)}
-          value={current}
-          onChange={(event) => write(event.target.value)}
-          className={`min-w-0 flex-1 font-mono text-xs ${changed ? "" : "text-muted-foreground"}`}
-        />
-      </div>
+
+      {kind === "color" ? <Colour current={current} write={write} /> : null}
+      {kind === "shadow" ? <Shadows name={name} current={current} write={write} /> : null}
+      {kind === "size" || (kind === "other" && !isFamily) ? (
+        <Sizes name={name} current={current} write={write} />
+      ) : null}
+      {isFamily ? <Family current={current} write={write} /> : null}
+
       {OWNED.has(name) ? <span className="text-2xs text-muted-foreground">{derived}</span> : null}
     </div>
   );
 };
 
 /**
- * Todas las variables del tema, una por campo, con su nombre y su grupo.
+ * Todas las variables del tema, cada una con el control que le corresponde.
  *
  * Va aparte de `ThemeEditor` a propósito: escriben el mismo objeto, pero no se
  * parecen en nada y la aplicación decide si son dos pestañas, dos pantallas o
@@ -151,11 +301,11 @@ export const ThemeTokenEditor = ({
   className,
 }: ThemeTokenEditorProps): React.JSX.Element => {
   const [query, setQuery] = React.useState("");
-  const search = useLabel("advanced.search", "Search a variable");
-  const title = useLabel("advanced.title", "Every variable");
+  const search = useLabel("advanced.search", "Search");
+  const title = useLabel("advanced.title", "Everything else");
   const subtitle = useLabel(
     "advanced.subtitle",
-    "Contrast is shown here, not corrected. Empty a field to go back to the sheet.",
+    "Here you can change anything, one thing at a time. Nothing is corrected for you.",
   );
 
   const groups = React.useMemo(() => {
@@ -163,6 +313,8 @@ export const ThemeTokenEditor = ({
     if (!needle) return TOKEN_GROUPS;
     return TOKEN_GROUPS.map((group) => ({
       ...group,
+      /* Se busca también por el nombre de la variable aunque no se enseñe:
+         quien lo sepa lo escribe, y a quien no le sobra con el nombre. */
       vars: group.vars.filter(
         (name) => name.includes(needle) || nameOf(name).toLowerCase().includes(needle),
       ),

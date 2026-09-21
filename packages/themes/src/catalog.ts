@@ -31,7 +31,7 @@ const MATCHERS: readonly {
   {
     id: "brand",
     label: "Brand",
-    description: "The colour of the school and everything drawn in it.",
+    description: "The colour of the product and everything drawn in it.",
     match: (n) => /^--(primary|accent|ring|link)/.test(n),
   },
   {
@@ -67,7 +67,7 @@ const MATCHERS: readonly {
   {
     id: "shadows",
     label: "Shadows",
-    description: "The elevation scale, plus the bevels that draw a surface.",
+    description: "How far each size lifts off the page. Moving one turns it into a single shadow.",
     match: (n) => n.startsWith("--shadow"),
   },
   {

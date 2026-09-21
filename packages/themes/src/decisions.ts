@@ -390,7 +390,7 @@ const status = (
 export const DECISIONS: readonly Decision[] = [
   color({
     id: "brand",
-    label: "School colour",
+    label: "Brand colour",
     description: "Buttons, links and anything selected.",
     group: "colors",
     card: "brand",
@@ -403,7 +403,7 @@ export const DECISIONS: readonly Decision[] = [
   color({
     id: "paper",
     label: "Page colour",
-    description: "What everything sits on. A dark colour turns the whole portal dark.",
+    description: "What everything sits on. A dark colour turns the whole app dark.",
     group: "colors",
     card: "paper",
     source: "--background",
@@ -415,7 +415,7 @@ export const DECISIONS: readonly Decision[] = [
   choice({
     id: "sidebar",
     label: "Side menu",
-    description: "The colour of the page, or the colour of the school.",
+    description: "The colour of the page, or the brand colour.",
     group: "colors",
     card: "sidebar",
     shape: "rail",
@@ -532,7 +532,7 @@ export const DECISIONS: readonly Decision[] = [
       options: fontOptions("--font-sans"),
     }),
     cardLabel: "Typefaces",
-    cardDescription: "Only the ones the portal loads show their own shape.",
+    cardDescription: "Only the ones the app loads show their own shape.",
   },
 
   choice({
