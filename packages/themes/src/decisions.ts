@@ -14,7 +14,7 @@
 
 import { at, format, lighten, parse, readableOn, step, type Oklch } from "./color";
 import type { EliseTheme } from "./theme";
-import { darkTheme, lightTheme, type EliseVar } from "./tokens.generated";
+import { darkTheme, FONT_FAMILIES, lightTheme, type EliseVar } from "./tokens.generated";
 
 /** Dónde se agrupa la decisión dentro del editor. */
 export type DecisionGroup = "colors" | "shape" | "text";
@@ -239,49 +239,6 @@ const depthVars = (shadows: readonly string[] | null): Vars => {
   });
   return vars;
 };
-
-/**
- * Las familias que el paquete lleva autoalojadas, cada una en su entrada.
- *
- * La aplicación importa las que vaya a ofrecer; las que no importe se ven con
- * la fuente del sistema. Las tres primeras entran con `fonts.css`.
- */
-export const FONT_FAMILIES: readonly { id: string; label: string; stack: string }[] = [
-  { id: "geist", label: "Geist", stack: '"Geist Variable", ui-sans-serif, sans-serif' },
-  {
-    id: "source-serif-4",
-    label: "Source Serif 4",
-    stack: '"Source Serif 4 Variable", ui-serif, Georgia, serif',
-  },
-  {
-    id: "jetbrains-mono",
-    label: "JetBrains Mono",
-    stack: '"JetBrains Mono Variable", ui-monospace, monospace',
-  },
-  { id: "archivo", label: "Archivo", stack: '"Archivo Variable", ui-sans-serif, sans-serif' },
-  {
-    id: "bricolage-grotesque",
-    label: "Bricolage Grotesque",
-    stack: '"Bricolage Grotesque Variable", ui-sans-serif, sans-serif',
-  },
-  {
-    id: "ibm-plex-sans",
-    label: "IBM Plex Sans",
-    stack: '"IBM Plex Sans Variable", ui-sans-serif, sans-serif',
-  },
-  { id: "manrope", label: "Manrope", stack: '"Manrope Variable", ui-sans-serif, sans-serif' },
-  { id: "newsreader", label: "Newsreader", stack: '"Newsreader Variable", ui-serif, serif' },
-  {
-    id: "public-sans",
-    label: "Public Sans",
-    stack: '"Public Sans Variable", ui-sans-serif, sans-serif',
-  },
-  {
-    id: "space-grotesk",
-    label: "Space Grotesk",
-    stack: '"Space Grotesk Variable", ui-sans-serif, sans-serif',
-  },
-];
 
 const fontOptions = (name: EliseVar) =>
   FONT_FAMILIES.map(({ id, label, stack }) => ({ id, label, vars: { [name]: stack } as Vars }));

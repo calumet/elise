@@ -28,10 +28,9 @@ import * as React from "react";
 
 import { nameOf, noteOf, OWNED, TOKEN_GROUPS } from "./catalog";
 import { contrast, parse, toHex } from "./color";
-import { FONT_FAMILIES } from "./decisions";
 import { useLabel } from "./i18n";
 import type { EliseTheme } from "./theme";
-import { lightTheme, tokenKinds, type EliseVar } from "./tokens.generated";
+import { FONT_FAMILIES, lightTheme, tokenKinds, type EliseVar } from "./tokens.generated";
 import { formatShadow, formatSize, linkedTo, parseShadow, parseSize, type Shadow } from "./values";
 
 /** Props de {@link ThemeTokenEditor}. */

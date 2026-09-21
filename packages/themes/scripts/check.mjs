@@ -9,14 +9,13 @@
  */
 
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const { applyTheme, themeToCss, lightTheme, darkTheme, tokenKinds, ThemeProvider } = await import(
-  join(here, "../dist/index.mjs")
-);
+const { applyTheme, themeToCss, lightTheme, darkTheme, tokenKinds, ThemeProvider, FONT_FAMILIES } =
+  await import(join(here, "../dist/index.mjs"));
 const { createElement } = await import("react");
 const { renderToStaticMarkup } = await import("react-dom/server");
 
@@ -38,6 +37,19 @@ assert.match(lightTheme["--shadow-surface-bevel"], /^inset 1px 0 0 0 .+ inset 0 
 assert.equal(tokenKinds["--shadow-surface-bevel"], "shadow");
 assert.equal(tokenKinds["--inverse"], "color", "sigue var(--foreground) hasta el color");
 assert.equal(tokenKinds["--spacing"], "size");
+
+/* Las familias son las que sirve elise-ui, una por entrada y sin sobrar ninguna. */
+const served = readdirSync(join(here, "../../ui/src/tailwind/fonts"))
+  .filter((entry) => entry.endsWith(".css"))
+  .map((entry) => entry.replace(".css", ""));
+assert.deepEqual(
+  FONT_FAMILIES.map((family) => family.id).sort(),
+  served.sort(),
+  "la lista de familias no coincide con las entradas de elise-ui",
+);
+for (const family of FONT_FAMILIES) {
+  assert.ok(family.stack.startsWith(`"${family.label} Variable"`), `${family.id} no se registra`);
+}
 
 assert.equal(
   themeToCss({ "--primary": "oklch(0.5 0.1 200)", "--radius": "1rem" }),

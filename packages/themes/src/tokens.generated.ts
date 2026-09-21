@@ -470,3 +470,51 @@ export const tokenKinds: Record<EliseVar, TokenKind> = {
   "--shadow-surface-bevel": "shadow",
   "--spacing": "size",
 };
+
+/** Una familia que @calumet/elise-ui lleva autoalojada. */
+export type FontFamily = { id: string; label: string; stack: string };
+
+/**
+ * Las familias que sirve la hoja, con su entrada en
+ * `@calumet/elise-ui/tailwind/fonts/<id>.css`. La app importa las que ofrezca.
+ */
+export const FONT_FAMILIES: readonly FontFamily[] = [
+  { id: "geist", label: "Geist", stack: '"Geist Variable", ui-sans-serif, sans-serif' },
+  {
+    id: "jetbrains-mono",
+    label: "JetBrains Mono",
+    stack: '"JetBrains Mono Variable", ui-monospace, monospace',
+  },
+  {
+    id: "source-serif-4",
+    label: "Source Serif 4",
+    stack: '"Source Serif 4 Variable", ui-serif, Georgia, serif',
+  },
+  { id: "archivo", label: "Archivo", stack: '"Archivo Variable", ui-sans-serif, sans-serif' },
+  {
+    id: "bricolage-grotesque",
+    label: "Bricolage Grotesque",
+    stack: '"Bricolage Grotesque Variable", ui-sans-serif, sans-serif',
+  },
+  {
+    id: "ibm-plex-sans",
+    label: "IBM Plex Sans",
+    stack: '"IBM Plex Sans Variable", ui-sans-serif, sans-serif',
+  },
+  { id: "manrope", label: "Manrope", stack: '"Manrope Variable", ui-sans-serif, sans-serif' },
+  {
+    id: "newsreader",
+    label: "Newsreader",
+    stack: '"Newsreader Variable", ui-serif, Georgia, serif',
+  },
+  {
+    id: "public-sans",
+    label: "Public Sans",
+    stack: '"Public Sans Variable", ui-sans-serif, sans-serif',
+  },
+  {
+    id: "space-grotesk",
+    label: "Space Grotesk",
+    stack: '"Space Grotesk Variable", ui-sans-serif, sans-serif',
+  },
+];
