@@ -43,10 +43,7 @@ const HELP = "text-xs leading-snug text-muted-foreground";
 
 const REFERENCE = /^var\((--[a-z0-9-]+)\)$/;
 
-/* Del fragmento de la opción, y si no de la hoja: nunca del tema en curso, que
-   si no la miniatura de «redondas» saldría con el radio que ya está puesto.
-   Lo que la opción escribe como referencia sí se sigue hasta el tema, que es
-   como el menú con color enseña el color que hay y no el de la hoja. */
+/* De la opción, y si no de la hoja: del tema en curso no, o «redondas» saldría con el radio ya puesto. */
 const varOf = (fragment: EliseTheme, theme: EliseTheme, name: EliseVar): string => {
   const value = fragment[name] ?? lightTheme[name];
   const reference = REFERENCE.exec(value);
@@ -158,8 +155,6 @@ const Preview = ({
     );
   }
 
-  /* La familia sale del fragmento y no del tema: la miniatura de cada opción
-     tiene que enseñar su propia letra, sea la del texto o la de los títulos. */
   const family = vars["--font-display"] ?? vars["--font-sans"] ?? of("--font-sans");
   return (
     <span className="flex h-11 items-center justify-center rounded-md bg-muted">
@@ -197,9 +192,7 @@ const OptionLabel = ({
   </span>
 );
 
-/* Con muchas opciones las fichas dejan de ayudar: diez familias son diez
-   tarjetas que no caben en un sidebar, y el nombre de la letra ya se lee en su
-   propia letra dentro de la lista. */
+/* Diez fichas no caben en un sidebar, y el nombre ya se lee en su propia letra. */
 const MANY = 6;
 
 const FromList = ({
@@ -212,8 +205,6 @@ const FromList = ({
   const search = useLabel("list.search", "Type to search");
   const empty = useLabel("list.empty", "Nothing matches");
 
-  /* La familia que escribe cada opción, para enseñar cada nombre en su propia
-     letra dentro de la lista y también en el disparador. */
   const familyOf = (id: string) => Object.values(decision.apply(id, value))[0];
 
   return (
@@ -232,8 +223,7 @@ const FromList = ({
           <ComboboxList>
             <ComboboxEmpty>{empty}</ComboboxEmpty>
             {decision.options.map((option) => (
-              /* El valor es el id, así que el nombre entra como término extra
-                 para que «Source Serif» encuentre a `source-serif-4`. */
+              /* El valor es el id, así que el nombre entra como término extra. */
               <ComboboxItem key={option.id} value={option.id} keywords={[option.label]}>
                 <span style={{ fontFamily: familyOf(option.id) }}>{option.label}</span>
               </ComboboxItem>
@@ -371,7 +361,6 @@ const Color = ({
             <span className="truncate font-mono text-xs text-muted-foreground uppercase">
               {hex}
             </span>
-            {/* Lo que sale del color elegido, que es lo que el editor hace por vos. */}
             <span className="flex gap-1" aria-hidden="true">
               {decision.ramp.slice(1).map((name) => (
                 <span

@@ -15,9 +15,7 @@ const EditorDeTemaDemo = (): React.JSX.Element => {
   const [avanzado, setAvanzado] = React.useState(false);
   const caja = React.useRef<HTMLDivElement>(null);
 
-  /* El tema se escribe sobre la caja de la vista previa y no sobre el
-     documento: si no, el propio editor se repinta con lo que se está probando y
-     deja de servir de referencia. */
+  /* Sobre la caja y no sobre el documento: si no, el editor se repinta con lo que se prueba. */
   React.useLayoutEffect(() => {
     const node = caja.current;
     if (!node) return;

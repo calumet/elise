@@ -66,9 +66,7 @@ export type Decision = ColorDecision | ChoiceDecision;
 
 type Vars = Partial<Record<EliseVar, string>>;
 
-/* Lo que ya vale lo que dice la hoja no se escribe: así el tema guardado es la
-   diferencia y no una copia, y una escuela que no tocó el relieve hereda el que
-   Elise cambie mañana. */
+/* El tema guardado es la diferencia, no una copia: lo que nadie tocó hereda lo que la hoja cambie. */
 const onlyChanges = (vars: Vars): EliseTheme => {
   const changed: Vars = {};
   for (const [name, value] of Object.entries(vars) as [EliseVar, string][]) {
@@ -77,10 +75,7 @@ const onlyChanges = (vars: Vars): EliseTheme => {
   return changed;
 };
 
-/* Una relación entre variables se escribe como referencia y no como valor, y
-   así queda viva: el acento sigue al color de la escuela y al del papel sin que
-   nadie vuelva a aplicar esas decisiones, y con un papel oscuro se oscurece
-   solo. Es lo que el navegador ya sabe hacer. */
+/* Referencia y no valor: el tinte sigue vivo cuando cambian la marca o el papel. */
 const tint = (over: EliseVar, amount: number, on: EliseVar = "--background") =>
   `color-mix(in oklab, var(${over}) ${amount}%, var(${on}))`;
 
@@ -98,11 +93,7 @@ const SURFACES = [
   "--track",
 ] as const satisfies readonly EliseVar[];
 
-/* Los bordes no salen del papel sino de su propia decisión, y se escriben como
-   mezcla de la tinta sobre el fondo para que sigan a los dos. Los porcentajes
-   son de compromiso: la hoja usa el 8% en claro y el 16% en oscuro para la
-   misma variable, así que el 12% queda a 0.035 de cada uno en vez de clavar uno
-   y desviarse el doble en el otro. */
+/* El 12% es el compromiso entre el 8% que usa la hoja en claro y el 16% en oscuro. */
 const borderVars = (scale: number): Vars => ({
   "--border-subtle": tint("--foreground", 9 * scale),
   "--border": tint("--foreground", 12 * scale),
@@ -125,9 +116,7 @@ const INKS = [
   "--muted-foreground",
 ] as const satisfies readonly EliseVar[];
 
-/* Los escalones salen de los dos temas de la hoja y no de una tabla a mano: en
-   claro la tarjeta sube 0.016 sobre el fondo y en oscuro sube 0.044, y esa
-   diferencia es justo la que hace que un papel oscuro dé un tema oscuro. */
+/* Los escalones salen de los dos temas de la hoja: por eso un papel oscuro da un tema oscuro. */
 const offsets = (theme: Record<EliseVar, string>, from: EliseVar, names: readonly EliseVar[]) => {
   const anchor = parse(theme[from]);
   const table = new Map<EliseVar, number>();
@@ -149,10 +138,7 @@ const INK_STEPS = {
   dark: offsets(darkTheme, "--foreground", INKS),
 };
 
-/* Un tinte sobre el papel no es de quien elige el color sino del papel: el
-   acento y los suaves de los avisos son el color de arriba mezclado con el
-   fondo, así que los escribe esta decisión y nadie más. Si los escribieran
-   también las otras, borrar una dejaría al papel oscuro con una banda clara. */
+/* Los escribe el papel y nadie más: si los escribieran dos, borrar una decisión se llevaría lo de la otra. */
 const LINKED: Vars = {
   "--accent": tint("--primary", 18),
   "--accent-foreground": ink("--primary", 70),
@@ -186,8 +172,7 @@ const brandVars = (base: Oklch): Vars => ({
   "--primary-active": format(step(base, 0.088)),
   "--primary-foreground": format(readableOn(base)),
   "--ring": format(base),
-  /* El enlace se separa del relleno: es texto sobre el papel y necesita su
-     propia luminosidad, que es lo que hace la hoja con su navy. */
+  /* El enlace es texto sobre el papel, así que necesita su propia luminosidad. */
   "--link": format(step(base, 0.128)),
   "--link-hover": format(step(base, 0.068)),
   "--link-active": format(step(base, 0.028)),
@@ -201,9 +186,7 @@ const brandVars = (base: Oklch): Vars => ({
   "--chart-5": format(at(base, 0.252, 0.156)),
 });
 
-/* Los cuatro colores de estado se derivan igual: el de encima por contraste y
-   los de paso moviéndose del fondo. Los suaves no están aquí: son un tinte
-   sobre el papel y los escribe esa decisión. */
+/* Los suaves no están aquí: son un tinte sobre el papel y los escribe esa decisión. */
 const statusVars = (prefix: string, base: Oklch): Vars =>
   ({
     [`--${prefix}`]: format(base),
@@ -320,8 +303,7 @@ const choice = (
     options: options.map(({ id, label }) => ({ id, label })),
     writes: writes as EliseVar[],
     apply: (value) => fragments.get(value) ?? {},
-    /* La opción que ya está escrita entera. La que no escribe nada es la de la
-       hoja, y esa es la respuesta cuando ninguna otra encaja. */
+    /* La que no escribe nada es la de la hoja, y esa es la respuesta si ninguna otra encaja. */
     read: (theme) => {
       for (const option of options) {
         const fragment = fragments.get(option.id) ?? {};
@@ -355,9 +337,7 @@ const color = (
     apply: (value, theme) => {
       const base = parse(value);
       if (!base) return {};
-      /* Volver al color que ya trae la hoja no escribe nada. El tema de Elise
-         está afinado a mano familia por familia y ninguna fórmula lo reproduce
-         exacto, así que la que manda es la hoja y no la derivación. */
+      /* Volver al color de la hoja no escribe nada: la hoja manda sobre la derivación. */
       if (format(base) === lightTheme[source]) return {};
       return onlyChanges(derive(base, theme));
     },

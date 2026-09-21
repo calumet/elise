@@ -49,9 +49,7 @@ const firstLayer = (text: string) => {
   return text;
 };
 
-/* Un cero va sin unidad en CSS, así que `0 1px 1px -0.5px` tiene cuatro
-   longitudes y solo tres llevan `px`. Pedirle `px` a todas corría los números
-   un puesto y dejaba el desenfoque con el valor del crecimiento. */
+/* Un cero va sin unidad, así que `0 1px 1px -0.5px` lleva cuatro longitudes y solo tres con `px`. */
 const LENGTH = "(-?[\\d.]+)(?:px)?";
 const LENGTHS = new RegExp(`${LENGTH}\\s+${LENGTH}\\s+${LENGTH}(?:\\s+${LENGTH})?`);
 const ALPHA = /\/\s*([\d.]+)\s*\)/;
@@ -76,8 +74,7 @@ export const parseShadow = (text: string): Shadow | null => {
   };
 };
 
-/* La tinta de las sombras de la hoja. Se conserva para que una sombra editada
-   siga siendo del mismo gris azulado que las demás. */
+/* La tinta de la hoja, para que una sombra editada no cambie de gris. */
 const SHADOW_INK = "oklch(0.21 0.02 265";
 
 /** Una sola capa, que es lo que sale de mover los controles. */

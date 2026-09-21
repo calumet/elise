@@ -59,8 +59,7 @@ applyTheme(
 );
 assert.deepEqual(written, { "--primary": "red" });
 
-/* El provider monta el script que marca el `<html>` al parsear el HTML del
-   servidor, con la clave y el tema por defecto que le pasaron a él. */
+/* El script sale con la clave y el tema por defecto que le pasaron al provider. */
 const render = (props) => renderToStaticMarkup(createElement(ThemeProvider, props, "contenido"));
 
 const html = render({ storageKey: "portal-tema", defaultTheme: "dark" });

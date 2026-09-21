@@ -20,8 +20,7 @@ export type TokenGroup = {
   vars: readonly EliseVar[];
 };
 
-/* El orden manda: la primera que encaja se lo lleva, así que
-   `--success-foreground` cae en estado y no en texto. */
+/* La primera que encaja se la lleva: `--success-foreground` cae en estado y no en texto. */
 const MATCHERS: readonly {
   id: string;
   label: string;
@@ -102,8 +101,7 @@ const MATCHERS: readonly {
   },
 ];
 
-/* Las capas quedan fuera hasta del avanzado: cambiar el orden de apilado no es
-   una decisión de apariencia, es romper los overlays. */
+/* Cambiar el orden de apilado no es apariencia, es romper los overlays. */
 const OFF_LIMITS = /^--z-/;
 
 /** Lo que la variable no dice de sí misma. El resto se entiende por su grupo. */

@@ -60,8 +60,7 @@ const CardHead = ({ decision }: { decision: Decision }) => {
 const FOOT_BUTTON =
   "inline-flex h-8 cursor-pointer items-center rounded-md border border-input bg-card px-2.5 text-xs text-foreground transition-[border-color] duration-(--duration-fast) hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
-/* Un tema que llega de un archivo es texto de fuera: solo entran las variables
-   que la hoja declara, y solo si su valor es una cadena. */
+/* Un tema de un archivo es texto de fuera: solo entra lo que la hoja declara. */
 const asTheme = (parsed: unknown): EliseTheme | null => {
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return null;
   const theme: EliseTheme = {};
@@ -207,8 +206,7 @@ export const ThemeEditor = ({
           <button type="button" className={FOOT_BUTTON} onClick={() => file.current?.click()}>
             {importLabel}
           </button>
-          {/* Lo dispara el botón de al lado, así que sale del orden de
-              tabulación: `sr-only` esconde pero no quita el foco. */}
+          {/* `sr-only` esconde pero no quita el foco. */}
           <input
             ref={file}
             type="file"

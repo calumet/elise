@@ -58,9 +58,7 @@ const applyThemeToDocument = (theme: Theme, attribute: ThemeAttribute) => {
   }
 };
 
-/* Qué vale como preferencia guardada. Lo leen el provider y el script en línea,
-   así que vive una sola vez: si los dos no aplicaran la misma regla, React
-   arrancaría con un tema y la página ya estaría pintada con el otro. */
+/* Vive una sola vez porque la leen el provider y el script, y tienen que coincidir. */
 const THEMES: readonly Theme[] = ["light", "dark"];
 
 const readStoredTheme = (storageKey?: string): Theme | null => {
@@ -69,9 +67,7 @@ const readStoredTheme = (storageKey?: string): Theme | null => {
   return THEMES.find((theme) => theme === stored) ?? null;
 };
 
-/* El mismo trabajo que `applyThemeToDocument`, en JS plano, para correr al
-   parsear el HTML del servidor y no después de hidratar. Sale de los mismos
-   props que usa el provider, que es lo que mantiene a los dos de acuerdo. */
+/* Lo mismo que `applyThemeToDocument`, en JS plano, para correr al parsear y no al hidratar. */
 const markOnParse = (storageKey: string, attribute: ThemeAttribute, defaultTheme: Theme) => {
   const text = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003C");
   const mark =

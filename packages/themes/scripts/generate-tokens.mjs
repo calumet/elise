@@ -89,8 +89,7 @@ const scale = declarations(bodyOf((s) => s === "@theme"));
 const root = declarations(bodyOf((s) => s === ":root"));
 const dark = declarations(bodyOf((s) => s.includes(DARK)));
 
-/* Los demás bloques de selector, que es de donde sale `--spacing`: lo declara
-   `@theme` porque Tailwind lo necesita en build, y lo redefine la densidad. */
+/* De aquí sale `--spacing`: lo declara `@theme` y lo redefine la densidad. */
 const overrides = blocks
   .filter((block) => !block.selector.startsWith("@") && block.selector !== ":root")
   .flatMap((block) => [...declarations(block.body).keys()]);

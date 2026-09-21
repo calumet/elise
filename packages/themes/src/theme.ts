@@ -10,8 +10,7 @@ import type { EliseVar } from "./tokens.generated";
 /** Un tema: cualquier subconjunto de las variables de Elise. */
 export type EliseTheme = Partial<Record<EliseVar, string>>;
 
-/* Un valor de tema sale de la base de datos y `themeToCss` lo pega dentro de un
-   `<style>`, así que estos caracteres se van a cerrar la etiqueta. */
+/* El valor sale de la base de datos y acaba dentro de un `<style>`: esto cierra la etiqueta. */
 const UNSAFE = /[<>{};]|\/\*/;
 
 /** Escribe un tema como variables CSS sobre un elemento, que por defecto es el `<html>`. */

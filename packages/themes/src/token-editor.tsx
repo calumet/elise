@@ -44,8 +44,7 @@ export type ThemeTokenEditorProps = {
 
 type Write = (next: string) => void;
 
-/* Un `-foreground` se lee encima de la variable de la que cuelga, y
-   `--foreground` encima del papel. Con eso sale el par que se mide. */
+/* Un `-foreground` se lee encima de la variable de la que cuelga. */
 const backdropOf = (name: EliseVar): EliseVar | null => {
   if (name === "--foreground") return "--background";
   if (!name.endsWith("-foreground")) return null;
@@ -101,8 +100,7 @@ const Colour = ({ current, write }: { current: string; write: Write }) => {
         </PopoverContent>
       </Popover>
       {linked ? (
-        /* Un valor atado a otra variable no tiene hex que enseñar, y decir su
-           fórmula no ayuda a nadie: se dice a quién sigue. */
+        /* Un valor atado no tiene hex que enseñar, y su fórmula no le sirve a nadie. */
         <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
           {follows.replace("{name}", nameOf(linked as EliseVar))}
         </span>
@@ -119,8 +117,6 @@ const Colour = ({ current, write }: { current: string; write: Write }) => {
   );
 };
 
-/* Los topes de cada tamaño, en la unidad en la que viene. El radio llega a una
-   esquina completamente redonda y el paso, a un portal que respira. */
 const LIMITS: Record<string, { max: number; step: number }> = {
   "--radius": { max: 2, step: 0.0625 },
   "--spacing": { max: 0.4, step: 0.01 },
@@ -313,8 +309,7 @@ export const ThemeTokenEditor = ({
     if (!needle) return TOKEN_GROUPS;
     return TOKEN_GROUPS.map((group) => ({
       ...group,
-      /* Se busca también por el nombre de la variable aunque no se enseñe:
-         quien lo sepa lo escribe, y a quien no le sobra con el nombre. */
+      /* También por el nombre de la variable, aunque no se enseñe. */
       vars: group.vars.filter(
         (name) => name.includes(needle) || nameOf(name).toLowerCase().includes(needle),
       ),
