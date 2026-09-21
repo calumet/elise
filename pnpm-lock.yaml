@@ -324,10 +324,11 @@ importers:
         version: 5.9.3
 
   packages/themes:
-    devDependencies:
+    dependencies:
       '@calumet/elise-ui':
         specifier: workspace:^
         version: link:../ui
+    devDependencies:
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0

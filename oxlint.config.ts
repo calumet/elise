@@ -23,7 +23,13 @@ export default defineConfig(
       },
       {
         // Elise es el design system, no quien lo consume. Queda `no-raw-colors`.
-        files: ["packages/ui/**", "packages/tables/**", "packages/alerts/**", "packages/toasts/**"],
+        files: [
+          "packages/ui/**",
+          "packages/tables/**",
+          "packages/alerts/**",
+          "packages/themes/**",
+          "packages/toasts/**",
+        ],
         rules: {
           "shadcn/no-restyle": "off",
           "shadcn/no-inline-styles": "off",

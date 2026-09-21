@@ -702,6 +702,18 @@ import { themeToCss } from "@calumet/elise-themes";
 `themeToCss` descarta los valores que llevan caracteres capaces de cerrar la
 etiqueta, porque un tema guardado en base de datos termina dentro de un `<style>`.
 
+### Dejar que lo cambie quien no sabe CSS
+
+`ThemeEditor` es el editor de apariencia, controlado y sin pantalla propia: se suelta donde quiera la aplicación y ella pone la vista previa al lado.
+
+```tsx
+import { ThemeEditor } from "@calumet/elise-themes";
+
+<ThemeEditor value={tema} onChange={setTema} decisions={["brand", "corners"]} />;
+```
+
+No enseña variables sino nueve decisiones con nombre, porque nadie elige doce sombras: elige una. Cada opción se dibuja con lo que ella misma escribe, así que la miniatura de «esquinas redondas» sale redonda porque su valor es el radio. La prop `decisions` recorta la lista para una app con menos margen que un portal multiinquilino.
+
 ### Lo que trae la hoja
 
 `lightTheme` y `darkTheme` son las 110 variables con el valor que les da

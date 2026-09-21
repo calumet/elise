@@ -19,10 +19,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./tailwind.css": "./src/tailwind.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/tailwind.css"
   ],
   "scripts": {
     "generate": "node scripts/generate-tokens.mjs && oxfmt src/tokens.generated.ts",
@@ -32,6 +34,9 @@
     "dev": "tsdown --watch --dts",
     "lint": "tsc --noEmit",
     "clean": "rimraf dist jsr"
+  },
+  "dependencies": {
+    "@calumet/elise-ui": "workspace:^"
   },
   "devDependencies": {
     "@calumet/elise-ui": "workspace:^",
@@ -43,6 +48,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
+    "@calumet/elise-ui": "workspace:^",
     "react": "^19.0.0",
     "typescript": ">=5.0.0"
   },

@@ -1,3 +1,7 @@
 export * from "./tokens.generated";
 export * from "./theme";
 export * from "./theme-provider";
+export * from "./color";
+export * from "./decisions";
+export * from "./decision-control";
+export * from "./theme-editor";

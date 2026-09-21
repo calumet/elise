@@ -34,6 +34,36 @@ En el servidor se serializa y viaja dentro del HTML, que es lo que evita el parp
 <style dangerouslySetInnerHTML={{ __html: themeToCss(tema) }} />
 ```
 
+## El editor
+
+`ThemeEditor` es el editor entero, listo para soltar en un sidebar o en una sheet. Es controlado y no guarda nada: recibe el tema y avisa del siguiente.
+
+```tsx
+import { ThemeEditor } from "@calumet/elise-themes";
+
+<ThemeEditor value={tema} onChange={setTema} />;
+<ThemeEditor value={tema} onChange={setTema} decisions={["brand", "corners", "density"]} />;
+```
+
+Lo que enseña no son las 110 variables sino nueve decisiones con nombre: el color de la escuela, el tono del papel, el menú lateral, los colores de los avisos, las esquinas, qué tan apretado, el relieve y los títulos. Cada una escribe entre una y dieciocho variables, y la de encima nunca se elige: sale por contraste del color de abajo, así que un amarillo lleva letra oscura sin que nadie lo decida.
+
+La aplicación pone la vista previa. El paquete no trae pantalla, ni presets, ni guardado.
+
+`DecisionControl` es una sola de esas decisiones, sin caja alrededor, para armar otra disposición:
+
+```tsx
+import { DECISIONS, DecisionControl } from "@calumet/elise-themes";
+
+const marca = DECISIONS.find((decision) => decision.id === "brand");
+<DecisionControl decision={marca} value={tema} onChange={setTema} />;
+```
+
+Los controles usan componentes de `@calumet/elise-ui`, así que hay que importar también su hoja:
+
+```css
+@import "@calumet/elise-themes/tailwind.css";
+```
+
 ## Los temas de la hoja
 
 `lightTheme` y `darkTheme` traen las 110 variables con el valor que les da `elise.css`, y `tokenKinds` dice de qué clase es cada una (`color`, `size`, `shadow` u `other`) para pintarle su control a un editor.
