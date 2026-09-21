@@ -716,6 +716,10 @@ No enseña variables sino doce decisiones con nombre, porque nadie elige doce so
 
 El color de la página es libre y de ahí sale el plano entero, así que un color oscuro da un tema oscuro sin que haya una decisión de claro contra oscuro. Los rótulos están en inglés y pasan por `@calumet/elise-i18n` en el espacio `themes`.
 
+Al lado va `ThemeTokenEditor`, que enseña todas las variables una por campo. Avanzado quiere decir que deja cambiarlo todo, no que pida saber CSS: colores en hex, tamaños con deslizador y sombras con sus cuatro controles.
+
+Una app con tokens que Elise no tiene los declara en su prop `extra` y salen en un grupo aparte. Si el valor lleva un `var(--x)` dentro, el editor dice a quién sigue en vez de ofrecer un selector. El detalle está en el [README del paquete](../packages/themes/README.md#traer-variables-propias).
+
 ### Lo que trae la hoja
 
 `lightTheme` y `darkTheme` son las 110 variables con el valor que les da
