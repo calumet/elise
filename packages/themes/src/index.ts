@@ -6,3 +6,5 @@ export * from "./i18n";
 export * from "./decisions";
 export * from "./decision-control";
 export * from "./theme-editor";
+export * from "./catalog";
+export * from "./token-editor";

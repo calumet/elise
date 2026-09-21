@@ -37,7 +37,7 @@ type Common = {
   /** La descripción de la tarjeta, cuando no es la de la decisión. */
   cardDescription?: string;
   /** Con qué se dibuja la muestra. */
-  shape?: "swatch" | "page" | "rail" | "corner" | "rows" | "card" | "type";
+  shape?: "swatch" | "page" | "rail" | "corner" | "rows" | "card" | "type" | "lines";
   /** Las variables que toca, para saber si está cambiada y para deshacerla. */
   writes: readonly EliseVar[];
   apply: (value: string, theme: EliseTheme) => EliseTheme;
@@ -96,11 +96,26 @@ const SURFACES = [
   "--muted",
   "--fill-tertiary",
   "--track",
-  "--border-subtle",
-  "--border",
-  "--border-strong",
-  "--input",
 ] as const satisfies readonly EliseVar[];
+
+/* Los bordes no salen del papel sino de su propia decisión, y se escriben como
+   mezcla de la tinta sobre el fondo para que sigan a los dos. Los porcentajes
+   son de compromiso: la hoja usa el 8% en claro y el 16% en oscuro para la
+   misma variable, así que el 12% queda a 0.035 de cada uno en vez de clavar uno
+   y desviarse el doble en el otro. */
+const borderVars = (scale: number): Vars => ({
+  "--border-subtle": tint("--foreground", 9 * scale),
+  "--border": tint("--foreground", 12 * scale),
+  "--border-strong": tint("--foreground", 20 * scale),
+  "--input": tint("--foreground", 18 * scale),
+});
+
+const HARD_BORDERS: Vars = {
+  "--border-subtle": "var(--foreground)",
+  "--border": "var(--foreground)",
+  "--border-strong": "var(--foreground)",
+  "--input": "var(--foreground)",
+};
 
 /** La tinta y sus grados, medidos desde el texto general. */
 const INKS = [
@@ -446,6 +461,21 @@ export const DECISIONS: readonly Decision[] = [
     ["--info-subtle", "--info-subtle-foreground", "--info"],
     ["--info", "--info-hover", "--info-foreground"],
   ),
+
+  choice({
+    id: "borders",
+    label: "Lines",
+    description: "How visible the lines around things are.",
+    group: "shape",
+    card: "borders",
+    shape: "lines",
+    options: [
+      { id: "faint", label: "Faint", vars: borderVars(0.5) },
+      { id: "normal", label: "Normal", vars: borderVars(1) },
+      { id: "strong", label: "Strong", vars: borderVars(2) },
+      { id: "hard", label: "Solid", vars: HARD_BORDERS },
+    ],
+  }),
 
   choice({
     id: "corners",

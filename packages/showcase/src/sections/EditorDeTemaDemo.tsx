@@ -1,4 +1,4 @@
-import { applyTheme, ThemeEditor, type EliseTheme } from "@calumet/elise-themes";
+import { applyTheme, ThemeEditor, ThemeTokenEditor, type EliseTheme } from "@calumet/elise-themes";
 import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
 import { Input } from "@calumet/elise-ui/input";
@@ -12,6 +12,7 @@ import * as React from "react";
  */
 const EditorDeTemaDemo = (): React.JSX.Element => {
   const [tema, setTema] = React.useState<EliseTheme>({});
+  const [avanzado, setAvanzado] = React.useState(false);
   const caja = React.useRef<HTMLDivElement>(null);
 
   /* El tema se escribe sobre la caja de la vista previa y no sobre el
@@ -26,8 +27,31 @@ const EditorDeTemaDemo = (): React.JSX.Element => {
 
   return (
     <div className="grid gap-5 lg:grid-cols-[420px_1fr]">
-      <div className="h-160 overflow-hidden rounded-xl border border-border">
-        <ThemeEditor value={tema} onChange={setTema} className="h-full" />
+      <div className="flex flex-col gap-2">
+        {/* Los dos editores escriben el mismo objeto; dónde van es de la app. */}
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant={avanzado ? "outline" : "solid"}
+            onClick={() => setAvanzado(false)}
+          >
+            Sencillo
+          </Button>
+          <Button
+            size="sm"
+            variant={avanzado ? "solid" : "outline"}
+            onClick={() => setAvanzado(true)}
+          >
+            Avanzado
+          </Button>
+        </div>
+        <div className="h-160 overflow-hidden rounded-xl border border-border">
+          {avanzado ? (
+            <ThemeTokenEditor value={tema} onChange={setTema} className="h-full" />
+          ) : (
+            <ThemeEditor value={tema} onChange={setTema} className="h-full" />
+          )}
+        </div>
       </div>
 
       <ThemeScope ref={caja} className="rounded-xl border border-border bg-canvas p-5">

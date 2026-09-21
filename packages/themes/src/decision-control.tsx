@@ -87,6 +87,15 @@ const Preview = ({
     );
   }
 
+  if (shape === "lines") {
+    return (
+      <span className="flex h-11 flex-col justify-center gap-1.5 rounded-md bg-muted px-2">
+        <span className="h-3.5 rounded-xs border bg-card" style={{ borderColor: of("--border") }} />
+        <span className="h-3.5 rounded-xs border bg-card" style={{ borderColor: of("--input") }} />
+      </span>
+    );
+  }
+
   if (shape === "card") {
     return (
       <span className="flex h-11 items-center justify-center rounded-md bg-muted px-2">
