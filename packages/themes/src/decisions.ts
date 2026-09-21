@@ -425,7 +425,7 @@ export const DECISIONS: readonly Decision[] = [
       { id: "square", label: "Square", vars: { "--radius": "0rem" } },
       { id: "soft", label: "Slightly round", vars: { "--radius": "0.25rem" } },
       { id: "round", label: "Round", vars: { "--radius": "0.5rem" } },
-      { id: "pill", label: "Very round", vars: { "--radius": "0.875rem" } },
+      { id: "pill", label: "Very round", vars: { "--radius": "1rem" } },
     ],
   }),
 

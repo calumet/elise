@@ -88,8 +88,7 @@
     "./toolbar": "./jsr/components/toolbar.js",
     "./tooltip": "./jsr/components/tooltip.js",
     "./tree": "./jsr/components/tree.js",
-    "./user-menu": "./jsr/components/user-menu.js",
-    "./theme": "./jsr/theme/theme-provider.js"
+    "./user-menu": "./jsr/components/user-menu.js"
   },
   "imports": {
     "@/": "./jsr/"

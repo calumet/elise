@@ -57,7 +57,9 @@ const EditorDeTemaDemo = (): React.JSX.Element => {
             Avanzado
           </Button>
         </div>
-        <div className="h-160 overflow-hidden rounded-xl border border-border">
+        {/* Sin tope de alto: la vitrina tiene que enseñar todos los controles, y
+            un scroll propio los esconde de la auditoría visual. */}
+        <div className="overflow-hidden rounded-xl border border-border">
           {avanzado ? (
             <ThemeTokenEditor value={tema} onChange={setTema} extra={PROPIOS} className="h-full" />
           ) : (
