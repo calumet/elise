@@ -1,5 +1,6 @@
 import { AlertHost } from "@calumet/elise-alerts";
 import { I18nProvider, useTranslation } from "@calumet/elise-i18n";
+import { ThemeProvider, useTheme } from "@calumet/elise-themes";
 import { Toaster } from "@calumet/elise-toasts";
 import { Button } from "@calumet/elise-ui/button";
 import {
@@ -19,7 +20,6 @@ import {
   NavigationMenuTrigger,
 } from "@calumet/elise-ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
-import { ThemeProvider, useTheme } from "@calumet/elise-ui/theme";
 import {
   Tooltip,
   TooltipContent,
@@ -65,6 +65,7 @@ const PantallaListado = React.lazy(() => import("./sections/pantallas/PantallaLi
 const PantallaFicha = React.lazy(() => import("./sections/pantallas/PantallaFicha"));
 const PortalHeaderDemo = React.lazy(() => import("./sections/PortalHeaderDemo"));
 const TemaPorSeccionDemo = React.lazy(() => import("./sections/TemaPorSeccionDemo"));
+const EditorDeTemaDemo = React.lazy(() => import("./sections/EditorDeTemaDemo"));
 const PantallaRegistroUnico = React.lazy(
   () => import("./sections/pantallas/PantallaRegistroUnico"),
 );
@@ -141,6 +142,7 @@ const SECCIONES: { title: string; Demo: React.ComponentType }[] = [
   { title: "Pantalla de inicio", Demo: PantallaInicio },
   { title: "Pantalla de listado", Demo: PantallaListado },
   { title: "Tema por seccion", Demo: TemaPorSeccionDemo },
+  { title: "Editor de apariencia", Demo: EditorDeTemaDemo },
   { title: "Portal: cabecera", Demo: PortalHeaderDemo },
   { title: "Pantalla de registro unico", Demo: PantallaRegistroUnico },
   { title: "Pantalla de ficha", Demo: PantallaFicha },

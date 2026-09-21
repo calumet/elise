@@ -4,15 +4,19 @@ Elise incluye un sistema de temas basado en CSS custom properties con soporte pa
 
 ## ThemeProvider
 
-Componente que gestiona el tema activo, lo persiste en localStorage y lo aplica al DOM.
+Componente que gestiona el tema activo, lo persiste en localStorage y lo aplica al DOM. Vive en [`@calumet/elise-themes`](../packages/themes/README.md).
 
 ```tsx
-import { ThemeProvider } from "@calumet/elise-ui";
+import { ThemeProvider } from "@calumet/elise-themes";
 
 <ThemeProvider attribute="class" storageKey="elise-theme" defaultTheme="light">
   <App />
 </ThemeProvider>;
 ```
+
+Monta además un script en línea que lee la preferencia mientras el navegador parsea el HTML, antes del primer pintado, así que una app con render en servidor no parpadea en claro en cada carga. Por eso conviene que el provider envuelva lo más alto posible del árbol.
+
+El script marca el `<html>` y el provider arranca leyendo la misma preferencia con la misma regla, así que React hidrata con el tema que ya está puesto y no hay desajuste. `suppressHydrationWarning` solo hace falta donde el `<html>` lo renderiza React, como en el App Router de Next; si la app monta en un nodo de dentro, React no compara ese elemento.
 
 ### Props
 
@@ -21,14 +25,15 @@ import { ThemeProvider } from "@calumet/elise-ui";
 | `attribute`    | `"class" \| "data-theme"` | `"class"`       | `"class"` agrega/quita la clase `.dark` en `<html>`. `"data-theme"` usa el atributo `data-theme="dark"` |
 | `storageKey`   | `string`                  | `"elise-theme"` | Clave de localStorage para persistir la preferencia del usuario                                         |
 | `defaultTheme` | `"light" \| "dark"`       | `"light"`       | Tema inicial cuando no hay preferencia guardada                                                         |
-| `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema específico, ignorando la preferencia guardada                                            |
+| `forcedTheme`  | `"light" \| "dark"`       | —               | Fuerza un tema específico, ignorando la preferencia guardada. Con él no se monta el script              |
+| `nonce`        | `string`                  | —               | Firma el script en línea, para una política de contenido que la exija                                   |
 
 ## Hook `useTheme()`
 
 Hook para leer y cambiar el tema desde cualquier componente dentro del ThemeProvider.
 
 ```tsx
-import { useTheme } from "@calumet/elise-ui";
+import { useTheme } from "@calumet/elise-themes";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -662,101 +667,69 @@ escala, o el icono se le encogerá en una rama compacta:
 <ChevronRight className="size-icon-md" aria-hidden />
 ```
 
-## Personalización con `applyTheme()`
+## Cambiar los tokens en caliente
 
-Para crear un tema programáticamente (por ejemplo, un selector de temas en runtime), usa `applyTheme()`:
-
-La forma recomendada es extender uno de los temas por defecto y sobrescribir solo
-lo que cambia. Así el tema hereda automáticamente los tokens que se agreguen en
-versiones futuras:
+Para un color de marca por inquilino o un editor de temas, los tokens están en
+[`@calumet/elise-themes`](../packages/themes/README.md). Un tema es cualquier
+subconjunto de las variables, con el nombre CSS como clave:
 
 ```tsx
-import { applyTheme, defaultLightTheme, type EliseTheme } from "@calumet/elise-ui";
+import { applyTheme, lightTheme, type EliseTheme } from "@calumet/elise-themes";
 
 const miTema: EliseTheme = {
-  ...defaultLightTheme,
-  primary: "oklch(0.55 0.20 150)",
-  primaryForeground: "oklch(1.00 0 0)",
-  ring: "oklch(0.55 0.20 150)",
-  accent: "oklch(0.93 0.04 150)",
-  accentForeground: "oklch(0.35 0.15 150)",
+  ...lightTheme,
+  "--primary": "oklch(0.55 0.20 150)",
+  "--ring": "oklch(0.55 0.20 150)",
 };
 
-// Aplicar al elemento root del documento
-applyTheme(miTema);
-
-// O aplicar a un elemento especifico
-applyTheme(miTema, document.getElementById("mi-seccion")!);
+applyTheme(miTema); // sobre el <html>
+applyTheme(miTema, document.getElementById("mi-seccion")!); // o sobre una sección
 ```
 
-`applyTheme()` establece las CSS custom properties directamente en el elemento, lo que permite tener múltiples temas en diferentes secciones de la página.
+`applyTheme` escribe las custom properties directamente en el elemento, así que
+el cambio entra sin re-render y sirve para tener varios temas en la misma página.
+Lo que no definas conserva el valor de `elise.css`.
 
-También podés construir el objeto completo a mano. En ese caso solo hacen falta
-los campos obligatorios del tipo, porque los opcionales que no definas conservan
-el valor que ya trae `elise.css`.
-
-### Tipo `EliseTheme`
-
-```typescript
-type EliseTheme = {
-  background: string;
-  foreground: string;
-  card: string;
-  cardForeground: string;
-  popover: string;
-  popoverForeground: string;
-  primary: string;
-  primaryForeground: string;
-  secondary: string;
-  secondaryForeground: string;
-  muted: string;
-  mutedForeground: string;
-  accent: string;
-  accentForeground: string;
-  destructive: string;
-  destructiveForeground: string;
-  border: string;
-  input: string;
-  ring: string;
-  success: string;
-  successForeground: string;
-  warning: string;
-  warningForeground: string;
-
-  // Agregados despues de la v0.2. Son opcionales para no romper los temas que
-  // ya se construyen como literal completo: si no los defines, se mantiene el
-  // valor de elise.css. Los temas por defecto si los traen.
-  borderStrong?: string;
-  info?: string;
-  infoForeground?: string;
-  successSubtle?: string;
-  successSubtleForeground?: string;
-  warningSubtle?: string;
-  warningSubtleForeground?: string;
-  destructiveSubtle?: string;
-  destructiveSubtleForeground?: string;
-  infoSubtle?: string;
-  infoSubtleForeground?: string;
-};
-```
-
-### Temas por defecto
-
-Elise exporta los temas por defecto que puedes usar como base para tus personalizaciones:
+En el servidor no hay DOM que escribir, así que el tema viaja serializado dentro
+del HTML, que es lo que evita que la página parpadee con el tema equivocado:
 
 ```tsx
-import { defaultLightTheme, defaultDarkTheme } from "@calumet/elise-ui";
+import { themeToCss } from "@calumet/elise-themes";
 
-// Extender el tema claro cambiando solo el primario
-const miTema = {
-  ...defaultLightTheme,
-  primary: "oklch(0.55 0.20 150)",
-  primaryForeground: "oklch(1.00 0 0)",
-  ring: "oklch(0.55 0.20 150)",
-};
-
-applyTheme(miTema);
+<style dangerouslySetInnerHTML={{ __html: themeToCss(miTema) }} />;
 ```
+
+`themeToCss` descarta los valores que llevan caracteres capaces de cerrar la
+etiqueta, porque un tema guardado en base de datos termina dentro de un `<style>`.
+
+### Dejar que lo cambie quien no sabe CSS
+
+`ThemeEditor` es el editor de apariencia, controlado y sin pantalla propia: se suelta donde quiera la aplicación y ella pone la vista previa al lado.
+
+```tsx
+import { ThemeEditor } from "@calumet/elise-themes";
+
+<ThemeEditor value={tema} onChange={setTema} decisions={["brand", "corners"]} />;
+```
+
+No enseña variables sino doce decisiones con nombre, porque nadie elige doce sombras: elige una. Cada opción se dibuja con lo que ella misma escribe, así que la miniatura de «esquinas redondas» sale redonda porque su valor es el radio. La prop `decisions` recorta la lista para una app con menos margen que un portal multiinquilino.
+
+El color de la página es libre y de ahí sale el plano entero, así que un color oscuro da un tema oscuro sin que haya una decisión de claro contra oscuro. Los rótulos están en inglés y pasan por `@calumet/elise-i18n` en el espacio `themes`.
+
+Al lado va `ThemeTokenEditor`, que enseña todas las variables una por campo. Avanzado quiere decir que deja cambiarlo todo, no que pida saber CSS: colores en hex, tamaños con deslizador y sombras con sus cuatro controles.
+
+Una app con tokens que Elise no tiene los declara en su prop `extra` y salen en un grupo aparte. Si el valor lleva un `var(--x)` dentro, el editor dice a quién sigue en vez de ofrecer un selector. El detalle está en el [README del paquete](../packages/themes/README.md#traer-variables-propias).
+
+### Lo que trae la hoja
+
+`lightTheme` y `darkTheme` son las 110 variables con el valor que les da
+`elise.css`, y `tokenKinds` dice de qué clase es cada una (`color`, `size`,
+`shadow` u `other`) para pintarle su control a un editor. Los tres se generan
+desde la hoja en cada build, así que no se desfasan.
+
+Tematizable es toda variable declarada en `:root`, más las que redefina otro
+bloque de selector. Así entra `--spacing`, que vive en `@theme` porque Tailwind lo
+necesita en build pero la densidad compacta lo cambia en caliente.
 
 ---
 

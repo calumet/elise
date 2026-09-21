@@ -6,6 +6,7 @@
     "./packages/icons",
     "./packages/linter",
     "./packages/tables",
+    "./packages/themes",
     "./packages/toasts",
     "./packages/ui"
   ],

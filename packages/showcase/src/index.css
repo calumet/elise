@@ -4,3 +4,14 @@
 @import "@calumet/elise-tables/tailwind.css";
 @import "@calumet/elise-toasts/tailwind.css";
 @import "@calumet/elise-alerts/tailwind.css";
+@import "@calumet/elise-themes/tailwind.css";
+
+/* Las otras siete familias que sirve Elise, para que el selector de letra las
+   enseñe de verdad y no con la del sistema. */
+@import "@calumet/elise-ui/tailwind/fonts/archivo.css";
+@import "@calumet/elise-ui/tailwind/fonts/bricolage-grotesque.css";
+@import "@calumet/elise-ui/tailwind/fonts/ibm-plex-sans.css";
+@import "@calumet/elise-ui/tailwind/fonts/manrope.css";
+@import "@calumet/elise-ui/tailwind/fonts/newsreader.css";
+@import "@calumet/elise-ui/tailwind/fonts/public-sans.css";
+@import "@calumet/elise-ui/tailwind/fonts/space-grotesk.css";

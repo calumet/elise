@@ -1,3 +1,4 @@
+import { applyTheme, darkTheme } from "@calumet/elise-themes";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -58,7 +59,6 @@ import {
   SheetTrigger,
 } from "@calumet/elise-ui/sheet";
 import { Text } from "@calumet/elise-ui/text";
-import { applyTheme, defaultDarkTheme } from "@calumet/elise-ui/theme";
 import { ThemeScope } from "@calumet/elise-ui/theme-scope";
 import {
   Tooltip,
@@ -224,7 +224,7 @@ const ConApplyTheme = (): React.JSX.Element => {
   const caja = React.useRef<HTMLDivElement>(null);
 
   React.useLayoutEffect(() => {
-    if (caja.current) applyTheme(defaultDarkTheme, caja.current);
+    if (caja.current) applyTheme(darkTheme, caja.current);
   }, []);
 
   return (

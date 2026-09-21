@@ -14,6 +14,7 @@
     "@calumet/elise-i18n": "workspace:*",
     "@calumet/elise-icons": "workspace:*",
     "@calumet/elise-tables": "workspace:*",
+    "@calumet/elise-themes": "workspace:*",
     "@calumet/elise-toasts": "workspace:*",
     "@calumet/elise-ui": "workspace:*",
     "react": "^19.3.0",
