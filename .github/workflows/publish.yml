@@ -48,7 +48,7 @@ jobs:
   # `id-token: write` es toda la autenticación de la publicación: JSR valida el
   # token OIDC contra el repositorio enlazado en la configuración de cada
   # paquete, y no hay ningún secreto que rotar. `jsr publish` lee el workspace de
-  # deno.json y sube los ocho paquetes en una sola pasada, saltándose los que ya
+  # deno.json y sube los nueve paquetes en una sola pasada, saltándose los que ya
   # tengan publicada esa versión -- por eso puede correr en cada push a master
   # sin tropezar.
   #
