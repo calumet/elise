@@ -60,7 +60,7 @@ export const INVALID_FIELD =
  * pantalla.
  */
 export const FIELD_BOX =
-  "flex h-9 w-full rounded-md border border-input hover:border-border-strong bg-background px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
+  "flex h-9 w-full rounded-md border border-input hover:border-muted-foreground bg-card px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 
 /**
  * La misma caja, pero para campos que llevan piezas dentro: un icono, un
@@ -76,7 +76,7 @@ export const FIELD_BOX =
  * y con él se apagaba el campo entero, valor incluido.
  */
 export const FIELD_BOX_COMPOSITE =
-  "flex h-9 w-full items-center gap-1.5 rounded-md border border-input bg-background ps-3 pe-1 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-border-strong focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50";
+  "flex h-9 w-full items-center gap-1.5 rounded-md border border-input bg-card ps-3 pe-1 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-muted-foreground focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50";
 
 /**
  * El `<input>` que va dentro de una caja compuesta: sin caja propia.

@@ -87,6 +87,17 @@ esquina de `rounded-md` y de seminegrita a peso medio: a 24px obligaba a la
 fila con un estado a crecer 4px por encima de las demás. `sm` baja a 16px para
 seguir siendo el pequeño. Los colores no cambian.
 
+**Los campos dejan de verse apagados.** Eran un relleno gris azulado con un
+borde que casi no se veía, y se leían como deshabilitados. Ahora son una caja
+blanca (`bg-card`) con el borde marcado: `--input` baja de 0.878 a 0.77 de
+luminosidad, calibrado contra el campo de Shopify (los dos píxeles del canto
+oscurecen 105 contra 106). Al apuntarlos el borde oscurece a
+`--muted-foreground`; antes iba a `--border-strong`, que con el borde nuevo
+habría aclarado. El rótulo de `Field` pasa de seminegrita a peso normal. El alto
+(36px) y la letra (14px) se quedan en la escala de Elise. Lo heredan `Input`,
+`Select`, `Textarea`, `NumberField`, `SearchField`, `PasswordField`,
+`TagInput`, `Combobox` y los campos de fecha y hora.
+
 ## `@calumet/elise-ui` 0.36.0 y `@calumet/elise-themes` 0.1.0
 
 ### Rompe

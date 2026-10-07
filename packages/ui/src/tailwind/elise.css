@@ -254,7 +254,8 @@
   --border-subtle: oklch(0.94 0.004 265);
   --border: oklch(0.922 0.005 265);
   --border-strong: oklch(0.865 0.008 265);
-  --input: oklch(0.878 0.007 265);
+  /* Lo bastante oscuro para dibujar el campo sobre blanco: a 0.878 se leía apagado. */
+  --input: oklch(0.77 0.007 265);
   --ring: oklch(0.252 0.156 265);
   /* Tinta, no relleno. El navy de la marca es un fondo excelente y un texto
      imposible sobre oscuro: ahi hace falta L 0.60 para leerse, y a esa altura

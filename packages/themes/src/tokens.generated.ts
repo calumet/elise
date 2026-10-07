@@ -156,7 +156,7 @@ export const lightTheme: Record<EliseVar, string> = {
   "--border-subtle": "oklch(0.94 0.004 265)",
   "--border": "oklch(0.922 0.005 265)",
   "--border-strong": "oklch(0.865 0.008 265)",
-  "--input": "oklch(0.878 0.007 265)",
+  "--input": "oklch(0.77 0.007 265)",
   "--ring": "oklch(0.252 0.156 265)",
   "--link": "oklch(0.38 0.155 265)",
   "--link-hover": "oklch(0.32 0.152 265)",
