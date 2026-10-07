@@ -98,6 +98,13 @@ habría aclarado. El rótulo de `Field` pasa de seminegrita a peso normal. El al
 `Select`, `Textarea`, `NumberField`, `SearchField`, `PasswordField`,
 `TagInput`, `Combobox` y los campos de fecha y hora.
 
+**Los diálogos dejan de ser grises enteros.** El pie de `Dialog`,
+`AlertDialog` y `Sheet` pasa a blanco y solo la cabecera queda sobre banda
+tenue; con las dos en gris, una confirmación corta se leía como un bloque gris.
+`SaveBar` pone su pregunta en `AlertDialogBody` y no en la cabecera, que es
+donde va. El velo pierde el desenfoque de 1px, que no tapaba nada y dejaba el
+fondo borroso.
+
 **Los botones ganan relieve.** `outline` deja de ser un borde plano sobre fondo
 transparente y pasa a ser una superficie (`bg-card`) con el relieve de las
 tarjetas, `shadow-surface-bevel`: se lee como algo que se pulsa, también sobre

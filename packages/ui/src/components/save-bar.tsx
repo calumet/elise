@@ -13,6 +13,7 @@ import { useElLabel } from "@/lib/i18n";
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogBody,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -154,8 +155,10 @@ export function SaveBar({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{confirmTitle}</AlertDialogTitle>
-            <AlertDialogDescription>{confirmText}</AlertDialogDescription>
           </AlertDialogHeader>
+          <AlertDialogBody>
+            <AlertDialogDescription>{confirmText}</AlertDialogDescription>
+          </AlertDialogBody>
           <AlertDialogFooter>
             <AlertDialogCancel>{followLabel}</AlertDialogCancel>
             <AlertDialogAction

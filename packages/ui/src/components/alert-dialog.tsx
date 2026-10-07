@@ -132,7 +132,7 @@ export const AlertDialogContent: React.ForwardRefExoticComponent<
 });
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
-/** La cabecera: el título y la descripción. */
+/** La cabecera: solo el título. La pregunta va en {@link AlertDialogBody}. */
 export const AlertDialogHeader = ({
   className,
   ...props

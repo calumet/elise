@@ -1,6 +1,7 @@
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogBody,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -22,8 +23,10 @@ const AlertDialogStandalone = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-          <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
         </AlertDialogHeader>
+        <AlertDialogBody>
+          <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+        </AlertDialogBody>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction tone="danger">Eliminar</AlertDialogAction>

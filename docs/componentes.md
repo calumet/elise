@@ -812,9 +812,29 @@ término buscado en vez de decir solo "Sin resultados".
 #### Las tres zonas
 
 `Dialog`, `AlertDialog` y `Sheet` reparten su contenido igual: cabecera y pie
-fijos sobre banda tenue con su filete, y cuerpo en blanco que es lo único que se
-desplaza. Con un formulario largo, el título y las acciones no hay que ir a
-buscarlos al final.
+fijos con su filete, y entre ellos el cuerpo, que es lo único que se desplaza.
+Solo la cabecera va sobre banda tenue; el cuerpo y el pie van en blanco, como en
+el admin de Shopify. Con un formulario largo, el título y las acciones no hay
+que ir a buscarlos al final.
+
+En `AlertDialog` la cabecera lleva solo el título, y la pregunta va en
+`AlertDialogBody`. Dentro de la cabecera, una confirmación corta queda gris
+entera y el mensaje se lee como un subtítulo.
+
+```tsx
+<AlertDialogContent>
+  <AlertDialogHeader>
+    <AlertDialogTitle>¿Descartar los cambios?</AlertDialogTitle>
+  </AlertDialogHeader>
+  <AlertDialogBody>
+    <AlertDialogDescription>Lo que editaste se pierde.</AlertDialogDescription>
+  </AlertDialogBody>
+  <AlertDialogFooter>
+    <AlertDialogCancel>Seguir editando</AlertDialogCancel>
+    <AlertDialogAction tone="danger">Descartar</AlertDialogAction>
+  </AlertDialogFooter>
+</AlertDialogContent>
+```
 
 ```tsx
 <SheetContent>

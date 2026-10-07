@@ -30,7 +30,7 @@ export const DialogClose: typeof DialogPrimitive.Close = DialogPrimitive.Close;
 
 /** Las clases del velo. Están sueltas para que Sheet y AlertDialog usen exactamente el mismo. */
 export const DIALOG_OVERLAY =
-  "fixed inset-0 z-overlay bg-black/50 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in";
+  "fixed inset-0 z-overlay bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in";
 
 /** Las clases del panel centrado, con su animación de entrada y de salida. */
 export const DIALOG_PANEL =
@@ -45,9 +45,11 @@ export const DIALOG_HEADER =
 /** Las clases del cuerpo, que es la única zona que desplaza. */
 export const DIALOG_BODY = "min-h-0 flex-1 overflow-y-auto p-4";
 /* Sin cuerpo la cabecera y el pie se tocan, y el filete de arriba sobra: ya está el de ella. */
+/* Blanco: con el gris de la cabecera también aquí, una confirmación corta
+   quedaba gris entera. Solo la cabecera se separa del resto. */
 /** Las clases del pie, donde van las acciones. */
 export const DIALOG_FOOTER =
-  "flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted p-4 sm:flex-row sm:justify-end [[data-slot$=-header]+&]:border-t-0";
+  "flex shrink-0 flex-col-reverse gap-2 border-t border-border p-4 sm:flex-row sm:justify-end [[data-slot$=-header]+&]:border-t-0";
 
 /** Las clases del título. */
 export const DIALOG_TITLE = "text-lg font-semibold tracking-tight";
