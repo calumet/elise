@@ -98,6 +98,17 @@ habría aclarado. El rótulo de `Field` pasa de seminegrita a peso normal. El al
 `Select`, `Textarea`, `NumberField`, `SearchField`, `PasswordField`,
 `TagInput`, `Combobox` y los campos de fecha y hora.
 
+**Los botones ganan relieve.** `outline` deja de ser un borde plano sobre fondo
+transparente y pasa a ser una superficie (`bg-card`) con el relieve de las
+tarjetas, `shadow-surface-bevel`: se lee como algo que se pulsa, también sobre
+el lienzo de una cabecera, donde antes era un recuadro por el que se veía el
+fondo. Al apuntarlo, el velo va encima como imagen y la superficie se queda. Los
+rellenos sólidos, con cualquier `tone`, llevan el relieve del primario de
+Polaris con menos blanco: un aro oscuro que marca el canto y un degradado leve
+hacia abajo. No toca `--shadow-bevel`, que siguen usando la casilla, el radio,
+el `Stepper` y el `ToggleGroup`. Un `outline` con `tone` conserva su borde de
+color y no lleva relieve, para no dibujar dos cantos.
+
 ## `@calumet/elise-ui` 0.36.0 y `@calumet/elise-themes` 0.1.0
 
 ### Rompe

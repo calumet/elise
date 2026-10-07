@@ -56,17 +56,28 @@ const baseClasses =
 const disabledClasses =
   "disabled:cursor-not-allowed disabled:text-muted-foreground disabled:shadow-none";
 
-/* Los rellenos sólidos llevan bisel, que al presionar se invierte hacia adentro
-   en lugar de solo oscurecer el fondo. Las variantes outline/ghost se apoyan en
-   las superficies sutiles y no derivan el fondo con opacidad.
+/* Los rellenos sólidos y `outline` llevan relieve, que al presionar se invierte
+   hacia adentro en lugar de solo oscurecer el fondo.
    `data-[state=open]` acompaña a `active` porque con `asChild` este botón es el
    disparador de un menú o un popover, y al soltar el ratón se quedaría plano
    mientras la superficie sigue abierta. */
+/* El relieve de los rellenos, el del primario de Polaris con menos blanco: un aro
+   oscuro que marca el canto y un degradado leve hacia abajo. Va aquí y no en
+   `--shadow-bevel`, que comparten la casilla, el radio y el `Stepper`. */
+const SOLID_RELIEF =
+  "bg-[linear-gradient(180deg,transparent_63%,oklch(1_0_0/0.07))] shadow-[inset_0_-1px_0_1px_oklch(0_0_0/0.5),inset_0_0_0_1px_oklch(0_0_0/0.2),inset_0_0.5px_0_1.5px_oklch(1_0_0/0.15)] disabled:bg-none";
+
+/* El velo de apuntar va como imagen sobre la superficie, y no en su lugar: en
+   `outline` el color de fondo es la tarjeta, y cambiarlo por el velo dejaría ver
+   el lienzo a través. */
+const OUTLINE_STATES =
+  "hover:bg-[linear-gradient(var(--state-hover),var(--state-hover))] active:bg-[linear-gradient(var(--state-active),var(--state-active))] data-[state=open]:bg-[linear-gradient(var(--state-hover),var(--state-hover))]";
+
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  solid:
-    "bg-primary text-primary-foreground shadow-bevel hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
-  outline:
-    "border border-border-strong text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
+  solid: `bg-primary text-primary-foreground ${SOLID_RELIEF} hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border`,
+  /* Una superficie con el relieve de las tarjetas, y no un borde plano: así se lee
+     como algo que se pulsa, sobre el lienzo y dentro de una tarjeta. */
+  outline: `bg-card text-foreground shadow-surface-bevel ${OUTLINE_STATES} active:shadow-bevel-inset data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border`,
   ghost:
     "text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset",
   /* Trae consigo la superficie de tarjeta, para cuando detrás no hay una página
@@ -82,9 +93,9 @@ const toneOverrides: Record<
 > = {
   success: {
     solid:
-      "bg-success text-success-foreground shadow-bevel hover:bg-success-hover active:bg-success-active active:shadow-bevel-inset",
+      "bg-success text-success-foreground hover:bg-success-hover active:bg-success-active active:shadow-bevel-inset",
     outline:
-      "border-success text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
+      "border-success shadow-none text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     ghost:
       "text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     surface:
@@ -92,9 +103,9 @@ const toneOverrides: Record<
   },
   warning: {
     solid:
-      "bg-warning text-warning-foreground shadow-bevel hover:bg-warning-hover active:bg-warning-active active:shadow-bevel-inset",
+      "bg-warning text-warning-foreground hover:bg-warning-hover active:bg-warning-active active:shadow-bevel-inset",
     outline:
-      "border-warning text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
+      "border-warning shadow-none text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     ghost:
       "text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     surface:
@@ -102,9 +113,9 @@ const toneOverrides: Record<
   },
   danger: {
     solid:
-      "bg-destructive text-destructive-foreground shadow-bevel hover:bg-destructive-hover active:bg-destructive-active active:shadow-bevel-inset",
+      "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active active:shadow-bevel-inset",
     outline:
-      "border-destructive text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
+      "border-destructive shadow-none text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     ghost:
       "text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     surface:
