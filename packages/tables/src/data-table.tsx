@@ -460,6 +460,12 @@ function FilterChip<TData extends RowData>({
   const value = column.getFilterValue();
   const summary = summarize(filterVariant, value);
   const shared = { column, columnHeader };
+  const labelSearch = useElLabel(
+    "tables",
+    "searchByColumn",
+    `Search ${columnHeader.toLowerCase()}`,
+    { column: columnHeader.toLowerCase() },
+  );
   const range = isDateRangeTuple(value) ? value : undefined;
 
   return (
@@ -487,7 +493,8 @@ function FilterChip<TData extends RowData>({
         {filterVariant === "text" ? (
           <Input
             autoFocus
-            aria-label={columnHeader}
+            aria-label={labelSearch}
+            placeholder={labelSearch}
             value={(value ?? "") as string}
             onChange={(e) => column.setFilterValue(e.target.value)}
           />
