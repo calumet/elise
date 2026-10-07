@@ -12,7 +12,6 @@ import {
   EmptyStateTitle,
 } from "@calumet/elise-ui/empty-state";
 import { Image } from "@calumet/elise-ui/image";
-import { Link } from "@calumet/elise-ui/link";
 import { SearchField } from "@calumet/elise-ui/search-field";
 import { Section } from "@calumet/elise-ui/section";
 import {
@@ -136,7 +135,7 @@ const PantallaListado = () => {
             </TableHeader>
             <TableBody>
               {filas.map((producto) => (
-                <TableRow key={producto.id}>
+                <TableRow key={producto.id} clickDelegate={`producto-${producto.id}`}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Clickable
@@ -154,7 +153,14 @@ const PantallaListado = () => {
                           alt=""
                         />
                       </Clickable>
-                      <Link href="#pantallas">{producto.nombre}</Link>
+                      {/* La fila ya es el destino: el nombre no se subraya hasta apuntarlo. */}
+                      <a
+                        id={`producto-${producto.id}`}
+                        href="#pantallas"
+                        className="rounded-xs font-medium underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                      >
+                        {producto.nombre}
+                      </a>
                     </div>
                   </TableCell>
                   <TableCell>{producto.stock}</TableCell>

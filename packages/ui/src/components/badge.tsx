@@ -19,11 +19,13 @@ export type BadgeProps = React.ComponentProps<"span"> & {
 };
 
 const baseClasses =
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-transparent font-semibold [&>svg]:size-icon-xs [&>svg]:shrink-0";
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent font-medium [&>svg]:size-icon-xs [&>svg]:shrink-0";
 
+/* `md` mide 20px, lo mismo que el interlineado de una celda: a 24 obligaba a la
+   fila a crecer 4px. */
 const sizeClasses: Record<NonNullable<BadgeProps["size"]>, string> = {
-  sm: "h-5 px-2 text-2xs",
-  md: "h-6 px-2.5 text-xs",
+  sm: "h-4 px-1.5 text-2xs",
+  md: "h-5 px-2 text-xs",
 };
 
 /* Las superficies suaves salen de los tokens `-subtle` y no de opacidad sobre el

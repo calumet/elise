@@ -400,7 +400,7 @@
   --shadow-bevel-inset: inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14);
   /* Contorno de superficie apoyada: en vez de un borde plano del mismo tono en
      los cuatro lados, un bisel donde el filo de abajo pesa más que el de
-     arriba, y una sombra de 1px por fuera. Es lo que hace que
+     arriba, y por fuera una sombra corta y difusa. Es lo que hace que
      una tarjeta se lea puesta sobre el lienzo y no recortada en él; con un borde
      uniforme el plano no tiene arriba ni abajo.
      Van en dos tokens porque se pintan en sitios distintos. Una sombra interior
@@ -408,7 +408,8 @@
      tabla el encabezado, que sí tiene fondo, se comía su tramo de bisel y el
      contorno salía distinto arriba que abajo. Por eso el bisel se dibuja encima
      del contenido, en una capa aparte. */
-  --shadow-surface: 0 1px 0 0 oklch(0.21 0.02 265 / 0.07);
+  /* Difusa y no de 1px: pegada al bisel, la de 1px se leía como un segundo filete. */
+  --shadow-surface: 0 1px 3px 0 oklch(0.21 0.02 265 / 0.045);
   --shadow-surface-bevel:
     inset 1px 0 0 0 oklch(0 0 0 / 0.13), inset -1px 0 0 0 oklch(0 0 0 / 0.13),
     inset 0 -1px 0 0 oklch(0 0 0 / 0.17), inset 0 1px 0 0 oklch(0.845 0 0 / 0.5);

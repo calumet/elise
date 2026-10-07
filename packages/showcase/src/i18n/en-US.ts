@@ -16,6 +16,9 @@ export default {
     clear: "Clear",
     searchInColumn: "Search {column}...",
     searchByColumn: "Search {column}",
+    clearFilters: "Clear filters",
+    export: "Export",
+    refresh: "Refresh",
   },
   alerts: {
     ok: "OK",

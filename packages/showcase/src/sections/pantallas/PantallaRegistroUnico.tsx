@@ -1,10 +1,20 @@
-import { Bell, CircleHelp, Upload } from "@calumet/elise-icons";
+import {
+  Bell,
+  CircleHelp,
+  GraduationCap,
+  Inbox,
+  ListChecks,
+  ScrollText,
+  Upload,
+} from "@calumet/elise-icons";
 import {
   AppShell,
   AppShellHeader,
   AppShellHeaderAction,
   AppShellHeaderActions,
   AppShellHeaderBrand,
+  AppShellHeaderNav,
+  AppShellHeaderNavItem,
   AppShellHeaderSearch,
   AppShellMain,
   AppShellUserMenu,
@@ -30,7 +40,6 @@ import {
   TableHeader,
   TableRow,
 } from "@calumet/elise-ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@calumet/elise-ui/tabs";
 import { Text } from "@calumet/elise-ui/text";
 
 const PENDIENTES = [
@@ -42,10 +51,9 @@ const PENDIENTES = [
  * Pantalla de registro único: la aplicación entera es un solo registro y no hay
  * listado al que volver.
  *
- * No lleva `AppShellNav`, y por eso tampoco `AppShellNavToggle`: lo que en otra
- * aplicación serían destinos de la barra acá son facetas del mismo registro, y
- * eso son pestañas. Sin navegación, la pista del marco colapsa a cero y el
- * contenido toma el ancho completo.
+ * Son cuatro destinos, y una barra lateral con cuatro entradas queda casi vacía:
+ * van en `AppShellHeaderNav`, la segunda fila de la cabecera. Sin `AppShellNav`
+ * la pista del marco colapsa a cero y el contenido toma el ancho completo.
  */
 const PantallaRegistroUnico = (): React.JSX.Element => (
   <div className="h-[820px] w-full overflow-hidden rounded-xl border border-border">
@@ -67,6 +75,20 @@ const PantallaRegistroUnico = (): React.JSX.Element => (
             <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
           </AppShellUserMenu>
         </AppShellHeaderActions>
+        <AppShellHeaderNav>
+          <AppShellHeaderNavItem href="#pantallas" icon={<GraduationCap />} active>
+            Resumen
+          </AppShellHeaderNavItem>
+          <AppShellHeaderNavItem href="#pantallas" icon={<ListChecks />} count={2}>
+            Requisitos
+          </AppShellHeaderNavItem>
+          <AppShellHeaderNavItem href="#pantallas" icon={<Inbox />}>
+            Solicitudes
+          </AppShellHeaderNavItem>
+          <AppShellHeaderNavItem href="#pantallas" icon={<ScrollText />}>
+            Actas y decisiones
+          </AppShellHeaderNavItem>
+        </AppShellHeaderNav>
       </AppShellHeader>
 
       <AppShellMain>
@@ -85,18 +107,6 @@ const PantallaRegistroUnico = (): React.JSX.Element => (
             </div>
             <Badge>En desarrollo</Badge>
           </header>
-
-          <Tabs defaultValue="resumen">
-            <TabsList>
-              <TabsTrigger value="resumen">Resumen</TabsTrigger>
-              <TabsTrigger value="requisitos" className="gap-2">
-                Requisitos
-                <Badge tone="warning">2</Badge>
-              </TabsTrigger>
-              <TabsTrigger value="solicitudes">Solicitudes</TabsTrigger>
-              <TabsTrigger value="actas">Actas y decisiones</TabsTrigger>
-            </TabsList>
-          </Tabs>
 
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
             <div className="flex min-w-0 flex-col gap-5">

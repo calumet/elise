@@ -1047,6 +1047,8 @@ import {
 | `AppShellHeaderActions` | La banda del final: acciones y, al cierre, la cuenta         |
 | `AppShellHeaderAction`  | Una acción de solo icono                                     |
 | `AppShellUserMenu`      | La cuenta. Es `UserMenu`, que también sirve fuera del shell  |
+| `AppShellHeaderNav`     | Los destinos de una app de pocos, en una segunda fila        |
+| `AppShellHeaderNavItem` | Un destino de esa fila                                       |
 | `AppShellNavToggle`     | Abre y cierra el cajón. Solo donde la barra está plegada     |
 | `AppShellNav`           | La navegación lateral                                        |
 | `AppShellNavSection`    | Grupo de entradas con su rótulo                              |
@@ -1123,6 +1125,48 @@ Por debajo del breakpoint deja de haber tres bandas y pasa a ser una fila con un
 solo hueco, con el buscador como lo que crece. Centrar el buscador solo tiene
 sentido cuando sobra ancho; en estrecho lo que se nota es el ritmo.
 
+### Pocos destinos: la segunda fila
+
+Con pocos destinos una barra lateral queda casi vacía. Para eso está
+`AppShellHeaderNav`: hasta cinco destinos van en una segunda fila de la
+cabecera, como las de un repositorio en GitHub. Desde seis, `AppShellNav`.
+
+```tsx
+<AppShell>
+  <AppShellHeader>
+    <AppShellHeaderBrand>…</AppShellHeaderBrand>
+    <AppShellHeaderSearch onClick={abrirBuscador}>Buscar</AppShellHeaderSearch>
+    <AppShellHeaderActions>…</AppShellHeaderActions>
+    <AppShellHeaderNav>
+      <AppShellHeaderNavItem href="/" icon={<Birrete />} active>
+        Mi trabajo
+      </AppShellHeaderNavItem>
+      <AppShellHeaderNavItem href="/solicitudes" icon={<Bandeja />} count={1}>
+        Solicitudes
+      </AppShellHeaderNavItem>
+      <AppShellHeaderNavItem href="/actas" icon={<Rollo />}>
+        Actas
+      </AppShellHeaderNavItem>
+    </AppShellHeaderNav>
+  </AppShellHeader>
+
+  <AppShellMain>{children}</AppShellMain>
+</AppShell>
+```
+
+**La primera fila no se mueve.** La cabecera crece a dos filas sola al ver la
+navegación, y la de arriba sigue midiendo 56px: los destinos van justo debajo,
+en 40px y sin hueco entre las dos. En móvil la separación baja a 8px.
+
+**Lo que no cabe pasa a «Más»**, pegado al final de la fila y separado por un
+filete, igual que el grupo de desbordamiento de `NavigationMenu`. Si la elegida
+queda dentro, «Más» lleva la raya. En estrecho los iconos se van y queda el
+rótulo.
+
+**Los destinos no van en `Tabs`.** Unas pestañas dentro de la página se leen
+como parte del contenido y cada pantalla tiene que repetirlas. `Tabs` es para
+cambiar de vista dentro de una misma pantalla, no para ir a otra.
+
 ## Ejemplo: Button
 
 El componente `Button` es el más utilizado y demuestra los patrones principales de Elise.
@@ -1145,6 +1189,7 @@ textura, donde `outline` deja el rótulo ilegible.
 ### Tamaños
 
 ```tsx
+<Button size="xs">Dentro de otro control</Button>
 <Button size="sm">Pequeno</Button>
 <Button size="md">Mediano</Button>   // Default
 <Button size="lg">Grande</Button>
@@ -1161,12 +1206,12 @@ textura, donde `outline` deja el rótulo ilegible.
 
 ### Props
 
-| Prop      | Tipo                                                  | Default   | Descripción                               |
-| --------- | ----------------------------------------------------- | --------- | ----------------------------------------- |
-| `variant` | `"solid" \| "outline" \| "ghost" \| "surface"`        | `"solid"` | Estilo visual                             |
-| `size`    | `"sm" \| "md" \| "lg" \| "xl" \| "icon" \| "icon-sm"` | `"md"`    | Tamaño                                    |
-| `tone`    | `"success" \| "warning" \| "danger"`                  | —         | Color semántico (sobreescribe el variant) |
-| `asChild` | `boolean`                                             | `false`   | Renderiza el hijo en lugar de `<button>`  |
+| Prop      | Tipo                                                          | Default   | Descripción                                    |
+| --------- | ------------------------------------------------------------- | --------- | ---------------------------------------------- |
+| `variant` | `"solid" \| "outline" \| "ghost" \| "surface"`                | `"solid"` | Estilo visual                                  |
+| `size`    | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "icon" \| "icon-sm"` | `"md"`    | Tamaño. `xs` es para ir dentro de otro control |
+| `tone`    | `"success" \| "warning" \| "danger"`                          | —         | Color semántico (sobreescribe el variant)      |
+| `asChild` | `boolean`                                                     | `false`   | Renderiza el hijo en lugar de `<button>`       |
 
 Además, acepta todas las props nativas de `<button>` (onClick, disabled, type, etc.).
 

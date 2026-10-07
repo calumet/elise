@@ -332,13 +332,17 @@ const columns: ColumnDef<Persona>[] = [
 ];
 ```
 
-| filterVariant | Descripción                          | Control                                     |
+Todo va en una sola franja. El primer filtro `text` es el buscador, sin caja;
+cada uno de los demás es un chip con el nombre de la columna que abre su control
+en un `Popover`, y con algo puesto muestra lo que filtra («Estado: Alpha»).
+
+| filterVariant | Descripción                          | Control dentro del chip                     |
 | ------------- | ------------------------------------ | ------------------------------------------- |
-| `"text"`      | Búsqueda de texto libre              | Input con icono de lupa                     |
-| `"select"`    | Selección múltiple de valores únicos | Popover con Command (búsqueda + checkboxes) |
+| `"text"`      | Búsqueda de texto libre              | El buscador de la franja, o un `Input`      |
+| `"select"`    | Selección múltiple de valores únicos | `Command` con búsqueda y marcas             |
 | `"range"`     | Rango numérico min/max               | Dos inputs numéricos                        |
-| `"date"`      | Fecha individual                     | DatePicker                                  |
-| `"daterange"` | Rango de fechas                      | DateRangePicker                             |
+| `"date"`      | Fecha individual                     | `Calendar` de un día                        |
+| `"daterange"` | Rango de fechas                      | `Calendar` de rango, valor `[desde, hasta]` |
 
 ### Con exportación y refresh
 

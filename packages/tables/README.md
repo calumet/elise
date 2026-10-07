@@ -28,7 +28,9 @@ El `ColumnDef` que exportamos es el de TanStack con el `meta` ya tipado. Antes e
 
 ### filterVariant
 
-Una columna sin `filterVariant` no aparece en la barra de filtros.
+Una columna sin `filterVariant` no aparece en la barra de filtros. El primer
+`text` es el buscador de la barra; cada uno de los demás es un chip que abre su
+control.
 
 | Valor       | Control                                       |
 | ----------- | --------------------------------------------- |
@@ -36,7 +38,7 @@ Una columna sin `filterVariant` no aparece en la barra de filtros.
 | `select`    | Lista con los valores presentes en la columna |
 | `range`     | Mínimo y máximo                               |
 | `date`      | Fecha única                                   |
-| `daterange` | Rango de fechas                               |
+| `daterange` | Rango de fechas, como `[desde, hasta]`        |
 
 ## Utilidades
 

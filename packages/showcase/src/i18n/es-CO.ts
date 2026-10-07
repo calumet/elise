@@ -16,6 +16,9 @@ export default {
     clear: "Limpiar",
     searchInColumn: "Buscar en {column}...",
     searchByColumn: "Buscar {column}",
+    clearFilters: "Limpiar filtros",
+    export: "Exportar",
+    refresh: "Recargar",
   },
   alerts: {
     ok: "Aceptar",

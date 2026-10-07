@@ -50,6 +50,12 @@ apuntar a un cuadrado de 16px.
 **El conjunto va con `padding="none"`.** La tabla llega al borde de la sección
 y no quedan dos marcos concéntricos.
 
+**El nombre no va en `Link`.** Cuando `clickDelegate` apunta al enlace del
+nombre, la fila entera ya es el destino y lo dice el cursor y el fondo al
+apuntarla. Un enlace subrayado en azul en cada fila repite eso mismo y llena la
+columna de ruido. Va en peso medio, con un `<a>` que solo se subraya al
+apuntarlo.
+
 ## 3. Lista de recursos
 
 Los registros en filas, reconocibles por algo que no es texto tabulado.

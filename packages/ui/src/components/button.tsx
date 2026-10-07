@@ -14,7 +14,7 @@ import { Spinner } from "./spinner";
 /** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "solid" | "outline" | "ghost" | "surface";
-  size?: "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
   /** Estira el botón hasta el ancho de su contenedor. */
@@ -140,6 +140,8 @@ export const buttonVariants = ({
    mezcle rótulos e iconos no se desnivele. Un icono solo dentro de un botón con
    relleno de texto queda descentrado y la caja se lee corrida. */
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
+  /* Para ir dentro de otro control de 36px, como la barra de cambios sin guardar. */
+  xs: "h-7 px-2.5 text-sm",
   sm: "h-8 px-3 text-sm",
   md: "h-9 px-4 text-base",
   lg: "h-10 px-5 text-base",
