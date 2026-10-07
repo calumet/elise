@@ -8,6 +8,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { MENU_ITEM, MENU_PANEL } from "@/lib/surface";
 
 import { useThemeScope } from "./theme-scope";
 
@@ -15,8 +16,6 @@ import { useThemeScope } from "./theme-scope";
    suelto en una fila salía a su tamaño natural, que en la mayoría de los juegos
    son 24px, y estiraba la fila. El `:not([class*=size-])` deja pasar al que sí
    trae medida propia. */
-const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-icon-md";
 
 /* El color sale del tono y no de la base: tapándolo desde fuera quedan las dos
    clases en la fila y gana la que el CSS ponga última. Y el icono sigue al
@@ -76,7 +75,8 @@ export const DropdownMenuContent: React.ForwardRefExoticComponent<
         align={align}
         className={cn(
           theme.classes,
-          "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
+          MENU_PANEL,
+          "min-w-[200px] data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
           indicatorGutter,
           className,
         )}
@@ -104,7 +104,7 @@ export const DropdownMenuItem: React.ForwardRefExoticComponent<
     <DropdownMenuPrimitive.Item
       data-slot="dropdown-menu-item"
       ref={ref}
-      className={cn(baseItem, ITEM_TONES[tone], className)}
+      className={cn(MENU_ITEM, ITEM_TONES[tone], className)}
       {...props}
     />
   ),
@@ -122,7 +122,7 @@ export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<
   <DropdownMenuPrimitive.CheckboxItem
     data-slot="dropdown-menu-checkbox-item"
     ref={ref}
-    className={cn(baseItem, ITEM_TONES.neutral, "pl-7", className)}
+    className={cn(MENU_ITEM, ITEM_TONES.neutral, "pl-7", className)}
     checked={checked}
     {...props}
   >
@@ -156,7 +156,7 @@ export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<
   <DropdownMenuPrimitive.RadioItem
     data-slot="dropdown-menu-radio-item"
     ref={ref}
-    className={cn(baseItem, ITEM_TONES.neutral, "pl-7", className)}
+    className={cn(MENU_ITEM, ITEM_TONES.neutral, "pl-7", className)}
     {...props}
   >
     <span className="absolute left-2 flex size-icon-sm items-center justify-center">
@@ -214,7 +214,7 @@ export const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<
   <DropdownMenuPrimitive.SubTrigger
     data-slot="dropdown-menu-sub-trigger"
     ref={ref}
-    className={cn(baseItem, ITEM_TONES.neutral, className)}
+    className={cn(MENU_ITEM, ITEM_TONES.neutral, className)}
     {...props}
   >
     {children}
@@ -243,7 +243,8 @@ export const DropdownMenuSubContent: React.ForwardRefExoticComponent<
     data-slot="dropdown-menu-sub-content"
     ref={ref}
     className={cn(
-      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
+      MENU_PANEL,
+      "min-w-[180px] data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
       indicatorGutter,
       className,
     )}

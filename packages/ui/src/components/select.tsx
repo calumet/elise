@@ -9,6 +9,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { MENU_ITEM } from "@/lib/surface";
 
 import { FIELD_BOX, INVALID_FIELD, FIELD_SIZES, type FieldSize } from "./input";
 import { useThemeScope } from "./theme-scope";
@@ -137,10 +138,9 @@ export const SelectItem: React.ForwardRefExoticComponent<
   <SelectPrimitive.Item
     data-slot="select-item"
     ref={ref}
-    className={cn(
-      "relative flex w-full cursor-default items-center gap-2 rounded-sm px-3 py-2 pl-6 text-base transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
-      className,
-    )}
+    /* Lo elegido lo dicen la marca y el peso, como en los menús. Con fondo azul
+       se veían dos filas activas a la vez, la elegida y la resaltada. */
+    className={cn(MENU_ITEM, "w-full pl-6 data-[state=checked]:font-medium", className)}
     {...props}
   >
     <SelectPrimitive.ItemIndicator className="absolute left-2 flex size-icon-sm items-center justify-center">

@@ -98,6 +98,16 @@ habría aclarado. El rótulo de `Field` pasa de seminegrita a peso normal. El al
 `Select`, `Textarea`, `NumberField`, `SearchField`, `PasswordField`,
 `TagInput`, `Combobox` y los campos de fecha y hora.
 
+**Los menús miden y se marcan igual.** Cada uno definía su opción por su
+cuenta, y se habían separado: 36px en `DropdownMenu`, `ContextMenu`,
+`Menubar`, `UserMenu` y `Select`, 32 en `Combobox` y 44 en la paleta de
+`Command`. Ahora todos van a 32, el `sm` de la escala, con la letra de 14 que ya
+tenían. La fila resaltada es el mismo velo `--state-hover` en todos (`Command` y
+`Combobox` usaban `bg-muted`). `Select` y `Menubar` dejan de marcar lo elegido
+con fondo y texto azules: lo dicen la marca y, en `Select`, el peso medio, como
+en los demás menús. La opción y el panel salen de una sola clase compartida para
+que no vuelvan a separarse.
+
 **Los diálogos dejan de ser grises enteros.** El pie de `Dialog`,
 `AlertDialog` y `Sheet` pasa a blanco y solo la cabecera queda sobre banda
 tenue; con las dos en gris, una confirmación corta se leía como un bloque gris.
