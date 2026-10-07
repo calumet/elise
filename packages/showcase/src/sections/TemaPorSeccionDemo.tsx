@@ -154,7 +154,7 @@ const Disparadores = (): React.JSX.Element => (
     </Popover>
 
     <Select>
-      <SelectTrigger className="w-36">
+      <SelectTrigger size="sm" className="w-36">
         <SelectValue placeholder="Select" />
       </SelectTrigger>
       <SelectContent>
