@@ -73,11 +73,15 @@ const SOLID_RELIEF =
 const OUTLINE_STATES =
   "hover:bg-[linear-gradient(var(--state-hover),var(--state-hover))] active:bg-[linear-gradient(var(--state-active),var(--state-active))] data-[state=open]:bg-[linear-gradient(var(--state-hover),var(--state-hover))]";
 
+/* Sin borde: la sombra interior se pinta por dentro de él, y con el transparente
+   de la base el canto quedaba 1px adentro, más bajo que el de un campo. */
+const RELIEF_EDGE = "border-0 disabled:border disabled:border-border";
+
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  solid: `bg-primary text-primary-foreground ${SOLID_RELIEF} hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border`,
+  solid: `bg-primary text-primary-foreground ${SOLID_RELIEF} ${RELIEF_EDGE} hover:bg-primary-hover active:bg-primary-active active:shadow-bevel-inset data-[state=open]:bg-primary-active data-[state=open]:shadow-bevel-inset disabled:bg-muted`,
   /* Una superficie con el relieve de las tarjetas, y no un borde plano: así se lee
      como algo que se pulsa, sobre el lienzo y dentro de una tarjeta. */
-  outline: `bg-card text-foreground shadow-surface-bevel ${OUTLINE_STATES} active:shadow-bevel-inset data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border`,
+  outline: `bg-card text-foreground shadow-surface-bevel ${RELIEF_EDGE} ${OUTLINE_STATES} active:shadow-bevel-inset data-[state=open]:shadow-bevel-inset disabled:bg-muted`,
   ghost:
     "text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset",
   /* Trae consigo la superficie de tarjeta, para cuando detrás no hay una página
@@ -95,7 +99,7 @@ const toneOverrides: Record<
     solid:
       "bg-success text-success-foreground hover:bg-success-hover active:bg-success-active active:shadow-bevel-inset",
     outline:
-      "border-success shadow-none text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
+      "border border-success shadow-none text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     ghost:
       "text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     surface:
@@ -105,7 +109,7 @@ const toneOverrides: Record<
     solid:
       "bg-warning text-warning-foreground hover:bg-warning-hover active:bg-warning-active active:shadow-bevel-inset",
     outline:
-      "border-warning shadow-none text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
+      "border border-warning shadow-none text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     ghost:
       "text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     surface:
@@ -115,7 +119,7 @@ const toneOverrides: Record<
     solid:
       "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active active:shadow-bevel-inset",
     outline:
-      "border-destructive shadow-none text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
+      "border border-destructive shadow-none text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     ghost:
       "text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     surface:
