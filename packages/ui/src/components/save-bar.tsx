@@ -13,6 +13,7 @@ import { useElLabel } from "@/lib/i18n";
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogBody,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -117,31 +118,29 @@ export function SaveBar({
         data-slot="save-bar"
         data-theme="dark"
         role="status"
-        background="card"
-        border
-        radius="md"
-        paddingX={2}
+        radius="lg"
         paddingY={1}
-        className={cn("min-w-0", className)}
+        // La misma caja que el buscador, cuyo sitio toma dentro del marco.
+        className={cn("min-w-0 bg-fill-tertiary ps-3 pe-1 shadow-surface-bevel", className)}
         {...props}
       >
         <InlineStack gap={2} align="center" wrap={false}>
           <AlertCircle aria-hidden="true" className="size-icon-md shrink-0" />
-          <Text size="sm" weight="medium" className="min-w-0 flex-1 truncate">
+          <Text size="sm" className="min-w-0 flex-1 truncate">
             {message ?? renderLabel}
           </Text>
           <InlineStack gap={1} align="center" wrap={false} className="shrink-0">
             <Button
-              size="sm"
-              variant="outline"
+              size="xs"
+              variant="ghost"
               disabled={saving}
-              className="bg-state-hover"
+              className="bg-fill-tertiary-hover hover:bg-fill-tertiary-active"
               onClick={() => setConfirming(true)}
             >
               {dismissLabel}
             </Button>
             <Button
-              size="sm"
+              size="xs"
               loading={saving}
               className="bg-foreground text-inverse shadow-none hover:bg-foreground/90 active:bg-foreground/80"
               onClick={onSave}
@@ -156,8 +155,10 @@ export function SaveBar({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{confirmTitle}</AlertDialogTitle>
-            <AlertDialogDescription>{confirmText}</AlertDialogDescription>
           </AlertDialogHeader>
+          <AlertDialogBody>
+            <AlertDialogDescription>{confirmText}</AlertDialogDescription>
+          </AlertDialogBody>
           <AlertDialogFooter>
             <AlertDialogCancel>{followLabel}</AlertDialogCancel>
             <AlertDialogAction

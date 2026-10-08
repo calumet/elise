@@ -118,6 +118,11 @@ el DOM ya renderizado y falla si aparece un valor fuera de escala.
 `popover` va por encima de `modal` porque un `Select` se abre desde dentro de un
 diálogo.
 
+**Un botón al lado de un campo lleva su mismo `size`.** Las dos escalas miden
+igual a propósito: `sm` 32, `md` 36, `lg` 40 y `xl` 44 px, en `Button` y en
+los campos. Un `Input` por defecto con un `Button size="sm"` al lado deja el
+botón 4px más bajo, y la fila se lee torcida.
+
 ## 3. Lo que el sistema ya resuelve
 
 Estas cosas están hechas dentro de los componentes. Rehacerlas por fuera

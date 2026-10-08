@@ -18,6 +18,21 @@
 export const SURFACE =
   "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
 
+/**
+ * El panel de los menús: `DropdownMenu`, `ContextMenu` y `Menubar`. Cada uno le
+ * suma su ancho mínimo y su animación.
+ */
+export const MENU_PANEL = "z-popover rounded-xl border border-border bg-popover p-1 shadow-lg";
+
+/**
+ * Una opción de menú. La comparten los tres menús y `Select`; la paleta de
+ * comandos usa el mismo alto y el mismo resaltado con los atributos de `cmdk`.
+ * 32px, el `sm` de la escala: antes eran 36 aquí, 32 en el combobox y 44 en la
+ * paleta.
+ */
+export const MENU_ITEM =
+  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-1.5 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-highlighted:bg-state-hover data-highlighted:text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-icon-md";
+
 /* Caen fuera de la escala de la raíz, así que declaran la suya en el propio
    elemento y lo de adentro resuelve contra la superficie sin saber dónde está. */
 

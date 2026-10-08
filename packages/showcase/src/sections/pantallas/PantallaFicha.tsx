@@ -95,9 +95,7 @@ const PantallaFicha = () => (
                 placeholder="Buscar variantes"
                 className="min-w-0 flex-1"
               />
-              <Button size="sm" variant="outline">
-                Agregar
-              </Button>
+              <Button variant="outline">Agregar</Button>
             </div>
 
             <Table bare frameClassName="overflow-hidden rounded-lg border border-border">

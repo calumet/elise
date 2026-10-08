@@ -29,46 +29,48 @@ export function toCurrency(
   }).format(amount);
 }
 
+/* `Date` lee "2026-10-01" como medianoche UTC, que al oeste de Greenwich cae el
+   día anterior. Sin hora, la fecha se lee local, como la da el calendario. */
+const parseDate = (value: unknown): Date =>
+  typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? new Date(`${value}T00:00`)
+    : new Date(value as string);
+
+/** Un extremo del rango, llevado al principio o al final de su día. */
+const edge = (value: unknown, end: boolean): Date | undefined => {
+  if (!value) return undefined;
+  const date = parseDate(value);
+  if (end) date.setHours(23, 59, 59, 999);
+  else date.setHours(0, 0, 0, 0);
+  return date;
+};
+
+const isInvalid = (date: Date | undefined): boolean => !!date && isNaN(date.getTime());
+
 /**
- * Filtro de rango de fechas. El valor son dos fechas ISO, y cualquiera de las
- * dos puede venir vacía para acotar por un solo extremo. Descarta las filas sin
- * valor o con una fecha que no se puede parsear.
+ * Filtro de rango de fechas. El valor son dos fechas, `Date` o ISO, y
+ * cualquiera de las dos puede venir vacía para acotar por un solo extremo.
+ * Descarta las filas sin valor o con una fecha que no se puede parsear.
  */
 export const dateRangeFilterFn: FilterFn<Features, Record<string, unknown>> = (
   row,
   columnId,
-  value: [string, string],
+  value: [string | Date | undefined, string | Date | undefined],
 ) => {
   if (!value || value.length !== 2) return true;
-  const [from, to] = value;
 
   const rowValue = row.getValue<unknown>(columnId);
-  if (!rowValue) return false;
+  const rowDate = rowValue ? parseDate(rowValue) : undefined;
+  if (!rowDate || isInvalid(rowDate)) return false;
 
-  const rowDate = new Date(rowValue as string);
-  if (isNaN(rowDate.getTime())) return false;
+  const from = edge(value[0], false);
+  const to = edge(value[1], true);
+  if (isInvalid(from) || isInvalid(to)) return false;
 
-  const fromDate = from ? new Date(from) : undefined;
-  const toDate = to ? new Date(to) : undefined;
-
-  if (fromDate) fromDate.setHours(0, 0, 0, 0);
-  if (toDate) toDate.setHours(23, 59, 59, 999);
-
-  if (fromDate && isNaN(fromDate.getTime())) return false;
-  if (toDate && isNaN(toDate.getTime())) return false;
-
-  if (fromDate && toDate) {
-    return rowDate >= fromDate && rowDate <= toDate;
-  }
-  if (fromDate) {
-    return rowDate >= fromDate;
-  }
-  if (toDate) {
-    return rowDate <= toDate;
-  }
-  return true;
+  // Un extremo vacío no acota.
+  return (!from || rowDate >= from) && (!to || rowDate <= to);
 };
-dateRangeFilterFn.autoRemove = (val: [string, string]) => !val || (val[0] === "" && val[1] === "");
+dateRangeFilterFn.autoRemove = (val: [unknown, unknown]) => !val || (!val[0] && !val[1]);
 
 /**
  * Filtro de selección múltiple. El valor es la lista de opciones elegidas, y

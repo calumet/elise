@@ -6,11 +6,11 @@ import {
   Search,
   X,
   Check,
-  ChevronsUpDown,
   Download,
 } from "@calumet/elise-icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui";
 import { Button } from "@calumet/elise-ui/button";
+import { Calendar } from "@calumet/elise-ui/calendar";
 import {
   Command,
   CommandEmpty,
@@ -20,7 +20,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@calumet/elise-ui/command";
-import { DatePicker, DateRangePicker } from "@calumet/elise-ui/date-picker";
+import { toISOText } from "@calumet/elise-ui/date-field";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -100,17 +100,6 @@ interface DataTableProps<TData extends RowData> {
   initialPageSize?: number;
 }
 
-type DateRangePickerValue = { from: Date | undefined; to?: Date };
-
-const isDateRangePickerValue = (value: unknown): value is DateRangePickerValue => {
-  if (!value || typeof value !== "object") return false;
-
-  const candidate = value as { from?: unknown; to?: unknown };
-  const isDateOrUndefined = (item: unknown) => item === undefined || item instanceof Date;
-
-  return isDateOrUndefined(candidate.from) && isDateOrUndefined(candidate.to);
-};
-
 function DataTableContent<TData extends RowData>({
   name,
   columns,
@@ -135,6 +124,9 @@ function DataTableContent<TData extends RowData>({
     "Select number of results",
   );
   const labelOf = useElLabel("tables", "of", "of");
+  const labelClearFilters = useElLabel("tables", "clearFilters", "Clear filters");
+  const labelExport = useElLabel("tables", "export", "Export");
+  const labelRefresh = useElLabel("tables", "refresh", "Refresh");
 
   const enhancedColumns: ColumnDef<TData>[] = useMemo(() => {
     return columns.map((column) => {
@@ -202,34 +194,29 @@ function DataTableContent<TData extends RowData>({
      `Table` por su cuenta, con `filters`, `paginate` y `loading`. Antes esto
      armaba su propia tarjeta con la misma `SUPERFICIE`, y eran dos sitios donde
      arreglar lo mismo. */
-  const filterBar = (
-    <section className="flex flex-wrap justify-between gap-3 sm:flex-nowrap">
-      <div className="flex flex-wrap items-end gap-3">
-        {table.getAllColumns().map((column) => {
-          if (!metaOf(column.columnDef).filterVariant) return null;
+  /* Una sola franja, como la de un listado de Shopify: el primer filtro de texto
+     es el buscador y el resto son chips que abren su control. */
+  const filtered = table.getAllColumns().filter((column) => metaOf(column.columnDef).filterVariant);
+  const search = filtered.find((column) => metaOf(column.columnDef).filterVariant === "text");
 
-          return (
-            <div className="w-45" key={column.id}>
-              <Filter column={column} />
-            </div>
-          );
-        })}
-        {columnFilters.length > 0 && (
-          <Button
-            onClick={() => {
-              setColumnFilters([]);
-            }}
-            variant="outline"
-          >
-            <X className="size-icon-md" />
-          </Button>
-        )}
-      </div>
-      <div className="flex justify-end gap-2">
+  const filterBar = (
+    <section className="flex min-h-8 flex-wrap items-center gap-2">
+      {search ? <SearchFilter column={search} /> : null}
+      {filtered
+        .filter((column) => column !== search)
+        .map((column) => (
+          <FilterChip key={column.id} column={column} />
+        ))}
+      {columnFilters.length > 0 && (
+        <Button size="xs" variant="ghost" onClick={() => setColumnFilters([])}>
+          {labelClearFilters}
+        </Button>
+      )}
+      <div className="ms-auto flex items-center gap-1">
         {exportTo && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="ghost" size="icon-sm" aria-label={labelExport}>
                 <Download className="size-icon-md" />
               </Button>
             </DropdownMenuTrigger>
@@ -256,7 +243,7 @@ function DataTableContent<TData extends RowData>({
           </DropdownMenu>
         )}
         {refresh && (
-          <Button onClick={refresh} variant="outline">
+          <Button onClick={refresh} variant="ghost" size="icon-sm" aria-label={labelRefresh}>
             <RefreshCw className="size-icon-md" />
           </Button>
         )}
@@ -396,7 +383,156 @@ type FilterProps<TData extends RowData> = {
   columnHeader: string;
 };
 
-function RangeFilter<TData extends RowData>({
+const headerOf = <TData extends RowData>(column: Column<Features, TData, unknown>): string =>
+  typeof column.columnDef.header === "string" ? column.columnDef.header : "";
+
+/* `dateRangeFilterFn` lee una tupla `[desde, hasta]`. Con el objeto de
+   `Calendar` no tiene `length` y la función dejaba pasar todas las filas. */
+type DateRangeTuple = [Date | undefined, Date | undefined];
+
+const isDateRangeTuple = (value: unknown): value is DateRangeTuple =>
+  Array.isArray(value) && value.length === 2;
+
+type Summary = (value: unknown) => string | undefined;
+
+/* Cómo dice cada tipo de filtro lo que tiene puesto. `text` es el valor tal cual. */
+const SUMMARIES: Record<NonNullable<ColumnMeta["filterVariant"]>, Summary> = {
+  text: (value) => String(value),
+  select: (value) => (Array.isArray(value) && value.length > 0 ? value.join(", ") : undefined),
+  range: (value) => {
+    const [min, max] = (Array.isArray(value) ? value : []) as [number?, number?];
+    return min === undefined && max === undefined ? undefined : `${min ?? ""}–${max ?? ""}`;
+  },
+  date: (value) => (value instanceof Date ? toISOText(value) : undefined),
+  daterange: (value) => {
+    const [from, to] = isDateRangeTuple(value) ? value : [];
+    if (!from) return undefined;
+    return to ? `${toISOText(from)}--${toISOText(to)}` : toISOText(from);
+  },
+};
+
+/** Lo que el chip dice que está puesto, o nada si el filtro está vacío. */
+const summarize = (variant: ColumnMeta["filterVariant"], value: unknown): string | undefined =>
+  value === undefined || value === null || value === ""
+    ? undefined
+    : SUMMARIES[variant ?? "text"](value);
+
+/**
+ * El buscador de la franja, sin caja: el primer filtro de texto. El nombre de
+ * la columna va en `aria-label`, ya que no hay rótulo a la vista.
+ */
+function SearchFilter<TData extends RowData>({
+  column,
+}: {
+  column: Column<Features, TData, unknown>;
+}): React.JSX.Element {
+  const columnHeader = headerOf(column);
+  const labelSearch = useElLabel(
+    "tables",
+    "searchByColumn",
+    `Search ${columnHeader.toLowerCase()}`,
+    { column: columnHeader.toLowerCase() },
+  );
+
+  return (
+    <div className="relative min-w-40 flex-1 sm:max-w-80">
+      <Search
+        aria-hidden="true"
+        className="pointer-events-none absolute start-2 top-1/2 size-icon-md -translate-y-1/2 text-muted-foreground"
+      />
+      <input
+        type="text"
+        aria-label={labelSearch}
+        placeholder={labelSearch}
+        value={(column.getFilterValue() ?? "") as string}
+        onChange={(e) => column.setFilterValue(e.target.value)}
+        className="h-8 w-full rounded-md bg-transparent ps-8 pe-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out placeholder:text-muted-foreground hover:bg-state-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      />
+    </div>
+  );
+}
+
+/**
+ * Un filtro que no es el buscador. Vacío va con borde discontinuo y solo el
+ * nombre de la columna; puesto, con borde lleno y lo que filtra.
+ */
+function FilterChip<TData extends RowData>({
+  column,
+}: {
+  column: Column<Features, TData, unknown>;
+}): React.JSX.Element {
+  const [open, setOpen] = React.useState(false);
+  const columnHeader = headerOf(column);
+  const { filterVariant } = metaOf(column.columnDef);
+  const value = column.getFilterValue();
+  const summary = summarize(filterVariant, value);
+  const shared = { column, columnHeader };
+  const labelSearch = useElLabel(
+    "tables",
+    "searchByColumn",
+    `Search ${columnHeader.toLowerCase()}`,
+    { column: columnHeader.toLowerCase() },
+  );
+  const range = isDateRangeTuple(value) ? value : undefined;
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          size="xs"
+          variant="outline"
+          className={`max-w-64 gap-1 ${summary ? "" : "border-dashed font-normal text-muted-foreground"}`}
+        >
+          <span className="truncate">{summary ? `${columnHeader}: ${summary}` : columnHeader}</span>
+          <ChevronDown aria-hidden="true" className="size-icon-sm shrink-0" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        className={
+          filterVariant === "range" || filterVariant === "text" ? "w-64 p-3" : "w-auto min-w-56 p-0"
+        }
+      >
+        {filterVariant === "select" ? (
+          <SelectOptions {...shared} onClear={() => setOpen(false)} />
+        ) : null}
+        {filterVariant === "range" ? <RangeInputs {...shared} /> : null}
+        {filterVariant === "text" ? (
+          <Input
+            autoFocus
+            aria-label={labelSearch}
+            placeholder={labelSearch}
+            value={(value ?? "") as string}
+            onChange={(e) => column.setFilterValue(e.target.value)}
+          />
+        ) : null}
+        {filterVariant === "date" ? (
+          <Calendar
+            mode="single"
+            selected={value instanceof Date ? value : undefined}
+            onSelect={(date) => {
+              column.setFilterValue(date ?? undefined);
+              setOpen(false);
+            }}
+          />
+        ) : null}
+        {filterVariant === "daterange" ? (
+          <Calendar
+            mode="range"
+            selected={range ? { from: range[0], to: range[1] } : undefined}
+            onSelect={(next) =>
+              column.setFilterValue(
+                next?.from ? ([next.from, next.to] as DateRangeTuple) : undefined,
+              )
+            }
+          />
+        ) : null}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function RangeInputs<TData extends RowData>({
   column,
   columnHeader,
 }: FilterProps<TData>): React.JSX.Element {
@@ -406,8 +542,7 @@ function RangeFilter<TData extends RowData>({
   const labelMax = useElLabel("tables", "max", "Max");
 
   return (
-    <div className="*:not-first:mt-1">
-      <Label>{columnHeader}</Label>
+    <div>
       <div className="flex">
         <Input
           id={`${id}-range-1`}
@@ -442,47 +577,13 @@ function RangeFilter<TData extends RowData>({
   );
 }
 
-function DateRangeFilter<TData extends RowData>({
+function SelectOptions<TData extends RowData>({
   column,
   columnHeader,
-}: FilterProps<TData>): React.JSX.Element {
+  onClear,
+}: FilterProps<TData> & { onClear: () => void }): React.JSX.Element {
   const columnFilterValue = column.getFilterValue();
 
-  const rangeValue = isDateRangePickerValue(columnFilterValue) ? columnFilterValue : undefined;
-
-  return (
-    <div className="*:not-first:mt-1">
-      <Label>{columnHeader}</Label>
-      <DateRangePicker value={rangeValue} onChange={(value) => column.setFilterValue(value)} />
-    </div>
-  );
-}
-
-function DateFilter<TData extends RowData>({
-  column,
-  columnHeader,
-}: FilterProps<TData>): React.JSX.Element {
-  const columnFilterValue = column.getFilterValue();
-
-  const dateValue = columnFilterValue instanceof Date ? columnFilterValue : undefined;
-
-  return (
-    <div className="*:not-first:mt-1">
-      <Label>{columnHeader}</Label>
-      <DatePicker value={dateValue} onChange={(value) => column.setFilterValue(value)} />
-    </div>
-  );
-}
-
-function SelectFilter<TData extends RowData>({
-  column,
-  columnHeader,
-}: FilterProps<TData>): React.JSX.Element {
-  const columnFilterValue = column.getFilterValue();
-  const [selectOpen, setSelectOpen] = React.useState(false);
-  const listId = React.useId();
-
-  const labelSelectPlaceholder = useElLabel("tables", "selectPlaceholder", "Select...");
   const labelNoOptions = useElLabel("tables", "noOptions", "No options found.");
   const labelClear = useElLabel("tables", "clear", "Clear");
   const labelSearchInColumn = useElLabel(
@@ -530,127 +631,44 @@ function SelectFilter<TData extends RowData>({
 
   const clearAllSelections = () => {
     column.setFilterValue(undefined);
-    setSelectOpen(false);
+    onClear();
   };
 
   return (
-    <div className="*:not-first:mt-1">
-      <Label>{columnHeader}</Label>
-      <Popover open={selectOpen} onOpenChange={setSelectOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={selectOpen}
-            aria-controls={listId}
-            className="w-full justify-between border-border bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
-          >
-            <div className="flex min-w-0 flex-1 items-center">
-              {selectedValues.length > 0 ? (
-                <span className="truncate">{selectedValues.join(", ")}</span>
-              ) : (
-                <span className="text-muted-foreground">{labelSelectPlaceholder}</span>
-              )}
-            </div>
-            <ChevronsUpDown
-              className="size-icon-md shrink-0 text-muted-foreground/80"
-              aria-hidden="true"
-            />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          id={listId}
-          className="w-full min-w-(--radix-popper-anchor-width) border-border p-0"
-          align="start"
-        >
-          <Command>
-            <CommandInput placeholder={labelSearchInColumn} />
-            <CommandList>
-              <CommandEmpty>{labelNoOptions}</CommandEmpty>
-              <CommandGroup>
-                {sortedUniqueValues.map((value) => (
-                  <CommandItem
-                    key={String(value)}
-                    value={String(value)}
-                    onSelect={() => toggleSelection(String(value))}
-                  >
-                    <span className="truncate">{String(value)}</span>
-                    {selected.has(String(value)) && <Check className="ml-auto size-icon-md" />}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              {selectedValues.length > 0 && (
-                <Fragment>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start px-3 font-normal"
-                      onClick={clearAllSelections}
-                    >
-                      <X className="-ms-1 size-icon-md opacity-60" aria-hidden="true" />
-                      {labelClear}
-                    </Button>
-                  </CommandGroup>
-                </Fragment>
-              )}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+    <Command>
+      <CommandInput placeholder={labelSearchInColumn} />
+      <CommandList>
+        <CommandEmpty>{labelNoOptions}</CommandEmpty>
+        <CommandGroup>
+          {sortedUniqueValues.map((value) => (
+            <CommandItem
+              key={String(value)}
+              value={String(value)}
+              onSelect={() => toggleSelection(String(value))}
+            >
+              <span className="truncate">{String(value)}</span>
+              {selected.has(String(value)) && <Check className="ml-auto size-icon-md" />}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+        {selectedValues.length > 0 && (
+          <Fragment>
+            <CommandSeparator />
+            <CommandGroup>
+              <Button
+                variant="ghost"
+                className="w-full justify-start px-3 font-normal"
+                onClick={clearAllSelections}
+              >
+                <X className="-ms-1 size-icon-md opacity-60" aria-hidden="true" />
+                {labelClear}
+              </Button>
+            </CommandGroup>
+          </Fragment>
+        )}
+      </CommandList>
+    </Command>
   );
-}
-
-function TextFilter<TData extends RowData>({
-  column,
-  columnHeader,
-}: FilterProps<TData>): React.JSX.Element {
-  const id = useId();
-  const columnFilterValue = column.getFilterValue();
-  const labelSearch = useElLabel(
-    "tables",
-    "searchByColumn",
-    `Buscar ${columnHeader.toLowerCase()}`,
-    {
-      column: columnHeader.toLowerCase(),
-    },
-  );
-
-  return (
-    <div className="*:not-first:mt-1">
-      <Label htmlFor={`${id}-input`}>{columnHeader}</Label>
-      <div className="relative">
-        <Input
-          id={`${id}-input`}
-          className="peer ps-9"
-          value={(columnFilterValue ?? "") as string}
-          onChange={(e) => column.setFilterValue(e.target.value)}
-          placeholder={labelSearch}
-          type="text"
-        />
-        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
-          <Search className="size-icon-md" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Filter<TData extends RowData>({
-  column,
-}: {
-  column: Column<Features, TData, unknown>;
-}): React.JSX.Element {
-  const { filterVariant } = metaOf(column.columnDef);
-  const columnHeader = typeof column.columnDef.header === "string" ? column.columnDef.header : "";
-  const shared = { column, columnHeader };
-
-  if (filterVariant === "range") return <RangeFilter {...shared} />;
-  if (filterVariant === "daterange") return <DateRangeFilter {...shared} />;
-  if (filterVariant === "date") return <DateFilter {...shared} />;
-  if (filterVariant === "select") return <SelectFilter {...shared} />;
-  return <TextFilter {...shared} />;
 }
 
 /**

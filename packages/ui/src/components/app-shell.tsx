@@ -28,6 +28,13 @@ import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useElLabel } from "@/lib/i18n";
 import { SIDEBAR_SURFACE } from "@/lib/surface";
 
+import { Badge } from "./badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
 import { Kbd } from "./kbd";
 import { SaveBar, type SaveBarProps } from "./save-bar";
 import { UserMenu, type UserMenuProps } from "./user-menu";
@@ -237,10 +244,14 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
       /* Las columnas existen por la plantilla, no por que haya alguien en cada
          una, así que una cabecera sin buscador no corre las otras dos de sitio.
          Cada banda dice en cuál cae; la cabecera no mira a sus hijos. */
+      /* La sombra es la cabecera repetida un radio más abajo: es lo que asoma
+         por las esquinas redondeadas del lienzo, en el color de su propio tema. */
+      /* Con `AppShellHeaderNav` suma una segunda fila, y la primera no se mueve. */
       className={cn(
-        "col-start-1 col-end-3 row-start-1 flex h-14 items-center gap-2 bg-background px-4 text-foreground",
+        "col-start-1 col-end-3 row-start-1 flex h-14 items-center gap-2 bg-background px-4 text-foreground shadow-[0_var(--radius-xl)_0_0_var(--background)]",
         "max-md:has-[[data-slot=app-shell-nav-toggle]]:ps-2.5",
-        "md:grid md:grid-cols-[1fr_minmax(0,420px)_1fr] md:gap-4",
+        "md:grid md:grid-cols-[1fr_minmax(0,640px)_1fr] md:gap-4",
+        "has-[[data-slot=app-shell-header-nav]]:h-auto has-[[data-slot=app-shell-header-nav]]:flex-wrap max-md:has-[[data-slot=app-shell-header-nav]]:gap-y-2 max-md:has-[[data-slot=app-shell-header-nav]]:pt-3 md:has-[[data-slot=app-shell-header-nav]]:grid-rows-[3.5rem_auto] md:has-[[data-slot=app-shell-header-nav]]:gap-y-0",
         className,
       )}
       {...props}
@@ -323,7 +334,7 @@ export type AppShellHeaderSearchProps = Omit<React.ComponentProps<"button">, "on
  * ninguna parte, y por eso lleva el atajo dibujado: dice que hay otra manera de
  * llegar. Para un campo de búsqueda de verdad está `SearchField`.
  *
- * Mide 32px, como el resto de los controles de la barra.
+ * Mide 36px, igual que `AppShellSaveBar`, que toma su sitio sin cambiar de alto.
  *
  * Donde no cabe se queda en la lupa sola, del ancho de una acción. Estirado a lo
  * que sobre acababa en veintipocos píxeles, que no es un buscador estrecho sino
@@ -340,12 +351,10 @@ function AppShellHeaderSearch({
     <button
       type="button"
       data-slot="app-shell-header-search"
-      /* Las piezas de la cabecera usan `bg-card`, la superficie que se levanta
-         bajo su tema oscuro, más un borde: contra un fondo casi negro, 0.044 de
-         diferencia de luminosidad no alcanzan a dibujar la caja, y lo que la
-         define es el contorno. */
+      /* Relleno y bisel, sin borde: con `bg-card` la caja quedaba a 0.044 del
+         fondo y solo la dibujaba el contorno. */
       className={cn(
-        "flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-card text-muted-foreground transition-[background-color,border-color] duration-(--duration-fast) ease-out hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
+        "flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-fill-tertiary text-muted-foreground shadow-surface-bevel transition-[background-color] duration-(--duration-fast) ease-out hover:bg-fill-tertiary-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
         "w-full min-w-0 flex-1 px-3 md:col-start-2 md:flex-none",
         className,
       )}
@@ -428,6 +437,217 @@ function AppShellHeaderAction({
     >
       {icon}
     </button>
+  );
+}
+
+/** Props de {@link AppShellHeaderNav}. */
+export type AppShellHeaderNavProps = React.ComponentProps<"nav"> & {
+  /** Nombre del landmark. Por defecto, «Navegación». */
+  label?: string;
+};
+
+/**
+ * Los destinos de una aplicación de pocos, en una segunda fila de la cabecera.
+ *
+ * Es la alternativa a `AppShellNav` cuando una barra lateral quedaría casi vacía:
+ * hasta cinco destinos. Desde seis, la barra lateral. Va dentro de
+ * `AppShellHeader`, que crece a dos filas al verla sin mover la de arriba.
+ *
+ * Lo que no cabe pasa a «Más», pegado al final de la fila. En estrecho los
+ * iconos se van y queda el rótulo.
+ *
+ * ```tsx
+ * <AppShellHeader>
+ *   <AppShellHeaderBrand>…</AppShellHeaderBrand>
+ *   <AppShellHeaderSearch onClick={abrirBuscador}>Buscar</AppShellHeaderSearch>
+ *   <AppShellHeaderActions>…</AppShellHeaderActions>
+ *   <AppShellHeaderNav>
+ *     <AppShellHeaderNavItem href="/" icon={<Birrete />} active>Mi trabajo</AppShellHeaderNavItem>
+ *     <AppShellHeaderNavItem href="/solicitudes" icon={<Bandeja />} count={1}>Solicitudes</AppShellHeaderNavItem>
+ *   </AppShellHeaderNav>
+ * </AppShellHeader>
+ * ```
+ */
+function AppShellHeaderNav({
+  className,
+  label,
+  children,
+  ...props
+}: AppShellHeaderNavProps): React.JSX.Element {
+  const defaultLabel = useElLabel("ui", "navigation", "Navegación");
+  const moreLabel = useElLabel("ui", "more", "Más");
+  const items = React.Children.toArray(children).filter(
+    React.isValidElement,
+  ) as React.ReactElement<AppShellHeaderNavItemProps>[];
+
+  const row = React.useRef<HTMLUListElement>(null);
+  const assign = React.useRef<() => void>(undefined);
+  const [visible, setVisible] = React.useState(items.length);
+
+  /* El mismo reparto que `NavigationMenuList`: se mide todo y se baja hasta que
+     entra, contando «Más» solo si queda alguno fuera. */
+  React.useLayoutEffect(() => {
+    const list = row.current;
+    if (!list) return;
+    assign.current = () => {
+      const entries = [...list.children] as HTMLElement[];
+      const more = entries.pop();
+      if (!more) return;
+      const covered = [...entries, more].filter((el) => el.hidden);
+      for (const el of covered) el.hidden = false;
+      const gap = parseFloat(getComputedStyle(list).columnGap) || 0;
+      const widths = entries.map((el) => el.getBoundingClientRect().width + gap);
+      const moreWidth = more.getBoundingClientRect().width;
+      for (const el of covered) el.hidden = true;
+      const taken = (n: number) =>
+        widths.slice(0, n).reduce((a, b) => a + b, 0) + (n < entries.length ? moreWidth : 0);
+      let fit = entries.length;
+      while (fit > 0 && taken(fit) > list.clientWidth) fit -= 1;
+      setVisible(fit);
+    };
+    const ro = new ResizeObserver(() => assign.current?.());
+    ro.observe(list);
+    assign.current();
+    void document.fonts?.ready.then(() => assign.current?.());
+    return () => {
+      ro.disconnect();
+      assign.current = undefined;
+    };
+  }, []);
+
+  /* Un cambio de rótulo no lo ve el observer. */
+  React.useLayoutEffect(() => assign.current?.(), [children]);
+
+  const rest = items.slice(visible);
+
+  return (
+    <nav
+      data-slot="app-shell-header-nav"
+      aria-label={label ?? defaultLabel}
+      className={cn("col-span-full row-start-2 min-w-0 basis-full", className)}
+      {...props}
+    >
+      <ul ref={row} className="flex list-none items-center gap-2 overflow-hidden">
+        {items.map((item, i) => (
+          <li key={item.key ?? i} hidden={i >= visible} className="shrink-0">
+            {item}
+          </li>
+        ))}
+        <li hidden={rest.length === 0} className="ms-auto flex shrink-0 items-center">
+          <span aria-hidden="true" className="me-2 h-5 border-s border-border" />
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger className="relative flex h-8 cursor-pointer items-center gap-1 rounded-md px-2 text-sm text-foreground transition-[background-color] duration-(--duration-fast) ease-out hover:bg-fill-tertiary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+              {moreLabel}
+              {/* La elegida puede haber quedado dentro: «Más» lleva su raya. */}
+              {rest.some((item) => item.props.active) ? (
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-foreground"
+                />
+              ) : null}
+              <svg
+                viewBox="0 0 16 16"
+                className="size-icon-md"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M4 6l4 4 4-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {rest.map((item, i) => {
+                const {
+                  icon: _icon,
+                  count,
+                  active,
+                  className: _cls,
+                  children: text,
+                  ...anchor
+                } = item.props;
+                return (
+                  <DropdownMenuItem key={item.key ?? i} asChild>
+                    <a aria-current={active ? "page" : undefined} {...anchor}>
+                      <span className="flex-1">{text}</span>
+                      {count !== undefined && count !== null ? <Badge>{count}</Badge> : null}
+                    </a>
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+/** Props de {@link AppShellHeaderNavItem}. */
+export type AppShellHeaderNavItemProps = React.ComponentProps<"a"> & {
+  /** Obligatorio: un `<a>` sin destino no se enfoca ni se activa con teclado. */
+  href: string;
+  active?: boolean;
+  /** Se va en estrecho, donde la fila necesita el sitio para los rótulos. */
+  icon?: React.ReactNode;
+  /** Número al lado del rótulo: sin leer, pendientes, lo que haya. */
+  count?: React.ReactNode;
+};
+
+/**
+ * Un destino de {@link AppShellHeaderNav}. `active` lo marca con
+ * `aria-current="page"`, seminegrita y una raya de 2px contra el borde de abajo.
+ *
+ * Los demás no se apagan: siguen siendo destinos, no opciones deshabilitadas. El
+ * fondo al apuntar va solo detrás del rótulo.
+ */
+function AppShellHeaderNavItem({
+  className,
+  active,
+  icon,
+  count,
+  children,
+  ...props
+}: AppShellHeaderNavItemProps): React.JSX.Element {
+  return (
+    <a
+      data-slot="app-shell-header-nav-item"
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "group relative flex h-10 items-center text-sm text-foreground focus-visible:outline-none",
+        className,
+      )}
+      {...props}
+    >
+      <span
+        className={cn(
+          "flex items-center gap-2 rounded-md px-2 py-1 whitespace-nowrap transition-[background-color] duration-(--duration-fast) ease-out group-hover:bg-fill-tertiary group-focus-visible:ring-2 group-focus-visible:ring-ring",
+          active ? "font-semibold" : "font-normal",
+        )}
+      >
+        {icon ? (
+          <span
+            aria-hidden="true"
+            className="flex text-muted-foreground max-md:hidden [&_svg]:size-icon-md"
+          >
+            {icon}
+          </span>
+        ) : null}
+        {children}
+        {count !== undefined && count !== null ? <Badge>{count}</Badge> : null}
+      </span>
+      {active ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-foreground"
+        />
+      ) : null}
+    </a>
   );
 }
 
@@ -568,7 +788,7 @@ function AppShellNav({
            del marco. Por debajo del breakpoint no hay nada que anular. */
         className={cn(
           SIDEBAR_SURFACE,
-          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto border-e border-sidebar-border py-3",
+          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto rounded-ss-xl py-3",
           "max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
           drawerOpen
             ? "max-md:translate-x-0"
@@ -604,10 +824,7 @@ function AppShellNavFooter({
   return (
     <div
       data-slot="app-shell-nav-footer"
-      className={cn(
-        "sticky bottom-0 mt-auto shrink-0 border-t border-sidebar-border bg-sidebar pt-2",
-        className,
-      )}
+      className={cn("sticky bottom-0 mt-auto shrink-0 bg-sidebar pt-2", className)}
       {...props}
     >
       <ul className="list-none">{children}</ul>
@@ -1181,7 +1398,9 @@ function AppShellMain({
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
          el marco se leía como una sola plancha. */
       className={cn(
-        "col-start-2 row-start-2 flex min-w-0 flex-col bg-canvas",
+        "col-start-2 row-start-2 flex min-w-0 flex-col rounded-se-xl bg-canvas max-md:rounded-ss-xl",
+        // Sin barra, la esquina de inicio también es suya.
+        !hasNav && "rounded-ss-xl",
         fill ? "overflow-hidden" : "overflow-y-auto p-5",
         className,
       )}
@@ -1200,6 +1419,8 @@ export {
   AppShellHeaderSearch,
   AppShellHeaderActions,
   AppShellHeaderAction,
+  AppShellHeaderNav,
+  AppShellHeaderNavItem,
   AppShellUserMenu,
   AppShellNav,
   AppShellNavFooter,

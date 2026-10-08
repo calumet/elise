@@ -8,11 +8,9 @@ import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { MENU_ITEM, MENU_PANEL } from "@/lib/surface";
 
 import { useThemeScope } from "./theme-scope";
-
-const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground";
 
 /* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
    modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
@@ -56,7 +54,8 @@ export const ContextMenuContent: React.ForwardRefExoticComponent<
         ref={ref}
         className={cn(
           theme.classes,
-          "z-popover min-w-[200px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
+          MENU_PANEL,
+          "min-w-[200px] data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
           indicatorGutter,
           className,
         )}
@@ -78,7 +77,7 @@ export const ContextMenuItem: React.ForwardRefExoticComponent<
   <ContextMenuPrimitive.Item
     data-slot="context-menu-item"
     ref={ref}
-    className={cn(baseItem, className)}
+    className={cn(MENU_ITEM, className)}
     {...props}
   />
 ));
@@ -95,7 +94,7 @@ export const ContextMenuCheckboxItem: React.ForwardRefExoticComponent<
   <ContextMenuPrimitive.CheckboxItem
     data-slot="context-menu-checkbox-item"
     ref={ref}
-    className={cn(baseItem, "pl-7", className)}
+    className={cn(MENU_ITEM, "pl-7", className)}
     checked={checked}
     {...props}
   >
@@ -129,7 +128,7 @@ export const ContextMenuRadioItem: React.ForwardRefExoticComponent<
   <ContextMenuPrimitive.RadioItem
     data-slot="context-menu-radio-item"
     ref={ref}
-    className={cn(baseItem, "pl-7", className)}
+    className={cn(MENU_ITEM, "pl-7", className)}
     {...props}
   >
     <span className="absolute left-2 flex size-icon-sm items-center justify-center">
@@ -187,7 +186,7 @@ export const ContextMenuSubTrigger: React.ForwardRefExoticComponent<
   <ContextMenuPrimitive.SubTrigger
     data-slot="context-menu-sub-trigger"
     ref={ref}
-    className={cn(baseItem, className)}
+    className={cn(MENU_ITEM, className)}
     {...props}
   >
     {children}
@@ -216,7 +215,8 @@ export const ContextMenuSubContent: React.ForwardRefExoticComponent<
     data-slot="context-menu-sub-content"
     ref={ref}
     className={cn(
-      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
+      MENU_PANEL,
+      "min-w-[180px] data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in",
       indicatorGutter,
       className,
     )}

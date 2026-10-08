@@ -262,7 +262,7 @@ function ComboboxTrigger({
           data-slot="combobox-trigger"
           data-state={open ? "open" : "closed"}
           className={cn(
-            "flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-input bg-background text-foreground transition-[border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-input bg-card text-foreground transition-[border-color,box-shadow] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             FIELD_SIZES[size],
             className,
           )}

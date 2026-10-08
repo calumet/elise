@@ -2,6 +2,7 @@ import { applyTheme, darkTheme } from "@calumet/elise-themes";
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogBody,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -123,8 +124,10 @@ const Disparadores = (): React.JSX.Element => (
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Con el tema de la sección</AlertDialogTitle>
-          <AlertDialogDescription>El panel sale tintado.</AlertDialogDescription>
         </AlertDialogHeader>
+        <AlertDialogBody>
+          <AlertDialogDescription>El panel sale tintado.</AlertDialogDescription>
+        </AlertDialogBody>
         <AlertDialogFooter>
           <AlertDialogAction>Vale</AlertDialogAction>
         </AlertDialogFooter>
@@ -154,7 +157,7 @@ const Disparadores = (): React.JSX.Element => (
     </Popover>
 
     <Select>
-      <SelectTrigger className="w-36">
+      <SelectTrigger size="sm" className="w-36">
         <SelectValue placeholder="Select" />
       </SelectTrigger>
       <SelectContent>

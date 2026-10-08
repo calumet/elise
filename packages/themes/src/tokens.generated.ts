@@ -156,7 +156,7 @@ export const lightTheme: Record<EliseVar, string> = {
   "--border-subtle": "oklch(0.94 0.004 265)",
   "--border": "oklch(0.922 0.005 265)",
   "--border-strong": "oklch(0.865 0.008 265)",
-  "--input": "oklch(0.878 0.007 265)",
+  "--input": "oklch(0.77 0.007 265)",
   "--ring": "oklch(0.252 0.156 265)",
   "--link": "oklch(0.38 0.155 265)",
   "--link-hover": "oklch(0.32 0.152 265)",
@@ -234,7 +234,7 @@ export const lightTheme: Record<EliseVar, string> = {
     "0 12px 24px -6px oklch(0.21 0.02 265 / 0.16), 0 36px 64px -16px oklch(0.21 0.02 265 / 0.26)",
   "--shadow-bevel": "inset 0 1px 0 oklch(1 0 0 / 0.2), inset 0 -1px 0 oklch(0 0 0 / 0.16)",
   "--shadow-bevel-inset": "inset 0 2px 3px oklch(0 0 0 / 0.22), inset 0 1px 0 oklch(0 0 0 / 0.14)",
-  "--shadow-surface": "0 1px 0 0 oklch(0.21 0.02 265 / 0.07)",
+  "--shadow-surface": "0 1px 3px 0 oklch(0.21 0.02 265 / 0.045)",
   "--shadow-surface-bevel":
     "inset 1px 0 0 0 oklch(0 0 0 / 0.13), inset -1px 0 0 0 oklch(0 0 0 / 0.13), inset 0 -1px 0 0 oklch(0 0 0 / 0.17), inset 0 1px 0 0 oklch(0.845 0 0 / 0.5)",
   "--spacing": "0.25rem",

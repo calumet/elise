@@ -28,7 +28,7 @@ export const Textarea: React.ForwardRefExoticComponent<
       data-slot="textarea"
       ref={ref}
       className={cn(
-        "flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out placeholder:text-muted-foreground hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "flex min-h-[120px] w-full rounded-md border border-input bg-card px-3 py-2 text-base text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out placeholder:text-muted-foreground hover:border-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         family === "mono" && "font-mono",
         INVALID_FIELD,
         className,

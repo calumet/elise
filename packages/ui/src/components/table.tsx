@@ -424,7 +424,8 @@ export const Table: React.ForwardRefExoticComponent<
     const filterBar = filters ? (
       <div
         data-slot="table-filters"
-        className={cn("border-b border-border px-3 py-3", loading && DIMMED)}
+        // Con controles de 32px la franja mide 44, como la de un listado de Shopify.
+        className={cn("border-b border-border px-3 py-1.5", loading && DIMMED)}
         inert={loading || undefined}
       >
         {filters}
@@ -852,7 +853,8 @@ export const TableCell: React.ForwardRefExoticComponent<
         data-slot="table-cell"
         ref={ref}
         className={cn(
-          "px-1.5 py-2 align-middle text-sm text-foreground first:ps-3 last:pe-3",
+          // 6px y no 8: la fila queda en 33px, como en un listado de Shopify.
+          "px-1.5 py-1.5 align-middle text-sm text-foreground first:ps-3 last:pe-3",
           isNumeric(columns[column]?.format) && "text-end tabular-nums",
           isCode(columns[column]?.format) && "font-mono",
           className,

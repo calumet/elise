@@ -9,11 +9,9 @@ import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { MENU_ITEM, MENU_PANEL } from "@/lib/surface";
 
 import { useThemeScope } from "./theme-scope";
-
-const baseItem =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-3 py-2 text-base text-foreground outline-none transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-state-hover data-highlighted:text-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground";
 
 /* Las filas con indicador lo pintan en absoluto sobre una canaleta izquierda, de
    modo que su texto arranca en pl-7 mientras el de una fila plana arranca en
@@ -100,7 +98,8 @@ export const MenubarContent: React.ForwardRefExoticComponent<
           // Solo animación de entrada: una animación de salida mantiene montado el
           // DismissableLayer del menú anterior, que cierra el menú nuevo al cambiar
           // de trigger con hover (mismo criterio que shadcn para Menubar).
-          "z-popover min-w-[220px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+          MENU_PANEL,
+          "min-w-[220px] data-[state=open]:animate-in data-[state=open]:fade-in",
           indicatorGutter,
           className,
         )}
@@ -122,7 +121,7 @@ export const MenubarItem: React.ForwardRefExoticComponent<
   <MenubarPrimitive.Item
     data-slot="menubar-item"
     ref={ref}
-    className={cn(baseItem, className)}
+    className={cn(MENU_ITEM, className)}
     {...props}
   />
 ));
@@ -139,11 +138,7 @@ export const MenubarCheckboxItem: React.ForwardRefExoticComponent<
   <MenubarPrimitive.CheckboxItem
     data-slot="menubar-checkbox-item"
     ref={ref}
-    className={cn(
-      baseItem,
-      "pl-7 data-[state=checked]:bg-transparent data-[state=checked]:text-foreground",
-      className,
-    )}
+    className={cn(MENU_ITEM, "pl-7", className)}
     checked={checked}
     {...props}
   >
@@ -180,7 +175,7 @@ export const MenubarRadioItem: React.ForwardRefExoticComponent<
   <MenubarPrimitive.RadioItem
     data-slot="menubar-radio-item"
     ref={ref}
-    className={cn(baseItem, "pl-7", className)}
+    className={cn(MENU_ITEM, "pl-7", className)}
     {...props}
   >
     <span className="absolute left-2 flex size-icon-sm items-center justify-center">
@@ -241,7 +236,7 @@ export const MenubarSubTrigger: React.ForwardRefExoticComponent<
   <MenubarPrimitive.SubTrigger
     data-slot="menubar-sub-trigger"
     ref={ref}
-    className={cn(baseItem, className)}
+    className={cn(MENU_ITEM, className)}
     {...props}
   >
     {children}
@@ -270,7 +265,8 @@ export const MenubarSubContent: React.ForwardRefExoticComponent<
     data-slot="menubar-sub-content"
     ref={ref}
     className={cn(
-      "z-popover min-w-[180px] rounded-xl border border-border bg-popover p-1 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in",
+      MENU_PANEL,
+      "min-w-[180px] data-[state=open]:animate-in data-[state=open]:fade-in",
       indicatorGutter,
       className,
     )}

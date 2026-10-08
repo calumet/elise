@@ -184,7 +184,8 @@ function Field({
     <label
       data-slot="field-label"
       htmlFor={id}
-      className={cn("text-sm font-semibold text-foreground", labelHidden && "sr-only")}
+      // Peso normal: en seminegrita el rótulo pesaba más que el valor que nombra.
+      className={cn("text-sm font-normal text-foreground", labelHidden && "sr-only")}
     >
       {label}
       {required ? <FieldRequiredMark /> : null}

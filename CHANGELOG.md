@@ -3,6 +3,158 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.37.0 y `elise-tables` 0.9.0
+
+Sube también `elise-themes` 0.1.1, que lleva el valor nuevo de
+`--shadow-surface`.
+
+### `DataTable`: los filtros en una sola franja
+
+La barra de filtros pasa de una fila de campos con su rótulo encima a una
+franja de 44px, como la de un listado de Shopify. La API no cambia: cada
+columna sigue declarando `meta.filterVariant` y lo que se ve sale de ahí.
+
+- El primer filtro `text` es el buscador de la franja, sin caja.
+- Los demás son chips que abren su control en un `Popover`: borde
+  discontinuo cuando están vacíos, lleno y con lo que filtran cuando no
+  («Estado: Alpha»). Las fechas se eligen con `Calendar` directamente.
+- Limpiar, exportar y recargar ganan nombre accesible. Los tres eran solo un
+  icono. Son las claves nuevas `clearFilters`, `export` y `refresh` del espacio
+  `tables`.
+- La ranura `filters` de `Table` baja su relleno de 12 a 6px.
+
+### Corrige
+
+**El filtro `daterange` no filtraba nada.** El control le pasaba
+`{ from, to }` y `dateRangeFilterFn` espera una tupla `[desde, hasta]`: sin
+`length`, la función dejaba pasar todas las filas. Al arreglarlo apareció un
+segundo fallo debajo: una fecha sin hora como `"2026-10-01"` se leía como
+medianoche UTC, y al oeste de Greenwich caía el día anterior, fuera de un rango
+que empezaba ese mismo día. Ahora se lee como fecha local, igual que la da el
+calendario. Comprobado en Bogotá, UTC y Tokio.
+
+### Añade
+
+**Una segunda fila de la cabecera para las apps de pocos destinos.** Con hasta
+cinco, una barra lateral queda casi vacía, y la salida que se venía usando eran
+`Tabs` dentro de la página, que se leen como contenido y cada pantalla tiene que
+repetir. `AppShellHeaderNav` los pone debajo de la primera fila, como las de un
+repositorio en GitHub:
+
+```tsx
+<AppShellHeader>
+  …
+  <AppShellHeaderNav>
+    <AppShellHeaderNavItem href="/" icon={<Birrete />} active>
+      Mi trabajo
+    </AppShellHeaderNavItem>
+    <AppShellHeaderNavItem href="/solicitudes" icon={<Bandeja />} count={1}>
+      Solicitudes
+    </AppShellHeaderNavItem>
+  </AppShellHeaderNav>
+</AppShellHeader>
+```
+
+La cabecera crece sola y la primera fila no se mueve. Lo que no cabe pasa a
+«Más», al final de la fila, y en estrecho se van los iconos. Cuándo va cada
+navegación está en
+[Patrones de pantalla](docs/patrones-pantalla.md#1-el-marco-común).
+
+**`Button` gana `size="xs"`**, de 28px, para ir dentro de otro control de 36.
+Es lo que usa `SaveBar`.
+
+### Cambia
+
+**El marco se acerca al de Shopify.** El lienzo y la barra lateral forman una
+lámina con las esquinas de arriba redondeadas bajo la cabecera, y se van los
+filetes entre la barra y el contenido y encima del pie de la barra. El buscador
+pasa de 420 × 32 a 640 × 36 y deja el borde por relleno y bisel. `SaveBar` es
+ahora esa misma caja, con botones `xs` y «Descartar» relleno en vez de
+contorno, así que al tomar el sitio del buscador no cambia ni de tamaño ni de
+aspecto.
+
+**La sombra de las tarjetas deja de leerse como un segundo filete.**
+`--shadow-surface` pasa de `0 1px 0 0` al 7% a `0 1px 3px 0` al 4.5%. Pegada al
+bisel, la de 1px dibujaba dos líneas duras en el canto de abajo; difusa, queda
+una sola línea y una sombra corta debajo, como en las tarjetas del admin de
+Shopify. Lo heredan todas las superficies: `Card`, `Section`, `Table`,
+`DataTable` y la opción activa de `SegmentedControl`.
+
+**Las filas de `Table` bajan a 33px y `Badge` deja de ser una píldora.** Las
+celdas pasan de 8 a 6px de relleno vertical, como en un listado de Shopify, y
+`DataTable` lo hereda. `Badge` en `md` pasa de 24 a 20px, de redondo a la
+esquina de `rounded-md` y de seminegrita a peso medio: a 24px obligaba a la
+fila con un estado a crecer 4px por encima de las demás. `sm` baja a 16px para
+seguir siendo el pequeño. Los colores no cambian.
+
+**Los campos dejan de verse apagados.** Eran un relleno gris azulado con un
+borde que casi no se veía, y se leían como deshabilitados. Ahora son una caja
+blanca (`bg-card`) con el borde marcado: `--input` baja de 0.878 a 0.77 de
+luminosidad, calibrado contra el campo de Shopify (los dos píxeles del canto
+oscurecen 105 contra 106). Al apuntarlos el borde oscurece a
+`--muted-foreground`; antes iba a `--border-strong`, que con el borde nuevo
+habría aclarado. El rótulo de `Field` pasa de seminegrita a peso normal. El alto
+(36px) y la letra (14px) se quedan en la escala de Elise. Lo heredan `Input`,
+`Select`, `Textarea`, `NumberField`, `SearchField`, `PasswordField`,
+`TagInput`, `Combobox` y los campos de fecha y hora.
+
+**Los menús miden y se marcan igual.** Cada uno definía su opción por su
+cuenta, y se habían separado: 36px en `DropdownMenu`, `ContextMenu`,
+`Menubar`, `UserMenu` y `Select`, 32 en `Combobox` y 44 en la paleta de
+`Command`. Ahora todos van a 32, el `sm` de la escala, con la letra de 14 que ya
+tenían. La fila resaltada es el mismo velo `--state-hover` en todos (`Command` y
+`Combobox` usaban `bg-muted`). `Select` y `Menubar` dejan de marcar lo elegido
+con fondo y texto azules: lo dicen la marca y, en `Select`, el peso medio, como
+en los demás menús. La opción y el panel salen de una sola clase compartida para
+que no vuelvan a separarse.
+
+**Los diálogos dejan de ser grises enteros.** El pie de `Dialog`,
+`AlertDialog` y `Sheet` pasa a blanco y solo la cabecera queda sobre banda
+tenue; con las dos en gris, una confirmación corta se leía como un bloque gris.
+`SaveBar` pone su pregunta en `AlertDialogBody` y no en la cabecera, que es
+donde va. El velo pierde el desenfoque de 1px, que no tapaba nada y dejaba el
+fondo borroso.
+
+**Los botones ganan relieve.** `outline` deja de ser un borde plano sobre fondo
+transparente y pasa a ser una superficie (`bg-card`) con el relieve de las
+tarjetas, `shadow-surface-bevel`: se lee como algo que se pulsa, también sobre
+el lienzo de una cabecera, donde antes era un recuadro por el que se veía el
+fondo. Al apuntarlo, el velo va encima como imagen y la superficie se queda. Los
+rellenos sólidos, con cualquier `tone`, llevan el relieve del primario de
+Polaris con menos blanco: un aro oscuro que marca el canto y un degradado leve
+hacia abajo. No toca `--shadow-bevel`, que siguen usando la casilla, el radio,
+el `Stepper` y el `ToggleGroup`. Un `outline` con `tone` conserva su borde de
+color y no lleva relieve, para no dibujar dos cantos.
+
+## `@calumet/elise-ui` 0.36.0 y `@calumet/elise-themes` 0.1.0
+
+### Rompe
+
+**El tema sale de `elise-ui` a su propio paquete.** `elise-ui` pierde el
+subpath `./theme`. `ThemeProvider`, `useTheme` y `applyTheme` pasan a
+`@calumet/elise-themes`, así que para ellos la mudanza es cambiar el import.
+`ThemeScope` se queda en `elise-ui`.
+
+`EliseTheme`, `defaultLightTheme` y `defaultDarkTheme` desaparecen: el tema por
+defecto es la hoja. Un tema pasa a ser `Partial<Record<EliseVar, string>>` con
+el nombre CSS como clave, así que entran las 110 variables de la hoja y no solo
+los 44 colores que modelaba `EliseTheme`.
+
+### Añade
+
+- **`themeToCss`**, para quien renderiza en servidor. Descarta el valor que
+  traiga `< > { } ;` o `/*`, que de otro modo un color guardado podía cerrar el
+  `<style>`.
+- **`ThemeProvider` deja de parpadear con SSR.** Monta un script en línea que
+  lee la preferencia mientras el navegador parsea el HTML, así que la página ya
+  no sale en claro y se pone oscura al arrancar el JS.
+- **Un editor de apariencia**, que enseña decisiones con nombre (el color de la
+  escuela, el papel, las esquinas, la densidad, la tipografía) en vez de
+  variables. Los rótulos van en inglés y se traducen con `elise-i18n`, en el
+  espacio `themes`.
+
+Más en [Temas](docs/temas.md).
+
 ## `@calumet/elise-ui` 0.35.2
 
 ### Corrige

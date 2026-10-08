@@ -122,7 +122,7 @@ const TableDemo = () => {
           loadingLabel="Cargando clientes"
           filters={
             <div className="flex flex-wrap items-center gap-2">
-              <Input placeholder="Buscar cliente" className="w-56" />
+              <Input size="sm" placeholder="Buscar cliente" className="w-56" />
               <Button variant="outline" size="sm">
                 Estado
               </Button>

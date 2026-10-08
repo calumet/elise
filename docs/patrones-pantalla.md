@@ -50,6 +50,11 @@ El contenido de las cuatro se reparte en `Section`, una por grupo. Una pantalla
 que ponga contenido suelto entre secciones pierde el ritmo vertical y deja
 huérfano lo que no está en ninguna.
 
+**La navegación depende de cuántos destinos hay.** Hasta cinco, en la segunda
+fila de la cabecera con `AppShellHeaderNav`; desde seis, en la barra lateral con
+`AppShellNav`. Ninguno de los dos casos va en `Tabs` dentro de
+la página: ver [Pocos destinos](componentes.md#pocos-destinos-la-segunda-fila).
+
 **La pantalla que no fluye hacia abajo lleva `AppShellMain fill`.** Un editor
 con su panel de resultados, una consola, un maestro-detalle de dos paneles: no
 son ninguna de las cuatro, porque el usuario no viene a recorrerlas sino a
