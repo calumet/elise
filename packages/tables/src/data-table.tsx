@@ -393,22 +393,29 @@ type DateRangeTuple = [Date | undefined, Date | undefined];
 const isDateRangeTuple = (value: unknown): value is DateRangeTuple =>
   Array.isArray(value) && value.length === 2;
 
-/** Lo que el chip dice que está puesto, o nada si el filtro está vacío. */
-const summarize = (variant: ColumnMeta["filterVariant"], value: unknown): string | undefined => {
-  if (value === undefined || value === null || value === "") return undefined;
-  if (variant === "select" && Array.isArray(value)) return value.join(", ") || undefined;
-  if (variant === "range" && Array.isArray(value)) {
-    const [min, max] = value as [number | undefined, number | undefined];
+type Summary = (value: unknown) => string | undefined;
+
+/* Cómo dice cada tipo de filtro lo que tiene puesto. `text` es el valor tal cual. */
+const SUMMARIES: Record<NonNullable<ColumnMeta["filterVariant"]>, Summary> = {
+  text: (value) => String(value),
+  select: (value) => (Array.isArray(value) && value.length > 0 ? value.join(", ") : undefined),
+  range: (value) => {
+    const [min, max] = (Array.isArray(value) ? value : []) as [number?, number?];
     return min === undefined && max === undefined ? undefined : `${min ?? ""}–${max ?? ""}`;
-  }
-  if (variant === "date" && value instanceof Date) return toISOText(value);
-  if (variant === "daterange" && isDateRangeTuple(value)) {
-    const [from, to] = value;
+  },
+  date: (value) => (value instanceof Date ? toISOText(value) : undefined),
+  daterange: (value) => {
+    const [from, to] = isDateRangeTuple(value) ? value : [];
     if (!from) return undefined;
     return to ? `${toISOText(from)}--${toISOText(to)}` : toISOText(from);
-  }
-  return String(value);
+  },
 };
+
+/** Lo que el chip dice que está puesto, o nada si el filtro está vacío. */
+const summarize = (variant: ColumnMeta["filterVariant"], value: unknown): string | undefined =>
+  value === undefined || value === null || value === ""
+    ? undefined
+    : SUMMARIES[variant ?? "text"](value);
 
 /**
  * El buscador de la franja, sin caja: el primer filtro de texto. El nombre de
