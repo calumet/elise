@@ -26,6 +26,15 @@ la sans no cambia, porque San Francisco ya mide casi lo mismo que Geist.
 **El realce de `Clickable` no se veía sobre la superficie invertida.** El velo
 era negro también ahí; ahora la superficie declara el suyo.
 
+**El valor de `Select` se partía en dos líneas.** En un disparador estrecho,
+como uno con `w-44` dentro de `data-density="compact"`, el texto elegido crecía
+hacia abajo y se salía de la caja. Ahora se corta con elipsis, como en
+`DatePicker`.
+
+**`SegmentedControl` se estiraba a todo el ancho** dentro de un contenedor
+`flex` en columna, con las opciones a un lado y el carril vacío al otro. Ahora
+mide lo que sus opciones.
+
 **`ThemeScope` contra su propia documentación.** El linter aceptaba solo
 `layout` en su `className`; ahora acepta también borde, radio, color y relleno.
 

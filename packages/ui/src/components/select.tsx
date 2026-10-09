@@ -53,7 +53,7 @@ export const SelectTrigger: React.ForwardRefExoticComponent<
         FIELD_BOX,
         FIELD_SIZES[size],
         TRIGGER_VARIANTS[variant],
-        "items-center justify-between data-placeholder:text-muted-foreground",
+        "items-center justify-between gap-2 text-start data-placeholder:text-muted-foreground [&>span]:min-w-0 [&>span]:truncate",
         INVALID_FIELD,
         className,
       )}
