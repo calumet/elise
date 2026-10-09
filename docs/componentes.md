@@ -123,8 +123,8 @@ del tema. Una barra que pasa de `shadow="none"` a `shadow="sm"` al pegarse arrib
 no necesita escribir su transición.
 
 `scrim` es para el texto que va encima de una foto: pinta un velo oscuro que se
-concentra abajo, donde va el texto, y llega a transparente antes del último
-cuarto, y declara su par de texto claro, así que `tone="muted"` resuelve contra
+concentra abajo, donde va el texto, y llega a transparente pasados dos tercios de
+la altura, y declara su par de texto claro, así que `tone="muted"` resuelve contra
 él. Es igual en los dos temas, porque la foto también lo es. Ver
 [Reglas de interfaz](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve).
 

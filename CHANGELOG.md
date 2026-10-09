@@ -11,7 +11,7 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 hacía falta.** Bajaba en línea recta desde `--inverse` al 80% hasta
 transparente a lo alto de toda la foto: aclaraba la franja del texto y oscurecía
 la mitad de arriba aunque no llevara nada. Ahora es un negro fijo concentrado
-abajo (80%, 50% al 40% de la altura, transparente desde el 75%), igual en los
+abajo (78%, 45% al 38% de la altura, transparente desde el 72%), igual en los
 dos temas, y su texto apagado es más claro que el de la superficie invertida,
 que estaba pensado para un fondo casi negro.
 
