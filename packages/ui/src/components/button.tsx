@@ -89,7 +89,7 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
      desenfoque separa el rótulo de lo que se mueva debajo. */
   surface:
     "border border-border-strong bg-card/85 text-foreground backdrop-blur-[2px] hover:bg-card active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-card data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
-  overlay: `bg-inverse-foreground/10 text-inverse-foreground shadow-surface-bevel backdrop-blur-sm ${RELIEF_EDGE} ${OUTLINE_STATES} hover:bg-inverse-foreground/20 active:shadow-bevel-inset data-[state=open]:shadow-bevel-inset disabled:bg-inverse-foreground/5 disabled:text-inverse-muted-foreground`,
+  overlay: `bg-inverse-foreground/10 text-inverse-foreground border-0 shadow-surface-bevel backdrop-blur-sm ${OUTLINE_STATES} hover:bg-inverse-foreground/20 active:shadow-bevel-inset data-[state=open]:shadow-bevel-inset disabled:bg-inverse-foreground/5 disabled:text-inverse-muted-foreground`,
 };
 
 const toneOverrides: Record<
