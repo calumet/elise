@@ -13,7 +13,7 @@ import { Spinner } from "./spinner";
 
 /** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "solid" | "outline" | "ghost" | "surface";
+  variant?: "solid" | "outline" | "ghost" | "surface" | "overlay";
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
@@ -85,10 +85,12 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   ghost:
     "text-foreground hover:bg-state-hover active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-state-hover data-[state=open]:shadow-bevel-inset",
   /* Trae consigo la superficie de tarjeta, para cuando detrás no hay una página
-     lisa sino una imagen o una textura. `outline` ahí queda ilegible, y el
+     lisa sino una textura. `outline` ahí queda ilegible, y el
      desenfoque separa el rótulo de lo que se mueva debajo. */
   surface:
     "border border-border-strong bg-card/85 text-foreground backdrop-blur-[2px] hover:bg-card active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-card data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
+  overlay:
+    "border-0 bg-[oklch(0_0_0/0.35)] text-inverse-foreground backdrop-blur-sm hover:bg-[oklch(0_0_0/0.5)] active:bg-[oklch(0_0_0/0.6)] data-[state=open]:bg-[oklch(0_0_0/0.5)] disabled:bg-[oklch(0_0_0/0.2)] disabled:text-inverse-muted-foreground",
 };
 
 const toneOverrides: Record<
@@ -104,6 +106,7 @@ const toneOverrides: Record<
       "text-success-subtle-foreground hover:bg-success-subtle hover:text-success-subtle-foreground active:bg-success-subtle",
     surface:
       "border-success bg-card/85 text-success-subtle-foreground hover:bg-success-subtle active:bg-success-subtle",
+    overlay: "text-inverse-success",
   },
   warning: {
     solid:
@@ -114,6 +117,7 @@ const toneOverrides: Record<
       "text-warning-subtle-foreground hover:bg-warning-subtle hover:text-warning-subtle-foreground active:bg-warning-subtle",
     surface:
       "border-warning bg-card/85 text-warning-subtle-foreground hover:bg-warning-subtle active:bg-warning-subtle",
+    overlay: "text-inverse-warning",
   },
   danger: {
     solid:
@@ -124,6 +128,7 @@ const toneOverrides: Record<
       "text-destructive-subtle-foreground hover:bg-destructive-subtle hover:text-destructive-subtle-foreground active:bg-destructive-subtle",
     surface:
       "border-destructive bg-card/85 text-destructive-subtle-foreground hover:bg-destructive-subtle active:bg-destructive-subtle",
+    overlay: "text-inverse-danger",
   },
 };
 
@@ -168,7 +173,7 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
-/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una imagen o una textura. */
+/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una textura, y `overlay` el cristal oscuro para ir sobre una foto. */
 export const Button: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, ButtonProps>(

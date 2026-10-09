@@ -7,6 +7,8 @@ import {
 import { Button } from "@calumet/elise-ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@calumet/elise-ui/collapsible";
 import { Separator } from "@calumet/elise-ui/separator";
+import { BlockStack } from "@calumet/elise-ui/stack";
+import { Text } from "@calumet/elise-ui/text";
 import { useState } from "react";
 
 const AccordionCollapsibleDemo = () => {
@@ -30,6 +32,29 @@ const AccordionCollapsibleDemo = () => {
           <AccordionItem value="item-2">
             <AccordionTrigger>¿Puedo personalizarlo?</AccordionTrigger>
             <AccordionContent>Claro, ajusta tokens y preset según tu marca.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
+      <div className="space-y-3">
+        <h3 className="text-base font-semibold text-muted-foreground">
+          Accordion flush: la barra de sección en móvil
+        </h3>
+        <Accordion type="single" collapsible variant="flush">
+          <AccordionItem value="seccion">
+            <AccordionTrigger>
+              <Text as="span" size="xs" tone="muted">
+                Programas
+              </Text>
+              <Text as="span">Ingeniería de Sistemas</Text>
+            </AccordionTrigger>
+            <AccordionContent>
+              <BlockStack gap={2}>
+                <Text>Ingeniería de Sistemas</Text>
+                <Text tone="muted">Maestría en Informática</Text>
+                <Text tone="muted">Doctorado en Ingeniería</Text>
+              </BlockStack>
+            </AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>
