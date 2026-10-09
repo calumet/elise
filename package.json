@@ -18,6 +18,7 @@
     "clean": "pnpm -r clean",
     "publish:packages": "pnpm --filter \"@calumet/elise-*\" publish --no-git-checks",
     "check:versions": "node scripts/check-versions.mjs",
+    "check:peers": "node scripts/check-peers.mjs",
     "jsr:check": "node scripts/check-versions.mjs && jsr publish --dry-run --allow-dirty"
   },
   "devDependencies": {

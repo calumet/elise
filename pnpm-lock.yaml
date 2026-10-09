@@ -41,10 +41,10 @@ importers:
       '@calumet/elise-icons':
         specifier: workspace:^
         version: link:../icons
-      '@calumet/elise-ui':
-        specifier: workspace:^
-        version: link:../ui
     devDependencies:
+      '@calumet/elise-ui':
+        specifier: workspace:*
+        version: link:../ui
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -288,9 +288,6 @@ importers:
       '@calumet/elise-icons':
         specifier: workspace:^
         version: link:../icons
-      '@calumet/elise-ui':
-        specifier: workspace:^
-        version: link:../ui
       '@tanstack/react-table':
         specifier: ^9.2.4
         version: 9.2.4(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -301,6 +298,9 @@ importers:
         specifier: ^3.7.0
         version: 3.7.0
     devDependencies:
+      '@calumet/elise-ui':
+        specifier: workspace:*
+        version: link:../ui
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -324,11 +324,10 @@ importers:
         version: 5.9.3
 
   packages/themes:
-    dependencies:
-      '@calumet/elise-ui':
-        specifier: workspace:^
-        version: link:../ui
     devDependencies:
+      '@calumet/elise-ui':
+        specifier: workspace:*
+        version: link:../ui
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -353,10 +352,10 @@ importers:
       '@calumet/elise-icons':
         specifier: workspace:^
         version: link:../icons
-      '@calumet/elise-ui':
-        specifier: workspace:^
-        version: link:../ui
     devDependencies:
+      '@calumet/elise-ui':
+        specifier: workspace:*
+        version: link:../ui
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0

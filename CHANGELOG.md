@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `elise-toasts` 0.4.21, `elise-alerts` 0.3.20, `elise-tables` 0.9.1 y `elise-themes` 0.1.3
+
+### Corrige
+
+**El peer de `elise-ui` se quedaba atrás en cada minor.** Se declaraba con
+`workspace:^`, que se publica como `^` de la versión del momento, y en `0.x`
+eso no cruza la minor: `toasts` y `alerts` pedían `^0.35.0`, `tables`
+`^0.37.0` y `themes` `^0.38.0`, y con `elise-ui` 0.39.0 los cuatro avisaban de un
+peer sin cumplir. Ahora piden `>=0.39.0 <1.0.0`, y `elise-ui` sale de sus
+`dependencies`: va solo como peer, el de la app.
+
+En JSR la dependencia se sigue publicando como `^0.39.0`, porque JSR no deja
+ensanchar el rango entre miembros del workspace. Por eso estos cuatro paquetes
+se republican con cada minor de `elise-ui`.
+
+Quien tapaba el aviso con `peerDependencyRules.allowedVersions` puede quitar
+esas reglas.
+
 ## `@calumet/elise-ui` 0.39.0
 
 ### Corrige

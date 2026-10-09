@@ -177,6 +177,15 @@ Usa mensajes claros y descriptivos con [Conventional Commits](https://www.conven
   - `patch` para correcciones (`0.1.0 -> 0.1.1`)
   - `minor` para features retrocompatibles (`0.1.x -> 0.2.0`)
   - `major` para cambios incompatibles
+- Un paquete que usa `elise-ui` lo declara como peer con `">=0.39.0 <1.0.0"`, y
+  como `devDependency` con `workspace:*`; nunca en `dependencies` ni con
+  `workspace:^`. En `0.x`, `^0.39.0` no admite la `0.40.0`, así que cada minor de
+  `elise-ui` dejaba a los demás con el peer sin cumplir.
+- Cuando `elise-ui` sube de minor, `elise-toasts`, `elise-alerts`,
+  `elise-tables` y `elise-themes` suben un parche en la misma PR. JSR publica la
+  dependencia entre miembros del workspace como `^` de la versión del momento,
+  sin forma de ensancharla, así que solo se mantienen al día republicándolos.
+  `pnpm check:peers` lo comprueba contra lo publicado en jsr.io, y CI lo corre.
 
 ## ¿Preguntas?
 
