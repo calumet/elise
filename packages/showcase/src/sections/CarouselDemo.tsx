@@ -57,8 +57,16 @@ export default function CarouselDemo() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious variant="overlay" className="left-4" />
-        <CarouselNext variant="overlay" className="right-4" />
+        <CarouselPrevious
+          variant="overlay"
+          size="icon-sm"
+          className="top-auto right-18 bottom-6 left-auto translate-y-0"
+        />
+        <CarouselNext
+          variant="overlay"
+          size="icon-sm"
+          className="top-auto right-8 bottom-6 translate-y-0"
+        />
       </Carousel>
 
       <Carousel className="w-full max-w-sm">

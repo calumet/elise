@@ -90,7 +90,7 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   surface:
     "border border-border-strong bg-card/85 text-foreground backdrop-blur-[2px] hover:bg-card active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-card data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   overlay:
-    "border-0 bg-[oklch(0_0_0/0.35)] text-inverse-foreground backdrop-blur-sm hover:bg-[oklch(0_0_0/0.5)] active:bg-[oklch(0_0_0/0.6)] data-[state=open]:bg-[oklch(0_0_0/0.5)] disabled:bg-[oklch(0_0_0/0.2)] disabled:text-inverse-muted-foreground",
+    "border-0 bg-inverse-foreground/10 text-inverse-foreground backdrop-blur-sm hover:bg-inverse-foreground/20 active:bg-inverse-foreground/25 data-[state=open]:bg-inverse-foreground/20 disabled:bg-inverse-foreground/5 disabled:text-inverse-muted-foreground",
 };
 
 const toneOverrides: Record<
@@ -173,7 +173,7 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
-/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una textura, y `overlay` el cristal oscuro para ir sobre una foto. */
+/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una textura, y `overlay` el cristal claro para ir sobre una foto. */
 export const Button: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, ButtonProps>(

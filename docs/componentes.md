@@ -924,8 +924,8 @@ lo pone el hijo entero.
 | DatePicker, DateRangePicker                                             | `@calumet/elise-ui/date-picker`  | [react-day-picker](https://daypicker.dev/)                           |
 
 `CarouselPrevious` y `CarouselNext` aceptan las props de `Button`. En un banner
-van encima de la foto con `variant="overlay"`, dentro del carrusel en vez de a
-sus costados. El texto va en un `Box background="scrim"`, y una diapositiva sin
+van encima de la foto con `variant="overlay"`, abajo a la derecha, donde el velo
+es más oscuro. El texto va en un `Box background="scrim"`, y una diapositiva sin
 texto no lo lleva, así que la foto se ve limpia:
 
 ```tsx
@@ -937,8 +937,16 @@ texto no lo lleva, así que la foto se ve limpia:
       </Box>
     </CarouselItem>
   </CarouselContent>
-  <CarouselPrevious variant="overlay" className="left-4" />
-  <CarouselNext variant="overlay" className="right-4" />
+  <CarouselPrevious
+    variant="overlay"
+    size="icon-sm"
+    className="top-auto right-18 bottom-6 left-auto translate-y-0"
+  />
+  <CarouselNext
+    variant="overlay"
+    size="icon-sm"
+    className="top-auto right-8 bottom-6 translate-y-0"
+  />
 </Carousel>
 ```
 
@@ -1263,16 +1271,17 @@ import { Button } from "@calumet/elise-ui/button";
 <Button variant="outline">Contorno</Button> // Solo borde
 <Button variant="ghost">Fantasma</Button>   // Sin fondo ni borde
 <Button variant="surface">Encima</Button>   // Borde y superficie de tarjeta
-<Button variant="overlay">Sobre foto</Button> // Cristal oscuro
+<Button variant="overlay">Sobre foto</Button> // Cristal claro
 ```
 
 `surface` es `outline` con la superficie de tarjeta detrás, traslúcida y con
 desenfoque. Es para cuando debajo no hay una página lisa sino una textura, donde
 `outline` deja el rótulo ilegible.
 
-`overlay` es cristal oscuro traslúcido con el rótulo claro, igual en los dos
-temas. Es para ir encima de una foto, donde una caja blanca se lee como lo más
-llamativo de la imagen.
+`overlay` es cristal claro traslúcido, que se ilumina al apuntarlo, con el rótulo
+claro, igual en los dos temas. Es para ir encima de una foto, donde una caja
+blanca se lee como lo más llamativo de la imagen. Se lee contra el velo de
+`scrim`, así que va en la parte de abajo, donde el velo es más oscuro.
 
 ### Tamaños
 

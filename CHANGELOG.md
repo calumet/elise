@@ -17,7 +17,7 @@ que estaba pensado para un fondo casi negro.
 
 ### Añade
 
-- `Button` gana `variant="overlay"`: cristal oscuro traslúcido con el rótulo
+- `Button` gana `variant="overlay"`: cristal claro traslúcido con el rótulo
   claro, para ir encima de una foto. Es la que llevan los controles de un
   carrusel de banners.
 - `Accordion` gana `variant="flush"`: sin tarjeta, cada sección es una barra a
