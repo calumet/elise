@@ -99,6 +99,12 @@ las que ya cayó esta herramienta:
 - **Fondos semitransparentes.** Un fondo como `bg-primary/10` se compone contra
   lo que tiene detras. Tratarlo como si fuera sólido daba 1.09:1 en texto
   perfectamente legible.
+- **Texto sobre una imagen.** Un banner pinta su foto y su velo con
+  `background-image`, y el script solo sabe componer colores: atravesaba los
+  dos y medía el texto blanco contra el fondo de la página, 1.00:1. Cuando un
+  elemento pinta una imagen sin un color opaco debajo, el texto que tiene
+  encima no se mide. El degradado de relieve de un botón sólido va sobre su
+  color opaco, así que ese se sigue midiendo.
 - **Colores a mitad de transición.** Al cambiar de tema, Chrome reporta el valor
   interpolado como `oklab(...)` y la medición sale del tema equivocado. El
   script congela transiciones y animaciones antes de medir.
