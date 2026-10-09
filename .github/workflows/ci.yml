@@ -38,6 +38,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Peers entre paquetes
+        run: pnpm check:peers
+
       - name: React Doctor
         run: |
           for p in ui themes forms tables toasts alerts i18n icons; do

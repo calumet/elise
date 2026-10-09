@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-alerts",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "private": false,
   "description": "Sistema de alertas modales basado en event bus para Elise.",
   "repository": {
@@ -34,10 +34,10 @@
     "clean": "rimraf dist jsr"
   },
   "dependencies": {
-    "@calumet/elise-icons": "workspace:^",
-    "@calumet/elise-ui": "workspace:^"
+    "@calumet/elise-icons": "workspace:^"
   },
   "devDependencies": {
+    "@calumet/elise-ui": "workspace:*",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "react": "^19.3.0",
@@ -47,7 +47,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "@calumet/elise-ui": "workspace:^",
+    "@calumet/elise-ui": ">=0.39.0 <1.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": ">=5.0.0"
