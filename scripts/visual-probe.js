@@ -340,7 +340,9 @@
     const effectiveBackground = (el) => {
       const layers = [];
       for (let n = el; n; n = n.parentElement) {
-        const c = aRgba(getComputedStyle(n).backgroundColor);
+        const ns = getComputedStyle(n);
+        const c = aRgba(ns.backgroundColor);
+        if (ns.backgroundImage !== "none" && c[3] < 1) return null;
         if (c[3] === 0) continue;
         layers.push(c);
         if (c[3] === 1) break;
@@ -363,6 +365,7 @@
       const large = px >= 24 || (px >= 18.66 && bold);
       const min = large ? 3 : 4.5;
       const background = effectiveBackground(el);
+      if (!background) continue;
       const text = compose(aRgba(cs.color), background);
       const [l1, l2] = [lum(text), lum(background)].sort((a, b) => b - a);
       const ratio = (l1 + 0.05) / (l2 + 0.05);

@@ -122,9 +122,10 @@ Con `shadow`, el cambio de una sombra a otra se anima con el token de movimiento
 del tema. Una barra que pasa de `shadow="none"` a `shadow="sm"` al pegarse arriba
 no necesita escribir su transición.
 
-`scrim` es para el texto que va encima de una foto: pinta un velo que sube desde
-la superficie invertida hasta transparente, y declara el par de texto invertido,
-así que `tone="muted"` resuelve contra él. Ver
+`scrim` es para el texto que va encima de una foto: pinta un velo oscuro que se
+concentra abajo, donde va el texto, y llega a transparente pasados dos tercios de
+la altura, y declara su par de texto claro, así que `tone="muted"` resuelve contra
+él. Es igual en los dos temas, porque la foto también lo es. Ver
 [Reglas de interfaz](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve).
 
 #### Grid
@@ -649,8 +650,30 @@ estado con texto para lectores de pantalla.
 | Menubar, MenubarMenu, MenubarTrigger, MenubarContent, ...    | `@calumet/elise-ui/menubar`         | [Menubar](https://www.radix-ui.com/primitives/docs/components/menubar)                |
 | DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, ...  | `@calumet/elise-ui/dropdown-menu`   | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
 | ContextMenu, ContextMenuTrigger, ContextMenuContent, ...     | `@calumet/elise-ui/context-menu`    | [ContextMenu](https://www.radix-ui.com/primitives/docs/components/context-menu)       |
-| Pagination, PaginationContent, PaginationItem                | `@calumet/elise-ui/pagination`      | —                                                                                     |
-| UserMenu                                                     | `@calumet/elise-ui/user-menu`       | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
+
+`Accordion` es una tarjeta por defecto. Con `variant="flush"` pierde la tarjeta y
+cada sección es una barra a todo el ancho, separada por un filete, como la barra
+de sección que en móvil sustituye a la columna lateral. Sus hijos se apilan, así
+que el rótulo puede llevar dos líneas:
+
+```tsx
+<Accordion type="single" collapsible variant="flush" className="xl:hidden">
+  <AccordionItem value="seccion">
+    <AccordionTrigger>
+      <Text as="span" size="xs" tone="muted">
+        Programas
+      </Text>
+      <Text as="span">Ingeniería de Sistemas</Text>
+    </AccordionTrigger>
+    <AccordionContent>…</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+`Collapsible` sigue sin aspecto propio, para cuando el disparador es otra cosa,
+como un botón.
+| Pagination, PaginationContent, PaginationItem | `@calumet/elise-ui/pagination` | — |
+| UserMenu | `@calumet/elise-ui/user-menu` | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu) |
 
 #### Lo que no es una sección, en el cajón de móvil
 
@@ -900,17 +923,35 @@ lo pone el hijo entero.
 | Calendar                                                                | `@calumet/elise-ui/calendar`     | [react-day-picker](https://daypicker.dev/)                           |
 | DatePicker, DateRangePicker                                             | `@calumet/elise-ui/date-picker`  | [react-day-picker](https://daypicker.dev/)                           |
 
-`CarouselPrevious` y `CarouselNext` aceptan las props de `Button`. Encima de la
-foto van con `variant="surface"`, que les pone la superficie de tarjeta detrás, y
-dentro del carrusel en vez de a sus costados:
+`CarouselPrevious` y `CarouselNext` aceptan las props de `Button`. En un banner
+van encima de la foto con `variant="overlay"`, abajo a la derecha, donde el velo
+es más oscuro. El texto va en un `Box background="scrim"`, y una diapositiva sin
+texto no lo lleva, así que la foto se ve limpia:
 
 ```tsx
 <Carousel>
-  <CarouselContent>…</CarouselContent>
-  <CarouselPrevious variant="surface" className="left-4" />
-  <CarouselNext variant="surface" className="right-4" />
+  <CarouselContent>
+    <CarouselItem>
+      <Box background="scrim" padding={8} className="absolute inset-0 flex flex-col justify-end">
+        <Heading level={2}>Admisiones 2027</Heading>
+      </Box>
+    </CarouselItem>
+  </CarouselContent>
+  <CarouselPrevious
+    variant="overlay"
+    size="icon-sm"
+    className="top-auto right-18 bottom-6 left-auto translate-y-0"
+  />
+  <CarouselNext
+    variant="overlay"
+    size="icon-sm"
+    className="top-auto right-8 bottom-6 translate-y-0"
+  />
 </Carousel>
 ```
+
+Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
+`outline`, a los costados.
 
 ### Acciones
 
@@ -1230,11 +1271,18 @@ import { Button } from "@calumet/elise-ui/button";
 <Button variant="outline">Contorno</Button> // Solo borde
 <Button variant="ghost">Fantasma</Button>   // Sin fondo ni borde
 <Button variant="surface">Encima</Button>   // Borde y superficie de tarjeta
+<Button variant="overlay">Sobre foto</Button> // Cristal claro
 ```
 
 `surface` es `outline` con la superficie de tarjeta detrás, traslúcida y con
-desenfoque. Es para cuando debajo no hay una página lisa sino una imagen o una
-textura, donde `outline` deja el rótulo ilegible.
+desenfoque. Es para cuando debajo no hay una página lisa sino una textura, donde
+`outline` deja el rótulo ilegible.
+
+`overlay` es cristal claro traslúcido, que se ilumina al apuntarlo, con el rótulo
+claro, igual en los dos temas. Es para ir encima de una foto, donde una caja
+blanca se lee como lo más llamativo de la imagen. Oscurece un poco lo que tiene
+detrás, así que el rótulo se lee también sobre una foto clara sin velo, y sobre
+el velo de `scrim` casi no cambia.
 
 ### Tamaños
 
@@ -1258,7 +1306,7 @@ textura, donde `outline` deja el rótulo ilegible.
 
 | Prop      | Tipo                                                          | Default   | Descripción                                    |
 | --------- | ------------------------------------------------------------- | --------- | ---------------------------------------------- |
-| `variant` | `"solid" \| "outline" \| "ghost" \| "surface"`                | `"solid"` | Estilo visual                                  |
+| `variant` | `"solid" \| "outline" \| "ghost" \| "surface" \| "overlay"`   | `"solid"` | Estilo visual                                  |
 | `size`    | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "icon" \| "icon-sm"` | `"md"`    | Tamaño. `xs` es para ir dentro de otro control |
 | `tone`    | `"success" \| "warning" \| "danger"`                          | —         | Color semántico (sobreescribe el variant)      |
 | `asChild` | `boolean`                                                     | `false`   | Renderiza el hijo en lugar de `<button>`       |

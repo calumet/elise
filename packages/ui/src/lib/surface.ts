@@ -38,7 +38,7 @@ export const MENU_ITEM =
 
 const INVERSE_TOKENS: string = [
   "text-foreground",
-  "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
+  "[--foreground:var(--inverse-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
   "[--warning-subtle-foreground:var(--inverse-warning)] [--destructive-subtle-foreground:var(--inverse-danger)]",
   "[--border-subtle:var(--inverse-border-subtle)] [--border:var(--inverse-border)]",
@@ -47,9 +47,9 @@ const INVERSE_TOKENS: string = [
 ].join(" ");
 
 /** La franja invertida: la capa que va encima de todo, como un toast. */
-export const INVERSE_SURFACE: string = `bg-inverse ${INVERSE_TOKENS}`;
+export const INVERSE_SURFACE: string = `bg-inverse [--muted-foreground:var(--inverse-muted-foreground)] ${INVERSE_TOKENS}`;
 
-export const SCRIM_SURFACE: string = `bg-linear-to-t from-inverse/80 to-transparent ${INVERSE_TOKENS}`;
+export const SCRIM_SURFACE: string = `bg-linear-to-t from-[oklch(0_0_0/0.78)] via-[oklch(0_0_0/0.45)] via-38% to-transparent to-72% [--muted-foreground:oklch(0.9_0.01_265)] ${INVERSE_TOKENS}`;
 
 /** El riel de la navegación. */
 export const SIDEBAR_SURFACE: string = [

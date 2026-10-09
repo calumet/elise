@@ -3,6 +3,28 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.39.0
+
+### Corrige
+
+**El velo `scrim` de la 0.38.0 dejaba el texto con menos contraste del que
+hacía falta.** Bajaba en línea recta desde `--inverse` al 80% hasta
+transparente a lo alto de toda la foto: aclaraba la franja del texto y oscurecía
+la mitad de arriba aunque no llevara nada. Ahora es un negro fijo concentrado
+abajo (78%, 45% al 38% de la altura, transparente desde el 72%), igual en los
+dos temas, y su texto apagado es más claro que el de la superficie invertida,
+que estaba pensado para un fondo casi negro.
+
+### Añade
+
+- `Button` gana `variant="overlay"`: cristal claro traslúcido con el rótulo
+  claro, para ir encima de una foto. Oscurece un poco lo que tiene detrás, así
+  que se lee también sobre una foto clara sin velo. Es la que llevan los
+  controles de un carrusel de banners.
+- `Accordion` gana `variant="flush"`: sin tarjeta, cada sección es una barra a
+  todo el ancho y el rótulo puede llevar dos líneas. Es la barra de sección que
+  en móvil sustituye a la columna lateral.
+
 ## `@calumet/elise-ui` 0.38.0, `elise-linter` 0.9.2 y `elise-themes` 0.1.2
 
 ### Corrige
