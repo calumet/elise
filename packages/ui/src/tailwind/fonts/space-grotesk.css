@@ -1,2 +1,21 @@
 /* Registra "Space Grotesk Variable". */
 @import "@fontsource-variable/space-grotesk/index.css";
+
+@font-face {
+  font-family: "Space Grotesk Variable Fallback";
+  src: local("Segoe UI"), local("SegoeUI");
+  font-weight: 100 549;
+  size-adjust: 110.29%;
+  ascent-override: 89.22%;
+  descent-override: 26.47%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Space Grotesk Variable Fallback";
+  src: local("Segoe UI Semibold"), local("SegoeUI-Semibold");
+  font-weight: 550 1000;
+  size-adjust: 107.1%;
+  ascent-override: 91.88%;
+  descent-override: 27.26%;
+  line-gap-override: 0%;
+}

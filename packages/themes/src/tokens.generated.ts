@@ -203,11 +203,12 @@ export const lightTheme: Record<EliseVar, string> = {
   "--info-subtle": "oklch(0.962 0.028 240)",
   "--info-subtle-foreground": "oklch(0.42 0.12 245)",
   "--font-sans":
-    '"Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-  "--font-serif": '"Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif',
+    '"Geist Variable", "Geist", "Geist Variable Fallback", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+  "--font-serif":
+    '"Source Serif 4 Variable", "Source Serif 4", "Source Serif 4 Variable Fallback", ui-serif, Georgia, serif',
   "--font-display": "var(--font-sans)",
   "--font-mono":
-    '"JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+    '"JetBrains Mono Variable", "JetBrains Mono", "JetBrains Mono Variable Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
   "--radius": "0.5rem",
   "--duration-fast": "140ms",
   "--duration-base": "200ms",
@@ -326,11 +327,12 @@ export const darkTheme: Record<EliseVar, string> = {
   "--info-subtle": "oklch(0.285 0.055 240)",
   "--info-subtle-foreground": "oklch(0.85 0.1 240)",
   "--font-sans":
-    '"Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-  "--font-serif": '"Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif',
+    '"Geist Variable", "Geist", "Geist Variable Fallback", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+  "--font-serif":
+    '"Source Serif 4 Variable", "Source Serif 4", "Source Serif 4 Variable Fallback", ui-serif, Georgia, serif',
   "--font-display": "var(--font-sans)",
   "--font-mono":
-    '"JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+    '"JetBrains Mono Variable", "JetBrains Mono", "JetBrains Mono Variable Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
   "--radius": "0.5rem",
   "--duration-fast": "140ms",
   "--duration-base": "200ms",
@@ -479,42 +481,56 @@ export type FontFamily = { id: string; label: string; stack: string };
  * `@calumet/elise-ui/tailwind/fonts/<id>.css`. La app importa las que ofrezca.
  */
 export const FONT_FAMILIES: readonly FontFamily[] = [
-  { id: "geist", label: "Geist", stack: '"Geist Variable", ui-sans-serif, sans-serif' },
+  {
+    id: "geist",
+    label: "Geist",
+    stack: '"Geist Variable", "Geist Variable Fallback", ui-sans-serif, sans-serif',
+  },
   {
     id: "jetbrains-mono",
     label: "JetBrains Mono",
-    stack: '"JetBrains Mono Variable", ui-monospace, monospace',
+    stack: '"JetBrains Mono Variable", "JetBrains Mono Variable Fallback", ui-monospace, monospace',
   },
   {
     id: "source-serif-4",
     label: "Source Serif 4",
-    stack: '"Source Serif 4 Variable", ui-serif, Georgia, serif',
+    stack:
+      '"Source Serif 4 Variable", "Source Serif 4 Variable Fallback", ui-serif, Georgia, serif',
   },
-  { id: "archivo", label: "Archivo", stack: '"Archivo Variable", ui-sans-serif, sans-serif' },
+  {
+    id: "archivo",
+    label: "Archivo",
+    stack: '"Archivo Variable", "Archivo Variable Fallback", ui-sans-serif, sans-serif',
+  },
   {
     id: "bricolage-grotesque",
     label: "Bricolage Grotesque",
-    stack: '"Bricolage Grotesque Variable", ui-sans-serif, sans-serif',
+    stack:
+      '"Bricolage Grotesque Variable", "Bricolage Grotesque Variable Fallback", ui-sans-serif, sans-serif',
   },
   {
     id: "ibm-plex-sans",
     label: "IBM Plex Sans",
-    stack: '"IBM Plex Sans Variable", ui-sans-serif, sans-serif',
+    stack: '"IBM Plex Sans Variable", "IBM Plex Sans Variable Fallback", ui-sans-serif, sans-serif',
   },
-  { id: "manrope", label: "Manrope", stack: '"Manrope Variable", ui-sans-serif, sans-serif' },
+  {
+    id: "manrope",
+    label: "Manrope",
+    stack: '"Manrope Variable", "Manrope Variable Fallback", ui-sans-serif, sans-serif',
+  },
   {
     id: "newsreader",
     label: "Newsreader",
-    stack: '"Newsreader Variable", ui-serif, Georgia, serif',
+    stack: '"Newsreader Variable", "Newsreader Variable Fallback", ui-serif, Georgia, serif',
   },
   {
     id: "public-sans",
     label: "Public Sans",
-    stack: '"Public Sans Variable", ui-sans-serif, sans-serif',
+    stack: '"Public Sans Variable", "Public Sans Variable Fallback", ui-sans-serif, sans-serif',
   },
   {
     id: "space-grotesk",
     label: "Space Grotesk",
-    stack: '"Space Grotesk Variable", ui-sans-serif, sans-serif',
+    stack: '"Space Grotesk Variable", "Space Grotesk Variable Fallback", ui-sans-serif, sans-serif',
   },
 ];

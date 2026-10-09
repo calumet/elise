@@ -1,2 +1,12 @@
 /* Registra "JetBrains Mono Variable". */
 @import "@fontsource-variable/jetbrains-mono/index.css";
+
+@font-face {
+  font-family: "JetBrains Mono Variable Fallback";
+  src: local("Consolas");
+  font-weight: 100 1000;
+  size-adjust: 109.13%;
+  ascent-override: 93.47%;
+  descent-override: 27.49%;
+  line-gap-override: 0%;
+}

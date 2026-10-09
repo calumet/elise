@@ -3,6 +3,55 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.38.0, `elise-linter` 0.9.2 y `elise-themes` 0.1.2
+
+### Corrige
+
+**La franja de 11px en las páginas sin barra.** `html` deja de llevar
+`scrollbar-gutter: stable`. Con barras clásicas, el hueco reservado se veía vacío
+en cada página corta, con el fondo de `html` al lado de cabeceras y pies de otro
+color. Ahora la página se encoge 11px cuando aparece la barra, como en cualquier
+sitio. Quien prefiera la franja al salto lo pone en su hoja:
+`html { scrollbar-gutter: stable }`.
+
+**`NavigationMenuList` con `gap` desbordaba.** El reparto sumaba los anchos de
+las secciones pero no los huecos entre ellas, así que con un `gap-x-4` la fila
+se salía del contenedor en vez de pasar secciones a «Más».
+
+**El texto salta menos cuando llega la fuente.** Cada familia de `fonts/` trae
+un respaldo `"… Variable Fallback"` que ajusta la fuente del sistema (Segoe UI,
+Georgia o Consolas) a sus medidas, y los tokens `--font-*` lo listan. En macOS
+la sans no cambia, porque San Francisco ya mide casi lo mismo que Geist.
+
+**El realce de `Clickable` no se veía sobre la superficie invertida.** El velo
+era negro también ahí; ahora la superficie declara el suyo.
+
+**El valor de `Select` se partía en dos líneas.** En un disparador estrecho,
+como uno con `w-44` dentro de `data-density="compact"`, el texto elegido crecía
+hacia abajo y se salía de la caja. Ahora se corta con elipsis, como en
+`DatePicker`.
+
+**`SegmentedControl` se estiraba a todo el ancho** dentro de un contenedor
+`flex` en columna, con las opciones a un lado y el carril vacío al otro. Ahora
+mide lo que sus opciones.
+
+**`ThemeScope` contra su propia documentación.** El linter aceptaba solo
+`layout` en su `className`; ahora acepta también borde, radio, color y relleno.
+
+### Añade
+
+- `Box` gana `borderSide` (`"top"`, `"bottom"`, `"start"`, `"end"`), anima el
+  cambio de `shadow` con el token de movimiento del tema y suma
+  `background="scrim"`, el velo con el par de texto invertido para ir encima
+  de una foto.
+- `Clickable` gana `highlight="text"`: sin velo, el contenido pasa del tono
+  apagado al principal al apuntarlo.
+- `Text` gana `tone="inherit"`.
+- `Container` gana `size="xs"`, de 512px.
+
+Los enlaces de una lista donde todo es enlace van en un `<a>` suelto: ver
+[Reglas de interfaz](docs/reglas-ui.md#11-algo-que-se-pulsa).
+
 ## `@calumet/elise-ui` 0.37.0 y `elise-tables` 0.9.0
 
 Sube también `elise-themes` 0.1.1, que lleva el valor nuevo de

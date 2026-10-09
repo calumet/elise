@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Reglas compartidas de Oxlint/Oxfmt para Elise.",
   "keywords": [
     "elise",

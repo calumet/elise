@@ -20,7 +20,7 @@ export type TextProps = React.ComponentProps<"p"> & {
 
   size?: "2xs" | "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
   weight?: "normal" | "medium" | "semibold" | "bold";
-  tone?: "default" | "muted" | "primary" | "success" | "warning" | "danger" | "info";
+  tone?: "default" | "muted" | "primary" | "success" | "warning" | "danger" | "info" | "inherit";
   align?: "start" | "center" | "end";
 
   /**
@@ -73,6 +73,7 @@ const toneClasses: Record<NonNullable<TextProps["tone"]>, string> = {
   warning: "text-warning",
   danger: "text-destructive",
   info: "text-info",
+  inherit: "text-inherit",
 };
 
 const alignClasses: Record<NonNullable<TextProps["align"]>, string> = {

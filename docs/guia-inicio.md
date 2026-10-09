@@ -133,7 +133,8 @@ el registro, y la que no exista se ignora sin error:
 > Es un import aparte para que puedas omitirlo si tu app ya carga Geist por su
 > cuenta (por ejemplo con `geist/font` en Next.js) y no quieras descargarla dos
 > veces. Los tokens `--font-*` resuelven igual en ese caso: listan tanto
-> `"Geist Variable"` (el nombre que registra Fontsource) como `"Geist"`.
+> `"Geist Variable"` (el nombre que registra Fontsource) como `"Geist"`, y el
+> respaldo ajustado va detrás de los dos.
 
 6. **No dejes que el CSS de la plantilla pise al sistema.** El `src/index.css`
    que trae Vite estiliza `#root` con un ancho fijo, `text-align: center` y un

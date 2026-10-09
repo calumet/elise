@@ -1,2 +1,21 @@
 /* Registra "Public Sans Variable". */
 @import "@fontsource-variable/public-sans/index.css";
+
+@font-face {
+  font-family: "Public Sans Variable Fallback";
+  src: local("Segoe UI"), local("SegoeUI");
+  font-weight: 100 549;
+  size-adjust: 105.44%;
+  ascent-override: 90.09%;
+  descent-override: 21.34%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Public Sans Variable Fallback";
+  src: local("Segoe UI Semibold"), local("SegoeUI-Semibold");
+  font-weight: 550 1000;
+  size-adjust: 103.6%;
+  ascent-override: 91.7%;
+  descent-override: 21.72%;
+  line-gap-override: 0%;
+}

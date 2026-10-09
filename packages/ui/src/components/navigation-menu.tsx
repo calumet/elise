@@ -61,7 +61,7 @@ const ROW_BOX =
   "[&_div:has(>[data-slot=navigation-menu-list])]:min-w-0 [&_div:has(>[data-slot=navigation-menu-list])]:flex-1";
 
 /* El reparto en JS plano, para correr al parsear el HTML del servidor, antes de pintar. */
-const LAYOUT_ON_PARSE = `(function(){var s=document.currentScript,r=s&&s.parentElement;if(!r)return;var rows=r.querySelectorAll('[data-slot="navigation-menu-list"]');for(var k=0;k<rows.length;k++){var u=rows[k];if(!u.getClientRects().length)continue;var c=u.parentElement,g=null,li=[];for(var i=0;i<u.children.length;i++){var e=u.children[i];if(e.tagName!=="LI")continue;if(e.getAttribute("data-slot")==="navigation-menu-overflow")g=e;else li.push(e)}if(!g||!c)continue;var w=function(e){return e.getBoundingClientRect().width},p=function(e,q){var t=getComputedStyle(e);return parseFloat(t[q+"Left"])+parseFloat(t[q+"Right"])};g.hidden=false;var ag=w(g);g.hidden=true;var a=li.map(w),d=w(c)-p(c,"padding")-p(u,"padding")-p(u,"margin"),n=li.length,o=function(m){var t=0;for(var j=0;j<m;j++)t+=a[j];return t+(m<li.length?ag:0)};while(n>0&&o(n)>d)n--;for(i=0;i<li.length;i++)li[i].hidden=i>=n;g.hidden=n===li.length;u.removeAttribute("data-unmeasured");u.setAttribute("data-visible",String(n))}})();`;
+const LAYOUT_ON_PARSE = `(function(){var s=document.currentScript,r=s&&s.parentElement;if(!r)return;var rows=r.querySelectorAll('[data-slot="navigation-menu-list"]');for(var k=0;k<rows.length;k++){var u=rows[k];if(!u.getClientRects().length)continue;var c=u.parentElement,g=null,li=[];for(var i=0;i<u.children.length;i++){var e=u.children[i];if(e.tagName!=="LI")continue;if(e.getAttribute("data-slot")==="navigation-menu-overflow")g=e;else li.push(e)}if(!g||!c)continue;var w=function(e){return e.getBoundingClientRect().width},p=function(e,q){var t=getComputedStyle(e);return parseFloat(t[q+"Left"])+parseFloat(t[q+"Right"])};g.hidden=false;var ag=w(g);g.hidden=true;var a=li.map(w),d=w(c)-p(c,"padding")-p(u,"padding")-p(u,"margin"),n=li.length,G=parseFloat(getComputedStyle(u).columnGap)||0,o=function(m){var t=0;for(var j=0;j<m;j++)t+=a[j];var x=m<li.length?1:0;return t+x*ag+Math.max(m+x-1,0)*G};while(n>0&&o(n)>d)n--;for(i=0;i<li.length;i++)li[i].hidden=i>=n;g.hidden=n===li.length;u.removeAttribute("data-unmeasured");u.setAttribute("data-visible",String(n))}})();`;
 
 /**
  * Raíz del menú de navegación, para la barra principal de un sitio. Envolvé con
@@ -355,8 +355,15 @@ export const NavigationMenuList: React.ForwardRefExoticComponent<
       /* Lo que ocupan las primeras `n`, contando el grupo solo si queda alguna
          fuera. Se baja desde todas: la ultima que entra hace desaparecer el
          grupo, asi que no crece de forma pareja y no vale buscar de abajo. */
-      const taken = (n: number) =>
-        widths.slice(0, n).reduce((a, b) => a + b, 0) + (n < sections.length ? groupWidth : 0);
+      const gap = parseFloat(getComputedStyle(list).columnGap) || 0;
+      const taken = (n: number) => {
+        const shown = n + (n < sections.length ? 1 : 0);
+        return (
+          widths.slice(0, n).reduce((a, b) => a + b, 0) +
+          (n < sections.length ? groupWidth : 0) +
+          Math.max(shown - 1, 0) * gap
+        );
+      };
 
       let fit = sections.length;
       while (fit > 0 && taken(fit) > available) fit -= 1;

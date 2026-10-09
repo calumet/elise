@@ -38,6 +38,12 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: React Doctor
+        run: |
+          for p in ui themes forms tables toasts alerts i18n icons; do
+            npx -y react-doctor@0.9.17 --lint --no-supply-chain --no-score --blocking warning packages/$p
+          done
+
       - name: Build
         run: pnpm build
 

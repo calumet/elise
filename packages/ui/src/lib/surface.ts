@@ -36,15 +36,20 @@ export const MENU_ITEM =
 /* Caen fuera de la escala de la raíz, así que declaran la suya en el propio
    elemento y lo de adentro resuelve contra la superficie sin saber dónde está. */
 
-/** La franja invertida: la capa que va encima de todo, como un toast. */
-export const INVERSE_SURFACE: string = [
-  "bg-inverse text-foreground",
+const INVERSE_TOKENS: string = [
+  "text-foreground",
   "[--foreground:var(--inverse-foreground)] [--muted-foreground:var(--inverse-muted-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
   "[--warning-subtle-foreground:var(--inverse-warning)] [--destructive-subtle-foreground:var(--inverse-danger)]",
   "[--border-subtle:var(--inverse-border-subtle)] [--border:var(--inverse-border)]",
   "[--input:var(--inverse-input)] [--border-strong:var(--inverse-border-strong)]",
+  "[--state-hover:rgb(255_255_255/5%)] [--state-active:rgb(255_255_255/9%)]",
 ].join(" ");
+
+/** La franja invertida: la capa que va encima de todo, como un toast. */
+export const INVERSE_SURFACE: string = `bg-inverse ${INVERSE_TOKENS}`;
+
+export const SCRIM_SURFACE: string = `bg-linear-to-t from-inverse/80 to-transparent ${INVERSE_TOKENS}`;
 
 /** El riel de la navegación. */
 export const SIDEBAR_SURFACE: string = [

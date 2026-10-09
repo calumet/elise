@@ -133,6 +133,10 @@ a los de Oxlint y los del propio plugin, y mezclar idiomas en un mismo flujo
 es peor que elegir cualquiera de los dos. La regla que citan sí está en
 español, que es donde vive la documentación.
 
+`ThemeScope` es la excepción: es una sección con su propio tema, y su
+`className` lleva la caja (borde, radio, fondo y relleno), como dice su propia
+documentación.
+
 Los contratos se amplían con `contracts`.
 
 Esto vale para **todos** los componentes del catálogo, no solo para los que

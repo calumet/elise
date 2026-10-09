@@ -329,18 +329,20 @@
      su cuenta. Un nombre que nadie registra no falla de forma visible: la
      familia cae en la siguiente del stack y todo termina en la del sistema. */
   --font-sans:
-    "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
+    "Geist Variable", "Geist", "Geist Variable Fallback", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif:
+    "Source Serif 4 Variable", "Source Serif 4", "Source Serif 4 Variable Fallback", ui-serif,
+    Georgia, serif;
 
   /* La familia de los titulares, que es la única que `Heading` usa. Cae en
      `--font-sans` mientras el tema no la defina, así que un proyecto que no
      empareje dos fuentes no ve ningún cambio. */
   --font-display: var(--font-sans);
   --font-mono:
-    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
-    monospace;
+    "JetBrains Mono Variable", "JetBrains Mono", "JetBrains Mono Variable Fallback", ui-monospace,
+    SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Radio base = radio de controles (8px). Las escalas derivadas se separan
      ±2px, de modo que el escalón más chico queda en 6px y no en 2px. */
@@ -740,7 +742,6 @@
      tokens, así que la barra sigue al tema. */
   html {
     scrollbar-color: var(--color-border-strong) transparent;
-    scrollbar-gutter: stable;
   }
 
   /* El grosor va en `*` y el color en `html` porque no se heredan igual:

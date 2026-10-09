@@ -1,2 +1,21 @@
 /* Registra "Bricolage Grotesque Variable". */
 @import "@fontsource-variable/bricolage-grotesque/index.css";
+
+@font-face {
+  font-family: "Bricolage Grotesque Variable Fallback";
+  src: local("Segoe UI"), local("SegoeUI");
+  font-weight: 100 549;
+  size-adjust: 106.01%;
+  ascent-override: 87.73%;
+  descent-override: 25.47%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Bricolage Grotesque Variable Fallback";
+  src: local("Segoe UI Semibold"), local("SegoeUI-Semibold");
+  font-weight: 550 1000;
+  size-adjust: 105.57%;
+  ascent-override: 88.09%;
+  descent-override: 25.58%;
+  line-gap-override: 0%;
+}
