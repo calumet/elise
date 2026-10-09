@@ -1280,8 +1280,9 @@ desenfoque. Es para cuando debajo no hay una página lisa sino una textura, dond
 
 `overlay` es cristal claro traslúcido, que se ilumina al apuntarlo, con el rótulo
 claro, igual en los dos temas. Es para ir encima de una foto, donde una caja
-blanca se lee como lo más llamativo de la imagen. Se lee contra el velo de
-`scrim`, así que va en la parte de abajo, donde el velo es más oscuro.
+blanca se lee como lo más llamativo de la imagen. Oscurece un poco lo que tiene
+detrás, así que el rótulo se lee también sobre una foto clara sin velo, y sobre
+el velo de `scrim` casi no cambia.
 
 ### Tamaños
 

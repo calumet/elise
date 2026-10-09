@@ -18,8 +18,9 @@ que estaba pensado para un fondo casi negro.
 ### Añade
 
 - `Button` gana `variant="overlay"`: cristal claro traslúcido con el rótulo
-  claro, para ir encima de una foto. Es la que llevan los controles de un
-  carrusel de banners.
+  claro, para ir encima de una foto. Oscurece un poco lo que tiene detrás, así
+  que se lee también sobre una foto clara sin velo. Es la que llevan los
+  controles de un carrusel de banners.
 - `Accordion` gana `variant="flush"`: sin tarjeta, cada sección es una barra a
   todo el ancho y el rótulo puede llevar dos líneas. Es la barra de sección que
   en móvil sustituye a la columna lateral.
