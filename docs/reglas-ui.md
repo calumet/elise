@@ -16,6 +16,7 @@ con ellos, en [Patrones de pantalla](patrones-pantalla.md) y
 | ------------------------------------------- | ------------- | ----------------------- |
 | Una acción con rótulo propio                | `Button`      | `<button>`              |
 | Ir a otra pantalla desde dentro de un texto | `Link`        | `<a>`                   |
+| Un enlace de una lista donde todo es enlace | `<a>` suelto  | `<a>`                   |
 | Una caja entera que lleva a otra pantalla   | `Clickable`   | `<a>` (lleva `href`)    |
 | Una caja entera que ejecuta algo            | `Clickable`   | `<button>` (sin `href`) |
 | Varias acciones en fila                     | `ButtonGroup` | `<div role="group">`    |
@@ -23,6 +24,26 @@ con ellos, en [Patrones de pantalla](patrones-pantalla.md) y
 `Clickable` decide su elemento por la presencia de `href`. La diferencia se ve
 en el comportamiento del navegador, ya que un enlace se abre en otra pestaña
 con el botón central y un botón no.
+
+`Link` va subrayado porque dentro de un párrafo es lo único que dice dónde acaba
+lo pulsable. En una lista o una franja donde todo es enlace (el pie con los
+teléfonos y los correos, la lista de escuelas, el selector de idioma) eso ya lo
+dice la fila, y subrayar cada renglón solo llena la columna de ruido. Ahí va un
+`<a>` suelto que se subraya al apuntarlo, con el tono de su superficie:
+
+```tsx
+<a
+  href="/escuelas/sistemas"
+  className="text-muted-foreground hover:text-foreground hover:underline"
+>
+  Ingeniería de Sistemas
+</a>
+```
+
+Es el mismo `<a>` que usa la [lista de recursos](patrones-bloque.md#3-lista-de-recursos).
+Un logo o un icono que lleva a otra pantalla es un `Clickable` con
+`highlight="text"`: no pinta el velo, y el contenido pasa del tono apagado al
+principal al apuntarlo.
 
 Poner `onClick` en un `Box` deja la caja fuera del tabulador y sin respuesta al
 teclado. Envolverla en un `Button` obliga a deshacer relleno, borde y
@@ -104,7 +125,7 @@ medida, la toma de quien la posee.
 
 | Medida                | Dueño               | Valores                                                                       |
 | --------------------- | ------------------- | ----------------------------------------------------------------------------- |
-| Ancho de una pantalla | `Container`         | `sm` 672, `md` 896, `lg` 1152, `xl` 1280, `full`                              |
+| Ancho de una pantalla | `Container`         | `xs` 512, `sm` 672, `md` 896, `lg` 1152, `xl` 1280, `full`                    |
 | Contorno de un marco  | `SURFACE`           | Lo comparten `Card`, `Table` y `DataTable`                                    |
 | Espaciado             | `Box` y los `Stack` | 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16                                            |
 | Tamaño de texto       | `Text`              | 11, 12, 13, 14, 16, 20, 24, 30 px                                             |
@@ -174,6 +195,11 @@ Sobre una superficie invertida o sobre el riel de navegación, `tone="muted"` y
 par de texto. Atenuar con `opacity` o con `text-inverse-foreground/70` es
 inventar un número que no responde al tema, y que además queda casi al contraste
 del texto principal.
+
+Encima de una foto el texto no tiene superficie propia, así que la pone
+`Box background="scrim"`: el velo y el par invertido, en una sola pieza.
+Redefinir `--foreground` y sus hermanos a mano en el contenedor es repetir lo que
+el velo ya declara.
 
 ## 4. Lo que no se escribe
 

@@ -529,7 +529,7 @@ function AppShellHeaderNav({
     >
       <ul ref={row} className="flex list-none items-center gap-2 overflow-hidden">
         {items.map((item, i) => (
-          <li key={item.key ?? i} hidden={i >= visible} className="shrink-0">
+          <li key={item.key} hidden={i >= visible} className="shrink-0">
             {item}
           </li>
         ))}
@@ -562,7 +562,7 @@ function AppShellHeaderNav({
               </svg>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {rest.map((item, i) => {
+              {rest.map((item) => {
                 const {
                   icon: _icon,
                   count,
@@ -572,7 +572,7 @@ function AppShellHeaderNav({
                   ...anchor
                 } = item.props;
                 return (
-                  <DropdownMenuItem key={item.key ?? i} asChild>
+                  <DropdownMenuItem key={item.key} asChild>
                     <a aria-current={active ? "page" : undefined} {...anchor}>
                       <span className="flex-1">{text}</span>
                       {count !== undefined && count !== null ? <Badge>{count}</Badge> : null}

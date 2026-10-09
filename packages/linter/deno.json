@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-linter",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "license": "MIT",
   "exports": {
     "./oxlint": "./oxlint.js",

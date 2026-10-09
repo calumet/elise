@@ -1,2 +1,21 @@
 /* Registra "IBM Plex Sans Variable". */
 @import "@fontsource-variable/ibm-plex-sans/index.css";
+
+@font-face {
+  font-family: "IBM Plex Sans Variable Fallback";
+  src: local("Segoe UI"), local("SegoeUI");
+  font-weight: 100 549;
+  size-adjust: 101.72%;
+  ascent-override: 100.76%;
+  descent-override: 27.03%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "IBM Plex Sans Variable Fallback";
+  src: local("Segoe UI Semibold"), local("SegoeUI-Semibold");
+  font-weight: 550 1000;
+  size-adjust: 102.07%;
+  ascent-override: 100.42%;
+  descent-override: 26.94%;
+  line-gap-override: 0%;
+}

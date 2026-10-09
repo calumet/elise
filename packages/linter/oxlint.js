@@ -128,6 +128,7 @@ const CONTRACTS = [
     allow: ["layout", "spacing"],
   },
   { pattern: "^Container$", allow: ["layout", "spacing"], deny: ["opacity-*"] },
+  { pattern: "^ThemeScope$", allow: ["layout", "spacing", "shape", "color"], deny: DENY },
   {
     pattern: "^(Card|Table|DataTable)$",
     allow: ["layout", "spacing"],

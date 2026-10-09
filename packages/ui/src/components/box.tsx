@@ -9,7 +9,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
-import { INVERSE_SURFACE, SIDEBAR_SURFACE } from "@/lib/surface";
+import { INVERSE_SURFACE, SCRIM_SURFACE, SIDEBAR_SURFACE } from "@/lib/surface";
 
 /** Escala de espaciado compartida por Box, los Stack y Grid. */
 export type SpaceScale = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
@@ -30,8 +30,10 @@ export type BoxProps = React.ComponentProps<"div"> & {
     | "secondary"
     | "accent"
     | "sidebar"
-    | "inverse";
+    | "inverse"
+    | "scrim";
   border?: boolean | "strong";
+  borderSide?: "all" | "top" | "bottom" | "start" | "end";
   radius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
   shadow?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -95,6 +97,15 @@ const backgroundClasses: Record<NonNullable<BoxProps["background"]>, string> = {
   accent: "bg-accent text-accent-foreground",
   sidebar: SIDEBAR_SURFACE,
   inverse: INVERSE_SURFACE,
+  scrim: SCRIM_SURFACE,
+};
+
+const borderSideClasses: Record<NonNullable<BoxProps["borderSide"]>, string> = {
+  all: "border",
+  top: "border-t",
+  bottom: "border-b",
+  start: "border-s",
+  end: "border-e",
 };
 
 const radiusClasses: Record<NonNullable<BoxProps["radius"]>, string> = {
@@ -123,6 +134,7 @@ export type BoxStyleProps = Pick<
   | "paddingY"
   | "background"
   | "border"
+  | "borderSide"
   | "radius"
   | "shadow"
   | "overflowHidden"
@@ -139,6 +151,7 @@ export const boxClasses = ({
   paddingY,
   background = "none",
   border,
+  borderSide = "all",
   radius,
   shadow,
   overflowHidden,
@@ -148,7 +161,8 @@ export const boxClasses = ({
     paddingX !== undefined && paddingXClasses[paddingX],
     paddingY !== undefined && paddingYClasses[paddingY],
     backgroundClasses[background],
-    border && (border === "strong" ? "border border-border-strong" : "border border-border"),
+    border && borderSideClasses[borderSide],
+    border && (border === "strong" ? "border-border-strong" : "border-border"),
     radius && radiusClasses[radius],
     shadow && shadowClasses[shadow],
     overflowHidden && "overflow-hidden",
@@ -167,6 +181,7 @@ function Box({
   paddingY,
   background,
   border,
+  borderSide,
   radius,
   shadow,
   overflowHidden,
@@ -182,10 +197,12 @@ function Box({
           paddingY,
           background,
           border,
+          borderSide,
           radius,
           shadow,
           overflowHidden,
         }),
+        shadow !== undefined && "transition-shadow duration-(--duration-base) ease-out",
         className,
       )}
       {...props}

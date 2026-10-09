@@ -1,2 +1,21 @@
 /* Registra "Source Serif 4 Variable". */
 @import "@fontsource-variable/source-serif-4/index.css";
+
+@font-face {
+  font-family: "Source Serif 4 Variable Fallback";
+  src: local("Georgia");
+  font-weight: 100 549;
+  size-adjust: 107.45%;
+  ascent-override: 96.42%;
+  descent-override: 31.18%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Source Serif 4 Variable Fallback";
+  src: local("Georgia Bold"), local("Georgia-Bold");
+  font-weight: 550 1000;
+  size-adjust: 93.72%;
+  ascent-override: 110.54%;
+  descent-override: 35.74%;
+  line-gap-override: 0%;
+}

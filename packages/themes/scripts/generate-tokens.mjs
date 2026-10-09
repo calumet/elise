@@ -161,7 +161,7 @@ const families = readdirSync(FONTS)
     return {
       id,
       label: meta.family,
-      stack: `"${registered}", ${FALLBACKS[meta.category] ?? "ui-sans-serif, sans-serif"}`,
+      stack: `"${registered}", "${registered} Fallback", ${FALLBACKS[meta.category] ?? "ui-sans-serif, sans-serif"}`,
     };
   });
 

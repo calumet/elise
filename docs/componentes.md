@@ -101,17 +101,31 @@ import { Box } from "@calumet/elise-ui/box";
 </Box>;
 ```
 
-| Prop                                | Tipo                                                                               | Default  |
-| ----------------------------------- | ---------------------------------------------------------------------------------- | -------- |
-| `padding` / `paddingX` / `paddingY` | escala de espaciado                                                                | —        |
-| `background`                        | `"none" \| "card" \| "popover" \| "muted" \| "secondary" \| "accent" \| "sidebar"` | `"none"` |
-| `border`                            | `boolean \| "strong"`                                                              | —        |
-| `radius`                            | `"none" \| "sm" \| "md" \| "lg" \| "xl" \| "full"`                                 | —        |
-| `shadow`                            | `"none" \| "xs" \| "sm" \| "md" \| "lg" \| "xl"`                                   | —        |
-| `overflowHidden`                    | `boolean`                                                                          | —        |
+| Prop                                | Tipo                                                                                                       | Default  |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------- |
+| `padding` / `paddingX` / `paddingY` | escala de espaciado                                                                                        | —        |
+| `background`                        | `"none" \| "card" \| "popover" \| "muted" \| "secondary" \| "accent" \| "sidebar" \| "inverse" \| "scrim"` | `"none"` |
+| `border`                            | `boolean \| "strong"`                                                                                      | —        |
+| `borderSide`                        | `"all" \| "top" \| "bottom" \| "start" \| "end"`                                                           | `"all"`  |
+| `radius`                            | `"none" \| "sm" \| "md" \| "lg" \| "xl" \| "full"`                                                         | —        |
+| `shadow`                            | `"none" \| "xs" \| "sm" \| "md" \| "lg" \| "xl"`                                                           | —        |
+| `overflowHidden`                    | `boolean`                                                                                                  | —        |
 
 `background` setea también el color de texto que le corresponde (`card` trae
 `text-card-foreground`), así que los pares nunca se desemparejan.
+
+`border` elige el color y `borderSide` el lado. Un encabezado que solo se separa
+por abajo es `border borderSide="bottom"`, y el color sigue siendo el del
+sistema.
+
+Con `shadow`, el cambio de una sombra a otra se anima con el token de movimiento
+del tema. Una barra que pasa de `shadow="none"` a `shadow="sm"` al pegarse arriba
+no necesita escribir su transición.
+
+`scrim` es para el texto que va encima de una foto: pinta un velo que sube desde
+la superficie invertida hasta transparente, y declara el par de texto invertido,
+así que `tone="muted"` resuelve contra él. Ver
+[Reglas de interfaz](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve).
 
 #### Grid
 
@@ -158,20 +172,24 @@ hay que combinar `text-*` con `leading-*` y `tracking-*` a mano.
 <Text size="xs" family="mono">/srv/app/coma_test1</Text>
 ```
 
-| Prop       | Tipo                                                                                | Default     |
-| ---------- | ----------------------------------------------------------------------------------- | ----------- |
-| `as`       | `React.ElementType`                                                                 | `"p"`       |
-| `size`     | `"2xs" \| "xs" \| "sm" \| "base" \| "lg" \| "xl" \| "2xl" \| "3xl"`                 | `"base"`    |
-| `weight`   | `"normal" \| "medium" \| "semibold" \| "bold"`                                      | `"normal"`  |
-| `tone`     | `"default" \| "muted" \| "primary" \| "success" \| "warning" \| "danger" \| "info"` | `"default"` |
-| `family`   | `"sans" \| "mono"`                                                                  | `"sans"`    |
-| `align`    | `"start" \| "center" \| "end"`                                                      | —           |
-| `truncate` | `boolean`                                                                           | —           |
-| `lines`    | `2 \| 3 \| 4`                                                                       | —           |
-| `balance`  | `boolean`                                                                           | —           |
+| Prop       | Tipo                                                                                             | Default     |
+| ---------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| `as`       | `React.ElementType`                                                                              | `"p"`       |
+| `size`     | `"2xs" \| "xs" \| "sm" \| "base" \| "lg" \| "xl" \| "2xl" \| "3xl"`                              | `"base"`    |
+| `weight`   | `"normal" \| "medium" \| "semibold" \| "bold"`                                                   | `"normal"`  |
+| `tone`     | `"default" \| "muted" \| "primary" \| "success" \| "warning" \| "danger" \| "info" \| "inherit"` | `"default"` |
+| `family`   | `"sans" \| "mono"`                                                                               | `"sans"`    |
+| `align`    | `"start" \| "center" \| "end"`                                                                   | —           |
+| `truncate` | `boolean`                                                                                        | —           |
+| `lines`    | `2 \| 3 \| 4`                                                                                    | —           |
+| `balance`  | `boolean`                                                                                        | —           |
 
 `as` y `size` son independientes a propósito, de modo que un `h2` puede verse
 pequeño sin dejar de ser un `h2` para el lector de pantalla.
+
+`tone="inherit"` toma el color de lo que lo rodea. Es el que va dentro de un
+`Link` con `tone="neutral"`: con el tono por defecto, el texto fija su color y no
+sigue al enlace cuando este cambia al apuntarlo.
 
 `family="mono"` es para un dato de máquina que se lee carácter a carácter: una
 ruta, un host, un identificador, una expresión cron. Para uno metido dentro de
@@ -881,6 +899,18 @@ lo pone el hijo entero.
 | Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext | `@calumet/elise-ui/carousel`     | [Embla Carousel](https://www.embla-carousel.com/)                    |
 | Calendar                                                                | `@calumet/elise-ui/calendar`     | [react-day-picker](https://daypicker.dev/)                           |
 | DatePicker, DateRangePicker                                             | `@calumet/elise-ui/date-picker`  | [react-day-picker](https://daypicker.dev/)                           |
+
+`CarouselPrevious` y `CarouselNext` aceptan las props de `Button`. Encima de la
+foto van con `variant="surface"`, que les pone la superficie de tarjeta detrás, y
+dentro del carrusel en vez de a sus costados:
+
+```tsx
+<Carousel>
+  <CarouselContent>…</CarouselContent>
+  <CarouselPrevious variant="surface" className="left-4" />
+  <CarouselNext variant="surface" className="right-4" />
+</Carousel>
+```
 
 ### Acciones
 

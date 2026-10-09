@@ -1,2 +1,21 @@
 /* Registra "Geist Variable". */
 @import "@fontsource-variable/geist/index.css";
+
+@font-face {
+  font-family: "Geist Variable Fallback";
+  src: local("Segoe UI"), local("SegoeUI");
+  font-weight: 100 549;
+  size-adjust: 105.33%;
+  ascent-override: 95.41%;
+  descent-override: 28.01%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Variable Fallback";
+  src: local("Segoe UI Semibold"), local("SegoeUI-Semibold");
+  font-weight: 550 1000;
+  size-adjust: 106.88%;
+  ascent-override: 94.03%;
+  descent-override: 27.6%;
+  line-gap-override: 0%;
+}

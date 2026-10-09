@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-themes",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "Los tokens de tema de Elise como objeto, para aplicarlos en el DOM o serializarlos en el servidor.",
   "repository": {

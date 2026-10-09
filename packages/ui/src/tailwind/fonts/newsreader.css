@@ -1,2 +1,21 @@
 /* Registra "Newsreader Variable". */
 @import "@fontsource-variable/newsreader/index.css";
+
+@font-face {
+  font-family: "Newsreader Variable Fallback";
+  src: local("Georgia");
+  font-weight: 100 549;
+  size-adjust: 96.12%;
+  ascent-override: 76.47%;
+  descent-override: 27.57%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Newsreader Variable Fallback";
+  src: local("Georgia Bold"), local("Georgia-Bold");
+  font-weight: 550 1000;
+  size-adjust: 86.78%;
+  ascent-override: 84.7%;
+  descent-override: 30.54%;
+  line-gap-override: 0%;
+}

@@ -262,14 +262,22 @@ del sistema y la app se ve distinta en cada sistema operativo.
 
 Cada stack lista primero el nombre que registra Fontsource y después el nombre
 plano, así resuelve tanto con `fonts.css` como si la app carga la fuente por su
-cuenta:
+cuenta. Detrás va su respaldo ajustado:
 
 ```css
---font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, …;
---font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, serif;
---font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, …;
+--font-sans: "Geist Variable", "Geist", "Geist Variable Fallback", ui-sans-serif, system-ui, …;
+--font-serif: "Source Serif 4 Variable", "Source Serif 4", "Source Serif 4 Variable Fallback", …;
+--font-mono: "JetBrains Mono Variable", "JetBrains Mono", "JetBrains Mono Variable Fallback", …;
 --font-display: var(--font-sans);
 ```
+
+Si la fuente llega después del primer pintado, la página se pinta con la del
+sistema y cambia al llegar. Cada entrada de `fonts/` declara un
+`"… Variable Fallback"` que ajusta esa fuente del sistema (Segoe UI, Georgia o
+Consolas) a las medidas de la buena, así el cambio no mueve el texto. Donde esa
+fuente no existe, como San Francisco en macOS, que ya mide casi lo mismo que
+Geist, el respaldo se salta y la cadena sigue igual. Al emparejar familias, el
+respaldo va detrás de cada una.
 
 `--font-display` es la familia de los titulares, y la usa `Heading` y nadie más.
 Cae en `--font-sans` mientras no se defina, así que un proyecto con una sola
@@ -303,8 +311,10 @@ Se importan las que se usen, en vez de `fonts.css`:
 @import "@calumet/elise-ui/tailwind/elise.css";
 
 :root {
-  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, sans-serif;
-  --font-sans: "Manrope Variable", ui-sans-serif, sans-serif;
+  --font-display:
+    "Bricolage Grotesque Variable", "Bricolage Grotesque Variable Fallback", ui-sans-serif,
+    sans-serif;
+  --font-sans: "Manrope Variable", "Manrope Variable Fallback", ui-sans-serif, sans-serif;
 }
 ```
 

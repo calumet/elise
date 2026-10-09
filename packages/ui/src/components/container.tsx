@@ -14,13 +14,14 @@ import { cn } from "@/lib/cn";
 export type ContainerProps = React.ComponentProps<"div"> & {
   as?: React.ElementType;
 
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "full";
 
   /** Padding horizontal responsive. Ponelo en `false` si el padre ya lo trae. */
   gutter?: boolean;
 };
 
 const sizeClasses: Record<NonNullable<ContainerProps["size"]>, string> = {
+  xs: "max-w-lg",
   sm: "max-w-2xl",
   md: "max-w-4xl",
   lg: "max-w-6xl",

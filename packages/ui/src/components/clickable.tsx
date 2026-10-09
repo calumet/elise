@@ -51,6 +51,8 @@ export type ClickableProps = BoxStyleProps &
      */
     accessibilityLabel?: string;
 
+    highlight?: "veil" | "text";
+
     /**
      * Cede el marcado al hijo, para envolver el enlace del router de turno sin
      * anidar dos `<a>`.
@@ -86,9 +88,11 @@ export const Clickable: React.ForwardRefExoticComponent<
       paddingY,
       background,
       border,
+      borderSide,
       radius,
       shadow,
       overflowHidden,
+      highlight = "veil",
       href,
       target,
       rel,
@@ -120,8 +124,10 @@ export const Clickable: React.ForwardRefExoticComponent<
         aria-label={accessibilityLabel}
         aria-disabled={disabled || undefined}
         className={cn(
-          "block w-full cursor-pointer text-start transition-[background-color,box-shadow] duration-(--duration-fast) ease-out",
-          "hover:bg-state-hover active:bg-state-active",
+          "block w-full cursor-pointer text-start transition-[background-color,box-shadow,color] duration-(--duration-fast) ease-out",
+          highlight === "veil"
+            ? "hover:bg-state-hover active:bg-state-active"
+            : "text-muted-foreground hover:text-foreground",
           "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
           "aria-disabled:pointer-events-none aria-disabled:opacity-50",
           boxClasses({
@@ -130,6 +136,7 @@ export const Clickable: React.ForwardRefExoticComponent<
             paddingY,
             background,
             border,
+            borderSide,
             radius,
             shadow,
             overflowHidden,
