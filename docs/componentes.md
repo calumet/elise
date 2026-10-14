@@ -1043,7 +1043,7 @@ falta cuando se cambia de página y no cuando se carga por primera vez.
 
 | Prop            | Tipo                      | Default | Descripción                                 |
 | --------------- | ------------------------- | ------- | ------------------------------------------- |
-| `value`         | `string`                  | —       | Hex de 6 o de 8                             |
+| `value`         | `string`                  | —       | Hex de 6 o de 8; `""` es sin color          |
 | `defaultValue`  | `string`                  | —       | Sin controlar                               |
 | `onValueChange` | `(value: string) => void` | —       | En cada paso del arrastre                   |
 | `onValueCommit` | `(value: string) => void` | —       | Al soltar                                   |
@@ -1054,6 +1054,12 @@ Lee HSL, HSLA, RGB, RGBA y hex de 3, 4, 6 y 8, que es lo que se copia de una hoj
 de estilos o de una guía de marca sin tener que convertirlo antes. Siempre emite
 hex, de 6 o de 8 con `alpha`, para que quien lo reciba no tenga que aceptar cinco
 formatos.
+
+Controlado, `value=""` es "sin color": el campo hex queda vacío, la muestra sin
+relleno y el input oculto envía `""`. El área y las barras conservan el último
+color para seguir eligiendo desde ahí. `undefined` no sirve para esto, porque
+significa "sin controlar", como en el resto de componentes. Si el formulario
+guarda `undefined`, pásalo como `value={color ?? ""}`.
 
 Por dentro el modelo es HSV y no HSL, porque el área de dos ejes es literalmente
 saturación por brillo. El tono se guarda aparte del color y no se deduce del hex:
