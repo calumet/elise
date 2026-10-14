@@ -1,8 +1,8 @@
 {
   "name": "@calumet/elise-forms",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
-  "description": "Hook useZodForm: integración de react-hook-form + Zod para Elise.",
+  "description": "useZodForm y FormField: integración de react-hook-form + Zod para Elise.",
   "repository": {
     "type": "git",
     "url": "https://github.com/calumet/elise.git",
@@ -25,15 +25,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsdown --dts",
+    "build": "tsdown --dts && pnpm build:jsr",
+    "build:jsr": "tsc -p tsconfig.jsr.json && node ../../scripts/prepare-jsr.mjs jsr",
     "dev": "tsdown --watch --dts",
     "lint": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist jsr"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1"
   },
   "devDependencies": {
+    "@calumet/elise-ui": "workspace:*",
     "@types/react": "^19.3.0",
     "react": "^19.3.0",
     "react-hook-form": "^7.88.0",
@@ -43,6 +45,7 @@
     "zod": "^4.6.5"
   },
   "peerDependencies": {
+    "@calumet/elise-ui": ">=0.39.0 <1.0.0",
     "react": "^19.0.0",
     "react-hook-form": "^7.55.0",
     "typescript": ">=5.0.0",

@@ -1,6 +1,6 @@
 # @calumet/elise-forms
 
-`useZodForm` conecta react-hook-form con Zod en una sola llamada, ya con el resolver puesto.
+`useZodForm` conecta react-hook-form con Zod en una sola llamada, ya con el resolver puesto. `FormField` conecta cada campo con su control.
 
 ## Instalación
 
@@ -9,7 +9,7 @@ pnpm add jsr:@calumet/elise-forms     # JSR
 pnpm add @calumet/elise-forms         # GitHub Packages
 ```
 
-Requiere React 19. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
+Requiere React 19 y `@calumet/elise-ui`. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
 
 ## Uso
 
@@ -27,3 +27,17 @@ const form = useZodForm(esquema);
 El segundo parámetro admite las mismas opciones que `useForm`, menos `resolver`. Los tipos distinguen la entrada de la salida del esquema, así que `edad` llega como `string` desde el input y sale como `number` en `handleSubmit`.
 
 Reexportamos `z` para que el esquema y el hook vengan de la misma versión de Zod.
+
+```tsx
+import { FormField } from "@calumet/elise-forms";
+
+<FormField form={form} name="email" label="Correo">
+  <Input type="email" />
+</FormField>
+
+<FormField form={form} name="color" label="Color">
+  {(field) => <ColorPicker value={field.value} onValueChange={field.onChange} />}
+</FormField>
+```
+
+El control va como hijo directo si usa `value` y `onChange`, y como función si no. Los detalles están en [la documentación de utilidades](../../docs/utilidades.md#formfield).

@@ -44,7 +44,8 @@ elise/
                                                     │
 @calumet/elise-ui      ──── @calumet/elise-icons    │
                                                     │
-@calumet/elise-forms    (independiente; React + RHF + Zod)
+@calumet/elise-forms   ──── @calumet/elise-ui ──────┤
+                       └── RHF + Zod                │
                                                     │
 @calumet/elise-tables  ──── @calumet/elise-ui ──────┤
                        └── @calumet/elise-icons     │
@@ -81,9 +82,9 @@ Librería principal de componentes. Construida sobre [Radix UI Primitives](https
 
 Integración de [react-hook-form](https://react-hook-form.com/) + [Zod](https://zod.dev/) para validación de formularios con inferencia de tipos.
 
-- Exporta `useZodForm()` y el re-export `z` de Zod
-- **Independiente de `elise-ui`** (puede usarse con cualquier UI)
-- **Peer dependencies**: React 19, `zod`, `react-hook-form`
+- Exporta `useZodForm()`, `FormField` y el re-export `z` de Zod
+- `FormField` pinta el `Field` de `elise-ui`
+- **Peer dependencies**: React 19, `@calumet/elise-ui`, `zod`, `react-hook-form`
 
 ### @calumet/elise-tables
 

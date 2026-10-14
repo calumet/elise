@@ -3,6 +3,26 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-forms` 0.3.0
+
+### Añade
+
+**`FormField`, que conecta un campo de `useZodForm` con su control.** Pinta el
+`Field` de `elise-ui` con el error del esquema, sin `register` ni
+`formState.errors` a mano. El control va como hijo directo si usa `value` y
+`onChange`, o como función para los que avisan con `onValueChange` u
+`onCheckedChange`. Sin `label` solo conecta, para `Checkbox`, `Switch`,
+`RadioGroup` y `TagInput`, que ya traen rótulo y error.
+
+`elise-ui` pasa a ser peer de `elise-forms`, con `>=0.39.0 <1.0.0`.
+
+### Corrige
+
+**El ejemplo de `useZodForm` montaba el formulario con `Form*`**, la familia de
+Radix Form que valida con la API del navegador y que la documentación de `Field`
+dice que no se mezcla con react-hook-form. Ahora usa un `<form>` nativo y
+`FormField`.
+
 ## `elise-toasts` 0.4.21, `elise-alerts` 0.3.20, `elise-tables` 0.9.1 y `elise-themes` 0.1.3
 
 ### Corrige

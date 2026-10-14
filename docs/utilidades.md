@@ -13,7 +13,7 @@ import { formatDate, useDateRange } from "@calumet/elise-i18n/dates";
 
 | Paquete                 | Propósito                                 | Peer-deps clave                                                      |
 | ----------------------- | ----------------------------------------- | -------------------------------------------------------------------- |
-| `@calumet/elise-forms`  | Formularios con `useZodForm`              | react-hook-form, zod, @hookform/resolvers                            |
+| `@calumet/elise-forms`  | Formularios con `useZodForm`              | `@calumet/elise-ui`, react-hook-form, zod                            |
 | `@calumet/elise-toasts` | Notificaciones (event bus + `Toaster`)    | `@calumet/elise-ui`, `@calumet/elise-icons`                          |
 | `@calumet/elise-alerts` | Alertas modales (event bus + `AlertHost`) | `@calumet/elise-ui`, `@calumet/elise-icons`                          |
 | `@calumet/elise-tables` | `DataTable` con filtros y export          | `@calumet/elise-ui`, `@calumet/elise-icons`, `@tanstack/react-table` |
@@ -36,49 +36,104 @@ Hook que integra [react-hook-form](https://react-hook-form.com/) con [Zod](https
 ### Uso basico
 
 ```tsx
-import { useZodForm, z } from "@calumet/elise-forms";
-import { Form, FormField, FormLabel, FormControl, FormMessage } from "@calumet/elise-ui/form";
-import { Input } from "@calumet/elise-ui/input";
+import { FormField, useZodForm, z } from "@calumet/elise-forms";
 import { Button } from "@calumet/elise-ui/button";
+import { Checkbox } from "@calumet/elise-ui/checkbox";
+import { ColorPicker } from "@calumet/elise-ui/color-picker";
+import { Input } from "@calumet/elise-ui/input";
 
 const schema = z.object({
   nombre: z.string().min(2, "Minimo 2 caracteres"),
-  email: z.string().email("Email invalido"),
+  email: z.email("Email invalido"),
+  color: z.string(),
+  acepto: z.boolean().refine((v) => v, "Tienes que aceptar"),
 });
 
 function ContactForm() {
   const form = useZodForm(schema, {
-    defaultValues: { nombre: "", email: "" },
+    defaultValues: { nombre: "", email: "", color: "#2563eb", acepto: false },
   });
 
   const onSubmit = form.handleSubmit((data) => {
-    // data tiene tipo { nombre: string; email: string }
+    // data tiene tipo { nombre: string; email: string; color: string; acepto: boolean }
     console.log(data);
   });
 
   return (
-    <Form onSubmit={onSubmit}>
-      <FormField name="nombre" serverInvalid={!!form.formState.errors.nombre}>
-        <FormLabel>Nombre</FormLabel>
-        <FormControl asChild>
-          <Input {...form.register("nombre")} placeholder="Tu nombre" />
-        </FormControl>
-        <FormMessage>{form.formState.errors.nombre?.message}</FormMessage>
+    <form onSubmit={onSubmit} noValidate>
+      <FormField form={form} name="nombre" label="Nombre" required>
+        <Input placeholder="Tu nombre" />
       </FormField>
 
-      <FormField name="email" serverInvalid={!!form.formState.errors.email}>
-        <FormLabel>Email</FormLabel>
-        <FormControl asChild>
-          <Input {...form.register("email")} placeholder="tu@email.com" />
-        </FormControl>
-        <FormMessage>{form.formState.errors.email?.message}</FormMessage>
+      <FormField form={form} name="email" label="Email" required>
+        <Input type="email" placeholder="tu@email.com" />
+      </FormField>
+
+      <FormField form={form} name="color" label="Color">
+        {(field) => <ColorPicker value={field.value} onValueChange={field.onChange} />}
+      </FormField>
+
+      <FormField form={form} name="acepto">
+        {(field, { error }) => (
+          <Checkbox
+            label="Acepto los términos"
+            checked={field.value}
+            onCheckedChange={field.onChange}
+            error={error}
+          />
+        )}
       </FormField>
 
       <Button type="submit">Enviar</Button>
-    </Form>
+    </form>
   );
 }
 ```
+
+El formulario es un `<form>` nativo. `Form` y su familia de `@calumet/elise-ui/form`
+validan con la API del navegador y no se mezclan con `useZodForm`: cada uno quiere
+ser dueño del estado del campo.
+
+### `FormField`
+
+Conecta un campo del formulario con su control. Toma el valor, los manejadores y
+el error del esquema, así que no hace falta `register` ni leer `formState.errors`
+a mano. Usa siempre `defaultValues`: sin ellos el control arranca sin valor y
+React avisa al pasar de no controlado a controlado.
+
+El control va de dos formas:
+
+- **Hijo directo**, para los que usan `value` y `onChange`, como `Input` o
+  `Textarea`. `FormField` le pone el valor, los manejadores y los `id` y `aria-*`
+  del campo.
+- **Función**, para los que avisan con otro nombre: `onValueChange` en
+  `RadioGroup`, `SegmentedControl`, `ColorPicker` y `TagInput`, o
+  `onCheckedChange` con `checked` en `Checkbox` y `Switch`. La función recibe
+  `field` y escribe tú qué prop recibe cada cosa, con los tipos comprobados. No
+  esparzas `{...field}` en estos: TypeScript no revisa las props de más de un
+  spread, y el `onChange` acabaría en el elemento de fuera recogiendo los eventos
+  de los inputs de dentro.
+
+Con `label` pinta un [`Field`](componentes.md#field) alrededor del control, con el
+rótulo, la ayuda y el error. Sin `label` no pinta nada: es para los controles que
+ya traen su rótulo y su error, como `Checkbox`, `Switch`, `RadioGroup` y
+`TagInput`, que reciben el error por el segundo argumento de la función. Sin
+`label` el hijo tiene que ser una función.
+
+| Prop          | Tipo                                    | Descripción                                       |
+| ------------- | --------------------------------------- | ------------------------------------------------- |
+| `form`        | lo que devuelve `useZodForm`            | Requerido                                         |
+| `name`        | ruta de un campo del esquema            | Requerido; se autocompleta y se comprueba         |
+| `children`    | elemento o `(field, { error }) => node` | Requerido; sin `label`, solo función              |
+| `label`       | `React.ReactNode`                       | Pinta el `Field` con el rótulo y el error         |
+| `description` | `React.ReactNode`                       | Ayuda bajo el control                             |
+| `required`    | `boolean`                               | Asterisco y `aria-required`                       |
+| `...`         |                                         | El resto de props de `Field` cuando lleva `label` |
+
+`field` trae `name`, `value`, `onChange`, `onBlur` y `ref`, y con `label` además
+`id`, `aria-describedby`, `aria-invalid` y `aria-required`. `onChange` acepta
+tanto el evento de un input como el valor suelto, así que sirve para
+`onValueChange` y `onCheckedChange` sin adaptarlo.
 
 ### API
 
