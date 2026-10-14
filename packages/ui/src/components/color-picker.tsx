@@ -94,6 +94,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
     );
     const [typed, setTyped] = React.useState<string | null>(null);
 
+    const empty = value === "";
     const hex = toHex(color, alpha);
 
     /* Solo se relee el prop cuando dice algo distinto de lo que este selector
@@ -227,10 +228,12 @@ export const ColorPicker: React.ForwardRefExoticComponent<
               "ajedrez",
             )}
           >
-            <span
-              className="block size-full rounded-md"
-              style={{ backgroundColor: toCss(color) }}
-            />
+            {empty ? null : (
+              <span
+                className="block size-full rounded-md"
+                style={{ backgroundColor: toCss(color) }}
+              />
+            )}
           </span>
 
           <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -290,7 +293,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
         <input
           data-slot="color-picker-hex"
           aria-label={hexLabel}
-          value={typed ?? hex}
+          value={typed ?? (empty ? "" : hex)}
           onChange={(e) => onTypeHex(e.target.value)}
           onBlur={() => setTyped(null)}
           spellCheck={false}
@@ -298,7 +301,7 @@ export const ColorPicker: React.ForwardRefExoticComponent<
           className={cn(FIELD_BOX, "font-mono text-sm")}
         />
 
-        {name ? <input type="hidden" name={name} value={hex} /> : null}
+        {name ? <input type="hidden" name={name} value={empty ? "" : hex} /> : null}
       </div>
     );
   },

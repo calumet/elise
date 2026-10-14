@@ -1,3 +1,4 @@
+import { Button } from "@calumet/elise-ui/button";
 import { Code } from "@calumet/elise-ui/code";
 import { ColorPicker } from "@calumet/elise-ui/color-picker";
 import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
@@ -15,9 +16,14 @@ const ColorPickerDemo = () => {
           Sin opacidad
         </Text>
         <ColorPicker value={marca} onValueChange={setMarca} name="marca" />
-        <Text size="sm" tone="muted">
-          Emite <Code>{marca}</Code>
-        </Text>
+        <InlineStack gap={2} className="items-center justify-between">
+          <Text size="sm" tone="muted">
+            Emite <Code>{marca || '""'}</Code>
+          </Text>
+          <Button size="sm" variant="outline" onClick={() => setMarca("")} disabled={!marca}>
+            Quitar color
+          </Button>
+        </InlineStack>
       </BlockStack>
 
       <BlockStack gap={2}>

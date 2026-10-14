@@ -3,6 +3,17 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.39.1
+
+### Corrige
+
+**`ColorPicker` no podía quedarse sin color.** Siempre pintaba uno, aunque el
+formulario no tuviera ninguno: `value=""` se ignoraba y el selector seguía con
+el último color. Ahora, controlado, `value=""` es
+"sin color": el campo hex vacío, la muestra sin relleno y el input oculto
+envía `""`. `undefined` sigue significando "sin controlar"; si el formulario
+lo guarda así, pásalo como `value={color ?? ""}`.
+
 ## `@calumet/elise-forms` 0.3.0
 
 ### Añade
