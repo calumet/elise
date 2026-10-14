@@ -395,7 +395,10 @@ párrafo de error lleva `role="alert"` y se anuncia al aparecer, sin esperar a q
 el foco vuelva al campo.
 
 `Field` no conoce react-hook-form ni Radix Form. Recibe `error` ya resuelto, así
-que sirve igual con `useZodForm`, con estado propio o sin librería.
+que sirve igual con `useZodForm`, con estado propio o sin librería. Con
+`useZodForm` lo cómodo es [`FormField`](utilidades.md#formfield) de
+`@calumet/elise-forms`, que pinta este mismo `Field` y le pasa el valor y el error
+del esquema.
 
 Para formularios que validan con la API nativa del navegador está `Form` y su
 familia, montada sobre Radix Form. Las dos no se mezclan en un mismo campo, ya

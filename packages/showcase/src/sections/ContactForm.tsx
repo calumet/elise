@@ -1,16 +1,7 @@
-import { useZodForm, z } from "@calumet/elise-forms";
+import { FormField, useZodForm, z } from "@calumet/elise-forms";
 import { Button } from "@calumet/elise-ui/button";
 import { Checkbox } from "@calumet/elise-ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormDescription,
-  FormRow,
-  FormLabel,
-  FormMessage,
-  FormSubmit,
-} from "@calumet/elise-ui/form";
+import { FormRow } from "@calumet/elise-ui/form";
 import { Input } from "@calumet/elise-ui/input";
 import { Textarea } from "@calumet/elise-ui/textarea";
 import { useState } from "react";
@@ -25,7 +16,7 @@ const schema = z.object({
 const ContactForm = () => {
   const [success, setSuccess] = useState<string | null>(null);
 
-  const { handleSubmit, formState, register, setValue, watch } = useZodForm(schema, {
+  const form = useZodForm(schema, {
     defaultValues: {
       name: "",
       email: "",
@@ -34,55 +25,43 @@ const ContactForm = () => {
     },
   });
 
-  const onSubmit = handleSubmit(() => {
+  const onSubmit = form.handleSubmit(() => {
     setSuccess("Enviado. Gracias por contactarnos.");
   });
 
   return (
-    <Form onSubmit={onSubmit} noValidate className="w-full max-w-lg space-y-4">
+    <form onSubmit={onSubmit} noValidate className="w-full max-w-lg space-y-4">
       <FormRow>
-        <FormField name="name">
-          <FormLabel>Nombre</FormLabel>
-          <FormControl asChild>
-            <Input placeholder="Ada Lovelace" {...register("name")} />
-          </FormControl>
-          <FormDescription>Tu nombre completo.</FormDescription>
-          {formState.errors.name && <FormMessage>{formState.errors.name.message}</FormMessage>}
+        <FormField form={form} name="name" label="Nombre" description="Tu nombre completo.">
+          <Input placeholder="Ada Lovelace" />
         </FormField>
-        <FormField name="email">
-          <FormLabel>Email</FormLabel>
-          <FormControl asChild>
-            <Input type="email" placeholder="ada@elise.dev" {...register("email")} />
-          </FormControl>
-          {formState.errors.email && <FormMessage>{formState.errors.email.message}</FormMessage>}
+        <FormField form={form} name="email" label="Email">
+          <Input type="email" placeholder="ada@elise.dev" />
         </FormField>
       </FormRow>
-      <FormField name="message">
-        <FormLabel>Mensaje</FormLabel>
-        <FormControl asChild>
-          <Textarea placeholder="Cuéntanos tu idea..." {...register("message")} />
-        </FormControl>
-        <FormDescription>Detalla tu solicitud para que podamos ayudarte.</FormDescription>
-        {formState.errors.message && <FormMessage>{formState.errors.message.message}</FormMessage>}
+      <FormField
+        form={form}
+        name="message"
+        label="Mensaje"
+        description="Detalla tu solicitud para que podamos ayudarte."
+      >
+        <Textarea placeholder="Cuéntanos tu idea..." />
       </FormField>
-      {/* La casilla ya trae rótulo y error, así que no le hace falta ni un
-          `FormLabel` al lado ni un `FormMessage` debajo. */}
-      <FormField name="agree">
-        <Checkbox
-          id="agree"
-          label="Acepto los términos y políticas."
-          checked={watch("agree")}
-          onCheckedChange={(v) => setValue("agree", v === true, { shouldValidate: true })}
-          error={formState.errors.agree?.message}
-        />
+      <FormField form={form} name="agree">
+        {(field, { error }) => (
+          <Checkbox
+            label="Acepto los términos y políticas."
+            checked={field.value}
+            onCheckedChange={field.onChange}
+            error={error}
+          />
+        )}
       </FormField>
       {success && <p className="text-sm text-success">{success}</p>}
-      <FormSubmit asChild>
-        <Button type="submit" disabled={formState.isSubmitting}>
-          Enviar
-        </Button>
-      </FormSubmit>
-    </Form>
+      <Button type="submit" disabled={form.formState.isSubmitting}>
+        Enviar
+      </Button>
+    </form>
   );
 };
 

@@ -7,7 +7,7 @@ Plataforma frontend de Calumet: design system (Radix UI primitives + [Tailwind C
 | Paquete                                    | Descripción                                                                       |
 | ------------------------------------------ | --------------------------------------------------------------------------------- |
 | [`@calumet/elise-ui`](packages/ui)         | Librería principal con 58 componentes accesibles                                  |
-| [`@calumet/elise-forms`](packages/forms)   | Hook `useZodForm` (react-hook-form + Zod)                                         |
+| [`@calumet/elise-forms`](packages/forms)   | `useZodForm` y `FormField` (react-hook-form + Zod)                                |
 | [`@calumet/elise-tables`](packages/tables) | `DataTable` con filtros, ordenamiento, paginación y export (TanStack React Table) |
 | [`@calumet/elise-toasts`](packages/toasts) | Sistema de toasts (event bus + `Toaster`)                                         |
 | [`@calumet/elise-alerts`](packages/alerts) | Sistema de alertas modales (event bus + `AlertHost`)                              |
