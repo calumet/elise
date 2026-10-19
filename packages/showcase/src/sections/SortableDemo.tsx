@@ -53,9 +53,6 @@ export default function SortableDemo() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-14">
-              <span className="sr-only">Orden</span>
-            </TableHead>
             <TableHead>Banner</TableHead>
             <TableHead>Visible</TableHead>
           </TableRow>
@@ -70,12 +67,12 @@ export default function SortableDemo() {
               <SortableItem asChild key={banner.id} id={banner.id}>
                 <TableRow clickDelegate={`edit-${banner.id}`}>
                   <TableCell>
-                    <SortableHandle label={banner.title} />
-                  </TableCell>
-                  <TableCell>
-                    <a id={`edit-${banner.id}`} href={`#${banner.id}`}>
-                      {banner.title}
-                    </a>
+                    <span className="flex items-center gap-2">
+                      <SortableHandle label={banner.title} />
+                      <a id={`edit-${banner.id}`} href={`#${banner.id}`}>
+                        {banner.title}
+                      </a>
+                    </span>
                   </TableCell>
                   <TableCell>{banner.visible ? "Sí" : "No"}</TableCell>
                 </TableRow>

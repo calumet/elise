@@ -1000,7 +1000,8 @@ cincuenta hojas serían cincuenta paradas.
 enlace. Con teclado, espacio levanta, las flechas mueven y espacio suelta, y el
 lector de pantalla oye la posición. `onReorder` recibe los ids en el orden nuevo;
 guardarlo es cosa de la aplicación. Con `asChild`, la lista y sus elementos
-pasan a una tabla:
+pasan a una tabla. El asa va en la celda principal, junto al título, y no en una
+columna propia: en la vista de lista esa celda es la que encabeza la fila.
 
 ```tsx
 <Table>
@@ -1010,9 +1011,12 @@ pasan a una tabla:
         <SortableItem asChild key={banner.id} id={banner.id}>
           <TableRow>
             <TableCell>
-              <SortableHandle label={banner.titulo} />
+              <span className="flex items-center gap-2">
+                <SortableHandle label={banner.titulo} />
+                {banner.titulo}
+              </span>
             </TableCell>
-            <TableCell>{banner.titulo}</TableCell>
+            <TableCell>{banner.visible ? "Sí" : "No"}</TableCell>
           </TableRow>
         </SortableItem>
       ))}
