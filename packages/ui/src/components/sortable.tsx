@@ -136,7 +136,12 @@ export function SortableList({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
-  const accessibility = useAnnouncements(items, labels);
+  const [container, setContainer] = React.useState<Element>();
+  const listRef = React.useCallback((node: HTMLElement | null) => {
+    setContainer(node?.closest("table")?.parentElement ?? undefined);
+  }, []);
+
+  const accessibility = { ...useAnnouncements(items, labels), container };
 
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (!over || active.id === over.id) return;
@@ -157,6 +162,7 @@ export function SortableList({
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <Comp
+            ref={listRef}
             data-slot="sortable-list"
             className={cn(!asChild && "flex list-none flex-col gap-2", className)}
             {...props}
