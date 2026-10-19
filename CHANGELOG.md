@@ -3,6 +3,23 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.44.0
+
+### Añade
+
+**`ChecklistPicker`, en `@calumet/elise-ui/checklist-picker`: elegir con casillas
+entre muchas opciones, filtradas por pestañas y por nombre.** Va dentro de un
+`Dialog` o un `Sheet`: un buscador y unas pestañas en cápsula quedan fijos y solo
+las casillas desplazan. Cada opción lleva `id`, `label`, `description` opcional
+(también se busca) y el `filter` de la pestaña a la que pertenece. La búsqueda
+ignora mayúsculas y tildes y las opciones se ordenan por nombre según `locale`.
+`selected` y `onToggle` son de quien lo usa; aplicar o cancelar es cosa del
+diálogo.
+
+## `elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6, `elise-themes` 0.1.8 y `elise-toasts` 0.4.26
+
+Se republican para que JSR los publique contra `elise-ui` 0.44.0. No cambian.
+
 ## `@calumet/elise-ui` 0.43.0
 
 ### Añade

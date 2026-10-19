@@ -15,6 +15,7 @@ export * from "./carousel";
 export * from "./calendar";
 export * from "./checkbox";
 export * from "./checkbox-group";
+export * from "./checklist-picker";
 export * from "./chip";
 export * from "./clickable";
 export * from "./collapsible";

@@ -271,6 +271,7 @@ Acepta lo mismo que `Text` menos `as`, `truncate` y `lines`. `weight` sale en
 | Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
 | MultiCombobox, MultiComboboxField                             | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
 | FileUpload, FileUploadList, FileUploadItem, ImageUpload       | `@calumet/elise-ui/file-upload`       | —                                                                               |
+| ChecklistPicker                                               | `@calumet/elise-ui/checklist-picker`  | —                                                                               |
 | Stepper, StepperItem, StepperTitle, StepperDescription        | `@calumet/elise-ui/stepper`           | —                                                                               |
 
 `Checkbox`, `RadioGroupItem` y `Switch` son un `button` con su rol ARIA, no un
@@ -562,6 +563,48 @@ removibles dentro del disparador y, a partir de `maxChips`, resume el resto con
 > La X de cada chip es un `<span role="button">` y no un `<button>`, dado que
 > vive dentro del disparador y un botón dentro de otro es HTML inválido. El
 > disparador sigue siendo el único control enfocable con Tab.
+
+#### ChecklistPicker
+
+`ChecklistPicker` es para elegir con casillas entre muchas opciones dentro de un
+`Dialog` o un `Sheet`, cuando un `MultiCombobox` no sirve: el desplegable cierra
+la lista tras cada gesto y no deja ver de un vistazo qué hay marcado, y aquí lo
+que se elige se confirma después, con un botón del pie. Va entre la cabecera y el
+pie. Arriba, fijos, un `SearchField` y unas `Tabs` en `variant="capsule"` (la
+primera, «Todas», la pone él); debajo, las casillas, que son lo único que
+desplaza.
+
+La búsqueda ignora mayúsculas y tildes y mira el nombre y la descripción. Las
+opciones salen ordenadas por nombre según `locale`, que por defecto es el del
+navegador. Sin opciones muestra un texto, y si la búsqueda no encuentra nada,
+otro. Los textos salen del namespace `ui` de `elise-i18n`.
+
+La selección es de quien lo usa: `selected` es un `Set` con los `id` marcados y
+`onToggle` avisa de cada casilla. Aplicar o cancelar es cosa del diálogo.
+
+```tsx
+<DialogContent>
+  <DialogHeader>
+    <DialogTitle>Difundir a otras escuelas</DialogTitle>
+  </DialogHeader>
+  <ChecklistPicker
+    locale="es"
+    options={escuelas.map((e) => ({
+      id: e.id,
+      label: e.nombre,
+      description: e.acronimo,
+      filter: e.facultadId,
+    }))}
+    filters={facultades.map((f) => ({ value: f.id, label: f.nombre }))}
+    selected={elegidas}
+    onToggle={(id, marcada) => setElegidas(alternar(elegidas, id, marcada))}
+  />
+  <DialogFooter>{/* Cancelar y Aplicar */}</DialogFooter>
+</DialogContent>
+```
+
+> `Command` y `Combobox` no lo cubren: filtran por texto dentro de un popover,
+> sin pestañas ni casillas, y marcan al elegir. Por eso no se apoya en ellos.
 
 #### FileUpload
 

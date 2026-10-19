@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-ui",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "license": "MIT",
   "exports": {
     ".": "./jsr/index.js",
@@ -22,6 +22,7 @@
     "./carousel": "./jsr/components/carousel.js",
     "./checkbox": "./jsr/components/checkbox.js",
     "./checkbox-group": "./jsr/components/checkbox-group.js",
+    "./checklist-picker": "./jsr/components/checklist-picker.js",
     "./chip": "./jsr/components/chip.js",
     "./clickable": "./jsr/components/clickable.js",
     "./code": "./jsr/components/code.js",
