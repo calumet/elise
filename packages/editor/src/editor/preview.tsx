@@ -181,7 +181,12 @@ export const EditorPreviewButton = ({ className }: EditorPreviewButtonProps): Re
       onClick={previewing ? edit : preview}
     >
       {previewing ? <PencilLine aria-hidden="true" /> : <Eye aria-hidden="true" />}
-      {previewing ? t.backToEditing : t.preview}
+      <span className="grid justify-items-center">
+        <span className="[grid-area:1/1]">{previewing ? t.backToEditing : t.preview}</span>
+        <span aria-hidden="true" className="invisible [grid-area:1/1]">
+          {previewing ? t.preview : t.backToEditing}
+        </span>
+      </span>
     </Button>
   );
 };

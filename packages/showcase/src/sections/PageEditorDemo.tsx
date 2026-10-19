@@ -540,19 +540,24 @@ const PageBar = ({
   const { t } = useTranslation("pageEditor");
   const commands = useEditorCommands();
   const { previewing } = useEditorPreview();
-  const coding = useEditorMode().mode === "code";
-  const editing = !previewing && !coding;
+  const { mode } = useEditorMode();
+  const editing = !previewing && mode === "visual";
   return (
     <div className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-card px-4 py-2">
-      {outlineDocked && editing ? (
-        <IconButton
-          label={t("structure", { fallback: "Page structure" })}
-          pressed={treeShown}
-          className="-me-2"
-          onClick={onOutline}
-        >
-          {treeShown ? <PanelLeftClose aria-hidden="true" /> : <PanelLeftOpen aria-hidden="true" />}
-        </IconButton>
+      {outlineDocked ? (
+        <Slot shown={editing} className="-me-2">
+          <IconButton
+            label={t("structure", { fallback: "Page structure" })}
+            pressed={treeShown}
+            onClick={onOutline}
+          >
+            {treeShown ? (
+              <PanelLeftClose aria-hidden="true" />
+            ) : (
+              <PanelLeftOpen aria-hidden="true" />
+            )}
+          </IconButton>
+        </Slot>
       ) : null}
       <div className="flex min-w-40 flex-1 flex-col max-sm:basis-full">
         <div className="flex min-w-0 items-center gap-2">
@@ -567,20 +572,21 @@ const PageBar = ({
           {t("saved", { fallback: "Saved just now" })}
         </Text>
       </div>
-      <SegmentedControl
-        aria-label={t("view", { fallback: "View" })}
-        value={view}
-        onValueChange={(next) => onView(next as View)}
-        className={coding ? "hidden" : "max-md:hidden"}
-      >
-        <SegmentedControlItem value="desktop" aria-label={t("desktop", { fallback: "Desktop" })}>
-          <Monitor aria-hidden="true" className="size-icon-md" />
-        </SegmentedControlItem>
-        <SegmentedControlItem value="mobile" aria-label={t("mobile", { fallback: "Mobile" })}>
-          <Smartphone aria-hidden="true" className="size-icon-md" />
-        </SegmentedControlItem>
-      </SegmentedControl>
-      <div className={editing ? "flex items-center gap-1" : "hidden"}>
+      <Slot shown={mode === "visual"} className="max-md:hidden">
+        <SegmentedControl
+          aria-label={t("view", { fallback: "View" })}
+          value={view}
+          onValueChange={(next) => onView(next as View)}
+        >
+          <SegmentedControlItem value="desktop" aria-label={t("desktop", { fallback: "Desktop" })}>
+            <Monitor aria-hidden="true" className="size-icon-md" />
+          </SegmentedControlItem>
+          <SegmentedControlItem value="mobile" aria-label={t("mobile", { fallback: "Mobile" })}>
+            <Smartphone aria-hidden="true" className="size-icon-md" />
+          </SegmentedControlItem>
+        </SegmentedControl>
+      </Slot>
+      <Slot shown={editing} className="flex items-center gap-1">
         {outlineDocked ? null : (
           <IconButton label={t("structure", { fallback: "Page structure" })} onClick={onOutline}>
             <ListTree aria-hidden="true" />
@@ -613,30 +619,45 @@ const PageBar = ({
           variant="outline"
           size="sm"
           aria-pressed={sideDocked ? catalogShown : undefined}
-          className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-sm:size-8 max-sm:px-0"
+          className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-xl:size-8 max-xl:px-0"
           onClick={() => onSide(sideDocked && side === "catalog" ? "settings" : "catalog")}
         >
           <Plus aria-hidden="true" />
-          <span className="max-sm:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
+          <span className="max-xl:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
         </Button>
-      </div>
-      <Separator
-        orientation="vertical"
-        className={editing ? "data-[orientation=vertical]:h-6 max-sm:hidden" : "hidden"}
-      />
+      </Slot>
+      <Editor.ModeSwitch />
+      <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 max-sm:hidden" />
       <div className="flex items-center gap-2">
-        {previewing ? null : (
+        <Slot shown={!previewing}>
           <Editor.TranslationsButton className="max-xl:[&_[data-slot=label]]:sr-only" />
-        )}
+        </Slot>
         <Editor.PreviewButton className={previewing ? undefined : "max-sm:hidden"} />
         <Button type="button" size="sm">
           {t("publish", { fallback: "Publish" })}
         </Button>
-        <Editor.ModeSwitch className="ms-2" />
       </div>
     </div>
   );
 };
+
+const Slot = ({
+  shown,
+  className,
+  children,
+}: {
+  shown: boolean;
+  className?: string;
+  children: ReactNode;
+}) => (
+  <div
+    inert={!shown}
+    data-hidden={shown ? undefined : ""}
+    className={`transition-opacity duration-(--duration-base) ease-out data-hidden:opacity-0 ${className ?? ""}`}
+  >
+    {children}
+  </div>
+);
 
 const DATASETS: Record<
   Dataset,
@@ -713,8 +734,6 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
     if (!sideDocked) setSheet(next);
   };
 
-  if (mode === "translations") return <Editor.Translations title={title} />;
-
   return (
     <>
       <PageBar
@@ -730,7 +749,8 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
         sideDocked={sideDocked}
       />
       {mode === "code" ? <Editor.Code title={title} /> : null}
-      <div className={mode === "code" ? "hidden" : "flex min-h-0 flex-1"}>
+      {mode === "translations" ? <Editor.Translations title={title} /> : null}
+      <div className={mode === "visual" ? "flex min-h-0 flex-1" : "hidden"}>
         {outlineDocked && !previewing ? (
           <aside
             aria-label={t("structure", { fallback: "Page structure" })}
