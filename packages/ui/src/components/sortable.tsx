@@ -381,57 +381,73 @@ const project = <T,>(
 
 type DragState = { items: FlatNode<SortableTreeNode>[]; offset: number };
 
+type KeyboardContext = Parameters<KeyboardCoordinateGetter>[1]["context"];
+
+const nextDroppable = (down: boolean, context: KeyboardContext) => {
+  const { active, over, collisionRect, droppableRects, droppableContainers } = context;
+  if (!active || !collisionRect) return undefined;
+
+  const containers: DroppableContainer[] = [];
+  droppableContainers.forEach((container) => {
+    const rect = droppableRects.get(container.id);
+    if (!rect || container.disabled || container.id === over?.id) return;
+    if (down ? collisionRect.top < rect.top : collisionRect.top > rect.top)
+      containers.push(container);
+  });
+
+  const collisions = closestCorners({
+    active,
+    collisionRect,
+    pointerCoordinates: null,
+    droppableRects,
+    droppableContainers: containers,
+  });
+  const closestId = getFirstCollision(collisions, "id");
+  return closestId === over?.id && collisions.length > 1 ? collisions[1].id : closestId;
+};
+
+type Coordinates = Parameters<KeyboardCoordinateGetter>[1]["currentCoordinates"];
+
+const changeDepth = (
+  drag: DragState,
+  step: number,
+  coordinates: Coordinates,
+  { active, over }: KeyboardContext,
+) => {
+  if (!active || !over) return undefined;
+  const { depth, minDepth, maxDepth } = project(drag.items, active.id, over.id, drag.offset);
+  const next = depth + step;
+  if (next < minDepth || next > maxDepth) return undefined;
+  return { ...coordinates, x: coordinates.x + step * INDENT };
+};
+
+const changePosition = (drag: DragState, down: boolean, context: KeyboardContext) => {
+  const closestId = nextDroppable(down, context);
+  const rect = closestId == null ? undefined : context.droppableRects.get(closestId);
+  const target = drag.items.find(({ id }) => id === closestId);
+  const current = drag.items.find(({ id }) => id === context.active?.id);
+  if (!rect || !target || !current || !context.over) return undefined;
+
+  const offset = (target.depth - current.depth) * INDENT;
+  const { depth } = project(drag.items, current.id, target.id, offset);
+  return { x: rect.left + depth * INDENT, y: rect.top };
+};
+
+const steps: Record<string, number> = { [KeyboardCode.Left]: -1, [KeyboardCode.Right]: 1 };
+const downs: Record<string, boolean> = { [KeyboardCode.Up]: false, [KeyboardCode.Down]: true };
+
 const treeKeyboardCoordinates =
   (drag: DragState): KeyboardCoordinateGetter =>
   (event, { currentCoordinates, context }) => {
-    const { active, over, collisionRect, droppableRects, droppableContainers } = context;
-    const vertical = event.code === KeyboardCode.Up || event.code === KeyboardCode.Down;
-    const horizontal = event.code === KeyboardCode.Left || event.code === KeyboardCode.Right;
-    if ((!vertical && !horizontal) || !active || !collisionRect) return undefined;
-    event.preventDefault();
-
-    const { items, offset } = drag;
-
-    if (horizontal) {
-      if (over == null) return undefined;
-      const { depth, minDepth, maxDepth } = project(items, active.id, over.id, offset);
-      if (event.code === KeyboardCode.Left && depth > minDepth)
-        return { ...currentCoordinates, x: currentCoordinates.x - INDENT };
-      if (event.code === KeyboardCode.Right && depth < maxDepth)
-        return { ...currentCoordinates, x: currentCoordinates.x + INDENT };
-      return undefined;
+    if (event.code in steps) {
+      event.preventDefault();
+      return changeDepth(drag, steps[event.code], currentCoordinates, context);
     }
-
-    const containers: DroppableContainer[] = [];
-    droppableContainers.forEach((container) => {
-      if (container.disabled || container.id === over?.id) return;
-      const rect = droppableRects.get(container.id);
-      if (!rect) return;
-      const ahead =
-        event.code === KeyboardCode.Down
-          ? collisionRect.top < rect.top
-          : collisionRect.top > rect.top;
-      if (ahead) containers.push(container);
-    });
-
-    const collisions = closestCorners({
-      active,
-      collisionRect,
-      pointerCoordinates: null,
-      droppableRects,
-      droppableContainers: containers,
-    });
-    let closestId = getFirstCollision(collisions, "id");
-    if (closestId === over?.id && collisions.length > 1) closestId = collisions[1].id;
-    if (closestId == null || over == null) return undefined;
-
-    const rect = droppableRects.get(closestId);
-    const target = items.find(({ id }) => id === closestId);
-    const current = items.find(({ id }) => id === active.id);
-    if (!rect || !target || !current) return undefined;
-
-    const { depth } = project(items, active.id, closestId, (target.depth - current.depth) * INDENT);
-    return { x: rect.left + depth * INDENT, y: rect.top };
+    if (event.code in downs) {
+      event.preventDefault();
+      return changePosition(drag, downs[event.code], context);
+    }
+    return undefined;
   };
 
 const useTreeTexts = () => ({
