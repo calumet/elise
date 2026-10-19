@@ -1021,7 +1021,7 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 | DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list` | —     |
 | Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`         | —     |
 | Tree, TreeItem                                                            | `@calumet/elise-ui/tree`             | —     |
-| SortableList, SortableItem, SortableHandle                                | `@calumet/elise-ui/sortable`         | —     |
+| SortableList, SortableItem, SortableHandle, SortableTree                  | `@calumet/elise-ui/sortable`         | —     |
 
 `DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
 relación entre el rótulo y su valor está en el marcado y un lector de pantalla
@@ -1065,6 +1065,33 @@ columna propia: en la vista de lista esa celda es la que encabeza la fila.
     </TableBody>
   </SortableList>
 </Table>
+```
+
+`SortableTree` es el mismo gesto sobre una jerarquía, como el editor de menús de
+Shopify: arrastrar desde el asa reordena entre hermanas, y desplazar en
+horizontal mientras se arrastra mete el nodo dentro de la hermana de arriba o lo
+saca al padre. Con teclado, las flechas izquierda y derecha cambian el nivel. Una
+rama plegada se mueve entera. A diferencia de `SortableList`, recibe los datos y
+no los hijos, porque necesita conocer el árbol entero para calcular dónde cae
+cada nodo.
+
+`maxDepth` es el número de niveles que caben. Un movimiento que lo supere, o que
+meta un nodo dentro de otro con `acceptsChildren: false`, se marca en rojo
+mientras se arrastra, el lector de pantalla lo dice y al soltar no pasa nada. Una
+fila con `draggable: false` no se arrastra, aunque las demás se muevan a su
+alrededor. `onMove` recibe el movimiento (`id`, `parentId` o `null` para la
+raíz, e `index` entre las nuevas hermanas) y el árbol ya con él aplicado.
+
+```tsx
+<SortableTree
+  items={menu}
+  maxDepth={4}
+  renderItem={(entrada) => <a href={entrada.url}>{entrada.label}</a>}
+  onMove={(movimiento, arbol) => {
+    setMenu(arbol);
+    guardarMovimiento(movimiento);
+  }}
+/>
 ```
 
 > Para tablas con funcionalidad avanzada (filtros, paginación, ordenamiento, exportación), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).

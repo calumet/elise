@@ -3,6 +3,22 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.43.0
+
+### Añade
+
+**`SortableTree`, en `@calumet/elise-ui/sortable`: un árbol que se reordena y
+se re-anida arrastrando.** Desplazar en horizontal mientras se arrastra cambia
+el nivel, y con teclado lo hacen las flechas izquierda y derecha. `maxDepth`
+limita los niveles; un nodo con `draggable: false` no se arrastra y uno con
+`acceptsChildren: false` no admite hijos. Lo que no se permite se marca mientras
+se arrastra y no se suelta. `onMove` recibe el `id`, el nuevo `parentId` y el
+`index` entre las nuevas hermanas, y el árbol ya movido.
+
+## `elise-alerts` 0.3.24, `elise-forms` 0.3.4, `elise-tables` 0.9.5, `elise-themes` 0.1.7 y `elise-toasts` 0.4.25
+
+Se republican para que JSR los publique contra `elise-ui` 0.43.0. No cambian.
+
 ## `@calumet/elise-ui` 0.42.0
 
 ### Añade
