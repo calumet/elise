@@ -3,6 +3,27 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.40.0
+
+### Añade
+
+**`SortableList`, `SortableItem` y `SortableHandle`, en
+`@calumet/elise-ui/sortable`: una lista que se reordena arrastrando.** Solo el
+asa inicia el arrastre. Con teclado se mueve con espacio y flechas, y el lector
+de pantalla anuncia la posición, con textos en el namespace `ui` de
+`elise-i18n`. `onReorder` recibe los ids en el orden nuevo. Con `asChild`
+funciona sobre `TableBody` y `TableRow`. `elise-ui` suma `@dnd-kit` a sus
+dependencias.
+
+### Corrige
+
+**`TableBody` y `TableRow` perdían el `ref` en la vista de lista**, la que
+`Table` usa cuando no cabe a lo ancho.
+
+## `elise-alerts` 0.3.21, `elise-forms` 0.3.1, `elise-tables` 0.9.2, `elise-themes` 0.1.4 y `elise-toasts` 0.4.22
+
+Se republican para que JSR los publique contra `elise-ui` 0.40.0. No cambian.
+
 ## `@calumet/elise-i18n` 0.4.0
 
 ### Añade

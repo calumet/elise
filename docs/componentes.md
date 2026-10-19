@@ -979,6 +979,7 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 | DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list` | —     |
 | Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`         | —     |
 | Tree, TreeItem                                                            | `@calumet/elise-ui/tree`             | —     |
+| SortableList, SortableItem, SortableHandle                                | `@calumet/elise-ui/sortable`         | —     |
 
 `DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
 relación entre el rótulo y su valor está en el marcado y un lector de pantalla
@@ -993,6 +994,32 @@ espera de un árbol (arriba y abajo recorren lo que se ve, derecha abre o entra,
 izquierda cierra o sube al padre). El foco entra una sola vez y desde ahí se mueve
 con las flechas, porque con un `tabIndex` por nodo, tabular por un árbol de
 cincuenta hojas serían cincuenta paradas.
+
+`SortableList` reordena en vertical arrastrando desde `SortableHandle`, el
+único sitio que inicia el arrastre, así que el resto de la fila sigue siendo un
+enlace. Con teclado, espacio levanta, las flechas mueven y espacio suelta, y el
+lector de pantalla oye la posición. `onReorder` recibe los ids en el orden nuevo;
+guardarlo es cosa de la aplicación. Con `asChild`, la lista y sus elementos
+pasan a una tabla:
+
+```tsx
+<Table>
+  <SortableList asChild items={ids} onReorder={guardarOrden}>
+    <TableBody>
+      {banners.map((banner) => (
+        <SortableItem asChild key={banner.id} id={banner.id}>
+          <TableRow>
+            <TableCell>
+              <SortableHandle label={banner.titulo} />
+            </TableCell>
+            <TableCell>{banner.titulo}</TableCell>
+          </TableRow>
+        </SortableItem>
+      ))}
+    </TableBody>
+  </SortableList>
+</Table>
+```
 
 > Para tablas con funcionalidad avanzada (filtros, paginación, ordenamiento, exportación), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).
 
