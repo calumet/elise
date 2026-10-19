@@ -669,7 +669,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
           </aside>
         ) : null}
         <div
-          className="min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
+          className="@container/pane min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
           onPointerDown={(event) => {
             const target = event.target as Element;
             if (!event.currentTarget.contains(target)) return;
@@ -691,7 +691,9 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
               radius="xl"
               paddingX={4}
               paddingY={6}
-              className={view === "mobile" ? undefined : "sm:px-12 sm:py-10"}
+              className={
+                view === "mobile" ? undefined : "@sm/pane:px-8 @2xl/pane:px-12 @2xl/pane:py-10"
+              }
               style={{ viewTransitionName: "editor-page" }}
             >
               <div className="mb-6 flex flex-col gap-1">
