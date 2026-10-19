@@ -75,6 +75,7 @@ export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Elemen
         side="bottom"
         align="start"
         collisionPadding={16}
+        hideWhenDetached
         className="p-1"
         onOpenAutoFocus={preventFocus}
         onCloseAutoFocus={preventFocus}

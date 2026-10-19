@@ -132,6 +132,7 @@ export const FormatRow = ({ className }: { className?: string }): React.JSX.Elem
             side="top"
             align="start"
             collisionPadding={16}
+            hideWhenDetached
             onCloseAutoFocus={(event) => {
               event.preventDefault();
               editor.tf.focus();
@@ -425,6 +426,7 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
           side="bottom"
           align="start"
           collisionPadding={16}
+          hideWhenDetached
           onCloseAutoFocus={preventFocus}
           onEscapeKeyDown={(event) => {
             event.preventDefault();
@@ -437,6 +439,7 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
         <PopoverContent
           side="top"
           collisionPadding={16}
+          hideWhenDetached
           className={className ? `${FLOATING} ${className}` : FLOATING}
           onOpenAutoFocus={preventFocus}
           onCloseAutoFocus={preventFocus}
@@ -479,6 +482,7 @@ const TableBar = (): React.JSX.Element => {
         align="end"
         sideOffset={4}
         collisionPadding={16}
+        hideWhenDetached
         className={FLOATING}
         onOpenAutoFocus={preventFocus}
         onCloseAutoFocus={preventFocus}
