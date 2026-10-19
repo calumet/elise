@@ -895,9 +895,9 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
             }
           >
             <Box
-              background="card"
-              border
-              radius="xl"
+              background={view === "mobile" ? "card" : undefined}
+              border={view === "mobile"}
+              radius={view === "mobile" ? "xl" : undefined}
               paddingX={4}
               paddingY={6}
               className={

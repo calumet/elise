@@ -339,7 +339,7 @@ export const EditorCode = ({ title, className }: EditorCodeProps): React.JSX.Ele
           </div>
           <div
             data-device={device}
-            className={`@container/editor-page mx-auto w-full rounded-xl border border-border bg-card px-4 py-6 ${device === "mobile" ? "max-w-sm" : "max-w-none @2xl:px-8"}`}
+            className={`@container/editor-page mx-auto w-full px-4 py-6 ${device === "mobile" ? "max-w-sm rounded-xl border border-border bg-card" : "max-w-none @2xl:px-8"}`}
           >
             {title ? (
               <Heading level={1} className="mb-6 min-w-0 break-words">
