@@ -1011,7 +1011,7 @@ columna propia: en la vista de lista esa celda es la que encabeza la fila.
         <SortableItem asChild key={banner.id} id={banner.id}>
           <TableRow>
             <TableCell>
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5">
                 <SortableHandle label={banner.titulo} />
                 {banner.titulo}
               </span>

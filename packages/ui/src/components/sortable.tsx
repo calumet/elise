@@ -254,7 +254,7 @@ export function SortableHandle({
       ref={setActivatorNodeRef}
       data-slot="sortable-handle"
       className={cn(
-        "inline-flex size-11 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-dragging:cursor-grabbing",
+        "relative inline-flex size-icon-lg shrink-0 cursor-grab touch-none items-center justify-center rounded-xs text-muted-foreground transition-[background-color,color] duration-(--duration-fast) ease-out before:absolute before:-inset-1 before:content-[''] hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-dragging:cursor-grabbing",
         className,
       )}
       data-dragging={isDragging ? "" : undefined}

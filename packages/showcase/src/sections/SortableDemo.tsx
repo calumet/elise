@@ -40,7 +40,7 @@ export default function SortableDemo() {
           <SortableItem
             key={field.id}
             id={field.id}
-            className="flex items-center gap-2 border border-border pe-4"
+            className="flex items-center gap-2 border border-border px-3 py-2.5"
           >
             <SortableHandle label={field.label} />
             <Text as="span" size="sm">
@@ -67,7 +67,7 @@ export default function SortableDemo() {
               <SortableItem asChild key={banner.id} id={banner.id}>
                 <TableRow clickDelegate={`edit-${banner.id}`}>
                   <TableCell>
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center gap-1.5">
                       <SortableHandle label={banner.title} />
                       <a id={`edit-${banner.id}`} href={`#${banner.id}`}>
                         {banner.title}
