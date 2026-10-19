@@ -60,19 +60,6 @@ export const EditorOutline = ({ className }: EditorOutlineProps): React.JSX.Elem
   const blocks = useBlockCommands();
   const headingId = React.useId();
   const items = React.useMemo(() => toItems(outline), [outline]);
-  const container = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const hold = (event: KeyboardEvent) => {
-      const target = event.target instanceof Element ? event.target : null;
-      const lifted = target?.closest('[data-slot="sortable-handle"][aria-pressed="true"]');
-      if (event.key === "Escape" && lifted && container.current?.contains(lifted)) {
-        event.preventDefault();
-      }
-    };
-    window.addEventListener("keydown", hold, true);
-    return () => window.removeEventListener("keydown", hold, true);
-  }, []);
 
   const select = (id: string) => {
     if (!blocks.select(id)) return;
@@ -88,7 +75,6 @@ export const EditorOutline = ({ className }: EditorOutlineProps): React.JSX.Elem
 
   return (
     <div
-      ref={container}
       data-slot="editor-outline"
       className={`flex min-h-0 flex-col gap-2 ${className ?? ""}`.trim()}
     >
