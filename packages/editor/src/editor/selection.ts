@@ -33,6 +33,12 @@ export const selectedId = (editor: PlateEditor): string | null => {
   return node && "id" in node ? String(node.id) : null;
 };
 
+export const deselectBlock = (editor: PlateEditor): void => {
+  editor.setOption(BlockSelectionPlugin, "id", null);
+  editor.tf.deselect();
+  editor.tf.blur();
+};
+
 export const selectBlockById = (editor: PlateEditor, id: string): boolean => {
   const entry = blockEntry(editor, id);
   if (!entry) return false;

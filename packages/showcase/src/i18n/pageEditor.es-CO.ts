@@ -8,6 +8,7 @@ export default {
   mobile: "Móvil",
   structure: "Estructura de la página",
   addBlock: "Añadir bloque",
+  addAtEnd: "Añadir un bloque al final",
   blockSettings: "Ajustes del bloque",
   undo: "Deshacer",
   redo: "Rehacer",

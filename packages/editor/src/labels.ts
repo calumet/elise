@@ -157,6 +157,8 @@ const DEFAULTS = {
   imagesHint: "JPG, PNG or WebP",
   removeImage: "Remove image",
   emptyGallery: "Add images in the block settings",
+  catalogTarget: "Goes below “{block}”",
+  catalogTargetEnd: "Goes at the end of the page",
 };
 
 export type Labels = Record<keyof typeof DEFAULTS, string>;

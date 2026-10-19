@@ -155,4 +155,6 @@ export default {
   imagesHint: "JPG, PNG o WebP",
   removeImage: "Quitar la imagen",
   emptyGallery: "Añade imágenes en los ajustes del bloque",
+  catalogTarget: "Se añade debajo de «{block}»",
+  catalogTargetEnd: "Se añade al final de la página",
 };

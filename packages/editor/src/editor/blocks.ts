@@ -9,7 +9,7 @@ import {
   type SettingKey,
   type SettingValue,
 } from "../settings";
-import { selectBlockById, selectedId } from "./selection";
+import { deselectBlock, selectBlockById, selectedId } from "./selection";
 import {
   applySettings,
   blockEntry,
@@ -62,11 +62,12 @@ export type BlockCommands = {
   move: (id: string, direction: "up" | "down") => boolean;
   moveTo: (id: string, targetId: string, position: DropPosition) => boolean;
   canMoveTo: (id: string, targetId: string, position: DropPosition) => boolean;
+  deselect: () => void;
 };
 
 const MAX_LABEL = 48;
 
-const nodeLabel = (t: Labels, node: TElement, index: number): string => {
+export const nodeLabel = (t: Labels, node: TElement, index: number): string => {
   const type = String(node.type);
   if (type === "column") return `${t.column} ${index + 1}`;
   const own =
@@ -207,5 +208,6 @@ export const useBlockCommands = (): BlockCommands => {
     },
     moveTo: (id, targetId, position) => moveBlock(editor, id, targetId, position),
     canMoveTo: (id, targetId, position) => canMoveBlock(editor, id, targetId, position),
+    deselect: () => deselectBlock(editor),
   };
 };

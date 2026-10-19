@@ -95,7 +95,8 @@ Las columnas no se rompen: una columna no puede quedar vacía ni contener otras 
 | `duplicate(id)`, `remove(id)`      | Duplica con ids nuevos, o elimina                                                     |
 | `move(id, "up" \| "down")`         | Sube o baja entre hermanos, dentro de la misma columna o del documento                |
 | `moveTo(id, destino, posición)`    | `before`, `after` o `inside` (solo sobre una `column`). Rechaza lo que anide columnas |
-| `canMoveTo(id, destino, posición)` | Lo mismo sin mover, para pintar la línea de soltar                                    |
+| `canMoveTo(id, destino, posición)` | Lo mismo sin mover, para pintar dónde caería                                          |
+| `deselect()`                       | Deja la página sin bloque elegido, como al pulsar fuera de ella                       |
 
 `useEditorCommands()` suma `insert` para `columns`, `spacer`, `button` y `gallery`, `insertFile(archivo)`, `uploadImage(archivo)` y `templates` con `insertTemplate(id)`.
 
@@ -103,7 +104,7 @@ Las columnas no se rompen: una columna no puede quedar vacía ni contener otras 
 
 `useOutline()` devuelve el documento como árbol de `{ id, type, label, depth, children }` y se mantiene al día con cada cambio. Las columnas aparecen como `columns`, con sus `column` y los bloques de cada una; tablas, avisos y citas son una hoja. La etiqueta es el texto del bloque o, si no tiene, el nombre del tipo.
 
-El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva al margen un `+` que abre el menú `/` debajo, un asa (`data-slot="drag-handle"`) y una línea de soltar (`data-slot="drop-line"`). El bloque elegido lleva su contorno y el nombre del tipo. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
+El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva al margen un `+` que abre el menú `/` debajo y un asa (`data-slot="drag-handle"`). Al arrastrar, una ficha con el tipo y el texto del bloque sigue al puntero y el hueco donde caería se abre en la página (`data-slot="drop-line"`), también dentro de una columna. El bloque elegido lleva su contorno y el nombre del tipo, encima o debajo según haya sitio, y se esconde antes que pisar el contenido. Un bloque recién insertado queda elegido, con sus ajustes a la vista. El asa se aparta del texto `--editor-gutter` (0.75rem por defecto), para dejarla fuera de una hoja con menos margen. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
 
 ### Los paneles
 
@@ -113,7 +114,7 @@ Tres piezas de `Editor` arman la pantalla del editor de páginas alrededor de `E
 | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `Editor.Outline`  | La estructura en un `Tree`, con la selección sincronizada con la página y arrastre en los dos sentidos             |
 | `Editor.Settings` | Los ajustes del bloque elegido, pintados según su tipo, más subir, bajar, mover a una columna, duplicar y eliminar |
-| `Editor.Catalog`  | Bloques y plantillas con buscador. `onClose` pinta el botón de cerrar                                              |
+| `Editor.Catalog`  | Bloques y plantillas con buscador. Dice dónde se añade lo nuevo. `onClose` pinta el botón de cerrar                |
 
 ```tsx
 <Editor.Root

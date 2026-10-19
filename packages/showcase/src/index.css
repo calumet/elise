@@ -16,3 +16,18 @@
 @import "@calumet/elise-ui/tailwind/fonts/newsreader.css";
 @import "@calumet/elise-ui/tailwind/fonts/public-sans.css";
 @import "@calumet/elise-ui/tailwind/fonts/space-grotesk.css";
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(editor-page) {
+  animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-out);
+}
+::view-transition-old(editor-page),
+::view-transition-new(editor-page) {
+  height: 100%;
+  object-fit: none;
+  object-position: top;
+}

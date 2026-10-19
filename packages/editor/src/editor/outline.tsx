@@ -1,20 +1,3 @@
-import {
-  Columns2,
-  Heading2,
-  Heading3,
-  Image,
-  Images,
-  Info,
-  Minus,
-  MousePointerClick,
-  MoveVertical,
-  Paperclip,
-  Pilcrow,
-  Quote,
-  RectangleVertical,
-  SquarePlay,
-  Table,
-} from "@calumet/elise-icons";
 import { Text } from "@calumet/elise-ui/text";
 import { Tree, TreeItem } from "@calumet/elise-ui/tree";
 import { useEditorRef } from "platejs/react";
@@ -23,37 +6,20 @@ import * as React from "react";
 import { useLabels } from "../labels";
 import { useBlockCommands, useOutline, useSelectedBlock, type OutlineNode } from "./blocks";
 import { useOutlineDnd } from "./drag";
+import { blockIcon } from "./icons";
 import { blockEntry } from "./structure";
 
-const ICONS: Record<string, typeof Pilcrow> = {
-  p: Pilcrow,
-  h2: Heading2,
-  h3: Heading3,
-  blockquote: Quote,
-  callout: Info,
-  hr: Minus,
-  img: Image,
-  media_embed: SquarePlay,
-  table: Table,
-  columns: Columns2,
-  column: RectangleVertical,
-  spacer: MoveVertical,
-  button: MousePointerClick,
-  gallery: Images,
-  file: Paperclip,
-};
-
 const ROW =
-  "relative data-dragging:opacity-50 before:pointer-events-none before:absolute before:inset-x-0 before:z-sticky before:hidden before:h-0.5 before:rounded-full before:bg-primary data-[drop=after]:before:-bottom-px data-[drop=after]:before:block data-[drop=before]:before:-top-px data-[drop=before]:before:block [&[data-drop=inside]>span:first-child]:ring-2 [&[data-drop=inside]>span:first-child]:ring-primary";
+  "relative data-dragging:opacity-40 before:pointer-events-none before:absolute before:inset-x-1 before:z-sticky before:hidden before:h-0.5 before:rounded-full before:bg-primary data-[drop=after]:before:-bottom-px data-[drop=after]:before:block data-[drop=before]:before:-top-px data-[drop=before]:before:block [&[data-drop=inside]>span:first-child]:bg-accent [&[data-drop=inside]>span:first-child]:ring-2 [&[data-drop=inside]>span:first-child]:ring-primary";
 
 const OutlineRow = ({ node }: { id: string; node: OutlineNode }): React.JSX.Element => {
   const { ref, isDragging, position } = useOutlineDnd(node.id);
-  const Icon = ICONS[node.type] ?? Pilcrow;
+  const Icon = blockIcon(node.type);
   return (
     <TreeItem
       ref={ref}
       id={node.id}
-      label={node.label}
+      label={<span title={node.label}>{node.label}</span>}
       icon={<Icon className="size-icon-md text-muted-foreground" />}
       data-drop={position ?? undefined}
       data-dragging={isDragging || undefined}

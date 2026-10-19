@@ -277,18 +277,31 @@ const ButtonBlock = ({
   const settings = resolveSettings(element);
   const secondary = settings.variant === "secondary";
   const href = safeHref(String(settings.href));
+  const label = String(settings.label);
   return (
     <div data-slot="button" data-selected={selected || undefined} className={VOID} {...attributes}>
-      <a
-        href={href}
-        data-variant={settings.variant}
-        className={buttonVariants({ variant: secondary ? "outline" : "solid" })}
-        {...(editing
-          ? { contentEditable: false, onClick: (event: React.MouseEvent) => event.preventDefault() }
-          : {})}
-      >
-        {String(settings.label)}
-      </a>
+      {label ? (
+        <a
+          href={href}
+          data-variant={settings.variant}
+          className={`${buttonVariants({ variant: secondary ? "outline" : "solid" })} h-auto! min-h-9 max-w-full py-2 whitespace-normal!`}
+          {...(editing
+            ? {
+                contentEditable: false,
+                onClick: (event: React.MouseEvent) => event.preventDefault(),
+              }
+            : {})}
+        >
+          {label}
+        </a>
+      ) : editing ? (
+        <span
+          contentEditable={false}
+          className="inline-flex h-9 items-center rounded-md border border-dashed border-border-strong px-4"
+        >
+          <Hint text={(t) => t.buttonBlock} />
+        </span>
+      ) : null}
       {children}
     </div>
   );
@@ -349,13 +362,13 @@ const FileCard = ({
       data-slot="file"
       data-size={size}
       data-selected={selected || undefined}
-      className={`flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-base ${VOID}`}
+      className={`flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3 text-base ${VOID}`}
       {...attributes}
     >
-      <span className="shrink-0 text-muted-foreground" {...frozen(editing)}>
+      <span className="mt-0.5 shrink-0 text-muted-foreground" {...frozen(editing)}>
         <FileText aria-hidden="true" className="size-icon-md" />
       </span>
-      <span className="min-w-0 flex-1 truncate" {...frozen(editing)}>
+      <span className="min-w-0 flex-1 wrap-anywhere" {...frozen(editing)}>
         <a
           href={src}
           download={name || undefined}
@@ -365,7 +378,10 @@ const FileCard = ({
           {name}
         </a>
         {size ? (
-          <span data-slot="file-size" className="ms-2 text-sm text-muted-foreground">
+          <span
+            data-slot="file-size"
+            className="ms-2 text-sm whitespace-nowrap text-muted-foreground"
+          >
             {formatSize(size)}
           </span>
         ) : null}

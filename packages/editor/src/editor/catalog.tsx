@@ -15,10 +15,12 @@ import { useEditorRef } from "platejs/react";
 import * as React from "react";
 
 import { useLabels, type Labels } from "../labels";
+import { useSelectedBlock } from "./blocks";
 import { useEditorCommands } from "./commands";
 import { ITEMS } from "./insert-menu";
 import { openLine, type InsertItem, type InsertItemId } from "./items";
 import { isMediaKind, MediaDialogs, type MediaKind } from "./media-dialogs";
+import { revealSelected } from "./motion";
 import type { TemplateId } from "./templates";
 
 const GROUPS: { label: keyof Labels; ids: InsertItemId[] }[] = [
@@ -91,16 +93,23 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
   const headingId = React.useId();
   const [query, setQuery] = React.useState("");
   const [dialog, setDialog] = React.useState<MediaKind | null>(null);
+  const selected = useSelectedBlock();
 
   const pick = (item: InsertItem) => {
     if (isMediaKind(item.id)) {
-      openLine(editor);
       setDialog(item.id);
       return;
     }
     if (RETYPE.has(item.id)) openLine(editor);
     commands.insert(item.id, { replace: true });
+    revealSelected(editor);
   };
+
+  const pickTemplate = (id: TemplateId) => {
+    if (commands.insertTemplate(id)) revealSelected(editor);
+  };
+
+  const target = selected ? t.catalogTarget.replace("{block}", selected.label) : t.catalogTargetEnd;
 
   const groups = GROUPS.map((group) => ({
     label: t[group.label],
@@ -120,10 +129,15 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
       aria-labelledby={headingId}
       className={`flex min-h-0 flex-col gap-3 ${className ?? ""}`.trim()}
     >
-      <div className="flex items-center justify-between gap-2">
-        <Text as="h2" id={headingId} data-slot="editor-panel-heading" size="lg" weight="semibold">
-          {t.addBlock}
-        </Text>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <Text as="h2" id={headingId} data-slot="editor-panel-heading" size="lg" weight="semibold">
+            {t.addBlock}
+          </Text>
+          <Text size="xs" tone="muted" lines={2}>
+            {target}
+          </Text>
+        </div>
         {onClose ? (
           <Button
             type="button"
@@ -188,7 +202,7 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
                   Icon={TEMPLATE_ICONS[template.id]}
                   label={template.label}
                   description={template.description}
-                  onPick={() => commands.insertTemplate(template.id)}
+                  onPick={() => pickTemplate(template.id)}
                 />
               ))}
             </ul>

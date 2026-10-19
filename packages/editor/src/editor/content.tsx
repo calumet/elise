@@ -4,6 +4,7 @@ import * as React from "react";
 import { useLabels } from "../labels";
 import { contentClassName } from "../views";
 import { useServices } from "./context";
+import { DragChip } from "./drag-chip";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
 import { isMediaKind, MediaDialogs, type MediaKind } from "./media-dialogs";
@@ -68,6 +69,7 @@ export const EditorContentArea = ({
       {renderSlashMenu ? renderSlashMenu(menu) : <InsertMenu menu={menu} />}
       {longForm && !page && !renderSlashMenu ? <InsertButton container={container} /> : null}
       <MediaDialogs open={dialog} onClose={() => setDialog(null)} />
+      {page ? <DragChip /> : null}
     </div>
   );
 };

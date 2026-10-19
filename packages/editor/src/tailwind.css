@@ -65,6 +65,15 @@
   margin-top: 0.25rem;
 }
 
+[data-slot="block-handle"] {
+  inset-inline-start: calc(-1 * var(--editor-gutter, 0.75rem));
+}
+@container editor-page (min-width: 32rem) {
+  [data-slot="column"] [data-slot="block-handle"] {
+    inset-inline-start: -0.75rem;
+  }
+}
+
 [data-slate-editor] > [data-slot="block"] + [data-slot="block"]:has(> h2) {
   margin-top: 2rem;
 }

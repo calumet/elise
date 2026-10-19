@@ -6,6 +6,7 @@ import { newId } from "../ids";
 import { useLabels } from "../labels";
 import { blockSettings } from "../settings";
 import type { EditorSchema } from "../types";
+import { selectBlockById } from "./selection";
 import { buildColumn, unitPath } from "./structure";
 
 export type InsertItemId =
@@ -57,6 +58,12 @@ export const placeBlock = (
     if (replace && empty) editor.tf.removeNodes({ at: path });
     editor.tf.insertNodes(nodes, { at });
   });
+  const first = nodes[0];
+  if ("columns" in editor.plugins && first?.id) {
+    selectBlockById(editor, String(first.id));
+    editor.tf.focus();
+    return;
+  }
   const target = editor.api.node(at);
   const isVoid = target && ElementApi.isElement(target[0]) && editor.api.isVoid(target[0]);
   const next = isVoid && editor.api.node(PathApi.next(at)) ? PathApi.next(at) : at;
