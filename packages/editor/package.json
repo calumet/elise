@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-editor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "Editor de texto enriquecido y de bloques para Elise, sobre Plate.",
   "repository": {
@@ -41,12 +41,15 @@
   "dependencies": {
     "@calumet/elise-icons": "workspace:^",
     "@platejs/basic-nodes": "53.0.0",
+    "@platejs/dnd": "53.3.8",
     "@platejs/indent": "^53.0.0",
     "@platejs/link": "53.3.5",
     "@platejs/list": "53.3.13",
     "@platejs/media": "53.1.4",
     "@platejs/table": "53.0.9",
-    "platejs": "53.3.18"
+    "platejs": "53.3.18",
+    "react-dnd": "16.0.1",
+    "react-dnd-html5-backend": "16.0.1"
   },
   "devDependencies": {
     "@calumet/elise-ui": "workspace:*",

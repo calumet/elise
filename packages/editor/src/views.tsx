@@ -1,6 +1,8 @@
-import { AlertTriangle, CheckCircle2, Info, XCircle } from "@calumet/elise-icons";
+import { AlertTriangle, CheckCircle2, FileText, Info, XCircle } from "@calumet/elise-icons";
+import { buttonVariants } from "@calumet/elise-ui/button";
 import * as React from "react";
 
+import { columnsSettings, resolveSettings, type GalleryImage } from "./settings";
 import type { EditorNode, EditorSchema } from "./types";
 import { parseVideo, safeHref, safeSrc } from "./urls";
 
@@ -189,6 +191,153 @@ const HeaderCell = ({ attributes, children }: ViewProps): React.JSX.Element => (
   </th>
 );
 
+const Columns = ({ element, attributes, children }: ViewProps): React.JSX.Element => {
+  const settings = columnsSettings(element);
+  return (
+    <div
+      data-slot="columns"
+      data-count={settings.count}
+      data-ratio={settings.ratio}
+      data-gap={settings.gap}
+      data-align={settings.align}
+      data-background={settings.background}
+      data-stack={settings.stack}
+      {...attributes}
+    >
+      {children}
+    </div>
+  );
+};
+
+const Column = ({ attributes, children }: ViewProps): React.JSX.Element => (
+  <div data-slot="column" {...attributes}>
+    {children}
+  </div>
+);
+
+const Spacer = ({
+  element,
+  attributes,
+  children,
+  editing,
+  selected,
+}: ViewProps): React.JSX.Element => (
+  <div
+    data-slot="spacer"
+    data-size={resolveSettings(element).size}
+    data-selected={selected || undefined}
+    aria-hidden={editing ? undefined : true}
+    className={VOID}
+    {...attributes}
+  >
+    {children}
+  </div>
+);
+
+const ButtonBlock = ({
+  element,
+  attributes,
+  children,
+  editing,
+  selected,
+}: ViewProps): React.JSX.Element => {
+  const settings = resolveSettings(element);
+  const secondary = settings.variant === "secondary";
+  const href = safeHref(String(settings.href));
+  return (
+    <div data-slot="button" data-selected={selected || undefined} className={VOID} {...attributes}>
+      <a
+        href={href}
+        data-variant={settings.variant}
+        className={buttonVariants({ variant: secondary ? "outline" : "solid" })}
+        {...(editing
+          ? { contentEditable: false, onClick: (event: React.MouseEvent) => event.preventDefault() }
+          : {})}
+      >
+        {String(settings.label)}
+      </a>
+      {children}
+    </div>
+  );
+};
+
+const Gallery = ({
+  element,
+  attributes,
+  children,
+  editing,
+  selected,
+}: ViewProps): React.JSX.Element => {
+  const images = (resolveSettings(element).images as GalleryImage[]).flatMap((image) => {
+    const src = safeSrc(image.src);
+    return src ? [{ src, alt: image.alt }] : [];
+  });
+  return (
+    <div
+      data-slot="gallery"
+      data-count={images.length}
+      data-empty={images.length === 0 || undefined}
+      data-selected={selected || undefined}
+      className={VOID}
+      {...attributes}
+    >
+      <div {...frozen(editing)} data-slot="gallery-images">
+        {images.map((image, index) => (
+          <img key={`${image.src}.${index}`} src={image.src} alt={image.alt} loading="lazy" />
+        ))}
+      </div>
+      {children}
+    </div>
+  );
+};
+
+const formatSize = (bytes: number): string => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(bytes < 10240 ? 1 : 0)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+};
+
+const FileCard = ({
+  element,
+  attributes,
+  children,
+  editing,
+  selected,
+}: ViewProps): React.JSX.Element => {
+  const src = safeHref(String(element.src ?? ""));
+  const name = String(element.name ?? "");
+  const size = typeof element.size === "number" && element.size > 0 ? element.size : undefined;
+  return (
+    <div
+      data-slot="file"
+      data-size={size}
+      data-selected={selected || undefined}
+      className={`flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-base ${VOID}`}
+      {...attributes}
+    >
+      <span className="shrink-0 text-muted-foreground" {...frozen(editing)}>
+        <FileText aria-hidden="true" className="size-icon-md" />
+      </span>
+      <span className="min-w-0 flex-1 truncate" {...frozen(editing)}>
+        <a
+          href={src}
+          download={name || undefined}
+          className="text-link underline underline-offset-2 hover:text-link-hover"
+          {...(editing ? { onClick: (event: React.MouseEvent) => event.preventDefault() } : {})}
+        >
+          {name}
+        </a>
+        {size ? (
+          <span data-slot="file-size" className="ms-2 text-sm text-muted-foreground">
+            {formatSize(size)}
+          </span>
+        ) : null}
+      </span>
+      {children}
+    </div>
+  );
+};
+
 export const AnchorView = ({ element, attributes, children }: ViewProps): React.JSX.Element => {
   const blank = element.target === "_blank";
   return (
@@ -217,6 +366,12 @@ export const views: Record<string, (props: ViewProps) => React.JSX.Element> = {
   tr: Row,
   td: Cell,
   th: HeaderCell,
+  columns: Columns,
+  column: Column,
+  spacer: Spacer,
+  button: ButtonBlock,
+  gallery: Gallery,
+  file: FileCard,
   a: AnchorView,
 };
 

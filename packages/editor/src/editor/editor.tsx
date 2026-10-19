@@ -64,11 +64,12 @@ const EditorComposed = ({
   onChange,
   locales,
   onUploadImage,
+  onUploadFile,
   searchLinks,
   className,
   ...content
 }: EditorProps): React.JSX.Element => {
-  const root = { schema, value, onChange, locales, onUploadImage, searchLinks };
+  const root = { schema, value, onChange, locales, onUploadImage, onUploadFile, searchLinks };
 
   if (schema.blocks.length <= 2) {
     return (

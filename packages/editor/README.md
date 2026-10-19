@@ -30,8 +30,9 @@ El esquema decide qué se puede insertar, qué ofrece el menú `/`, qué acepta 
 | ---------------- | ---------------------------------------------------------------------- |
 | `messageSchema`  | Párrafo, negrita, cursiva, enlace, listas e inline code                |
 | `documentSchema` | Lo anterior, más h2, h3, cita, imagen, tabla, callout, divisor y video |
+| `pageSchema`     | Lo anterior, más columnas, espacio, botón, galería y archivo           |
 
-`pageSchema` llega en 0.2.
+`pageSchema` es el de la página: `documentSchema` más columnas, espacio, botón, galería y archivo. Está en la sección de abajo.
 
 ## Editor
 
@@ -65,6 +66,49 @@ Los comandos viven en `useEditorCommands()`, que se usa desde cualquier hijo de 
 
 Los elementos del editor y del render salen de un solo archivo, `src/views.tsx`, así que lo que se edita y lo que se lee se ven igual.
 
+## La página
+
+Con `pageSchema` el editor suma estos bloques. Cada uno declara los ajustes que se pueden editar, así que un panel genérico los pinta sin conocer el bloque.
+
+| Bloque    | Guarda                                                                                           |
+| --------- | ------------------------------------------------------------------------------------------------ |
+| `columns` | De 1 a 4 `column`, con `ratio`, `gap`, `align`, `background` y `stack`. Un solo nivel de anidado |
+| `spacer`  | `size`: `small`, `medium` o `large`                                                              |
+| `button`  | `label`, `href`, `variant` (`primary` o `secondary`). Es un bloque vacío                         |
+| `gallery` | `images`: lista de `{ src, alt }`                                                                |
+| `file`    | `src`, `name` y `size` en bytes. Sube con `onUploadFile`                                         |
+
+`onUploadFile?: (file: File) => Promise<{ src: string; name: string; size?: number }>` es la única prop nueva. `src` debe ser una dirección http(s) o relativa, porque `fromHtml` descarta las `data:` y `blob:` de los enlaces.
+
+Las columnas no se rompen: una columna no puede quedar vacía ni contener otras columnas, más de cuatro se funden en la cuarta, y cambiar `count` reparte el contenido de las que sobran en la última que queda. Los valores fuera de lista vuelven al de por defecto.
+
+### Ajustes de un bloque
+
+`useSelectedBlock()` devuelve el bloque seleccionado, ya sea por selección de texto o elegido con `select`, con `settings` listos para pintar: cada campo trae `key`, `kind` (`select`, `toggle`, `number`, `text`, `url`, `video` o `images`), `label`, `value`, `default` y, según el tipo, `options` o `min` y `max`. Los rótulos salen del namespace `editor`.
+
+`useBlockCommands()` actúa sobre un bloque por su `id`:
+
+| Comando                            | Hace                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------- |
+| `select(id)`, `selectParent()`     | Selecciona un bloque, o las columnas que contienen al seleccionado                    |
+| `update(id, { clave: valor })`     | Cambia ajustes. Devuelve `false` si algún valor no es válido y lo ignora              |
+| `duplicate(id)`, `remove(id)`      | Duplica con ids nuevos, o elimina                                                     |
+| `move(id, "up" \| "down")`         | Sube o baja entre hermanos, dentro de la misma columna o del documento                |
+| `moveTo(id, destino, posición)`    | `before`, `after` o `inside` (solo sobre una `column`). Rechaza lo que anide columnas |
+| `canMoveTo(id, destino, posición)` | Lo mismo sin mover, para pintar la línea de soltar                                    |
+
+`useEditorCommands()` suma `insert` para `columns`, `spacer`, `button` y `gallery`, `insertFile(archivo)`, `uploadImage(archivo)` y `templates` con `insertTemplate(id)`.
+
+### Estructura y arrastre
+
+`useOutline()` devuelve el documento como árbol de `{ id, type, label, depth, children }` y se mantiene al día con cada cambio. Las columnas aparecen como `columns`, con sus `column` y los bloques de cada una; tablas, avisos y citas son una hoja. La etiqueta es el texto del bloque o, si no tiene, el nombre del tipo.
+
+El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva un asa (`data-slot="drag-handle"`) y una línea de soltar (`data-slot="drop-line"`) sin estilo. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
+
+### Plantillas
+
+`commands.templates` lista las plantillas que el esquema permite: texto con imagen, equipo, preguntas y respuestas, y llamada a la acción. Al insertarlas son bloques ordinarios, no un nodo especial.
+
 ## Render
 
 `@calumet/elise-editor/render` no importa el runtime de edición, así que una noticia renderizada en el servidor no carga Plate.
@@ -78,6 +122,21 @@ const copia = fromHtml(html, { schema: documentSchema });
 ```
 
 Una traducción que falte cae al idioma base del documento. `fromHtml` usa `DOMParser`, así que corre en el navegador o con jsdom.
+
+### HTML de la página y sanitizado
+
+El diseño de las columnas no depende de las clases: lo da `@calumet/elise-editor/tailwind.css` a partir de atributos `data-*`. Un sanitizador que quite `class` conserva el diseño si deja pasar estos atributos y elementos:
+
+| Elemento                 | Atributos                                                                                                                                                                                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `div[data-slot=columns]` | `data-count` (1 a 4), `data-ratio` (`equal`, `wide-first`, `wide-second`), `data-gap` (`small`, `medium`, `large`), `data-align` (`top`, `center`, `bottom`), `data-background` (`none`, `card`, `featured`), `data-stack` (`true`, `false`), `data-id` |
+| `div[data-slot=column]`  | `data-id`                                                                                                                                                                                                                                               |
+| `div[data-slot=spacer]`  | `data-size` (`small`, `medium`, `large`), `aria-hidden`, `data-id`                                                                                                                                                                                      |
+| `div[data-slot=button]`  | `data-id`, y dentro un `a` con `href` y `data-variant` (`primary`, `secondary`)                                                                                                                                                                         |
+| `div[data-slot=gallery]` | `data-count`, `data-empty`, `data-id`, y dentro `div[data-slot=gallery-images]` con `img` (`src`, `alt`, `loading`)                                                                                                                                     |
+| `div[data-slot=file]`    | `data-size` (bytes), `data-id`, y dentro un `a` con `href` y `download`, y `span[data-slot=file-size]`                                                                                                                                                  |
+
+Con `data-stack="true"` las columnas se apilan por debajo de 40rem. `fromHtml` lee estos mismos atributos, así que el ida y vuelta de lo que produce `pageSchema` es estable.
 
 ## Textos
 

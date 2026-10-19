@@ -6,6 +6,7 @@ export type EditorServices = {
   schema: EditorSchema;
   locales?: string[];
   onUploadImage?: (file: File) => Promise<{ src: string; alt?: string }>;
+  onUploadFile?: (file: File) => Promise<{ src: string; name: string; size?: number }>;
   searchLinks?: (query: string) => Promise<{ label: string; href: string }[]>;
 };
 

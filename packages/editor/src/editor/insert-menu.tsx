@@ -1,11 +1,16 @@
 import {
+  Columns2,
   Heading2,
   Heading3,
   Image,
+  Images,
   Info,
   List,
   ListOrdered,
   Minus,
+  MousePointerClick,
+  MoveVertical,
+  Paperclip,
   Plus,
   Quote,
   SquarePlay,
@@ -35,6 +40,11 @@ const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof Labels
   callout: { Icon: Info, description: "calloutDescription" },
   divider: { Icon: Minus, description: "dividerDescription" },
   video: { Icon: SquarePlay, description: "videoDescription" },
+  columns: { Icon: Columns2, description: "columnsDescription" },
+  spacer: { Icon: MoveVertical, description: "spacerDescription" },
+  button: { Icon: MousePointerClick, description: "buttonBlockDescription" },
+  gallery: { Icon: Images, description: "galleryDescription" },
+  file: { Icon: Paperclip, description: "fileDescription" },
 };
 
 const preventFocus = (event: Event): void => event.preventDefault();

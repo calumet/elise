@@ -1,4 +1,5 @@
 import { newId } from "../ids";
+import { COLUMN_LIMIT, coerceSetting, settingDefs, type SettingValue } from "../settings";
 import { isText } from "../types";
 import type {
   EditorDocument,
@@ -206,6 +207,80 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
     ];
   };
 
+  const dataSettings = (type: string, element: Element): Record<string, SettingValue> => {
+    const found: Record<string, SettingValue> = {};
+    for (const def of settingDefs(type)) {
+      const raw = element.getAttribute(`data-${def.key}`);
+      if (raw === null || def.kind === "number") continue;
+      const value = coerceSetting(def, def.kind === "toggle" ? raw === "true" : raw);
+      if (value !== undefined) found[def.key] = value;
+    }
+    return found;
+  };
+
+  const unnest = (content: EditorNode[]): EditorNode[] =>
+    content.flatMap((node) =>
+      node.type === "columns"
+        ? node.children.flatMap((column) =>
+            isText(column)
+              ? []
+              : unnest(column.children.filter((n): n is EditorNode => !isText(n))),
+          )
+        : [node],
+    );
+
+  const columnsBlock = (element: Element, id: string | null): EditorNode => {
+    const groups = Array.from(element.children)
+      .filter((child) => child.getAttribute("data-slot") === "column")
+      .map((column) => ({
+        id: column.getAttribute("data-id"),
+        content: unnest(blocks(column.childNodes)),
+      }));
+    const kept = groups.slice(0, COLUMN_LIMIT);
+    const last = kept[kept.length - 1];
+    if (last) last.content = groups.slice(kept.length - 1).flatMap((group) => group.content);
+    const columns = (kept.length ? kept : [{ id: null, content: [] as EditorNode[] }]).map(
+      (group) =>
+        blockOf("column", group.content.length ? group.content : [paragraph([])], group.id),
+    );
+    return blockOf("columns", columns, id, dataSettings("columns", element));
+  };
+
+  const pageBlock = (
+    slot: string,
+    element: Element,
+    id: string | null,
+  ): EditorNode[] | undefined => {
+    if (!allows(slot) || !["columns", "spacer", "button", "gallery", "file"].includes(slot)) {
+      return undefined;
+    }
+    const voidBlock = (extra: Record<string, unknown>) => [
+      blockOf(slot, [{ text: "" }], id, extra),
+    ];
+    const link = element.querySelector("a");
+    if (slot === "columns") return [columnsBlock(element, id)];
+    if (slot === "spacer") return voidBlock(dataSettings("spacer", element));
+    if (slot === "button") {
+      return voidBlock({
+        label: link?.textContent?.trim() ?? "",
+        href: safeHref(link?.getAttribute("href")) ?? "",
+        ...(link ? dataSettings("button", link) : {}),
+      });
+    }
+    if (slot === "gallery") {
+      const images = Array.from(element.querySelectorAll("img")).flatMap((img) => {
+        const src = safeSrc(img.getAttribute("src"));
+        return src ? [{ src, alt: img.getAttribute("alt") ?? "" }] : [];
+      });
+      return voidBlock({ images });
+    }
+    const src = safeHref(link?.getAttribute("href"));
+    const size = Number(element.getAttribute("data-size"));
+    return src
+      ? voidBlock({ src, name: link?.textContent?.trim() ?? "", ...(size > 0 ? { size } : {}) })
+      : [];
+  };
+
   const blocks = (nodes: Iterable<Node>): EditorNode[] => {
     const out: EditorNode[] = [];
     let loose: Node[] = [];
@@ -267,6 +342,9 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
 
   const block = (element: Element, tag: string): EditorNode[] => {
     const id = element.getAttribute("data-id");
+    const slot = element.getAttribute("data-slot");
+    const page = slot ? pageBlock(slot, element, id) : undefined;
+    if (page) return page;
     const handler = byTag[tag];
     if (handler) return handler(element, id);
     if (tag === "figure" && element.querySelector("img, iframe")) return media(element, id);

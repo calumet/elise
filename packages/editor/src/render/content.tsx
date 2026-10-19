@@ -148,7 +148,9 @@ const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNod
       continue;
     }
     flush();
-    if (!allowed.has(node.type) && !STRUCTURAL.has(node.type)) continue;
+    const structural =
+      STRUCTURAL.has(node.type) || (node.type === "column" && allowed.has("columns"));
+    if (!allowed.has(node.type) && !structural) continue;
     const View = views[node.type];
     if (!View) continue;
     const attributes = { "data-id": node.id };

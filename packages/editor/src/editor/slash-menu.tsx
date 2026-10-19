@@ -6,7 +6,7 @@ import { useEditorCommands } from "./commands";
 import type { InsertItem } from "./items";
 
 const SLASH = /^\/(\S*)$/;
-const DEFERRED = new Set(["image", "video"]);
+const DEFERRED = new Set(["image", "video", "file"]);
 
 export type SlashMenuState = {
   id: string;

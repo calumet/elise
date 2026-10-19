@@ -1,5 +1,7 @@
 import { Plate, usePlateEditor } from "platejs/react";
 import * as React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { newId } from "../ids";
 import type { EditorDocument, EditorNode, EditorSchema } from "../types";
@@ -27,6 +29,7 @@ export const EditorRoot = ({
   onChange,
   locales,
   onUploadImage,
+  onUploadFile,
   searchLinks,
   className,
   children,
@@ -55,23 +58,31 @@ export const EditorRoot = ({
   }, [value.content, editor]);
 
   const services = React.useMemo(
-    () => ({ schema, locales, onUploadImage, searchLinks }),
-    [schema, locales, onUploadImage, searchLinks],
+    () => ({ schema, locales, onUploadImage, onUploadFile, searchLinks }),
+    [schema, locales, onUploadImage, onUploadFile, searchLinks],
+  );
+
+  const body = (
+    <Plate
+      editor={editor}
+      onValueChange={({ value: next }) => {
+        emitted.current = next as unknown as EditorNode[];
+        onChange({ ...latest.current, content: emitted.current });
+      }}
+    >
+      <div data-slot="editor" className={className}>
+        {children}
+      </div>
+    </Plate>
   );
 
   return (
     <ServicesProvider value={services}>
-      <Plate
-        editor={editor}
-        onValueChange={({ value: next }) => {
-          emitted.current = next as unknown as EditorNode[];
-          onChange({ ...latest.current, content: emitted.current });
-        }}
-      >
-        <div data-slot="editor" className={className}>
-          {children}
-        </div>
-      </Plate>
+      {schema.blocks.includes("columns") ? (
+        <DndProvider backend={HTML5Backend}>{body}</DndProvider>
+      ) : (
+        body
+      )}
     </ServicesProvider>
   );
 };
