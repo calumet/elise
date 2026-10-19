@@ -3,6 +3,16 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.43.2
+
+### Corrige
+
+**Una pantalla dentro de `AppShellMain` ya no suma dos rellenos horizontales.**
+El área pone los 20 px y el `Container` que lleva dentro no añade los suyos, así
+que a 390 px el contenido queda a 20 px de cada lado y no a 36. Ya no hace falta
+`gutter={false}` en cada pantalla. Con `fill` el área no rellena, y un
+`Container` dentro conserva su gutter. Fuera del área, `Container` no cambia.
+
 ## `@calumet/elise-ui` 0.43.1
 
 ### Corrige

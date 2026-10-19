@@ -16,7 +16,10 @@ export type ContainerProps = React.ComponentProps<"div"> & {
 
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "full";
 
-  /** Padding horizontal responsive. Ponelo en `false` si el padre ya lo trae. */
+  /**
+   * Padding horizontal responsive. Dentro de `AppShellMain` lo pone el área y el
+   * `Container` no suma el suyo; fuera, ponelo en `false` si el padre ya lo trae.
+   */
   gutter?: boolean;
 };
 
@@ -28,6 +31,9 @@ const sizeClasses: Record<NonNullable<ContainerProps["size"]>, string> = {
   xl: "max-w-7xl",
   full: "max-w-none",
 };
+
+const gutterClasses =
+  "px-4 sm:px-6 lg:px-8 in-[[data-slot=app-shell-main]:not([data-fill])]:px-0 sm:in-[[data-slot=app-shell-main]:not([data-fill])]:px-0 lg:in-[[data-slot=app-shell-main]:not([data-fill])]:px-0";
 
 /**
  * Centra el contenido y le pone un ancho máximo. Evita que cada pantalla
@@ -44,12 +50,7 @@ function Container({
   return (
     <Comp
       data-slot="container"
-      className={cn(
-        "mx-auto w-full",
-        sizeClasses[size],
-        gutter && "px-4 sm:px-6 lg:px-8",
-        className,
-      )}
+      className={cn("mx-auto w-full", sizeClasses[size], gutter && gutterClasses, className)}
       {...props}
     />
   );
