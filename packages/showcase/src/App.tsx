@@ -149,7 +149,7 @@ const SECCIONES: { title: string; Demo: React.ComponentType }[] = [
   { title: "Pantalla de ficha", Demo: PantallaFicha },
   { title: "Pantalla de ajustes", Demo: PantallaAjustes },
   { title: "Field: rotulo, error y accesibilidad enlazada", Demo: FieldDemo },
-  { title: "MultiSelect, FileUpload y Stepper", Demo: CatalogoDemo },
+  { title: "MultiSelect, FileUpload, ImageUpload y Stepper", Demo: CatalogoDemo },
   { title: "Combobox: select con busqueda", Demo: ComboboxDemo },
   { title: "Primitivas: Box, Stack, Grid, Bleed y Text", Demo: PrimitivesDemo },
   { title: "Badge, Alert, Spinner y Empty State", Demo: FeedbackDemo },

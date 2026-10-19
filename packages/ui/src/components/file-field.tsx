@@ -8,6 +8,7 @@ import { File as FileIcon, ImageIcon, Upload, X } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { useObjectUrl } from "@/lib/hooks/use-object-url";
 import { useElLabel } from "@/lib/i18n";
 
 import { Button } from "./button";
@@ -124,19 +125,9 @@ export function FileField({
 
   const uploading = typeof progress === "number";
 
-  // Crear y revocar el `objectURL` van de a pares, y el par vive en el efecto.
-  const [urlLocal, setUrlLocal] = React.useState<string>();
-  React.useEffect(() => {
-    if (!(value instanceof File) || !value.type.startsWith("image/")) {
-      // oxlint-disable-next-line react/set-state-in-effect -- crear el objectURL fuera del efecto lo deja sin la limpieza que lo revoca.
-      setUrlLocal(undefined);
-      return;
-    }
-    const url = URL.createObjectURL(value);
-    // oxlint-disable-next-line react/set-state-in-effect -- ídem: el par crear/revocar vive en el efecto.
-    setUrlLocal(url);
-    return () => URL.revokeObjectURL(url);
-  }, [value]);
+  const urlLocal = useObjectUrl(
+    value instanceof File && value.type.startsWith("image/") ? value : undefined,
+  );
 
   const select = (file: File | undefined) => {
     if (!file) return;

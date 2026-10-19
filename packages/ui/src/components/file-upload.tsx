@@ -5,16 +5,21 @@
  * de descartar en silencio lo que no pasa, porque un archivo que desaparece sin
  * explicación deja al usuario sin saber qué corregir.
  *
- * No guarda los archivos ni los muestra. Para eso está `FileUploadList`.
+ * No guarda los archivos ni los muestra. Para eso está `FileUploadList`, o
+ * `ImageUpload` cuando es una sola imagen.
  *
  * @module
  */
 
-import { File as FileIcon, Upload, X } from "@calumet/elise-icons";
+import { File as FileIcon, ImageIcon, Upload, X } from "@calumet/elise-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { useObjectUrl } from "@/lib/hooks/use-object-url";
 import { useElLabel } from "@/lib/i18n";
+
+import { Button } from "./button";
+import type { StoredFile } from "./file-field";
 
 /** Un archivo rechazado, con el motivo por el que no paso. */
 export type RejectedFile = {
@@ -71,34 +76,19 @@ export const acceptedType = (file: File, accept?: string): boolean => {
     });
 };
 
-/**
- * Área para soltar o elegir archivos.
- *
- * Reporta siempre las dos listas (aceptados y rechazados, con el motivo) en vez
- * de descartar en silencio lo que no pasa, porque un archivo que desaparece sin
- * explicación deja al usuario sin saber qué corregir.
- *
- * No guarda los archivos ni los muestra. Para eso está `FileUploadList`.
- */
-function FileUpload({
-  className,
+function useFileDrop({
   accept,
-  multiple = false,
+  multiple,
   maxSize,
   disabled,
-  invalid,
   validator,
   onFiles,
-  label,
-  hint,
-  ...props
-}: FileUploadProps): React.JSX.Element {
+}: Pick<
+  FileUploadProps,
+  "accept" | "multiple" | "maxSize" | "disabled" | "validator" | "onFiles"
+>) {
   const [dragging, setDragging] = React.useState(false);
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const counter = React.useRef(0);
-
-  const defaultLabel = useElLabel("ui", "fileUpload", "Arrastra archivos o haz clic para elegir");
-  const buttonLabel = useElLabel("ui", "fileUploadBrowse", "Elegir archivos");
 
   const assign = (list: FileList | null) => {
     if (!list) return;
@@ -135,15 +125,60 @@ function FileUpload({
     assign(e.dataTransfer.files);
   };
 
+  return {
+    dragging,
+    assign,
+    dropProps: {
+      onDragEnter: onEnter,
+      onDragOver: (e: React.DragEvent) => e.preventDefault(),
+      onDragLeave: onLeave,
+      onDrop,
+    },
+  };
+}
+
+/**
+ * Área para soltar o elegir archivos.
+ *
+ * Reporta siempre las dos listas (aceptados y rechazados, con el motivo) en vez
+ * de descartar en silencio lo que no pasa, porque un archivo que desaparece sin
+ * explicación deja al usuario sin saber qué corregir.
+ *
+ * No guarda los archivos ni los muestra. Para eso está `FileUploadList`, o
+ * `ImageUpload` cuando es una sola imagen.
+ */
+function FileUpload({
+  className,
+  accept,
+  multiple = false,
+  maxSize,
+  disabled,
+  invalid,
+  validator,
+  onFiles,
+  label,
+  hint,
+  ...props
+}: FileUploadProps): React.JSX.Element {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const { dragging, assign, dropProps } = useFileDrop({
+    accept,
+    multiple,
+    maxSize,
+    disabled,
+    validator,
+    onFiles,
+  });
+
+  const defaultLabel = useElLabel("ui", "fileUpload", "Arrastra archivos o haz clic para elegir");
+  const buttonLabel = useElLabel("ui", "fileUploadBrowse", "Elegir archivos");
+
   return (
     <div
       data-slot="file-upload"
       data-dragging={dragging ? "" : undefined}
       data-invalid={invalid ? "" : undefined}
-      onDragEnter={onEnter}
-      onDragOver={(e) => e.preventDefault()}
-      onDragLeave={onLeave}
-      onDrop={onDrop}
+      {...dropProps}
       className={cn(
         "flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong bg-card px-6 py-8 text-center transition-[background-color,border-color] duration-(--duration-fast) ease-out",
         !disabled && "hover:border-primary hover:bg-accent/40",
@@ -240,4 +275,189 @@ function FileUploadItem({
   );
 }
 
-export { FileUpload, FileUploadList, FileUploadItem, formatSize as formatFileSize };
+/** Props de {@link ImageUpload}. */
+export type ImageUploadProps = Omit<FileUploadProps, "multiple" | "ref"> & {
+  /** La imagen recién elegida, o la que ya estaba guardada. */
+  value?: File | StoredFile | null;
+
+  /** Ancho entre alto, como en `Image`: `2`, `"16 / 9"`. Vale para el área vacía y para la imagen. */
+  aspectRatio?: number | string;
+
+  /** Muestra el botón de quitar. Sin esto, la imagen solo se reemplaza. */
+  onRemove?: () => void;
+};
+
+/**
+ * El área de `FileUpload` para una sola imagen, que la muestra dentro una vez
+ * elegida.
+ *
+ * Sin `value` es el área de siempre. Con él, la imagen la llena en su
+ * proporción, y soltar otra encima o pulsar «Reemplazar» la cambia. `onFiles`
+ * reporta igual que en `FileUpload`, con un aceptado como mucho; guardarlo en
+ * `value` es de quien llama.
+ *
+ * ```tsx
+ * <ImageUpload
+ *   aspectRatio={2}
+ *   maxSize={2 * 1024 * 1024}
+ *   value={imagen}
+ *   onFiles={([elegida], rechazados) => {
+ *     if (elegida) setImagen(elegida);
+ *     setRechazados(rechazados);
+ *   }}
+ * />
+ * ```
+ */
+function ImageUpload({
+  className,
+  style,
+  value,
+  aspectRatio,
+  onRemove,
+  accept = "image/*",
+  maxSize,
+  disabled,
+  invalid,
+  validator,
+  onFiles,
+  label,
+  hint,
+  ...props
+}: ImageUploadProps): React.JSX.Element {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const focusAfterChange = React.useRef(false);
+
+  const report = (accepted: File[], rejected: RejectedFile[]) => {
+    if (accepted.length > 0) focusAfterChange.current = true;
+    onFiles?.(accepted, rejected);
+  };
+  const { dragging, assign, dropProps } = useFileDrop({
+    accept,
+    maxSize,
+    disabled,
+    validator,
+    onFiles: report,
+  });
+
+  const defaultLabel = useElLabel(
+    "ui",
+    "imageUpload",
+    "Arrastra una imagen o haz clic para elegirla",
+  );
+  const replaceLabel = useElLabel("ui", "imageUploadReplace", "Reemplazar");
+  const removeLabel = useElLabel("ui", "imageUploadRemove", "Quitar");
+  const dropLabel = useElLabel("ui", "imageUploadDrop", "Suelta para reemplazarla");
+
+  const localUrl = useObjectUrl(value instanceof File ? value : undefined);
+  const url = value instanceof File ? localUrl : value?.url;
+  const [failedUrl, setFailedUrl] = React.useState<string>();
+
+  React.useEffect(() => {
+    if (!focusAfterChange.current) return;
+    focusAfterChange.current = false;
+    rootRef.current?.querySelector<HTMLButtonElement>("button:not(:disabled)")?.focus();
+  }, [value]);
+
+  const ratioStyle = aspectRatio !== undefined ? { aspectRatio, ...style } : style;
+
+  if (!value) {
+    return (
+      <FileUpload
+        ref={rootRef}
+        data-slot="image-upload"
+        accept={accept}
+        maxSize={maxSize}
+        disabled={disabled}
+        invalid={invalid}
+        validator={validator}
+        onFiles={report}
+        label={label ?? defaultLabel}
+        hint={hint}
+        style={ratioStyle}
+        className={className}
+        {...props}
+      />
+    );
+  }
+
+  return (
+    <div
+      ref={rootRef}
+      data-slot="image-upload"
+      data-dragging={dragging ? "" : undefined}
+      data-invalid={invalid ? "" : undefined}
+      {...dropProps}
+      style={ratioStyle}
+      className={cn(
+        "relative overflow-hidden rounded-xl border border-border bg-muted",
+        "data-dragging:border-primary",
+        "data-invalid:border-destructive",
+        disabled && "cursor-not-allowed opacity-60",
+        className,
+      )}
+      {...props}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        tabIndex={-1}
+        aria-hidden="true"
+        accept={accept}
+        disabled={disabled}
+        className="sr-only"
+        onChange={(e) => {
+          assign(e.target.files);
+          e.target.value = "";
+        }}
+      />
+      {url && url !== failedUrl ? (
+        <img
+          src={url}
+          alt={value.name}
+          onError={() => setFailedUrl(url)}
+          className="size-full object-cover"
+        />
+      ) : (
+        <span
+          role="img"
+          aria-label={value.name}
+          className="flex size-full items-center justify-center text-muted-foreground"
+        >
+          <ImageIcon className="size-icon-lg" aria-hidden="true" />
+        </span>
+      )}
+      {dragging ? (
+        <span className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-accent text-sm font-medium text-accent-foreground">
+          <Upload className="size-icon-md" aria-hidden="true" />
+          {dropLabel}
+        </span>
+      ) : null}
+      <span className="absolute right-3 bottom-3 flex gap-2">
+        <Button
+          variant="surface"
+          size="sm"
+          disabled={disabled}
+          onClick={() => inputRef.current?.click()}
+        >
+          {replaceLabel}
+        </Button>
+        {onRemove ? (
+          <Button
+            variant="surface"
+            size="sm"
+            disabled={disabled}
+            onClick={() => {
+              focusAfterChange.current = true;
+              onRemove();
+            }}
+          >
+            {removeLabel}
+          </Button>
+        ) : null}
+      </span>
+    </div>
+  );
+}
+
+export { FileUpload, FileUploadList, FileUploadItem, ImageUpload, formatSize as formatFileSize };

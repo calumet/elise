@@ -270,7 +270,7 @@ Acepta lo mismo que `Text` menos `as`, `truncate` y `lines`. `weight` sale en
 | FileField                                                     | `@calumet/elise-ui/file-field`        | —                                                                               |
 | Combobox, ComboboxField, …                                    | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
 | MultiCombobox, MultiComboboxField                             | `@calumet/elise-ui/combobox`          | Popover + [cmdk](https://cmdk.paco.me/)                                         |
-| FileUpload, FileUploadList, FileUploadItem                    | `@calumet/elise-ui/file-upload`       | —                                                                               |
+| FileUpload, FileUploadList, FileUploadItem, ImageUpload       | `@calumet/elise-ui/file-upload`       | —                                                                               |
 | Stepper, StepperItem, StepperTitle, StepperDescription        | `@calumet/elise-ui/stepper`           | —                                                                               |
 
 `Checkbox`, `RadioGroupItem` y `Switch` son un `button` con su rol ARIA, no un
@@ -606,6 +606,30 @@ y `FileUploadItem`, para que la lista pueda vivir donde haga falta.
 | `hint`      | `string`                                          | —       | Formatos y tamaño admitidos      |
 
 `RejectedFile` trae `{ file, reason }`, con `reason` en `"type" | "size" | "custom"`.
+
+`ImageUpload` es la misma área para una sola imagen, que la muestra dentro: la
+de un banner, una portada. Sin `value` pinta `FileUpload`; con un `File` o un
+`StoredFile` (el de `FileField`), la imagen llena el área en `aspectRatio`, y
+soltar otra encima o pulsar «Reemplazar» la cambia. «Quitar» solo aparece con
+`onRemove`, así que un campo obligatorio no lo ofrece. Es un componente aparte y
+no un `variant` porque tiene valor y `FileUpload` no: con un `variant`, `value`
+sobraría en uno y `multiple` en el otro.
+
+```tsx
+<ImageUpload
+  aspectRatio={2}
+  maxSize={2 * 1024 * 1024}
+  hint="JPG o PNG, hasta 2 MB"
+  value={imagen}
+  onFiles={([elegida], rechazados) => {
+    if (elegida) setImagen(elegida);
+    setRechazados(rechazados);
+  }}
+/>
+```
+
+Para una imagen pequeña entre otros ajustes, como un logo, `FileField` ocupa una
+fila y no se lleva la sección.
 
 #### Stepper
 
