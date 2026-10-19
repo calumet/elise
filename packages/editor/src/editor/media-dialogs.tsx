@@ -34,22 +34,27 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
   const t = useLabels();
   const commands = useEditorCommands();
   const returnFocus = useReturnFocus();
-  const [file, setFile] = React.useState<File | null>(null);
+  const [picked, setPicked] = React.useState<{ file: File; preview: string } | null>(null);
   const [alt, setAlt] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [failed, setFailed] = React.useState(false);
-  const preview = React.useMemo(() => (file ? URL.createObjectURL(file) : undefined), [file]);
+  const latest = React.useRef<File | null>(null);
+  const file = picked?.file ?? null;
 
-  React.useEffect(
-    () => () => {
-      if (preview) URL.revokeObjectURL(preview);
-    },
-    [preview],
-  );
+  const pick = (next: File | null) => {
+    latest.current = next;
+    setPicked(null);
+    if (!next) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (latest.current === next) setPicked({ file: next, preview: String(reader.result) });
+    };
+    reader.readAsDataURL(next);
+  };
 
   const change = (next: boolean) => {
     if (!next) {
-      setFile(null);
+      pick(null);
       setAlt("");
       setBusy(false);
       setFailed(false);
@@ -81,10 +86,10 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
           <DialogBody>
             <BlockStack gap={4}>
               {failed ? <Alert tone="danger">{t.uploadFailed}</Alert> : null}
-              {file && preview ? (
+              {picked ? (
                 <BlockStack gap={2}>
                   <Image
-                    src={preview}
+                    src={picked.preview}
                     alt=""
                     fill
                     aspectRatio="16/9"
@@ -94,9 +99,9 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
                   />
                   <FileUploadList>
                     <FileUploadItem
-                      name={file.name}
-                      size={file.size}
-                      onRemove={() => setFile(null)}
+                      name={picked.file.name}
+                      size={picked.file.size}
+                      onRemove={() => pick(null)}
                     />
                   </FileUploadList>
                 </BlockStack>
@@ -104,7 +109,7 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
                 <FileUpload
                   accept="image/*"
                   label={t.imageFile}
-                  onFiles={(accepted) => setFile(accepted[0] ?? null)}
+                  onFiles={(accepted) => pick(accepted[0] ?? null)}
                 />
               )}
               <Field label={t.altText} description={t.altTextHint}>

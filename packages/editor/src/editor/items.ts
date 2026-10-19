@@ -90,5 +90,6 @@ export const useInsertItems = (schema: EditorSchema): InsertItem[] => {
     { id: "divider", block: "hr", label: t.divider, keywords: "divider rule line hr separator" },
     { id: "video", block: "media_embed", label: t.video, keywords: "video youtube vimeo embed" },
   ];
-  return all.filter((item) => schema.blocks.includes(item.block));
+  const allowed = new Set(schema.blocks);
+  return all.filter((item) => allowed.has(item.block));
 };

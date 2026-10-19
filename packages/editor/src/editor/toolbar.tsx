@@ -250,16 +250,66 @@ const usePointerDown = (): boolean => {
 
 const preventFocus = (event: Event): void => event.preventDefault();
 
-export type EditorToolbarProps = { className?: string };
+const useLatched = (
+  ready: string | null,
+): [string | null, React.Dispatch<React.SetStateAction<string | null>>] => {
+  const [shown, setShown] = React.useState<string | null>(null);
+  const [last, setLast] = React.useState(ready);
+  if (ready !== last) {
+    setLast(ready);
+    if (ready) setShown(ready);
+  }
+  return [shown, setShown];
+};
 
-export const EditorToolbar = ({ className }: EditorToolbarProps): React.JSX.Element => {
+const useStayForEditor = (): ((event: Event) => void) => {
+  const editor = useEditorRef();
+  return (event) => {
+    const root = editor.api.toDOMNode(editor);
+    if (root && event.target instanceof Node && root.contains(event.target)) {
+      event.preventDefault();
+    }
+  };
+};
+
+const FormatBar = ({
+  barRef,
+  onLink,
+}: {
+  barRef: React.RefObject<HTMLDivElement | null>;
+  onLink: () => void;
+}): React.JSX.Element => {
   const t = useLabels();
+  const { schema } = useServices();
+  const textBlocks = BLOCKS.filter((option) => schema.blocks.includes(option.needs)).length;
+  return (
+    <Toolbar ref={barRef} aria-label={t.formatting} className={BAR}>
+      {textBlocks > 1 ? (
+        <>
+          <BlockTypeMenu />
+          <ToolbarSeparator />
+        </>
+      ) : null}
+      {schema.marks.map((mark) => (
+        <MarkButton key={mark} mark={mark} />
+      ))}
+      {schema.links ? (
+        <>
+          <ToolbarSeparator />
+          <LinkButton expanded={false} onClick={onLink} />
+        </>
+      ) : null}
+    </Toolbar>
+  );
+};
+
+const SelectionBar = ({ className }: { className?: string }): React.JSX.Element => {
   const editor = useEditorRef();
   const { schema } = useServices();
   const focused = useEditorFocused();
   const pressing = usePointerDown();
+  const stayForEditor = useStayForEditor();
   const barRef = React.useRef<HTMLDivElement>(null);
-
   const selection = useEditorSelector(
     (ed) =>
       ed.selection && !ed.api.isCollapsed() && ed.api.string(ed.selection).trim() !== ""
@@ -267,29 +317,8 @@ export const EditorToolbar = ({ className }: EditorToolbarProps): React.JSX.Elem
         : null,
     [],
   );
-  const table = useEditorSelector((ed) => {
-    if (!ed.selection || !ed.api.isCollapsed()) return null;
-    const entry = ed.api.above({ match: { type: "table" } });
-    return entry ? entry[1].join(".") : null;
-  }, []);
-
-  const [shownFor, setShownFor] = React.useState<string | null>(null);
-  const [tableFor, setTableFor] = React.useState<string | null>(null);
+  const [shownFor, setShownFor] = useLatched(focused && !pressing ? selection : null);
   const [linking, setLinking] = React.useState(false);
-
-  const ready = focused && !pressing ? selection : null;
-  const [lastReady, setLastReady] = React.useState(ready);
-  if (ready !== lastReady) {
-    setLastReady(ready);
-    if (ready) setShownFor(ready);
-  }
-
-  const inTable = focused ? table : null;
-  const [lastInTable, setLastInTable] = React.useState(inTable);
-  if (inTable !== lastInTable) {
-    setLastInTable(inTable);
-    if (inTable) setTableFor(inTable);
-  }
 
   React.useEffect(() => {
     const root = editor.api.toDOMNode(editor);
@@ -314,110 +343,108 @@ export const EditorToolbar = ({ className }: EditorToolbarProps): React.JSX.Elem
     };
     root.addEventListener("keydown", onKeyDown);
     return () => root.removeEventListener("keydown", onKeyDown);
-  }, [editor, schema.links, selection]);
+  }, [editor, schema.links, selection, setShownFor]);
 
   const anchor = React.useMemo(
     () => (selection ? rangeAnchor(editor, JSON.parse(selection)) : undefined),
     [editor, selection],
   );
-  const tableAnchor = React.useMemo(
-    () => (table ? blockAnchor(editor, table.split(".").map(Number)) : undefined),
-    [editor, table],
-  );
-
-  const stayForEditor = (event: Event) => {
-    const root = editor.api.toDOMNode(editor);
-    if (root && event.target instanceof Node && root.contains(event.target)) {
-      event.preventDefault();
-    }
-  };
-
   const open = selection !== null && shownFor === selection;
   const closeLink = () => {
     setLinking(false);
     editor.tf.focus();
   };
-  const textBlocks = BLOCKS.filter((option) => schema.blocks.includes(option.needs)).length;
 
   return (
-    <>
-      <Popover
-        open={open}
-        onOpenChange={(next) => {
-          if (next) return;
-          setShownFor(null);
-          setLinking(false);
-        }}
-      >
-        <PopoverAnchor virtualRef={anchor ? { current: anchor } : undefined} />
-        {open && linking ? (
-          <PopoverContent
-            side="bottom"
-            align="start"
-            collisionPadding={16}
-            onCloseAutoFocus={preventFocus}
-            onEscapeKeyDown={(event) => {
-              event.preventDefault();
-              closeLink();
-            }}
-          >
-            <LinkForm onClose={closeLink} />
-          </PopoverContent>
-        ) : (
-          <PopoverContent
-            side="top"
-            collisionPadding={16}
-            className={className ? `${FLOATING} ${className}` : FLOATING}
-            onOpenAutoFocus={preventFocus}
-            onCloseAutoFocus={preventFocus}
-            onInteractOutside={stayForEditor}
-            onEscapeKeyDown={() => editor.tf.focus()}
-          >
-            <Toolbar ref={barRef} aria-label={t.formatting} className={BAR}>
-              {textBlocks > 1 ? (
-                <>
-                  <BlockTypeMenu />
-                  <ToolbarSeparator />
-                </>
-              ) : null}
-              {schema.marks.map((mark) => (
-                <MarkButton key={mark} mark={mark} />
-              ))}
-              {schema.links ? (
-                <>
-                  <ToolbarSeparator />
-                  <LinkButton expanded={false} onClick={() => setLinking(true)} />
-                </>
-              ) : null}
-            </Toolbar>
-          </PopoverContent>
-        )}
-      </Popover>
-
-      {schema.blocks.includes("table") ? (
-        <Popover
-          open={table !== null && tableFor === table}
-          onOpenChange={(next) => {
-            if (!next) setTableFor(null);
+    <Popover
+      open={open}
+      onOpenChange={(next) => {
+        if (next) return;
+        setShownFor(null);
+        setLinking(false);
+      }}
+    >
+      <PopoverAnchor virtualRef={anchor ? { current: anchor } : undefined} />
+      {open && linking ? (
+        <PopoverContent
+          side="bottom"
+          align="start"
+          collisionPadding={16}
+          onCloseAutoFocus={preventFocus}
+          onEscapeKeyDown={(event) => {
+            event.preventDefault();
+            closeLink();
           }}
         >
-          <PopoverAnchor virtualRef={tableAnchor ? { current: tableAnchor } : undefined} />
-          <PopoverContent
-            side="top"
-            align="end"
-            sideOffset={4}
-            collisionPadding={16}
-            className={FLOATING}
-            onOpenAutoFocus={preventFocus}
-            onCloseAutoFocus={preventFocus}
-            onInteractOutside={stayForEditor}
-          >
-            <Toolbar aria-label={t.tableActions} className={BAR}>
-              <TableMenu />
-            </Toolbar>
-          </PopoverContent>
-        </Popover>
-      ) : null}
+          <LinkForm onClose={closeLink} />
+        </PopoverContent>
+      ) : (
+        <PopoverContent
+          side="top"
+          collisionPadding={16}
+          className={className ? `${FLOATING} ${className}` : FLOATING}
+          onOpenAutoFocus={preventFocus}
+          onCloseAutoFocus={preventFocus}
+          onInteractOutside={stayForEditor}
+          onEscapeKeyDown={() => editor.tf.focus()}
+        >
+          <FormatBar barRef={barRef} onLink={() => setLinking(true)} />
+        </PopoverContent>
+      )}
+    </Popover>
+  );
+};
+
+const TableBar = (): React.JSX.Element => {
+  const t = useLabels();
+  const editor = useEditorRef();
+  const focused = useEditorFocused();
+  const stayForEditor = useStayForEditor();
+  const table = useEditorSelector((ed) => {
+    if (!ed.selection || !ed.api.isCollapsed()) return null;
+    const entry = ed.api.above({ match: { type: "table" } });
+    return entry ? entry[1].join(".") : null;
+  }, []);
+  const [tableFor, setTableFor] = useLatched(focused ? table : null);
+  const anchor = React.useMemo(
+    () => (table ? blockAnchor(editor, table.split(".").map(Number)) : undefined),
+    [editor, table],
+  );
+
+  return (
+    <Popover
+      open={table !== null && tableFor === table}
+      onOpenChange={(next) => {
+        if (!next) setTableFor(null);
+      }}
+    >
+      <PopoverAnchor virtualRef={anchor ? { current: anchor } : undefined} />
+      <PopoverContent
+        side="top"
+        align="end"
+        sideOffset={4}
+        collisionPadding={16}
+        className={FLOATING}
+        onOpenAutoFocus={preventFocus}
+        onCloseAutoFocus={preventFocus}
+        onInteractOutside={stayForEditor}
+      >
+        <Toolbar aria-label={t.tableActions} className={BAR}>
+          <TableMenu />
+        </Toolbar>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export type EditorToolbarProps = { className?: string };
+
+export const EditorToolbar = ({ className }: EditorToolbarProps): React.JSX.Element => {
+  const { schema } = useServices();
+  return (
+    <>
+      <SelectionBar className={className} />
+      {schema.blocks.includes("table") ? <TableBar /> : null}
     </>
   );
 };

@@ -96,7 +96,9 @@ const blockOf = (
 export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): EditorDocument => {
   const parsed = new DOMParser().parseFromString(html, "text/html");
   const root = parsed.querySelector("[data-slot=editor-content]") ?? parsed.body;
-  const allows = (type: string) => schema.blocks.includes(type);
+  const allowedBlocks = new Set(schema.blocks);
+  const allowedMarks = new Set(schema.marks);
+  const allows = (type: string) => allowedBlocks.has(type);
 
   const inline = (nodes: Iterable<Node>, marks: Marks): EditorInline[] => {
     const out: EditorInline[] = [];
@@ -114,7 +116,7 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
       }
       const element = node as Element;
       const mark = MARK_TAGS[tag];
-      const next: Marks = mark && schema.marks.includes(mark) ? { ...marks, [mark]: true } : marks;
+      const next: Marks = mark && allowedMarks.has(mark) ? { ...marks, [mark]: true } : marks;
       const href = tag === "a" && schema.links ? safeHref(element.getAttribute("href")) : undefined;
       const children = inline(element.childNodes, next);
       const target = element.getAttribute("target") === "_blank" ? { target: "_blank" } : {};
@@ -221,48 +223,60 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
         continue;
       }
       flush();
-      const element = node as Element;
-      const id = element.getAttribute("data-id");
-      const holdsBlocks = Array.from(element.children).some((child) => BLOCKS.has(tagOf(child)));
-
-      if (/^h[1-6]$/.test(tag)) {
-        const type = tag === "h1" || tag === "h2" ? "h2" : "h3";
-        out.push(
-          blockOf(allows(type) ? type : "p", normalizeInline(inline(element.childNodes, {})), id),
-        );
-      } else if (tag === "ul" || tag === "ol") out.push(...lists(element, 1));
-      else if (tag === "li") out.push(paragraph(element.childNodes, id));
-      else if (tag === "hr") {
-        if (allows("hr")) out.push(blockOf("hr", [{ text: "" }], id));
-      } else if (
-        tag === "img" ||
-        tag === "iframe" ||
-        (tag === "figure" && element.querySelector("img, iframe"))
-      ) {
-        out.push(...media(element, id));
-      } else if (tag === "table") out.push(...table(element, id));
-      else if (tag === "blockquote") {
-        const inner = blocks(element.childNodes);
-        if (allows("blockquote")) {
-          out.push(blockOf("blockquote", inner.length ? inner : [paragraph([])], id));
-        } else out.push(...inner);
-      } else if (
-        element.hasAttribute("data-callout") ||
-        element.getAttribute("data-slot") === "alert"
-      ) {
-        const body = element.querySelector("[data-slot=alert-body]") ?? element;
-        const inner = blocks(body.childNodes);
-        if (allows("callout")) {
-          const tone = element.getAttribute("data-callout");
-          out.push(
-            blockOf("callout", inner.length ? inner : [paragraph([])], id, tone ? { tone } : {}),
-          );
-        } else out.push(...inner);
-      } else if (holdsBlocks) out.push(...blocks(element.childNodes));
-      else out.push(paragraph(element.childNodes, tag === "p" ? id : null));
+      out.push(...block(node as Element, tag));
     }
     flush();
     return out;
+  };
+
+  const container = (
+    type: string,
+    body: Element,
+    id: string | null,
+    extra: Record<string, unknown> = {},
+  ): EditorNode[] => {
+    const inner = blocks(body.childNodes);
+    if (!allows(type)) return inner;
+    return [blockOf(type, inner.length ? inner : [paragraph([])], id, extra)];
+  };
+
+  const heading = (element: Element, id: string | null): EditorNode[] => {
+    const type = ["h1", "h2"].includes(tagOf(element)) ? "h2" : "h3";
+    return [
+      blockOf(allows(type) ? type : "p", normalizeInline(inline(element.childNodes, {})), id),
+    ];
+  };
+
+  const byTag: Record<string, (element: Element, id: string | null) => EditorNode[]> = {
+    ...Object.fromEntries(["h1", "h2", "h3", "h4", "h5", "h6"].map((tag) => [tag, heading])),
+    ul: (element) => lists(element, 1),
+    ol: (element) => lists(element, 1),
+    li: (element, id) => [paragraph(element.childNodes, id)],
+    hr: (_, id) => (allows("hr") ? [blockOf("hr", [{ text: "" }], id)] : []),
+    img: media,
+    iframe: media,
+    table,
+    blockquote: (element, id) => container("blockquote", element, id),
+  };
+
+  const callout = (element: Element, id: string | null): EditorNode[] => {
+    const tone = element.getAttribute("data-callout");
+    const body = element.querySelector("[data-slot=alert-body]") ?? element;
+    return container("callout", body, id, tone ? { tone } : {});
+  };
+
+  const block = (element: Element, tag: string): EditorNode[] => {
+    const id = element.getAttribute("data-id");
+    const handler = byTag[tag];
+    if (handler) return handler(element, id);
+    if (tag === "figure" && element.querySelector("img, iframe")) return media(element, id);
+    if (element.hasAttribute("data-callout") || element.getAttribute("data-slot") === "alert") {
+      return callout(element, id);
+    }
+    if (Array.from(element.children).some((child) => BLOCKS.has(tagOf(child)))) {
+      return blocks(element.childNodes);
+    }
+    return [paragraph(element.childNodes, tag === "p" ? id : null)];
   };
 
   const content = blocks(root.childNodes);

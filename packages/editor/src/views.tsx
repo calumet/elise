@@ -146,6 +146,8 @@ const Video = ({
             src={source.embed}
             title={source.provider}
             loading="lazy"
+            allow="encrypted-media; picture-in-picture; fullscreen"
+            referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
             data-selected={selected || undefined}
             className={`aspect-video w-full rounded-lg border-0 bg-muted ${VOID}`}

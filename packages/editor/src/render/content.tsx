@@ -88,8 +88,8 @@ export const renderInline = (children: EditorInline[], keyPrefix: string): React
     const View = views[child.type];
     return View
       ? [
-          <View key={key} element={child}>
-            {renderInline(child.children, key)}
+          <View key={child.id} element={child}>
+            {renderInline(child.children, child.id)}
           </View>,
         ]
       : renderInline(child.children, key);
@@ -117,41 +117,38 @@ const ListTag = ({
     <ul className={LIST_CLASSES.disc}>{children}</ul>
   );
 
-const renderGroup = (group: ListGroup, key: string, schema: EditorSchema): React.ReactNode => (
+const renderGroup = (group: ListGroup, key: string): React.ReactNode => (
   <ListTag key={key} style={group.style}>
     {group.items.map((item, index) => (
       <li key={item.node.id} data-id={item.node.id} className={LIST_CLASSES.item}>
         {renderInline(item.node.children, `${key}.${index}`)}
-        {item.nested.map((nested, at) => renderGroup(nested, `${key}.${index}.${at}`, schema))}
+        {item.nested.map((nested, at) => renderGroup(nested, `${key}.${index}.${at}`))}
       </li>
     ))}
   </ListTag>
 );
 
+const STRUCTURAL = new Set(["tr", "td", "th"]);
+
 const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNode[] => {
+  const allowed = new Set(schema.blocks);
   const output: React.ReactNode[] = [];
   let run: EditorNode[] = [];
   const flush = () => {
     if (run.length === 0) return;
     groupLists(run).forEach((group, index) =>
-      output.push(renderGroup(group, `${run[0]?.id}.${index}`, schema)),
+      output.push(renderGroup(group, `${run[0]?.id}.${index}`)),
     );
     run = [];
   };
 
   for (const node of nodes) {
-    if (node.listStyleType && schema.blocks.includes("list")) {
+    if (node.listStyleType && allowed.has("list")) {
       run.push(node);
       continue;
     }
     flush();
-    if (
-      !schema.blocks.includes(node.type) &&
-      node.type !== "tr" &&
-      node.type !== "td" &&
-      node.type !== "th"
-    )
-      continue;
+    if (!allowed.has(node.type) && !STRUCTURAL.has(node.type)) continue;
     const View = views[node.type];
     if (!View) continue;
     const attributes = { "data-id": node.id };
