@@ -16,10 +16,7 @@ export type ContainerProps = React.ComponentProps<"div"> & {
 
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "full";
 
-  /**
-   * Padding horizontal responsive. Dentro de `AppShellMain` lo pone el área y el
-   * `Container` no suma el suyo; fuera, ponelo en `false` si el padre ya lo trae.
-   */
+  /** Padding horizontal responsive. Ponelo en `false` si el padre ya lo trae. */
   gutter?: boolean;
 };
 
