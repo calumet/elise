@@ -117,8 +117,11 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
       const next: Marks = mark && schema.marks.includes(mark) ? { ...marks, [mark]: true } : marks;
       const href = tag === "a" && schema.links ? safeHref(element.getAttribute("href")) : undefined;
       const children = inline(element.childNodes, next);
+      const target = element.getAttribute("target") === "_blank" ? { target: "_blank" } : {};
       out.push(
-        ...(href ? [blockOf("a", normalizeInline(children), null, { url: href })] : children),
+        ...(href
+          ? [blockOf("a", normalizeInline(children), null, { url: href, ...target })]
+          : children),
       );
     }
     return out;

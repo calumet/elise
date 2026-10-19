@@ -9,6 +9,8 @@ const SLASH = /^\/(\S*)$/;
 const DEFERRED = new Set(["image", "video"]);
 
 export type SlashMenuState = {
+  id: string;
+  optionId: (index: number) => string;
   open: boolean;
   query: string;
   matches: InsertItem[];
@@ -19,6 +21,7 @@ export type SlashMenuState = {
 };
 
 export const useSlashMenu = (onPicked?: (item: InsertItem) => void): SlashMenuState => {
+  const id = React.useId();
   const editor = useEditorRef();
   const commands = useEditorCommands();
   const state = useEditorSelector((ed) => {
@@ -68,5 +71,7 @@ export const useSlashMenu = (onPicked?: (item: InsertItem) => void): SlashMenuSt
     }
   };
 
-  return { open, query, matches, active, setActive, pick, onKeyDown };
+  const optionId = (index: number): string => `${id}-${matches[index]?.id ?? index}`;
+
+  return { id, optionId, open, query, matches, active, setActive, pick, onKeyDown };
 };

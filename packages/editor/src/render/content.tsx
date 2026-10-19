@@ -9,7 +9,7 @@ import type {
   EditorSchema,
   EditorText,
 } from "../types";
-import { markView, views } from "../views";
+import { contentClassName, LIST_CLASSES, markView, views } from "../views";
 
 export type EditorContentProps = {
   value: EditorDocument;
@@ -110,12 +110,17 @@ const ListTag = ({
 }: {
   style: string;
   children: React.ReactNode;
-}): React.JSX.Element => (style === "decimal" ? <ol>{children}</ol> : <ul>{children}</ul>);
+}): React.JSX.Element =>
+  style === "decimal" ? (
+    <ol className={LIST_CLASSES.decimal}>{children}</ol>
+  ) : (
+    <ul className={LIST_CLASSES.disc}>{children}</ul>
+  );
 
 const renderGroup = (group: ListGroup, key: string, schema: EditorSchema): React.ReactNode => (
   <ListTag key={key} style={group.style}>
     {group.items.map((item, index) => (
-      <li key={item.node.id} data-id={item.node.id}>
+      <li key={item.node.id} data-id={item.node.id} className={LIST_CLASSES.item}>
         {renderInline(item.node.children, `${key}.${index}`)}
         {item.nested.map((nested, at) => renderGroup(nested, `${key}.${index}.${at}`, schema))}
       </li>
@@ -175,7 +180,11 @@ export const EditorContent = ({
   const content =
     language === value.locale ? value.content : localize(value.content, value, language);
   return (
-    <div data-slot="editor-content" lang={language} className={className}>
+    <div
+      data-slot="editor-content"
+      lang={language}
+      className={className ? `${contentClassName(schema)} ${className}` : contentClassName(schema)}
+    >
       {renderBlocks(content, schema)}
     </div>
   );

@@ -33,7 +33,12 @@ export const EditorRoot = ({
 }: EditorRootProps): React.JSX.Element => {
   const plugins = React.useMemo(() => buildPlugins(schema), [schema]);
   const editor = usePlateEditor(
-    { plugins, components: components as never, value: value.content as never },
+    {
+      plugins,
+      components: components as never,
+      value: value.content as never,
+      shouldNormalizeEditor: true,
+    },
     [plugins],
   );
   const latest = React.useRef(value);

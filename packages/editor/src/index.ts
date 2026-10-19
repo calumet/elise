@@ -1,11 +1,5 @@
-import { EditorContentArea } from "./editor/content";
-import { EditorRoot } from "./editor/root";
-
-export const Editor: { Root: typeof EditorRoot; Content: typeof EditorContentArea } = {
-  Root: EditorRoot,
-  Content: EditorContentArea,
-};
-
+export { Editor, type EditorProps } from "./editor/editor";
+export type { EditorToolbarProps } from "./editor/toolbar";
 export {
   useBlockActive,
   useEditorCommands,

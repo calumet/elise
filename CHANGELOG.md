@@ -17,6 +17,11 @@ pegado y qué HTML sale.
 **`@calumet/elise-editor/render`**, con `EditorContent`, `toHtml` y `fromHtml`.
 No importa el runtime de edición y el viaje de ida y vuelta es estable.
 
+**La interfaz.** `Editor` compone la caja de mensaje o la hoja de documento
+según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
+`Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
+y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
+
 ## `@calumet/elise-i18n` 0.4.0
 
 ### Añade

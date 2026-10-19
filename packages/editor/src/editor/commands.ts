@@ -30,7 +30,7 @@ export type EditorCommands = {
   toggleMark: (mark: EditorMark) => void;
   toggleList: (style: "disc" | "decimal") => void;
   toggleBlock: (type: "h2" | "h3" | "blockquote") => void;
-  setLink: (url: string, text?: string) => boolean;
+  setLink: (url: string, text?: string, newTab?: boolean) => boolean;
   removeLink: () => void;
   insert: (id: InsertItemId, options?: { replace?: boolean }) => void;
   insertImage: (source: File | { src: string; alt?: string }, alt?: string) => Promise<void>;
@@ -77,11 +77,11 @@ export const useEditorCommands = (): EditorCommands => {
     },
     toggleList: (style) => setList(editor, style),
     toggleBlock,
-    setLink: (url, text) => {
+    setLink: (url, text, newTab) => {
       const safe = safeHref(url);
       if (!safe || !schema.links) return false;
       editor.tf.focus();
-      upsertLink(editor, { url: safe, text });
+      upsertLink(editor, { url: safe, text, target: newTab ? "_blank" : undefined });
       return true;
     },
     removeLink: () => {
