@@ -3,6 +3,14 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.40.1
+
+### Corrige
+
+**`SortableList` con `asChild` sobre `TableBody` ya no mete nodos `<div>` dentro
+del `<table>`.** Las instrucciones y los anuncios para el lector de pantalla van
+ahora junto a la tabla, y React deja de avisar de HTML inválido.
+
 ## `@calumet/elise-ui` 0.40.0
 
 ### Añade
