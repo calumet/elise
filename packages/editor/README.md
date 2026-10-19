@@ -161,7 +161,7 @@ La tabla guarda `headerRow`, `headerColumn` y `columnAlign` (`left`, `center` o 
 
 ### Modos
 
-`useEditorMode()` devuelve `{ mode, setMode }`, con `mode` en `"visual"`, `"code"` o `"translations"`. La aplicación pinta según el modo: su espacio de edición en `"visual"`, `Editor.Code` en `"code"` y `Editor.Translations` en `"translations"`. `Editor.ModeSwitch` es el control Visual/Código para la barra y `Editor.TranslationsButton` la entrada a las traducciones, con un contador de los idiomas que tienen textos pendientes.
+`useEditorMode()` devuelve `{ mode, setMode }`, con `mode` de tipo `EditorMode`: `"visual"`, `"code"` o `"translations"`. `Editor.Translations` recibe `title` y `className`; `Editor.Code`, `Editor.ModeSwitch` y `Editor.TranslationsButton`, `className`. La aplicación pinta según el modo: su espacio de edición en `"visual"`, `Editor.Code` en `"code"` y `Editor.Translations` en `"translations"`. `Editor.ModeSwitch` es el control Visual/Código para la barra y `Editor.TranslationsButton` la entrada a las traducciones, con un contador de los idiomas que tienen textos pendientes.
 
 **Código.** `Editor.Code` muestra a la izquierda el HTML de la página (`toHtml` del idioma base, sin clases) para editarlo, y a la derecha cómo queda con las pestañas de escritorio y móvil. Si el HTML trae elementos o atributos que el esquema no admite (un `<font>`, un `onclick`), una franja los enumera y «Ver qué cambia» lleva a cada línea. Al volver a Visual el HTML pasa por `fromHtml` y entra como un solo cambio que se deshace de una vez.
 
