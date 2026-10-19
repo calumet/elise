@@ -36,7 +36,7 @@ import {
 } from "./commands";
 import { useServices } from "./context";
 import { Float, useDismiss } from "./float";
-import { useEditorFocused } from "./focus";
+import { focusMovedOn, useEditorFocused } from "./focus";
 import { LinkForm } from "./link-form";
 
 export const BAR = "flex-nowrap gap-0.5 rounded-none border-0 bg-transparent p-0";
@@ -211,6 +211,7 @@ const BlockTypeMenu = (): React.JSX.Element => {
 
   return (
     <DropdownMenu
+      modal={false}
       onOpenChange={(open) => {
         if (open) chosen.current = false;
       }}
@@ -227,7 +228,7 @@ const BlockTypeMenu = (): React.JSX.Element => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         onCloseAutoFocus={(event) => {
-          if (chosen.current) event.preventDefault();
+          if (chosen.current || focusMovedOn(event)) event.preventDefault();
         }}
       >
         {options.map(({ kind, label: key, Icon }) => (
@@ -253,6 +254,7 @@ const TableMenu = (): React.JSX.Element => {
 
   return (
     <DropdownMenu
+      modal={false}
       onOpenChange={(open) => {
         if (open) chosen.current = false;
       }}
@@ -270,7 +272,8 @@ const TableMenu = (): React.JSX.Element => {
       <DropdownMenuContent
         align="end"
         onCloseAutoFocus={(event) => {
-          if (!chosen.current) return;
+          if (focusMovedOn(event)) event.preventDefault();
+          if (!chosen.current || focusMovedOn(event)) return;
           event.preventDefault();
           editor.tf.focus();
         }}

@@ -57,6 +57,7 @@ import {
   type SelectedBlock,
 } from "./blocks";
 import { useEditorCommands } from "./commands";
+import { focusMovedOn } from "./focus";
 import { addTableColumn, addTableRow } from "./table";
 
 type ControlProps = {
@@ -470,7 +471,7 @@ const MoveMenu = ({ selected }: { selected: SelectedBlock }): React.JSX.Element 
   );
   if (!options.length) return null;
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           type="button"
@@ -482,7 +483,12 @@ const MoveMenu = ({ selected }: { selected: SelectedBlock }): React.JSX.Element 
           <Ellipsis aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent
+        align="end"
+        onCloseAutoFocus={(event) => {
+          if (focusMovedOn(event)) event.preventDefault();
+        }}
+      >
         <DropdownMenuLabel>{t.moveTo}</DropdownMenuLabel>
         {options.map((option) => (
           <DropdownMenuItem

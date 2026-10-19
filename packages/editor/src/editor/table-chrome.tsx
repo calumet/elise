@@ -14,6 +14,7 @@ import * as React from "react";
 import { useLabels } from "../labels";
 import type { EditorNode } from "../types";
 import { views } from "../views";
+import { focusMovedOn } from "./focus";
 import { blockEntry } from "./structure";
 import { addTableColumn, addTableRow, removeTableColumn, removeTableRow } from "./table";
 
@@ -105,7 +106,7 @@ const Chrome = ({ id }: { id: string }): React.JSX.Element => {
   const hold = (event: React.MouseEvent) => event.preventDefault();
   const back = (event: Event) => {
     event.preventDefault();
-    editor.tf.focus();
+    if (!focusMovedOn(event)) editor.tf.focus();
   };
   const spot = pointer ?? caretSpot;
   const rowName = spot ? t.rowActions.replace("{n}", String(spot.row + 1)) : "";
@@ -115,7 +116,7 @@ const Chrome = ({ id }: { id: string }): React.JSX.Element => {
     <div ref={ref} contentEditable={false} className="pointer-events-none absolute inset-0">
       {spot ? (
         <>
-          <DropdownMenu onOpenChange={keep}>
+          <DropdownMenu modal={false} onOpenChange={keep}>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
@@ -142,7 +143,7 @@ const Chrome = ({ id }: { id: string }): React.JSX.Element => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DropdownMenu onOpenChange={keep}>
+          <DropdownMenu modal={false} onOpenChange={keep}>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
