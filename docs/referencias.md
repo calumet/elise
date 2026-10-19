@@ -33,7 +33,7 @@ Elise se construye sobre librerías de código abierto bien documentadas. Aquí 
 | **Embla Carousel**   | Motor del componente `Carousel`                              | https://www.embla-carousel.com/ |
 | **react-day-picker** | Motor de `Calendar`, `DatePicker` y `DateRangePicker`        | https://daypicker.dev/          |
 | **cmdk**             | Motor del componente `Command` (paleta de comandos/búsqueda) | https://cmdk.paco.me/           |
-| **dnd-kit**          | Motor de `SortableList`                                      | https://dndkit.com/             |
+| **dnd-kit**          | Motor de `SortableList` y `SortableTree`                     | https://dndkit.com/             |
 
 ## Utilidades CSS
 

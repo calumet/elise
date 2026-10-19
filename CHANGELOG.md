@@ -22,7 +22,7 @@ según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
-## `@calumet/elise-ui` 0.42.0 y `@calumet/elise-themes` 0.1.6
+## `@calumet/elise-ui` 0.44.0 y `@calumet/elise-themes` 0.1.8
 
 ### Cambia
 
@@ -39,6 +39,36 @@ pone en lugar de `--accent` y `--accent-foreground`. Sin ellos, lo elegido
 dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
+
+## `@calumet/elise-ui` 0.43.0
+
+### Añade
+
+**`SortableTree`, en `@calumet/elise-ui/sortable`: un árbol que se reordena y
+se re-anida arrastrando.** Desplazar en horizontal mientras se arrastra cambia
+el nivel, y con teclado lo hacen las flechas izquierda y derecha. `maxDepth`
+limita los niveles; un nodo con `draggable: false` no se arrastra y uno con
+`acceptsChildren: false` no admite hijos. Lo que no se permite se marca mientras
+se arrastra y no se suelta. `onMove` recibe el `id`, el nuevo `parentId` y el
+`index` entre las nuevas hermanas, y el árbol ya movido.
+
+## `elise-alerts` 0.3.24, `elise-forms` 0.3.4, `elise-tables` 0.9.5, `elise-themes` 0.1.7 y `elise-toasts` 0.4.25
+
+Se republican para que JSR los publique contra `elise-ui` 0.43.0. No cambian.
+
+## `@calumet/elise-ui` 0.42.0
+
+### Añade
+
+**`TabsList` con `variant="capsule"`: pestañas en cápsula para filtrar una
+lista por categoría.** La activa lleva el gris plano `fill-tertiary`, sin subrayado ni
+borde. Donde no caben parten en renglones en vez de desplazarse, para que
+todas las opciones queden a la vista. `variant="underline"` es la de siempre y
+sigue por defecto.
+
+## `elise-alerts` 0.3.23, `elise-forms` 0.3.3, `elise-tables` 0.9.4, `elise-themes` 0.1.6 y `elise-toasts` 0.4.24
+
+Se republican para que JSR los publique contra `elise-ui` 0.42.0. No cambian.
 
 ## `@calumet/elise-ui` 0.41.0
 

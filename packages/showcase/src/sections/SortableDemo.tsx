@@ -1,4 +1,11 @@
-import { SortableHandle, SortableItem, SortableList } from "@calumet/elise-ui/sortable";
+import {
+  SortableHandle,
+  SortableItem,
+  SortableList,
+  SortableTree,
+  type SortableTreeMove,
+  type SortableTreeNode,
+} from "@calumet/elise-ui/sortable";
 import {
   Table,
   TableBody,
@@ -23,15 +30,69 @@ const initialBanners = [
   { id: "maintenance", title: "Mantenimiento del portal", visible: false },
 ];
 
+const initialMenu: SortableTreeNode[] = [
+  { id: "home", label: "Inicio", draggable: false, acceptsChildren: false },
+  {
+    id: "school",
+    label: "La escuela",
+    children: [
+      { id: "history", label: "Historia" },
+      {
+        id: "programs",
+        label: "Programas",
+        children: [
+          {
+            id: "undergrad",
+            label: "Pregrado",
+            children: [
+              { id: "systems", label: "Ingeniería de Sistemas" },
+              { id: "industrial", label: "Ingeniería Industrial" },
+            ],
+          },
+          { id: "postgrad", label: "Posgrado" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "admissions",
+    label: "Admisiones",
+    children: [
+      { id: "calendar", label: "Calendario" },
+      { id: "fees", label: "Costos" },
+    ],
+  },
+  { id: "contact", label: "Contacto" },
+];
+
 const byId = <T extends { id: string }>(rows: T[], ids: (string | number)[]) =>
   ids.map((id) => rows.find((row) => row.id === id)!);
 
 export default function SortableDemo() {
   const [fields, setFields] = React.useState(initialFields);
   const [banners, setBanners] = React.useState(initialBanners);
+  const [menu, setMenu] = React.useState(initialMenu);
+  const [lastMove, setLastMove] = React.useState<SortableTreeMove>();
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <SortableTree
+          items={menu}
+          maxDepth={4}
+          defaultCollapsed={["admissions"]}
+          onMove={(move, items) => {
+            setLastMove(move);
+            setMenu(items);
+          }}
+        />
+        <Text size="sm" tone="muted">
+          {lastMove
+            ? `${lastMove.id} → ${lastMove.parentId ?? "raíz"}, posición ${lastMove.index}`
+            : "Hasta 4 niveles. Inicio no se mueve ni admite hijos."}
+        </Text>
+      </div>
+
       <SortableList
         items={fields.map((field) => field.id)}
         onReorder={(ids) => setFields(byId(fields, ids))}

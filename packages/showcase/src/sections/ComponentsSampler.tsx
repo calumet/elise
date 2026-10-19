@@ -4,10 +4,37 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@calumet/elise-ui/tabs
 import { Toggle, ToggleGroup } from "@calumet/elise-ui/toggle-group";
 import { useState } from "react";
 
+const FACULTADES = [
+  "Todas",
+  "Ingeniería",
+  "Ciencias de la Salud",
+  "Derecho",
+  "Economía",
+  "Educación",
+  "Artes",
+  "Ciencias Agrarias",
+  "Ciencias Sociales",
+  "Facultades y otras",
+];
+
 const ComponentsSampler = () => {
   const [progress, setProgress] = useState(35);
   return (
-    <div className="w-full max-w-2xl">
+    <div className="flex w-full max-w-2xl flex-col gap-8">
+      <Tabs defaultValue="Todas">
+        <TabsList variant="capsule" aria-label="Facultad">
+          {FACULTADES.map((facultad) => (
+            <TabsTrigger key={facultad} value={facultad}>
+              {facultad}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {FACULTADES.map((facultad) => (
+          <TabsContent key={facultad} value={facultad} className="px-0">
+            <p className="text-sm text-muted-foreground">Escuelas de {facultad.toLowerCase()}.</p>
+          </TabsContent>
+        ))}
+      </Tabs>
       <Tabs defaultValue="overview">
         <TabsList className="w-full justify-start">
           <TabsTrigger value="overview">Overview</TabsTrigger>
