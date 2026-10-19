@@ -272,6 +272,7 @@ const Gallery = ({
     const src = safeSrc(image.src);
     return src ? [{ src, alt: image.alt }] : [];
   });
+  const seen = new Map<string, number>();
   return (
     <div
       data-slot="gallery"
@@ -282,9 +283,11 @@ const Gallery = ({
       {...attributes}
     >
       <div {...frozen(editing)} data-slot="gallery-images">
-        {images.map((image, index) => (
-          <img key={`${image.src}.${index}`} src={image.src} alt={image.alt} loading="lazy" />
-        ))}
+        {images.map((image) => {
+          const nth = (seen.get(image.src) ?? 0) + 1;
+          seen.set(image.src, nth);
+          return <img key={`${image.src}#${nth}`} src={image.src} alt={image.alt} loading="lazy" />;
+        })}
       </div>
       {children}
     </div>

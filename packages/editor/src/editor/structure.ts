@@ -11,7 +11,13 @@ import {
 import type { PlateEditor } from "platejs/react";
 
 import { newId } from "../ids";
-import { COLUMN_LIMIT, coerceSetting, settingDefs, type SettingValue } from "../settings";
+import {
+  COLUMN_LIMIT,
+  coerceSetting,
+  settingDefs,
+  type SettingKey,
+  type SettingValue,
+} from "../settings";
 
 export type DropPosition = "before" | "after" | "inside";
 
@@ -178,8 +184,9 @@ export const applySettings = (
   const props: Record<string, SettingValue> = {};
   let complete = true;
   let count: number | undefined;
+  const byKey = new Map(defs.map((candidate) => [candidate.key, candidate]));
   for (const [key, raw] of Object.entries(patch)) {
-    const def = defs.find((candidate) => candidate.key === key);
+    const def = byKey.get(key as SettingKey);
     const value = def && coerceSetting(def, raw);
     if (!def || value === undefined) {
       complete = false;

@@ -91,8 +91,9 @@ export const templateDefs: readonly TemplateDef[] = [
 
 export const useTemplates = (schema: EditorSchema): TemplateItem[] => {
   const t = useLabels();
+  const allowed = new Set(schema.blocks);
   return templateDefs
-    .filter((def) => def.requires.every((block) => schema.blocks.includes(block)))
+    .filter((def) => def.requires.every((block) => allowed.has(block)))
     .map((def) => ({
       id: def.id,
       label: t[def.label],
