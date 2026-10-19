@@ -122,7 +122,7 @@ El usuario viene a leer o editar un registro concreto.
 | ----------------- | ------------------------------------------- |
 | Vuelta al listado | `Link` con `ChevronLeft`, encima del título |
 | Estado            | `Badge`, al lado del título                 |
-| Acciones          | Duplicar y eliminar en la cabecera          |
+| Acciones          | Duplicar en la cabecera; eliminar, abajo    |
 | Contenido         | Varias `Section`, una por grupo de campos   |
 | Datos de apoyo    | Columna al lado, con `DescriptionList`      |
 
@@ -136,6 +136,9 @@ La columna de apoyo mide 320px y se apila por debajo de 1024px:
 contenido y una tabla ancha empuja la columna de apoyo fuera de la pantalla.
 
 **Eliminar pasa por `AlertDialog`.** Destruye un registro y no hay deshacer.
+Va al final del menú de la cabecera y en `danger`, como la acción secundaria
+`destructive` de Polaris. En una ficha larga se pasa a su propia sección al
+final, como en [Ajustes](#5-ajustes).
 
 ## 5. Ajustes
 
