@@ -179,6 +179,8 @@ const brandVars = (base: Oklch): Vars => ({
   "--sidebar-primary": format(base),
   "--sidebar-primary-foreground": format(readableOn(base)),
   "--sidebar-ring": format(base),
+  "--inverse-accent": format(at(base, 0.3, 0.085)),
+  "--inverse-accent-foreground": format(at(base, 0.88, 0.06)),
   "--chart-1": format(at(base, 0.62, 0.14)),
   "--chart-2": format(at(base, 0.52, 0.15)),
   "--chart-3": format(at(base, 0.42, 0.155)),

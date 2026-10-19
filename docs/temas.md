@@ -92,20 +92,22 @@ Los temas se implementan vía CSS custom properties definidas en `@calumet/elise
 y 6.7 en los dos temas. Dos superficies caen fuera de esa escala y llevan la
 suya, así que el texto secundario no se resuelve con opacidades a ojo.
 
-| Token CSS                    | Utilidad Tailwind               | Descripción                                  |
-| ---------------------------- | ------------------------------- | -------------------------------------------- |
-| `--inverse`                  | `bg-inverse`                    | La capa que va encima de todo, como un toast |
-| `--inverse-foreground`       | `text-inverse-foreground`       | Texto principal de la franja invertida       |
-| `--inverse-muted-foreground` | `text-inverse-muted-foreground` | Texto secundario de la franja invertida      |
-| `--sidebar-muted-foreground` | `text-sidebar-muted-foreground` | Texto secundario del riel de navegación      |
-| `--inverse-info`             | `text-inverse-info`             | Tinta de estado sobre la franja invertida    |
-| `--inverse-success`          | `text-inverse-success`          | Tinta de éxito sobre la franja invertida     |
-| `--inverse-warning`          | `text-inverse-warning`          | Tinta de advertencia sobre la franja         |
-| `--inverse-danger`           | `text-inverse-danger`           | Tinta de error sobre la franja               |
-| `--inverse-border-subtle`    | `border-inverse-border-subtle`  | Línea tenue sobre la franja invertida        |
-| `--inverse-border`           | `border-inverse-border`         | Divisor sobre la franja invertida            |
-| `--inverse-input`            | `border-inverse-input`          | Borde de campo sobre la franja invertida     |
-| `--inverse-border-strong`    | `border-inverse-border-strong`  | Contorno de control sobre la franja          |
+| Token CSS                     | Utilidad Tailwind                | Descripción                                  |
+| ----------------------------- | -------------------------------- | -------------------------------------------- |
+| `--inverse`                   | `bg-inverse`                     | La capa que va encima de todo, como un toast |
+| `--inverse-foreground`        | `text-inverse-foreground`        | Texto principal de la franja invertida       |
+| `--inverse-muted-foreground`  | `text-inverse-muted-foreground`  | Texto secundario de la franja invertida      |
+| `--sidebar-muted-foreground`  | `text-sidebar-muted-foreground`  | Texto secundario del riel de navegación      |
+| `--inverse-info`              | `text-inverse-info`              | Tinta de estado sobre la franja invertida    |
+| `--inverse-success`           | `text-inverse-success`           | Tinta de éxito sobre la franja invertida     |
+| `--inverse-warning`           | `text-inverse-warning`           | Tinta de advertencia sobre la franja         |
+| `--inverse-danger`            | `text-inverse-danger`            | Tinta de error sobre la franja               |
+| `--inverse-accent`            | `bg-inverse-accent`              | Lo elegido sobre la franja invertida         |
+| `--inverse-accent-foreground` | `text-inverse-accent-foreground` | Glifo de lo elegido sobre la franja          |
+| `--inverse-border-subtle`     | `border-inverse-border-subtle`   | Línea tenue sobre la franja invertida        |
+| `--inverse-border`            | `border-inverse-border`          | Divisor sobre la franja invertida            |
+| `--inverse-input`             | `border-inverse-input`           | Borde de campo sobre la franja invertida     |
+| `--inverse-border-strong`     | `border-inverse-border-strong`   | Contorno de control sobre la franja          |
 
 No hace falta nombrarlos en cada sitio. Las dos superficies declaran su par en el
 propio elemento, de modo que `Text tone="muted"` y `text-muted-foreground`
@@ -118,9 +120,9 @@ resuelven contra ellas y no contra la página:
 </Box>
 ```
 
-Cada una reapunta las tres escalas que la raíz calibra contra superficies
-claras: el par de texto, la tinta de estado con la que se pinta un icono de
-éxito o de error, y las líneas. Un `Separator` dentro de la franja sale como
+Cada una reapunta las escalas que la raíz calibra contra superficies claras: el
+par de texto, la tinta de estado con la que se pinta un icono de éxito o de
+error, las líneas y, en la franja, el acento de lo elegido. Un `Separator` dentro de la franja sale como
 pelo y no como raya blanca, y en el riel sale con `--sidebar-border`, que es la
 línea que ya tenía.
 

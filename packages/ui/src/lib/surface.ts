@@ -41,6 +41,7 @@ const INVERSE_TOKENS: string = [
   "[--foreground:var(--inverse-foreground)]",
   "[--info-subtle-foreground:var(--inverse-info)] [--success-subtle-foreground:var(--inverse-success)]",
   "[--warning-subtle-foreground:var(--inverse-warning)] [--destructive-subtle-foreground:var(--inverse-danger)]",
+  "[--accent:var(--inverse-accent)] [--accent-foreground:var(--inverse-accent-foreground)]",
   "[--border-subtle:var(--inverse-border-subtle)] [--border:var(--inverse-border)]",
   "[--input:var(--inverse-input)] [--border-strong:var(--inverse-border-strong)]",
   "[--state-hover:rgb(255_255_255/5%)] [--state-active:rgb(255_255_255/9%)]",

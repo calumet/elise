@@ -22,6 +22,28 @@ según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
+## `@calumet/elise-ui` 0.40.0 y `@calumet/elise-themes` 0.1.4
+
+### Cambia
+
+**El `ToolbarButton` activo lleva el tinte de acento y no el relleno de
+primario.** Fondo `--accent` y glifo `--accent-foreground`, el mismo par de
+`Text tone="primary"`. En una barra de formato la negrita sigue encendida
+mientras el cursor esté sobre texto en negrita, y un cuadro sólido del color de
+marca se leía como la acción principal de la pantalla.
+
+### Añade
+
+**`--inverse-accent` y `--inverse-accent-foreground`**, que la franja invertida
+pone en lugar de `--accent` y `--accent-foreground`. Sin ellos, lo elegido
+dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
+En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
+que sale de ella.
+
+## `elise-toasts` 0.4.22, `elise-alerts` 0.3.21, `elise-forms` 0.3.1 y `elise-tables` 0.9.2
+
+Sin cambios propios: se republican en JSR contra `elise-ui` 0.40.0.
+
 ## `@calumet/elise-i18n` 0.4.0
 
 ### Añade
