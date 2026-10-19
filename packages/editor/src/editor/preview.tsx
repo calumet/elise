@@ -77,13 +77,15 @@ export const PreviewProvider = ({
 
   const swap = React.useCallback((next: boolean, after?: () => void) => {
     if (!reducedMotion() && document.startViewTransition) {
-      document.startViewTransition(
-        () =>
-          new Promise<void>((done) => {
-            pending.current = { after, fade: false, done };
-            setPreviewing(next);
-          }),
-      );
+      document
+        .startViewTransition(
+          () =>
+            new Promise<void>((done) => {
+              pending.current = { after, fade: false, done };
+              setPreviewing(next);
+            }),
+        )
+        .ready.catch(() => {});
       return;
     }
     pending.current = { after, fade: true };

@@ -567,7 +567,6 @@ const PageBar = ({
           {t("saved", { fallback: "Saved just now" })}
         </Text>
       </div>
-      {previewing ? null : <Editor.ModeSwitch />}
       <SegmentedControl
         aria-label={t("view", { fallback: "View" })}
         value={view}
@@ -633,6 +632,7 @@ const PageBar = ({
         <Button type="button" size="sm">
           {t("publish", { fallback: "Publish" })}
         </Button>
+        <Editor.ModeSwitch className="ms-2" />
       </div>
     </div>
   );
@@ -729,7 +729,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
         treeShown={treeShown}
         sideDocked={sideDocked}
       />
-      {mode === "code" ? <Editor.Code /> : null}
+      {mode === "code" ? <Editor.Code title={title} /> : null}
       <div className={mode === "code" ? "hidden" : "flex min-h-0 flex-1"}>
         {outlineDocked && !previewing ? (
           <aside

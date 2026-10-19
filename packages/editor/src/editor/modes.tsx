@@ -59,7 +59,7 @@ export const transition = (run: () => void): void => {
     run();
     return;
   }
-  document.startViewTransition(() => flushSync(run));
+  document.startViewTransition(() => flushSync(run)).ready.catch(() => {});
 };
 
 export const ModeProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => {

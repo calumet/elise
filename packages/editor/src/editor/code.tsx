@@ -1,5 +1,6 @@
 import { Monitor, Smartphone, TriangleAlert } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
+import { Heading } from "@calumet/elise-ui/heading";
 import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
 import { SegmentedControl, SegmentedControlItem } from "@calumet/elise-ui/segmented-control";
 import { Text } from "@calumet/elise-ui/text";
@@ -259,9 +260,9 @@ const Divider = ({ controls }: { controls: string }): React.JSX.Element => {
   );
 };
 
-export type EditorCodeProps = { className?: string };
+export type EditorCodeProps = { title?: string; className?: string };
 
-export const EditorCode = ({ className }: EditorCodeProps): React.JSX.Element | null => {
+export const EditorCode = ({ title, className }: EditorCodeProps): React.JSX.Element | null => {
   const t = useLabels();
   const { schema } = useServices();
   const { value } = useDocument();
@@ -340,6 +341,11 @@ export const EditorCode = ({ className }: EditorCodeProps): React.JSX.Element | 
             data-device={device}
             className={`@container/editor-page mx-auto w-full rounded-xl border border-border bg-card px-4 py-6 ${device === "mobile" ? "max-w-sm" : "max-w-none @2xl:px-8"}`}
           >
+            {title ? (
+              <Heading level={1} className="mb-6 min-w-0 break-words">
+                {title}
+              </Heading>
+            ) : null}
             <EditorContent value={result} schema={schema} />
           </div>
           <Text size="xs" tone="muted">
@@ -356,11 +362,16 @@ export type EditorModeSwitchProps = { className?: string };
 export const EditorModeSwitch = ({ className }: EditorModeSwitchProps): React.JSX.Element => {
   const t = useLabels();
   const { mode, setMode } = useEditorMode();
+  const { previewing, edit } = useEditorPreview();
+  const pick = (next: string) => {
+    if (previewing) edit();
+    if (next && next !== mode) setMode(next as "visual" | "code");
+  };
   return (
     <SegmentedControl
       aria-label={t.editorMode}
-      value={mode === "code" ? "code" : "visual"}
-      onValueChange={(next) => next && setMode(next as "visual" | "code")}
+      value={mode === "translations" ? "" : mode}
+      onValueChange={pick}
       className={className}
     >
       <SegmentedControlItem value="visual">{t.modeVisual}</SegmentedControlItem>

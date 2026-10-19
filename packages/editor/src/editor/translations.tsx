@@ -23,6 +23,7 @@ import { fill, typeLabel, useLabels, type Labels } from "../labels";
 import { renderInline } from "../render/content";
 import type { TranslationUnit } from "../translations";
 import { isTranslated } from "../translations";
+import { EditorModeSwitch } from "./code";
 import {
   useEditorMode,
   useTranslationsState,
@@ -273,6 +274,7 @@ const Header = ({
         <Button type="button" size="sm" onClick={() => setMode("visual")}>
           {t.done}
         </Button>
+        <EditorModeSwitch className="ms-2" />
       </div>
     </div>
   );
