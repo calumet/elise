@@ -35,6 +35,7 @@ import {
   type DroppableContainer,
   type KeyboardCoordinateGetter,
   type UniqueIdentifier,
+  useDndContext,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -119,6 +120,21 @@ const useAnnouncements = (
   return { announcements, screenReaderInstructions: { draggable: instructions } };
 };
 
+function HoldEscape() {
+  const dragging = useDndContext().active != null;
+
+  React.useEffect(() => {
+    if (!dragging) return;
+    const hold = (event: KeyboardEvent) => {
+      if (event.key === "Escape") event.preventDefault();
+    };
+    window.addEventListener("keydown", hold, true);
+    return () => window.removeEventListener("keydown", hold, true);
+  }, [dragging]);
+
+  return null;
+}
+
 /** Props de {@link SortableList}. */
 export type SortableListProps = Omit<React.HTMLAttributes<HTMLUListElement>, "onChange"> & {
   /** Los ids de los elementos, en el orden actual. */
@@ -171,6 +187,7 @@ export function SortableList({
         accessibility={accessibility}
         onDragEnd={onDragEnd}
       >
+        <HoldEscape />
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <Comp
             ref={listRef}
@@ -495,7 +512,7 @@ export type SortableTreeProps<T extends SortableTreeNode> = Omit<
   items: T[];
   /** Recibe el movimiento al soltar, y el árbol con él ya aplicado. */
   onMove: (move: SortableTreeMove, items: T[]) => void;
-  /** El contenido de cada fila, después del asa. Sin él se pinta `label`. */
+  /** El contenido de cada fila, después del asa. Sin él se pinta `label`, recortado. Recortar el texto largo es cosa del contenido. */
   renderItem?: (node: T) => React.ReactNode;
   /** Cuántos niveles caben. Un movimiento que los supere no se puede soltar. */
   maxDepth?: number;
@@ -512,7 +529,7 @@ export type SortableTreeProps<T extends SortableTreeNode> = Omit<
 export function SortableTree<T extends SortableTreeNode>({
   items,
   onMove,
-  renderItem = (node) => node.label,
+  renderItem = (node) => <span className="block truncate">{node.label}</span>,
   maxDepth = Infinity,
   defaultCollapsed = [],
   className,
@@ -663,6 +680,7 @@ export function SortableTree<T extends SortableTreeNode>({
         onDragEnd={onDragEnd}
         onDragCancel={reset}
       >
+        <HoldEscape />
         <SortableContext items={visible.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
           <ul
             data-slot="sortable-tree"
@@ -768,7 +786,9 @@ function SortableTreeRow({
           key={level}
           aria-hidden="true"
           className="absolute inset-y-0 border-s border-border"
-          style={{ insetInlineStart: level * INDENT + INDENT / 2 }}
+          style={{
+            insetInlineStart: `calc(${level * INDENT}px + 0.25rem + 1px + var(--spacing-icon-lg) / 2 - 0.5px)`,
+          }}
         />
       ))}
       <div
@@ -808,7 +828,7 @@ function SortableTreeRow({
               />
             </button>
           )}
-          <div className="min-w-0 flex-1 truncate">{children}</div>
+          <div className="min-w-0 flex-1">{children}</div>
         </div>
       </div>
     </li>
