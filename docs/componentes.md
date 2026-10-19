@@ -680,7 +680,7 @@ estado con texto para lectores de pantalla.
 
 `TabsList` lleva `variant="underline"` por defecto: la activa se subraya, y
 donde no caben la fila se desplaza a lo ancho. Con `variant="capsule"` las
-pestañas son píldoras y la activa lleva el gris plano `fill-tertiary`, sin
+pestañas son cápsulas con el radio de `ToggleGroup` y la activa lleva el gris plano `fill-tertiary`, sin
 subrayado ni borde. Es para filtrar una lista por categoría dentro de un diálogo o una
 sección, y donde no caben parte en renglones: un filtro tiene que enseñar todas
 sus opciones, y con desplazamiento las que quedan fuera no se ven. El teclado,

@@ -72,7 +72,7 @@ function TabsTrigger({
         "inline-flex cursor-pointer items-center justify-center whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground",
         variant === "underline"
           ? "h-10 rounded-t-sm border-b-2 border-transparent px-4 text-base font-semibold data-[state=active]:border-primary"
-          : "h-8 rounded-full px-3 text-sm font-medium data-[state=active]:bg-fill-tertiary data-[state=inactive]:hover:bg-state-hover",
+          : "h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-fill-tertiary data-[state=inactive]:hover:bg-state-hover",
         className,
       )}
       {...props}

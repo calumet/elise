@@ -7,7 +7,7 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Añade
 
-**`TabsList` con `variant="capsule"`: pestañas en píldora para filtrar una
+**`TabsList` con `variant="capsule"`: pestañas en cápsula para filtrar una
 lista por categoría.** La activa lleva el gris plano `fill-tertiary`, sin subrayado ni
 borde. Donde no caben parten en renglones en vez de desplazarse, para que
 todas las opciones queden a la vista. `variant="underline"` es la de siempre y
