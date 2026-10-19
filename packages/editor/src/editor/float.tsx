@@ -20,6 +20,14 @@ const scrollBox = (node: HTMLElement): DOMRect => {
   return new DOMRect(0, 0, window.innerWidth, window.innerHeight);
 };
 
+const layerOf = (editor: ReturnType<typeof useEditorRef>): HTMLElement | null => {
+  try {
+    return editor.api.toDOMNode(editor)?.parentElement ?? null;
+  } catch {
+    return null;
+  }
+};
+
 export type FloatProps = Omit<React.ComponentProps<"div">, "ref"> & {
   anchor: Measurable | undefined;
   side?: Side;
@@ -44,14 +52,10 @@ export const Float = ({
   ...props
 }: FloatProps): React.ReactPortal | null => {
   const editor = useEditorRef();
-  const [layer, setLayer] = React.useState<HTMLElement | null>(null);
+  const layer = layerOf(editor);
   const [place, setPlace] = React.useState<Place | null>(null);
   const node = React.useRef<HTMLDivElement | null>(null);
   const chosen = React.useRef<Side | null>(null);
-
-  React.useLayoutEffect(() => {
-    setLayer(editor.api.toDOMNode(editor)?.parentElement ?? null);
-  }, [editor]);
 
   const measure = React.useCallback(() => {
     const float = node.current;
