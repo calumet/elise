@@ -3,21 +3,38 @@ import {
   pageSchema,
   useBlockCommands,
   useEditorCommands,
+  useOutline,
   useSelectedBlock,
   type EditorDocument,
   type EditorNode,
 } from "@calumet/elise-editor";
 import { useTranslation } from "@calumet/elise-i18n";
 import {
+  Columns2,
+  Heading2,
+  Heading3,
+  Image,
+  Images,
+  Info,
   ListTree,
   Lock,
+  Minus,
   Monitor,
   Moon,
+  MousePointerClick,
+  MoveVertical,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Paperclip,
+  Pilcrow,
   Plus,
+  Quote,
   Redo2,
   SlidersHorizontal,
   Smartphone,
+  SquarePlay,
   Sun,
+  Table,
   Undo2,
 } from "@calumet/elise-icons";
 import { useTheme } from "@calumet/elise-themes";
@@ -38,6 +55,12 @@ import { SegmentedControl, SegmentedControlItem } from "@calumet/elise-ui/segmen
 import { Separator } from "@calumet/elise-ui/separator";
 import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle } from "@calumet/elise-ui/sheet";
 import { Text } from "@calumet/elise-ui/text";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@calumet/elise-ui/tooltip";
 import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 
@@ -499,6 +522,77 @@ const DataToggle = ({ value }: { value: Dataset }) => (
   </div>
 );
 
+const railLayout = (): boolean =>
+  new URLSearchParams(window.location.search).get("layout") === "rail";
+
+const RAIL_ICONS: Record<string, typeof Pilcrow> = {
+  h2: Heading2,
+  h3: Heading3,
+  blockquote: Quote,
+  callout: Info,
+  hr: Minus,
+  img: Image,
+  media_embed: SquarePlay,
+  table: Table,
+  columns: Columns2,
+  spacer: MoveVertical,
+  button: MousePointerClick,
+  gallery: Images,
+  file: Paperclip,
+};
+
+const OutlineRail = ({ onExpand }: { onExpand: () => void }) => {
+  const { t } = useTranslation("pageEditor");
+  const outline = useOutline();
+  const selected = useSelectedBlock();
+  const blocks = useBlockCommands();
+  const current = outline.find(
+    (node) =>
+      node.id === selected?.id ||
+      node.children.some(
+        (column) =>
+          column.id === selected?.id || column.children.some((child) => child.id === selected?.id),
+      ),
+  )?.id;
+  return (
+    <TooltipProvider>
+      <nav
+        aria-label={t("structure", { fallback: "Page structure" })}
+        className="flex w-14 shrink-0 flex-col items-center gap-1 overflow-y-auto border-e border-border bg-card py-3"
+      >
+        <IconButton
+          label={t("expandStructure", { fallback: "Expand the structure" })}
+          onClick={onExpand}
+        >
+          <PanelLeftOpen aria-hidden="true" />
+        </IconButton>
+        <Separator className="my-1 w-6" />
+        {outline.map((node) => {
+          const Icon = RAIL_ICONS[node.type] ?? Pilcrow;
+          return (
+            <Tooltip key={node.id}>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={node.label}
+                  aria-current={node.id === current || undefined}
+                  className="shrink-0 text-muted-foreground aria-[current]:bg-accent aria-[current]:text-accent-foreground"
+                  onClick={() => blocks.select(node.id)}
+                >
+                  <Icon aria-hidden="true" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">{node.label}</TooltipContent>
+            </Tooltip>
+          );
+        })}
+      </nav>
+    </TooltipProvider>
+  );
+};
+
 type Panels = {
   side: Side;
   setSide: (side: Side) => void;
@@ -511,8 +605,12 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
   const selected = useSelectedBlock();
   const blocks = useBlockCommands();
   const [view, setView] = useState<View>("desktop");
-  const outlineDocked = useMinWidth("(min-width: 90rem)");
+  const wide = useMinWidth("(min-width: 80rem)");
+  const tablet = useMinWidth("(min-width: 48rem)");
   const sideDocked = useMinWidth("(min-width: 64rem)");
+  const [railOpen, setRailOpen] = useState(false);
+  const rail = railLayout() && tablet && !wide;
+  const outlineDocked = wide || (rail && railOpen);
   const catalogShown = side === "catalog" || !selected;
 
   const switchView = (next: View) => {
@@ -539,20 +637,31 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
         catalogShown={catalogShown}
         onSide={openSide}
         onOutline={() => setSheet("outline")}
-        outlineDocked={outlineDocked}
+        outlineDocked={outlineDocked || rail}
         sideDocked={sideDocked}
       />
       <div className="flex min-h-0 flex-1">
         {outlineDocked ? (
           <aside
             aria-label={t("structure", { fallback: "Page structure" })}
-            className="w-60 shrink-0 overflow-y-auto border-e border-border bg-card p-3"
+            className="relative w-62 shrink-0 overflow-y-auto border-e border-border bg-card p-3"
           >
+            {rail ? (
+              <IconButton
+                label={t("collapseStructure", { fallback: "Collapse the structure" })}
+                className="absolute end-2 top-2"
+                onClick={() => setRailOpen(false)}
+              >
+                <PanelLeftClose aria-hidden="true" />
+              </IconButton>
+            ) : null}
             <Editor.Outline className="min-h-full" />
           </aside>
+        ) : rail ? (
+          <OutlineRail onExpand={() => setRailOpen(true)} />
         ) : null}
         <div
-          className="min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8"
+          className="min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
           onPointerDown={(event) => {
             const target = event.target as Element;
             if (!target.closest("[data-slate-editor], [data-slot=page-add]")) blocks.deselect();
@@ -617,7 +726,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
                 ? t("addBlock", { fallback: "Add block" })
                 : t("blockSettings", { fallback: "Block settings" })
             }
-            className="w-80 shrink-0 overflow-y-auto border-s border-border bg-card p-4"
+            className="w-75 shrink-0 overflow-y-auto border-s border-border bg-card p-4"
           >
             {catalogShown ? (
               <Editor.Catalog onClose={selected ? () => setSide("settings") : undefined} />
