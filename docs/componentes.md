@@ -678,6 +678,24 @@ estado con texto para lectores de pantalla.
 | DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, ...  | `@calumet/elise-ui/dropdown-menu`   | [DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu)     |
 | ContextMenu, ContextMenuTrigger, ContextMenuContent, ...     | `@calumet/elise-ui/context-menu`    | [ContextMenu](https://www.radix-ui.com/primitives/docs/components/context-menu)       |
 
+`TabsList` lleva `variant="underline"` por defecto: la activa se subraya, y
+donde no caben la fila se desplaza a lo ancho. Con `variant="capsule"` las
+pestañas son cápsulas con el radio de `ToggleGroup` y la activa lleva el gris plano `fill-tertiary`, sin
+subrayado ni borde. Es para filtrar una lista por categoría dentro de un diálogo o una
+sección, y donde no caben parte en renglones: un filtro tiene que enseñar todas
+sus opciones, y con desplazamiento las que quedan fuera no se ven. El teclado,
+`aria-selected` y el foco son los mismos en las dos.
+
+```tsx
+<Tabs value={facultad} onValueChange={setFacultad}>
+  <TabsList variant="capsule" aria-label="Facultad">
+    <TabsTrigger value="todas">Todas</TabsTrigger>
+    <TabsTrigger value="ingenieria">Ingeniería</TabsTrigger>
+    <TabsTrigger value="otras">Facultades y otras</TabsTrigger>
+  </TabsList>
+</Tabs>
+```
+
 `Accordion` es una tarjeta por defecto. Con `variant="flush"` pierde la tarjeta y
 cada sección es una barra a todo el ancho, separada por un filete, como la barra
 de sección que en móvil sustituye a la columna lateral. Sus hijos se apilan, así

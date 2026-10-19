@@ -3,6 +3,20 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.42.0
+
+### Añade
+
+**`TabsList` con `variant="capsule"`: pestañas en cápsula para filtrar una
+lista por categoría.** La activa lleva el gris plano `fill-tertiary`, sin subrayado ni
+borde. Donde no caben parten en renglones en vez de desplazarse, para que
+todas las opciones queden a la vista. `variant="underline"` es la de siempre y
+sigue por defecto.
+
+## `elise-alerts` 0.3.23, `elise-forms` 0.3.3, `elise-tables` 0.9.4, `elise-themes` 0.1.6 y `elise-toasts` 0.4.24
+
+Se republican para que JSR los publique contra `elise-ui` 0.42.0. No cambian.
+
 ## `@calumet/elise-ui` 0.41.0
 
 ### Añade
