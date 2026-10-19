@@ -285,19 +285,6 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
           variant="ghost"
           size="icon-sm"
           tabIndex={-1}
-          data-slot="block-add"
-          aria-label={t.addBlockBelow}
-          className="text-muted-foreground"
-          onMouseDown={(event) => event.preventDefault()}
-          onClick={() => addBelow(editor as PlateEditor, id)}
-        >
-          <Plus aria-hidden="true" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          tabIndex={-1}
           ref={setActivatorNodeRef}
           aria-label={t.dragHandle}
           data-slot="drag-handle"
@@ -307,6 +294,19 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
           onClick={() => selectBlockById(editor as PlateEditor, id)}
         >
           <GripVertical aria-hidden="true" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          tabIndex={-1}
+          data-slot="block-add"
+          aria-label={t.addBlockBelow}
+          className="text-muted-foreground"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => addBelow(editor as PlateEditor, id)}
+        >
+          <Plus aria-hidden="true" />
         </Button>
       </div>
       {selected ? (
