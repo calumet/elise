@@ -20,6 +20,10 @@ dependencias.
 **`TableBody` y `TableRow` perdían el `ref` en la vista de lista**, la que
 `Table` usa cuando no cabe a lo ancho.
 
+**`Table` ya no saca una barra de scroll vertical cuando una fila se sale un
+píxel**, como la que se arrastra al final de la tabla. La barra aparecía y
+desaparecía mientras se arrastraba, y la tabla parpadeaba.
+
 ## `elise-alerts` 0.3.21, `elise-forms` 0.3.1, `elise-tables` 0.9.2, `elise-themes` 0.1.4 y `elise-toasts` 0.4.22
 
 Se republican para que JSR los publique contra `elise-ui` 0.40.0. No cambian.

@@ -443,7 +443,7 @@ export const Table: React.ForwardRefExoticComponent<
       emptyZone
     ) : (
       <div className={cn("relative overflow-hidden", zoneRadius(!!filterBar, !!paginationBar))}>
-        <div className="w-full overflow-x-auto" inert={loading || undefined}>
+        <div className="w-full overflow-x-auto overflow-y-hidden" inert={loading || undefined}>
           {body}
         </div>
       </div>
