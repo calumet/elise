@@ -56,6 +56,9 @@ export type ChecklistPickerProps = {
 const fold = (text: string, locale?: string): string =>
   text.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase(locale);
 
+const matches = (text: string, term: string, locale?: string): boolean =>
+  fold(text, locale).includes(term);
+
 /**
  * Elegir con casillas entre muchas opciones, filtradas por pestañas y por nombre.
  *
@@ -90,9 +93,7 @@ function ChecklistPicker({
       .filter((option) => filter === ALL || option.filter === filter)
       .filter(
         ({ label, description }) =>
-          !term ||
-          fold(label, locale).includes(term) ||
-          (description !== undefined && fold(description, locale).includes(term)),
+          !term || matches(`${label}\n${description ?? ""}`, term, locale),
       )
       .sort((a, b) => collator.compare(a.label, b.label));
   }, [options, filter, term, locale]);
