@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.43.1
+
+### Corrige
+
+**Escape durante un arrastre en `SortableTree` o `SortableList` ya no cierra el
+`Dialog` o la `Sheet` que los contiene.** Cancela el movimiento, anuncia la
+cancelación, y sin arrastre en curso Escape cierra el diálogo como siempre.
+
+**El anillo de foco de un control dentro de una fila de `SortableTree` ya no
+sale recortado.** La fila dejó de recortar lo que devuelve `renderItem`; sin
+`renderItem` el `label` se sigue recortando, y con él recortar el texto largo
+es cosa del contenido.
+
 ## `@calumet/elise-ui` 0.43.0
 
 ### Añade
