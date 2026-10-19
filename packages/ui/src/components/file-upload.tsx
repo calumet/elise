@@ -352,7 +352,6 @@ function ImageUpload({
   const localUrl = useObjectUrl(value instanceof File ? value : undefined);
   const url = value instanceof File ? localUrl : value?.url;
   const [failedUrl, setFailedUrl] = React.useState<string>();
-  const shown = url !== undefined && url !== failedUrl;
 
   React.useEffect(() => {
     if (!focusAfterChange.current) return;
@@ -412,7 +411,7 @@ function ImageUpload({
           e.target.value = "";
         }}
       />
-      {shown ? (
+      {url && url !== failedUrl ? (
         <img
           src={url}
           alt={value.name}
@@ -436,7 +435,7 @@ function ImageUpload({
       ) : null}
       <span className="absolute right-3 bottom-3 flex gap-2">
         <Button
-          variant={shown ? "overlay" : "surface"}
+          variant="surface"
           size="sm"
           disabled={disabled}
           onClick={() => inputRef.current?.click()}
@@ -445,7 +444,7 @@ function ImageUpload({
         </Button>
         {onRemove ? (
           <Button
-            variant={shown ? "overlay" : "surface"}
+            variant="surface"
             size="sm"
             disabled={disabled}
             onClick={() => {
