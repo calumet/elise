@@ -22,7 +22,7 @@ según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
-## `@calumet/elise-ui` 0.40.0 y `@calumet/elise-themes` 0.1.4
+## `@calumet/elise-ui` 0.41.0 y `@calumet/elise-themes` 0.1.5
 
 ### Cambia
 
@@ -40,9 +40,30 @@ dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
 
-## `elise-toasts` 0.4.22, `elise-alerts` 0.3.21, `elise-forms` 0.3.1 y `elise-tables` 0.9.2
+## `@calumet/elise-ui` 0.40.0
 
-Sin cambios propios: se republican en JSR contra `elise-ui` 0.40.0.
+### Añade
+
+**`SortableList`, `SortableItem` y `SortableHandle`, en
+`@calumet/elise-ui/sortable`: una lista que se reordena arrastrando.** Solo el
+asa inicia el arrastre. Con teclado se mueve con espacio y flechas, y el lector
+de pantalla anuncia la posición, con textos en el namespace `ui` de
+`elise-i18n`. `onReorder` recibe los ids en el orden nuevo. Con `asChild`
+funciona sobre `TableBody` y `TableRow`. `elise-ui` suma `@dnd-kit` a sus
+dependencias.
+
+### Corrige
+
+**`TableBody` y `TableRow` perdían el `ref` en la vista de lista**, la que
+`Table` usa cuando no cabe a lo ancho.
+
+**`Table` ya no saca una barra de scroll vertical cuando una fila se sale un
+píxel**, como la que se arrastra al final de la tabla. La barra aparecía y
+desaparecía mientras se arrastraba, y la tabla parpadeaba.
+
+## `elise-alerts` 0.3.21, `elise-forms` 0.3.1, `elise-tables` 0.9.2, `elise-themes` 0.1.4 y `elise-toasts` 0.4.22
+
+Se republican para que JSR los publique contra `elise-ui` 0.40.0. No cambian.
 
 ## `@calumet/elise-i18n` 0.4.0
 
