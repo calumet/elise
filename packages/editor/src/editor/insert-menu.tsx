@@ -18,7 +18,6 @@ import {
   Type,
 } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
-import { Popover, PopoverAnchor, PopoverContent } from "@calumet/elise-ui/popover";
 import { Separator } from "@calumet/elise-ui/separator";
 import { KEYS, NodeApi } from "platejs";
 import { useEditorRef, useEditorSelector } from "platejs/react";
@@ -26,6 +25,7 @@ import * as React from "react";
 
 import { useLabels, type Labels } from "../labels";
 import { blockAnchor } from "./anchor";
+import { Float } from "./float";
 import { useEditorFocused } from "./focus";
 import type { InsertItemId } from "./items";
 import type { SlashMenuState } from "./slash-menu";
@@ -49,9 +49,9 @@ export const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof
   text: { Icon: Type, description: "textBlockDescription" },
 };
 
-const preventFocus = (event: Event): void => event.preventDefault();
+const MENU = "w-72 rounded-xl border border-border bg-popover p-1 text-foreground shadow-lg";
 
-export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Element => {
+export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Element | null => {
   const t = useLabels();
   const editor = useEditorRef();
   const block = useEditorSelector((ed) => {
@@ -68,65 +68,61 @@ export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Elemen
     if (activeId) document.getElementById(activeId)?.scrollIntoView({ block: "nearest" });
   }, [activeId]);
 
+  if (!menu.open) return null;
   return (
-    <Popover open={menu.open}>
-      <PopoverAnchor virtualRef={anchor ? { current: anchor } : undefined} />
-      <PopoverContent
-        side="bottom"
-        align="start"
-        collisionPadding={16}
-        hideWhenDetached
-        className="p-1"
-        onOpenAutoFocus={preventFocus}
-        onCloseAutoFocus={preventFocus}
+    <Float
+      anchor={anchor}
+      side="bottom"
+      refresh={block}
+      className={MENU}
+      onMouseDown={(event) => event.preventDefault()}
+    >
+      <div
+        id={menu.id}
+        role="listbox"
+        aria-label={t.insertBlock}
+        className="max-h-80 overflow-y-auto"
       >
-        <div
-          id={menu.id}
-          role="listbox"
-          aria-label={t.insertBlock}
-          className="max-h-80 overflow-y-auto"
-        >
-          {menu.matches.length === 0 ? (
-            <p className="px-3 py-6 text-center text-base text-muted-foreground">{t.noBlocks}</p>
-          ) : (
-            menu.matches.map((item, index) => {
-              const { Icon, description } = ITEMS[item.id];
-              const active = index === menu.active;
-              return (
-                <div
-                  key={item.id}
-                  id={menu.optionId(index)}
-                  role="option"
-                  tabIndex={-1}
-                  aria-selected={active}
-                  data-selected={active || undefined}
-                  className="flex cursor-pointer items-center gap-3 rounded-sm px-3 py-1.5 select-none data-selected:bg-state-hover"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onMouseMove={() => {
-                    if (!active) menu.setActive(index);
-                  }}
-                  onClick={() => menu.pick(index)}
-                >
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground">
-                    <Icon aria-hidden="true" className="size-icon-md" />
+        {menu.matches.length === 0 ? (
+          <p className="px-3 py-6 text-center text-base text-muted-foreground">{t.noBlocks}</p>
+        ) : (
+          menu.matches.map((item, index) => {
+            const { Icon, description } = ITEMS[item.id];
+            const active = index === menu.active;
+            return (
+              <div
+                key={item.id}
+                id={menu.optionId(index)}
+                role="option"
+                tabIndex={-1}
+                aria-selected={active}
+                data-selected={active || undefined}
+                className="flex cursor-pointer items-center gap-3 rounded-sm px-3 py-1.5 select-none data-selected:bg-state-hover"
+                onMouseDown={(event) => event.preventDefault()}
+                onMouseMove={() => {
+                  if (!active) menu.setActive(index);
+                }}
+                onClick={() => menu.pick(index)}
+              >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground">
+                  <Icon aria-hidden="true" className="size-icon-md" />
+                </span>
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate text-base font-medium text-foreground">
+                    {item.label}
                   </span>
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate text-base font-medium text-foreground">
-                      {item.label}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">{t[description]}</span>
-                  </span>
-                </div>
-              );
-            })
-          )}
-        </div>
-        <div aria-hidden="true" className="pointer-coarse:hidden">
-          <Separator className="my-1" />
-          <p className="px-3 py-1.5 text-xs text-muted-foreground">{t.menuHint}</p>
-        </div>
-      </PopoverContent>
-    </Popover>
+                  <span className="truncate text-xs text-muted-foreground">{t[description]}</span>
+                </span>
+              </div>
+            );
+          })
+        )}
+      </div>
+      <div aria-hidden="true" className="pointer-coarse:hidden">
+        <Separator className="my-1" />
+        <p className="px-3 py-1.5 text-xs text-muted-foreground">{t.menuHint}</p>
+      </div>
+    </Float>
   );
 };
 

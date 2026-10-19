@@ -764,7 +764,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
             const target = event.target as Element;
             if (!event.currentTarget.contains(target)) return;
             if (target.closest("[data-slot=page-add]")) return;
-            if (!target.closest("[data-slate-editor]")) blocks.deselect();
+            if (!target.closest("[data-slate-editor], [data-slot=editor-float]")) blocks.deselect();
             setSide("settings");
           }}
         >
