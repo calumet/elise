@@ -503,9 +503,9 @@ const MoveMenu = ({ selected }: { selected: SelectedBlock }): React.JSX.Element 
   );
 };
 
-export type EditorSettingsProps = { className?: string };
+export type EditorBlockPanelProps = { className?: string };
 
-export const EditorSettings = ({ className }: EditorSettingsProps): React.JSX.Element => {
+export const EditorBlockPanel = ({ className }: EditorBlockPanelProps): React.JSX.Element => {
   const t = useLabels();
   const selected = useSelectedBlock();
   const blocks = useBlockCommands();
@@ -513,7 +513,7 @@ export const EditorSettings = ({ className }: EditorSettingsProps): React.JSX.El
 
   if (!selected) {
     return (
-      <div data-slot="editor-settings" className={classes}>
+      <div data-slot="editor-block-panel" className={classes}>
         <EmptyState size="sm">
           <EmptyStateMedia>
             <MousePointerClick />
@@ -530,7 +530,7 @@ export const EditorSettings = ({ className }: EditorSettingsProps): React.JSX.El
   const inColumns = selected.type === "column" || selected.parentId !== null;
 
   return (
-    <div data-slot="editor-settings" className={classes}>
+    <div data-slot="editor-block-panel" className={classes}>
       <div className="flex items-center justify-between gap-2">
         <Text as="h2" size="lg" weight="semibold" truncate>
           {typeLabel(t, selected.type)}

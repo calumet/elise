@@ -115,11 +115,11 @@ El arrastre usa `@dnd-kit/core`. `Editor.Root` con `pageSchema` pone el `DndCont
 
 Tres piezas de `Editor` arman la pantalla del editor de páginas alrededor de `Editor.Content`. El marco, la barra y dónde va cada panel son de la aplicación.
 
-| Pieza             | Qué es                                                                                                             |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `Editor.Outline`  | La estructura en un `SortableTree`, con la selección sincronizada con la página, arrastre y teclado                |
-| `Editor.Settings` | Los ajustes del bloque elegido, pintados según su tipo, más subir, bajar, mover a una columna, duplicar y eliminar |
-| `Editor.Catalog`  | Bloques y plantillas con buscador. Dice dónde se añade lo nuevo. `onClose` pinta el botón de cerrar                |
+| Pieza               | Qué es                                                                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `Editor.Outline`    | La estructura en un `SortableTree`, con la selección sincronizada con la página, arrastre y teclado                |
+| `Editor.BlockPanel` | Los ajustes del bloque elegido, pintados según su tipo, más subir, bajar, mover a una columna, duplicar y eliminar |
+| `Editor.Catalog`    | Bloques y plantillas con buscador. Dice dónde se añade lo nuevo. `onClose` pinta el botón de cerrar                |
 
 ```tsx
 <Editor.Root
@@ -133,18 +133,22 @@ Tres piezas de `Editor` arman la pantalla del editor de páginas alrededor de `E
   </aside>
   <Editor.Content aria-label="Contenido de la página" />
   <aside aria-label="Ajustes del bloque">
-    <Editor.Settings />
+    <Editor.BlockPanel />
   </aside>
 </Editor.Root>
 ```
 
-`Editor.Settings` pinta cada ajuste con el control que le toca: un `SegmentedControl` hasta cuatro opciones y un `Select` desde cinco, un interruptor para `toggle`, la proporción de las columnas con su dibujo, y las direcciones se validan al salir del campo. Arrastrar no es accesible por sí solo, así que todo lo que se mueve arrastrando se mueve también desde este panel.
+`Editor.BlockPanel` pinta cada ajuste con el control que le toca: un `SegmentedControl` hasta cuatro opciones y un `Select` desde cinco, un interruptor para `toggle`, la proporción de las columnas con su dibujo, y las direcciones se validan al salir del campo. Arrastrar no es accesible por sí solo, así que todo lo que se mueve arrastrando se mueve también desde este panel.
+
+### Vista previa
+
+`Editor.Root` guarda si se está editando o viendo la página como la ve quien la visita. `useEditorPreview()` devuelve `{ previewing, preview, edit }`, y `Editor.PreviewButton` es el botón para la barra, con «Vista previa» y «Volver a editar» como textos. En la vista previa `Editor.Content` pinta la página con `EditorContent`, la misma salida que el render, y `Editor.Outline`, `Editor.BlockPanel`, `Editor.Catalog`, `Editor.Toolbar` y las barras flotantes no se pintan; lo que la aplicación ponga alrededor (paneles, la barra de bloques) lo esconde ella con `previewing`. Escape o el botón vuelven a editar con la selección que había. El cambio usa una transición de vista si el navegador la tiene, y con movimiento reducido solo un fundido.
 
 Dentro de `Editor.Content` con `pageSchema`, las columnas se apilan cuando el área mide menos de 32rem, para que una vista previa del ancho de un móvil las muestre como en el teléfono.
 
 ### Tablas
 
-Cada fila y cada columna tienen su asa con insertar antes, insertar después y eliminar; al insertar, el cursor va a la primera celda nueva y la tabla sigue elegida. Las asas aparecen al apuntar la fila o la columna, o con el cursor en una de sus celdas, y quedan dentro de la página a cualquier ancho. Con la tabla elegida, `Editor.Settings` ofrece fila y columna de encabezado y la alineación de cada columna, más añadir fila y columna desde el teclado.
+Cada fila y cada columna tienen su asa con insertar antes, insertar después y eliminar; al insertar, el cursor va a la primera celda nueva y la tabla sigue elegida. Las asas aparecen al apuntar la fila o la columna, o con el cursor en una de sus celdas, y quedan dentro de la página a cualquier ancho. Con la tabla elegida, `Editor.BlockPanel` ofrece fila y columna de encabezado y la alineación de cada columna, más añadir fila y columna desde el teclado.
 
 La tabla guarda `headerRow`, `headerColumn` y `columnAlign` (`left`, `center` o `right` por columna). La normalización deja las celdas de acuerdo con ellos: `th` con `scope="col"` en la fila de encabezado, `th` con `scope="row"` en la columna, y `align` en cada celda que no vaya a la izquierda. Unir celdas, el ancho de las columnas y elegir varias celdas a la vez quedan fuera.
 

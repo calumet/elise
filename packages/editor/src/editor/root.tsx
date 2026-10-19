@@ -7,6 +7,7 @@ import { components } from "./components";
 import { ServicesProvider, type EditorServices } from "./context";
 import { BlockDrag } from "./drag";
 import { buildPlugins } from "./plugins";
+import { PreviewProvider } from "./preview";
 
 export type EditorRootProps = Omit<EditorServices, "schema"> & {
   schema: EditorSchema;
@@ -76,7 +77,9 @@ export const EditorRoot = ({
           onChange({ ...latest.current, content: emitted.current });
         }}
       >
-        {schema.blocks.includes("columns") ? <BlockDrag>{body}</BlockDrag> : body}
+        <PreviewProvider locale={value.locale}>
+          {schema.blocks.includes("columns") ? <BlockDrag>{body}</BlockDrag> : body}
+        </PreviewProvider>
       </Plate>
     </ServicesProvider>
   );

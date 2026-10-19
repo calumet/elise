@@ -161,6 +161,8 @@ export default {
   catalogActions: "Datos y acciones",
   catalogEmpty: "Nada coincide con «{query}»",
   closePanel: "Cerrar",
+  preview: "Vista previa",
+  backToEditing: "Volver a editar",
   outlineHint:
     "Arrastra un asa para reordenar, o enfócala y pulsa espacio para moverla con las flechas.",
   noSelection: "Ningún bloque elegido",

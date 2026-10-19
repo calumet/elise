@@ -14,7 +14,6 @@ export default {
   blockSettings: "Ajustes del bloque",
   undo: "Deshacer",
   redo: "Rehacer",
-  preview: "Vista previa",
   publish: "Publicar",
   titleLocked: "Título fijo",
   titleHint: "El título es el de la entrada del menú.",

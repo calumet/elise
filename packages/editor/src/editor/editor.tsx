@@ -1,19 +1,35 @@
 import { Box } from "@calumet/elise-ui/box";
 import { Separator } from "@calumet/elise-ui/separator";
-import type * as React from "react";
+import * as React from "react";
 
-import { EditorSettings } from "./block-settings";
-import { EditorCatalog } from "./catalog";
+import { EditorBlockPanel, type EditorBlockPanelProps } from "./block-panel";
+import { EditorCatalog, type EditorCatalogProps } from "./catalog";
 import { EditorContentArea, type EditorContentAreaProps } from "./content";
-import { EditorOutline } from "./outline";
+import { EditorOutline, type EditorOutlineProps } from "./outline";
+import { EditorPreviewButton, usePreviewing } from "./preview";
 import { EditorRoot, type EditorRootProps } from "./root";
-import { EditorToolbar, FormatRow } from "./toolbar";
+import { EditorToolbar, FormatRow, type EditorToolbarProps } from "./toolbar";
 
 export type EditorProps = Omit<EditorRootProps, "children"> &
   Omit<EditorContentAreaProps, "className" | "renderSlashMenu" | "onSlashPick">;
 
 const COMPOSER =
   "flex w-full flex-col rounded-md border border-input bg-card text-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:border-muted-foreground focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background";
+
+type EditingOnly<P> = (props: P) => React.JSX.Element | null;
+
+const whileEditing = <P extends object>(
+  Component: (props: P) => React.JSX.Element,
+): EditingOnly<P> => {
+  const Editing = (props: P): React.JSX.Element | null =>
+    usePreviewing() ? null : <Component {...props} />;
+  return Editing;
+};
+
+const Toolbar: EditingOnly<EditorToolbarProps> = whileEditing(EditorToolbar);
+const Outline: EditingOnly<EditorOutlineProps> = whileEditing(EditorOutline);
+const BlockPanel: EditingOnly<EditorBlockPanelProps> = whileEditing(EditorBlockPanel);
+const Catalog: EditingOnly<EditorCatalogProps> = whileEditing(EditorCatalog);
 
 const EditorComposed = ({
   schema,
@@ -48,7 +64,7 @@ const EditorComposed = ({
         paddingY={6}
         className="sm:px-12 sm:py-10"
       >
-        <EditorToolbar />
+        <Toolbar />
         <EditorContentArea {...content} className="min-h-40" />
       </Box>
     </EditorRoot>
@@ -58,15 +74,17 @@ const EditorComposed = ({
 export const Editor: ((props: EditorProps) => React.JSX.Element) & {
   Root: typeof EditorRoot;
   Content: typeof EditorContentArea;
-  Toolbar: typeof EditorToolbar;
-  Outline: typeof EditorOutline;
-  Settings: typeof EditorSettings;
-  Catalog: typeof EditorCatalog;
+  Toolbar: typeof Toolbar;
+  Outline: typeof Outline;
+  BlockPanel: typeof BlockPanel;
+  Catalog: typeof Catalog;
+  PreviewButton: typeof EditorPreviewButton;
 } = Object.assign(EditorComposed, {
   Root: EditorRoot,
   Content: EditorContentArea,
-  Toolbar: EditorToolbar,
-  Outline: EditorOutline,
-  Settings: EditorSettings,
-  Catalog: EditorCatalog,
+  Toolbar,
+  Outline,
+  BlockPanel,
+  Catalog,
+  PreviewButton: EditorPreviewButton,
 });

@@ -7,6 +7,7 @@ import { useServices } from "./context";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
 import { isMediaKind, MediaDialogs, type MediaKind } from "./media-dialogs";
+import { PreviewDocument, usePreviewing } from "./preview";
 import { useSlashMenu, type SlashMenuState } from "./slash-menu";
 
 export type EditorContentAreaProps = {
@@ -43,31 +44,43 @@ export const EditorContentArea = ({
   const hint = placeholder ?? (longForm ? t.placeholderDocument : t.placeholderMessage);
   const base = `${contentClassName(schema)} outline-none`;
   const page = schema.blocks.includes("columns");
+  const previewing = usePreviewing();
 
   return (
-    <div ref={container} className={page ? "@container/editor-page relative isolate" : "relative"}>
-      <PlateContent
-        {...aria}
-        placeholder={hint}
-        renderPlaceholder={({ attributes, children }) => (
-          <span
-            {...attributes}
-            style={{ ...attributes.style, opacity: 1 }}
-            className="text-muted-foreground"
-          >
-            {children}
-          </span>
-        )}
-        aria-controls={menu.open ? menu.id : undefined}
-        aria-activedescendant={
-          menu.open && menu.matches.length ? menu.optionId(menu.active) : undefined
-        }
-        onKeyDown={menu.onKeyDown}
-        className={className ? `${base} ${className}` : base}
-      />
-      {renderSlashMenu ? renderSlashMenu(menu) : <InsertMenu menu={menu} />}
-      {longForm && !page && !renderSlashMenu ? <InsertButton container={container} /> : null}
-      <MediaDialogs open={dialog} onClose={() => setDialog(null)} />
-    </div>
+    <>
+      {previewing ? (
+        <div data-slot="editor-preview" className={page ? "@container/editor-page" : undefined}>
+          <PreviewDocument />
+        </div>
+      ) : null}
+      <div
+        ref={container}
+        hidden={previewing}
+        className={page ? "@container/editor-page relative isolate" : "relative"}
+      >
+        <PlateContent
+          {...aria}
+          placeholder={hint}
+          renderPlaceholder={({ attributes, children }) => (
+            <span
+              {...attributes}
+              style={{ ...attributes.style, opacity: 1 }}
+              className="text-muted-foreground"
+            >
+              {children}
+            </span>
+          )}
+          aria-controls={menu.open ? menu.id : undefined}
+          aria-activedescendant={
+            menu.open && menu.matches.length ? menu.optionId(menu.active) : undefined
+          }
+          onKeyDown={menu.onKeyDown}
+          className={className ? `${base} ${className}` : base}
+        />
+        {renderSlashMenu ? renderSlashMenu(menu) : <InsertMenu menu={menu} />}
+        {longForm && !page && !renderSlashMenu ? <InsertButton container={container} /> : null}
+        <MediaDialogs open={dialog} onClose={() => setDialog(null)} />
+      </div>
+    </>
   );
 };

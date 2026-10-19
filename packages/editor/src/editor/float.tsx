@@ -3,6 +3,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 
 import type { Measurable } from "./anchor";
+import { usePreviewing } from "./preview";
 
 type Side = "top" | "bottom";
 type Place = { top: number; left: number; side: Side };
@@ -52,6 +53,7 @@ export const Float = ({
   ...props
 }: FloatProps): React.ReactPortal | null => {
   const editor = useEditorRef();
+  const previewing = usePreviewing();
   const layer = layerOf(editor);
   const [place, setPlace] = React.useState<Place | null>(null);
   const node = React.useRef<HTMLDivElement | null>(null);
@@ -117,7 +119,7 @@ export const Float = ({
     [floatRef],
   );
 
-  if (!layer || !anchor) return null;
+  if (!layer || !anchor || previewing) return null;
   return createPortal(
     <div
       {...props}

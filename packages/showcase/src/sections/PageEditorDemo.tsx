@@ -3,6 +3,7 @@ import {
   pageSchema,
   useBlockCommands,
   useEditorCommands,
+  useEditorPreview,
   useOutline,
   useSelectedBlock,
   type EditorDocument,
@@ -499,6 +500,7 @@ const PageBar = ({
 }) => {
   const { t } = useTranslation("pageEditor");
   const commands = useEditorCommands();
+  const { previewing } = useEditorPreview();
   return (
     <div className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-card px-4 py-2">
       <div className="flex min-w-0 flex-1 flex-col">
@@ -527,7 +529,7 @@ const PageBar = ({
           <Smartphone aria-hidden="true" className="size-icon-md" />
         </SegmentedControlItem>
       </SegmentedControl>
-      <div className="flex items-center gap-1">
+      <div className={previewing ? "hidden" : "flex items-center gap-1"}>
         {outlineDocked ? null : (
           <IconButton label={t("structure", { fallback: "Page structure" })} onClick={onOutline}>
             <ListTree aria-hidden="true" />
@@ -567,11 +569,9 @@ const PageBar = ({
           <span className="max-sm:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
         </Button>
       </div>
-      <Separator orientation="vertical" className="h-6 max-sm:hidden" />
+      <Separator orientation="vertical" className={previewing ? "hidden" : "h-6 max-sm:hidden"} />
       <div className="flex items-center gap-2">
-        <Button type="button" variant="outline" size="sm" className="max-sm:hidden">
-          {t("preview", { fallback: "Preview" })}
-        </Button>
+        <Editor.PreviewButton className={previewing ? undefined : "max-sm:hidden"} />
         <Button type="button" size="sm">
           {t("publish", { fallback: "Publish" })}
         </Button>
@@ -700,6 +700,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
   const { t } = useTranslation("pageEditor");
   const selected = useSelectedBlock();
   const blocks = useBlockCommands();
+  const { previewing } = useEditorPreview();
   const [view, setView] = useState<View>("desktop");
   const wide = useMinWidth("(min-width: 80rem)");
   const tablet = useMinWidth("(min-width: 48rem)");
@@ -739,7 +740,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
         sideDocked={sideDocked}
       />
       <div className="flex min-h-0 flex-1">
-        {outlineDocked ? (
+        {previewing ? null : outlineDocked ? (
           <aside
             aria-label={t("structure", { fallback: "Page structure" })}
             className="relative w-62 shrink-0 overflow-y-auto border-e border-border bg-card p-3"
@@ -789,15 +790,19 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
                   <Heading level={1} className="min-w-0 break-words">
                     {title}
                   </Heading>
-                  <Lock
-                    role="img"
-                    aria-label={t("titleLocked", { fallback: "Fixed title" })}
-                    className="mt-3 size-icon-sm shrink-0 text-muted-foreground"
-                  />
+                  {previewing ? null : (
+                    <Lock
+                      role="img"
+                      aria-label={t("titleLocked", { fallback: "Fixed title" })}
+                      className="mt-3 size-icon-sm shrink-0 text-muted-foreground"
+                    />
+                  )}
                 </div>
-                <Text size="xs" tone="muted">
-                  {t("titleHint", { fallback: "The title is the one of the menu entry." })}
-                </Text>
+                {previewing ? null : (
+                  <Text size="xs" tone="muted">
+                    {t("titleHint", { fallback: "The title is the one of the menu entry." })}
+                  </Text>
+                )}
               </div>
               <Editor.Toolbar />
               <Editor.Content
@@ -808,6 +813,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
                 type="button"
                 variant="ghost"
                 fullWidth
+                hidden={previewing}
                 data-slot="page-add"
                 className="mt-8 border border-dashed border-border-strong text-muted-foreground"
                 onClick={() => {
@@ -821,7 +827,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
             </Box>
           </Container>
         </div>
-        {sideDocked ? (
+        {sideDocked && !previewing ? (
           <aside
             aria-label={
               catalogShown
@@ -833,7 +839,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
             {catalogShown ? (
               <Editor.Catalog onClose={selected ? () => setSide("settings") : undefined} />
             ) : (
-              <Editor.Settings className="min-h-full" />
+              <Editor.BlockPanel className="min-h-full" />
             )}
           </aside>
         ) : null}
@@ -855,7 +861,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
             ) : sheet === "catalog" ? (
               <Editor.Catalog />
             ) : (
-              <Editor.Settings />
+              <Editor.BlockPanel />
             )}
           </SheetBody>
         </SheetContent>

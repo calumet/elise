@@ -1,8 +1,13 @@
 export { Editor, type EditorProps } from "./editor/editor";
 export type { EditorToolbarProps } from "./editor/toolbar";
 export type { EditorOutlineProps } from "./editor/outline";
-export type { EditorSettingsProps } from "./editor/block-settings";
+export type { EditorBlockPanelProps } from "./editor/block-panel";
 export type { EditorCatalogProps } from "./editor/catalog";
+export {
+  useEditorPreview,
+  type EditorPreview,
+  type EditorPreviewButtonProps,
+} from "./editor/preview";
 export {
   useBlockActive,
   useEditorCommands,
