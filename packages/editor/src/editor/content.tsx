@@ -5,7 +5,7 @@ import { useLabels } from "../labels";
 import { contentClassName } from "../views";
 import { useServices } from "./context";
 import { DropArea } from "./drag";
-import { DragChip } from "./drag-chip";
+import { DragGhost } from "./drag-ghost";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
 import { isMediaKind, MediaDialogs, type MediaKind } from "./media-dialogs";
@@ -70,7 +70,7 @@ export const EditorContentArea = ({
       {renderSlashMenu ? renderSlashMenu(menu) : <InsertMenu menu={menu} />}
       {longForm && !page && !renderSlashMenu ? <InsertButton container={container} /> : null}
       <MediaDialogs open={dialog} onClose={() => setDialog(null)} />
-      {page ? <DragChip /> : null}
+      {page ? <DragGhost /> : null}
       {page ? <DropArea container={container} /> : null}
     </div>
   );

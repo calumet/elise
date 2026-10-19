@@ -80,7 +80,7 @@ export const setDropTarget = (editor: object, value: DropTarget): void => {
   for (const listener of store.listeners) listener();
 };
 
-export const useDropTarget = (editor: object): DropTarget =>
+const useDropTarget = (editor: object): DropTarget =>
   React.useSyncExternalStore(
     (listener) => {
       const { listeners } = storeOf(editor);

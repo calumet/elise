@@ -66,6 +66,10 @@
   margin-top: 0.25rem;
 }
 
+[data-slate-editor] td,
+[data-slate-editor] th {
+  min-width: 4rem;
+}
 table td[data-align="center"],
 table th[data-align="center"] {
   text-align: center;
