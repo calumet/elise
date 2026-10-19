@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-forms",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": false,
   "description": "useZodForm y FormField: integración de react-hook-form + Zod para Elise.",
   "repository": {
