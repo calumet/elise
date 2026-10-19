@@ -3,6 +3,23 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-i18n` 0.4.0
+
+### Añade
+
+**`mergeMessages`, que combina catálogos de varios orígenes sin que un namespace
+pise a otro.** Une las keys dentro de cada namespace y, si dos catálogos traen
+la misma, gana el último. Una app que suma el catálogo de un paquete ya no
+necesita un namespace distinto del que usa el paquete:
+`mergeMessages(catalogoDeLaApp, catalogoDelPaquete)`.
+
+### Corrige
+
+**`buildMessages` y `buildLazyLoader` pisaban namespaces al juntar archivos por
+locale.** Dos archivos `<locale>.<ext>` con el mismo namespace se reemplazaban
+entero, y ahora se unen key a key. El archivo `<namespace>.<locale>.<ext>` sigue
+reemplazando el namespace completo.
+
 ## `@calumet/elise-ui` 0.39.1
 
 ### Corrige
