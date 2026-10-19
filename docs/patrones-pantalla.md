@@ -122,7 +122,7 @@ El usuario viene a leer o editar un registro concreto.
 | ----------------- | ------------------------------------------- |
 | Vuelta al listado | `Link` con `ChevronLeft`, encima del título |
 | Estado            | `Badge`, al lado del título                 |
-| Acciones          | Duplicar en la cabecera; eliminar, abajo    |
+| Acciones          | En la cabecera, a la derecha del título     |
 | Contenido         | Varias `Section`, una por grupo de campos   |
 | Datos de apoyo    | Columna al lado, con `DescriptionList`      |
 
@@ -136,9 +136,12 @@ La columna de apoyo mide 320px y se apila por debajo de 1024px:
 contenido y una tabla ancha empuja la columna de apoyo fuera de la pantalla.
 
 **Eliminar pasa por `AlertDialog`.** Destruye un registro y no hay deshacer.
-Va al final del menú de la cabecera y en `danger`, como la acción secundaria
-`destructive` de Polaris. En una ficha larga se pasa a su propia sección al
-final, como en [Ajustes](#5-ajustes).
+Lo que actúa sobre el registro entero (duplicar, archivar, eliminar) va en la
+fila del título, alineado a la derecha: las acciones frecuentes como botones y
+el resto en «Más acciones». Eliminar va al final de ese menú, en `danger`. No
+lleva sección de peligro al final: eso es de los [Ajustes](#5-ajustes). Desde
+el listado, eliminar es una acción en lote sobre la selección
+([Tabla de índice](patrones-bloque.md#2-tabla-de-índice)).
 
 ## 5. Ajustes
 
@@ -150,7 +153,7 @@ El usuario viene a cambiar algo que ya estaba configurado.
 | Explicación del grupo | Un `Text` con `tone="muted"` dentro                               |
 | Controles             | `Field`, `Switch`, `CheckboxGroup`, `Select`                      |
 | Ir a un subajuste     | [Menú de subpantallas](patrones-bloque.md#4-menú-de-subpantallas) |
-| Acciones destructivas | Su propia sección, al final                                       |
+| Acciones destructivas | Su propia sección, al final (borrar la cuenta o el espacio)       |
 | Cambios sin guardar   | `SaveBar`, fijada arriba mientras haya sin guardar                |
 
 **El ancho baja a `sm`.** Una pantalla de ajustes es una columna de
