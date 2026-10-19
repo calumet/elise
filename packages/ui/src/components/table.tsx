@@ -443,7 +443,7 @@ export const Table: React.ForwardRefExoticComponent<
       emptyZone
     ) : (
       <div className={cn("relative overflow-hidden", zoneRadius(!!filterBar, !!paginationBar))}>
-        <div className="w-full overflow-x-auto" inert={loading || undefined}>
+        <div className="w-full overflow-x-auto overflow-y-hidden" inert={loading || undefined}>
           {body}
         </div>
       </div>
@@ -549,6 +549,7 @@ export const TableBody: React.ForwardRefExoticComponent<
       return (
         <ul
           data-slot="table-body"
+          ref={ref as React.Ref<HTMLUListElement>}
           className={cn("list-none", rules, className)}
           {...(props as React.HTMLAttributes<HTMLUListElement>)}
         />
@@ -744,10 +745,16 @@ export const TableRow: React.ForwardRefExoticComponent<
       onPress(event);
     };
 
+    const setRow = (node: HTMLElement | null) => {
+      row.current = node;
+      if (typeof ref === "function") ref(node as HTMLTableRowElement);
+      else if (ref) ref.current = node as HTMLTableRowElement;
+    };
+
     if (mode === "list") {
       return (
         <ListRow
-          ref={row as React.Ref<HTMLLIElement>}
+          ref={setRow}
           className={className}
           clickDelegate={clickDelegate}
           onClick={press}
@@ -774,11 +781,7 @@ export const TableRow: React.ForwardRefExoticComponent<
     return (
       <tr
         data-slot="table-row"
-        ref={(node) => {
-          row.current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref) ref.current = node;
-        }}
+        ref={setRow}
         onClick={press}
         /* Apuntar una fila la deja del mismo tono que el encabezado: un solo valor
            para «superficie que no es la del contenido». Elegida baja un paso más,

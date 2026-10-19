@@ -74,6 +74,7 @@ const PrimitivesDemo = React.lazy(() => import("./sections/PrimitivesDemo"));
 const ProgressSkeletonDemo = React.lazy(() => import("./sections/ProgressSkeletonDemo"));
 const ScrollToolbarDemo = React.lazy(() => import("./sections/ScrollToolbarDemo"));
 const SectionDemo = React.lazy(() => import("./sections/SectionDemo"));
+const SortableDemo = React.lazy(() => import("./sections/SortableDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
 const ToastDemo = React.lazy(() => import("./sections/ToastDemo"));
 const VaciosDemo = React.lazy(() => import("./sections/VaciosDemo"));
@@ -163,6 +164,7 @@ const SECCIONES: { title: string; Demo: React.ComponentType }[] = [
   { title: "Color Picker", Demo: ColorPickerDemo },
   { title: "Table", Demo: TableDemo },
   { title: "Data Table (filtros y exportacion)", Demo: DataTableDemo },
+  { title: "Sortable", Demo: SortableDemo },
   { title: "Carousel", Demo: CarouselDemo },
   { title: "Scroll & Toolbar", Demo: ScrollToolbarDemo },
   { title: "Toast", Demo: ToastDemo },
