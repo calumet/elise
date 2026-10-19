@@ -7,7 +7,6 @@ import {
   HorizontalRulePlugin,
   ItalicPlugin,
 } from "@platejs/basic-nodes/react";
-import { DndPlugin } from "@platejs/dnd";
 import { IndentPlugin } from "@platejs/indent/react";
 import { LinkPlugin } from "@platejs/link/react";
 import { ListPlugin } from "@platejs/list/react";
@@ -197,7 +196,7 @@ export const buildPlugins = (schema: EditorSchema): AnyPluginConfig[] => {
     plugins.push(
       blockPlugin("columns"),
       blockPlugin("column"),
-      DndPlugin.configure({ render: { aboveNodes: draggable } }),
+      createPlatePlugin({ key: "blockDrag", render: { aboveNodes: draggable } }),
     );
   }
   plugins.push(BlockSelectionPlugin);

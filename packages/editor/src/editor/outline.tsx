@@ -13,11 +13,12 @@ const ROW =
   "relative data-dragging:opacity-40 before:pointer-events-none before:absolute before:inset-x-1 before:z-sticky before:hidden before:h-0.5 before:rounded-full before:bg-primary data-[drop=after]:before:-bottom-px data-[drop=after]:before:block data-[drop=before]:before:-top-px data-[drop=before]:before:block [&[data-drop=inside]>span:first-child]:bg-accent [&[data-drop=inside]>span:first-child]:ring-2 [&[data-drop=inside]>span:first-child]:ring-primary";
 
 const OutlineRow = ({ node }: { id: string; node: OutlineNode }): React.JSX.Element => {
-  const { ref, isDragging, position } = useOutlineDnd(node.id);
+  const { ref, listeners, isDragging, position } = useOutlineDnd(node.id);
   const Icon = blockIcon(node.type);
   return (
     <TreeItem
       ref={ref}
+      {...listeners}
       id={node.id}
       label={<span title={node.label}>{node.label}</span>}
       icon={<Icon className="size-icon-md text-muted-foreground" />}

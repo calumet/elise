@@ -98,6 +98,22 @@ table th[data-align="right"] {
   }
 }
 
+[data-block-drag],
+[data-block-drag] * {
+  cursor: grabbing;
+}
+[data-block-drag] [data-slot="block"] {
+  transition: margin var(--duration-base) var(--ease-out);
+}
+[data-block-drag] [data-slot="block"]:not([data-dragging]) > [data-slot="block-handle"] {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-block-drag] [data-slot="block"] {
+    transition: none;
+  }
+}
+
 [data-slate-editor] > [data-slot="block"] + [data-slot="block"]:has(> h2) {
   margin-top: 2rem;
 }

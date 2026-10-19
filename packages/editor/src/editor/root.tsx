@@ -1,12 +1,11 @@
 import { Plate, usePlateEditor } from "platejs/react";
 import * as React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { newId } from "../ids";
 import type { EditorDocument, EditorNode, EditorSchema } from "../types";
 import { components } from "./components";
 import { ServicesProvider, type EditorServices } from "./context";
+import { BlockDrag } from "./drag";
 import { buildPlugins } from "./plugins";
 
 export type EditorRootProps = Omit<EditorServices, "schema"> & {
@@ -63,26 +62,22 @@ export const EditorRoot = ({
   );
 
   const body = (
-    <Plate
-      editor={editor}
-      onValueChange={({ value: next }) => {
-        emitted.current = next as unknown as EditorNode[];
-        onChange({ ...latest.current, content: emitted.current });
-      }}
-    >
-      <div data-slot="editor" className={className}>
-        {children}
-      </div>
-    </Plate>
+    <div data-slot="editor" className={className}>
+      {children}
+    </div>
   );
 
   return (
     <ServicesProvider value={services}>
-      {schema.blocks.includes("columns") ? (
-        <DndProvider backend={HTML5Backend}>{body}</DndProvider>
-      ) : (
-        body
-      )}
+      <Plate
+        editor={editor}
+        onValueChange={({ value: next }) => {
+          emitted.current = next as unknown as EditorNode[];
+          onChange({ ...latest.current, content: emitted.current });
+        }}
+      >
+        {schema.blocks.includes("columns") ? <BlockDrag>{body}</BlockDrag> : body}
+      </Plate>
     </ServicesProvider>
   );
 };
