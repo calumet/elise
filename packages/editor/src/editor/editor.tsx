@@ -6,9 +6,12 @@ import { useEditorRef } from "platejs/react";
 import * as React from "react";
 
 import { useLabels } from "../labels";
+import { EditorSettings } from "./block-settings";
+import { EditorCatalog } from "./catalog";
 import { EditorContentArea, type EditorContentAreaProps } from "./content";
 import { useServices } from "./context";
 import { LinkForm } from "./link-form";
+import { EditorOutline } from "./outline";
 import { EditorRoot, type EditorRootProps } from "./root";
 import { BAR, EditorToolbar, LinkButton, ListButton, MarkButton } from "./toolbar";
 
@@ -102,8 +105,14 @@ export const Editor: ((props: EditorProps) => React.JSX.Element) & {
   Root: typeof EditorRoot;
   Content: typeof EditorContentArea;
   Toolbar: typeof EditorToolbar;
+  Outline: typeof EditorOutline;
+  Settings: typeof EditorSettings;
+  Catalog: typeof EditorCatalog;
 } = Object.assign(EditorComposed, {
   Root: EditorRoot,
   Content: EditorContentArea,
   Toolbar: EditorToolbar,
+  Outline: EditorOutline,
+  Settings: EditorSettings,
+  Catalog: EditorCatalog,
 });

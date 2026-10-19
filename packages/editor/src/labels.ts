@@ -95,6 +95,7 @@ const DEFAULTS = {
   templateCtaBody: "Say what happens next in one sentence.",
   templateCtaButton: "Get started",
   uploadFileFailed: "The file could not be uploaded. Try again.",
+  insertFile: "Insert file",
   dragHandle: "Drag to move",
   moveUp: "Move up",
   moveDown: "Move down",
@@ -102,7 +103,7 @@ const DEFAULTS = {
   deleteBlock: "Delete",
   blockSettings: "Block settings",
   outline: "Page structure",
-  settingCount: "Columns",
+  settingCount: "Number of columns",
   settingRatio: "Proportion",
   settingGap: "Gap",
   settingAlign: "Vertical alignment",
@@ -136,9 +137,48 @@ const DEFAULTS = {
   optionSuccess: "Success",
   optionWarning: "Warning",
   optionDanger: "Danger",
+  addBlock: "Add block",
+  addBlockBelow: "Add a block below",
+  searchCatalog: "Search blocks and templates",
+  catalogBlocks: "Blocks",
+  catalogText: "Text",
+  catalogLayout: "Layout",
+  catalogMedia: "Media",
+  catalogActions: "Data and actions",
+  catalogEmpty: "Nothing matches “{query}”",
+  closePanel: "Close",
+  outlineHint: "Drag in this list or on the page to reorder.",
+  noSelection: "No block selected",
+  noSelectionHint: "Select a block on the page or in the structure to change it.",
+  selectParent: "Select the columns",
+  moveTo: "Move to",
+  moveOut: "Out of the columns",
+  addImages: "Add images",
+  imagesHint: "JPG, PNG or WebP",
+  removeImage: "Remove image",
+  emptyGallery: "Add images in the block settings",
 };
 
 export type Labels = Record<keyof typeof DEFAULTS, string>;
+
+export const typeLabel = (t: Labels, type: string): string =>
+  ({
+    p: t.paragraph,
+    h2: t.heading2,
+    h3: t.heading3,
+    blockquote: t.quote,
+    callout: t.callout,
+    hr: t.divider,
+    img: t.image,
+    media_embed: t.video,
+    table: t.table,
+    columns: t.columns,
+    column: t.column,
+    spacer: t.spacer,
+    button: t.buttonBlock,
+    gallery: t.gallery,
+    file: t.file,
+  })[type] ?? type;
 
 export const useLabels = (): Labels => {
   const translate = useElTranslate("editor");

@@ -1,4 +1,5 @@
-import { GripVertical } from "@calumet/elise-icons";
+import { GripVertical, Plus } from "@calumet/elise-icons";
+import { Button } from "@calumet/elise-ui/button";
 import {
   DRAG_ITEM_BLOCK,
   getHoverDirection,
@@ -7,13 +8,19 @@ import {
   useDropLine,
   type DragItemNode,
 } from "@platejs/dnd";
-import type { TElement } from "platejs";
-import { useEditorRef, type PlateEditor, type PlateElementProps } from "platejs/react";
+import { PathApi, type TElement } from "platejs";
+import {
+  useEditorRef,
+  useEditorSelector,
+  type PlateEditor,
+  type PlateElementProps,
+} from "platejs/react";
 import * as React from "react";
 import { useDrag, useDrop } from "react-dnd";
 
-import { useLabels } from "../labels";
-import { selectBlockById } from "./selection";
+import { typeLabel, useLabels } from "../labels";
+import { insertLine } from "./items";
+import { selectBlockById, selectedId } from "./selection";
 import {
   blockEntry,
   canMoveBlock,
@@ -44,8 +51,22 @@ const canDropNode = ({
   );
 };
 
+const BLOCK =
+  "relative rounded-md outline-offset-8 data-dragging:opacity-50 data-selected:outline-2 data-selected:outline-primary [&:hover:not(:has([data-slot=block]:hover))>[data-slot=block-handle]]:opacity-100 [&[data-selected]>[data-slot=block-handle]]:opacity-100";
+const HANDLE =
+  "absolute -start-3 top-0 flex -translate-x-full flex-col opacity-0 transition-opacity duration-(--duration-fast) ease-out max-sm:hidden";
+const CHIP =
+  "pointer-events-none absolute -top-2 start-3 z-sticky -translate-y-1/2 rounded-sm bg-primary px-1.5 text-2xs font-semibold text-primary-foreground select-none";
+
+const addBelow = (editor: PlateEditor, id: string): void => {
+  const entry = blockEntry(editor, id);
+  if (entry) insertLine(editor, PathApi.next(entry[1]), "/");
+};
+
 const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.Element => {
   const t = useLabels();
+  const id = String(element.id);
+  const selected = useEditorSelector((ed) => selectedId(ed) === id, [id]);
   const nodeRef = React.useRef<HTMLDivElement>(null);
   const { dropLine } = useDropLine();
   const { handleRef, isDragging } = useDraggable({
@@ -84,33 +105,50 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
     <div
       ref={nodeRef}
       data-slot="block"
-      data-block-id={String(element.id)}
+      data-block-id={id}
       data-dragging={isDragging || undefined}
-      className="relative"
+      data-selected={selected || undefined}
+      className={BLOCK}
     >
-      <div
-        contentEditable={false}
-        data-slot="block-handle"
-        className="absolute start-0 top-0 -translate-x-full"
-      >
-        <button
+      <div contentEditable={false} data-slot="block-handle" className={HANDLE}>
+        <Button
           type="button"
+          variant="ghost"
+          size="icon-sm"
+          tabIndex={-1}
+          aria-label={t.addBlockBelow}
+          className="text-muted-foreground"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => addBelow(editor as PlateEditor, id)}
+        >
+          <Plus aria-hidden="true" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          tabIndex={-1}
           ref={handleRef as React.Ref<HTMLButtonElement>}
           aria-label={t.dragHandle}
           data-slot="drag-handle"
-          className="cursor-grab"
-          onClick={() => selectBlockById(editor as PlateEditor, String(element.id))}
+          className="cursor-grab text-muted-foreground active:cursor-grabbing"
+          onClick={() => selectBlockById(editor as PlateEditor, id)}
         >
-          <GripVertical aria-hidden="true" className="size-icon-md" />
-        </button>
+          <GripVertical aria-hidden="true" />
+        </Button>
       </div>
+      {selected ? (
+        <span contentEditable={false} aria-hidden="true" className={CHIP}>
+          {typeLabel(t, String(element.type))}
+        </span>
+      ) : null}
       {children}
       {dropLine ? (
         <div
           contentEditable={false}
           data-slot="drop-line"
           data-position={dropLine}
-          className={`pointer-events-none absolute inset-x-0 h-0.5 bg-primary ${dropLine === "top" ? "top-0" : "bottom-0"}`}
+          className={`pointer-events-none absolute -inset-x-2 h-0.5 rounded-full bg-primary ${dropLine === "top" ? "-top-2" : "-bottom-2"}`}
         />
       ) : null}
     </div>

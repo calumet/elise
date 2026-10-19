@@ -26,7 +26,9 @@ y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
 **Ajustes por bloque.** Cada tipo declara sus ajustes (`select`, `toggle`, `number`, `text`, `url`, `video`, `images`). `useSelectedBlock` los entrega listos para pintar y `useBlockCommands` selecciona, cambia, duplica, elimina y mueve bloques.
 
-**Esquema de la página.** `useOutline` devuelve el documento como árbol. El arrastre usa `@platejs/dnd`: cada bloque lleva un asa sin estilo, `useOutlineDnd` deja arrastrar desde el esquema y las columnas rechazan anidarse.
+**Esquema de la página.** `useOutline` devuelve el documento como árbol. El arrastre usa `@platejs/dnd`: cada bloque lleva un asa, `useOutlineDnd` deja arrastrar desde el esquema y las columnas rechazan anidarse.
+
+**La interfaz del editor de páginas.** `Editor.Outline` es la estructura en un `Tree`, `Editor.Settings` el panel de ajustes del bloque elegido y `Editor.Catalog` el catálogo de bloques y plantillas con buscador. El bloque apuntado o elegido muestra al margen el `+` y el asa, y el elegido su contorno con el tipo. Todo arrastre tiene su alternativa con teclado en el panel: subir, bajar y mover a una columna o fuera de ella. El menú `/` funciona también dentro de una columna, y elegir Archivo en él abre su diálogo.
 
 **Plantillas** (texto con imagen, equipo, preguntas, llamada a la acción) que se insertan como bloques ordinarios, y `insertFile`, `uploadImage` e `insertTemplate` en `useEditorCommands`.
 

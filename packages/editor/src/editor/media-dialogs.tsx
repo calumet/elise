@@ -139,6 +139,100 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
   );
 };
 
+export const FileDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX.Element => {
+  const t = useLabels();
+  const commands = useEditorCommands();
+  const returnFocus = useReturnFocus();
+  const [file, setFile] = React.useState<File | null>(null);
+  const [busy, setBusy] = React.useState(false);
+  const [failed, setFailed] = React.useState(false);
+
+  const change = (next: boolean) => {
+    if (!next) {
+      setFile(null);
+      setBusy(false);
+      setFailed(false);
+    }
+    onOpenChange(next);
+  };
+
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!file || busy) return;
+    setBusy(true);
+    setFailed(false);
+    try {
+      await commands.insertFile(file);
+      change(false);
+    } catch {
+      setBusy(false);
+      setFailed(true);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={change}>
+      <DialogContent size="sm" onCloseAutoFocus={returnFocus}>
+        <form noValidate onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
+          <DialogHeader>
+            <DialogTitle>{t.insertFile}</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <BlockStack gap={4}>
+              {failed ? <Alert tone="danger">{t.uploadFileFailed}</Alert> : null}
+              {file ? (
+                <FileUploadList>
+                  <FileUploadItem
+                    name={file.name}
+                    size={file.size}
+                    onRemove={() => setFile(null)}
+                  />
+                </FileUploadList>
+              ) : (
+                <FileUpload label={t.file} onFiles={(accepted) => setFile(accepted[0] ?? null)} />
+              )}
+            </BlockStack>
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                {t.cancel}
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={!file} loading={busy}>
+              {t.insert}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export type MediaKind = "image" | "video" | "file";
+
+export const MediaDialogs = ({
+  open,
+  onClose,
+}: {
+  open: MediaKind | null;
+  onClose: () => void;
+}): React.JSX.Element => {
+  const close = (next: boolean) => {
+    if (!next) onClose();
+  };
+  return (
+    <>
+      <ImageDialog open={open === "image"} onOpenChange={close} />
+      <VideoDialog open={open === "video"} onOpenChange={close} />
+      <FileDialog open={open === "file"} onOpenChange={close} />
+    </>
+  );
+};
+
+export const isMediaKind = (id: string): id is MediaKind =>
+  id === "image" || id === "video" || id === "file";
+
 export const VideoDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX.Element => {
   const t = useLabels();
   const commands = useEditorCommands();

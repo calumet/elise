@@ -103,7 +103,38 @@ Las columnas no se rompen: una columna no puede quedar vacía ni contener otras 
 
 `useOutline()` devuelve el documento como árbol de `{ id, type, label, depth, children }` y se mantiene al día con cada cambio. Las columnas aparecen como `columns`, con sus `column` y los bloques de cada una; tablas, avisos y citas son una hoja. La etiqueta es el texto del bloque o, si no tiene, el nombre del tipo.
 
-El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva un asa (`data-slot="drag-handle"`) y una línea de soltar (`data-slot="drop-line"`) sin estilo. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
+El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva al margen un `+` que abre el menú `/` debajo, un asa (`data-slot="drag-handle"`) y una línea de soltar (`data-slot="drop-line"`). El bloque elegido lleva su contorno y el nombre del tipo. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
+
+### Los paneles
+
+Tres piezas de `Editor` arman la pantalla del editor de páginas alrededor de `Editor.Content`. El marco, la barra y dónde va cada panel son de la aplicación.
+
+| Pieza             | Qué es                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `Editor.Outline`  | La estructura en un `Tree`, con la selección sincronizada con la página y arrastre en los dos sentidos             |
+| `Editor.Settings` | Los ajustes del bloque elegido, pintados según su tipo, más subir, bajar, mover a una columna, duplicar y eliminar |
+| `Editor.Catalog`  | Bloques y plantillas con buscador. `onClose` pinta el botón de cerrar                                              |
+
+```tsx
+<Editor.Root
+  schema={pageSchema}
+  value={pagina}
+  onChange={setPagina}
+  className="flex min-h-0 flex-1"
+>
+  <aside aria-label="Estructura">
+    <Editor.Outline />
+  </aside>
+  <Editor.Content aria-label="Contenido de la página" />
+  <aside aria-label="Ajustes del bloque">
+    <Editor.Settings />
+  </aside>
+</Editor.Root>
+```
+
+`Editor.Settings` pinta cada ajuste con el control que le toca: un `SegmentedControl` hasta cuatro opciones y un `Select` desde cinco, un interruptor para `toggle`, la proporción de las columnas con su dibujo, y las direcciones se validan al salir del campo. Arrastrar no es accesible por sí solo, así que todo lo que se mueve arrastrando se mueve también desde este panel.
+
+Dentro de `Editor.Content` con `pageSchema`, las columnas se apilan cuando el área mide menos de 32rem, para que una vista previa del ancho de un móvil las muestre como en el teléfono.
 
 ### Plantillas
 

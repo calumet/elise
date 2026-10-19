@@ -28,8 +28,9 @@ import { blockAnchor } from "./anchor";
 import { useEditorFocused } from "./focus";
 import type { InsertItemId } from "./items";
 import type { SlashMenuState } from "./slash-menu";
+import { unitPath } from "./structure";
 
-const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof Labels }> = {
+export const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof Labels }> = {
   h2: { Icon: Heading2, description: "heading2Description" },
   h3: { Icon: Heading3, description: "heading3Description" },
   bulleted: { Icon: List, description: "bulletedListDescription" },
@@ -52,9 +53,12 @@ const preventFocus = (event: Event): void => event.preventDefault();
 export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Element => {
   const t = useLabels();
   const editor = useEditorRef();
-  const block = useEditorSelector((ed) => ed.selection?.anchor.path[0] ?? null, []);
+  const block = useEditorSelector((ed) => {
+    const path = ed.selection?.anchor.path;
+    return path ? unitPath(ed, path).join(".") : null;
+  }, []);
   const anchor = React.useMemo(
-    () => (block === null ? undefined : blockAnchor(editor, [block])),
+    () => (block === null ? undefined : blockAnchor(editor, block.split(".").map(Number))),
     [editor, block],
   );
   const activeId = menu.open ? menu.optionId(menu.active) : null;

@@ -2,6 +2,7 @@ import { AlertTriangle, CheckCircle2, FileText, Info, XCircle } from "@calumet/e
 import { buttonVariants } from "@calumet/elise-ui/button";
 import * as React from "react";
 
+import { useLabels, type Labels } from "./labels";
 import { columnsSettings, resolveSettings, type GalleryImage } from "./settings";
 import type { EditorNode, EditorSchema } from "./types";
 import { parseVideo, safeHref, safeSrc } from "./urls";
@@ -30,7 +31,7 @@ export const LIST_CLASSES = {
 };
 
 const VOID =
-  "data-selected:ring-2 data-selected:ring-ring data-selected:ring-offset-2 data-selected:ring-offset-background";
+  "data-selected:ring-2 data-selected:ring-ring data-selected:ring-offset-2 data-selected:ring-offset-background [[data-slot=block][data-selected]_&]:ring-0 [[data-slot=block][data-selected]_&]:ring-offset-0";
 
 const CALLOUT_TONES: Record<string, { surface: string; Icon: typeof Info }> = {
   info: { surface: "bg-info-subtle text-info-subtle-foreground", Icon: Info },
@@ -209,11 +210,37 @@ const Columns = ({ element, attributes, children }: ViewProps): React.JSX.Elemen
   );
 };
 
-const Column = ({ attributes, children }: ViewProps): React.JSX.Element => (
-  <div data-slot="column" {...attributes}>
+const Column = ({ attributes, children, editing }: ViewProps): React.JSX.Element => (
+  <div
+    data-slot="column"
+    className={
+      editing
+        ? "rounded-md outline-1 outline-offset-4 outline-border-strong outline-dashed"
+        : undefined
+    }
+    {...attributes}
+  >
     {children}
   </div>
 );
+
+const Hint = ({ text }: { text: (t: Labels) => string }): React.JSX.Element => {
+  const t = useLabels();
+  return (
+    <span
+      contentEditable={false}
+      className="pointer-events-none text-2xs text-muted-foreground select-none"
+    >
+      {text(t)}
+    </span>
+  );
+};
+
+const SIZE_LABELS: Record<string, keyof Labels> = {
+  small: "optionSmall",
+  medium: "optionMedium",
+  large: "optionLarge",
+};
 
 const Spacer = ({
   element,
@@ -221,18 +248,24 @@ const Spacer = ({
   children,
   editing,
   selected,
-}: ViewProps): React.JSX.Element => (
-  <div
-    data-slot="spacer"
-    data-size={resolveSettings(element).size}
-    data-selected={selected || undefined}
-    aria-hidden={editing ? undefined : true}
-    className={VOID}
-    {...attributes}
-  >
-    {children}
-  </div>
-);
+}: ViewProps): React.JSX.Element => {
+  const size = String(resolveSettings(element).size);
+  return (
+    <div
+      data-slot="spacer"
+      data-size={size}
+      data-selected={selected || undefined}
+      aria-hidden={editing ? undefined : true}
+      className={editing ? `flex items-center justify-center rounded-md bg-muted ${VOID}` : VOID}
+      {...attributes}
+    >
+      {editing ? (
+        <Hint text={(t) => `${t.spacer} · ${t[SIZE_LABELS[size] ?? "optionMedium"]}`} />
+      ) : null}
+      {children}
+    </div>
+  );
+};
 
 const ButtonBlock = ({
   element,
@@ -279,9 +312,10 @@ const Gallery = ({
       data-count={images.length}
       data-empty={images.length === 0 || undefined}
       data-selected={selected || undefined}
-      className={VOID}
+      className={editing && images.length === 0 ? `flex items-center justify-center ${VOID}` : VOID}
       {...attributes}
     >
+      {editing && images.length === 0 ? <Hint text={(t) => t.emptyGallery} /> : null}
       <div {...frozen(editing)} data-slot="gallery-images">
         {images.map((image) => {
           const nth = (seen.get(image.src) ?? 0) + 1;

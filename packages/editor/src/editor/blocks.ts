@@ -1,7 +1,7 @@
 import { ElementApi, NodeApi, type Descendant, type TElement } from "platejs";
 import { useEditorRef, useEditorSelector } from "platejs/react";
 
-import { useLabels, type Labels } from "../labels";
+import { typeLabel, useLabels, type Labels } from "../labels";
 import {
   settingDefs,
   resolveSettings,
@@ -65,25 +65,6 @@ export type BlockCommands = {
 };
 
 const MAX_LABEL = 48;
-
-const typeLabel = (t: Labels, type: string): string =>
-  ({
-    p: t.paragraph,
-    h2: t.heading2,
-    h3: t.heading3,
-    blockquote: t.quote,
-    callout: t.callout,
-    hr: t.divider,
-    img: t.image,
-    media_embed: t.video,
-    table: t.table,
-    columns: t.columns,
-    column: t.column,
-    spacer: t.spacer,
-    button: t.buttonBlock,
-    gallery: t.gallery,
-    file: t.file,
-  })[type] ?? type;
 
 const nodeLabel = (t: Labels, node: TElement, index: number): string => {
   const type = String(node.type);

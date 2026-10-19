@@ -1,5 +1,5 @@
 import { toggleList } from "@platejs/list";
-import { ElementApi, KEYS, NodeApi, PathApi, type TElement } from "platejs";
+import { ElementApi, KEYS, NodeApi, PathApi, type Path, type TElement } from "platejs";
 import type { PlateEditor } from "platejs/react";
 
 import { newId } from "../ids";
@@ -62,6 +62,28 @@ export const placeBlock = (
   const next = isVoid && editor.api.node(PathApi.next(at)) ? PathApi.next(at) : at;
   editor.tf.select(editor.api.start(next) ?? undefined);
   editor.tf.focus();
+};
+
+export const insertLine = (editor: PlateEditor, at: Path, text = ""): void => {
+  editor.tf.insertNodes({ ...paragraph(), children: [{ text }] }, { at });
+  editor.tf.select(editor.api.end(at));
+  editor.tf.focus();
+};
+
+export const openLine = (editor: PlateEditor): void => {
+  const anchor = editor.selection?.anchor.path;
+  const entry = anchor ? editor.api.node<TElement>(unitPath(editor, anchor)) : undefined;
+  if (!entry) {
+    insertLine(editor, [editor.children.length]);
+    return;
+  }
+  const [node, path] = entry;
+  if (node.type === KEYS.p && !node.listStyleType && NodeApi.string(node) === "") {
+    editor.tf.select(editor.api.start(path) ?? undefined);
+    editor.tf.focus();
+    return;
+  }
+  insertLine(editor, PathApi.next(path));
 };
 
 const cell = (type: "td" | "th"): TElement => ({ id: newId(), type, children: [paragraph()] });

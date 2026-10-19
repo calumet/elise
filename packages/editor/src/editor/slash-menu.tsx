@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { useEditorCommands } from "./commands";
 import type { InsertItem } from "./items";
+import { unitPath } from "./structure";
 
 const SLASH = /^\/(\S*)$/;
 const DEFERRED = new Set(["image", "video", "file"]);
@@ -26,7 +27,12 @@ export const useSlashMenu = (onPicked?: (item: InsertItem) => void): SlashMenuSt
   const commands = useEditorCommands();
   const state = useEditorSelector((ed) => {
     const entry = ed.selection && ed.api.isCollapsed() ? ed.api.block() : undefined;
-    if (!entry || entry[1].length !== 1 || entry[0].type !== KEYS.p || entry[0].listStyleType) {
+    if (
+      !entry ||
+      unitPath(ed, entry[1]).length !== entry[1].length ||
+      entry[0].type !== KEYS.p ||
+      entry[0].listStyleType
+    ) {
       return null;
     }
     const match = SLASH.exec(NodeApi.string(entry[0]));
