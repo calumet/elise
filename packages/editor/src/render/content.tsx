@@ -148,6 +148,15 @@ export const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.R
       continue;
     }
     flush();
+    if (node.type === "text" && !allowed.has("text")) {
+      output.push(
+        ...renderBlocks(
+          node.children.filter((child): child is EditorNode => !isText(child)),
+          schema,
+        ),
+      );
+      continue;
+    }
     const structural =
       STRUCTURAL.has(node.type) || (node.type === "column" && allowed.has("columns"));
     if (!allowed.has(node.type) && !structural) continue;

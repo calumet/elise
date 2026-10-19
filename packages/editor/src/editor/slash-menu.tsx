@@ -3,11 +3,12 @@ import { useEditorRef, useEditorSelector } from "platejs/react";
 import * as React from "react";
 
 import { useEditorCommands } from "./commands";
-import type { InsertItem } from "./items";
+import type { InsertItem, InsertItemId } from "./items";
 import { unitPath } from "./structure";
 
 const SLASH = /^\/(\S*)$/;
 const DEFERRED = new Set(["image", "video", "file"]);
+const LINE_ITEMS = new Set<InsertItemId>(["h2", "h3", "bulleted", "numbered", "quote"]);
 
 export type SlashMenuState = {
   id: string;
@@ -27,16 +28,19 @@ export const useSlashMenu = (onPicked?: (item: InsertItem) => void): SlashMenuSt
   const commands = useEditorCommands();
   const state = useEditorSelector((ed) => {
     const entry = ed.selection && ed.api.isCollapsed() ? ed.api.block() : undefined;
+    const holder = entry && entry[1].length > 1 ? ed.api.parent(entry[1])?.[0] : undefined;
+    const inText = holder?.type === "text";
     if (
       !entry ||
-      unitPath(ed, entry[1]).length !== entry[1].length ||
+      (!inText && unitPath(ed, entry[1]).length !== entry[1].length) ||
       entry[0].type !== KEYS.p ||
       entry[0].listStyleType
     ) {
       return null;
     }
     const match = SLASH.exec(NodeApi.string(entry[0]));
-    return match ? `${String(entry[0].id)}:${match[1]}` : null;
+    const scope = inText ? (holder.children.length > 1 ? "lines" : "text") : "page";
+    return match ? `${String(entry[0].id)}:${scope}:${match[1]}` : null;
   }, []);
   const [dismissed, setDismissed] = React.useState<string | null>(null);
   const [cursor, setCursor] = React.useState<{ key: string | null; index: number }>({
@@ -46,9 +50,12 @@ export const useSlashMenu = (onPicked?: (item: InsertItem) => void): SlashMenuSt
   const active = cursor.key === state ? cursor.index : 0;
   const setActive = (index: number): void => setCursor({ key: state, index });
 
-  const query = state?.slice(state.indexOf(":") + 1).toLowerCase() ?? "";
-  const matches = commands.items.filter((item) =>
-    `${item.label} ${item.keywords}`.toLowerCase().includes(query),
+  const [, scope = "page", ...rest] = state?.split(":") ?? [];
+  const query = rest.join(":").toLowerCase();
+  const matches = commands.items.filter(
+    (item) =>
+      (scope === "lines" ? LINE_ITEMS.has(item.id) : scope !== "text" || item.id !== "text") &&
+      `${item.label} ${item.keywords}`.toLowerCase().includes(query),
   );
   const open = state !== null && state !== dismissed && commands.items.length > 0;
 

@@ -22,7 +22,7 @@ según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
-**El editor de páginas.** `pageSchema`, con columnas (de 1 a 4, un solo nivel), espacio, botón, galería y archivo. `onUploadFile` es la prop nueva para subir archivos.
+**El editor de páginas.** `pageSchema`, con bloques de texto, columnas (de 1 a 4, un solo nivel), espacio, botón, galería y archivo. `onUploadFile` es la prop nueva para subir archivos. Un bloque de texto (`text`) reúne párrafos, títulos, listas y citas que se escriben seguidos; en la estructura y al arrastrar es una sola fila. `messageSchema` y `documentSchema` no cambian. La imagen se elige con `ImageUpload`, así que el peer `@calumet/elise-ui` pasa a `>=0.41.0`.
 
 **Ajustes por bloque.** Cada tipo declara sus ajustes (`select`, `toggle`, `number`, `text`, `url`, `video`, `images`). `useSelectedBlock` los entrega listos para pintar y `useBlockCommands` selecciona, cambia, duplica, elimina y mueve bloques.
 

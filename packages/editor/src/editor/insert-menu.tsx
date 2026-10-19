@@ -15,6 +15,7 @@ import {
   Quote,
   SquarePlay,
   Table,
+  Type,
 } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "@calumet/elise-ui/popover";
@@ -28,7 +29,6 @@ import { blockAnchor } from "./anchor";
 import { useEditorFocused } from "./focus";
 import type { InsertItemId } from "./items";
 import type { SlashMenuState } from "./slash-menu";
-import { unitPath } from "./structure";
 
 export const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof Labels }> = {
   h2: { Icon: Heading2, description: "heading2Description" },
@@ -46,6 +46,7 @@ export const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof
   button: { Icon: MousePointerClick, description: "buttonBlockDescription" },
   gallery: { Icon: Images, description: "galleryDescription" },
   file: { Icon: Paperclip, description: "fileDescription" },
+  text: { Icon: Type, description: "textBlockDescription" },
 };
 
 const preventFocus = (event: Event): void => event.preventDefault();
@@ -54,8 +55,8 @@ export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Elemen
   const t = useLabels();
   const editor = useEditorRef();
   const block = useEditorSelector((ed) => {
-    const path = ed.selection?.anchor.path;
-    return path ? unitPath(ed, path).join(".") : null;
+    const path = ed.selection ? ed.api.block()?.[1] : undefined;
+    return path ? path.join(".") : null;
   }, []);
   const anchor = React.useMemo(
     () => (block === null ? undefined : blockAnchor(editor, block.split(".").map(Number))),

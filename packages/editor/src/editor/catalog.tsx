@@ -24,7 +24,10 @@ import { revealSelected } from "./motion";
 import type { TemplateId } from "./templates";
 
 const GROUPS: { label: keyof Labels; ids: InsertItemId[] }[] = [
-  { label: "catalogText", ids: ["h2", "h3", "bulleted", "numbered", "quote", "callout"] },
+  {
+    label: "catalogText",
+    ids: ["text", "h2", "h3", "bulleted", "numbered", "quote", "callout"],
+  },
   { label: "catalogLayout", ids: ["columns", "spacer", "divider"] },
   { label: "catalogMedia", ids: ["image", "gallery", "video", "file"] },
   { label: "catalogActions", ids: ["table", "button"] },
@@ -111,13 +114,16 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
 
   const target = selected ? t.catalogTarget.replace("{block}", selected.label) : t.catalogTargetEnd;
 
+  const textBlocks = commands.items.some((item) => item.id === "text");
   const groups = GROUPS.map((group) => ({
     label: t[group.label],
-    items: commands.items.filter(
-      (item) =>
-        group.ids.includes(item.id) &&
-        matches(query, item.label, item.keywords, t[ITEMS[item.id].description]),
-    ),
+    items: group.ids
+      .flatMap((id) => commands.items.filter((item) => item.id === id))
+      .filter(
+        (item) =>
+          !(textBlocks && RETYPE.has(item.id)) &&
+          matches(query, item.label, item.keywords, t[ITEMS[item.id].description]),
+      ),
   })).filter((group) => group.items.length > 0);
   const templates = commands.templates.filter((template) =>
     matches(query, template.label, template.keywords, template.description),

@@ -75,9 +75,11 @@ export const nodeLabel = (t: Labels, node: TElement, index: number): string => {
       ? String(node[type === "button" ? "label" : "name"] ?? "")
       : type === "img"
         ? String(node.alt ?? "")
-        : ["p", "h2", "h3", "blockquote", "callout"].includes(type)
-          ? NodeApi.string(node)
-          : "";
+        : type === "text"
+          ? NodeApi.string(node.children[0] ?? { text: "" })
+          : ["p", "h2", "h3", "blockquote", "callout"].includes(type)
+            ? NodeApi.string(node)
+            : "";
   const text = own.replace(/\s+/g, " ").trim();
   if (!text) return typeLabel(t, type);
   return text.length > MAX_LABEL ? `${text.slice(0, MAX_LABEL - 1)}…` : text;
@@ -172,7 +174,7 @@ export const useSelectedBlock = (): SelectedBlock | null => {
     settings: settingDefs(type).map((def) => ({
       key: def.key,
       kind: def.kind,
-      label: t[SETTING_LABELS[def.key]],
+      label: t[def.kind === "image" ? "settingImage" : SETTING_LABELS[def.key]],
       value: values[def.key] ?? def.default,
       default: def.default,
       ...(def.kind === "select" || def.kind === "alignments"

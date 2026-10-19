@@ -15,11 +15,19 @@ export type ViewProps = {
   selected?: boolean;
 };
 
+const FLOW =
+  "[&>*+*]:mt-4 [&>*+h2]:mt-8 [&>*+h3]:mt-6 [&>h2+*]:mt-2 [&>h3+*]:mt-2 [&>[data-list]+[data-list]]:mt-1";
+
 const RHYTHM = {
-  document:
-    "text-lg [&>*+*]:mt-4 [&>*+h2]:mt-8 [&>*+h3]:mt-6 [&>h2+*]:mt-2 [&>h3+*]:mt-2 [&>[data-list]+[data-list]]:mt-1",
+  document: `text-lg ${FLOW}`,
   message: "text-base [&>*+*]:mt-2 [&>[data-list]+[data-list]]:mt-1",
 };
+
+const TextBlock = ({ attributes, children }: ViewProps): React.JSX.Element => (
+  <div data-slot="text" className={FLOW} {...attributes}>
+    {children}
+  </div>
+);
 
 export const contentClassName = (schema: EditorSchema): string =>
   `min-w-0 text-foreground break-words ${schema.blocks.length > 2 ? RHYTHM.document : RHYTHM.message}`;
@@ -427,6 +435,7 @@ export const views: Record<string, (props: ViewProps) => React.JSX.Element> = {
   tr: Row,
   td: Cell,
   th: HeaderCell,
+  text: TextBlock,
   columns: Columns,
   column: Column,
   spacer: Spacer,

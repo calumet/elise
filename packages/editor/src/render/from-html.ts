@@ -274,6 +274,10 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
     element: Element,
     id: string | null,
   ): EditorNode[] | undefined => {
+    if (slot === "text") {
+      const inner = blocks(element.childNodes);
+      return allows("text") ? [blockOf("text", inner.length ? inner : [paragraph([])], id)] : inner;
+    }
     if (!allows(slot) || !["columns", "spacer", "button", "gallery", "file"].includes(slot)) {
       return undefined;
     }

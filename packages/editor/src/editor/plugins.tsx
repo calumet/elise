@@ -27,6 +27,8 @@ import {
   TrailingBlockPlugin,
   type AnyPluginConfig,
   type Descendant,
+  type Path,
+  type TElement,
 } from "platejs";
 import { createPlatePlugin, type PlateEditor } from "platejs/react";
 
@@ -38,6 +40,7 @@ import { draggable } from "./drag";
 import { BlockSelectionPlugin } from "./selection";
 import { isColumns, lastIndex, normalizeColumnNode } from "./structure";
 import { normalizeTableNode } from "./table";
+import { normalizeTextNode } from "./text";
 
 const STRUCTURAL = new Set(["a"]);
 
@@ -46,13 +49,19 @@ const atColumnEdge = (editor: PlateEditor, edge: "start" | "end"): boolean => {
   if (!selection || !editor.api.isCollapsed()) return false;
   const entry = editor.api.block();
   if (!entry) return false;
-  const [node, path] = entry;
+  let [node, path] = entry as [TElement, Path];
   const there =
     edge === "start"
       ? editor.api.isStart(selection.anchor, path)
       : editor.api.isEnd(selection.anchor, path);
   if (!there) return false;
-  const parent = editor.api.parent(path);
+  let parent = editor.api.parent(path);
+  if (parent?.[0].type === "text") {
+    const outer = lastIndex(path) === (edge === "start" ? 0 : parent[0].children.length - 1);
+    if (!outer) return false;
+    [node, path] = parent as [TElement, Path];
+    parent = editor.api.parent(path);
+  }
   if (parent?.[0].type === "column") {
     return lastIndex(path) === (edge === "start" ? 0 : parent[0].children.length - 1);
   }
@@ -109,6 +118,7 @@ const schemaPlugin = (schema: EditorSchema) =>
       normalizeNode([node, path]) {
         if (normalizeColumnNode(editor, [node, path])) return;
         if (normalizeTableNode(editor, [node, path])) return;
+        if (schema.blocks.includes("text") && normalizeTextNode(editor, [node, path])) return;
         if (ElementApi.isElement(node) && node.type) {
           const type = String(node.type);
           if (!isAllowedType(schema, type) && !STRUCTURAL.has(type)) {
@@ -145,8 +155,8 @@ export const buildPlugins = (schema: EditorSchema): AnyPluginConfig[] => {
   const plugins: AnyPluginConfig[] = [
     NodeIdPlugin.configure({ options: { idCreator: newId } }),
     schemaPlugin(schema),
-    TrailingBlockPlugin,
   ];
+  if (!has("text")) plugins.push(TrailingBlockPlugin);
 
   if (schema.marks.includes("bold")) plugins.push(BoldPlugin);
   if (schema.marks.includes("italic")) plugins.push(ItalicPlugin);
@@ -182,6 +192,7 @@ export const buildPlugins = (schema: EditorSchema): AnyPluginConfig[] => {
   for (const type of ["spacer", "button", "gallery", "file"]) {
     if (has(type)) plugins.push(blockPlugin(type, true));
   }
+  if (has("text")) plugins.push(blockPlugin("text"));
   if (has("columns")) {
     plugins.push(
       blockPlugin("columns"),

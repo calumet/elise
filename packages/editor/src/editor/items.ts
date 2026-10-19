@@ -24,7 +24,8 @@ export type InsertItemId =
   | "spacer"
   | "button"
   | "gallery"
-  | "file";
+  | "file"
+  | "text";
 
 export type InsertItem = {
   id: InsertItemId;
@@ -51,7 +52,9 @@ export const placeBlock = (
   );
   const path = entry ? entry[1] : [editor.children.length];
   const empty = entry
-    ? entry[0].type === KEYS.p && NodeApi.string(entry[0]) === "" && !entry[0].listStyleType
+    ? NodeApi.string(entry[0]) === "" &&
+      ((entry[0].type === KEYS.p && !entry[0].listStyleType) ||
+        (entry[0].type === "text" && (entry[0] as TElement).children.length === 1))
     : false;
   const at = replace && empty ? path : entry ? PathApi.next(path) : path;
   editor.tf.withoutNormalizing(() => {
@@ -194,6 +197,12 @@ export const useInsertItems = (schema: EditorSchema): InsertItem[] => {
       keywords: "gallery images photos pictures",
     },
     { id: "file", block: "file", label: t.file, keywords: "file download attachment document pdf" },
+    {
+      id: "text",
+      block: "text",
+      label: t.textBlock,
+      keywords: "text paragraph heading list quote writing",
+    },
   ];
   const allowed = new Set(schema.blocks);
   return all.filter((item) => allowed.has(item.block));

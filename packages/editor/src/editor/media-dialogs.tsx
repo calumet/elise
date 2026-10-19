@@ -10,8 +10,12 @@ import {
   DialogTitle,
 } from "@calumet/elise-ui/dialog";
 import { Field } from "@calumet/elise-ui/field";
-import { FileUpload, FileUploadItem, FileUploadList } from "@calumet/elise-ui/file-upload";
-import { Image } from "@calumet/elise-ui/image";
+import {
+  FileUpload,
+  FileUploadItem,
+  FileUploadList,
+  ImageUpload,
+} from "@calumet/elise-ui/file-upload";
 import { Input } from "@calumet/elise-ui/input";
 import { BlockStack } from "@calumet/elise-ui/stack";
 import { useEditorRef } from "platejs/react";
@@ -41,27 +45,14 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
   const commands = useEditorCommands();
   const returnFocus = useReturnFocus();
   const reveal = useReveal();
-  const [picked, setPicked] = React.useState<{ file: File; preview: string } | null>(null);
+  const [file, setFile] = React.useState<File | null>(null);
   const [alt, setAlt] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [failed, setFailed] = React.useState(false);
-  const latest = React.useRef<File | null>(null);
-  const file = picked?.file ?? null;
-
-  const pick = (next: File | null) => {
-    latest.current = next;
-    setPicked(null);
-    if (!next) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (latest.current === next) setPicked({ file: next, preview: String(reader.result) });
-    };
-    reader.readAsDataURL(next);
-  };
 
   const change = (next: boolean) => {
     if (!next) {
-      pick(null);
+      setFile(null);
       setAlt("");
       setBusy(false);
       setFailed(false);
@@ -94,32 +85,16 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
           <DialogBody>
             <BlockStack gap={4}>
               {failed ? <Alert tone="danger">{t.uploadFailed}</Alert> : null}
-              {picked ? (
-                <BlockStack gap={2}>
-                  <Image
-                    src={picked.preview}
-                    alt=""
-                    fill
-                    aspectRatio="16/9"
-                    objectFit="contain"
-                    radius="lg"
-                    border
-                  />
-                  <FileUploadList>
-                    <FileUploadItem
-                      name={picked.file.name}
-                      size={picked.file.size}
-                      onRemove={() => pick(null)}
-                    />
-                  </FileUploadList>
-                </BlockStack>
-              ) : (
-                <FileUpload
-                  accept="image/*"
-                  label={t.imageFile}
-                  onFiles={(accepted) => pick(accepted[0] ?? null)}
-                />
-              )}
+              <ImageUpload
+                aspectRatio="16 / 9"
+                label={t.imageFile}
+                hint={t.imageHint}
+                value={file}
+                onFiles={([accepted]) => {
+                  if (accepted) setFile(accepted);
+                }}
+                onRemove={() => setFile(null)}
+              />
               <Field label={t.altText} description={t.altTextHint}>
                 {(control) => (
                   <Input

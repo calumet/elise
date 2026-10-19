@@ -47,6 +47,7 @@ export type SettingDef =
   | (Base & { kind: "url"; default: string })
   | (Base & { kind: "video"; default: string })
   | (Base & { kind: "images"; default: GalleryImage[] })
+  | (Base & { kind: "image"; default: string })
   | (Base & { kind: "alignments"; options: readonly string[]; default: string[] });
 
 export type SettingValue = string | number | boolean | GalleryImage[] | string[];
@@ -82,6 +83,7 @@ export const blockSettings: Record<string, readonly SettingDef[]> = {
   file: [{ key: "name", kind: "text", default: "" }],
   callout: [select("tone", "info")],
   img: [
+    { key: "url", kind: "image", default: "" },
     { key: "alt", kind: "text", default: "" },
     { key: "caption", kind: "text", default: "" },
   ],
@@ -153,6 +155,8 @@ export const coerceSetting = (def: SettingDef, value: unknown): SettingValue | u
             alt: typeof image.alt === "string" ? image.alt : "",
           }))
         : undefined;
+    case "image":
+      return typeof value === "string" ? safeSrc(value) : undefined;
     case "alignments": {
       const allowed = new Set(def.options);
       return Array.isArray(value) &&

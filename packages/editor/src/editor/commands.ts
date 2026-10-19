@@ -30,6 +30,7 @@ import {
   type InsertItemId,
 } from "./items";
 import { templateDefs, useTemplates, type TemplateId, type TemplateItem } from "./templates";
+import { buildText } from "./text";
 
 export type EditorCommands = {
   items: InsertItem[];
@@ -63,9 +64,10 @@ export const useEditorCommands = (): EditorCommands => {
   const templates = useTemplates(schema);
 
   const toggleBlock: EditorCommands["toggleBlock"] = (type) => {
-    const top = editor.selection?.anchor.path[0];
+    const at = editor.api.block()?.[1];
     editor.tf.toggleBlock(type);
-    if (top !== undefined) editor.tf.select(editor.api.start([top]));
+    const start = at ? editor.api.start(at) : undefined;
+    if (start) editor.tf.select(start);
     editor.tf.focus();
   };
 
@@ -82,6 +84,7 @@ export const useEditorCommands = (): EditorCommands => {
     else if (id === "spacer") placeBlock(editor, buildSpacer(), replace);
     else if (id === "button") placeBlock(editor, buildButton(t.buttonBlock), replace);
     else if (id === "gallery") placeBlock(editor, buildGallery(), replace);
+    else if (id === "text") placeBlock(editor, buildText(), replace);
   };
 
   const uploadImage: EditorCommands["uploadImage"] = (file) =>

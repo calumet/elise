@@ -28,7 +28,7 @@ import {
   EmptyStateTitle,
 } from "@calumet/elise-ui/empty-state";
 import { Field } from "@calumet/elise-ui/field";
-import { FileUpload } from "@calumet/elise-ui/file-upload";
+import { FileUpload, ImageUpload } from "@calumet/elise-ui/file-upload";
 import { InlineError } from "@calumet/elise-ui/inline-error";
 import { Input } from "@calumet/elise-ui/input";
 import { NumberField } from "@calumet/elise-ui/number-field";
@@ -294,6 +294,47 @@ const ImagesControl = ({ field, set }: ControlProps): React.JSX.Element => {
   );
 };
 
+const ImageControl = ({ field, set }: ControlProps): React.JSX.Element => {
+  const t = useLabels();
+  const commands = useEditorCommands();
+  const [busy, setBusy] = React.useState(false);
+  const [failed, setFailed] = React.useState(false);
+  const url = String(field.value);
+
+  const replace = async (file: File) => {
+    setBusy(true);
+    setFailed(false);
+    try {
+      const uploaded = await commands.uploadImage(file);
+      if (!set(uploaded.src)) setFailed(true);
+    } catch {
+      setFailed(true);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <BlockStack gap={2}>
+      <Text as="span" size="sm">
+        {field.label}
+      </Text>
+      <ImageUpload
+        aspectRatio="16 / 9"
+        label={t.imageFile}
+        hint={t.imageHint}
+        disabled={busy}
+        invalid={failed}
+        value={url ? { name: t.image, url } : null}
+        onFiles={([accepted]) => {
+          if (accepted) void replace(accepted);
+        }}
+      />
+      {failed ? <InlineError>{t.uploadFailed}</InlineError> : null}
+    </BlockStack>
+  );
+};
+
 const ALIGN_ICONS: Record<string, typeof AlignLeft> = {
   left: AlignLeft,
   center: AlignCenter,
@@ -375,6 +416,8 @@ const SettingControl = ({ field, set }: ControlProps): React.JSX.Element => {
       return <AddressControl field={field} set={set} />;
     case "images":
       return <ImagesControl field={field} set={set} />;
+    case "image":
+      return <ImageControl field={field} set={set} />;
     case "text":
       return (
         <Field label={field.label}>

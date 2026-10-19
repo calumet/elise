@@ -14,6 +14,7 @@ import {
   RectangleVertical,
   SquarePlay,
   Table,
+  Type,
 } from "@calumet/elise-icons";
 
 export type BlockIcon = typeof Pilcrow;
@@ -34,6 +35,7 @@ const ICONS: Record<string, BlockIcon> = {
   button: MousePointerClick,
   gallery: Images,
   file: Paperclip,
+  text: Type,
 };
 
 export const blockIcon = (type: string): BlockIcon => ICONS[type] ?? Pilcrow;

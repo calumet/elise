@@ -26,13 +26,13 @@ type EditorDocument = {
 
 El esquema decide qué se puede insertar, qué ofrece el menú `/`, qué acepta el pegado y qué HTML sale. Lo que quede fuera se descarta al pegar y en `fromHtml`.
 
-| Esquema          | Contenido                                                              |
-| ---------------- | ---------------------------------------------------------------------- |
-| `messageSchema`  | Párrafo, negrita, cursiva, enlace, listas e inline code                |
-| `documentSchema` | Lo anterior, más h2, h3, cita, imagen, tabla, callout, divisor y video |
-| `pageSchema`     | Lo anterior, más columnas, espacio, botón, galería y archivo           |
+| Esquema          | Contenido                                                                                           |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| `messageSchema`  | Párrafo, negrita, cursiva, enlace, listas e inline code                                             |
+| `documentSchema` | Lo anterior, más h2, h3, cita, imagen, tabla, callout, divisor y video                              |
+| `pageSchema`     | Bloques de texto, imagen, galería, video, tabla, aviso, botón, archivo, divisor, espacio y columnas |
 
-`pageSchema` es el de la página: `documentSchema` más columnas, espacio, botón, galería y archivo. Está en la sección de abajo.
+`pageSchema` es el de la página: en lugar de un solo documento, una lista de bloques. El texto va dentro de bloques de texto. Está en la sección de abajo.
 
 ## Editor
 
@@ -72,6 +72,7 @@ Con `pageSchema` el editor suma estos bloques. Cada uno declara los ajustes que 
 
 | Bloque    | Guarda                                                                                           |
 | --------- | ------------------------------------------------------------------------------------------------ |
+| `text`    | Párrafos, h2, h3, listas y citas, con la barra flotante y el menú `/` de las líneas de texto     |
 | `columns` | De 1 a 4 `column`, con `ratio`, `gap`, `align`, `background` y `stack`. Un solo nivel de anidado |
 | `spacer`  | `size`: `small`, `medium` o `large`                                                              |
 | `button`  | `label`, `href`, `variant` (`primary` o `secondary`). Es un bloque vacío                         |
@@ -79,6 +80,10 @@ Con `pageSchema` el editor suma estos bloques. Cada uno declara los ajustes que 
 | `file`    | `src`, `name` y `size` en bytes. Sube con `onUploadFile`                                         |
 
 `onUploadFile?: (file: File) => Promise<{ src: string; name: string; size?: number }>` es la única prop nueva. `src` debe ser una dirección http(s) o relativa, porque `fromHtml` descarta las `data:` y `blob:` de los enlaces.
+
+Un bloque de texto se escribe como un documento: Intro sigue dentro del bloque, y en la estructura y al arrastrar es una sola fila con su primera línea por nombre. Una línea de texto suelta en la página o en una columna se envuelve en un bloque de texto, y lo que no es texto dentro de uno sale de él. En un bloque de texto con contenido el menú `/` ofrece solo tipos de línea; en uno vacío ofrece todos los bloques, que lo reemplazan. Con `documentSchema` o `messageSchema` el render deja su contenido suelto.
+
+La imagen se elige y se previsualiza con `ImageUpload` de `elise-ui`, en el diálogo y en los ajustes del bloque, donde se reemplaza con `onUploadImage`. Por eso el peer `@calumet/elise-ui` pide `>=0.41.0`.
 
 Las columnas no se rompen: una columna no puede quedar vacía ni contener otras columnas, más de cuatro se funden en la cuarta, y cambiar `count` reparte el contenido de las que sobran en la última que queda. Los valores fuera de lista vuelven al de por defecto.
 
@@ -168,6 +173,7 @@ El diseño de las columnas no depende de las clases: lo da `@calumet/elise-edito
 | Elemento                 | Atributos                                                                                                                                                                                                                                               |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `div[data-slot=columns]` | `data-count` (1 a 4), `data-ratio` (`equal`, `wide-first`, `wide-second`), `data-gap` (`small`, `medium`, `large`), `data-align` (`top`, `center`, `bottom`), `data-background` (`none`, `card`, `featured`), `data-stack` (`true`, `false`), `data-id` |
+| `div[data-slot=text]`    | `data-id`, y dentro `p`, `h2`, `h3`, `ul`, `ol`, `li` y `blockquote`                                                                                                                                                                                    |
 | `div[data-slot=column]`  | `data-id`                                                                                                                                                                                                                                               |
 | `div[data-slot=spacer]`  | `data-size` (`small`, `medium`, `large`), `aria-hidden`, `data-id`                                                                                                                                                                                      |
 | `div[data-slot=button]`  | `data-id`, y dentro un `a` con `href` y `data-variant` (`primary`, `secondary`)                                                                                                                                                                         |

@@ -35,6 +35,7 @@ import {
   SquarePlay,
   Sun,
   Table,
+  Type,
   Undo2,
 } from "@calumet/elise-icons";
 import { useTheme } from "@calumet/elise-themes";
@@ -86,6 +87,12 @@ const text = (id: string, type: string, content: string, extra = {}): EditorNode
   children: [{ text: content }],
 });
 
+const lines = (id: string, ...children: EditorNode[]): EditorNode => ({
+  id,
+  type: "text",
+  children,
+});
+
 const solid = (id: string, type: string, extra: Record<string, unknown>): EditorNode => ({
   id,
   type,
@@ -123,10 +130,13 @@ const createPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
   content: [
-    text(
+    lines(
       "intro",
-      "p",
-      "La escuela recibe aspirantes dos veces al año. Aquí están las fechas, los requisitos y a quién escribir si tienes dudas.",
+      text(
+        "intro-p",
+        "p",
+        "La escuela recibe aspirantes dos veces al año. Aquí están las fechas, los requisitos y a quién escribir si tienes dudas.",
+      ),
     ),
     {
       id: "cols",
@@ -152,16 +162,19 @@ const createPage = (): EditorDocument => ({
           id: "c2",
           type: "column",
           children: [
-            text("req", "h3", "Requisitos"),
-            text("r1", "p", "Resultado de la prueba Saber 11", {
-              listStyleType: "disc",
-              indent: 1,
-            }),
-            text("r2", "p", "Documento de identidad", { listStyleType: "disc", indent: 1 }),
-            text("r3", "p", "Formulario de inscripción diligenciado", {
-              listStyleType: "disc",
-              indent: 1,
-            }),
+            lines(
+              "req",
+              text("req-h", "h3", "Requisitos"),
+              text("r1", "p", "Resultado de la prueba Saber 11", {
+                listStyleType: "disc",
+                indent: 1,
+              }),
+              text("r2", "p", "Documento de identidad", { listStyleType: "disc", indent: 1 }),
+              text("r3", "p", "Formulario de inscripción diligenciado", {
+                listStyleType: "disc",
+                indent: 1,
+              }),
+            ),
             solid("inscribirse", "button", {
               label: "Inscribirse",
               href: "/inscripciones",
@@ -171,7 +184,15 @@ const createPage = (): EditorDocument => ({
         },
       ],
     },
-    text("calendario", "h2", "Calendario"),
+    lines(
+      "calendario",
+      text("calendario-h", "h2", "Calendario"),
+      text(
+        "calendario-p",
+        "p",
+        "Las fechas pueden cambiar. Revisa esta página antes de inscribirte.",
+      ),
+    ),
     {
       id: "fechas",
       type: "table",
@@ -209,15 +230,18 @@ const createWorstPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
   content: [
-    text(
+    lines(
       "w-intro",
-      "p",
-      "Aleksandra Wiśniewska-Kowalczyk, coordinadora de admisiones internacionales, responde las solicitudes de transferencia externa en un plazo máximo de quince días hábiles contados desde la radicación completa de los documentos.",
-    ),
-    text(
-      "w-h2",
-      "h2",
-      "Calendario de admisiones para el segundo semestre académico de 2027 y convocatorias extraordinarias",
+      text(
+        "w-intro-p",
+        "p",
+        "Aleksandra Wiśniewska-Kowalczyk, coordinadora de admisiones internacionales, responde las solicitudes de transferencia externa en un plazo máximo de quince días hábiles contados desde la radicación completa de los documentos.",
+      ),
+      text(
+        "w-h2",
+        "h2",
+        "Calendario de admisiones para el segundo semestre académico de 2027 y convocatorias extraordinarias",
+      ),
     ),
     {
       id: "w-four",
@@ -228,13 +252,19 @@ const createWorstPage = (): EditorDocument => ({
       background: "card",
       stack: true,
       children: [
-        column("w-c1", text("w-c1h", "h3", "Requisitos para aspirantes internacionales")),
+        column(
+          "w-c1",
+          lines("w-c1t", text("w-c1h", "h3", "Requisitos para aspirantes internacionales")),
+        ),
         column(
           "w-c2",
-          text(
-            "w-c2p",
-            "p",
-            "https://admisiones.universidad-industrial-de-santander.edu.co/convocatorias/2027/segundo-semestre/requisitos-aspirantes-internacionales.pdf",
+          lines(
+            "w-c2t",
+            text(
+              "w-c2p",
+              "p",
+              "https://admisiones.universidad-industrial-de-santander.edu.co/convocatorias/2027/segundo-semestre/requisitos-aspirantes-internacionales.pdf",
+            ),
           ),
         ),
         column(
@@ -264,9 +294,9 @@ const createWorstPage = (): EditorDocument => ({
       background: "none",
       stack: true,
       children: [
-        column("w-e1", text("w-e1p", "p", "")),
-        column("w-e2", text("w-e2p", "p", "")),
-        column("w-e3", text("w-e3p", "p", "")),
+        column("w-e1", lines("w-e1t", text("w-e1p", "p", ""))),
+        column("w-e2", lines("w-e2t", text("w-e2p", "p", ""))),
+        column("w-e3", lines("w-e3t", text("w-e3p", "p", ""))),
       ],
     },
     solid("w-button", "button", { label: "", href: "", variant: "primary" }),
@@ -312,16 +342,20 @@ const createWorstPage = (): EditorDocument => ({
 const createEmptyPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
-  content: [text("e-p", "p", "")],
+  content: [lines("e-t", text("e-p", "p", ""))],
 });
 
 const createLongPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
-  content: Array.from({ length: 80 }, (_, index) =>
-    index % 8 === 0
-      ? text(`m-${index}`, "h2", `Sección ${index / 8 + 1}`)
-      : text(`m-${index}`, "p", `Párrafo ${index} de una página con muchos bloques.`),
+  content: Array.from({ length: 40 }, (_, index) =>
+    lines(
+      `m-${index}`,
+      text(`m-${index}-h`, "h2", `Sección ${index + 1}`),
+      ...Array.from({ length: 4 }, (_, line) =>
+        text(`m-${index}-${line}`, "p", `Párrafo ${line + 1} de la sección ${index + 1}.`),
+      ),
+    ),
   ),
 });
 
@@ -539,6 +573,7 @@ const RAIL_ICONS: Record<string, typeof Pilcrow> = {
   button: MousePointerClick,
   gallery: Images,
   file: Paperclip,
+  text: Type,
 };
 
 const OutlineRail = ({ onExpand }: { onExpand: () => void }) => {
@@ -702,6 +737,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
                   {t("titleHint", { fallback: "The title is the one of the menu entry." })}
                 </Text>
               </div>
+              <Editor.Toolbar />
               <Editor.Content
                 aria-label={t("content", { fallback: "Page content" })}
                 className="min-h-40"

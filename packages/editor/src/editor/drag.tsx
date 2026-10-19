@@ -197,9 +197,18 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
   const t = useLabels();
   const id = String(element.id);
   const selected = useSelectedId() === id;
-  const empty = element.type === KEYS.p && !element.listStyleType && NodeApi.string(element) === "";
+  const first = element.children[0] as TElement | undefined;
+  const empty =
+    element.type === "text" &&
+    element.children.length === 1 &&
+    first?.type === KEYS.p &&
+    !first.listStyleType &&
+    NodeApi.string(element) === "";
   const caret = useEditorSelector(
-    (ed) => ed.children.length > 1 && ed.api.isCollapsed() && ed.api.block()?.[0].id === id,
+    (ed) => {
+      const line = ed.selection && ed.api.isCollapsed() ? ed.api.block() : undefined;
+      return Boolean(line && ed.api.parent(line[1])?.[0].id === id);
+    },
     [id],
   );
   const alone = useEditorSelector(

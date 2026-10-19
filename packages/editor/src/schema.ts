@@ -26,7 +26,7 @@ export const documentSchema: EditorSchema = {
 
 export const pageSchema: EditorSchema = {
   name: "page",
-  blocks: [...documentSchema.blocks, "columns", "spacer", "button", "gallery", "file"],
+  blocks: [...documentSchema.blocks, "text", "columns", "spacer", "button", "gallery", "file"],
   marks: documentSchema.marks,
   links: true,
 };
