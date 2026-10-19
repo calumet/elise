@@ -1,10 +1,12 @@
 import { Alert, AlertDescription, AlertTitle } from "@calumet/elise-ui/alert";
 import { Button } from "@calumet/elise-ui/button";
 import { MultiComboboxField, type ComboboxOption } from "@calumet/elise-ui/combobox";
+import type { StoredFile } from "@calumet/elise-ui/file-field";
 import {
   FileUpload,
   FileUploadItem,
   FileUploadList,
+  ImageUpload,
   type RejectedFile,
 } from "@calumet/elise-ui/file-upload";
 import { Label } from "@calumet/elise-ui/label";
@@ -36,10 +38,20 @@ const PASOS = [
   { titulo: "Listo", descripcion: "Revisa y confirma" },
 ];
 
+const BANNER_GUARDADO: StoredFile = {
+  name: "admisiones-2027.svg",
+  url: `data:image/svg+xml;utf8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="#0f766e"/><text x="200" y="110" font-family="sans-serif" font-size="28" fill="white" text-anchor="middle">Admisiones 2027</text></svg>`,
+  )}`,
+};
+
 const CatalogoDemo = () => {
   const [stack, setStack] = useState<string[]>(["react", "node"]);
   const [archivos, setArchivos] = useState<{ id: string; file: File }[]>([]);
   const [rechazados, setRechazados] = useState<RejectedFile[]>([]);
+  const [banner, setBanner] = useState<File | StoredFile>(BANNER_GUARDADO);
+  const [portada, setPortada] = useState<File | null>(null);
+  const [imagenRechazada, setImagenRechazada] = useState<RejectedFile>();
   const [paso, setPaso] = useState(1);
 
   const estado = (i: number): StepStatus =>
@@ -112,6 +124,43 @@ const CatalogoDemo = () => {
             ))}
           </FileUploadList>
         ) : null}
+      </BlockStack>
+
+      <BlockStack gap={3} className="max-w-md">
+        <Text size="sm" weight="semibold">
+          ImageUpload
+        </Text>
+        <Text size="xs" tone="muted">
+          El banner es obligatorio: solo se reemplaza. La portada se puede quitar.
+        </Text>
+        <ImageUpload
+          aspectRatio={2}
+          maxSize={1024 * 1024}
+          hint="JPG, PNG o SVG, hasta 1 MB"
+          value={banner}
+          invalid={imagenRechazada !== undefined}
+          onFiles={([elegida], [rechazada]) => {
+            if (elegida) setBanner(elegida);
+            setImagenRechazada(rechazada);
+          }}
+        />
+        {imagenRechazada ? (
+          <Alert tone="danger" onDismiss={() => setImagenRechazada(undefined)}>
+            <AlertTitle>No pudimos usar esa imagen</AlertTitle>
+            <AlertDescription>
+              {imagenRechazada.file.name} ({motivo(imagenRechazada)})
+            </AlertDescription>
+          </Alert>
+        ) : null}
+        <ImageUpload
+          aspectRatio="16 / 9"
+          hint="Opcional"
+          value={portada}
+          onFiles={([elegida]) => {
+            if (elegida) setPortada(elegida);
+          }}
+          onRemove={() => setPortada(null)}
+        />
       </BlockStack>
 
       <BlockStack gap={4}>

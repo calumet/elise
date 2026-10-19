@@ -22,7 +22,7 @@ según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
-## `@calumet/elise-ui` 0.41.0 y `@calumet/elise-themes` 0.1.5
+## `@calumet/elise-ui` 0.42.0 y `@calumet/elise-themes` 0.1.6
 
 ### Cambia
 
@@ -39,6 +39,29 @@ pone en lugar de `--accent` y `--accent-foreground`. Sin ellos, lo elegido
 dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
+
+## `@calumet/elise-ui` 0.41.0
+
+### Añade
+
+**`ImageUpload`, en `@calumet/elise-ui/file-upload`: el área de `FileUpload`
+para una sola imagen, que la muestra dentro.** Recibe en `value` un `File` o un
+`StoredFile` con su `url`. Sin valor es el área de siempre; con él, la imagen la
+llena en `aspectRatio`, y soltar otra encima o «Reemplazar» la cambia. «Quitar»
+solo aparece con `onRemove`, así que un campo obligatorio no lo ofrece.
+`onFiles` reporta aceptados y rechazados igual que en `FileUpload`.
+
+## `elise-alerts` 0.3.22, `elise-forms` 0.3.2, `elise-tables` 0.9.3, `elise-themes` 0.1.5 y `elise-toasts` 0.4.23
+
+Se republican para que JSR los publique contra `elise-ui` 0.41.0. No cambian.
+
+## `@calumet/elise-ui` 0.40.1
+
+### Corrige
+
+**`SortableList` con `asChild` sobre `TableBody` ya no mete nodos `<div>` dentro
+del `<table>`.** Las instrucciones y los anuncios para el lector de pantalla van
+ahora junto a la tabla, y React deja de avisar de HTML inválido.
 
 ## `@calumet/elise-ui` 0.40.0
 
