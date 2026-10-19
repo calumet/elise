@@ -233,6 +233,7 @@ const DEFAULTS = {
   droppedElement: "<{name}> element",
   droppedAttribute: "{name} attribute",
   seeChanges: "See what changes",
+  resizePanels: "Width of the code and the result",
   lineNumber: "Line {line}",
 };
 

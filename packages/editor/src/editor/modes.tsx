@@ -32,11 +32,20 @@ type ModeState = {
   setMode: (mode: EditorMode) => void;
   code: string;
   setCode: (code: string) => void;
+  split: number;
+  setSplit: (split: number) => void;
 };
 
 const ModeContext = React.createContext<ModeState | null>(null);
 
-const IDLE: ModeState = { mode: "visual", setMode: () => {}, code: "", setCode: () => {} };
+const IDLE: ModeState = {
+  mode: "visual",
+  setMode: () => {},
+  code: "",
+  setCode: () => {},
+  split: 50,
+  setSplit: () => {},
+};
 
 export const useMode = (): ModeState => React.useContext(ModeContext) ?? IDLE;
 
@@ -79,7 +88,11 @@ export const ModeProvider = ({ children }: { children: React.ReactNode }): React
     [mode, code, schema, value, editor],
   );
 
-  const state = React.useMemo(() => ({ mode, setMode, code, setCode }), [mode, setMode, code]);
+  const [split, setSplit] = React.useState(50);
+  const state = React.useMemo(
+    () => ({ mode, setMode, code, setCode, split, setSplit }),
+    [mode, setMode, code, split],
+  );
   return <ModeContext.Provider value={state}>{children}</ModeContext.Provider>;
 };
 

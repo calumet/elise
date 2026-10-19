@@ -179,6 +179,86 @@ const Dropped = ({
   );
 };
 
+const CODE_MIN = 256;
+const RESULT_MIN = 320;
+const STEP = 2;
+
+const useParentWidth = (ref: React.RefObject<HTMLElement | null>): number => {
+  const [width, setWidth] = React.useState(0);
+  React.useLayoutEffect(() => {
+    const parent = ref.current?.parentElement;
+    if (!parent) return;
+    const observer = new ResizeObserver(([entry]) => setWidth(entry?.contentRect.width ?? 0));
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [ref]);
+  return width;
+};
+
+const Divider = ({ controls }: { controls: string }): React.JSX.Element => {
+  const t = useLabels();
+  const { split, setSplit } = useMode();
+  const self = React.useRef<HTMLDivElement>(null);
+  const width = useParentWidth(self);
+  const min = width ? Math.min(50, Math.ceil((CODE_MIN / width) * 100)) : 0;
+  const max = width ? Math.max(50, Math.floor(100 - (RESULT_MIN / width) * 100)) : 100;
+  const clamp = (value: number) => Math.round(Math.min(max, Math.max(min, value)));
+  const [dragging, setDragging] = React.useState(false);
+
+  const follow = (event: React.PointerEvent) => {
+    const box = self.current?.parentElement?.getBoundingClientRect();
+    if (box?.width) setSplit(clamp(((event.clientX - box.left) / box.width) * 100));
+  };
+
+  const keys: Record<string, () => number> = {
+    ArrowLeft: () => split - STEP,
+    ArrowRight: () => split + STEP,
+    Home: () => min,
+    End: () => max,
+    Enter: () => 50,
+  };
+
+  return (
+    <div
+      ref={self}
+      role="separator"
+      tabIndex={0}
+      aria-orientation="vertical"
+      aria-label={t.resizePanels}
+      aria-controls={controls}
+      aria-valuenow={clamp(split)}
+      aria-valuemin={min}
+      aria-valuemax={max}
+      data-dragging={dragging || undefined}
+      onPointerDown={(event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        event.currentTarget.focus();
+        setDragging(true);
+      }}
+      onPointerMove={(event) => {
+        if (dragging) follow(event);
+      }}
+      onPointerUp={() => setDragging(false)}
+      onPointerCancel={() => setDragging(false)}
+      onDoubleClick={() => setSplit(50)}
+      onKeyDown={(event) => {
+        const next = keys[event.key];
+        if (!next) return;
+        event.preventDefault();
+        setSplit(clamp(next()));
+      }}
+      className="group relative z-sticky hidden w-px shrink-0 cursor-col-resize touch-none bg-border outline-none before:absolute before:-inset-x-1.5 before:inset-y-0 before:content-[''] md:block"
+    >
+      <span
+        aria-hidden="true"
+        className="absolute -inset-x-px inset-y-0 bg-primary opacity-0 transition-opacity duration-(--duration-fast) ease-out group-hover:opacity-100 group-focus-visible:opacity-100 group-data-dragging:opacity-100"
+      />
+    </div>
+  );
+};
+
 export type EditorCodeProps = { className?: string };
 
 export const EditorCode = ({ className }: EditorCodeProps): React.JSX.Element | null => {
@@ -186,8 +266,9 @@ export const EditorCode = ({ className }: EditorCodeProps): React.JSX.Element | 
   const { schema } = useServices();
   const { value } = useDocument();
   const { mode } = useEditorMode();
-  const { code, setCode } = useMode();
+  const { code, setCode, split } = useMode();
   const { device, setDevice } = useEditorPreview();
+  const codeId = React.useId();
   const textarea = React.useRef<HTMLTextAreaElement>(null);
   const scroller = React.useRef<HTMLDivElement>(null);
   const deferred = React.useDeferredValue(code);
@@ -219,19 +300,24 @@ export const EditorCode = ({ className }: EditorCodeProps): React.JSX.Element | 
       className={`flex min-h-0 flex-1 flex-col ${className ?? ""}`.trim()}
     >
       {items.length ? <Dropped items={items} onLine={goToLine} /> : null}
-      <div className="grid min-h-0 flex-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
+      <div
+        style={{ "--split": `${split}%` } as React.CSSProperties}
+        className="flex min-h-0 flex-1 flex-col has-data-dragging:cursor-col-resize has-data-dragging:select-none md:flex-row"
+      >
         <div
           ref={scroller}
+          id={codeId}
           role="region"
           aria-label={t.pageCode}
-          className="min-h-0 overflow-y-auto border-b border-border bg-card md:border-e md:border-b-0"
+          className="min-h-0 flex-1 overflow-y-auto border-b border-border bg-card md:min-w-64 md:grow-0 md:basis-(--split) md:border-b-0"
         >
           <CodeView code={code} flagged={flagged} onChange={setCode} textareaRef={textarea} />
         </div>
+        <Divider controls={codeId} />
         <div
           role="region"
           aria-label={t.codeResult}
-          className="flex min-h-0 flex-col gap-3 overflow-y-auto px-4 py-4 sm:px-6"
+          className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 sm:px-6 md:min-w-80"
         >
           <div className="flex items-center justify-between gap-2">
             <Text size="xs" weight="medium" tone="muted">

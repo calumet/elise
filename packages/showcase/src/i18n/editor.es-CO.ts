@@ -232,5 +232,6 @@ export default {
   droppedElement: "elemento <{name}>",
   droppedAttribute: "atributo {name}",
   seeChanges: "Ver qué cambia",
+  resizePanels: "Ancho del código y del resultado",
   lineNumber: "Línea {line}",
 };
