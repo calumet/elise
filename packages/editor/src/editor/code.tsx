@@ -1,0 +1,284 @@
+import { Monitor, Smartphone, TriangleAlert } from "@calumet/elise-icons";
+import { Button } from "@calumet/elise-ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
+import { SegmentedControl, SegmentedControlItem } from "@calumet/elise-ui/segmented-control";
+import { Text } from "@calumet/elise-ui/text";
+import * as React from "react";
+
+import { fill, useLabels, type Labels } from "../labels";
+import { EditorContent } from "../render/content";
+import { fromHtml } from "../render/from-html";
+import { droppedIn, type DroppedItem } from "./code-html";
+import { useServices } from "./context";
+import { transition, useDocument, useEditorMode, useMode } from "./modes";
+import { reducedMotion } from "./motion";
+import { useEditorPreview } from "./preview";
+
+const WRAP = "min-w-0 flex-1 px-4 whitespace-pre-wrap wrap-anywhere [tab-size:2]";
+
+type Token = { kind: "tag" | "name" | "value" | "text"; text: string };
+
+const TOKEN = /(<\/?[a-zA-Z][\w-]*)|(\/?>)|([^\s=<>"'/]+)|("[^"]*"|'[^']*')|(=)/g;
+
+const tokenize = (line: string, inTag: { open: boolean }): Token[] => {
+  const tokens: Token[] = [];
+  let last = 0;
+  for (const match of line.matchAll(TOKEN)) {
+    const at = match.index ?? 0;
+    const push = (kind: Token["kind"], text: string) => tokens.push({ kind, text });
+    if (at > last) push("text", line.slice(last, at));
+    last = at + match[0].length;
+    if (match[1]) {
+      inTag.open = true;
+      push("tag", match[1]);
+    } else if (match[2]) {
+      push(inTag.open ? "tag" : "text", match[2]);
+      inTag.open = false;
+    } else if (inTag.open) {
+      push(match[4] ? "value" : match[3] ? "name" : "text", match[0]);
+    } else push("text", match[0]);
+  }
+  if (last < line.length) tokens.push({ kind: "text", text: line.slice(last) });
+  return tokens;
+};
+
+const TONES: Record<Token["kind"], string> = {
+  tag: "text-link",
+  name: "text-success-subtle-foreground",
+  value: "text-warning-subtle-foreground",
+  text: "text-foreground",
+};
+
+const summarize = (t: Labels, items: DroppedItem[]): string => {
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const label = fill(item.kind === "element" ? t.droppedElement : t.droppedAttribute, {
+      name: item.name,
+    });
+    counts.set(label, (counts.get(label) ?? 0) + 1);
+  }
+  return Array.from(counts, ([label, count]) => (count > 1 ? `${label} ×${count}` : label)).join(
+    ", ",
+  );
+};
+
+const CodeView = ({
+  code,
+  flagged,
+  onChange,
+  textareaRef,
+}: {
+  code: string;
+  flagged: Set<number>;
+  onChange: (code: string) => void;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+}): React.JSX.Element => {
+  const t = useLabels();
+  const lines = React.useMemo(() => {
+    const state = { open: false };
+    return code.split("\n").map((line) => tokenize(line, state));
+  }, [code]);
+  return (
+    <div className="relative min-h-full py-4 font-mono text-sm leading-6">
+      <div
+        aria-hidden="true"
+        className="absolute inset-y-0 start-0 w-12 border-e border-border bg-muted"
+      />
+      <pre aria-hidden="true" className="relative m-0 font-[inherit]">
+        {lines.map((tokens, index) => (
+          <div
+            key={index}
+            data-flagged={flagged.has(index + 1) || undefined}
+            className="flex data-flagged:bg-warning-subtle"
+          >
+            <span className="w-12 shrink-0 pe-3 text-end text-muted-foreground select-none">
+              {index + 1}
+            </span>
+            <span className={WRAP}>
+              {tokens.length
+                ? tokens.map((token, at) => (
+                    <span key={at} className={TONES[token.kind]}>
+                      {token.text}
+                    </span>
+                  ))
+                : "​"}
+            </span>
+          </div>
+        ))}
+      </pre>
+      <textarea
+        ref={textareaRef}
+        aria-label={t.pageCode}
+        value={code}
+        spellCheck={false}
+        autoCapitalize="off"
+        autoComplete="off"
+        onChange={(event) => onChange(event.target.value)}
+        className={`${WRAP} absolute inset-y-0 start-12 end-0 resize-none overflow-hidden border-0 bg-transparent py-4 font-[inherit] leading-[inherit] text-foreground caret-foreground outline-none [-webkit-text-fill-color:transparent] selection:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset`}
+      />
+    </div>
+  );
+};
+
+const Dropped = ({
+  items,
+  onLine,
+}: {
+  items: DroppedItem[];
+  onLine: (line: number) => void;
+}): React.JSX.Element => {
+  const t = useLabels();
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div
+      role="status"
+      className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 border-b border-border bg-warning-subtle px-4 py-2 text-sm text-warning-subtle-foreground transition-opacity duration-(--duration-base) ease-out starting:opacity-0"
+    >
+      <TriangleAlert aria-hidden="true" className="size-icon-md shrink-0" />
+      <span className="min-w-0 flex-1 basis-60">
+        {t.droppedIntro} <span className="font-mono">{summarize(t, items)}</span>
+      </span>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-warning-subtle-foreground underline underline-offset-2"
+          >
+            {t.seeChanges}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-72 p-1">
+          <ul className="m-0 flex max-h-72 list-none flex-col overflow-y-auto p-0">
+            {items.map((item) => (
+              <li key={`${item.kind}-${item.at}`}>
+                <button
+                  type="button"
+                  className="flex w-full items-baseline gap-3 rounded-sm px-2 py-1.5 text-start text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                  onClick={() => {
+                    setOpen(false);
+                    onLine(item.line);
+                  }}
+                >
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    {fill(t.lineNumber, { line: item.line })}
+                  </span>
+                  <span className="min-w-0 font-mono break-all">
+                    {fill(item.kind === "element" ? t.droppedElement : t.droppedAttribute, {
+                      name: item.name,
+                    })}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
+
+export type EditorCodeProps = { className?: string };
+
+export const EditorCode = ({ className }: EditorCodeProps): React.JSX.Element | null => {
+  const t = useLabels();
+  const { schema } = useServices();
+  const { value } = useDocument();
+  const { mode } = useEditorMode();
+  const { code, setCode } = useMode();
+  const { device, setDevice } = useEditorPreview();
+  const textarea = React.useRef<HTMLTextAreaElement>(null);
+  const scroller = React.useRef<HTMLDivElement>(null);
+  const deferred = React.useDeferredValue(code);
+  const items = React.useMemo(() => droppedIn(deferred, schema), [deferred, schema]);
+  const flagged = React.useMemo(() => new Set(items.map((item) => item.line)), [items]);
+  const result = React.useMemo(
+    () => ({ ...value, content: fromHtml(deferred, { schema, locale: value.locale }).content }),
+    [deferred, schema, value],
+  );
+  if (mode !== "code") return null;
+
+  const goToLine = (line: number) => {
+    const field = textarea.current;
+    if (!field) return;
+    const lines = code.split("\n");
+    const start = lines.slice(0, line - 1).reduce((sum, text) => sum + text.length + 1, 0);
+    field.focus({ preventScroll: true });
+    field.setSelectionRange(start, start + (lines[line - 1]?.length ?? 0));
+    scroller.current?.querySelectorAll("pre > div")[line - 1]?.scrollIntoView({
+      block: "center",
+      behavior: reducedMotion() ? "auto" : "smooth",
+    });
+  };
+
+  return (
+    <section
+      data-slot="editor-code"
+      aria-label={t.modeCode}
+      className={`flex min-h-0 flex-1 flex-col ${className ?? ""}`.trim()}
+    >
+      {items.length ? <Dropped items={items} onLine={goToLine} /> : null}
+      <div className="grid min-h-0 flex-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
+        <div
+          ref={scroller}
+          role="region"
+          aria-label={t.pageCode}
+          className="min-h-0 overflow-y-auto border-b border-border bg-card md:border-e md:border-b-0"
+        >
+          <CodeView code={code} flagged={flagged} onChange={setCode} textareaRef={textarea} />
+        </div>
+        <div
+          role="region"
+          aria-label={t.codeResult}
+          className="flex min-h-0 flex-col gap-3 overflow-y-auto px-4 py-4 sm:px-6"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <Text size="xs" weight="medium" tone="muted">
+              {t.codeResult}
+            </Text>
+            <SegmentedControl
+              aria-label={t.view}
+              value={device}
+              onValueChange={(next) => next && transition(() => setDevice(next as typeof device))}
+            >
+              <SegmentedControlItem value="desktop" aria-label={t.desktop}>
+                <Monitor aria-hidden="true" className="size-icon-md" />
+              </SegmentedControlItem>
+              <SegmentedControlItem value="mobile" aria-label={t.mobile}>
+                <Smartphone aria-hidden="true" className="size-icon-md" />
+              </SegmentedControlItem>
+            </SegmentedControl>
+          </div>
+          <div
+            data-device={device}
+            className={`@container/editor-page mx-auto w-full rounded-xl border border-border bg-card px-4 py-6 ${device === "mobile" ? "max-w-sm" : "max-w-none @2xl:px-8"}`}
+          >
+            <EditorContent value={result} schema={schema} />
+          </div>
+          <Text size="xs" tone="muted">
+            {t.codeResultHint}
+          </Text>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export type EditorModeSwitchProps = { className?: string };
+
+export const EditorModeSwitch = ({ className }: EditorModeSwitchProps): React.JSX.Element => {
+  const t = useLabels();
+  const { mode, setMode } = useEditorMode();
+  return (
+    <SegmentedControl
+      aria-label={t.editorMode}
+      value={mode === "code" ? "code" : "visual"}
+      onValueChange={(next) => next && setMode(next as "visual" | "code")}
+      className={className}
+    >
+      <SegmentedControlItem value="visual">{t.modeVisual}</SegmentedControlItem>
+      <SegmentedControlItem value="code">{t.modeCode}</SegmentedControlItem>
+    </SegmentedControl>
+  );
+};

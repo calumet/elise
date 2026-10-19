@@ -11,6 +11,8 @@ import * as React from "react";
 const CONTEXT_KEY = Symbol.for("@calumet/elise.i18n.context");
 
 type I18nCtx = {
+  locale?: string;
+  locales?: string[];
   translate: (
     namespace: string,
     key: string,
@@ -33,4 +35,9 @@ const SharedI18nContext = globalScope[CONTEXT_KEY]!;
 export const useElTranslate = (namespace: string): ((key: string, fallback: string) => string) => {
   const ctx = React.useContext(SharedI18nContext);
   return (key, fallback) => (ctx ? ctx.translate(namespace, key, { fallback }) : fallback);
+};
+
+export const useElLocales = (): { locale?: string; locales: string[] } => {
+  const ctx = React.useContext(SharedI18nContext);
+  return { locale: ctx?.locale, locales: ctx?.locales ?? [] };
 };

@@ -8,6 +8,7 @@ import { useLabels } from "../labels";
 import { EditorContent } from "../render/content";
 import type { EditorNode } from "../types";
 import { useServices } from "./context";
+import { useDocument, useMode, type EditorMode } from "./modes";
 import { motionOptions, reducedMotion } from "./motion";
 import { BlockSelectionPlugin, selectBlockById } from "./selection";
 
@@ -19,7 +20,11 @@ export type EditorPreview = {
   setDevice: (device: "desktop" | "mobile") => void;
 };
 
-type PreviewState = EditorPreview & { locale: string };
+type PreviewState = EditorPreview & {
+  locale: string;
+  shown: string;
+  previewIn: (locale: string) => void;
+};
 
 const PreviewContext = React.createContext<PreviewState | null>(null);
 
@@ -38,6 +43,9 @@ export const useEditorPreview = (): EditorPreview => React.useContext(PreviewCon
 
 export const usePreviewing = (): boolean => React.useContext(PreviewContext)?.previewing ?? false;
 
+export const usePreviewIn = (): ((locale: string) => void) =>
+  React.useContext(PreviewContext)?.previewIn ?? (() => {});
+
 export const PreviewProvider = ({
   locale,
   children,
@@ -46,7 +54,11 @@ export const PreviewProvider = ({
   children: React.ReactNode;
 }): React.JSX.Element => {
   const editor = useEditorRef();
+  const { mode, setMode } = useMode();
   const [previewing, setPreviewing] = React.useState(false);
+  const [picked, setShown] = React.useState<string | null>(null);
+  const shown = picked ?? locale;
+  const returnTo = React.useRef<EditorMode>("visual");
   const [device, setDevice] = React.useState<EditorPreview["device"]>("desktop");
   const saved = React.useRef<{ selection: Range | null; block: string | null } | null>(null);
   const pending = React.useRef<{ after?: () => void; fade: boolean; done?: () => void } | null>(
@@ -78,18 +90,37 @@ export const PreviewProvider = ({
     setPreviewing(next);
   }, []);
 
-  const preview = React.useCallback(() => {
-    saved.current = {
-      selection: editor.selection,
-      block: editor.getOption(BlockSelectionPlugin, "id"),
-    };
-    editor.tf.blur();
-    swap(true);
-  }, [editor, swap]);
+  const previewIn = React.useCallback(
+    (target: string) => {
+      returnTo.current = mode;
+      setShown(target);
+      if (mode !== "visual") {
+        setMode("visual");
+        setPreviewing(true);
+        return;
+      }
+      saved.current = {
+        selection: editor.selection,
+        block: editor.getOption(BlockSelectionPlugin, "id"),
+      };
+      editor.tf.blur();
+      swap(true);
+    },
+    [editor, swap, mode, setMode],
+  );
+
+  const preview = React.useCallback(() => previewIn(locale), [previewIn, locale]);
 
   const edit = React.useCallback(() => {
     const previous = saved.current;
     saved.current = null;
+    if (returnTo.current !== "visual") {
+      const back = returnTo.current;
+      returnTo.current = "visual";
+      setPreviewing(false);
+      setMode(back);
+      return;
+    }
     swap(false, () => {
       if (previous?.block) {
         selectBlockById(editor, previous.block);
@@ -98,7 +129,7 @@ export const PreviewProvider = ({
         editor.tf.focus();
       }
     });
-  }, [editor, swap]);
+  }, [editor, swap, setMode]);
 
   React.useEffect(() => {
     if (!previewing) return;
@@ -110,14 +141,15 @@ export const PreviewProvider = ({
   }, [previewing, edit]);
 
   const value = React.useMemo(
-    () => ({ previewing, preview, edit, device, setDevice, locale }),
-    [previewing, preview, edit, device, locale],
+    () => ({ previewing, preview, edit, device, setDevice, locale, shown, previewIn }),
+    [previewing, preview, edit, device, locale, shown, previewIn],
   );
   return <PreviewContext.Provider value={value}>{children}</PreviewContext.Provider>;
 };
 
 export const PreviewArea = ({ page }: { page: boolean }): React.JSX.Element => {
   const { schema } = useServices();
+  const { value } = useDocument();
   const state = React.useContext(PreviewContext);
   const content = useEditorSelector((editor) => editor.children, []) as unknown as EditorNode[];
   return (
@@ -126,7 +158,7 @@ export const PreviewArea = ({ page }: { page: boolean }): React.JSX.Element => {
       data-device={page ? (state?.device ?? "desktop") : undefined}
       className={page ? "@container/editor-page" : undefined}
     >
-      <EditorContent value={{ version: 1, locale: state?.locale ?? "", content }} schema={schema} />
+      <EditorContent value={{ ...value, content }} locale={state?.shown} schema={schema} />
     </div>
   );
 };

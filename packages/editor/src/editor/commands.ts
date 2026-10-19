@@ -7,6 +7,7 @@ import {
   insertTableColumn,
   insertTableRow,
 } from "@platejs/table";
+import { ElementApi, type TElement } from "platejs";
 import { useEditorRef, useEditorSelector } from "platejs/react";
 
 import { newId } from "../ids";
@@ -29,6 +30,7 @@ import {
   type InsertItem,
   type InsertItemId,
 } from "./items";
+import { selectBlockById } from "./selection";
 import { templateDefs, useTemplates, type TemplateId, type TemplateItem } from "./templates";
 import { buildText } from "./text";
 
@@ -54,6 +56,15 @@ export type EditorCommands = {
   undo: () => void;
   redo: () => void;
   focus: () => void;
+};
+
+const firstEditable = (nodes: TElement[]): string | undefined => {
+  for (const node of nodes) {
+    if (["h2", "h3", "p"].includes(String(node.type))) return String(node.id);
+    const inner = firstEditable(node.children.filter(ElementApi.isElement));
+    if (inner) return inner;
+  }
+  return undefined;
 };
 
 export const useEditorCommands = (): EditorCommands => {
@@ -167,7 +178,10 @@ export const useEditorCommands = (): EditorCommands => {
     insertTemplate: (id) => {
       const def = templateDefs.find((candidate) => candidate.id === id);
       if (!def || !templates.some((item) => item.id === id)) return false;
-      placeBlock(editor, def.build(t), true);
+      const nodes = def.build(t);
+      placeBlock(editor, nodes, true);
+      const first = firstEditable(nodes);
+      if (first && selectBlockById(editor, first)) editor.tf.focus();
       return true;
     },
     addRow: () => insertTableRow(editor),

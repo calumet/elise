@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { isInlineHolder, isTranslated } from "../translations";
 import { isText } from "../types";
 import type {
   EditorDocument,
@@ -28,21 +29,21 @@ const candidates = (locale: string): string[] => {
   return base === locale ? [locale] : [locale, base];
 };
 
-const isInlineHolder = (node: EditorNode): boolean =>
-  node.children.every((child) => isText(child) || child.type === "a");
-
 const localize = (nodes: EditorNode[], doc: EditorDocument, locale: string): EditorNode[] => {
   const tables = candidates(locale).map((key) => doc.translations?.[key]);
   const pick = (key: string) => {
-    for (const table of tables) if (table && key in table) return table[key];
+    for (const table of tables) if (table && isTranslated(table[key])) return table[key];
     return undefined;
   };
 
   const visit = (node: EditorNode): EditorNode => {
     let next = node;
     const translated = pick(node.id);
-    if (Array.isArray(translated) && isInlineHolder(node)) {
-      next = { ...next, children: translated };
+    if (translated !== undefined && isInlineHolder(node)) {
+      next = {
+        ...next,
+        children: typeof translated === "string" ? [{ text: translated }] : translated,
+      };
     }
     for (const key of Object.keys(node)) {
       const attribute = pick(`${node.id}#${key}`);

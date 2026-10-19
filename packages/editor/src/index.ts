@@ -3,6 +3,9 @@ export type { EditorToolbarProps } from "./editor/toolbar";
 export type { EditorOutlineProps } from "./editor/outline";
 export type { EditorBlockPanelProps } from "./editor/block-panel";
 export type { EditorCatalogProps } from "./editor/catalog";
+export type { EditorCodeProps, EditorModeSwitchProps } from "./editor/code";
+export type { EditorTranslationsButtonProps, EditorTranslationsProps } from "./editor/translations";
+export { useEditorMode, type EditorMode } from "./editor/modes";
 export {
   useEditorPreview,
   type EditorPreview,

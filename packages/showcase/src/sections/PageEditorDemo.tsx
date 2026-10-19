@@ -3,6 +3,7 @@ import {
   pageSchema,
   useBlockCommands,
   useEditorCommands,
+  useEditorMode,
   useEditorPreview,
   useSelectedBlock,
   type EditorDocument,
@@ -109,14 +110,17 @@ const createPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
   content: [
-    lines(
-      "intro",
-      text(
-        "intro-p",
-        "p",
-        "La escuela recibe aspirantes dos veces al año. Aquí están las fechas, los requisitos y a quién escribir si tienes dudas.",
-      ),
-    ),
+    lines("intro", {
+      id: "intro-p",
+      type: "p",
+      children: [
+        { text: "La escuela recibe aspirantes " },
+        { text: "dos veces al año", bold: true },
+        {
+          text: ". Aquí están las fechas, los requisitos y a quién escribir si tienes dudas.",
+        },
+      ],
+    }),
     {
       id: "cols",
       type: "columns",
@@ -188,7 +192,20 @@ const createPage = (): EditorDocument => ({
       type: "callout",
       tone: "info",
       children: [
-        text("aviso-p", "p", "¿Dudas sobre el proceso? Escribe a admisiones@calumet.edu.co."),
+        {
+          id: "aviso-p",
+          type: "p",
+          children: [
+            { text: "¿Dudas sobre el proceso? Escribe a " },
+            {
+              id: "aviso-a",
+              type: "a",
+              url: "mailto:admisiones@calumet.edu.co",
+              children: [{ text: "admisiones@calumet.edu.co" }],
+            },
+            { text: "." },
+          ],
+        },
       ],
     },
     solid("guia", "file", {
@@ -197,7 +214,27 @@ const createPage = (): EditorDocument => ({
       size: 204800,
     }),
   ],
+  translations: {
+    "en-US": {
+      "intro-p": [
+        { text: "The school admits applicants " },
+        { text: "twice a year", bold: true },
+        {
+          text: ". Here are the dates, the requirements and who to write to if you have questions.",
+        },
+      ],
+      "foto#alt": "Students in the lab",
+      "req-h": "Requirements",
+      r1: "Saber 11 test results",
+      r2: "ID document",
+      "inscribirse#label": "Apply",
+      "calendario-p": "Dates may change.",
+    },
+  },
+  translatedFrom: { "en-US": { "calendario-p": "outdated" } },
 });
+
+const LOCALES = ["es-CO", "en-US", "pt-BR"];
 
 const column = (id: string, ...children: EditorNode[]): EditorNode => ({
   id,
@@ -313,7 +350,29 @@ const createWorstPage = (): EditorDocument => ({
     },
     solid("w-spacer", "spacer", { size: "large" }),
   ],
+  translations: {
+    "en-US": {
+      "w-intro-p":
+        "Aleksandra Wiśniewska-Kowalczyk, international admissions coordinator, answers external transfer requests within fifteen business days of the complete filing of the documents.",
+      "w-c2p":
+        "https://admissions.universidad-industrial-de-santander.edu.co/calls/2027/second-semester/international-applicant-requirements.pdf",
+    },
+    "ar-EG": { "w-h2": "جدول القبول للفصل الدراسي الثاني من العام الأكاديمي 2027" },
+    "zh-Hant-TW": { "w-c1h": "國際申請者的要求" },
+  },
 });
+
+const WORST_LOCALES = [
+  "es-CO",
+  "en-US",
+  "pt-BR",
+  "fr-CA",
+  "de-CH",
+  "zh-Hant-TW",
+  "sr-Latn-RS",
+  "ar-EG",
+  "x-klingon",
+];
 
 const createColumnsPage = (): EditorDocument => {
   const image = photo();
@@ -481,9 +540,11 @@ const PageBar = ({
   const { t } = useTranslation("pageEditor");
   const commands = useEditorCommands();
   const { previewing } = useEditorPreview();
+  const coding = useEditorMode().mode === "code";
+  const editing = !previewing && !coding;
   return (
     <div className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-card px-4 py-2">
-      {outlineDocked && !previewing ? (
+      {outlineDocked && editing ? (
         <IconButton
           label={t("structure", { fallback: "Page structure" })}
           pressed={treeShown}
@@ -493,7 +554,7 @@ const PageBar = ({
           {treeShown ? <PanelLeftClose aria-hidden="true" /> : <PanelLeftOpen aria-hidden="true" />}
         </IconButton>
       ) : null}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-40 flex-1 flex-col max-sm:basis-full">
         <div className="flex min-w-0 items-center gap-2">
           <Text as="p" size="base" weight="semibold" truncate title={title}>
             {title}
@@ -506,11 +567,12 @@ const PageBar = ({
           {t("saved", { fallback: "Saved just now" })}
         </Text>
       </div>
+      {previewing ? null : <Editor.ModeSwitch />}
       <SegmentedControl
         aria-label={t("view", { fallback: "View" })}
         value={view}
         onValueChange={(next) => onView(next as View)}
-        className="max-md:hidden"
+        className={coding ? "hidden" : "max-md:hidden"}
       >
         <SegmentedControlItem value="desktop" aria-label={t("desktop", { fallback: "Desktop" })}>
           <Monitor aria-hidden="true" className="size-icon-md" />
@@ -519,7 +581,7 @@ const PageBar = ({
           <Smartphone aria-hidden="true" className="size-icon-md" />
         </SegmentedControlItem>
       </SegmentedControl>
-      <div className={previewing ? "hidden" : "flex items-center gap-1"}>
+      <div className={editing ? "flex items-center gap-1" : "hidden"}>
         {outlineDocked ? null : (
           <IconButton label={t("structure", { fallback: "Page structure" })} onClick={onOutline}>
             <ListTree aria-hidden="true" />
@@ -559,8 +621,14 @@ const PageBar = ({
           <span className="max-sm:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
         </Button>
       </div>
-      <Separator orientation="vertical" className={previewing ? "hidden" : "h-6 max-sm:hidden"} />
+      <Separator
+        orientation="vertical"
+        className={editing ? "data-[orientation=vertical]:h-6 max-sm:hidden" : "hidden"}
+      />
       <div className="flex items-center gap-2">
+        {previewing ? null : (
+          <Editor.TranslationsButton className="max-xl:[&_[data-slot=label]]:sr-only" />
+        )}
         <Editor.PreviewButton className={previewing ? undefined : "max-sm:hidden"} />
         <Button type="button" size="sm">
           {t("publish", { fallback: "Publish" })}
@@ -570,10 +638,14 @@ const PageBar = ({
   );
 };
 
-const DATASETS: Record<Dataset, { create: () => EditorDocument; title?: string }> = {
+const DATASETS: Record<
+  Dataset,
+  { create: () => EditorDocument; title?: string; locales?: string[] }
+> = {
   demo: { create: createPage },
   worst: {
     create: createWorstPage,
+    locales: WORST_LOCALES,
     title:
       "Admisiones de pregrado, posgrado y educación continua para aspirantes nacionales e internacionales",
   },
@@ -619,6 +691,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
   const selected = useSelectedBlock();
   const blocks = useBlockCommands();
   const { previewing, device: view, setDevice: setView } = useEditorPreview();
+  const { mode } = useEditorMode();
   const outlineDocked = useMinWidth("(min-width: 48rem)");
   const sideDocked = useMinWidth("(min-width: 64rem)");
   const [treeShown, setTreeShown] = useState(true);
@@ -640,6 +713,8 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
     if (!sideDocked) setSheet(next);
   };
 
+  if (mode === "translations") return <Editor.Translations title={title} />;
+
   return (
     <>
       <PageBar
@@ -654,7 +729,8 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
         treeShown={treeShown}
         sideDocked={sideDocked}
       />
-      <div className="flex min-h-0 flex-1">
+      {mode === "code" ? <Editor.Code /> : null}
+      <div className={mode === "code" ? "hidden" : "flex min-h-0 flex-1"}>
         {outlineDocked && !previewing ? (
           <aside
             aria-label={t("structure", { fallback: "Page structure" })}
@@ -813,6 +889,7 @@ const PageEditorDemo = () => {
             setSide("settings");
             if (sheet === "catalog") setSheet(null);
           }}
+          locales={DATASETS[dataset].locales ?? LOCALES}
           onUploadImage={uploadImage}
           onUploadFile={uploadFile}
           className="flex min-h-0 flex-1 flex-col"

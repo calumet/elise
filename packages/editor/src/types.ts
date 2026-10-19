@@ -21,6 +21,7 @@ export type EditorDocument = {
   locale: string;
   content: EditorNode[];
   translations?: Record<string, Record<string, Translation>>;
+  translatedFrom?: Record<string, Record<string, string>>;
 };
 
 export type EditorMark = "bold" | "italic" | "code";
