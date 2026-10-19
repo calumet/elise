@@ -1,6 +1,5 @@
 import type { TElement } from "platejs";
 import type { PlateEditor } from "platejs/react";
-import { flushSync } from "react-dom";
 
 import { motionOptions, reducedMotion } from "./motion";
 import { blockEntry, canMoveBlock, isColumns, moveBlock, type DropPosition } from "./structure";
@@ -10,12 +9,16 @@ export type DropTarget = { id: string; position: DropPosition };
 export type PageDrag = { finish: (commit: boolean) => void };
 
 type Point = { x: number; y: number };
-type Anchor = { element: HTMLElement; side: "before" | "after"; gap: number };
+type Anchor = { element: HTMLElement; side: "before" | "after"; gap: number; height: number };
+type Lane = { container: HTMLElement; area: DOMRect; items: HTMLElement[]; mids: number[] };
 
 const BLOCK = '[data-slot="block"]';
 const PAGE_SLACK = { x: 64, y: 32 };
 const GAP = 16;
 const EASE = 0.25;
+const INSET = 24;
+const DEAD = 16;
+const HYSTERESIS = 16;
 
 const blocksIn = (container: Element): HTMLElement[] =>
   [...container.children].filter(
@@ -24,11 +27,11 @@ const blocksIn = (container: Element): HTMLElement[] =>
 
 const idOf = (element: HTMLElement): string => element.dataset.blockId ?? "";
 
-const within = (box: DOMRect, point: Point, x: number, y: number): boolean =>
-  point.x >= box.left - x &&
-  point.x <= box.right + x &&
-  point.y >= box.top - y &&
-  point.y <= box.bottom + y;
+const within = (box: DOMRect, point: Point, slack: number): boolean =>
+  point.x >= box.left - slack &&
+  point.x <= box.right + slack &&
+  point.y >= box.top - slack &&
+  point.y <= box.bottom + slack;
 
 const sameTarget = (a: DropTarget | null, b: DropTarget | null): boolean =>
   a?.id === b?.id && a?.position === b?.position;
@@ -52,9 +55,15 @@ const settle = (root: HTMLElement, before: Map<string, DOMRect>, id: string): vo
     const carried = parent ? shifts.get(parent) : undefined;
     const x = shift.x - (carried?.x ?? 0);
     const y = shift.y - (carried?.y ?? 0);
-    if (reduce || (Math.abs(x) < 1 && Math.abs(y) < 1)) continue;
+    const resized = idOf(element) === id && Math.abs(from.width - now.width) > 1;
+    if (reduce || (Math.abs(x) < 1 && Math.abs(y) < 1 && !resized)) continue;
     const animation = element.animate(
-      [{ transform: `translate(${x}px, ${y}px)` }, { transform: "none" }],
+      resized
+        ? [
+            { transform: `translate(${x}px, ${y}px)`, width: `${from.width}px` },
+            { transform: "none", width: `${now.width}px` },
+          ]
+        : [{ transform: `translate(${x}px, ${y}px)` }, { transform: "none" }],
       options,
     );
     if (idOf(element) !== id) continue;
@@ -84,19 +93,73 @@ export const startPageDrag = ({
   const start = active.getBoundingClientRect();
   const style = getComputedStyle(active);
   const following = active.nextElementSibling;
-  const closing =
+  const collapse =
     Number.parseFloat(style.marginBottom) -
+    start.height -
     Number.parseFloat(following ? getComputedStyle(following).marginTop : style.marginTop);
-  let height = start.height;
   const nested = isColumns(blockEntry(editor, id)?.[0]);
   const smooth = !reducedMotion();
   const bases = new Map<HTMLElement, number>();
+  const heights = new Map<HTMLElement, number>();
   let pointer = pointOf(activator);
   const grab = { x: pointer.x - start.left, y: pointer.y - start.top };
   const offset = { x: 0, y: 0 };
   let target: DropTarget | null = null;
   let anchor: Anchor | null = null;
+  let lane: Lane | null = null;
+  let index = -1;
   let frame = 0;
+
+  const heightAt = (container: HTMLElement, width: number): number => {
+    let height = start.height;
+    if (Math.abs(width - start.width) > 1) {
+      active.style.width = `${width}px`;
+      height = active.offsetHeight;
+      active.style.width = "";
+    }
+    heights.set(container, height);
+    return height;
+  };
+
+  const laneOf = (container: HTMLElement, area: DOMRect): Lane => {
+    const items = blocksIn(container).filter((element) => element !== active);
+    const mids = items.map((element) => {
+      const box = element.getBoundingClientRect();
+      return box.top + box.height / 2;
+    });
+    return { container, area, items, mids };
+  };
+
+  active.style.marginBottom = `${collapse}px`;
+  const origin = root.getBoundingClientRect();
+  const page = laneOf(
+    root,
+    new DOMRect(
+      origin.x - PAGE_SLACK.x,
+      origin.y - PAGE_SLACK.y,
+      origin.width + PAGE_SLACK.x * 2,
+      origin.height + PAGE_SLACK.y * 2,
+    ),
+  );
+  const columns: Lane[] = [];
+  for (const column of nested ? [] : root.querySelectorAll<HTMLElement>('[data-slot="column"]')) {
+    const group = column.parentElement?.closest<HTMLElement>('[data-slot="columns"]');
+    if (!group || active.contains(column)) continue;
+    const box = column.getBoundingClientRect();
+    const outer = group.getBoundingClientRect();
+    const gaps = getComputedStyle(group);
+    const x = (Number.parseFloat(gaps.columnGap) || 0) / 2;
+    const y = (Number.parseFloat(gaps.rowGap) || 0) / 2;
+    const stacked = box.width > outer.width * 0.75;
+    const area = stacked
+      ? new DOMRect(outer.x, box.y - y, outer.width, box.height + y * 2)
+      : new DOMRect(box.x - x, outer.y, box.width + x * 2, outer.height);
+    columns.push(laneOf(column, area));
+    heightAt(column, box.width);
+  }
+  heightAt(root, origin.width);
+  active.style.marginBottom = "";
+  active.getBoundingClientRect();
 
   const baseMargin = (element: HTMLElement): number => {
     let base = bases.get(element);
@@ -107,53 +170,57 @@ export const startPageDrag = ({
     return base;
   };
 
-  const columnAt = (point: Point): HTMLElement | null => {
-    for (const column of root.querySelectorAll<HTMLElement>('[data-slot="column"]')) {
-      const group = column.parentElement?.closest<HTMLElement>('[data-slot="columns"]');
-      if (!group || active.contains(column)) continue;
-      const box = column.getBoundingClientRect();
-      const outer = group.getBoundingClientRect();
-      const gaps = getComputedStyle(group);
-      const x = (Number.parseFloat(gaps.columnGap) || 0) / 2;
-      const y = (Number.parseFloat(gaps.rowGap) || 0) / 2;
-      const stacked = box.width > outer.width * 0.75;
-      const area = stacked ? box : new DOMRect(box.x, outer.y, box.width, outer.height);
-      if (within(area, point, x, stacked ? y : 0)) return column;
-    }
-    return null;
+  const probe = (): Point => {
+    const now = root.getBoundingClientRect();
+    const x = follow ? pointer.x - grab.x + INSET : pointer.x;
+    return { x: x - (now.left - origin.left), y: pointer.y - (now.top - origin.top) };
   };
 
-  const fromOutline = (row: HTMLElement, point: Point): DropTarget | null => {
+  const laneAt = (point: Point): Lane | null => {
+    if (lane && lane !== page && within(lane.area, point, DEAD)) return lane;
+    const column = columns.find((candidate) => within(candidate.area, point, -DEAD));
+    if (column) return column;
+    return within(page.area, point, lane === page ? DEAD : 0) ? page : null;
+  };
+
+  const indexIn = (next: Lane, y: number): number => {
+    const current = next === lane ? index : -1;
+    return next.mids.filter((mid, at) => {
+      const edge = current < 0 ? mid : mid + (at >= current ? HYSTERESIS : -HYSTERESIS);
+      return y > edge;
+    }).length;
+  };
+
+  const fromOutline = (row: HTMLElement): DropTarget | null => {
     const rowId = row.dataset.outlineId;
     if (!rowId) return null;
     const box = (row.firstElementChild ?? row).getBoundingClientRect();
     const position: DropPosition =
       blockEntry(editor, rowId)?.[0].type === "column"
         ? "inside"
-        : point.y < box.top + box.height / 2
+        : pointer.y < box.top + box.height / 2
           ? "before"
           : "after";
     return { id: rowId, position };
   };
 
-  const fromPage = (point: Point): DropTarget | null => {
-    if (!within(root.getBoundingClientRect(), point, PAGE_SLACK.x, PAGE_SLACK.y)) return null;
-    const container = (!nested && columnAt(point)) || root;
-    const items = blocksIn(container).filter((element) => element !== active);
-    const next = items.find((element) => {
-      const box = element.getBoundingClientRect();
-      return point.y < box.top + box.height / 2;
-    });
-    if (next) return { id: idOf(next), position: "before" };
-    const last = items[items.length - 1];
+  const fromPage = (): DropTarget | null => {
+    const point = probe();
+    const next = laneAt(point);
+    index = next ? indexIn(next, point.y) : -1;
+    lane = next;
+    if (!next) return null;
+    const before = next.items[index];
+    if (before) return { id: idOf(before), position: "before" };
+    const last = next.items[next.items.length - 1];
     return last ? { id: idOf(last), position: "after" } : null;
   };
 
-  const locate = (point: Point): DropTarget | null => {
+  const locate = (): DropTarget | null => {
     const row = document
-      .elementFromPoint(point.x, point.y)
+      .elementFromPoint(pointer.x, pointer.y)
       ?.closest<HTMLElement>("[data-outline-id]");
-    const found = row ? fromOutline(row, point) : fromPage(point);
+    const found = row ? fromOutline(row) : fromPage();
     return found && canMoveBlock(editor, id, found.id, found.position) ? found : null;
   };
 
@@ -171,9 +238,10 @@ export const startPageDrag = ({
         `${BLOCK}[data-block-id="${CSS.escape(found.id)}"]`,
       );
     }
-    if (!element) return null;
+    const container = element?.parentElement;
+    if (!element || !container) return null;
     if (side === "after") {
-      const after = blocksIn(element.parentElement ?? root).filter((block) => block !== active);
+      const after = blocksIn(container).filter((block) => block !== active);
       const next = after[after.indexOf(element) + 1];
       if (next) {
         element = next;
@@ -181,8 +249,9 @@ export const startPageDrag = ({
       }
     }
     const base = baseMargin(element);
-    const first = element.parentElement?.firstElementChild === element;
-    return { element, side, gap: first || base <= 0 ? GAP : base };
+    const first = container.firstElementChild === element;
+    const height = heights.get(container) ?? heightAt(container, container.clientWidth);
+    return { element, side, gap: first || base <= 0 ? GAP : base, height };
   };
 
   const place = (next: Anchor | null): void => {
@@ -192,26 +261,24 @@ export const startPageDrag = ({
       anchor.element.style.marginBottom = "";
     }
     anchor = next;
-    const width = next?.element.offsetWidth ?? start.width;
-    active.style.width = Math.abs(width - start.width) > 1 ? `${width}px` : "";
-    height = active.offsetHeight;
     if (next?.side === "before") {
-      next.element.style.marginTop = `${baseMargin(next.element) + height + next.gap}px`;
+      next.element.style.marginTop = `${baseMargin(next.element) + next.height + next.gap}px`;
     } else if (next) {
-      next.element.style.marginBottom = `${height + next.gap}px`;
+      next.element.style.marginBottom = `${next.height + next.gap}px`;
     }
-    active.style.marginBottom = next ? `${closing - height}px` : "";
+    active.style.marginBottom = next ? `${collapse}px` : "";
   };
 
   const slot = (layout: Point): Point => {
     if (!anchor) return layout;
     const near = anchor.element.getBoundingClientRect();
-    const y = anchor.side === "before" ? near.top - height - anchor.gap : near.bottom + anchor.gap;
+    const y =
+      anchor.side === "before" ? near.top - anchor.height - anchor.gap : near.bottom + anchor.gap;
     return { x: near.left, y };
   };
 
   const track = (): void => {
-    const found = locate(pointer);
+    const found = locate();
     if (!sameTarget(found, target)) {
       target = found;
       onTarget(found);
@@ -255,12 +322,17 @@ export const startPageDrag = ({
       delete active.dataset.dragging;
       place(null);
       active.style.transform = "";
-      if (commit && target) {
-        const { id: to, position } = target;
-        flushSync(() => moveBlock(editor, id, to, position));
-      }
       onTarget(null);
-      settle(root, before, id);
+      if (!commit || !target) {
+        settle(root, before, id);
+        return;
+      }
+      const observer = new MutationObserver(() => {
+        observer.disconnect();
+        settle(root, before, id);
+      });
+      observer.observe(root, { childList: true, subtree: true });
+      if (!moveBlock(editor, id, target.id, target.position)) observer.disconnect();
     },
   };
 };
