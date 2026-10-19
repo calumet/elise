@@ -66,6 +66,15 @@
   margin-top: 0.25rem;
 }
 
+table td[data-align="center"],
+table th[data-align="center"] {
+  text-align: center;
+}
+table td[data-align="right"],
+table th[data-align="right"] {
+  text-align: right;
+}
+
 [data-slot="block-handle"] {
   inset-inline-start: calc(-1 * var(--editor-gutter, 0.75rem));
 }

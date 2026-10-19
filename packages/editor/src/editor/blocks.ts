@@ -102,6 +102,8 @@ const OPTION_LABELS: Record<string, keyof Labels> = {
   success: "optionSuccess",
   warning: "optionWarning",
   danger: "optionDanger",
+  left: "optionLeft",
+  right: "optionRight",
 };
 
 const SETTING_LABELS: Record<SettingKey, keyof Labels> = {
@@ -121,6 +123,9 @@ const SETTING_LABELS: Record<SettingKey, keyof Labels> = {
   alt: "settingAlt",
   caption: "settingCaption",
   url: "settingUrl",
+  headerRow: "settingHeaderRow",
+  headerColumn: "settingHeaderColumn",
+  columnAlign: "settingColumnAlign",
 };
 
 const outlineOf = (nodes: Descendant[], depth: number, t: Labels): OutlineNode[] =>
@@ -170,7 +175,7 @@ export const useSelectedBlock = (): SelectedBlock | null => {
       label: t[SETTING_LABELS[def.key]],
       value: values[def.key] ?? def.default,
       default: def.default,
-      ...(def.kind === "select"
+      ...(def.kind === "select" || def.kind === "alignments"
         ? {
             options: def.options.map((value) => ({
               value,

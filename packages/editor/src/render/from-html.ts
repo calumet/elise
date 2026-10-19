@@ -183,26 +183,49 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
       return rows.flatMap((row) =>
         Array.from(row.children).flatMap((cell) => blocks(cell.childNodes)),
       );
+    const grid = rows.map((row) =>
+      Array.from(row.children).filter((cell) => ["td", "th"].includes(tagOf(cell))),
+    );
+    const alignOf = (cell: Element | undefined): string => {
+      const value = cell?.getAttribute("data-align");
+      return value === "center" || value === "right" ? value : "left";
+    };
+    const headerRow =
+      (grid[0] ?? []).length > 0 && (grid[0] ?? []).every((cell) => tagOf(cell) === "th");
+    const body = headerRow ? grid.slice(1) : grid;
+    const headerColumn =
+      body.length > 0 && body.every((cells) => cells[0] && tagOf(cells[0]) === "th");
+    const width = Math.max(0, ...grid.map((cells) => cells.length));
+    const columnAlign = Array.from({ length: width }, (_, index) =>
+      alignOf(grid.find((cells) => cells[index])?.[index]),
+    );
     return [
       blockOf(
         "table",
-        rows.map((row) =>
+        grid.map((cells, rowIndex) =>
           blockOf(
             "tr",
-            Array.from(row.children)
-              .filter((cell) => ["td", "th"].includes(tagOf(cell)))
-              .map((cell) => {
-                const content = blocks(cell.childNodes);
-                return blockOf(
-                  tagOf(cell),
-                  content.length ? content : [paragraph([])],
-                  cell.getAttribute("data-id"),
-                );
-              }),
-            row.getAttribute("data-id"),
+            cells.map((cell) => {
+              const content = blocks(cell.childNodes);
+              const tag = tagOf(cell);
+              const align = alignOf(cell);
+              return blockOf(
+                tag,
+                content.length ? content : [paragraph([])],
+                cell.getAttribute("data-id"),
+                {
+                  ...(tag === "th"
+                    ? { scope: cell.getAttribute("scope") === "row" ? "row" : "col" }
+                    : {}),
+                  ...(align !== "left" ? { align } : {}),
+                },
+              );
+            }),
+            rows[rowIndex]?.getAttribute("data-id") ?? null,
           ),
         ),
         id,
+        { headerRow, headerColumn, columnAlign },
       ),
     ];
   };

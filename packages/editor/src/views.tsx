@@ -176,15 +176,23 @@ const Row = ({ attributes, children }: ViewProps): React.JSX.Element => (
   </tr>
 );
 
-const Cell = ({ attributes, children }: ViewProps): React.JSX.Element => (
-  <td className="px-1.5 py-1.5 align-top text-foreground first:ps-3 last:pe-3" {...attributes}>
+const cellAlign = (element: EditorNode): string | undefined =>
+  element.align === "center" || element.align === "right" ? element.align : undefined;
+
+const Cell = ({ element, attributes, children }: ViewProps): React.JSX.Element => (
+  <td
+    data-align={cellAlign(element)}
+    className="px-1.5 py-1.5 align-top text-foreground first:ps-3 last:pe-3"
+    {...attributes}
+  >
     {children}
   </td>
 );
 
-const HeaderCell = ({ attributes, children }: ViewProps): React.JSX.Element => (
+const HeaderCell = ({ element, attributes, children }: ViewProps): React.JSX.Element => (
   <th
-    scope="col"
+    scope={element.scope === "row" ? "row" : "col"}
+    data-align={cellAlign(element)}
     className="bg-muted px-1.5 py-2 text-start align-top font-medium text-muted-foreground first:ps-3 last:pe-3"
     {...attributes}
   >

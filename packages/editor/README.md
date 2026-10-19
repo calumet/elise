@@ -137,6 +137,12 @@ Tres piezas de `Editor` arman la pantalla del editor de páginas alrededor de `E
 
 Dentro de `Editor.Content` con `pageSchema`, las columnas se apilan cuando el área mide menos de 32rem, para que una vista previa del ancho de un móvil las muestre como en el teléfono.
 
+### Tablas
+
+Al apuntar una tabla aparecen un `+` en el borde derecho, que añade una columna, y otro en el de abajo, que añade una fila. Cada fila y cada columna tienen su asa con insertar antes, insertar después y eliminar. Con la tabla elegida, `Editor.Settings` ofrece fila y columna de encabezado y la alineación de cada columna, más añadir fila y columna desde el teclado.
+
+La tabla guarda `headerRow`, `headerColumn` y `columnAlign` (`left`, `center` o `right` por columna). La normalización deja las celdas de acuerdo con ellos: `th` con `scope="col"` en la fila de encabezado, `th` con `scope="row"` en la columna, y `align` en cada celda que no vaya a la izquierda. Unir celdas, el ancho de las columnas y elegir varias celdas a la vez quedan fuera.
+
 ### Plantillas
 
 `commands.templates` lista las plantillas que el esquema permite: texto con imagen, equipo, preguntas y respuestas, y llamada a la acción. Al insertarlas son bloques ordinarios, no un nodo especial.
@@ -167,6 +173,8 @@ El diseño de las columnas no depende de las clases: lo da `@calumet/elise-edito
 | `div[data-slot=button]`  | `data-id`, y dentro un `a` con `href` y `data-variant` (`primary`, `secondary`)                                                                                                                                                                         |
 | `div[data-slot=gallery]` | `data-count`, `data-empty`, `data-id`, y dentro `div[data-slot=gallery-images]` con `img` (`src`, `alt`, `loading`)                                                                                                                                     |
 | `div[data-slot=file]`    | `data-size` (bytes), `data-id`, y dentro un `a` con `href` y `download`, y `span[data-slot=file-size]`                                                                                                                                                  |
+| `table`, `tr`            | `data-id`                                                                                                                                                                                                                                               |
+| `th`, `td`               | `data-id`, `data-align` (`center`, `right`; sin él, a la izquierda), y en `th` `scope` (`col` en la fila de encabezado, `row` en la columna)                                                                                                            |
 
 Con `data-stack="true"` las columnas se apilan por debajo de 40rem. `fromHtml` lee estos mismos atributos, así que el ida y vuelta de lo que produce `pageSchema` es estable.
 

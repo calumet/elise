@@ -37,6 +37,7 @@ import type { EditorMark, EditorSchema } from "../types";
 import { draggable } from "./drag";
 import { BlockSelectionPlugin } from "./selection";
 import { isColumns, lastIndex, normalizeColumnNode } from "./structure";
+import { normalizeTableNode } from "./table";
 
 const STRUCTURAL = new Set(["a"]);
 
@@ -107,6 +108,7 @@ const schemaPlugin = (schema: EditorSchema) =>
       },
       normalizeNode([node, path]) {
         if (normalizeColumnNode(editor, [node, path])) return;
+        if (normalizeTableNode(editor, [node, path])) return;
         if (ElementApi.isElement(node) && node.type) {
           const type = String(node.type);
           if (!isAllowedType(schema, type) && !STRUCTURAL.has(type)) {

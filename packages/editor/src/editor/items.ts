@@ -42,13 +42,13 @@ export const placeBlock = (
 ): void => {
   const nodes = Array.isArray(placed) ? placed : [placed];
   const anchor = editor.selection?.anchor.path;
-  const entry = anchor
-    ? editor.api.node(
-        nodes.some((item) => item.type === "columns")
-          ? anchor.slice(0, 1)
-          : unitPath(editor, anchor),
-      )
-    : undefined;
+  const entry = editor.api.node(
+    anchor
+      ? nodes.some((item) => item.type === "columns")
+        ? anchor.slice(0, 1)
+        : unitPath(editor, anchor)
+      : [editor.children.length - 1],
+  );
   const path = entry ? entry[1] : [editor.children.length];
   const empty = entry
     ? entry[0].type === KEYS.p && NodeApi.string(entry[0]) === "" && !entry[0].listStyleType

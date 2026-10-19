@@ -609,9 +609,10 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
   const tablet = useMinWidth("(min-width: 48rem)");
   const sideDocked = useMinWidth("(min-width: 64rem)");
   const [railOpen, setRailOpen] = useState(false);
+  const [catalogFor, setCatalogFor] = useState<string | null>(null);
   const rail = railLayout() && tablet && !wide;
   const outlineDocked = wide || (rail && railOpen);
-  const catalogShown = side === "catalog" || !selected;
+  const catalogShown = !selected || (side === "catalog" && catalogFor === selected.id);
 
   const switchView = (next: View) => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -622,8 +623,9 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
     document.startViewTransition(() => flushSync(() => setView(next)));
   };
 
-  const openSide = (next: Side) => {
+  const openSide = (next: Side, forId: string | null = selected?.id ?? null) => {
     setSide(next);
+    setCatalogFor(forId);
     if (!sideDocked) setSheet(next);
   };
 
@@ -664,7 +666,9 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
           className="min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
           onPointerDown={(event) => {
             const target = event.target as Element;
-            if (!target.closest("[data-slate-editor], [data-slot=page-add]")) blocks.deselect();
+            if (target.closest("[data-slot=page-add]")) return;
+            if (!target.closest("[data-slate-editor]")) blocks.deselect();
+            setSide("settings");
           }}
         >
           <Container
@@ -710,7 +714,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
                 className="mt-8 border border-dashed border-border-strong text-muted-foreground"
                 onClick={() => {
                   blocks.deselect();
-                  openSide("catalog");
+                  openSide("catalog", null);
                 }}
               >
                 <Plus aria-hidden="true" />

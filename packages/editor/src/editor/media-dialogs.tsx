@@ -19,6 +19,7 @@ import * as React from "react";
 
 import { useLabels } from "../labels";
 import { useEditorCommands } from "./commands";
+import { revealSelected } from "./motion";
 
 type MediaDialogProps = { open: boolean; onOpenChange: (open: boolean) => void };
 
@@ -30,10 +31,16 @@ const useReturnFocus = () => {
   };
 };
 
+const useReveal = () => {
+  const editor = useEditorRef();
+  return () => revealSelected(editor);
+};
+
 export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX.Element => {
   const t = useLabels();
   const commands = useEditorCommands();
   const returnFocus = useReturnFocus();
+  const reveal = useReveal();
   const [picked, setPicked] = React.useState<{ file: File; preview: string } | null>(null);
   const [alt, setAlt] = React.useState("");
   const [busy, setBusy] = React.useState(false);
@@ -69,6 +76,7 @@ export const ImageDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
     setFailed(false);
     try {
       await commands.insertImage(file, alt.trim());
+      reveal();
       change(false);
     } catch {
       setBusy(false);
@@ -143,6 +151,7 @@ export const FileDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX.
   const t = useLabels();
   const commands = useEditorCommands();
   const returnFocus = useReturnFocus();
+  const reveal = useReveal();
   const [file, setFile] = React.useState<File | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [failed, setFailed] = React.useState(false);
@@ -163,6 +172,7 @@ export const FileDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX.
     setFailed(false);
     try {
       await commands.insertFile(file);
+      reveal();
       change(false);
     } catch {
       setBusy(false);
@@ -237,6 +247,7 @@ export const VideoDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
   const t = useLabels();
   const commands = useEditorCommands();
   const returnFocus = useReturnFocus();
+  const reveal = useReveal();
   const [url, setUrl] = React.useState("");
   const [invalid, setInvalid] = React.useState(false);
 
@@ -250,8 +261,12 @@ export const VideoDialog = ({ open, onOpenChange }: MediaDialogProps): React.JSX
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (commands.insertVideo(url)) change(false);
-    else setInvalid(true);
+    if (!commands.insertVideo(url)) {
+      setInvalid(true);
+      return;
+    }
+    reveal();
+    change(false);
   };
 
   return (

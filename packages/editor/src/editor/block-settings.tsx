@@ -1,10 +1,14 @@
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   ArrowDown,
   ArrowUp,
   Copy,
   Columns2,
   Ellipsis,
   MousePointerClick,
+  Plus,
   Trash2,
   X,
 } from "@calumet/elise-icons";
@@ -39,6 +43,7 @@ import {
 import { BlockStack, InlineStack } from "@calumet/elise-ui/stack";
 import { Switch } from "@calumet/elise-ui/switch";
 import { Text } from "@calumet/elise-ui/text";
+import { useEditorRef } from "platejs/react";
 import * as React from "react";
 
 import { typeLabel, useLabels, type Labels } from "../labels";
@@ -52,6 +57,7 @@ import {
   type SelectedBlock,
 } from "./blocks";
 import { useEditorCommands } from "./commands";
+import { addTableColumn, addTableRow } from "./table";
 
 type ControlProps = {
   field: BlockSettingField;
@@ -288,8 +294,76 @@ const ImagesControl = ({ field, set }: ControlProps): React.JSX.Element => {
   );
 };
 
+const ALIGN_ICONS: Record<string, typeof AlignLeft> = {
+  left: AlignLeft,
+  center: AlignCenter,
+  right: AlignRight,
+};
+
+const AlignmentsControl = ({ field, set }: ControlProps): React.JSX.Element => {
+  const t = useLabels();
+  const id = React.useId();
+  const values = field.value as string[];
+  return (
+    <div role="group" aria-labelledby={id} className="flex flex-col gap-2">
+      <span id={id} className="text-sm text-foreground">
+        {field.label}
+      </span>
+      {values.map((value, index) => {
+        const name = t.columnNumber.replace("{n}", String(index + 1));
+        return (
+          <div key={name} className="flex items-center justify-between gap-3">
+            <Text as="span" size="sm" tone="muted" truncate>
+              {name}
+            </Text>
+            <SegmentedControl
+              aria-label={name}
+              value={value}
+              onValueChange={(next) =>
+                set(values.map((current, at) => (at === index ? next : current)))
+              }
+            >
+              {(field.options ?? []).map((option) => {
+                const Icon = ALIGN_ICONS[option.value] ?? AlignLeft;
+                return (
+                  <SegmentedControlItem
+                    key={option.value}
+                    value={option.value}
+                    aria-label={option.label}
+                  >
+                    <Icon aria-hidden="true" className="size-icon-md" />
+                  </SegmentedControlItem>
+                );
+              })}
+            </SegmentedControl>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const TableActions = ({ id }: { id: string }): React.JSX.Element => {
+  const t = useLabels();
+  const editor = useEditorRef();
+  return (
+    <InlineStack gap={2}>
+      <Button type="button" variant="outline" size="sm" onClick={() => addTableRow(editor, id)}>
+        <Plus aria-hidden="true" />
+        {t.addRow}
+      </Button>
+      <Button type="button" variant="outline" size="sm" onClick={() => addTableColumn(editor, id)}>
+        <Plus aria-hidden="true" />
+        {t.addColumn}
+      </Button>
+    </InlineStack>
+  );
+};
+
 const SettingControl = ({ field, set }: ControlProps): React.JSX.Element => {
   switch (field.kind) {
+    case "alignments":
+      return <AlignmentsControl field={field} set={set} />;
     case "select":
       return <SelectControl field={field} set={set} />;
     case "number":
@@ -472,6 +546,8 @@ export const EditorSettings = ({ className }: EditorSettingsProps): React.JSX.El
           set={(value) => blocks.update(selected.id, { [field.key]: value })}
         />
       ))}
+
+      {selected.type === "table" ? <TableActions id={selected.id} /> : null}
 
       {selected.movable ? (
         <InlineStack gap={2} wrap={false} className="mt-auto pt-2">

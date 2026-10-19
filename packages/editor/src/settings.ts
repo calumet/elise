@@ -11,6 +11,7 @@ export const OPTIONS = {
   size: ["small", "medium", "large"],
   variant: ["primary", "secondary"],
   tone: ["info", "success", "warning", "danger"],
+  textAlign: ["left", "center", "right"],
 } as const;
 
 export type GalleryImage = { src: string; alt: string };
@@ -31,7 +32,10 @@ export type SettingKey =
   | "tone"
   | "alt"
   | "caption"
-  | "url";
+  | "url"
+  | "headerRow"
+  | "headerColumn"
+  | "columnAlign";
 
 type Base = { key: SettingKey };
 
@@ -42,12 +46,17 @@ export type SettingDef =
   | (Base & { kind: "text"; default: string })
   | (Base & { kind: "url"; default: string })
   | (Base & { kind: "video"; default: string })
-  | (Base & { kind: "images"; default: GalleryImage[] });
+  | (Base & { kind: "images"; default: GalleryImage[] })
+  | (Base & { kind: "alignments"; options: readonly string[]; default: string[] });
 
-export type SettingValue = string | number | boolean | GalleryImage[];
+export type SettingValue = string | number | boolean | GalleryImage[] | string[];
 export type SettingValues = Record<string, SettingValue>;
 
-const select = (key: keyof typeof OPTIONS, fallback: string, as: SettingKey = key): SettingDef => ({
+const select = (
+  key: Exclude<keyof typeof OPTIONS, "textAlign">,
+  fallback: string,
+  as: SettingKey = key,
+): SettingDef => ({
   key: as,
   kind: "select",
   options: OPTIONS[key],
@@ -77,6 +86,38 @@ export const blockSettings: Record<string, readonly SettingDef[]> = {
     { key: "caption", kind: "text", default: "" },
   ],
   media_embed: [{ key: "url", kind: "video", default: "" }],
+  table: [
+    { key: "headerRow", kind: "toggle", default: true },
+    { key: "headerColumn", kind: "toggle", default: false },
+    { key: "columnAlign", kind: "alignments", options: OPTIONS.textAlign, default: [] },
+  ],
+};
+
+const childrenOf = (node: EditorNode): EditorNode[] =>
+  node.children.filter((child): child is EditorNode => "type" in child);
+
+export const tableWidth = (table: EditorNode): number =>
+  Math.max(0, ...childrenOf(table).map((row) => childrenOf(row).length));
+
+export const tableShape = (
+  table: EditorNode,
+): { headerRow: boolean; headerColumn: boolean; columnAlign: string[] } => {
+  const firstRow = childrenOf(table)[0];
+  const firstCells = firstRow ? childrenOf(firstRow) : [];
+  const align = Array.isArray(table.columnAlign) ? (table.columnAlign as unknown[]) : [];
+  return {
+    headerRow:
+      typeof table.headerRow === "boolean"
+        ? table.headerRow
+        : firstCells.length > 0 && firstCells.every((cell) => cell.type === "th"),
+    headerColumn: table.headerColumn === true,
+    columnAlign: Array.from({ length: tableWidth(table) }, (_, index) => {
+      const value = align[index];
+      return typeof value === "string" && OPTIONS.textAlign.includes(value as "left")
+        ? value
+        : "left";
+    }),
+  };
 };
 
 export const settingDefs = (type: string): readonly SettingDef[] => blockSettings[type] ?? [];
@@ -112,10 +153,18 @@ export const coerceSetting = (def: SettingDef, value: unknown): SettingValue | u
             alt: typeof image.alt === "string" ? image.alt : "",
           }))
         : undefined;
+    case "alignments": {
+      const allowed = new Set(def.options);
+      return Array.isArray(value) &&
+        value.every((item) => typeof item === "string" && allowed.has(item))
+        ? [...(value as string[])]
+        : undefined;
+    }
   }
 };
 
 export const resolveSettings = (node: EditorNode): SettingValues => {
+  if (node.type === "table") return tableShape(node);
   const values: SettingValues = {};
   for (const def of settingDefs(node.type)) {
     values[def.key] =
