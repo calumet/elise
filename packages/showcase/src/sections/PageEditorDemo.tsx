@@ -11,6 +11,7 @@ import {
 } from "@calumet/elise-editor";
 import { useTranslation } from "@calumet/elise-i18n";
 import {
+  Ellipsis,
   ListTree,
   Lock,
   Monitor,
@@ -37,11 +38,27 @@ import { Badge } from "@calumet/elise-ui/badge";
 import { Box } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
 import { Container } from "@calumet/elise-ui/container";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@calumet/elise-ui/dropdown-menu";
 import { Heading } from "@calumet/elise-ui/heading";
 import { SegmentedControl, SegmentedControlItem } from "@calumet/elise-ui/segmented-control";
 import { Separator } from "@calumet/elise-ui/separator";
 import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle } from "@calumet/elise-ui/sheet";
 import { Text } from "@calumet/elise-ui/text";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@calumet/elise-ui/tooltip";
 import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 
@@ -501,17 +518,19 @@ const IconButton = ({
   className?: string;
   children: ReactNode;
 }) => (
-  <Button
-    type="button"
-    variant="ghost"
-    size="icon-sm"
-    aria-label={label}
-    aria-pressed={pressed}
-    className={`text-muted-foreground aria-pressed:bg-accent aria-pressed:text-accent-foreground ${className ?? ""}`}
-    onClick={onClick}
-  >
-    {children}
-  </Button>
+  <Hint label={label}>
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-sm"
+      aria-label={label}
+      aria-pressed={pressed}
+      className={`text-muted-foreground aria-pressed:bg-accent aria-pressed:text-accent-foreground ${className ?? ""}`}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  </Hint>
 );
 
 const PageBar = ({
@@ -542,6 +561,7 @@ const PageBar = ({
   const { previewing } = useEditorPreview();
   const { mode } = useEditorMode();
   const editing = !previewing && mode === "visual";
+  const wide = useMinWidth("(min-width: 80rem)");
   return (
     <div className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-card px-4 py-2">
       {outlineDocked ? (
@@ -572,27 +592,45 @@ const PageBar = ({
           {t("saved", { fallback: "Saved just now" })}
         </Text>
       </div>
-      <Slot shown={mode === "visual"} className="max-md:hidden">
-        <SegmentedControl
-          aria-label={t("view", { fallback: "View" })}
-          value={view}
-          onValueChange={(next) => onView(next as View)}
-        >
-          <SegmentedControlItem value="desktop" aria-label={t("desktop", { fallback: "Desktop" })}>
-            <Monitor aria-hidden="true" className="size-icon-md" />
-          </SegmentedControlItem>
-          <SegmentedControlItem value="mobile" aria-label={t("mobile", { fallback: "Mobile" })}>
-            <Smartphone aria-hidden="true" className="size-icon-md" />
-          </SegmentedControlItem>
-        </SegmentedControl>
-      </Slot>
+      {sideDocked ? (
+        <Slot shown={mode === "visual"}>
+          <SegmentedControl
+            aria-label={t("view", { fallback: "View" })}
+            value={view}
+            onValueChange={(next) => onView(next as View)}
+          >
+            <SegmentedControlItem
+              value="desktop"
+              aria-label={t("desktop", { fallback: "Desktop" })}
+            >
+              <Monitor aria-hidden="true" className="size-icon-md" />
+            </SegmentedControlItem>
+            <SegmentedControlItem value="mobile" aria-label={t("mobile", { fallback: "Mobile" })}>
+              <Smartphone aria-hidden="true" className="size-icon-md" />
+            </SegmentedControlItem>
+          </SegmentedControl>
+        </Slot>
+      ) : (
+        <Slot shown={mode === "visual"}>
+          <MoreMenu view={view} onView={onView} editing={editing} />
+        </Slot>
+      )}
       <Slot shown={editing} className="flex items-center gap-1">
         {outlineDocked ? null : (
           <IconButton label={t("structure", { fallback: "Page structure" })} onClick={onOutline}>
             <ListTree aria-hidden="true" />
           </IconButton>
         )}
-        {sideDocked ? null : (
+        {sideDocked ? (
+          <>
+            <IconButton label={t("undo", { fallback: "Undo" })} onClick={commands.undo}>
+              <Undo2 aria-hidden="true" />
+            </IconButton>
+            <IconButton label={t("redo", { fallback: "Redo" })} onClick={commands.redo}>
+              <Redo2 aria-hidden="true" />
+            </IconButton>
+          </>
+        ) : (
           <IconButton
             label={t("blockSettings", { fallback: "Block settings" })}
             onClick={() => onSide("settings")}
@@ -600,39 +638,38 @@ const PageBar = ({
             <SlidersHorizontal aria-hidden="true" />
           </IconButton>
         )}
-        <IconButton
-          label={t("undo", { fallback: "Undo" })}
-          className="max-sm:hidden"
-          onClick={commands.undo}
-        >
-          <Undo2 aria-hidden="true" />
-        </IconButton>
-        <IconButton
-          label={t("redo", { fallback: "Redo" })}
-          className="max-sm:hidden"
-          onClick={commands.redo}
-        >
-          <Redo2 aria-hidden="true" />
-        </IconButton>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          aria-pressed={sideDocked ? catalogShown : undefined}
-          className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-xl:size-8 max-xl:px-0"
-          onClick={() => onSide(sideDocked && side === "catalog" ? "settings" : "catalog")}
-        >
-          <Plus aria-hidden="true" />
-          <span className="max-xl:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
-        </Button>
+        <Hint label={t("addBlock", { fallback: "Add block" })} when={!wide}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            aria-pressed={sideDocked ? catalogShown : undefined}
+            className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-xl:size-8 max-xl:px-0"
+            onClick={() => onSide(sideDocked && side === "catalog" ? "settings" : "catalog")}
+          >
+            <Plus aria-hidden="true" />
+            <span className="max-xl:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
+          </Button>
+        </Hint>
       </Slot>
       <Editor.ModeSwitch />
       <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 max-sm:hidden" />
       <div className="flex items-center gap-2">
         <Slot shown={!previewing}>
-          <Editor.TranslationsButton className="max-xl:[&_[data-slot=label]]:sr-only" />
+          <Hint label={t("translations", { fallback: "Translations" })} when={!wide}>
+            <Editor.TranslationsButton className="max-xl:[&_[data-slot=label]]:sr-only" />
+          </Hint>
         </Slot>
-        <Editor.PreviewButton className={previewing ? undefined : "max-sm:hidden"} />
+        <Hint
+          label={
+            previewing
+              ? t("backToEditing", { fallback: "Back to editing" })
+              : t("preview", { fallback: "Preview" })
+          }
+          when={!wide}
+        >
+          <Editor.PreviewButton className="max-xl:size-8 max-xl:px-0 max-xl:[&_[data-slot=label]]:sr-only" />
+        </Hint>
         <Button type="button" size="sm">
           {t("publish", { fallback: "Publish" })}
         </Button>
@@ -640,6 +677,80 @@ const PageBar = ({
     </div>
   );
 };
+
+const RADIO_DOT = "[&_[data-state=checked]>span]:block";
+
+const MoreMenu = ({
+  view,
+  onView,
+  editing,
+}: {
+  view: View;
+  onView: (view: View) => void;
+  editing: boolean;
+}) => {
+  const { t } = useTranslation("pageEditor");
+  const commands = useEditorCommands();
+  return (
+    <DropdownMenu modal={false}>
+      <Hint label={t("more", { fallback: "More options" })}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={t("more", { fallback: "More options" })}
+            className="text-muted-foreground"
+          >
+            <Ellipsis aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+      </Hint>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>{t("view", { fallback: "View" })}</DropdownMenuLabel>
+        <DropdownMenuRadioGroup value={view} onValueChange={(next) => onView(next as View)}>
+          <DropdownMenuRadioItem value="desktop" className={RADIO_DOT}>
+            <Monitor aria-hidden="true" />
+            {t("desktop", { fallback: "Desktop" })}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="mobile" className={RADIO_DOT}>
+            <Smartphone aria-hidden="true" />
+            {t("mobile", { fallback: "Mobile" })}
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem disabled={!editing} onSelect={commands.undo}>
+          <Undo2 aria-hidden="true" />
+          {t("undo", { fallback: "Undo" })}
+        </DropdownMenuItem>
+        <DropdownMenuItem disabled={!editing} onSelect={commands.redo}>
+          <Redo2 aria-hidden="true" />
+          {t("redo", { fallback: "Redo" })}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const Hint = ({
+  label,
+  when = true,
+  children,
+}: {
+  label: string;
+  when?: boolean;
+  children: ReactNode;
+}) =>
+  when ? (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-flex">{children}</span>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
+  ) : (
+    children
+  );
 
 const Slot = ({
   shown,
@@ -736,18 +847,20 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
 
   return (
     <>
-      <PageBar
-        title={title}
-        view={view}
-        onView={switchView}
-        side={side}
-        catalogShown={catalogShown}
-        onSide={openSide}
-        onOutline={() => (outlineDocked ? setTreeShown(!treeShown) : setSheet("outline"))}
-        outlineDocked={outlineDocked}
-        treeShown={treeShown}
-        sideDocked={sideDocked}
-      />
+      <TooltipProvider>
+        <PageBar
+          title={title}
+          view={view}
+          onView={switchView}
+          side={side}
+          catalogShown={catalogShown}
+          onSide={openSide}
+          onOutline={() => (outlineDocked ? setTreeShown(!treeShown) : setSheet("outline"))}
+          outlineDocked={outlineDocked}
+          treeShown={treeShown}
+          sideDocked={sideDocked}
+        />
+      </TooltipProvider>
       {mode === "code" ? <Editor.Code title={title} /> : null}
       {mode === "translations" ? <Editor.Translations title={title} /> : null}
       <div className={mode === "visual" ? "flex min-h-0 flex-1" : "hidden"}>
