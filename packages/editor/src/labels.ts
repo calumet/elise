@@ -163,7 +163,7 @@ const DEFAULTS = {
   catalogActions: "Data and actions",
   catalogEmpty: "Nothing matches “{query}”",
   closePanel: "Close",
-  outlineHint: "Drag in this list or on the page to reorder.",
+  outlineHint: "Drag a handle to reorder, or focus it and press space to move with the arrows.",
   noSelection: "No block selected",
   noSelectionHint: "Select a block on the page or in the structure to change it.",
   selectParent: "Edit the columns",

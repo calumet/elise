@@ -1,13 +1,6 @@
 import { GripVertical, Plus } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
-import {
-  DndContext,
-  PointerSensor,
-  useDraggable,
-  useSensor,
-  useSensors,
-  type DraggableSyntheticListeners,
-} from "@dnd-kit/core";
+import { DndContext, PointerSensor, useDraggable, useSensor, useSensors } from "@dnd-kit/core";
 import { KEYS, NodeApi, PathApi, type TElement } from "platejs";
 import {
   useEditorRef,
@@ -20,9 +13,9 @@ import * as React from "react";
 
 import { typeLabel, useLabels } from "../labels";
 import { insertLine } from "./items";
-import { startPageDrag, type DropTarget, type PageDrag } from "./page-drag";
+import { startPageDrag, type PageDrag } from "./page-drag";
 import { BlockSelectionPlugin, selectBlockById, useSelectedId } from "./selection";
-import { blockEntry, isColumns, isMovable, type DropPosition } from "./structure";
+import { blockEntry, isColumns, isMovable } from "./structure";
 import { FormatRow } from "./toolbar";
 
 const BLOCK =
@@ -32,37 +25,6 @@ const HANDLE =
 const CHIP =
   "pointer-events-none absolute start-3 z-sticky rounded-sm [[data-formatting]_&]:invisible bg-primary px-1.5 text-2xs font-semibold text-primary-foreground select-none [[data-chip=above]>&]:top-0 [[data-chip=above]>&]:-translate-y-full [[data-chip=below]>&]:bottom-0 [[data-chip=below]>&]:translate-y-full [[data-chip=none]>&]:hidden";
 const CHIP_ROOM = 16;
-
-type DragState = { active: string | null; target: DropTarget | null };
-type DragStore = { value: DragState; listeners: Set<() => void> };
-type DragData = { blockId: string; follow: boolean };
-
-const IDLE: DragState = { active: null, target: null };
-const stores = new WeakMap<object, DragStore>();
-
-const storeOf = (editor: object): DragStore => {
-  const existing = stores.get(editor);
-  if (existing) return existing;
-  const created: DragStore = { value: IDLE, listeners: new Set() };
-  stores.set(editor, created);
-  return created;
-};
-
-const setDragState = (editor: object, value: DragState): void => {
-  const store = storeOf(editor);
-  store.value = value;
-  for (const listener of store.listeners) listener();
-};
-
-const useDragState = (editor: object): DragState =>
-  React.useSyncExternalStore(
-    (listener) => {
-      const { listeners } = storeOf(editor);
-      listeners.add(listener);
-      return () => listeners.delete(listener);
-    },
-    () => storeOf(editor).value,
-  );
 
 const room = (block: HTMLElement, side: "above" | "below"): number => {
   const box = block.getBoundingClientRect();
@@ -260,8 +222,7 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
     if (selected && node) node.dataset.chip = chipSide(node);
   }, [selected, element, bar]);
 
-  const data: DragData = { blockId: id, follow: true };
-  const { setNodeRef, setActivatorNodeRef, listeners } = useDraggable({ id, data });
+  const { setNodeRef, setActivatorNodeRef, listeners } = useDraggable({ id });
   const ref = React.useCallback(
     (node: HTMLDivElement | null) => {
       nodeRef.current = node;
@@ -352,7 +313,6 @@ export const BlockDrag = ({ children }: { children: React.ReactNode }): React.JS
   const finish = (commit: boolean) => {
     drag.current?.finish(commit);
     drag.current = null;
-    setDragState(editor, IDLE);
   };
 
   return (
@@ -361,15 +321,7 @@ export const BlockDrag = ({ children }: { children: React.ReactNode }): React.JS
       autoScroll={AUTO_SCROLL}
       accessibility={SILENT}
       onDragStart={({ active, activatorEvent }) => {
-        const { blockId, follow } = active.data.current as DragData;
-        setDragState(editor, { active: blockId, target: null });
-        drag.current = startPageDrag({
-          editor,
-          id: blockId,
-          follow,
-          activator: activatorEvent,
-          onTarget: (target) => setDragState(editor, { active: blockId, target }),
-        });
+        drag.current = startPageDrag({ editor, id: String(active.id), activator: activatorEvent });
       }}
       onDragEnd={() => finish(true)}
       onDragCancel={() => finish(false)}
@@ -377,32 +329,4 @@ export const BlockDrag = ({ children }: { children: React.ReactNode }): React.JS
       {children}
     </DndContext>
   );
-};
-
-export type OutlineDnd = {
-  ref: (node: HTMLElement | null) => void;
-  listeners: DraggableSyntheticListeners;
-  isDragging: boolean;
-  isOver: boolean;
-  position: DropPosition | null;
-};
-
-export const useOutlineDnd = (id: string): OutlineDnd => {
-  const editor = useEditorRef();
-  const { active, target } = useDragState(editor);
-  const data: DragData = { blockId: id, follow: false };
-  const { setNodeRef, listeners } = useDraggable({
-    id: `outline:${id}`,
-    data,
-    disabled: !isMovable(blockEntry(editor, id)?.[0]),
-  });
-  const ref = React.useCallback(
-    (node: HTMLElement | null) => {
-      if (node) node.dataset.outlineId = id;
-      setNodeRef(node);
-    },
-    [id, setNodeRef],
-  );
-  const position = target?.id === id ? target.position : null;
-  return { ref, listeners, isDragging: active === id, isOver: position !== null, position };
 };

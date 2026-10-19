@@ -1,10 +1,9 @@
-import type { TElement } from "platejs";
 import type { PlateEditor } from "platejs/react";
 
 import { motionOptions, reducedMotion } from "./motion";
-import { blockEntry, canMoveBlock, isColumns, moveBlock, type DropPosition } from "./structure";
+import { blockEntry, canMoveBlock, isColumns, moveBlock } from "./structure";
 
-export type DropTarget = { id: string; position: DropPosition };
+type DropTarget = { id: string; position: "before" | "after" };
 
 export type PageDrag = { finish: (commit: boolean) => void };
 
@@ -21,7 +20,6 @@ type Lane = {
 const BLOCK = '[data-slot="block"]';
 const PAGE_SLACK = { x: 64, y: 32 };
 const GAP = 16;
-const EASE = 0.25;
 const INSET = 24;
 const DEAD = 16;
 const HYSTERESIS = 16;
@@ -82,15 +80,11 @@ const settle = (root: HTMLElement, before: Map<string, DOMRect>, id: string): vo
 export const startPageDrag = ({
   editor,
   id,
-  follow,
   activator,
-  onTarget,
 }: {
   editor: PlateEditor;
   id: string;
-  follow: boolean;
   activator: Event | null;
-  onTarget: (target: DropTarget | null) => void;
 }): PageDrag | null => {
   const root = editor.api.toDOMNode(editor);
   const active = root?.querySelector<HTMLElement>(`${BLOCK}[data-block-id="${CSS.escape(id)}"]`);
@@ -104,7 +98,6 @@ export const startPageDrag = ({
     start.height -
     Number.parseFloat(following ? getComputedStyle(following).marginTop : style.marginTop);
   const nested = isColumns(blockEntry(editor, id)?.[0]);
-  const smooth = !reducedMotion();
   const bases = new Map<HTMLElement, number>();
   const heights = new Map<HTMLElement, number>();
   let pointer = pointOf(activator);
@@ -197,9 +190,11 @@ export const startPageDrag = ({
   const probe = (): Point & { top: number } => {
     const now = scrolled();
     const shift = { x: scrollStart.x - now.x, y: scrollStart.y - now.y };
-    const x = follow ? pointer.x - grab.x + INSET : pointer.x;
-    const top = (follow ? pointer.y - grab.y : pointer.y) - shift.y;
-    return { x: x - shift.x, y: pointer.y - shift.y, top };
+    return {
+      x: pointer.x - grab.x + INSET - shift.x,
+      y: pointer.y - shift.y,
+      top: pointer.y - grab.y - shift.y,
+    };
   };
 
   const laneAt = (point: Point): Lane | null => {
@@ -217,53 +212,28 @@ export const startPageDrag = ({
     }).length;
   };
 
-  const fromOutline = (row: HTMLElement): DropTarget | null => {
-    const rowId = row.dataset.outlineId;
-    if (!rowId) return null;
-    const box = (row.firstElementChild ?? row).getBoundingClientRect();
-    const position: DropPosition =
-      blockEntry(editor, rowId)?.[0].type === "column"
-        ? "inside"
-        : pointer.y < box.top + box.height / 2
-          ? "before"
-          : "after";
-    return { id: rowId, position };
-  };
-
-  const fromPage = (): DropTarget | null => {
+  const locate = (): DropTarget | null => {
     const point = probe();
     const next = laneAt(point);
     index = next ? indexIn(next, point.top) : -1;
     lane = next;
     if (!next) return null;
     const before = next.items[index];
-    if (before) return { id: idOf(before), position: "before" };
     const last = next.items[next.items.length - 1];
-    return last ? { id: idOf(last), position: "after" } : null;
-  };
-
-  const locate = (): DropTarget | null => {
-    const row = document
-      .elementFromPoint(pointer.x, pointer.y)
-      ?.closest<HTMLElement>("[data-outline-id]");
-    const found = row ? fromOutline(row) : fromPage();
+    const found: DropTarget | null = before
+      ? { id: idOf(before), position: "before" }
+      : last
+        ? { id: idOf(last), position: "after" }
+        : null;
     return found && canMoveBlock(editor, id, found.id, found.position) ? found : null;
   };
 
   const anchorOf = (found: DropTarget | null): Anchor | null => {
     if (!found) return null;
-    let element: HTMLElement | null | undefined;
-    let side: Anchor["side"] = found.position === "before" ? "before" : "after";
-    if (found.position === "inside") {
-      const node = blockEntry(editor, found.id)?.[0] as TElement | undefined;
-      const column = node ? editor.api.toDOMNode(node) : undefined;
-      const rest = column ? blocksIn(column).filter((block) => block !== active) : [];
-      element = rest[rest.length - 1];
-    } else {
-      element = root.querySelector<HTMLElement>(
-        `${BLOCK}[data-block-id="${CSS.escape(found.id)}"]`,
-      );
-    }
+    let element = root.querySelector<HTMLElement>(
+      `${BLOCK}[data-block-id="${CSS.escape(found.id)}"]`,
+    );
+    let side: Anchor["side"] = found.position;
     const container = element?.parentElement;
     if (!element || !container) return null;
     if (side === "after") {
@@ -295,32 +265,15 @@ export const startPageDrag = ({
     active.style.marginBottom = next ? `${collapse}px` : "";
   };
 
-  const slot = (layout: Point): Point => {
-    if (!anchor) return layout;
-    const near = anchor.element.getBoundingClientRect();
-    const y =
-      anchor.side === "before" ? near.top - anchor.height - anchor.gap : near.bottom + anchor.gap;
-    return { x: near.left, y };
-  };
-
   const track = (): void => {
     const found = locate();
     if (!sameTarget(found, target)) {
       target = found;
-      onTarget(found);
       place(anchorOf(found));
     }
     const box = active.getBoundingClientRect();
-    const layout = { x: box.left - offset.x, y: box.top - offset.y };
-    if (follow) {
-      offset.x = pointer.x - grab.x - layout.x;
-      offset.y = pointer.y - grab.y - layout.y;
-    } else {
-      const to = slot(layout);
-      const ease = smooth ? EASE : 1;
-      offset.x += (to.x - layout.x - offset.x) * ease;
-      offset.y += (to.y - layout.y - offset.y) * ease;
-    }
+    offset.x = pointer.x - grab.x - (box.left - offset.x);
+    offset.y = pointer.y - grab.y - (box.top - offset.y);
     active.style.transform = `translate(${offset.x}px, ${offset.y}px)`;
     frame = requestAnimationFrame(track);
   };
@@ -348,7 +301,6 @@ export const startPageDrag = ({
       delete active.dataset.dragging;
       place(null);
       active.style.transform = "";
-      onTarget(null);
       if (!commit || !target) {
         settle(root, before, id);
         return;

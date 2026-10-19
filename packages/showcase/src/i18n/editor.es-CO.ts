@@ -161,7 +161,8 @@ export default {
   catalogActions: "Datos y acciones",
   catalogEmpty: "Nada coincide con «{query}»",
   closePanel: "Cerrar",
-  outlineHint: "Arrastra en esta lista o en la página para reordenar.",
+  outlineHint:
+    "Arrastra un asa para reordenar, o enfócala y pulsa espacio para moverla con las flechas.",
   noSelection: "Ningún bloque elegido",
   noSelectionHint: "Elige un bloque en la página o en la estructura para cambiarlo.",
   selectParent: "Editar las columnas",

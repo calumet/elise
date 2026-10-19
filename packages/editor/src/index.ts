@@ -21,7 +21,6 @@ export {
   type OutlineNode,
   type SelectedBlock,
 } from "./editor/blocks";
-export { useOutlineDnd, type OutlineDnd } from "./editor/drag";
 export type { DropPosition } from "./editor/structure";
 export type { TemplateId, TemplateItem } from "./editor/templates";
 export type { EditorContentAreaProps } from "./editor/content";

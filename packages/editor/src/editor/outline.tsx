@@ -1,42 +1,54 @@
+import {
+  SortableTree,
+  type SortableTreeMove,
+  type SortableTreeNode,
+} from "@calumet/elise-ui/sortable";
 import { Text } from "@calumet/elise-ui/text";
-import { Tree, TreeItem } from "@calumet/elise-ui/tree";
 import { useEditorRef } from "platejs/react";
 import * as React from "react";
 
 import { useLabels } from "../labels";
 import { useBlockCommands, useOutline, useSelectedBlock, type OutlineNode } from "./blocks";
-import { useOutlineDnd } from "./drag";
 import { blockIcon } from "./icons";
-import { blockEntry } from "./structure";
+import { blockEntry, type DropPosition } from "./structure";
 
-const ROW =
-  "relative data-dragging:opacity-40 before:pointer-events-none before:absolute before:inset-x-1 before:z-sticky before:hidden before:h-0.5 before:rounded-full before:bg-primary data-[drop=after]:before:-bottom-px data-[drop=after]:before:block data-[drop=before]:before:-top-px data-[drop=before]:before:block [&[data-drop=inside]>span:first-child]:bg-accent [&[data-drop=inside]>span:first-child]:ring-2 [&[data-drop=inside]>span:first-child]:ring-primary";
+type OutlineItem = SortableTreeNode & { id: string; type: string; children: OutlineItem[] };
 
-const OutlineRow = ({ node }: { id: string; node: OutlineNode }): React.JSX.Element => {
-  const { ref, listeners, isDragging, position } = useOutlineDnd(node.id);
-  const Icon = blockIcon(node.type);
-  return (
-    <TreeItem
-      ref={ref}
-      {...listeners}
-      id={node.id}
-      label={<span title={node.label}>{node.label}</span>}
-      icon={<Icon className="size-icon-md text-muted-foreground" />}
-      data-drop={position ?? undefined}
-      data-dragging={isDragging || undefined}
-      className={ROW}
-    >
-      {node.children.map((child) => (
-        <OutlineRow key={child.id} id={child.id} node={child} />
-      ))}
-    </TreeItem>
-  );
+const MAX_DEPTH = 3;
+
+const TREE =
+  "[&_[data-slot=sortable-tree-item]>div:has([aria-current=true])]:bg-accent [&_[data-slot=sortable-tree-item]>div:has([aria-current=true])]:text-accent-foreground";
+
+const toItems = (nodes: OutlineNode[]): OutlineItem[] =>
+  nodes.map((node) => ({
+    id: node.id,
+    label: node.label,
+    type: node.type,
+    children: toItems(node.children),
+    draggable: node.type !== "column",
+    acceptsChildren: node.type === "column",
+  }));
+
+const findItem = (items: OutlineItem[], id: string): OutlineItem | undefined => {
+  for (const item of items) {
+    if (item.id === id) return item;
+    const inner = findItem(item.children, id);
+    if (inner) return inner;
+  }
+  return undefined;
 };
 
-const branchIds = (nodes: OutlineNode[]): string[] =>
-  nodes.flatMap((node) =>
-    node.children.length ? [node.id, ...branchIds(node.children)] : branchIds(node.children),
-  );
+const destination = (
+  { parentId, index }: SortableTreeMove,
+  items: OutlineItem[],
+): { id: string; position: DropPosition } | null => {
+  const siblings = parentId == null ? items : (findItem(items, String(parentId))?.children ?? []);
+  const before = siblings[index - 1];
+  const after = siblings[index + 1];
+  if (before) return { id: before.id, position: "after" };
+  if (after) return { id: after.id, position: "before" };
+  return parentId == null ? null : { id: String(parentId), position: "inside" };
+};
 
 export type EditorOutlineProps = { className?: string };
 
@@ -47,29 +59,36 @@ export const EditorOutline = ({ className }: EditorOutlineProps): React.JSX.Elem
   const selected = useSelectedBlock()?.id;
   const blocks = useBlockCommands();
   const headingId = React.useId();
-  const [collapsed, setCollapsed] = React.useState<ReadonlySet<string>>(new Set());
-  const picked = React.useRef<string | null>(null);
-  const branches = branchIds(outline);
-  const expanded = branches.filter((id) => !collapsed.has(id));
+  const items = React.useMemo(() => toItems(outline), [outline]);
+  const container = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const hold = (event: KeyboardEvent) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const lifted = target?.closest('[data-slot="sortable-handle"][aria-pressed="true"]');
+      if (event.key === "Escape" && lifted && container.current?.contains(lifted)) {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", hold, true);
+    return () => window.removeEventListener("keydown", hold, true);
+  }, []);
 
   const select = (id: string) => {
-    picked.current = id === selected ? null : id;
     if (!blocks.select(id)) return;
     const entry = blockEntry(editor, id);
     const element = entry ? editor.api.toDOMNode(entry[0]) : undefined;
     element?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   };
 
-  const toggle = (next: string[]) => {
-    const open = new Set(next);
-    const changed = branches.find((id) => collapsed.has(id) === open.has(id));
-    const skip = changed !== undefined && changed === picked.current;
-    picked.current = null;
-    if (!skip) setCollapsed(new Set(branches.filter((id) => !open.has(id))));
+  const move = (change: SortableTreeMove, next: OutlineItem[]) => {
+    const target = destination(change, next);
+    if (target) blocks.moveTo(String(change.id), target.id, target.position);
   };
 
   return (
     <div
+      ref={container}
       data-slot="editor-outline"
       className={`flex min-h-0 flex-col gap-2 ${className ?? ""}`.trim()}
     >
@@ -84,17 +103,28 @@ export const EditorOutline = ({ className }: EditorOutlineProps): React.JSX.Elem
       >
         {t.outline}
       </Text>
-      <Tree
+      <SortableTree
         aria-labelledby={headingId}
-        value={selected ?? ""}
-        onValueChange={select}
-        expanded={expanded}
-        onExpandedChange={toggle}
-      >
-        {outline.map((node) => (
-          <OutlineRow key={node.id} id={node.id} node={node} />
-        ))}
-      </Tree>
+        items={items}
+        maxDepth={MAX_DEPTH}
+        onMove={move}
+        className={TREE}
+        renderItem={(node) => {
+          const Icon = blockIcon(node.type);
+          return (
+            <button
+              type="button"
+              aria-current={node.id === selected || undefined}
+              title={node.label}
+              onClick={() => select(node.id)}
+              className="flex w-full min-w-0 items-center gap-1.5 rounded-xs text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              <Icon aria-hidden="true" className="size-icon-md shrink-0 text-muted-foreground" />
+              <span className="truncate">{node.label}</span>
+            </button>
+          );
+        }}
+      />
       <Text size="xs" tone="muted" className="mt-auto px-2 pt-2">
         {t.outlineHint}
       </Text>
