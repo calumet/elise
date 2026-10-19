@@ -40,6 +40,22 @@ dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
 
+## `@calumet/elise-ui` 0.43.1
+
+### Corrige
+
+**Escape durante un arrastre en `SortableTree` o `SortableList` ya no cierra el
+`Dialog` o la `Sheet` que los contiene.** Cancela el movimiento, anuncia la
+cancelación, y sin arrastre en curso Escape cierra el diálogo como siempre.
+
+**El anillo de foco de un control dentro de una fila de `SortableTree` ya no
+sale recortado.** La fila dejó de recortar lo que devuelve `renderItem`; sin
+`renderItem` el `label` se sigue recortando, y con él recortar el texto largo
+es cosa del contenido.
+
+**Las líneas que unen cada rama de `SortableTree` quedan centradas bajo el asa
+del padre.** Estaban 2,5 px a su izquierda.
+
 ## `@calumet/elise-ui` 0.43.0
 
 ### Añade

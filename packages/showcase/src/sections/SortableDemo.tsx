@@ -1,3 +1,14 @@
+import { Ellipsis } from "@calumet/elise-icons";
+import { Button } from "@calumet/elise-ui/button";
+import {
+  Sheet,
+  SheetBody,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@calumet/elise-ui/sheet";
 import {
   SortableHandle,
   SortableItem,
@@ -85,6 +96,14 @@ export default function SortableDemo() {
             setLastMove(move);
             setMenu(items);
           }}
+          renderItem={(node) => (
+            <span className="flex items-center gap-2">
+              <span className="min-w-0 flex-1 truncate">{node.label}</span>
+              <Button variant="ghost" size="icon-sm" aria-label={`Acciones de ${node.label}`}>
+                <Ellipsis aria-hidden="true" />
+              </Button>
+            </span>
+          )}
         />
         <Text size="sm" tone="muted">
           {lastMove
@@ -92,6 +111,42 @@ export default function SortableDemo() {
             : "Hasta 4 niveles. Inicio no se mueve ni admite hijos."}
         </Text>
       </div>
+
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" className="self-start">
+            Ordenar en una hoja
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left">
+          <SheetHeader>
+            <SheetTitle>Menú y campos</SheetTitle>
+            <SheetDescription>
+              Escape durante un arrastre lo cancela sin cerrar la hoja.
+            </SheetDescription>
+          </SheetHeader>
+          <SheetBody className="flex flex-col gap-6">
+            <SortableTree items={menu} maxDepth={4} onMove={(_, items) => setMenu(items)} />
+            <SortableList
+              items={fields.map((field) => field.id)}
+              onReorder={(ids) => setFields(byId(fields, ids))}
+            >
+              {fields.map((field) => (
+                <SortableItem
+                  key={field.id}
+                  id={field.id}
+                  className="flex items-center gap-2 border border-border px-3 py-2.5"
+                >
+                  <SortableHandle label={field.label} />
+                  <Text as="span" size="sm">
+                    {field.label}
+                  </Text>
+                </SortableItem>
+              ))}
+            </SortableList>
+          </SheetBody>
+        </SheetContent>
+      </Sheet>
 
       <SortableList
         items={fields.map((field) => field.id)}
