@@ -61,34 +61,10 @@ const fill = (template: string, vars: Record<string, string | number>) =>
     name in vars ? String(vars[name]) : match,
   );
 
-/** Props de {@link SortableList}. */
-export type SortableListProps = Omit<React.HTMLAttributes<HTMLUListElement>, "onChange"> & {
-  /** Los ids de los elementos, en el orden actual. */
-  items: UniqueIdentifier[];
-  /** Recibe los ids en el orden nuevo al soltar. */
-  onReorder: (items: UniqueIdentifier[]) => void;
-  /** Pasa la lista al hijo en vez de pintar un `<ul>`, por ejemplo a `TableBody`. */
-  asChild?: boolean;
-};
-
-/**
- * La lista. Solo reordena en vertical, y guardar el orden nuevo es cosa de
- * quien la usa.
- */
-export function SortableList({
-  items,
-  onReorder,
-  asChild,
-  className,
-  children,
-  ...props
-}: SortableListProps): React.JSX.Element {
-  const labels = React.useRef(new Map<UniqueIdentifier, string>());
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-
+const useAnnouncements = (
+  items: UniqueIdentifier[],
+  labels: React.RefObject<Map<UniqueIdentifier, string>>,
+) => {
   const instructions = useElLabel(
     "ui",
     "sortableInstructions",
@@ -129,6 +105,39 @@ export function SortableList({
     onDragCancel: ({ active }) => describe(canceled, active.id, active.id),
   };
 
+  return { announcements, screenReaderInstructions: { draggable: instructions } };
+};
+
+/** Props de {@link SortableList}. */
+export type SortableListProps = Omit<React.HTMLAttributes<HTMLUListElement>, "onChange"> & {
+  /** Los ids de los elementos, en el orden actual. */
+  items: UniqueIdentifier[];
+  /** Recibe los ids en el orden nuevo al soltar. */
+  onReorder: (items: UniqueIdentifier[]) => void;
+  /** Pasa la lista al hijo en vez de pintar un `<ul>`, por ejemplo a `TableBody`. */
+  asChild?: boolean;
+};
+
+/**
+ * La lista. Solo reordena en vertical, y guardar el orden nuevo es cosa de
+ * quien la usa.
+ */
+export function SortableList({
+  items,
+  onReorder,
+  asChild,
+  className,
+  children,
+  ...props
+}: SortableListProps): React.JSX.Element {
+  const labels = React.useRef(new Map<UniqueIdentifier, string>());
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const accessibility = useAnnouncements(items, labels);
+
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (!over || active.id === over.id) return;
     onReorder(arrayMove(items, items.indexOf(active.id), items.indexOf(over.id)));
@@ -143,7 +152,7 @@ export function SortableList({
         sensors={sensors}
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-        accessibility={{ announcements, screenReaderInstructions: { draggable: instructions } }}
+        accessibility={accessibility}
         onDragEnd={onDragEnd}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
