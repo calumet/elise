@@ -201,7 +201,7 @@ export const useInsertItems = (schema: EditorSchema): InsertItem[] => {
       id: "text",
       block: "text",
       label: t.textBlock,
-      keywords: "text paragraph heading list quote writing",
+      keywords: "text paragraph list bullets numbers bold italic link writing",
     },
   ];
   const allowed = new Set(schema.blocks);

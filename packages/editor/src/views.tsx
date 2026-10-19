@@ -161,7 +161,7 @@ const Video = ({
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
             data-selected={selected || undefined}
-            className={`aspect-video w-full rounded-lg border-0 bg-muted ${VOID}`}
+            className={`aspect-video w-full rounded-lg border-0 bg-muted ${VOID} ${editing ? "pointer-events-none" : ""}`}
           />
         ) : null}
       </div>

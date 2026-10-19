@@ -26,11 +26,11 @@ type EditorDocument = {
 
 El esquema decide qué se puede insertar, qué ofrece el menú `/`, qué acepta el pegado y qué HTML sale. Lo que quede fuera se descarta al pegar y en `fromHtml`.
 
-| Esquema          | Contenido                                                                                           |
-| ---------------- | --------------------------------------------------------------------------------------------------- |
-| `messageSchema`  | Párrafo, negrita, cursiva, enlace, listas e inline code                                             |
-| `documentSchema` | Lo anterior, más h2, h3, cita, imagen, tabla, callout, divisor y video                              |
-| `pageSchema`     | Bloques de texto, imagen, galería, video, tabla, aviso, botón, archivo, divisor, espacio y columnas |
+| Esquema          | Contenido                                                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `messageSchema`  | Párrafo, negrita, cursiva, enlace, listas e inline code                                                                      |
+| `documentSchema` | Lo anterior, más h2, h3, cita, imagen, tabla, callout, divisor y video                                                       |
+| `pageSchema`     | Bloques de texto, título, subtítulo, cita, imagen, galería, video, tabla, aviso, botón, archivo, divisor, espacio y columnas |
 
 `pageSchema` es el de la página: en lugar de un solo documento, una lista de bloques. El texto va dentro de bloques de texto. Está en la sección de abajo.
 
@@ -72,7 +72,7 @@ Con `pageSchema` el editor suma estos bloques. Cada uno declara los ajustes que 
 
 | Bloque    | Guarda                                                                                           |
 | --------- | ------------------------------------------------------------------------------------------------ |
-| `text`    | Párrafos, h2, h3, listas y citas, con la barra flotante y el menú `/` de las líneas de texto     |
+| `text`    | Párrafos y listas, con su fila de formato: negrita, cursiva, código, enlace y las dos listas     |
 | `columns` | De 1 a 4 `column`, con `ratio`, `gap`, `align`, `background` y `stack`. Un solo nivel de anidado |
 | `spacer`  | `size`: `small`, `medium` o `large`                                                              |
 | `button`  | `label`, `href`, `variant` (`primary` o `secondary`). Es un bloque vacío                         |
@@ -81,7 +81,7 @@ Con `pageSchema` el editor suma estos bloques. Cada uno declara los ajustes que 
 
 `onUploadFile?: (file: File) => Promise<{ src: string; name: string; size?: number }>` es la única prop nueva. `src` debe ser una dirección http(s) o relativa, porque `fromHtml` descarta las `data:` y `blob:` de los enlaces.
 
-Un bloque de texto se escribe como un documento: Intro sigue dentro del bloque, y en la estructura y al arrastrar es una sola fila con su primera línea por nombre. Una línea de texto suelta en la página o en una columna se envuelve en un bloque de texto, y lo que no es texto dentro de uno sale de él. En un bloque de texto con contenido el menú `/` ofrece solo tipos de línea; en uno vacío ofrece todos los bloques, que lo reemplazan. Con `documentSchema` o `messageSchema` el render deja su contenido suelto.
+Un bloque de texto es un editor como el de mensajes: con el bloque elegido aparece debajo del texto, dentro de su contorno, la fila de negrita, cursiva, código, enlace y las dos listas, y la barra flotante no sale dentro de él. Intro sigue dentro del bloque, y en la estructura y al arrastrar es una sola fila con su primera línea por nombre. Título, subtítulo y cita son bloques propios: un párrafo suelto en la página o en una columna se envuelve en un bloque de texto, y un título o una cita dentro de uno sale de él y lo parte en dos. En un bloque de texto con contenido el menú `/` ofrece las listas, título, subtítulo y cita, que sacan la línea a su propio bloque; en uno vacío ofrece todos los bloques, que lo reemplazan. Con `documentSchema` o `messageSchema` el render deja su contenido suelto.
 
 La imagen se elige y se previsualiza con `ImageUpload` de `elise-ui`, en el diálogo y en los ajustes del bloque, donde se reemplaza con `onUploadImage`. Por eso el peer `@calumet/elise-ui` pide `>=0.41.0`.
 
@@ -109,7 +109,7 @@ Las columnas no se rompen: una columna no puede quedar vacía ni contener otras 
 
 `useOutline()` devuelve el documento como árbol de `{ id, type, label, depth, children }` y se mantiene al día con cada cambio. Las columnas aparecen como `columns`, con sus `column` y los bloques de cada una; tablas, avisos y citas son una hoja. La etiqueta es el texto del bloque o, si no tiene, el nombre del tipo.
 
-El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva al margen un `+` que abre el menú `/` debajo y un asa (`data-slot="drag-handle"`). Al arrastrar, el propio bloque se pinta atenuado donde caería (`data-slot="drop-line"`), también dentro de una columna y a su ancho, y los bloques de alrededor se apartan para dejarle sitio. Se suelta justo donde se ve. Bajo el puntero va el bloque mismo, a su ancho, un poco levantado y cortado con un desvanecido si es muy alto. El bloque elegido lleva su contorno y el nombre del tipo, encima o debajo según haya sitio, y se esconde antes que pisar el contenido. Un bloque recién insertado queda elegido, con sus ajustes a la vista. El asa se aparta del texto `--editor-gutter` (0.75rem por defecto), para dejarla fuera de una hoja con menos margen. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
+El arrastre usa `@platejs/dnd` sobre `react-dnd`. `Editor.Root` con `pageSchema` pone el `DndProvider` y cada bloque de la página, o de una columna, lleva al margen un `+` que abre el menú `/` debajo y un asa (`data-slot="drag-handle"`). Al arrastrar, el propio bloque se pinta atenuado donde caería (`data-slot="drop-line"`), también dentro de una columna y a su ancho, y los bloques de alrededor se apartan para dejarle sitio. Se suelta justo donde se ve. Bajo el puntero va el bloque mismo, a su ancho, un poco levantado y cortado con un desvanecido si es muy alto. El bloque elegido lleva su contorno y el nombre del tipo, encima o debajo según haya sitio, y se esconde antes que pisar el contenido o mientras la barra flotante está abierta. Un bloque recién insertado queda elegido, con sus ajustes a la vista. El asa se aparta del texto `--editor-gutter` (0.75rem por defecto), para dejarla fuera de una hoja con menos margen. `useOutlineDnd(id)` devuelve `{ ref, isDragging, isOver, position }` para que una fila del esquema arrastre y reciba bloques con el mismo backend, así un bloque va del esquema a la página y al revés.
 
 ### Los paneles
 

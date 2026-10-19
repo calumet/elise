@@ -13,7 +13,7 @@ import type { PlateEditor } from "platejs/react";
 import { newId } from "../ids";
 import { lastIndex } from "./structure";
 
-const LINES = new Set<string>([KEYS.p, "h2", "h3", "blockquote"]);
+const LINES = new Set<string>([KEYS.p]);
 
 export const isLine = (node: TNode | undefined): node is TElement =>
   ElementApi.isElement(node) && LINES.has(String(node.type));

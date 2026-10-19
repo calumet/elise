@@ -112,6 +112,46 @@ export const LinkButton = ({
   );
 };
 
+export const FormatRow = ({ className }: { className?: string }): React.JSX.Element => {
+  const t = useLabels();
+  const editor = useEditorRef();
+  const { schema } = useServices();
+  const [linking, setLinking] = React.useState(false);
+
+  return (
+    <Toolbar aria-label={t.formatting} className={className ? `${BAR} ${className}` : BAR}>
+      {schema.marks.map((mark) => (
+        <MarkButton key={mark} mark={mark} />
+      ))}
+      {schema.links ? (
+        <Popover open={linking} onOpenChange={setLinking}>
+          <PopoverAnchor asChild>
+            <LinkButton expanded={linking} onClick={() => setLinking(true)} />
+          </PopoverAnchor>
+          <PopoverContent
+            side="top"
+            align="start"
+            collisionPadding={16}
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              editor.tf.focus();
+            }}
+          >
+            <LinkForm onClose={() => setLinking(false)} />
+          </PopoverContent>
+        </Popover>
+      ) : null}
+      {schema.blocks.includes("list") ? (
+        <>
+          <ToolbarSeparator />
+          <ListButton style="disc" />
+          <ListButton style="decimal" />
+        </>
+      ) : null}
+    </Toolbar>
+  );
+};
+
 type BlockKind = "p" | "h2" | "h3" | "blockquote" | "disc" | "decimal";
 
 const BLOCKS: { kind: BlockKind; needs: string; label: keyof Labels; Icon: typeof Bold }[] = [
@@ -317,6 +357,10 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
         : null,
     [],
   );
+  const inText = useEditorSelector(
+    (ed) => Boolean(ed.selection && ed.api.above({ at: ed.selection, match: { type: "text" } })),
+    [],
+  );
   const [shownFor, setShownFor] = useLatched(focused && !pressing ? selection : null);
   const [linking, setLinking] = React.useState(false);
 
@@ -325,7 +369,8 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
     if (!root) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.altKey && event.key === "F10") {
-        const first = barRef.current?.querySelector<HTMLElement>("button:not([disabled])");
+        const bar = barRef.current ?? root.querySelector("[data-slot=text-toolbar]");
+        const first = bar?.querySelector<HTMLElement>("button:not([disabled])");
         if (first) {
           event.preventDefault();
           first.focus();
@@ -349,7 +394,17 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
     () => (selection ? rangeAnchor(editor, JSON.parse(selection)) : undefined),
     [editor, selection],
   );
-  const open = selection !== null && shownFor === selection;
+  const open = selection !== null && shownFor === selection && (linking || !inText);
+  const formatting = open && !linking;
+
+  React.useEffect(() => {
+    const root = editor.api.toDOMNode(editor);
+    if (!root || !formatting) return;
+    root.dataset.formatting = "";
+    return () => {
+      delete root.dataset.formatting;
+    };
+  }, [editor, formatting]);
   const closeLink = () => {
     setLinking(false);
     editor.tf.focus();

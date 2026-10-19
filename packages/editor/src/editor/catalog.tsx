@@ -34,6 +34,7 @@ const GROUPS: { label: keyof Labels; ids: InsertItemId[] }[] = [
 ];
 
 const RETYPE = new Set<InsertItemId>(["h2", "h3", "bulleted", "numbered", "quote"]);
+const LISTS = new Set<InsertItemId>(["bulleted", "numbered"]);
 
 const TEMPLATE_ICONS: Record<TemplateId, typeof Columns2> = {
   "text-image": Columns2,
@@ -97,13 +98,14 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
   const [query, setQuery] = React.useState("");
   const [dialog, setDialog] = React.useState<MediaKind | null>(null);
   const selected = useSelectedBlock();
+  const textBlocks = commands.items.some((item) => item.id === "text");
 
   const pick = (item: InsertItem) => {
     if (isMediaKind(item.id)) {
       setDialog(item.id);
       return;
     }
-    if (RETYPE.has(item.id)) openLine(editor);
+    if (!textBlocks && RETYPE.has(item.id)) openLine(editor);
     commands.insert(item.id, { replace: true });
     revealSelected(editor);
   };
@@ -114,14 +116,13 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
 
   const target = selected ? t.catalogTarget.replace("{block}", selected.label) : t.catalogTargetEnd;
 
-  const textBlocks = commands.items.some((item) => item.id === "text");
   const groups = GROUPS.map((group) => ({
     label: t[group.label],
     items: group.ids
       .flatMap((id) => commands.items.filter((item) => item.id === id))
       .filter(
         (item) =>
-          !(textBlocks && RETYPE.has(item.id)) &&
+          !(textBlocks && LISTS.has(item.id)) &&
           matches(query, item.label, item.keywords, t[ITEMS[item.id].description]),
       ),
   })).filter((group) => group.items.length > 0);

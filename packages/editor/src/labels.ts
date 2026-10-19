@@ -138,7 +138,7 @@ const DEFAULTS = {
   optionWarning: "Warning",
   optionDanger: "Danger",
   textBlock: "Text",
-  textBlockDescription: "Paragraphs, headings and lists",
+  textBlockDescription: "Paragraphs and lists, with formatting",
   settingImage: "Image",
   imageHint: "JPG, PNG or WebP",
   optionLeft: "Left",

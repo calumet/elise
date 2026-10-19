@@ -64,8 +64,10 @@ export const useEditorCommands = (): EditorCommands => {
   const templates = useTemplates(schema);
 
   const toggleBlock: EditorCommands["toggleBlock"] = (type) => {
-    const at = editor.api.block()?.[1];
+    const block = editor.api.block()?.[1];
+    const ref = block ? editor.api.pathRef(block) : undefined;
     editor.tf.toggleBlock(type);
+    const at = ref?.unref();
     const start = at ? editor.api.start(at) : undefined;
     if (start) editor.tf.select(start);
     editor.tf.focus();
@@ -73,7 +75,13 @@ export const useEditorCommands = (): EditorCommands => {
 
   const insert: EditorCommands["insert"] = (id, options) => {
     const replace = options?.replace ?? false;
-    if (id === "h2" || id === "h3") retype(editor, id);
+    const line = id === "quote" ? "blockquote" : id;
+    if (
+      (line === "h2" || line === "h3" || line === "blockquote") &&
+      schema.blocks.includes("text")
+    ) {
+      placeBlock(editor, { id: newId(), type: line, children: [{ text: "" }] }, replace);
+    } else if (id === "h2" || id === "h3") retype(editor, id);
     else if (id === "quote") toggleBlock("blockquote");
     else if (id === "bulleted") setList(editor, "disc");
     else if (id === "numbered") setList(editor, "decimal");

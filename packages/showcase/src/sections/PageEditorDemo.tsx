@@ -68,7 +68,7 @@ import { flushSync } from "react-dom";
 type View = "desktop" | "mobile";
 type Side = "settings" | "catalog";
 type Sheeted = "outline" | Side | null;
-type Dataset = "demo" | "worst" | "empty" | "many";
+type Dataset = "demo" | "worst" | "empty" | "many" | "columns";
 
 const useMinWidth = (query: string): boolean =>
   useSyncExternalStore(
@@ -162,9 +162,9 @@ const createPage = (): EditorDocument => ({
           id: "c2",
           type: "column",
           children: [
+            text("req-h", "h3", "Requisitos"),
             lines(
               "req",
-              text("req-h", "h3", "Requisitos"),
               text("r1", "p", "Resultado de la prueba Saber 11", {
                 listStyleType: "disc",
                 indent: 1,
@@ -184,9 +184,9 @@ const createPage = (): EditorDocument => ({
         },
       ],
     },
+    text("calendario", "h2", "Calendario"),
     lines(
-      "calendario",
-      text("calendario-h", "h2", "Calendario"),
+      "calendario-t",
       text(
         "calendario-p",
         "p",
@@ -237,11 +237,11 @@ const createWorstPage = (): EditorDocument => ({
         "p",
         "Aleksandra Wiśniewska-Kowalczyk, coordinadora de admisiones internacionales, responde las solicitudes de transferencia externa en un plazo máximo de quince días hábiles contados desde la radicación completa de los documentos.",
       ),
-      text(
-        "w-h2",
-        "h2",
-        "Calendario de admisiones para el segundo semestre académico de 2027 y convocatorias extraordinarias",
-      ),
+    ),
+    text(
+      "w-h2",
+      "h2",
+      "Calendario de admisiones para el segundo semestre académico de 2027 y convocatorias extraordinarias",
     ),
     {
       id: "w-four",
@@ -252,10 +252,7 @@ const createWorstPage = (): EditorDocument => ({
       background: "card",
       stack: true,
       children: [
-        column(
-          "w-c1",
-          lines("w-c1t", text("w-c1h", "h3", "Requisitos para aspirantes internacionales")),
-        ),
+        column("w-c1", text("w-c1h", "h3", "Requisitos para aspirantes internacionales")),
         column(
           "w-c2",
           lines(
@@ -339,6 +336,68 @@ const createWorstPage = (): EditorDocument => ({
   ],
 });
 
+const createColumnsPage = (): EditorDocument => {
+  const image = photo();
+  const firsts: EditorNode[] = [
+    lines("k-text", text("k-text-p", "p", "Texto al inicio de la columna")),
+    text("k-h2", "h2", "Título al inicio"),
+    text("k-h3", "h3", "Subtítulo al inicio"),
+    text("k-quote", "blockquote", "Una cita al inicio de la columna"),
+    solid("k-img", "img", { url: image, alt: "Imagen al inicio", caption: "" }),
+    solid("k-gallery", "gallery", {
+      images: [
+        { src: image, alt: "Uno" },
+        { src: image, alt: "Dos" },
+      ],
+    }),
+    solid("k-video", "media_embed", { url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }),
+    solid("k-file", "file", { src: "/archivos/guia.pdf", name: "Guía.pdf", size: 204800 }),
+    solid("k-button", "button", {
+      label: "Inscribirse",
+      href: "/inscripciones",
+      variant: "primary",
+    }),
+    solid("k-spacer", "spacer", { size: "small" }),
+    solid("k-hr", "hr", {}),
+    {
+      id: "k-table",
+      type: "table",
+      children: [row("k-table-0", "th", ["Etapa", "Fecha"]), row("k-table-1", "td", ["A", "B"])],
+    },
+    {
+      id: "k-callout",
+      type: "callout",
+      tone: "info",
+      children: [text("k-callout-p", "p", "Aviso")],
+    },
+  ];
+  return {
+    version: 1,
+    locale: "es-CO",
+    content: firsts.map((first) => ({
+      id: `${first.id}-cols`,
+      type: "columns",
+      ratio: "equal",
+      gap: "medium",
+      align: "top",
+      background: "none",
+      stack: true,
+      children: [
+        column(`${first.id}-c1`, first),
+        column(
+          `${first.id}-c2`,
+          lines(
+            `${first.id}-t`,
+            text(`${first.id}-p`, "p", "Al lado, en la otra columna."),
+            text(`${first.id}-q`, "p", "Un segundo párrafo."),
+            text(`${first.id}-r`, "p", "Y un tercero."),
+          ),
+        ),
+      ],
+    })),
+  };
+};
+
 const createEmptyPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
@@ -348,15 +407,15 @@ const createEmptyPage = (): EditorDocument => ({
 const createLongPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
-  content: Array.from({ length: 40 }, (_, index) =>
+  content: Array.from({ length: 40 }, (_, index) => [
+    text(`m-${index}-h`, "h2", `Sección ${index + 1}`),
     lines(
       `m-${index}`,
-      text(`m-${index}-h`, "h2", `Sección ${index + 1}`),
       ...Array.from({ length: 4 }, (_, line) =>
         text(`m-${index}-${line}`, "p", `Párrafo ${line + 1} de la sección ${index + 1}.`),
       ),
     ),
-  ),
+  ]).flat(),
 });
 
 const uploadImage = (file: File): Promise<{ src: string; alt?: string }> =>
@@ -530,11 +589,12 @@ const DATASETS: Record<Dataset, { create: () => EditorDocument; title?: string }
   },
   empty: { create: createEmptyPage },
   many: { create: createLongPage },
+  columns: { create: createColumnsPage },
 };
 
 const datasetFromUrl = (): Dataset => {
   const value = new URLSearchParams(window.location.search).get("data");
-  return value === "worst" || value === "empty" || value === "many" ? value : "demo";
+  return value && Object.keys(DATASETS).includes(value) ? (value as Dataset) : "demo";
 };
 
 const DataToggle = ({ value }: { value: Dataset }) => (
@@ -552,6 +612,7 @@ const DataToggle = ({ value }: { value: Dataset }) => (
       <SegmentedControlItem value="worst">Worst case</SegmentedControlItem>
       <SegmentedControlItem value="empty">Empty</SegmentedControlItem>
       <SegmentedControlItem value="many">Many</SegmentedControlItem>
+      <SegmentedControlItem value="columns">Columns</SegmentedControlItem>
     </SegmentedControl>
   </div>
 );

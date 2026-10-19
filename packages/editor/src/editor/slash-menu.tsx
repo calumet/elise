@@ -9,6 +9,11 @@ import { unitPath } from "./structure";
 const SLASH = /^\/(\S*)$/;
 const DEFERRED = new Set(["image", "video", "file"]);
 const LINE_ITEMS = new Set<InsertItemId>(["h2", "h3", "bulleted", "numbered", "quote"]);
+const RETYPED: Partial<Record<InsertItemId, "h2" | "h3" | "blockquote">> = {
+  h2: "h2",
+  h3: "h3",
+  quote: "blockquote",
+};
 
 export type SlashMenuState = {
   id: string;
@@ -64,7 +69,9 @@ export const useSlashMenu = (onPicked?: (item: InsertItem) => void): SlashMenuSt
     if (!item) return undefined;
     const entry = editor.api.block();
     if (entry) editor.tf.delete({ at: editor.api.range(entry[1]) });
-    if (!DEFERRED.has(item.id)) commands.insert(item.id, { replace: true });
+    const line = RETYPED[item.id];
+    if (scope === "lines" && line) commands.toggleBlock(line);
+    else if (!DEFERRED.has(item.id)) commands.insert(item.id, { replace: true });
     onPicked?.(item);
     return item;
   };

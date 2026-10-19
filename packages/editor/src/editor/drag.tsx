@@ -18,7 +18,7 @@ import { renderBlocks } from "../render/content";
 import type { EditorNode } from "../types";
 import { useServices } from "./context";
 import { insertLine } from "./items";
-import { selectBlockById, useSelectedId } from "./selection";
+import { BlockSelectionPlugin, selectBlockById, useSelectedId } from "./selection";
 import {
   blockEntry,
   canMoveBlock,
@@ -27,6 +27,7 @@ import {
   moveBlock,
   type DropPosition,
 } from "./structure";
+import { FormatRow } from "./toolbar";
 
 const draggedId = (item: DragItemNode): string | undefined => {
   if (!("id" in item)) return undefined;
@@ -50,15 +51,15 @@ const canDropNode = ({
 };
 
 const BLOCK =
-  "relative rounded-md outline-offset-8 hover:z-sticky data-dragging:opacity-40 data-dragging:outline-1 data-dragging:outline-border-strong data-dragging:outline-dashed data-selected:z-sticky data-selected:outline-2 data-selected:outline-primary data-selected:outline-solid [&:hover:not(:has([data-slot=block]:hover))>[data-slot=block-handle]]:opacity-100 [&[data-selected]>[data-slot=block-handle]]:opacity-100";
+  "relative rounded-md outline-offset-8 hover:z-sticky data-dragging:opacity-40 data-dragging:outline-1 data-dragging:outline-border-strong data-dragging:outline-dashed data-selected:z-overlay data-selected:outline-2 data-selected:outline-primary data-selected:outline-solid [&:hover:not(:has([data-slot=block]:hover))>[data-slot=block-handle]]:opacity-100 [&[data-selected]>[data-slot=block-handle]]:opacity-100";
 const HANDLE =
   "absolute top-0 flex -translate-x-full flex-col opacity-0 transition-opacity duration-(--duration-fast) ease-out max-sm:hidden";
 const CHIP =
-  "pointer-events-none absolute start-3 z-sticky rounded-sm bg-primary px-1.5 text-2xs font-semibold text-primary-foreground select-none [[data-chip=above]>&]:-top-0.5 [[data-chip=above]>&]:-translate-y-full [[data-chip=below]>&]:-bottom-0.5 [[data-chip=below]>&]:translate-y-full [[data-chip=none]>&]:hidden";
+  "pointer-events-none absolute start-3 z-sticky rounded-sm [[data-formatting]_&]:invisible bg-primary px-1.5 text-2xs font-semibold text-primary-foreground select-none [[data-chip=above]>&]:top-0 [[data-chip=above]>&]:-translate-y-full [[data-chip=below]>&]:bottom-0 [[data-chip=below]>&]:translate-y-full [[data-chip=none]>&]:hidden";
 const GHOST =
   "max-h-64 overflow-hidden rounded-md border border-dashed border-primary p-2 opacity-60";
 
-const CHIP_ROOM = 14;
+const CHIP_ROOM = 16;
 
 type DropTarget = { id: string; position: "before" | "after" } | null;
 type TargetStore = { value: DropTarget; listeners: Set<() => void> };
@@ -135,6 +136,51 @@ const chipSide = (block: HTMLElement): "above" | "below" | "none" => {
   return room(block, "below") >= CHIP_ROOM ? "below" : "none";
 };
 
+const press = { down: false, tracked: false };
+
+const trackPress = (): void => {
+  if (press.tracked) return;
+  press.tracked = true;
+  const up = () => {
+    press.down = false;
+  };
+  document.addEventListener(
+    "pointerdown",
+    () => {
+      press.down = true;
+    },
+    true,
+  );
+  document.addEventListener("pointerup", up, true);
+  document.addEventListener("pointercancel", up, true);
+};
+
+const useTextBar = (selected: boolean, enabled: boolean): boolean => {
+  const [last, setLast] = React.useState(selected);
+  const [lingering, setLingering] = React.useState(false);
+  if (selected !== last) {
+    setLast(selected);
+    setLingering(!selected && press.down);
+  }
+
+  React.useEffect(() => {
+    if (enabled) trackPress();
+  }, [enabled]);
+
+  React.useEffect(() => {
+    if (!lingering) return;
+    const release = () => setLingering(false);
+    document.addEventListener("pointerup", release, { once: true });
+    document.addEventListener("pointercancel", release, { once: true });
+    return () => {
+      document.removeEventListener("pointerup", release);
+      document.removeEventListener("pointercancel", release);
+    };
+  }, [lingering]);
+
+  return enabled && (selected || lingering);
+};
+
 const addBelow = (editor: PlateEditor, id: string): void => {
   const entry = blockEntry(editor, id);
   if (entry) insertLine(editor, PathApi.next(entry[1]), "/");
@@ -193,17 +239,19 @@ const EmptyHint = (): React.JSX.Element => {
   );
 };
 
-const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.Element => {
-  const t = useLabels();
-  const id = String(element.id);
-  const selected = useSelectedId() === id;
+const isEmptyText = (element: TElement): boolean => {
   const first = element.children[0] as TElement | undefined;
-  const empty =
+  return (
     element.type === "text" &&
     element.children.length === 1 &&
     first?.type === KEYS.p &&
     !first.listStyleType &&
-    NodeApi.string(element) === "";
+    NodeApi.string(element) === ""
+  );
+};
+
+const useEmptyHint = (element: TElement): boolean => {
+  const id = String(element.id);
   const caret = useEditorSelector(
     (ed) => {
       const line = ed.selection && ed.api.isCollapsed() ? ed.api.block() : undefined;
@@ -220,13 +268,56 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
     [id],
   );
   const focused = useFocused();
-  const hint = empty && ((caret && focused) || alone);
+  return isEmptyText(element) && ((caret && focused) || alone);
+};
+
+const useBlockClick = (
+  editor: PlateEditor,
+  id: string,
+  isColumnsBlock: boolean,
+  nodeRef: React.RefObject<HTMLDivElement | null>,
+): void => {
+  React.useEffect(() => {
+    const node = nodeRef.current;
+    if (!node) return;
+    const pick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (target.closest("[data-slot=block]") !== node) return;
+      const name = target.dataset.slot;
+      if (isColumnsBlock && (name === "columns" || name === "column")) {
+        event.preventDefault();
+        selectBlockById(editor, id);
+        editor.tf.focus();
+        return;
+      }
+      const explicit = editor.getOption(BlockSelectionPlugin, "id");
+      if (!explicit || explicit === id || target.closest("[data-slot=block-handle]")) return;
+      const entry = blockEntry(editor, id);
+      if (entry && editor.api.isVoid(entry[0])) {
+        event.preventDefault();
+        selectBlockById(editor, id);
+        editor.tf.focus();
+      } else {
+        editor.setOption(BlockSelectionPlugin, "id", null);
+      }
+    };
+    node.addEventListener("mousedown", pick);
+    return () => node.removeEventListener("mousedown", pick);
+  }, [editor, id, isColumnsBlock, nodeRef]);
+};
+
+const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.Element => {
+  const t = useLabels();
+  const id = String(element.id);
+  const selected = useSelectedId() === id;
+  const hint = useEmptyHint(element as TElement);
   const nodeRef = React.useRef<HTMLDivElement>(null);
+  const bar = useTextBar(selected, element.type === "text");
 
   React.useLayoutEffect(() => {
     const node = nodeRef.current;
     if (selected && node) node.dataset.chip = chipSide(node);
-  }, [selected, element]);
+  }, [selected, element, bar]);
 
   const target = useDropTarget(editor);
   const { dragRef, isDragging } = useDndNode({
@@ -256,21 +347,7 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
     },
   });
   const slot = target?.id === id ? target.position : null;
-  const isColumnsBlock = element.type === "columns";
-
-  React.useEffect(() => {
-    const node = nodeRef.current;
-    if (!node || !isColumnsBlock) return;
-    const pick = (event: MouseEvent) => {
-      const name = (event.target as HTMLElement).dataset.slot;
-      if (name !== "columns" && name !== "column") return;
-      event.preventDefault();
-      selectBlockById(editor as PlateEditor, id);
-      editor.tf.focus();
-    };
-    node.addEventListener("mousedown", pick);
-    return () => node.removeEventListener("mousedown", pick);
-  }, [editor, id, isColumnsBlock]);
+  useBlockClick(editor as PlateEditor, id, element.type === "columns", nodeRef);
 
   return (
     <div
@@ -317,6 +394,15 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
       {slot === "before" ? <DropSlot position="before" /> : null}
       {hint ? <EmptyHint /> : null}
       {children}
+      {bar ? (
+        <div
+          contentEditable={false}
+          data-slot="text-toolbar"
+          className="mt-2 overflow-x-auto border-t border-border pt-1 select-none"
+        >
+          <FormatRow />
+        </div>
+      ) : null}
       {slot === "after" ? <DropSlot position="after" /> : null}
     </div>
   );

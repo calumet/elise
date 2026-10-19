@@ -47,7 +47,7 @@ export const EditorContentArea = ({
   const page = schema.blocks.includes("columns");
 
   return (
-    <div ref={container} className={page ? "@container/editor-page relative" : "relative"}>
+    <div ref={container} className={page ? "@container/editor-page relative isolate" : "relative"}>
       <PlateContent
         {...aria}
         placeholder={hint}

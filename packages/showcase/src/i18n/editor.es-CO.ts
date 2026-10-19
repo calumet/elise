@@ -135,7 +135,7 @@ export default {
   optionWarning: "Advertencia",
   optionDanger: "Peligro",
   textBlock: "Texto",
-  textBlockDescription: "Párrafos, títulos y listas",
+  textBlockDescription: "Párrafos y listas, con formato",
   settingImage: "Imagen",
   imageHint: "JPG, PNG o WebP",
   optionLeft: "Izquierda",
