@@ -9,8 +9,6 @@ export default {
   structure: "Estructura de la página",
   addBlock: "Añadir bloque",
   addAtEnd: "Añadir un bloque al final",
-  expandStructure: "Desplegar la estructura",
-  collapseStructure: "Plegar la estructura",
   blockSettings: "Ajustes del bloque",
   undo: "Deshacer",
   redo: "Rehacer",
