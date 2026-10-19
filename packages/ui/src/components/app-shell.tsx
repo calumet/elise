@@ -166,7 +166,7 @@ function AppShell({
            Por debajo del breakpoint la pista de la navegación mide cero, de modo
            que el cajón se monta encima del contenido en vez de correrlo. */
         className={cn(
-          "grid h-svh grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-background text-foreground",
+          "group/shell grid h-svh grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-background text-foreground",
           "grid-cols-[0_minmax(0,1fr)] md:grid-cols-[auto_minmax(0,1fr)]",
           className,
         )}
@@ -249,7 +249,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
       /* Con `AppShellHeaderNav` suma una segunda fila, y la primera no se mueve. */
       className={cn(
         "col-start-1 col-end-3 row-start-1 flex h-14 items-center gap-2 bg-background px-4 text-foreground shadow-[0_var(--radius-xl)_0_0_var(--background)]",
-        "max-md:has-[[data-slot=app-shell-nav-toggle]]:ps-2.5",
+        "max-md:group-has-[[data-slot=app-shell-nav]]/shell:has-[[data-slot=app-shell-nav-toggle]]:ps-2.5",
         "md:grid md:grid-cols-[1fr_minmax(0,640px)_1fr] md:gap-4",
         "has-[[data-slot=app-shell-header-nav]]:h-auto has-[[data-slot=app-shell-header-nav]]:flex-wrap max-md:has-[[data-slot=app-shell-header-nav]]:gap-y-2 max-md:has-[[data-slot=app-shell-header-nav]]:pt-3 md:has-[[data-slot=app-shell-header-nav]]:grid-rows-[3.5rem_auto] md:has-[[data-slot=app-shell-header-nav]]:gap-y-0",
         className,
@@ -665,16 +665,14 @@ const AppShellUserMenu: typeof UserMenu = UserMenu;
 /** Props de {@link AppShellNavToggle}. */
 export type AppShellNavToggleProps = React.ComponentProps<"button">;
 
-/** Abre y cierra el cajón. Solo se ve donde la navegación está plegada, y no se dibuja si no hay ninguna. */
+/** Abre y cierra el cajón. Solo se ve donde la navegación está plegada, y se esconde si no hay ninguna. */
 function AppShellNavToggle({
   className,
   children,
   ...props
-}: AppShellNavToggleProps): React.JSX.Element | null {
-  const { drawerOpen, setDrawerOpen, hasNav } = useAppShell("AppShellNavToggle");
+}: AppShellNavToggleProps): React.JSX.Element {
+  const { drawerOpen, setDrawerOpen } = useAppShell("AppShellNavToggle");
   const defaultLabel = useElLabel("ui", "toggleNavigation", "Alternar navegación");
-
-  if (!hasNav) return null;
 
   return (
     <button
@@ -690,7 +688,7 @@ function AppShellNavToggle({
          tokens generales y no los de la barra lateral: ahí `--sidebar` resolvería
          en oscuro y quedaría casi negro sobre casi negro. */
       className={cn(
-        "inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none md:hidden",
+        "hidden size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-[background-color,color] duration-(--duration-fast) ease-out hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none max-md:group-has-[[data-slot=app-shell-nav]]/shell:inline-flex",
         className,
       )}
       {...props}
@@ -788,7 +786,7 @@ function AppShellNav({
            del marco. Por debajo del breakpoint no hay nada que anular. */
         className={cn(
           SIDEBAR_SURFACE,
-          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto rounded-ss-xl py-3",
+          "col-start-1 row-start-2 flex w-60 flex-col overflow-y-auto rounded-ss-xl py-3 max-md:rounded-se-xl",
           "max-md:z-overlay max-md:transition-transform max-md:duration-(--duration-slow) max-md:ease-out",
           drawerOpen
             ? "max-md:translate-x-0"
@@ -1398,9 +1396,7 @@ function AppShellMain({
          fondo general las tres superficies quedaban a menos de un 2% entre sí y
          el marco se leía como una sola plancha. */
       className={cn(
-        "col-start-2 row-start-2 flex min-w-0 flex-col rounded-se-xl bg-canvas max-md:rounded-ss-xl",
-        // Sin barra, la esquina de inicio también es suya.
-        !hasNav && "rounded-ss-xl",
+        "relative col-start-2 row-start-2 flex min-w-0 flex-col rounded-ss-xl rounded-se-xl bg-canvas md:group-has-[[data-slot=app-shell-nav]]/shell:rounded-ss-none",
         fill ? "overflow-hidden" : "overflow-y-auto p-5",
         className,
       )}

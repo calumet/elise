@@ -20,6 +20,26 @@ locale.** Dos archivos `<locale>.<ext>` con el mismo namespace se reemplazaban
 entero, y ahora se unen key a key. El archivo `<namespace>.<locale>.<ext>` sigue
 reemplazando el namespace completo.
 
+## `@calumet/elise-ui` 0.39.2
+
+### Corrige
+
+**Una tabla dentro de `AppShellMain` alargaba el scroll del documento.** El
+`sr-only` de `Table` es `position: absolute` y, sin un ancestro posicionado, su
+contenedor era el bloque inicial: con una tabla muy abajo, la ventana entera se
+desplazaba y la cabecera y el sidebar se iban con ella. `AppShellMain` es ahora
+`position: relative`.
+
+**El primer pintado del marco ya no salta al hidratar.** La esquina redondeada
+del contenido y el botón del cajón dependían de un estado que el servidor no
+conoce, así que el HTML llegaba con la esquina pegada al sidebar y sin el botón.
+Ahora salen del CSS: `AppShell` es `group/shell` y lo que cambia de forma mira si
+hay un `AppShellNav`. `AppShellNavToggle` se renderiza siempre y se esconde si no
+hay barra.
+
+**El cajón móvil redondea también su esquina superior final**, para seguir la
+forma del lienzo que queda detrás.
+
 ## `@calumet/elise-ui` 0.39.1
 
 ### Corrige
