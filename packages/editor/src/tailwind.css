@@ -4,7 +4,8 @@
 [data-slot="columns"] {
   display: grid;
   grid-template-columns: repeat(var(--columns-count, 2), minmax(0, 1fr));
-  gap: 2rem;
+  --columns-gap: 2rem;
+  gap: var(--columns-gap);
   align-items: start;
 }
 [data-slot="columns"][data-count="1"] {
@@ -26,10 +27,10 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 }
 [data-slot="columns"][data-gap="small"] {
-  gap: 1rem;
+  --columns-gap: 1rem;
 }
 [data-slot="columns"][data-gap="large"] {
-  gap: 3rem;
+  --columns-gap: 3rem;
 }
 [data-slot="columns"][data-align="center"] {
   align-items: center;
@@ -71,6 +72,16 @@
 @container editor-page (min-width: 32rem) {
   [data-slot="column"] [data-slot="block-handle"] {
     inset-inline-start: -0.75rem;
+  }
+  [data-slot="column"] + [data-slot="column"] [data-slot="block-handle"] {
+    --tw-translate-x: -50%;
+    inset-inline-start: calc(var(--columns-gap) / -2);
+  }
+  [data-slot="column"] + [data-slot="column"] [data-slot="block-add"] {
+    display: none;
+  }
+  [data-slot="column"] + [data-slot="column"] [data-slot="drag-handle"] {
+    width: 1rem;
   }
 }
 

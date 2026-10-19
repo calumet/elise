@@ -9,7 +9,7 @@ import {
   type SettingKey,
   type SettingValue,
 } from "../settings";
-import { deselectBlock, selectBlockById, selectedId } from "./selection";
+import { deselectBlock, selectBlockById, selectedId, useSelectedId } from "./selection";
 import {
   applySettings,
   blockEntry,
@@ -147,7 +147,7 @@ export const useOutline = (): OutlineNode[] => {
 export const useSelectedBlock = (): SelectedBlock | null => {
   const editor = useEditorRef();
   const t = useLabels();
-  const id = useEditorSelector((ed) => selectedId(ed), []);
+  const id = useSelectedId();
   useEditorSelector((ed) => ed.children, []);
   const entry = id ? blockEntry(editor, id) : undefined;
   if (!id || !entry) return null;

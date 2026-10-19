@@ -130,7 +130,7 @@ const renderGroup = (group: ListGroup, key: string): React.ReactNode => (
 
 const STRUCTURAL = new Set(["tr", "td", "th"]);
 
-const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNode[] => {
+export const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNode[] => {
   const allowed = new Set(schema.blocks);
   const output: React.ReactNode[] = [];
   let run: EditorNode[] = [];

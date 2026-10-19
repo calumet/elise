@@ -148,7 +148,9 @@ export default {
   outlineHint: "Arrastra en esta lista o en la página para reordenar.",
   noSelection: "Ningún bloque elegido",
   noSelectionHint: "Elige un bloque en la página o en la estructura para cambiarlo.",
-  selectParent: "Elegir las columnas",
+  selectParent: "Editar las columnas",
+  selectParentHint:
+    "Este bloque está dentro de unas columnas. Cuántas son, su ancho, su separación y su fondo se ajustan en las columnas.",
   moveTo: "Mover a",
   moveOut: "Fuera de las columnas",
   addImages: "Añadir imágenes",

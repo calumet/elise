@@ -462,20 +462,20 @@ const PageBar = ({
         >
           <Redo2 aria-hidden="true" />
         </IconButton>
-      </div>
-      <Separator orientation="vertical" className="h-6 max-sm:hidden" />
-      <div className="flex items-center gap-2">
         <Button
           type="button"
           variant="outline"
           size="sm"
           aria-pressed={sideDocked ? catalogShown : undefined}
-          className="aria-pressed:bg-accent aria-pressed:text-accent-foreground max-sm:size-8 max-sm:px-0"
+          className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-sm:size-8 max-sm:px-0"
           onClick={() => onSide(sideDocked && side === "catalog" ? "settings" : "catalog")}
         >
           <Plus aria-hidden="true" />
           <span className="max-sm:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
         </Button>
+      </div>
+      <Separator orientation="vertical" className="h-6 max-sm:hidden" />
+      <div className="flex items-center gap-2">
         <Button type="button" variant="outline" size="sm" className="max-sm:hidden">
           {t("preview", { fallback: "Preview" })}
         </Button>

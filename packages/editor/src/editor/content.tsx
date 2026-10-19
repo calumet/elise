@@ -4,6 +4,7 @@ import * as React from "react";
 import { useLabels } from "../labels";
 import { contentClassName } from "../views";
 import { useServices } from "./context";
+import { DropArea } from "./drag";
 import { DragChip } from "./drag-chip";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
@@ -70,6 +71,7 @@ export const EditorContentArea = ({
       {longForm && !page && !renderSlashMenu ? <InsertButton container={container} /> : null}
       <MediaDialogs open={dialog} onClose={() => setDialog(null)} />
       {page ? <DragChip /> : null}
+      {page ? <DropArea container={container} /> : null}
     </div>
   );
 };

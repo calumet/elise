@@ -14,9 +14,11 @@ import { useDrag, useDragLayer, useDrop, type DropTargetMonitor } from "react-dn
 import { getEmptyImage } from "react-dnd-html5-backend";
 
 import { typeLabel, useLabels } from "../labels";
-import { DraggedBlock } from "./drag-chip";
+import { renderBlocks } from "../render/content";
+import type { EditorNode } from "../types";
+import { useServices } from "./context";
 import { insertLine } from "./items";
-import { selectBlockById, selectedId } from "./selection";
+import { selectBlockById, useSelectedId } from "./selection";
 import {
   blockEntry,
   canMoveBlock,
@@ -48,13 +50,13 @@ const canDropNode = ({
 };
 
 const BLOCK =
-  "relative rounded-md outline-offset-8 data-dragging:opacity-40 data-selected:outline-2 data-selected:outline-primary [&:hover:not(:has([data-slot=block]:hover))>[data-slot=block-handle]]:opacity-100 [&[data-selected]>[data-slot=block-handle]]:opacity-100";
+  "relative rounded-md outline-offset-8 hover:z-sticky data-dragging:opacity-40 data-dragging:outline-1 data-dragging:outline-border-strong data-dragging:outline-dashed data-selected:z-sticky data-selected:outline-2 data-selected:outline-primary data-selected:outline-solid [&:hover:not(:has([data-slot=block]:hover))>[data-slot=block-handle]]:opacity-100 [&[data-selected]>[data-slot=block-handle]]:opacity-100";
 const HANDLE =
   "absolute top-0 flex -translate-x-full flex-col opacity-0 transition-opacity duration-(--duration-fast) ease-out max-sm:hidden";
 const CHIP =
   "pointer-events-none absolute start-3 z-sticky rounded-sm bg-primary px-1.5 text-2xs font-semibold text-primary-foreground select-none [[data-chip=above]>&]:-top-0.5 [[data-chip=above]>&]:-translate-y-full [[data-chip=below]>&]:-bottom-0.5 [[data-chip=below]>&]:translate-y-full [[data-chip=none]>&]:hidden";
-const SLOT =
-  "pointer-events-none flex h-10 items-center justify-center rounded-md border border-dashed border-primary bg-accent px-3 text-sm font-medium text-accent-foreground transition-opacity duration-(--duration-fast) ease-out select-none starting:opacity-0";
+const GHOST =
+  "max-h-64 overflow-hidden rounded-md border border-dashed border-primary p-2 opacity-60";
 
 const CHIP_ROOM = 14;
 
@@ -71,14 +73,14 @@ const storeOf = (editor: object): TargetStore => {
   return created;
 };
 
-const setDropTarget = (editor: object, value: DropTarget): void => {
+export const setDropTarget = (editor: object, value: DropTarget): void => {
   const store = storeOf(editor);
   if (store.value?.id === value?.id && store.value?.position === value?.position) return;
   store.value = value;
   for (const listener of store.listeners) listener();
 };
 
-const useDropTarget = (editor: object): DropTarget =>
+export const useDropTarget = (editor: object): DropTarget =>
   React.useSyncExternalStore(
     (listener) => {
       const { listeners } = storeOf(editor);
@@ -88,19 +90,30 @@ const useDropTarget = (editor: object): DropTarget =>
     () => storeOf(editor).value,
   );
 
-const dropPosition = (
+const dropTarget = (
   editor: PlateEditor,
   dragItem: DragItemNode,
   element: TElement,
   monitor: DropTargetMonitor<DragItemNode>,
   nodeRef: React.RefObject<HTMLDivElement | null>,
-): "before" | "after" | null => {
+): DropTarget => {
   const dragged = draggedId(dragItem);
   const direction = getHoverDirection({ dragItem, element, monitor, nodeRef });
-  const position = direction === "top" ? "before" : direction === "bottom" ? "after" : null;
-  return dragged && position && canMoveBlock(editor, dragged, String(element.id), position)
-    ? position
-    : null;
+  const entry = blockEntry(editor, String(element.id));
+  if (!dragged || !direction || !entry) return null;
+  const previous = direction === "top" ? PathApi.previous(entry[1]) : undefined;
+  const before = previous ? editor.api.node<TElement>(previous)?.[0] : undefined;
+  const target: DropTarget = before?.id
+    ? { id: String(before.id), position: "after" }
+    : { id: String(element.id), position: direction === "top" ? "before" : "after" };
+  return target && canMoveBlock(editor, dragged, target.id, target.position) ? target : null;
+};
+
+export const dropOnTarget = (editor: PlateEditor, dragItem: DragItemNode): void => {
+  const dragged = draggedId(dragItem);
+  const target = storeOf(editor).value;
+  if (dragged && target) moveBlock(editor, dragged, target.id, target.position);
+  setDropTarget(editor, null);
 };
 
 const room = (block: HTMLElement, side: "above" | "below"): number => {
@@ -127,16 +140,42 @@ const addBelow = (editor: PlateEditor, id: string): void => {
   if (entry) insertLine(editor, PathApi.next(entry[1]), "/");
 };
 
-const DropSlot = ({ position }: { position: "top" | "bottom" }): React.JSX.Element => {
+const DropSlot = ({ position }: { position: "before" | "after" }): React.JSX.Element => {
+  const { schema } = useServices();
   const item = useDragLayer((monitor) => monitor.getItem<DragItemNode | null>());
+  const ref = React.useRef<HTMLDivElement>(null);
+  const element = item && "element" in item ? (item.element as EditorNode | undefined) : undefined;
+
+  React.useLayoutEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const style = getComputedStyle(node);
+    const options = {
+      duration: Number.parseFloat(style.getPropertyValue("--duration-base")) || 200,
+      easing: style.getPropertyValue("--ease-out").trim() || "ease-out",
+    };
+    node.animate(
+      reduce
+        ? [{ opacity: 0 }, { opacity: 1 }]
+        : [
+            { height: "0px", opacity: 0 },
+            { height: `${node.offsetHeight}px`, opacity: 1 },
+          ],
+      options,
+    );
+  }, []);
+
   return (
     <div
+      ref={ref}
       contentEditable={false}
+      aria-hidden="true"
       data-slot="drop-line"
       data-position={position}
-      className={`${SLOT} ${position === "top" ? "mb-4" : "mt-4"}`}
+      className={`pointer-events-none overflow-hidden select-none ${position === "before" ? "pb-4" : "pt-4"}`}
     >
-      <DraggedBlock item={item} />
+      <div className={GHOST}>{element ? renderBlocks([element], schema) : null}</div>
     </div>
   );
 };
@@ -157,7 +196,7 @@ const EmptyHint = (): React.JSX.Element => {
 const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.Element => {
   const t = useLabels();
   const id = String(element.id);
-  const selected = useEditorSelector((ed) => selectedId(ed) === id, [id]);
+  const selected = useSelectedId() === id;
   const empty = element.type === KEYS.p && !element.listStyleType && NodeApi.string(element) === "";
   const caret = useEditorSelector(
     (ed) => ed.children.length > 1 && ed.api.isCollapsed() && ed.api.block()?.[0].id === id,
@@ -181,34 +220,49 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
   }, [selected, element]);
 
   const target = useDropTarget(editor);
-  const { dragRef, isDragging, isOver } = useDndNode({
+  const { dragRef, isDragging } = useDndNode({
     element,
     nodeRef,
     preview: { disable: true },
     canDropNode: canDropNode as never,
-    onDropHandler: (_editor, { id, dragItem, monitor }) => {
-      if (monitor.didDrop()) return true;
-      const dragged = draggedId(dragItem);
-      const position = dropPosition(
-        editor as PlateEditor,
-        dragItem,
-        (blockEntry(editor as PlateEditor, id)?.[0] ?? element) as TElement,
-        monitor,
-        nodeRef,
-      );
-      if (dragged && position) moveBlock(editor as PlateEditor, dragged, id, position);
-      setDropTarget(editor, null);
+    onDropHandler: (_editor, { dragItem, monitor }) => {
+      if (!monitor.didDrop()) dropOnTarget(editor as PlateEditor, dragItem);
       return true;
     },
     drop: {
       hover: (dragItem, monitor) => {
         if (!monitor.isOver({ shallow: true })) return;
-        const position = dropPosition(editor as PlateEditor, dragItem, element, monitor, nodeRef);
-        setDropTarget(editor, position ? { id, position } : null);
+        const entry = blockEntry(editor as PlateEditor, id);
+        setDropTarget(
+          editor,
+          dropTarget(
+            editor as PlateEditor,
+            dragItem,
+            (entry?.[0] ?? element) as TElement,
+            monitor,
+            nodeRef,
+          ),
+        );
       },
     },
   });
-  const slot = isOver && target?.id === id ? target.position : null;
+  const slot = target?.id === id ? target.position : null;
+  const isColumnsBlock = element.type === "columns";
+
+  React.useEffect(() => {
+    const node = nodeRef.current;
+    if (!node || !isColumnsBlock) return;
+    const pick = (event: MouseEvent) => {
+      const name = (event.target as HTMLElement).dataset.slot;
+      if (name !== "columns" && name !== "column") return;
+      event.preventDefault();
+      selectBlockById(editor as PlateEditor, id);
+      editor.tf.focus();
+    };
+    node.addEventListener("mousedown", pick);
+    return () => node.removeEventListener("mousedown", pick);
+  }, [editor, id, isColumnsBlock]);
+
   return (
     <div
       ref={nodeRef}
@@ -224,6 +278,7 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
           variant="ghost"
           size="icon-sm"
           tabIndex={-1}
+          data-slot="block-add"
           aria-label={t.addBlockBelow}
           className="text-muted-foreground"
           onMouseDown={(event) => event.preventDefault()}
@@ -250,10 +305,10 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
           {typeLabel(t, String(element.type))}
         </span>
       ) : null}
-      {slot === "before" ? <DropSlot position="top" /> : null}
+      {slot === "before" ? <DropSlot position="before" /> : null}
       {hint ? <EmptyHint /> : null}
       {children}
-      {slot === "after" ? <DropSlot position="bottom" /> : null}
+      {slot === "after" ? <DropSlot position="after" /> : null}
     </div>
   );
 };
@@ -267,6 +322,34 @@ export const draggable = ({
   const root = path.length === 1;
   const inColumn = path.length === 3 && isColumns(editor.children[path[0] ?? 0]);
   return root || inColumn ? (props) => <Draggable {...props} /> : undefined;
+};
+
+export const DropArea = ({
+  container,
+}: {
+  container: React.RefObject<HTMLDivElement | null>;
+}): null => {
+  const editor = useEditorRef();
+  const [{ over }, drop] = useDrop<DragItemNode, unknown, { over: boolean }>(
+    () => ({
+      accept: DRAG_ITEM_BLOCK,
+      collect: (monitor) => ({ over: monitor.isOver() }),
+      drop: (item, monitor) => {
+        if (!monitor.didDrop()) dropOnTarget(editor, item);
+      },
+    }),
+    [editor],
+  );
+
+  React.useEffect(() => {
+    drop(container.current);
+  }, [container, drop]);
+
+  React.useEffect(() => {
+    if (!over) setDropTarget(editor, null);
+  }, [editor, over]);
+
+  return null;
 };
 
 export type OutlineDnd = {

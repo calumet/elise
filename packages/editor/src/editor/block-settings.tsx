@@ -2,12 +2,13 @@ import {
   ArrowDown,
   ArrowUp,
   Copy,
-  CornerLeftUp,
+  Columns2,
   Ellipsis,
   MousePointerClick,
   Trash2,
   X,
 } from "@calumet/elise-icons";
+import { Box } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
 import {
   DropdownMenu,
@@ -443,20 +444,25 @@ export const EditorSettings = ({ className }: EditorSettingsProps): React.JSX.El
       </div>
 
       {inColumns ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="self-start"
-          onClick={() =>
-            selected.type === "column" && selected.parentId
-              ? blocks.select(selected.parentId)
-              : blocks.selectParent()
-          }
-        >
-          <CornerLeftUp aria-hidden="true" />
-          {t.selectParent}
-        </Button>
+        <Box background="muted" radius="md" padding={3} className="flex flex-col gap-2">
+          <Text size="xs" tone="muted">
+            {t.selectParentHint}
+          </Text>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="self-start"
+            onClick={() =>
+              selected.type === "column" && selected.parentId
+                ? blocks.select(selected.parentId)
+                : blocks.selectParent()
+            }
+          >
+            <Columns2 aria-hidden="true" />
+            {t.selectParent}
+          </Button>
+        </Box>
       ) : null}
 
       {fields.map((field) => (

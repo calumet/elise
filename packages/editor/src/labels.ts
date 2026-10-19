@@ -150,7 +150,9 @@ const DEFAULTS = {
   outlineHint: "Drag in this list or on the page to reorder.",
   noSelection: "No block selected",
   noSelectionHint: "Select a block on the page or in the structure to change it.",
-  selectParent: "Select the columns",
+  selectParent: "Edit the columns",
+  selectParentHint:
+    "This block sits inside columns. How many there are, their width, gap and background are set on the columns.",
   moveTo: "Move to",
   moveOut: "Out of the columns",
   addImages: "Add images",
