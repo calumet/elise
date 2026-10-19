@@ -7,7 +7,7 @@ import { useServices } from "./context";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
 import { isMediaKind, MediaDialogs, type MediaKind } from "./media-dialogs";
-import { PreviewDocument, usePreviewing } from "./preview";
+import { PreviewArea, useDevice, usePreviewing } from "./preview";
 import { useSlashMenu, type SlashMenuState } from "./slash-menu";
 
 export type EditorContentAreaProps = {
@@ -45,17 +45,15 @@ export const EditorContentArea = ({
   const base = `${contentClassName(schema)} outline-none`;
   const page = schema.blocks.includes("columns");
   const previewing = usePreviewing();
+  const device = useDevice();
 
   return (
     <>
-      {previewing ? (
-        <div data-slot="editor-preview" className={page ? "@container/editor-page" : undefined}>
-          <PreviewDocument />
-        </div>
-      ) : null}
+      {previewing ? <PreviewArea page={page} /> : null}
       <div
         ref={container}
         hidden={previewing}
+        data-device={page ? device : undefined}
         className={page ? "@container/editor-page relative isolate" : "relative"}
       >
         <PlateContent

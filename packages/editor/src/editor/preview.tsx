@@ -15,13 +15,24 @@ export type EditorPreview = {
   previewing: boolean;
   preview: () => void;
   edit: () => void;
+  device: "desktop" | "mobile";
+  setDevice: (device: "desktop" | "mobile") => void;
 };
 
 type PreviewState = EditorPreview & { locale: string };
 
 const PreviewContext = React.createContext<PreviewState | null>(null);
 
-const IDLE: EditorPreview = { previewing: false, preview: () => {}, edit: () => {} };
+const IDLE: EditorPreview = {
+  previewing: false,
+  preview: () => {},
+  edit: () => {},
+  device: "desktop",
+  setDevice: () => {},
+};
+
+export const useDevice = (): EditorPreview["device"] =>
+  React.useContext(PreviewContext)?.device ?? "desktop";
 
 export const useEditorPreview = (): EditorPreview => React.useContext(PreviewContext) ?? IDLE;
 
@@ -36,6 +47,7 @@ export const PreviewProvider = ({
 }): React.JSX.Element => {
   const editor = useEditorRef();
   const [previewing, setPreviewing] = React.useState(false);
+  const [device, setDevice] = React.useState<EditorPreview["device"]>("desktop");
   const saved = React.useRef<{ selection: Range | null; block: string | null } | null>(null);
   const pending = React.useRef<{ after?: () => void; fade: boolean; done?: () => void } | null>(
     null,
@@ -98,17 +110,25 @@ export const PreviewProvider = ({
   }, [previewing, edit]);
 
   const value = React.useMemo(
-    () => ({ previewing, preview, edit, locale }),
-    [previewing, preview, edit, locale],
+    () => ({ previewing, preview, edit, device, setDevice, locale }),
+    [previewing, preview, edit, device, locale],
   );
   return <PreviewContext.Provider value={value}>{children}</PreviewContext.Provider>;
 };
 
-export const PreviewDocument = (): React.JSX.Element => {
+export const PreviewArea = ({ page }: { page: boolean }): React.JSX.Element => {
   const { schema } = useServices();
-  const locale = React.useContext(PreviewContext)?.locale ?? "";
+  const state = React.useContext(PreviewContext);
   const content = useEditorSelector((editor) => editor.children, []) as unknown as EditorNode[];
-  return <EditorContent value={{ version: 1, locale, content }} schema={schema} />;
+  return (
+    <div
+      data-slot="editor-preview"
+      data-device={page ? (state?.device ?? "desktop") : undefined}
+      className={page ? "@container/editor-page" : undefined}
+    >
+      <EditorContent value={{ version: 1, locale: state?.locale ?? "", content }} schema={schema} />
+    </div>
+  );
 };
 
 export type EditorPreviewButtonProps = { className?: string };

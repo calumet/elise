@@ -82,18 +82,18 @@ table th[data-align="right"] {
 [data-slot="block-handle"] {
   inset-inline-start: calc(-1 * var(--editor-gutter, 0.75rem));
 }
-@container editor-page (min-width: 32rem) {
-  [data-slot="column"] [data-slot="block-handle"] {
+@container editor-page (min-width: 20rem) {
+  [data-device="desktop"] [data-slot="column"] [data-slot="block-handle"] {
     inset-inline-start: -0.75rem;
   }
-  [data-slot="column"] + [data-slot="column"] [data-slot="block-handle"] {
+  [data-device="desktop"] [data-slot="column"] + [data-slot="column"] [data-slot="block-handle"] {
     --tw-translate-x: -50%;
     inset-inline-start: calc(var(--columns-gap) / -2);
   }
-  [data-slot="column"] + [data-slot="column"] [data-slot="block-add"] {
+  [data-device="desktop"] [data-slot="column"] + [data-slot="column"] [data-slot="block-add"] {
     display: none;
   }
-  [data-slot="column"] + [data-slot="column"] [data-slot="drag-handle"] {
+  [data-device="desktop"] [data-slot="column"] + [data-slot="column"] [data-slot="drag-handle"] {
     width: 1rem;
   }
 }
@@ -144,10 +144,13 @@ table th[data-align="right"] {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-@container editor-page (max-width: 32rem) {
+@container editor-page (max-width: 20rem) {
   [data-slot="columns"][data-stack="true"][data-count] {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+[data-device="mobile"] [data-slot="columns"][data-stack="true"][data-count] {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 [data-slot="spacer"] {

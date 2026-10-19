@@ -142,9 +142,9 @@ Tres piezas de `Editor` arman la pantalla del editor de páginas alrededor de `E
 
 ### Vista previa
 
-`Editor.Root` guarda si se está editando o viendo la página como la ve quien la visita. `useEditorPreview()` devuelve `{ previewing, preview, edit }`, y `Editor.PreviewButton` es el botón para la barra, con «Vista previa» y «Volver a editar» como textos. En la vista previa `Editor.Content` pinta la página con `EditorContent`, la misma salida que el render, y `Editor.Outline`, `Editor.BlockPanel`, `Editor.Catalog`, `Editor.Toolbar` y las barras flotantes no se pintan; lo que la aplicación ponga alrededor (paneles, la barra de bloques) lo esconde ella con `previewing`. Escape o el botón vuelven a editar con la selección que había. El cambio usa una transición de vista si el navegador la tiene, y con movimiento reducido solo un fundido.
+`Editor.Root` guarda si se está editando o viendo la página como la ve quien la visita. `useEditorPreview()` devuelve `{ previewing, preview, edit, device, setDevice }`, y `Editor.PreviewButton` es el botón para la barra, con «Vista previa» y «Volver a editar» como textos. En la vista previa `Editor.Content` pinta la página con `EditorContent`, la misma salida que el render, y `Editor.Outline`, `Editor.BlockPanel`, `Editor.Catalog`, `Editor.Toolbar` y las barras flotantes no se pintan; lo que la aplicación ponga alrededor (paneles, la barra de bloques) lo esconde ella con `previewing`. Escape o el botón vuelven a editar con la selección que había. El cambio usa una transición de vista si el navegador la tiene, y con movimiento reducido solo un fundido.
 
-Dentro de `Editor.Content` con `pageSchema`, las columnas se apilan cuando el área mide menos de 32rem, para que una vista previa del ancho de un móvil las muestre como en el teléfono.
+`device` es `"desktop"` o `"mobile"` (por defecto `"desktop"`) y dice para qué pantalla se está mirando la página, al editar y en la vista previa. El ancho del marco lo pone la aplicación con `device`; el editor, por su parte, con `"mobile"` apila las columnas que tienen «apilar en móvil», como en un teléfono. Con `"desktop"`, dentro de `Editor.Content` con `pageSchema` las columnas solo se apilan cuando el área mide menos de 20rem, y en un teléfono de verdad por debajo de 40rem de pantalla.
 
 ### Tablas
 

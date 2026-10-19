@@ -44,7 +44,7 @@ import { Text } from "@calumet/elise-ui/text";
 import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 
-type View = "desktop" | "mobile";
+type View = ReturnType<typeof useEditorPreview>["device"];
 type Side = "settings" | "catalog";
 type Sheeted = "outline" | Side | null;
 type Dataset = "demo" | "worst" | "empty" | "many" | "columns";
@@ -618,8 +618,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
   const { t } = useTranslation("pageEditor");
   const selected = useSelectedBlock();
   const blocks = useBlockCommands();
-  const { previewing } = useEditorPreview();
-  const [view, setView] = useState<View>("desktop");
+  const { previewing, device: view, setDevice: setView } = useEditorPreview();
   const outlineDocked = useMinWidth("(min-width: 48rem)");
   const sideDocked = useMinWidth("(min-width: 64rem)");
   const [treeShown, setTreeShown] = useState(true);
