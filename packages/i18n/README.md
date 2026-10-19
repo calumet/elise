@@ -21,7 +21,7 @@ Requiere React 19. La configuración del registro de GitHub está en el [README 
 
 ## Uso
 
-Los mensajes se organizan por locale, namespace y key. `buildMessages` los arma desde un glob de Vite, y `buildLazyLoader` hace lo mismo cargándolos bajo demanda.
+Los mensajes se organizan por locale, namespace y key. `buildMessages` los arma desde un glob de Vite, y `buildLazyLoader` hace lo mismo cargándolos bajo demanda. Para sumar el catálogo de un paquete al de la app, `mergeMessages` une las keys dentro de cada namespace.
 
 ```tsx
 import { I18nProvider, useTranslation, buildMessages } from "@calumet/elise-i18n";

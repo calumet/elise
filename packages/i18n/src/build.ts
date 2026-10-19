@@ -52,9 +52,34 @@ const setNamespace = (messages: Messages, locale: Locale, ns: string, value: unk
   messages[locale][ns] = value as NamespaceMessages;
 };
 
+const mergeLocaleMessages = (base: LocaleMessages, extra: LocaleMessages): LocaleMessages => {
+  const merged = { ...base };
+  for (const [ns, keys] of Object.entries(extra)) merged[ns] = { ...merged[ns], ...keys };
+  return merged;
+};
+
+/**
+ * Combina catálogos uniendo las keys dentro de cada namespace, en vez de
+ * reemplazar el namespace entero. Si dos catálogos traen la misma key, gana el
+ * último. No modifica los catálogos que recibe.
+ *
+ * @example
+ * ```ts
+ * const messages = mergeMessages(appMessages, authMessages);
+ * ```
+ */
+export const mergeMessages = (...catalogs: Messages[]): Messages => {
+  const result: Messages = {};
+  for (const catalog of catalogs) {
+    for (const [locale, localeMessages] of Object.entries(catalog)) {
+      result[locale] = mergeLocaleMessages(result[locale] ?? {}, localeMessages);
+    }
+  }
+  return result;
+};
+
 const mergeLocale = (messages: Messages, locale: Locale, value: unknown) => {
-  if (!messages[locale]) messages[locale] = {};
-  Object.assign(messages[locale], value as LocaleMessages);
+  messages[locale] = mergeLocaleMessages(messages[locale] ?? {}, value as LocaleMessages);
 };
 
 /**
@@ -156,14 +181,14 @@ export const buildLazyLoader = (modules: LazyGlobModules, options?: BuildOptions
     const entries = byLocale.get(locale);
     if (!entries) return {};
 
-    const localePart: LocaleMessages = {};
+    let localePart: LocaleMessages = {};
     const namespacePart: LocaleMessages = {};
 
     await Promise.all(
       entries.map(async (entry) => {
         const mod = await entry.loader();
         if (entry.kind === "locale") {
-          Object.assign(localePart, mod.default as LocaleMessages);
+          localePart = mergeLocaleMessages(localePart, mod.default as LocaleMessages);
         } else {
           namespacePart[entry.namespace] = mod.default as NamespaceMessages;
         }
