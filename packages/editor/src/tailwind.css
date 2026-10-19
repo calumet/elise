@@ -98,6 +98,19 @@ table th[data-align="right"] {
   }
 }
 
+[data-slot="block"]:has(> [data-slot="columns"]) > [data-slot="block-handle"] {
+  z-index: 1;
+}
+[data-slot="block"]:has(> [data-slot="columns"]):is(
+    [data-selected],
+    :hover:not(:has([data-slot="column"] [data-slot="block"]:hover))
+  )
+  [data-slot="column"]
+  > [data-slot="block"]
+  > [data-slot="block-handle"] {
+  visibility: hidden;
+}
+
 [data-block-drag],
 [data-block-drag] * {
   cursor: grabbing;

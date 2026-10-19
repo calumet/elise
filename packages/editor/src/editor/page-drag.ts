@@ -10,7 +10,13 @@ export type PageDrag = { finish: (commit: boolean) => void };
 
 type Point = { x: number; y: number };
 type Anchor = { element: HTMLElement; side: "before" | "after"; gap: number; height: number };
-type Lane = { container: HTMLElement; area: DOMRect; items: HTMLElement[]; mids: number[] };
+type Lane = {
+  container: HTMLElement;
+  area: DOMRect;
+  items: HTMLElement[];
+  mids: number[];
+  slacks: number[];
+};
 
 const BLOCK = '[data-slot="block"]';
 const PAGE_SLACK = { x: 64, y: 32 };
@@ -123,25 +129,27 @@ export const startPageDrag = ({
 
   const laneOf = (container: HTMLElement, area: DOMRect): Lane => {
     const items = blocksIn(container).filter((element) => element !== active);
-    const mids = items.map((element) => {
-      const box = element.getBoundingClientRect();
-      return box.top + box.height / 2;
-    });
-    return { container, area, items, mids };
+    const boxes = items.map((element) => element.getBoundingClientRect());
+    return {
+      container,
+      area,
+      items,
+      mids: boxes.map((box) => box.top + box.height / 2),
+      slacks: boxes.map((box) => Math.min(HYSTERESIS, Math.max(0, box.height / 2 - 2))),
+    };
   };
 
-  active.style.marginBottom = `${collapse}px`;
+  const scrolled = (): Point => {
+    const sum = { x: 0, y: 0 };
+    for (let node = root.parentElement; node; node = node.parentElement) {
+      sum.x += node.scrollLeft;
+      sum.y += node.scrollTop;
+    }
+    return sum;
+  };
   const origin = root.getBoundingClientRect();
-  const page = laneOf(
-    root,
-    new DOMRect(
-      origin.x - PAGE_SLACK.x,
-      origin.y - PAGE_SLACK.y,
-      origin.width + PAGE_SLACK.x * 2,
-      origin.height + PAGE_SLACK.y * 2,
-    ),
-  );
-  const columns: Lane[] = [];
+  const scrollStart = scrolled();
+  const areas = new Map<HTMLElement, DOMRect>();
   for (const column of nested ? [] : root.querySelectorAll<HTMLElement>('[data-slot="column"]')) {
     const group = column.parentElement?.closest<HTMLElement>('[data-slot="columns"]');
     if (!group || active.contains(column)) continue;
@@ -151,15 +159,31 @@ export const startPageDrag = ({
     const x = (Number.parseFloat(gaps.columnGap) || 0) / 2;
     const y = (Number.parseFloat(gaps.rowGap) || 0) / 2;
     const stacked = box.width > outer.width * 0.75;
-    const area = stacked
-      ? new DOMRect(outer.x, box.y - y, outer.width, box.height + y * 2)
-      : new DOMRect(box.x - x, outer.y, box.width + x * 2, outer.height);
-    columns.push(laneOf(column, area));
+    areas.set(
+      column,
+      stacked
+        ? new DOMRect(outer.x, box.y - y, outer.width, box.height + y * 2)
+        : new DOMRect(box.x - x, outer.y, box.width + x * 2, outer.height),
+    );
     heightAt(column, box.width);
   }
   heightAt(root, origin.width);
+  active.style.marginBottom = `${collapse}px`;
+  const page = laneOf(
+    root,
+    new DOMRect(
+      origin.x - PAGE_SLACK.x,
+      origin.y - PAGE_SLACK.y,
+      origin.width + PAGE_SLACK.x * 2,
+      origin.height + PAGE_SLACK.y * 2,
+    ),
+  );
+  const columns = [...areas].map(([column, area]) => laneOf(column, area));
   active.style.marginBottom = "";
   active.getBoundingClientRect();
+  lane =
+    [page, ...columns].find((candidate) => candidate.container === active.parentElement) ?? null;
+  index = lane ? blocksIn(lane.container).indexOf(active) : -1;
 
   const baseMargin = (element: HTMLElement): number => {
     let base = bases.get(element);
@@ -170,10 +194,12 @@ export const startPageDrag = ({
     return base;
   };
 
-  const probe = (): Point => {
-    const now = root.getBoundingClientRect();
+  const probe = (): Point & { top: number } => {
+    const now = scrolled();
+    const shift = { x: scrollStart.x - now.x, y: scrollStart.y - now.y };
     const x = follow ? pointer.x - grab.x + INSET : pointer.x;
-    return { x: x - (now.left - origin.left), y: pointer.y - (now.top - origin.top) };
+    const top = (follow ? pointer.y - grab.y : pointer.y) - shift.y;
+    return { x: x - shift.x, y: pointer.y - shift.y, top };
   };
 
   const laneAt = (point: Point): Lane | null => {
@@ -183,11 +209,11 @@ export const startPageDrag = ({
     return within(page.area, point, lane === page ? DEAD : 0) ? page : null;
   };
 
-  const indexIn = (next: Lane, y: number): number => {
+  const indexIn = (next: Lane, top: number): number => {
     const current = next === lane ? index : -1;
     return next.mids.filter((mid, at) => {
-      const edge = current < 0 ? mid : mid + (at >= current ? HYSTERESIS : -HYSTERESIS);
-      return y > edge;
+      const slack = current < 0 ? 0 : (next.slacks[at] ?? 0);
+      return top > mid + (at >= current ? slack : -slack);
     }).length;
   };
 
@@ -207,7 +233,7 @@ export const startPageDrag = ({
   const fromPage = (): DropTarget | null => {
     const point = probe();
     const next = laneAt(point);
-    index = next ? indexIn(next, point.y) : -1;
+    index = next ? indexIn(next, point.top) : -1;
     lane = next;
     if (!next) return null;
     const before = next.items[index];
