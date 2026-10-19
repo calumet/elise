@@ -16,6 +16,9 @@ sale recortado.** La fila dejó de recortar lo que devuelve `renderItem`; sin
 `renderItem` el `label` se sigue recortando, y con él recortar el texto largo
 es cosa del contenido.
 
+**Las líneas que unen cada rama de `SortableTree` quedan centradas bajo el asa
+del padre.** Estaban 2,5 px a su izquierda.
+
 ## `@calumet/elise-ui` 0.43.0
 
 ### Añade

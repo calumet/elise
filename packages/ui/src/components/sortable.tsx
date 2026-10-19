@@ -786,7 +786,9 @@ function SortableTreeRow({
           key={level}
           aria-hidden="true"
           className="absolute inset-y-0 border-s border-border"
-          style={{ insetInlineStart: level * INDENT + INDENT / 2 }}
+          style={{
+            insetInlineStart: `calc(${level * INDENT}px + 0.25rem + 1px + var(--spacing-icon-lg) / 2 - 0.5px)`,
+          }}
         />
       ))}
       <div
