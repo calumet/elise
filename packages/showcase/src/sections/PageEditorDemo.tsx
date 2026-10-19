@@ -324,7 +324,7 @@ const PageEditorDemo = () => {
       <Text size="sm" weight="semibold">
         Page (0.2 core harness)
       </Text>
-      <div style={{ display: "grid", gap: 16, gridTemplateColumns: "minmax(0,1fr) 320px" }}>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <Editor.Root
           schema={pageSchema}
           value={page}
