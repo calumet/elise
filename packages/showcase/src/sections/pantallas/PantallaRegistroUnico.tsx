@@ -92,7 +92,7 @@ const PantallaRegistroUnico = (): React.JSX.Element => (
       </AppShellHeader>
 
       <AppShellMain>
-        <Container size="lg" gutter={false} className="flex flex-col gap-5">
+        <Container size="lg" className="flex flex-col gap-5">
           <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
             <div className="flex min-w-0 flex-col gap-1">
               <Text as="h2" size="xl" weight="semibold">

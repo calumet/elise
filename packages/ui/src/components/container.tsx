@@ -29,6 +29,9 @@ const sizeClasses: Record<NonNullable<ContainerProps["size"]>, string> = {
   full: "max-w-none",
 };
 
+const gutterClasses =
+  "px-4 sm:px-6 lg:px-8 in-[[data-slot=app-shell-main]:not([data-fill])]:px-0 sm:in-[[data-slot=app-shell-main]:not([data-fill])]:px-0 lg:in-[[data-slot=app-shell-main]:not([data-fill])]:px-0";
+
 /**
  * Centra el contenido y le pone un ancho máximo. Evita que cada pantalla
  * invente su propio `max-w-*` y que las líneas de texto queden demasiado largas
@@ -44,12 +47,7 @@ function Container({
   return (
     <Comp
       data-slot="container"
-      className={cn(
-        "mx-auto w-full",
-        sizeClasses[size],
-        gutter && "px-4 sm:px-6 lg:px-8",
-        className,
-      )}
+      className={cn("mx-auto w-full", sizeClasses[size], gutter && gutterClasses, className)}
       {...props}
     />
   );

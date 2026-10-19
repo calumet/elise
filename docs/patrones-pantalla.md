@@ -42,6 +42,7 @@ Las cuatro comparten el mismo esqueleto.
 | ---------------------- | ------------------------------------------------------------------------------------------ |
 | Título                 | `Text as="h1"`, uno por documento. El tamaño va aparte de la semántica                     |
 | Ancho                  | Sale de `Container`. La pantalla no declara `max-w-*`                                      |
+| Margen lateral         | Lo pone `AppShellMain`. `Container` no suma el suyo ahí dentro: no pases `gutter={false}`  |
 | Acciones               | Una sólida como mucho. El resto en `outline`                                               |
 | `flex-wrap` y `gap-y`  | Sin envolver, tres botones piden 302px y a 360px de pantalla se salen de la banda de 228px |
 | `min-w-0` en el título | Sin él, un título largo empuja las acciones fuera del contenedor                           |
