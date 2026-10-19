@@ -181,6 +181,40 @@ const useTextBar = (selected: boolean, enabled: boolean): boolean => {
   return enabled && (selected || lingering);
 };
 
+const TEXT_BAR =
+  "group grid grid-rows-[0fr] transition-[grid-template-rows] duration-(--duration-base) ease-out select-none data-open:grid-rows-[1fr] starting:data-open:grid-rows-[0fr] motion-reduce:grid-rows-[1fr] motion-reduce:transition-none";
+const TEXT_ROW =
+  "mt-2 -translate-y-1 overflow-x-auto border-t border-border pt-1 opacity-0 transition-[opacity,translate] duration-(--duration-base) ease-out group-data-open:translate-y-0 group-data-open:opacity-100 starting:group-data-open:-translate-y-1 starting:group-data-open:opacity-0 motion-reduce:translate-y-0";
+
+const TextBar = ({ open }: { open: boolean }): React.JSX.Element | null => {
+  const [shown, setShown] = React.useState(open);
+  if (open && !shown) setShown(true);
+  if (!shown) return null;
+  return (
+    <div
+      contentEditable={false}
+      data-slot="text-toolbar"
+      data-open={open || undefined}
+      inert={!open}
+      className={TEXT_BAR}
+    >
+      <div className="min-h-0 overflow-hidden">
+        <div
+          data-motion="essential"
+          className={TEXT_ROW}
+          onTransitionEnd={(event) => {
+            if (!open && event.target === event.currentTarget && event.propertyName === "opacity") {
+              setShown(false);
+            }
+          }}
+        >
+          <FormatRow />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const addBelow = (editor: PlateEditor, id: string): void => {
   const entry = blockEntry(editor, id);
   if (entry) insertLine(editor, PathApi.next(entry[1]), "/");
@@ -394,15 +428,7 @@ const Draggable = ({ editor, element, children }: PlateElementProps): React.JSX.
       {slot === "before" ? <DropSlot position="before" /> : null}
       {hint ? <EmptyHint /> : null}
       {children}
-      {bar ? (
-        <div
-          contentEditable={false}
-          data-slot="text-toolbar"
-          className="mt-2 overflow-x-auto border-t border-border pt-1 select-none"
-        >
-          <FormatRow />
-        </div>
-      ) : null}
+      <TextBar open={bar} />
       {slot === "after" ? <DropSlot position="after" /> : null}
     </div>
   );
