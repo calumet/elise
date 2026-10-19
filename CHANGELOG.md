@@ -3,22 +3,6 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-editor` 0.2.0
-
-El núcleo del editor de páginas, sin la interfaz del panel.
-
-### Añade
-
-**`pageSchema`**, con columnas (de 1 a 4, un solo nivel), espacio, botón, galería y archivo. `onUploadFile` es la prop nueva para subir archivos.
-
-**Ajustes por bloque.** Cada tipo declara sus ajustes (`select`, `toggle`, `number`, `text`, `url`, `video`, `images`). `useSelectedBlock` los entrega listos para pintar y `useBlockCommands` selecciona, cambia, duplica, elimina y mueve bloques.
-
-**Esquema de la página.** `useOutline` devuelve el documento como árbol. El arrastre usa `@platejs/dnd`: cada bloque lleva un asa sin estilo, `useOutlineDnd` deja arrastrar desde el esquema y las columnas rechazan anidarse.
-
-**Plantillas** (texto con imagen, equipo, preguntas, llamada a la acción) que se insertan como bloques ordinarios, y `insertFile`, `uploadImage` e `insertTemplate` en `useEditorCommands`.
-
-**Render.** `EditorContent`, `toHtml` y `fromHtml` cubren los bloques nuevos. El diseño de las columnas sale de atributos `data-*` documentados en el README, para que sobreviva a un sanitizador que quite las clases, y se apilan en pantallas angostas.
-
 ## `@calumet/elise-editor` 0.1.0
 
 Paquete nuevo: editor de texto y de bloques sobre Plate.
@@ -37,6 +21,16 @@ No importa el runtime de edición y el viaje de ida y vuelta es estable.
 según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
+
+**El editor de páginas.** `pageSchema`, con columnas (de 1 a 4, un solo nivel), espacio, botón, galería y archivo. `onUploadFile` es la prop nueva para subir archivos.
+
+**Ajustes por bloque.** Cada tipo declara sus ajustes (`select`, `toggle`, `number`, `text`, `url`, `video`, `images`). `useSelectedBlock` los entrega listos para pintar y `useBlockCommands` selecciona, cambia, duplica, elimina y mueve bloques.
+
+**Esquema de la página.** `useOutline` devuelve el documento como árbol. El arrastre usa `@platejs/dnd`: cada bloque lleva un asa sin estilo, `useOutlineDnd` deja arrastrar desde el esquema y las columnas rechazan anidarse.
+
+**Plantillas** (texto con imagen, equipo, preguntas, llamada a la acción) que se insertan como bloques ordinarios, y `insertFile`, `uploadImage` e `insertTemplate` en `useEditorCommands`.
+
+**Render.** `EditorContent`, `toHtml` y `fromHtml` cubren los bloques nuevos. El diseño de las columnas sale de atributos `data-*` documentados en el README, para que sobreviva a un sanitizador que quite las clases, y se apilan en pantallas angostas.
 
 ## `@calumet/elise-ui` 0.44.0 y `@calumet/elise-themes` 0.1.8
 

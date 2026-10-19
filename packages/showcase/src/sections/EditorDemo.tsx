@@ -7,8 +7,6 @@ import { BlockStack } from "@calumet/elise-ui/stack";
 import { Text } from "@calumet/elise-ui/text";
 import { useState, type ReactNode } from "react";
 
-import PageEditorDemo from "./PageEditorDemo";
-
 const PAGINAS = [
   { label: "Transferencias", href: "/transferencias" },
   { label: "Inscripciones", href: "/inscripciones" },
@@ -229,7 +227,11 @@ const EditorDemo = () => {
         </Grid>
       </BlockStack>
 
-      <PageEditorDemo />
+      <Text size="sm">
+        <a className="text-link underline underline-offset-2" href="/page-editor.html">
+          El editor de páginas, en su propia página
+        </a>
+      </Text>
     </BlockStack>
   );
 };

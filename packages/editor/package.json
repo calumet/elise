@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-editor",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "private": false,
   "description": "Editor de texto enriquecido y de bloques para Elise, sobre Plate.",
   "repository": {
