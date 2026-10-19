@@ -58,8 +58,12 @@ export const addTableRow = (
 ): void => {
   const at = tablePath(editor, id);
   if (!at) return;
-  if (row === undefined) insertTableRow(editor, { at, select: false });
-  else insertTableRow(editor, { fromRow: [...at, row], before, select: false });
+  if (row === undefined) {
+    insertTableRow(editor, { at, select: false });
+    return;
+  }
+  insertTableRow(editor, { fromRow: [...at, row], before, select: false });
+  intoCell(editor, [...at, before ? row : row + 1, 0]);
 };
 
 export const addTableColumn = (
@@ -74,6 +78,7 @@ export const addTableColumn = (
   if (!at || !firstRow) return;
   const index = column ?? firstRow.children.length - 1;
   insertTableColumn(editor, { fromCell: [...at, 0, index], before, select: false });
+  if (column !== undefined) intoCell(editor, [...at, 0, before ? column : column + 1]);
 };
 
 export const removeTableRow = (editor: PlateEditor, id: string, row: number): void => {

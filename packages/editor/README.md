@@ -144,7 +144,7 @@ Dentro de `Editor.Content` con `pageSchema`, las columnas se apilan cuando el á
 
 ### Tablas
 
-Cada fila y cada columna tienen su asa con insertar antes, insertar después y eliminar. Las asas aparecen al apuntar la fila o la columna, o con el cursor en una de sus celdas, y quedan dentro de la página a cualquier ancho. Con la tabla elegida, `Editor.Settings` ofrece fila y columna de encabezado y la alineación de cada columna, más añadir fila y columna desde el teclado.
+Cada fila y cada columna tienen su asa con insertar antes, insertar después y eliminar; al insertar, el cursor va a la primera celda nueva y la tabla sigue elegida. Las asas aparecen al apuntar la fila o la columna, o con el cursor en una de sus celdas, y quedan dentro de la página a cualquier ancho. Con la tabla elegida, `Editor.Settings` ofrece fila y columna de encabezado y la alineación de cada columna, más añadir fila y columna desde el teclado.
 
 La tabla guarda `headerRow`, `headerColumn` y `columnAlign` (`left`, `center` o `right` por columna). La normalización deja las celdas de acuerdo con ellos: `th` con `scope="col"` en la fila de encabezado, `th` con `scope="row"` en la columna, y `align` en cada celda que no vaya a la izquierda. Unir celdas, el ancho de las columnas y elegir varias celdas a la vez quedan fuera.
 
