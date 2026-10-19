@@ -3,6 +3,20 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-editor` 0.1.0
+
+Paquete nuevo: editor de texto y de bloques sobre Plate.
+
+### Añade
+
+**El núcleo sin interfaz.** `EditorDocument` con ids estables, `messageSchema` y
+`documentSchema`, `Editor.Root` y `Editor.Content`, y los comandos que usará la
+interfaz (`useEditorCommands`). El esquema decide qué se inserta, qué acepta el
+pegado y qué HTML sale.
+
+**`@calumet/elise-editor/render`**, con `EditorContent`, `toHtml` y `fromHtml`.
+No importa el runtime de edición y el viaje de ida y vuelta es estable.
+
 ## `@calumet/elise-i18n` 0.4.0
 
 ### Añade

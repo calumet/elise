@@ -26,6 +26,7 @@ export default defineConfig(
         files: [
           "packages/ui/**",
           "packages/tables/**",
+          "packages/editor/**",
           "packages/alerts/**",
           "packages/themes/**",
           "packages/toasts/**",

@@ -1,6 +1,7 @@
 @import "@calumet/elise-ui/tailwind/fonts.css";
 @import "@calumet/elise-ui/tailwind/elise.css";
 
+@import "@calumet/elise-editor/tailwind.css";
 @import "@calumet/elise-tables/tailwind.css";
 @import "@calumet/elise-toasts/tailwind.css";
 @import "@calumet/elise-alerts/tailwind.css";
