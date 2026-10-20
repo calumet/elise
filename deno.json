@@ -1,6 +1,7 @@
 {
   "workspace": [
     "./packages/alerts",
+    "./packages/blocks",
     "./packages/forms",
     "./packages/i18n",
     "./packages/icons",

@@ -3,14 +3,32 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
-## `@calumet/elise-ui` 0.43.4
+## `@calumet/elise-blocks` 0.1.0 y `@calumet/elise-ui` 0.44.0
 
-### Corrige
+### Añade
 
-**Plegar o desplegar una rama de `SortableTree` ya no deja filas fuera de su
-contenedor.** Las filas de debajo se deslizaban desde su posición vieja mientras
-la tarjeta cambiaba de alto al instante, y su texto se veía fuera del borde.
-Ahora el cambio es instantáneo, como el de `Tree`. Arrastrar no cambia.
+**`@calumet/elise-blocks`, el paquete de bloques compuestos.** Piezas que
+arman una tarea reutilizable sobre los primitivos de `elise-ui`, sin conocer
+el dominio de ninguna app. El criterio de qué va aquí y qué se queda en
+`elise-ui` o en la app está en `docs/bloques.md`.
+
+**`ChecklistPicker`, en `@calumet/elise-blocks/checklist-picker`: elegir con
+casillas entre muchas opciones, filtradas por pestañas y por nombre.** Va
+dentro de un `Dialog` o un `Sheet`: buscador y pestañas en cápsula fijos, y
+solo las casillas desplazan. La búsqueda ignora mayúsculas y tildes y ordena
+con `Intl.Collator(locale)`. `selected` y `onToggle` son de quien lo usa.
+
+### Rompe
+
+**`SortableList`, `SortableItem`, `SortableHandle` y `SortableTree` salen de
+`@calumet/elise-ui/sortable` y pasan a `@calumet/elise-blocks/sortable`, sin
+re-export en `elise-ui`.** Son bloques (arrastre con anuncios, teclado y
+re-anidado ya armados), no primitivos. La API no cambia; solo el import. Las
+dependencias de dnd-kit se mudan con ellos y salen de `elise-ui`.
+
+`elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6,
+`elise-themes` 0.1.8 y `elise-toasts` 0.4.26 se republican para que JSR los
+publique contra `elise-ui` 0.44.0. No cambian.
 
 ## `@calumet/elise-ui` 0.43.3
 
