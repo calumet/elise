@@ -21,7 +21,7 @@ con `Intl.Collator(locale)`. `selected` y `onToggle` son de quien lo usa.
 ### Rompe
 
 **`SortableTree` sale de `@calumet/elise-ui/sortable` y pasa a
-`@calumet/elise-blocks/sortable`, sin re-export en `elise-ui`.** Es un bloque
+`@calumet/elise-blocks/sortable-tree`, sin re-export en `elise-ui`.** Es un bloque
 (el árbol entero con su re-anidado, anuncios y teclado ya armados), no un
 primitivo. La API no cambia; solo el import. `SortableList` y sus partes se
 quedan en `elise-ui`: se componen y entran en una tabla con `asChild`.

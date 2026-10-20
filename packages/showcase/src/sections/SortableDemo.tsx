@@ -2,7 +2,7 @@ import {
   SortableTree,
   type SortableTreeMove,
   type SortableTreeNode,
-} from "@calumet/elise-blocks/sortable";
+} from "@calumet/elise-blocks/sortable-tree";
 import { Ellipsis } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import {
