@@ -26,6 +26,10 @@ re-export en `elise-ui`.** Son bloques (arrastre con anuncios, teclado y
 re-anidado ya armados), no primitivos. La API no cambia; solo el import. Las
 dependencias de dnd-kit se mudan con ellos y salen de `elise-ui`.
 
+`elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6,
+`elise-themes` 0.1.8 y `elise-toasts` 0.4.26 se republican para que JSR los
+publique contra `elise-ui` 0.44.0. No cambian.
+
 ## `@calumet/elise-ui` 0.43.3
 
 ### Corrige
