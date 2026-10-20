@@ -52,8 +52,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
-import { cn } from "@/lib/cn";
-import { useElLabel } from "@/lib/i18n";
+import { cn } from "./lib/cn";
+import { useElLabel } from "./lib/i18n";
 
 type ListContextValue = {
   labels: React.RefObject<Map<UniqueIdentifier, string>>;

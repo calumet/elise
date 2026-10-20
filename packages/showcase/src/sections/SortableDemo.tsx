@@ -16,7 +16,7 @@ import {
   SortableTree,
   type SortableTreeMove,
   type SortableTreeNode,
-} from "@calumet/elise-ui/sortable";
+} from "@calumet/elise-blocks/sortable";
 import {
   Table,
   TableBody,

@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-ui",
-  "version": "0.43.2",
+  "version": "0.44.0",
   "license": "MIT",
   "exports": {
     ".": "./jsr/index.js",
@@ -69,7 +69,6 @@
     "./sidebar": "./jsr/components/sidebar.js",
     "./skeleton": "./jsr/components/skeleton.js",
     "./slider": "./jsr/components/slider.js",
-    "./sortable": "./jsr/components/sortable.js",
     "./spinner": "./jsr/components/spinner.js",
     "./stack": "./jsr/components/stack.js",
     "./stat": "./jsr/components/stat.js",

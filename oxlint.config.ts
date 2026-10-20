@@ -25,6 +25,7 @@ export default defineConfig(
         // Elise es el design system, no quien lo consume. Queda `no-raw-colors`.
         files: [
           "packages/ui/**",
+          "packages/blocks/**",
           "packages/tables/**",
           "packages/alerts/**",
           "packages/themes/**",
