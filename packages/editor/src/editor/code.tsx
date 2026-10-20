@@ -324,7 +324,7 @@ export const EditorCode = ({ title, className }: EditorCodeProps): React.JSX.Ele
         <div
           role="region"
           aria-label={t.codeResult}
-          className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 sm:px-6 md:min-w-80"
+          className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-y-auto bg-background px-4 py-4 sm:px-6 md:min-w-80"
         >
           <div className="flex items-center justify-between gap-2">
             <Text size="xs" weight="medium" tone="muted">

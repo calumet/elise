@@ -868,7 +868,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
           </aside>
         ) : null}
         <div
-          className="@container/pane min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
+          className="@container/pane min-w-0 flex-1 overflow-y-auto bg-background px-4 py-6 sm:px-6 sm:py-8"
           onPointerDown={(event) => {
             const target = event.target as Element;
             if (!event.currentTarget.contains(target)) return;
