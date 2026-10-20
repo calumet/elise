@@ -163,13 +163,12 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
         ? [blockOf("media_embed", [{ text: "" }], id, { url })]
         : [];
     }
-    const url = safeSrc(img?.getAttribute("src"));
-    if (!allows("img") || !img || !url) return [];
+    if (!allows("img") || (!img && !element.hasAttribute("data-empty"))) return [];
     const caption = element.querySelector("figcaption")?.textContent?.trim();
     return [
       blockOf("img", [{ text: "" }], id, {
-        url,
-        alt: img.getAttribute("alt") ?? "",
+        url: safeSrc(img?.getAttribute("src")) ?? "",
+        alt: img?.getAttribute("alt") ?? element.getAttribute("data-alt") ?? "",
         ...(caption ? { caption } : {}),
       }),
     ];
@@ -374,7 +373,11 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
     if (page) return page;
     const handler = byTag[tag];
     if (handler) return handler(element, id);
-    if (tag === "figure" && element.querySelector("img, iframe")) return media(element, id);
+    if (
+      tag === "figure" &&
+      (element.querySelector("img, iframe") || element.hasAttribute("data-empty"))
+    )
+      return media(element, id);
     if (element.hasAttribute("data-callout") || element.getAttribute("data-slot") === "alert") {
       return callout(element, id);
     }

@@ -176,6 +176,11 @@ export default {
   imagesHint: "JPG, PNG o WebP",
   removeImage: "Quitar la imagen",
   emptyGallery: "Añade imágenes en los ajustes del bloque",
+  emptyImage: "Imagen sin su archivo. Añádelo en los ajustes del bloque.",
+  pastedWithoutFile:
+    "Se pegaron {count} imágenes sin su archivo. Elige cada una y añade su archivo en los ajustes del bloque.",
+  pastedWithoutFileOne:
+    "Se pegó 1 imagen sin su archivo. Elígela y añade su archivo en los ajustes del bloque.",
   catalogTarget: "Se añade debajo de «{block}»",
   catalogTargetEnd: "Se añade al final de la página",
   translations: "Traducciones",

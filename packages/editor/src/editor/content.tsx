@@ -1,13 +1,15 @@
-import { PlateContent, useEditorRef } from "platejs/react";
+import { Alert } from "@calumet/elise-ui/alert";
+import { PlateContent, useEditorRef, usePluginOption } from "platejs/react";
 import * as React from "react";
 
-import { useLabels } from "../labels";
+import { fill, useLabels } from "../labels";
 import { contentClassName } from "../views";
 import { useEditorCommands } from "./commands";
 import { useServices } from "./context";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
 import { isMediaKind, MediaDialogs, type MediaKind } from "./media-dialogs";
+import { PasteNoticePlugin } from "./plugins";
 import { PreviewArea, useDevice, usePreviewing } from "./preview";
 import { useSlashMenu, type SlashMenuState } from "./slash-menu";
 
@@ -46,6 +48,36 @@ const useImageFiles = (): ((
   };
 };
 
+const PasteNotice = (): React.JSX.Element | null => {
+  const t = useLabels();
+  const editor = useEditorRef();
+  const missing = usePluginOption(PasteNoticePlugin, "missing");
+  if (!missing) return null;
+  return (
+    <Alert
+      tone="warning"
+      data-slot="editor-paste-notice"
+      className="sticky top-2 z-sticky mb-4"
+      onDismiss={() => editor.setOption(PasteNoticePlugin, "missing", 0)}
+    >
+      {missing === 1 ? t.pastedWithoutFileOne : fill(t.pastedWithoutFile, { count: missing })}
+    </Alert>
+  );
+};
+
+const renderPlaceholder: React.ComponentProps<typeof PlateContent>["renderPlaceholder"] = ({
+  attributes,
+  children,
+}) => (
+  <span
+    {...attributes}
+    style={{ ...attributes.style, opacity: 1 }}
+    className="text-muted-foreground"
+  >
+    {children}
+  </span>
+);
+
 export const EditorContentArea = ({
   placeholder,
   className,
@@ -73,7 +105,7 @@ export const EditorContentArea = ({
 
   return (
     <>
-      {previewing ? <PreviewArea page={page} /> : null}
+      {previewing ? <PreviewArea page={page} /> : <PasteNotice />}
       <div
         ref={container}
         hidden={previewing}
@@ -83,15 +115,7 @@ export const EditorContentArea = ({
         <PlateContent
           {...aria}
           placeholder={hint}
-          renderPlaceholder={({ attributes, children }) => (
-            <span
-              {...attributes}
-              style={{ ...attributes.style, opacity: 1 }}
-              className="text-muted-foreground"
-            >
-              {children}
-            </span>
-          )}
+          renderPlaceholder={renderPlaceholder}
           aria-controls={menu.open ? menu.id : undefined}
           aria-activedescendant={
             menu.open && menu.matches.length ? menu.optionId(menu.active) : undefined

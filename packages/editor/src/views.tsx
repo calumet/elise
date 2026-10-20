@@ -1,4 +1,11 @@
-import { AlertTriangle, CheckCircle2, FileText, Info, XCircle } from "@calumet/elise-icons";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  FileText,
+  ImageOff,
+  Info,
+  XCircle,
+} from "@calumet/elise-icons";
 import { buttonVariants } from "@calumet/elise-ui/button";
 import * as React from "react";
 
@@ -119,17 +126,31 @@ const Figure = ({
   selected,
 }: ViewProps): React.JSX.Element => {
   const src = safeSrc(String(element.url ?? ""));
+  const alt = String(element.alt ?? "");
   const caption = typeof element.caption === "string" ? element.caption : "";
   return (
-    <figure {...attributes}>
+    <figure
+      data-empty={src ? undefined : ""}
+      data-alt={src || !alt ? undefined : alt}
+      {...attributes}
+    >
       <div {...frozen(editing)}>
         {src ? (
           <img
             src={src}
-            alt={String(element.alt ?? "")}
+            alt={alt}
             data-selected={selected || undefined}
             className={`h-auto max-w-full rounded-lg ${VOID}`}
           />
+        ) : editing ? (
+          <div
+            data-selected={selected || undefined}
+            className={`flex min-h-24 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border-strong bg-muted px-4 py-6 text-center ${VOID}`}
+          >
+            <ImageOff aria-hidden="true" className="size-icon-lg text-muted-foreground" />
+            <Hint text={(t) => t.emptyImage} />
+            {alt ? <span className="text-sm break-words text-foreground">{alt}</span> : null}
+          </div>
         ) : null}
         {caption ? (
           <figcaption className="mt-2 text-sm text-muted-foreground">{caption}</figcaption>

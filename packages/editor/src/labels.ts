@@ -177,6 +177,11 @@ const DEFAULTS = {
   imagesHint: "JPG, PNG or WebP",
   removeImage: "Remove image",
   emptyGallery: "Add images in the block settings",
+  emptyImage: "Image without its file. Add it in the block settings.",
+  pastedWithoutFile:
+    "{count} pasted images came without their file. Select each one and add its file in the block settings.",
+  pastedWithoutFileOne:
+    "1 pasted image came without its file. Select it and add its file in the block settings.",
   catalogTarget: "Goes below “{block}”",
   catalogTargetEnd: "Goes at the end of the page",
   translations: "Translations",
