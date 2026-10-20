@@ -213,9 +213,9 @@ usan, son los que se mudan.
 - [x] Crear el paquete, con el criterio de qué es un bloque escrito en
       [Bloques](bloques.md): compone primitivos, trae un flujo cerrado, no
       conoce dominio ni hace fetch, y resuelve una tarea general
-- [x] `SortableList` y `SortableTree` se mudan desde `elise-ui` (corte limpio
-      en `elise-ui` 0.44.0, sin re-export) y `ChecklistPicker` entra como
-      primer bloque nuevo
+- [x] `SortableTree` se muda desde `elise-ui` (corte limpio en `elise-ui`
+      0.44.0, sin re-export; `SortableList` se queda como primitiva) y
+      `ChecklistPicker` entra como primer bloque nuevo
 - [ ] PageHeader, página de tabla, wizard, ajustes, autenticación, estados de
       error
 
