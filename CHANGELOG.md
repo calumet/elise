@@ -3,6 +3,23 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.1.1 y `@calumet/elise-ui` 0.44.1
+
+### Corrige
+
+**Plegar o desplegar una rama de `SortableTree` ya no deja filas fuera de su
+contenedor.** La tarjeta encogía al instante y las filas de debajo se deslizaban
+desde su posición vieja, con el texto fuera del borde. Ahora la rama y lo que
+hay debajo encogen juntos. Arrastrar no cambia: al levantar una rama, sus hijas
+se ocultan al instante.
+
+### Cambia
+
+**`Tree` anima el plegado de una rama, como `SortableTree`.** La altura
+transiciona con `--duration-fast`, y con `prefers-reduced-motion` es instantáneo.
+Las ramas cerradas siguen montadas, pero `inert`: ni se tabulan ni las lee un
+lector de pantalla.
+
 ## `@calumet/elise-blocks` 0.1.0 y `@calumet/elise-ui` 0.44.0
 
 ### Añade
