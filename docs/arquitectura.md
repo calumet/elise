@@ -86,12 +86,12 @@ Librería principal de componentes. Construida sobre [Radix UI Primitives](https
 
 Bloques compuestos sobre los primitivos de `elise-ui`: piezas que arman una
 tarea reutilizable (reordenar arrastrando, elegir con casillas y buscador) sin
-conocer el dominio de ninguna app. Nace con `SortableList`/`SortableTree`,
-movidos desde `elise-ui`, y `ChecklistPicker`.
+conocer el dominio de ninguna app. Nace con `SortableTree`, movido desde
+`elise-ui`, y `ChecklistPicker`.
 
 - **Peer dependencies**: React 19, `@calumet/elise-ui`
-- Dep directas: `@calumet/elise-icons`, dnd-kit (el motor de arrastre vive
-  aquí y ya no en `elise-ui`)
+- Dep directas: `@calumet/elise-icons`, dnd-kit (el motor del arrastre del
+  árbol; el de la lista plana sigue en `elise-ui`)
 
 El criterio para decidir si algo va en este paquete, en `elise-ui` o en la app
 está en [Bloques](bloques.md).

@@ -1021,7 +1021,8 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 | DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list` | —     |
 | Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`         | —     |
 | Tree, TreeItem                                                            | `@calumet/elise-ui/tree`             | —     |
-| SortableList, SortableItem, SortableHandle, SortableTree                  | `@calumet/elise-blocks/sortable`     | —     |
+| SortableList, SortableItem, SortableHandle                                | `@calumet/elise-ui/sortable`         | —     |
+| SortableTree                                                              | `@calumet/elise-blocks/sortable`     | —     |
 
 `DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
 relación entre el rótulo y su valor está en el marcado y un lector de pantalla
@@ -1037,9 +1038,9 @@ izquierda cierra o sube al padre). El foco entra una sola vez y desde ahí se mu
 con las flechas, porque con un `tabIndex` por nodo, tabular por un árbol de
 cincuenta hojas serían cincuenta paradas.
 
-Los dos `Sortable*` y `ChecklistPicker` son bloques, no primitivos: viven en
-`@calumet/elise-blocks`. El criterio y el catálogo de bloques están en
-[Bloques](bloques.md).
+`SortableTree` y `ChecklistPicker` son bloques y viven en
+`@calumet/elise-blocks`; `SortableList` se compone por partes y se queda como
+primitiva. El criterio y el catálogo de bloques están en [Bloques](bloques.md).
 
 `SortableList` reordena en vertical arrastrando desde `SortableHandle`, el
 único sitio que inicia el arrastre, así que el resto de la fila sigue siendo un
