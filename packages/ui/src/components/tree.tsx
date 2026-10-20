@@ -153,7 +153,7 @@ export type TreeItemProps = Omit<React.ComponentProps<"li">, "onSelect" | "id"> 
 const visible = (root: HTMLElement | null) =>
   root
     ? [...root.querySelectorAll<HTMLElement>('[role="treeitem"]')].filter(
-        (n) => n.offsetParent !== null,
+        (n) => n.offsetParent !== null && !n.closest("[inert]"),
       )
     : [];
 
@@ -299,11 +299,19 @@ export const TreeItem: React.ForwardRefExoticComponent<
           <span className="truncate">{label}</span>
         </span>
 
-        {isBranch && open ? (
+        {isBranch ? (
           <DepthCtx.Provider value={depth + 1}>
-            <ul role="group" className="m-0 flex list-none flex-col p-0">
-              {children}
-            </ul>
+            <div
+              inert={!open}
+              className={cn(
+                "grid transition-[grid-template-rows] duration-(--duration-fast) ease-out",
+                open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+              )}
+            >
+              <ul role="group" className="m-0 flex min-h-0 list-none flex-col overflow-hidden p-0">
+                {children}
+              </ul>
+            </div>
           </DepthCtx.Provider>
         ) : null}
       </li>

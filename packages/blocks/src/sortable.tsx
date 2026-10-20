@@ -654,6 +654,46 @@ export function SortableTree<T extends SortableTreeNode>({
     });
 
   const active = activeId == null ? undefined : byId.get(activeId)?.node;
+
+  const renderLevel = (nodes: T[], hidden = false): React.ReactNode =>
+    nodes.map((node) => {
+      const item = byId.get(node.id) as FlatNode<T>;
+      const isActive = node.id === activeId && projected;
+      const children = (node.children ?? []) as T[];
+      const branch = children.length > 0;
+      const open = !collapsed.has(node.id) && node.id !== activeId;
+      return (
+        <React.Fragment key={node.id}>
+          <SortableTreeRow
+            node={node}
+            depth={isActive ? projected.depth : item.depth}
+            blocked={isActive ? !projected.allowed : false}
+            collapsed={branch ? collapsed.has(node.id) : undefined}
+            hidden={hidden}
+            onToggle={() => toggle(node.id)}
+            texts={texts}
+          >
+            {renderItem(node)}
+          </SortableTreeRow>
+          {branch ? (
+            <li role="none" inert={hidden || !open}>
+              <div
+                className={cn(
+                  "grid transition-[grid-template-rows] duration-(--duration-fast) ease-out",
+                  activeId != null && "transition-none",
+                  open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                )}
+              >
+                <ul className="m-0 flex min-h-0 list-none flex-col overflow-hidden p-0">
+                  {renderLevel(children, hidden || !open)}
+                </ul>
+              </div>
+            </li>
+          ) : null}
+        </React.Fragment>
+      );
+    });
+
   const list = React.useMemo(() => ({ labels }), []);
 
   return (
@@ -686,23 +726,7 @@ export function SortableTree<T extends SortableTreeNode>({
             className={cn("m-0 flex list-none flex-col p-0", className)}
             {...props}
           >
-            {visible.map((item) => {
-              const isActive = item.id === activeId && projected;
-              const branch = (item.node.children?.length ?? 0) > 0;
-              return (
-                <SortableTreeRow
-                  key={item.id}
-                  node={item.node}
-                  depth={isActive ? projected.depth : item.depth}
-                  blocked={isActive ? !projected.allowed : false}
-                  collapsed={branch ? collapsed.has(item.id) : undefined}
-                  onToggle={() => toggle(item.id)}
-                  texts={texts}
-                >
-                  {renderItem(item.node)}
-                </SortableTreeRow>
-              );
-            })}
+            {renderLevel(items)}
           </ul>
         </SortableContext>
         <DragOverlay>
@@ -738,6 +762,7 @@ type SortableTreeRowProps = {
   depth: number;
   blocked: boolean;
   collapsed: boolean | undefined;
+  hidden: boolean;
   onToggle: () => void;
   texts: TreeTexts;
   children: React.ReactNode;
@@ -748,6 +773,7 @@ function SortableTreeRow({
   depth,
   blocked,
   collapsed,
+  hidden,
   onToggle,
   texts,
   children,
@@ -765,7 +791,7 @@ function SortableTreeRow({
   } = useSortable({
     id: node.id,
     animateLayoutChanges,
-    disabled: { draggable: locked, droppable: false },
+    disabled: { draggable: locked || hidden, droppable: hidden },
   });
 
   const item = React.useMemo(
