@@ -181,6 +181,10 @@ const copia = fromHtml(html, { schema: documentSchema });
 
 Una traducción que falte cae al idioma base del documento. `fromHtml` usa `DOMParser`, así que corre en el navegador o con jsdom.
 
+### Direcciones
+
+Un `href` o un `src` vale si es http(s), `mailto:`, `tel:` o relativo. Cualquier otro esquema se descarta, `data:` y `blob:` incluidos, también en las imágenes y la galería: el documento guarda direcciones, no archivos incrustados. Rige al pegar, en `fromHtml`, en el modo código (que avisa de cada dirección que va a quitar) y en lo que devuelve `onUploadImage`. Una imagen pegada o soltada en la página se sube con `onUploadImage` y entra como cualquier otra; sin `onUploadImage`, no se inserta.
+
 ### HTML de la página y sanitizado
 
 El diseño de las columnas no depende de las clases: lo da `@calumet/elise-editor/tailwind.css` a partir de atributos `data-*`. Un sanitizador que quite `class` conserva el diseño si deja pasar estos atributos y elementos:

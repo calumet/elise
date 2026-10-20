@@ -232,6 +232,7 @@ const DEFAULTS = {
   droppedIntro: "Going back to Visual removes what the editor does not support:",
   droppedElement: "<{name}> element",
   droppedAttribute: "{name} attribute",
+  droppedAddress: "{name} address",
   seeChanges: "See what changes",
   resizePanels: "Width of the code and the result",
   lineNumber: "Line {line}",

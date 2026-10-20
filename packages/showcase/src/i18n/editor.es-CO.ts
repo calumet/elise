@@ -231,6 +231,7 @@ export default {
   droppedIntro: "Al volver a Visual, lo que el editor no admite se quita:",
   droppedElement: "elemento <{name}>",
   droppedAttribute: "atributo {name}",
+  droppedAddress: "dirección {name}",
   seeChanges: "Ver qué cambia",
   resizePanels: "Ancho del código y del resultado",
   lineNumber: "Línea {line}",

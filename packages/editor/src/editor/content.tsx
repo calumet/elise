@@ -1,8 +1,9 @@
-import { PlateContent } from "platejs/react";
+import { PlateContent, useEditorRef } from "platejs/react";
 import * as React from "react";
 
 import { useLabels } from "../labels";
 import { contentClassName } from "../views";
+import { useEditorCommands } from "./commands";
 import { useServices } from "./context";
 import { InsertButton, InsertMenu } from "./insert-menu";
 import type { InsertItem } from "./items";
@@ -21,6 +22,28 @@ export type EditorContentAreaProps = {
   "aria-describedby"?: string;
   "aria-invalid"?: boolean;
   "aria-required"?: boolean;
+};
+
+const useImageFiles = (): ((
+  event: React.ClipboardEvent | React.DragEvent,
+  data: DataTransfer | null,
+) => void) => {
+  const editor = useEditorRef();
+  const commands = useEditorCommands();
+  const { schema, onUploadImage } = useServices();
+  return (event, data) => {
+    const images = Array.from(data?.files ?? []).filter((file) => file.type.startsWith("image/"));
+    if (!images.length) return;
+    event.preventDefault();
+    if (!onUploadImage || !schema.blocks.includes("img")) return;
+    if (event.type === "drop") {
+      const range = editor.api.findEventRange(event);
+      if (range) editor.tf.select(range);
+    }
+    void images
+      .reduce((done, file) => done.then(() => commands.insertImage(file)), Promise.resolve())
+      .catch(() => {});
+  };
 };
 
 export const EditorContentArea = ({
@@ -46,6 +69,7 @@ export const EditorContentArea = ({
   const page = schema.blocks.includes("columns");
   const previewing = usePreviewing();
   const device = useDevice();
+  const takeImages = useImageFiles();
 
   return (
     <>
@@ -73,6 +97,8 @@ export const EditorContentArea = ({
             menu.open && menu.matches.length ? menu.optionId(menu.active) : undefined
           }
           onKeyDown={menu.onKeyDown}
+          onPaste={(event) => takeImages(event, event.clipboardData)}
+          onDrop={(event) => takeImages(event, event.dataTransfer)}
           className={className ? `${base} ${className}` : base}
         />
         {renderSlashMenu ? renderSlashMenu(menu) : <InsertMenu menu={menu} />}

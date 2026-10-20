@@ -107,21 +107,9 @@ const row = (id: string, kind: "th" | "td", cells: string[]): EditorNode => ({
   })),
 });
 
-const photo = (): string => {
-  const canvas = document.createElement("canvas");
-  canvas.width = 640;
-  canvas.height = 420;
-  const brush = canvas.getContext("2d");
-  if (brush) {
-    brush.fillStyle = "#0f766e";
-    brush.fillRect(0, 0, 640, 420);
-    brush.fillStyle = "#ffffff";
-    brush.font = "28px sans-serif";
-    brush.textAlign = "center";
-    brush.fillText("Laboratorio", 320, 220);
-  }
-  return canvas.toDataURL("image/png");
-};
+const SAMPLES = ["/editor/laboratorio.svg", "/editor/aula.svg"];
+
+const photo = (): string => SAMPLES[0] as string;
 
 const createPage = (): EditorDocument => ({
   version: 1,
@@ -402,7 +390,7 @@ const createColumnsPage = (): EditorDocument => {
     solid("k-gallery", "gallery", {
       images: [
         { src: image, alt: "Uno" },
-        { src: image, alt: "Dos" },
+        { src: SAMPLES[1] as string, alt: "Dos" },
       ],
     }),
     solid("k-video", "media_embed", { url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }),
@@ -473,13 +461,15 @@ const createLongPage = (): EditorDocument => ({
   ]).flat(),
 });
 
-const uploadImage = (file: File): Promise<{ src: string; alt?: string }> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve({ src: String(reader.result) });
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
+let uploads = 0;
+
+const uploadImage = (file: File): Promise<{ src: string; alt?: string }> => {
+  uploads += 1;
+  return Promise.resolve({
+    src: SAMPLES[uploads % SAMPLES.length] as string,
+    alt: file.name.replace(/\.[^.]+$/, ""),
   });
+};
 
 const uploadFile = (file: File): Promise<{ src: string; name: string; size?: number }> =>
   Promise.resolve({

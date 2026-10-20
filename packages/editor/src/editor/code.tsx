@@ -50,10 +50,16 @@ const TONES: Record<Token["kind"], string> = {
   text: "text-foreground",
 };
 
+const DROPPED_LABELS: Record<DroppedItem["kind"], (t: Labels) => string> = {
+  element: (t) => t.droppedElement,
+  attribute: (t) => t.droppedAttribute,
+  address: (t) => t.droppedAddress,
+};
+
 const summarize = (t: Labels, items: DroppedItem[]): string => {
   const counts = new Map<string, number>();
   for (const item of items) {
-    const label = fill(item.kind === "element" ? t.droppedElement : t.droppedAttribute, {
+    const label = fill(DROPPED_LABELS[item.kind](t), {
       name: item.name,
     });
     counts.set(label, (counts.get(label) ?? 0) + 1);
@@ -166,7 +172,7 @@ const Dropped = ({
                     {fill(t.lineNumber, { line: item.line })}
                   </span>
                   <span className="min-w-0 font-mono break-all">
-                    {fill(item.kind === "element" ? t.droppedElement : t.droppedAttribute, {
+                    {fill(DROPPED_LABELS[item.kind](t), {
                       name: item.name,
                     })}
                   </span>

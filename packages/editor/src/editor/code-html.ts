@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import { EditorContent } from "../render/content";
 import type { EditorDocument, EditorSchema } from "../types";
+import { safeHref, safeSrc } from "../urls";
 
 const VOID = new Set(["br", "hr", "img"]);
 
@@ -133,10 +134,21 @@ const MARKS: Record<string, string> = {
   kbd: "code",
 };
 
-export type DroppedItem = { kind: "element" | "attribute"; name: string; line: number; at: number };
+export type DroppedItem = {
+  kind: "element" | "attribute" | "address";
+  name: string;
+  line: number;
+  at: number;
+};
 
 const TAG = /<([a-zA-Z][\w-]*)((?:[^>"']|"[^"]*"|'[^']*')*)>/g;
-const ATTRIBUTE = /([^\s=/"']+)(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?/g;
+const ATTRIBUTE = /([^\s=/"']+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s>]+))?/g;
+const ADDRESSES: Record<string, (value: string) => string | undefined> = {
+  src: safeSrc,
+  href: safeHref,
+};
+
+const unquote = (value: string): string => value.replace(/^["']|["']$/g, "");
 
 export const droppedIn = (source: string, schema: EditorSchema): DroppedItem[] => {
   const blocks = new Set(schema.blocks);
@@ -152,13 +164,16 @@ export const droppedIn = (source: string, schema: EditorSchema): DroppedItem[] =
     if (!supported(tag)) dropped.push({ kind: "element", name: tag, line, at: match.index });
     for (const attr of (match[2] ?? "").matchAll(ATTRIBUTE)) {
       const name = (attr[1] ?? "").toLowerCase();
+      const at = match.index + (match[1]?.length ?? 0) + 1 + (attr.index ?? 0);
       if (!name.startsWith("data-") && !ATTRIBUTES.has(name)) {
-        dropped.push({
-          kind: "attribute",
-          name,
-          line,
-          at: match.index + (match[1]?.length ?? 0) + 1 + (attr.index ?? 0),
-        });
+        dropped.push({ kind: "attribute", name, line, at });
+        continue;
+      }
+      const value = unquote(attr[2] ?? "").trim();
+      const check = ADDRESSES[name];
+      if (check && value && !check(value)) {
+        const scheme = /^([a-z][a-z0-9+.-]*):/i.exec(value)?.[1]?.toLowerCase() ?? name;
+        dropped.push({ kind: "address", name: `${scheme}:`, line, at });
       }
     }
   }

@@ -7,11 +7,7 @@ export const safeHref = (href: string | null | undefined): string | undefined =>
   return /^[a-z][a-z0-9+.-]*:/i.test(value) ? undefined : value;
 };
 
-export const safeSrc = (src: string | null | undefined): string | undefined => {
-  const value = src?.trim();
-  if (value && /^data:image\/(png|jpe?g|gif|webp|avif);/i.test(value)) return value;
-  return safeHref(value);
-};
+export const safeSrc = (src: string | null | undefined): string | undefined => safeHref(src);
 
 export type VideoSource = { provider: "youtube" | "vimeo"; id: string; embed: string };
 

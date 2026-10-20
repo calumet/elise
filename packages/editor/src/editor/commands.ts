@@ -13,7 +13,7 @@ import { useEditorRef, useEditorSelector } from "platejs/react";
 import { newId } from "../ids";
 import { useLabels } from "../labels";
 import type { EditorMark } from "../types";
-import { parseVideo, safeHref } from "../urls";
+import { parseVideo, safeHref, safeSrc } from "../urls";
 import { useServices } from "./context";
 import {
   buildButton,
@@ -134,12 +134,14 @@ export const useEditorCommands = (): EditorCommands => {
     uploadImage,
     insertImage: async (source, alt) => {
       const uploaded = source instanceof File ? await uploadImage(source) : source;
+      const url = safeSrc(uploaded.src);
+      if (!url) return;
       placeBlock(
         editor,
         {
           id: newId(),
           type: "img",
-          url: uploaded.src,
+          url,
           alt: alt ?? uploaded.alt ?? "",
           children: [{ text: "" }],
         },
