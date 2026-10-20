@@ -1021,7 +1021,7 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 | DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list` | —     |
 | Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`         | —     |
 | Tree, TreeItem                                                            | `@calumet/elise-ui/tree`             | —     |
-| SortableList, SortableItem, SortableHandle, SortableTree                  | `@calumet/elise-ui/sortable`         | —     |
+| SortableList, SortableItem, SortableHandle, SortableTree                  | `@calumet/elise-blocks/sortable`     | —     |
 
 `DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
 relación entre el rótulo y su valor está en el marcado y un lector de pantalla
@@ -1036,6 +1036,10 @@ espera de un árbol (arriba y abajo recorren lo que se ve, derecha abre o entra,
 izquierda cierra o sube al padre). El foco entra una sola vez y desde ahí se mueve
 con las flechas, porque con un `tabIndex` por nodo, tabular por un árbol de
 cincuenta hojas serían cincuenta paradas.
+
+Los dos `Sortable*` y `ChecklistPicker` son bloques, no primitivos: viven en
+`@calumet/elise-blocks`. El criterio y el catálogo de bloques están en
+[Bloques](bloques.md).
 
 `SortableList` reordena en vertical arrastrando desde `SortableHandle`, el
 único sitio que inicia el arrastre, así que el resto de la fila sigue siendo un
@@ -1092,6 +1096,24 @@ raíz, e `index` entre las nuevas hermanas) y el árbol ya con él aplicado.
     guardarMovimiento(movimiento);
   }}
 />
+```
+
+`ChecklistPicker` elige con casillas entre muchas opciones dentro de un
+`Dialog` o un `Sheet`: buscador y pestañas en cápsula fijos arriba, casillas
+debajo. La búsqueda ignora mayúsculas y tildes, mira nombre y descripción y
+ordena con `Intl.Collator(locale)`. `selected` y `onToggle` son de quien lo
+usa; aplicar o cancelar es cosa del diálogo.
+
+```tsx
+import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
+
+<ChecklistPicker
+  locale="es"
+  options={opciones}
+  filters={filtros}
+  selected={elegidas}
+  onToggle={alternar}
+/>;
 ```
 
 > Para tablas con funcionalidad avanzada (filtros, paginación, ordenamiento, exportación), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).

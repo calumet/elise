@@ -30,7 +30,7 @@ elise/
 │   ├── icons/        @calumet/elise-icons     Iconos (Lucide)
 │   ├── linter/       @calumet/elise-linter    Config Oxlint + Oxfmt
 │   ├── showcase/     showcase                 App demo
-│   └── blocks/       (futuro)                 Bloques prefabricados
+│   └── blocks/       @calumet/elise-blocks    Bloques compuestos
 ├── package.json                                Scripts globales
 ├── pnpm-workspace.yaml                         Config workspaces
 ├── tsconfig.base.json                          TypeScript base compartido
@@ -56,6 +56,10 @@ elise/
 @calumet/elise-alerts  ──── @calumet/elise-ui ──────┤
                        └── @calumet/elise-icons     │
                                                     │
+@calumet/elise-blocks  ──── @calumet/elise-ui ──────┤
+                       └── @calumet/elise-icons     │
+                       └── dnd-kit                  │
+                                                    │
 @calumet/elise-i18n    (independiente; solo React)  │
                                                     │
 showcase ──────── @calumet/elise-ui ────────────────┤
@@ -77,6 +81,20 @@ Librería principal de componentes. Construida sobre [Radix UI Primitives](https
 - **Sistema de temas** con ThemeProvider (light/dark)
 - **Tokens CSS** semánticos (e.g., `--primary`, `--background`) mapeados a utilidades de Tailwind
 - **Peer dependencies**: React 19, React DOM 19
+
+### @calumet/elise-blocks
+
+Bloques compuestos sobre los primitivos de `elise-ui`: piezas que arman una
+tarea reutilizable (reordenar arrastrando, elegir con casillas y buscador) sin
+conocer el dominio de ninguna app. Nace con `SortableList`/`SortableTree`,
+movidos desde `elise-ui`, y `ChecklistPicker`.
+
+- **Peer dependencies**: React 19, `@calumet/elise-ui`
+- Dep directas: `@calumet/elise-icons`, dnd-kit (el motor de arrastre vive
+  aquí y ya no en `elise-ui`)
+
+El criterio para decidir si algo va en este paquete, en `elise-ui` o en la app
+está en [Bloques](bloques.md).
 
 ### @calumet/elise-forms
 
