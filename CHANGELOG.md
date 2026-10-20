@@ -3,6 +3,15 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.43.4
+
+### Corrige
+
+**Plegar o desplegar una rama de `SortableTree` ya no deja filas fuera de su
+contenedor.** Las filas de debajo se deslizaban desde su posición vieja mientras
+la tarjeta cambiaba de alto al instante, y su texto se veía fuera del borde.
+Ahora el cambio es instantáneo, como el de `Tree`. Arrastrar no cambia.
+
 ## `@calumet/elise-ui` 0.43.3
 
 ### Corrige

@@ -1071,7 +1071,8 @@ columna propia: en la vista de lista esa celda es la que encabeza la fila.
 Shopify: arrastrar desde el asa reordena entre hermanas, y desplazar en
 horizontal mientras se arrastra mete el nodo dentro de la hermana de arriba o lo
 saca al padre. Con teclado, las flechas izquierda y derecha cambian el nivel. Una
-rama plegada se mueve entera. A diferencia de `SortableList`, recibe los datos y
+rama plegada se mueve entera. Plegar y desplegar una rama es instantáneo, como en
+`Tree`. A diferencia de `SortableList`, recibe los datos y
 no los hijos, porque necesita conocer el árbol entero para calcular dónde cae
 cada nodo.
 

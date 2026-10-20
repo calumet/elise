@@ -495,8 +495,7 @@ const useTreeTexts = () => ({
 
 type TreeTexts = ReturnType<typeof useTreeTexts>;
 
-const animateLayoutChanges: AnimateLayoutChanges = ({ isSorting, wasDragging }) =>
-  !isSorting && !wasDragging;
+const animateLayoutChanges: AnimateLayoutChanges = () => false;
 
 const measuring = { droppable: { strategy: MeasuringStrategy.Always } };
 
