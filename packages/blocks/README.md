@@ -4,7 +4,7 @@ Bloques compuestos de Elise: piezas que arman una tarea reutilizable sobre los
 primitivos de `@calumet/elise-ui`, sin conocer el dominio de ninguna app.
 
 ```tsx
-import { SortableTree } from "@calumet/elise-blocks/sortable";
+import { SortableTree } from "@calumet/elise-blocks/sortable-tree";
 import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
 ```
 

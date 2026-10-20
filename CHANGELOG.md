@@ -37,11 +37,11 @@ con `Intl.Collator(locale)`. `selected` y `onToggle` son de quien lo usa.
 
 ### Rompe
 
-**`SortableList`, `SortableItem`, `SortableHandle` y `SortableTree` salen de
-`@calumet/elise-ui/sortable` y pasan a `@calumet/elise-blocks/sortable`, sin
-re-export en `elise-ui`.** Son bloques (arrastre con anuncios, teclado y
-re-anidado ya armados), no primitivos. La API no cambia; solo el import. Las
-dependencias de dnd-kit se mudan con ellos y salen de `elise-ui`.
+**`SortableTree` sale de `@calumet/elise-ui/sortable` y pasa a
+`@calumet/elise-blocks/sortable-tree`, sin re-export en `elise-ui`.** Es un bloque
+(el árbol entero con su re-anidado, anuncios y teclado ya armados), no un
+primitivo. La API no cambia; solo el import. `SortableList` y sus partes se
+quedan en `elise-ui`: se componen y entran en una tabla con `asChild`.
 
 `elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6,
 `elise-themes` 0.1.8 y `elise-toasts` 0.4.26 se republican para que JSR los

@@ -69,6 +69,7 @@
     "./sidebar": "./jsr/components/sidebar.js",
     "./skeleton": "./jsr/components/skeleton.js",
     "./slider": "./jsr/components/slider.js",
+    "./sortable": "./jsr/components/sortable.js",
     "./spinner": "./jsr/components/spinner.js",
     "./stack": "./jsr/components/stack.js",
     "./stat": "./jsr/components/stat.js",

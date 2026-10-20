@@ -4,7 +4,7 @@
   "license": "MIT",
   "exports": {
     ".": "./jsr/index.js",
-    "./sortable": "./jsr/sortable.js",
+    "./sortable-tree": "./jsr/sortable-tree.js",
     "./checklist-picker": "./jsr/checklist-picker.js"
   },
   "publish": {

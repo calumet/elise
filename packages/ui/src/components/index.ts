@@ -65,6 +65,7 @@ export * from "./separator";
 export * from "./sheet";
 export * from "./sidebar";
 export * from "./slider";
+export * from "./sortable";
 export * from "./spinner";
 export * from "./stack";
 export * from "./stepper";

@@ -6,7 +6,8 @@ opciones con buscador y pestañas, reordenar un árbol arrastrando. Eso vive aqu
 
 ```tsx
 import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
-import { SortableList, SortableTree } from "@calumet/elise-blocks/sortable";
+import { SortableTree } from "@calumet/elise-blocks/sortable-tree";
+import { SortableList } from "@calumet/elise-ui/sortable";
 ```
 
 ## El criterio
@@ -50,17 +51,20 @@ Dos consecuencias deliberadas:
 
 ## Catálogo inicial
 
-| Bloque                                           | Import                                   | Qué arma                                                           |
-| ------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------------ |
-| `SortableList`, `SortableItem`, `SortableHandle` | `@calumet/elise-blocks/sortable`         | Reordenar una lista arrastrando, con teclado y lector de pantalla  |
-| `SortableTree`                                   | `@calumet/elise-blocks/sortable`         | Lo mismo sobre una jerarquía: reordenar y re-anidar                |
-| `ChecklistPicker`                                | `@calumet/elise-blocks/checklist-picker` | Elegir con casillas entre muchas opciones, con buscador y pestañas |
+| Bloque            | Import                                   | Qué arma                                                           |
+| ----------------- | ---------------------------------------- | ------------------------------------------------------------------ |
+| `SortableTree`    | `@calumet/elise-blocks/sortable-tree`    | Reordenar una jerarquía arrastrando: reordenar y re-anidar         |
+| `ChecklistPicker` | `@calumet/elise-blocks/checklist-picker` | Elegir con casillas entre muchas opciones, con buscador y pestañas |
 
-`SortableList` y `SortableTree` vivían en `@calumet/elise-ui/sortable` hasta
-`elise-ui` 0.43.x. En 0.44.0 salen de `elise-ui` sin re-export: el import nuevo
-es `@calumet/elise-blocks/sortable`. Es un corte limpio a propósito; mantener
-el import viejo obligaría a `elise-ui` a depender de `elise-blocks`, que es
-justo la dirección contraria a la del grafo. La API no cambia.
+`SortableTree` vivía en `@calumet/elise-ui/sortable` hasta `elise-ui` 0.43.x.
+En 0.44.0 sale de `elise-ui` sin re-export: el import nuevo es
+`@calumet/elise-blocks/sortable-tree`. Es un corte limpio a propósito; mantener el
+import viejo obligaría a `elise-ui` a depender de `elise-blocks`, que es justo
+la dirección contraria a la del grafo. La API no cambia.
+
+`SortableList` no se mueve: se compone por partes (`SortableList`,
+`SortableItem` y `SortableHandle`, que además entra en una tabla con
+`asChild`), así que es una primitiva y se queda en `@calumet/elise-ui/sortable`.
 
 `ChecklistPicker` nace aquí: opciones con
 `id/label/description/filter`, pestañas con `value/label` (el vocabulario de
