@@ -26,6 +26,15 @@ re-export en `elise-ui`.** Son bloques (arrastre con anuncios, teclado y
 re-anidado ya armados), no primitivos. La API no cambia; solo el import. Las
 dependencias de dnd-kit se mudan con ellos y salen de `elise-ui`.
 
+## `@calumet/elise-ui` 0.43.3
+
+### Corrige
+
+**La opción elegida de `DropdownMenuRadioItem` y `ContextMenuRadioItem` vuelve a
+mostrar su punto.** El punto era un `span` en línea, y un elemento en línea y
+vacío no toma alto ni ancho, así que medía 0x0. Ahora es un bloque de 8 px.
+`MenubarRadioItem` y `SelectItem` no estaban afectados.
+
 ## `@calumet/elise-ui` 0.43.2
 
 ### Corrige
