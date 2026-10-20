@@ -3,10 +3,10 @@
  * los primitivos de `@calumet/elise-ui`, sin conocer el dominio de ninguna app.
  *
  * Cada bloque tiene además su propio subpath, por ejemplo
- * `@calumet/elise-blocks/sortable`.
+ * `@calumet/elise-blocks/sortable-tree`.
  *
  * @module
  */
 
 export * from "./checklist-picker";
-export * from "./sortable";
+export * from "./sortable-tree";

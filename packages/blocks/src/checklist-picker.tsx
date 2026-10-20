@@ -6,9 +6,11 @@
  * @module
  */
 
+import { Box } from "@calumet/elise-ui/box";
 import { Checkbox } from "@calumet/elise-ui/checkbox";
 import { DIALOG_BODY } from "@calumet/elise-ui/dialog";
 import { SearchField } from "@calumet/elise-ui/search-field";
+import { BlockStack } from "@calumet/elise-ui/stack";
 import { Tabs, TabsList, TabsTrigger } from "@calumet/elise-ui/tabs";
 import { Text } from "@calumet/elise-ui/text";
 import * as React from "react";
@@ -99,35 +101,40 @@ export function ChecklistPicker({
 
   return (
     <>
-      <div
+      <Box
         data-slot="checklist-picker-header"
-        className="flex shrink-0 flex-col gap-3 border-b border-border p-4"
+        padding={4}
+        border
+        borderSide="bottom"
+        className="shrink-0"
       >
-        <SearchField
-          label={searchLabel}
-          labelHidden
-          placeholder={searchLabel}
-          value={query}
-          onValueChange={setQuery}
-        />
-        <Tabs value={filter} onValueChange={setFilter}>
-          <TabsList variant="capsule" aria-label={filtersLabel}>
-            <TabsTrigger value={ALL}>{allLabel}</TabsTrigger>
-            {filters.map(({ value, label }) => (
-              <TabsTrigger key={value} value={value}>
-                {label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
+        <BlockStack gap={3}>
+          <SearchField
+            label={searchLabel}
+            labelHidden
+            placeholder={searchLabel}
+            value={query}
+            onValueChange={setQuery}
+          />
+          <Tabs value={filter} onValueChange={setFilter}>
+            <TabsList variant="capsule" aria-label={filtersLabel}>
+              <TabsTrigger value={ALL}>{allLabel}</TabsTrigger>
+              {filters.map(({ value, label }) => (
+                <TabsTrigger key={value} value={value}>
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </BlockStack>
+      </Box>
       <div data-slot="checklist-picker-body" className={DIALOG_BODY}>
         {visible.length === 0 ? (
           <Text tone="muted">
             {term ? noResultsTemplate.replace("{query}", query.trim()) : emptyLabel}
           </Text>
         ) : (
-          <div className="flex flex-col gap-3">
+          <BlockStack gap={3}>
             {visible.map((option) => (
               <Checkbox
                 key={option.id}
@@ -137,7 +144,7 @@ export function ChecklistPicker({
                 onCheckedChange={(checked) => onToggle(option.id, checked === true)}
               />
             ))}
-          </div>
+          </BlockStack>
         )}
       </div>
     </>
