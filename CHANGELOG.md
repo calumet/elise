@@ -3,6 +3,15 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.43.3
+
+### Corrige
+
+**La opción elegida de `DropdownMenuRadioItem` y `ContextMenuRadioItem` vuelve a
+mostrar su punto.** El punto era un `span` en línea, y un elemento en línea y
+vacío no toma alto ni ancho, así que medía 0x0. Ahora es un bloque de 8 px.
+`MenubarRadioItem` y `SelectItem` no estaban afectados.
+
 ## `@calumet/elise-ui` 0.43.2
 
 ### Corrige
