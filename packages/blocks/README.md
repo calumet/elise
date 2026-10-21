@@ -6,6 +6,17 @@ primitivos de `@calumet/elise-ui`, sin conocer el dominio de ninguna app.
 ```tsx
 import { SortableTree } from "@calumet/elise-blocks/sortable-tree";
 import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
+import { ChecklistDialog } from "@calumet/elise-blocks/checklist-dialog";
+import { ChecklistField } from "@calumet/elise-blocks/checklist-field";
+import { ChecklistTable } from "@calumet/elise-blocks/checklist-table";
+```
+
+Con Tailwind, su hoja va junto a la de `elise-ui`, para que se generen las
+clases de los bloques:
+
+```css
+@import "@calumet/elise-ui/tailwind/elise.css";
+@import "@calumet/elise-blocks/tailwind.css";
 ```
 
 Un bloque compone dos o más primitivos, aporta una interacción o un estado
