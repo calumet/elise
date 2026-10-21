@@ -138,18 +138,20 @@ const INK_STEPS = {
   dark: offsets(darkTheme, "--foreground", INKS),
 };
 
-/* Los escribe el papel y nadie más: si los escribieran dos, borrar una decisión se llevaría lo de la otra. */
+const subtleVars = (prefix: string): Vars =>
+  ({
+    [`--${prefix}-subtle`]: tint(`--${prefix}` as EliseVar, 14),
+    [`--${prefix}-subtle-foreground`]: ink(`--${prefix}` as EliseVar, 65),
+  }) as Vars;
+
+/* Los suaves de estado los escribe también su color: los dos los necesitan, y `clear` no borra lo que la otra sigue usando. */
 const LINKED: Vars = {
   "--accent": tint("--primary", 18),
   "--accent-foreground": ink("--primary", 70),
-  "--success-subtle": tint("--success", 14),
-  "--success-subtle-foreground": ink("--success", 65),
-  "--warning-subtle": tint("--warning", 14),
-  "--warning-subtle-foreground": ink("--warning", 65),
-  "--destructive-subtle": tint("--destructive", 14),
-  "--destructive-subtle-foreground": ink("--destructive", 65),
-  "--info-subtle": tint("--info", 14),
-  "--info-subtle-foreground": ink("--info", 65),
+  ...subtleVars("success"),
+  ...subtleVars("warning"),
+  ...subtleVars("destructive"),
+  ...subtleVars("info"),
 };
 
 const paperVars = (paper: Oklch): Vars => {
@@ -186,13 +188,13 @@ const brandVars = (base: Oklch): Vars => ({
   "--chart-5": format(at(base, 0.252, 0.156)),
 });
 
-/* Los suaves no están aquí: son un tinte sobre el papel y los escribe esa decisión. */
 const statusVars = (prefix: string, base: Oklch): Vars =>
   ({
     [`--${prefix}`]: format(base),
     [`--${prefix}-foreground`]: format(readableOn(base)),
     [`--${prefix}-hover`]: format(step(base, 0.045)),
     [`--${prefix}-active`]: format(step(base, 0.085)),
+    ...subtleVars(prefix),
   }) as Vars;
 
 const SIDEBAR_ON_BRAND: Vars = {
@@ -484,14 +486,26 @@ export const DECISIONS: readonly Decision[] = [
   }),
 ];
 
+const SHARED = new Set(
+  DECISIONS.flatMap((decision) => decision.writes).filter(
+    (name, index, all) => all.indexOf(name) !== index,
+  ),
+);
+
 /** Si la decisión está escrita en el tema, aunque sea a medias. */
 export const isChanged = (decision: Decision, theme: EliseTheme): boolean =>
-  decision.writes.some((name) => theme[name] !== undefined);
+  decision.writes.some((name) => !SHARED.has(name) && theme[name] !== undefined);
 
 /** Saca la decisión del tema, en vez de escribirle el valor de la hoja. */
 export const clear = (decision: Decision, theme: EliseTheme): EliseTheme => {
   const next = { ...theme };
   for (const name of decision.writes) delete next[name];
+  for (const other of DECISIONS) {
+    if (other === decision || !isChanged(other, next)) continue;
+    for (const name of other.writes) {
+      if (SHARED.has(name) && theme[name] !== undefined) next[name] = theme[name];
+    }
+  }
   return next;
 };
 
