@@ -95,6 +95,7 @@ Desde GitHub Packages las hojas tienen subpath propio:
 @import "@calumet/elise-ui/tailwind/elise.css";
 
 /* Solo incluye los que uses */
+@import "@calumet/elise-blocks/tailwind.css";
 @import "@calumet/elise-tables/tailwind.css";
 @import "@calumet/elise-toasts/tailwind.css";
 @import "@calumet/elise-alerts/tailwind.css";
@@ -109,6 +110,7 @@ Las hojas viajan igual dentro del paquete y se importan por su ruta:
 @import "../node_modules/@calumet/elise-ui/src/tailwind/elise.css";
 
 /* Solo incluye los que uses */
+@import "../node_modules/@calumet/elise-blocks/src/tailwind.css";
 @import "../node_modules/@calumet/elise-tables/src/tailwind.css";
 @import "../node_modules/@calumet/elise-toasts/src/tailwind.css";
 @import "../node_modules/@calumet/elise-alerts/src/tailwind.css";
