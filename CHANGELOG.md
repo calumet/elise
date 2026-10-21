@@ -3,6 +3,16 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-themes` 0.1.9
+
+### Corrige
+
+**Cambiar un color de alerta en el editor cambia también el fondo y el texto
+del badge y del alert, no solo el punto.** Los tonos suaves de cada estado los
+escribía solo el color de la página, así que sin tocarlo se quedaban en los de
+la hoja. Ahora los escribe también cada color de alerta, y resetear uno de los
+dos no borra lo que el otro sigue usando.
+
 ## `@calumet/elise-blocks` 0.1.1 y `@calumet/elise-ui` 0.44.1
 
 ### Corrige
