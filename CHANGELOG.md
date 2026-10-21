@@ -11,7 +11,8 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 del badge y del alert, no solo el punto.** Los tonos suaves de cada estado los
 escribía solo el color de la página, así que sin tocarlo se quedaban en los de
 la hoja. Ahora los escribe también cada color de alerta, y resetear uno de los
-dos no borra lo que el otro sigue usando.
+dos no borra lo que el otro sigue usando. La ficha de cada alerta en el editor
+se pinta con esas mismas variables, así que también cambia entera.
 
 ## `@calumet/elise-blocks` 0.1.1 y `@calumet/elise-ui` 0.44.1
 
