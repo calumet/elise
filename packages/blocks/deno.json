@@ -6,7 +6,7 @@
     ".": "./jsr/index.js",
     "./sortable-tree": "./jsr/sortable-tree.js",
     "./checklist-dialog": "./jsr/checklist-dialog.js",
-    "./checklist-field":"./jsr/checklist-field.js",
+    "./checklist-field": "./jsr/checklist-field.js",
     "./checklist-picker": "./jsr/checklist-picker.js",
     "./checklist-table": "./jsr/checklist-table.js"
   },

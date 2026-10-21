@@ -45,7 +45,7 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./tailwind.css":"./src/tailwind.css"
+    "./tailwind.css": "./src/tailwind.css"
   },
   "files": [
     "dist",
