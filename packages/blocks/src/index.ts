@@ -8,5 +8,8 @@
  * @module
  */
 
+export * from "./checklist-dialog";
+export * from "./checklist-field";
 export * from "./checklist-picker";
+export * from "./checklist-table";
 export * from "./sortable-tree";

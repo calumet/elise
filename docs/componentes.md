@@ -1140,7 +1140,9 @@ contorno, su encabezado fijo y su pie de paginación. `DataTable` de
 propio hueco y no la ventana, porque la misma tabla puede ir a lo ancho de una
 página o dentro de una tarjeta estrecha. El corte está en 490px. En modo lista
 cada fila deja de ser una rejilla de celdas y pasa a ser un bloque, y `listSlot`
-dice qué papel juega cada columna ahí.
+dice qué papel juega cada columna ahí. La columna de botones de la fila va con
+`listSlot="action"`, que la lleva al final y a la derecha; con `inline` se
+pegaría al nombre, que es para un estado como un `Badge`.
 
 **`format`.** Se declara una vez en el `TableHead` y cae sobre toda la columna,
 también en modo lista. `numeric` y `currency` alinean a la derecha y numeran a
