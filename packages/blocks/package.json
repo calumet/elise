@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-blocks",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "description": "Bloques compuestos de Elise: piezas que arman una tarea reutilizable sobre los primitivos de elise-ui, sin conocer el dominio de ninguna app.",
   "repository": {
@@ -25,14 +25,31 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./checklist-dialog": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./checklist-field": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./checklist-picker": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./checklist-table": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./tailwind.css":"./src/tailwind.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/tailwind.css"
   ],
   "scripts": {
     "build": "tsdown --dts && pnpm build:jsr",
@@ -62,7 +79,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "@calumet/elise-ui": ">=0.44.0 <1.0.0",
+    "@calumet/elise-ui": ">=0.45.0 <1.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": ">=5.0.0"

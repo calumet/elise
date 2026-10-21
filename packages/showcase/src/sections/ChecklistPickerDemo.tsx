@@ -1,20 +1,15 @@
-import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
-import { Button } from "@calumet/elise-ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@calumet/elise-ui/dialog";
+import { ChecklistDialog } from "@calumet/elise-blocks/checklist-dialog";
+import { ChecklistField } from "@calumet/elise-blocks/checklist-field";
+import type {
+  ChecklistPickerFilter,
+  ChecklistPickerOption,
+} from "@calumet/elise-blocks/checklist-picker";
+import { ChecklistTable } from "@calumet/elise-blocks/checklist-table";
+import { BlockStack } from "@calumet/elise-ui/stack";
 import { Text } from "@calumet/elise-ui/text";
 import * as React from "react";
 
 const schools = [
-  { id: "sistemas", label: "Ingeniería de Sistemas", description: "EISI", filter: "ing" },
   { id: "industrial", label: "Ingeniería Industrial", description: "EII", filter: "ing" },
   { id: "civil", label: "Ingeniería Civil", description: "ECI", filter: "ing" },
   { id: "medicina", label: "Medicina", description: "MED", filter: "salud" },
@@ -30,54 +25,143 @@ const faculties = [
   { value: "humanas", label: "Humanas" },
 ];
 
-export default function ChecklistPickerDemo() {
+const modules = [
+  "Agenda",
+  "Archivo",
+  "Biblioteca",
+  "Calificaciones",
+  "Comunicados",
+  "Encuestas",
+  "Eventos",
+  "Finanzas",
+  "Foros",
+  "Horarios",
+  "Inscripciones",
+  "Inventario",
+  "Mensajes",
+  "Reportes",
+  "Reservas",
+  "Tareas",
+];
+
+const actions = ["Ver", "Crear", "Editar", "Borrar"];
+
+const permissions: ChecklistPickerOption[] = modules.flatMap((module) =>
+  actions.map((action) => ({
+    id: `${module}.${action}`,
+    label: `${action} en ${module}`,
+    filter: module,
+  })),
+);
+
+const moduleFilters = modules.map((module) => ({ value: module, label: module }));
+
+type PickerFieldProps = {
+  title: string;
+  options: ChecklistPickerOption[];
+  filters: ChecklistPickerFilter[];
+  locked?: ChecklistPickerOption[];
+  empty: string;
+};
+
+const PickerField = ({ title, options, filters, locked = [], empty }: PickerFieldProps) => {
+  const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(new Set());
-  const [draft, setDraft] = React.useState<ReadonlySet<string>>(applied);
+
+  const items = [
+    ...locked.map(({ id, label }) => ({ id, label, locked: true })),
+    ...options.filter(({ id }) => applied.has(id)).map(({ id, label }) => ({ id, label })),
+  ];
 
   return (
-    <div className="flex flex-col gap-3">
-      <Dialog
-        onOpenChange={(open) => {
-          if (open) setDraft(applied);
-        }}
-      >
-        <DialogTrigger asChild>
-          <Button variant="outline" className="self-start">
-            Elegir escuelas
-          </Button>
-        </DialogTrigger>
-        <DialogContent size="md">
-          <DialogHeader>
-            <DialogTitle>Difundir a otras escuelas</DialogTitle>
-            <DialogDescription>Busca por nombre o sigla, o filtra por facultad.</DialogDescription>
-          </DialogHeader>
-          <ChecklistPicker
-            locale="es"
-            options={schools}
-            filters={faculties}
-            selected={draft}
-            onToggle={(id, checked) =>
-              setDraft((prev) => {
-                const next = new Set(prev);
-                if (checked) next.add(id);
-                else next.delete(id);
-                return next;
-              })
-            }
-          />
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancelar</Button>
-            </DialogClose>
-            <DialogClose asChild>
-              <Button onClick={() => setApplied(draft)}>Aplicar</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      <Text size="sm" tone="muted">
-        {applied.size ? `Elegidas: ${[...applied].join(", ")}` : "Ninguna escuela elegida."}
-      </Text>
-    </div>
+    <>
+      <ChecklistField
+        items={items}
+        empty={<Text tone="muted">{empty}</Text>}
+        editLabel="Elegir"
+        onEdit={() => setOpen(true)}
+        onRemove={(id) =>
+          setApplied((prev) => new Set([...prev].filter((applied) => applied !== id)))
+        }
+      />
+      <ChecklistDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={title}
+        description="Busca por nombre o filtra."
+        locale="es"
+        options={options}
+        filters={filters}
+        selected={applied}
+        onApply={setApplied}
+      />
+    </>
+  );
+};
+
+export default function ChecklistPickerDemo() {
+  return (
+    <BlockStack gap={6}>
+      <BlockStack gap={2}>
+        <Text size="sm" weight="medium">
+          Con pestañas
+        </Text>
+        <PickerField
+          title="Difundir a otras escuelas"
+          options={schools}
+          filters={faculties}
+          locked={[{ id: "sistemas", label: "Ingeniería de Sistemas", filter: "ing" }]}
+          empty="Ninguna escuela elegida."
+        />
+      </BlockStack>
+      <BlockStack gap={2}>
+        <Text size="sm" weight="medium">
+          En tabla, con el picker agrupado
+        </Text>
+        <PermissionsTable />
+      </BlockStack>
+    </BlockStack>
   );
 }
+
+const PermissionsTable = () => {
+  const [open, setOpen] = React.useState(false);
+  const [applied, setApplied] = React.useState<ReadonlySet<string>>(
+    new Set(permissions.slice(0, 14).map(({ id }) => id)),
+  );
+
+  return (
+    <>
+      <ChecklistTable
+        locale="es"
+        options={permissions}
+        filters={moduleFilters}
+        selected={applied}
+        title="Permisos del perfil"
+        description="Lo que puede hacer quien tiene el perfil."
+        editLabel="Conceder permisos"
+        columns={{ option: "Permiso", filter: "Módulo" }}
+        empty={{
+          title: "Este perfil todavía no concede permisos",
+          description: "Elige qué puede hacer quien lo tenga.",
+        }}
+        onEdit={() => setOpen(true)}
+        onRemove={(id) =>
+          setApplied((prev) => new Set([...prev].filter((applied) => applied !== id)))
+        }
+      />
+      <ChecklistDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Conceder permisos"
+        description="Busca por permiso o por módulo."
+        locale="es"
+        layout="groups"
+        options={permissions}
+        filters={moduleFilters}
+        selected={applied}
+        onApply={setApplied}
+      />
+    </>
+  );
+};

@@ -5,7 +5,10 @@ de cada app hay piezas que ya traen una tarea armada: elegir entre muchas
 opciones con buscador y pestañas, reordenar un árbol arrastrando. Eso vive aquí.
 
 ```tsx
+import { ChecklistDialog } from "@calumet/elise-blocks/checklist-dialog";
+import { ChecklistField } from "@calumet/elise-blocks/checklist-field";
 import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
+import { ChecklistTable } from "@calumet/elise-blocks/checklist-table";
 import { SortableTree } from "@calumet/elise-blocks/sortable-tree";
 import { SortableList } from "@calumet/elise-ui/sortable";
 ```
@@ -51,10 +54,13 @@ Dos consecuencias deliberadas:
 
 ## Catálogo inicial
 
-| Bloque            | Import                                   | Qué arma                                                           |
-| ----------------- | ---------------------------------------- | ------------------------------------------------------------------ |
-| `SortableTree`    | `@calumet/elise-blocks/sortable-tree`    | Reordenar una jerarquía arrastrando: reordenar y re-anidar         |
-| `ChecklistPicker` | `@calumet/elise-blocks/checklist-picker` | Elegir con casillas entre muchas opciones, con buscador y pestañas |
+| Bloque            | Import                                   | Qué arma                                                             |
+| ----------------- | ---------------------------------------- | -------------------------------------------------------------------- |
+| `SortableTree`    | `@calumet/elise-blocks/sortable-tree`    | Reordenar una jerarquía arrastrando: reordenar y re-anidar           |
+| `ChecklistPicker` | `@calumet/elise-blocks/checklist-picker` | Elegir con casillas entre muchas opciones, con buscador y pestañas   |
+| `ChecklistDialog` | `@calumet/elise-blocks/checklist-dialog` | `ChecklistPicker` en un diálogo que aplica o cancela                 |
+| `ChecklistField`  | `@calumet/elise-blocks/checklist-field`  | Mostrar lo elegido como fichas que se quitan, con el botón de editar |
+| `ChecklistTable`  | `@calumet/elise-blocks/checklist-table`  | Mostrar lo elegido como tabla paginada, con su grupo y su quitar     |
 
 `SortableTree` vivía en `@calumet/elise-ui/sortable` hasta `elise-ui` 0.43.x.
 En 0.44.0 sale de `elise-ui` sin re-export: el import nuevo es
@@ -71,7 +77,19 @@ la dirección contraria a la del grafo. La API no cambia.
 `Combobox`), búsqueda sin mayúsculas ni tildes ordenada con
 `Intl.Collator(locale)`, y la selección (`selected`/`onToggle`) de quien lo
 usa. Aplicar o cancelar es cosa del diálogo que lo contiene, y por eso no
-trae pie ni botones.
+trae pie ni botones. Con `layout="groups"` cambia las pestañas por un
+encabezado fijo por filtro, para cuando los filtros no caben en una fila.
+
+`ChecklistDialog` lo mete en un diálogo con Aplicar y Cancelar y lleva el
+borrador: cada apertura parte de lo aplicado. `ChecklistField` muestra lo
+aplicado fuera del diálogo, los elegidos como `Chip` que se quitan y los
+`locked` como `Badge`, con el botón que abre el diálogo. `ChecklistTable` es
+lo mismo para una lista larga: la tarjeta con una fila por opción, su grupo y
+su quitar, paginada. El diálogo va aparte porque sirve igual a las dos.
+
+La tabla de algo que no sale de un `ChecklistPicker`, como las personas que
+tienen un perfil, sigue siendo la «Tabla de índice» de `patrones-bloque.md`, y
+la arma la app.
 
 ## Qué se revisó y no se mueve
 
