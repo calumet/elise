@@ -1388,6 +1388,7 @@ function AppShellMain({
   return (
     <main
       data-slot="app-shell-main"
+      data-fill={fill ? "" : undefined}
       /* Sin navegación no hay cajón que lo tape, así que dejarlo inerte lo
          volvía inalcanzable sin nada a la vista que explicara por qué. */
       inert={drawerOpen && isMobile && hasNav}

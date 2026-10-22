@@ -25,7 +25,7 @@
 
   const visible = (el) => {
     const r = el.getBoundingClientRect();
-    if (r.width === 0 || r.height === 0) return false;
+    if (r.width === 0 || r.height === 0 || el.closest("[inert]")) return false;
     const cs = getComputedStyle(el);
     return cs.visibility !== "hidden" && cs.display !== "none" && cs.opacity !== "0";
   };

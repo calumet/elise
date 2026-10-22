@@ -1,3 +1,8 @@
+import {
+  SortableTree,
+  type SortableTreeMove,
+  type SortableTreeNode,
+} from "@calumet/elise-blocks/sortable-tree";
 import { Ellipsis } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import {
@@ -9,14 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@calumet/elise-ui/sheet";
-import {
-  SortableHandle,
-  SortableItem,
-  SortableList,
-  SortableTree,
-  type SortableTreeMove,
-  type SortableTreeNode,
-} from "@calumet/elise-ui/sortable";
+import { SortableHandle, SortableItem, SortableList } from "@calumet/elise-ui/sortable";
 import {
   Table,
   TableBody,

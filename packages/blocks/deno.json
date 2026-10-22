@@ -1,0 +1,17 @@
+{
+  "name": "@calumet/elise-blocks",
+  "version": "0.2.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./jsr/index.js",
+    "./sortable-tree": "./jsr/sortable-tree.js",
+    "./checklist-dialog": "./jsr/checklist-dialog.js",
+    "./checklist-field": "./jsr/checklist-field.js",
+    "./checklist-picker": "./jsr/checklist-picker.js",
+    "./checklist-table": "./jsr/checklist-table.js"
+  },
+  "publish": {
+    "include": ["jsr/**/*.js", "jsr/**/*.d.ts", "src/tailwind.css", "package.json", "README.md"],
+    "exclude": ["!jsr"]
+  }
+}

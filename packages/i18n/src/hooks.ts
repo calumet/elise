@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { I18nContext } from "./context";
+import { interpolate } from "./interpolate";
 import type { Locale, TranslateFn } from "./types";
 
 const DEFAULT_NAMESPACE = "default";
@@ -22,12 +23,7 @@ export const useTranslation = (namespace: string = DEFAULT_NAMESPACE): UseTransl
     (key, options) => {
       if (ctx) return ctx.translate(namespace, key, options);
       const { fallback, ...vars } = options ?? {};
-      const template = fallback ?? key;
-      if (Object.keys(vars).length === 0) return template;
-      return template.replace(/\{(\w+)\}/g, (match, name: string) => {
-        const value = (vars as Record<string, string | number>)[name];
-        return value === undefined ? match : String(value);
-      });
+      return interpolate(fallback ?? key, vars);
     },
     [ctx, namespace],
   );
