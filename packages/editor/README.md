@@ -9,7 +9,11 @@ pnpm add jsr:@calumet/elise-editor    # JSR
 pnpm add @calumet/elise-editor        # GitHub Packages
 ```
 
-Requiere React 19. `@calumet/elise-ui` y `@calumet/elise-i18n` son peers (el segundo es opcional).
+Requiere React 19. `@calumet/elise-ui`, `@calumet/elise-blocks` y `@calumet/elise-i18n` son peers (el último es opcional). `Editor.Outline` usa `SortableTree` de `elise-blocks`, así que su CSS va en la hoja de la aplicación junto al de `elise-ui`:
+
+```css
+@import "@calumet/elise-blocks/tailwind.css";
+```
 
 ## Un documento, tres esquemas
 
@@ -83,7 +87,7 @@ Con `pageSchema` el editor suma estos bloques. Cada uno declara los ajustes que 
 
 Un bloque de texto es un editor como el de mensajes: con el bloque elegido aparece debajo del texto, dentro de su contorno, la fila de negrita, cursiva, código, enlace y las dos listas, que se abre y se cierra deslizando lo de abajo (con movimiento reducido solo se desvanece), y la barra flotante no sale dentro de él. Intro sigue dentro del bloque, y en la estructura y al arrastrar es una sola fila con su primera línea por nombre. Título, subtítulo y cita son bloques propios: un párrafo suelto en la página o en una columna se envuelve en un bloque de texto, y un título o una cita dentro de uno sale de él y lo parte en dos. En un bloque de texto con contenido el menú `/` ofrece las listas, título, subtítulo y cita, que sacan la línea a su propio bloque; en uno vacío ofrece todos los bloques, que lo reemplazan. Con `documentSchema` o `messageSchema` el render deja su contenido suelto.
 
-La imagen se elige y se previsualiza con `ImageUpload` de `elise-ui`, en el diálogo y en los ajustes del bloque, donde se reemplaza con `onUploadImage`. El esquema usa `SortableTree`, y por eso el peer `@calumet/elise-ui` pide `>=0.44.0`.
+La imagen se elige y se previsualiza con `ImageUpload` de `elise-ui`, en el diálogo y en los ajustes del bloque, donde se reemplaza con `onUploadImage`. El peer `@calumet/elise-ui` pide `>=0.45.0`, el mismo que pide `elise-blocks`.
 
 Las columnas no se rompen: una columna no puede quedar vacía ni contener otras columnas, más de cuatro se funden en la cuarta, y cambiar `count` reparte el contenido de las que sobran en la última que queda. Los valores fuera de lista vuelven al de por defecto.
 

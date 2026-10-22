@@ -2,7 +2,7 @@ import {
   SortableTree,
   type SortableTreeMove,
   type SortableTreeNode,
-} from "@calumet/elise-ui/sortable";
+} from "@calumet/elise-blocks/sortable-tree";
 import { Text } from "@calumet/elise-ui/text";
 import { useEditorRef } from "platejs/react";
 import * as React from "react";
