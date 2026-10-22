@@ -26,14 +26,50 @@ import {
   TrailingBlockPlugin,
   type AnyPluginConfig,
   type Descendant,
+  type Path,
+  type TElement,
 } from "platejs";
-import { createPlatePlugin } from "platejs/react";
+import { createPlatePlugin, type PlateEditor } from "platejs/react";
 
 import { newId } from "../ids";
 import { fromHtml } from "../render/from-html";
+import { isAllowedType } from "../settings";
 import type { EditorMark, EditorSchema } from "../types";
+import { draggable } from "./drag";
+import { BlockSelectionPlugin } from "./selection";
+import { isColumns, lastIndex, normalizeColumnNode } from "./structure";
+import { normalizeTableNode } from "./table";
+import { normalizeTextNode } from "./text";
 
-const STRUCTURAL = new Set(["tr", "td", "th", "a"]);
+const STRUCTURAL = new Set(["a"]);
+
+const atColumnEdge = (editor: PlateEditor, edge: "start" | "end"): boolean => {
+  const { selection } = editor;
+  if (!selection || !editor.api.isCollapsed()) return false;
+  const entry = editor.api.block();
+  if (!entry) return false;
+  let [node, path] = entry as [TElement, Path];
+  const there =
+    edge === "start"
+      ? editor.api.isStart(selection.anchor, path)
+      : editor.api.isEnd(selection.anchor, path);
+  if (!there) return false;
+  let parent = editor.api.parent(path);
+  if (parent?.[0].type === "text") {
+    const outer = lastIndex(path) === (edge === "start" ? 0 : parent[0].children.length - 1);
+    if (!outer) return false;
+    [node, path] = parent as [TElement, Path];
+    parent = editor.api.parent(path);
+  }
+  if (parent?.[0].type === "column") {
+    return lastIndex(path) === (edge === "start" ? 0 : parent[0].children.length - 1);
+  }
+  const index = lastIndex(path);
+  const neighbour = editor.children[edge === "start" ? index - 1 : index + 1];
+  return (
+    path.length === 1 && isColumns(neighbour) && (edge === "end" || NodeApi.string(node) !== "")
+  );
+};
 const EXITABLE = new Set(["blockquote", "callout"]);
 const MARKS: EditorMark[] = ["bold", "italic", "code"];
 
@@ -70,12 +106,21 @@ const schemaPlugin = (schema: EditorSchema) =>
         return false;
       },
     },
-  }).overrideEditor(({ editor, tf: { normalizeNode } }) => ({
+  }).overrideEditor(({ editor, tf: { normalizeNode, deleteBackward, deleteForward } }) => ({
     transforms: {
+      deleteBackward(unit) {
+        if (!atColumnEdge(editor, "start")) deleteBackward(unit);
+      },
+      deleteForward(unit) {
+        if (!atColumnEdge(editor, "end")) deleteForward(unit);
+      },
       normalizeNode([node, path]) {
+        if (normalizeColumnNode(editor, [node, path])) return;
+        if (normalizeTableNode(editor, [node, path])) return;
+        if (schema.blocks.includes("text") && normalizeTextNode(editor, [node, path])) return;
         if (ElementApi.isElement(node) && node.type) {
           const type = String(node.type);
-          if (!schema.blocks.includes(type) && !STRUCTURAL.has(type)) {
+          if (!isAllowedType(schema, type) && !STRUCTURAL.has(type)) {
             if (editor.api.isInline(node)) editor.tf.unwrapNodes({ at: path });
             else editor.tf.setNodes({ type: KEYS.p }, { at: path });
             return;
@@ -109,8 +154,8 @@ export const buildPlugins = (schema: EditorSchema): AnyPluginConfig[] => {
   const plugins: AnyPluginConfig[] = [
     NodeIdPlugin.configure({ options: { idCreator: newId } }),
     schemaPlugin(schema),
-    TrailingBlockPlugin,
   ];
+  if (!has("text")) plugins.push(TrailingBlockPlugin);
 
   if (schema.marks.includes("bold")) plugins.push(BoldPlugin);
   if (schema.marks.includes("italic")) plugins.push(ItalicPlugin);
@@ -143,5 +188,17 @@ export const buildPlugins = (schema: EditorSchema): AnyPluginConfig[] => {
   if (has("table")) {
     plugins.push(TablePlugin, TableRowPlugin, TableCellPlugin, TableCellHeaderPlugin);
   }
+  for (const type of ["spacer", "button", "gallery", "file"]) {
+    if (has(type)) plugins.push(blockPlugin(type, true));
+  }
+  if (has("text")) plugins.push(blockPlugin("text"));
+  if (has("columns")) {
+    plugins.push(
+      blockPlugin("columns"),
+      blockPlugin("column"),
+      createPlatePlugin({ key: "blockDrag", render: { aboveNodes: draggable } }),
+    );
+  }
+  plugins.push(BlockSelectionPlugin);
   return plugins;
 };

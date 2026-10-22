@@ -124,6 +124,9 @@ importers:
       '@calumet/elise-icons':
         specifier: workspace:^
         version: link:../icons
+      '@dnd-kit/core':
+        specifier: ^6.3.1
+        version: 6.3.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@platejs/basic-nodes':
         specifier: 53.0.0
         version: 53.0.0(platejs@53.3.18(@types/react@19.3.0)(immer@10.2.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(scheduler@0.28.0)(use-sync-external-store@1.7.0(react@19.3.0)))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -146,6 +149,9 @@ importers:
         specifier: 53.3.18
         version: 53.3.18(@types/react@19.3.0)(immer@10.2.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(scheduler@0.28.0)(use-sync-external-store@1.7.0(react@19.3.0))
     devDependencies:
+      '@calumet/elise-blocks':
+        specifier: workspace:*
+        version: link:../blocks
       '@calumet/elise-ui':
         specifier: workspace:*
         version: link:../ui

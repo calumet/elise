@@ -1,4 +1,5 @@
 import { newId } from "../ids";
+import { COLUMN_LIMIT, coerceSetting, settingDefs, type SettingValue } from "../settings";
 import { isText } from "../types";
 import type {
   EditorDocument,
@@ -182,28 +183,129 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
       return rows.flatMap((row) =>
         Array.from(row.children).flatMap((cell) => blocks(cell.childNodes)),
       );
+    const grid = rows.map((row) =>
+      Array.from(row.children).filter((cell) => ["td", "th"].includes(tagOf(cell))),
+    );
+    const alignOf = (cell: Element | undefined): string => {
+      const value = cell?.getAttribute("data-align");
+      return value === "center" || value === "right" ? value : "left";
+    };
+    const headerRow =
+      (grid[0] ?? []).length > 0 && (grid[0] ?? []).every((cell) => tagOf(cell) === "th");
+    const body = headerRow ? grid.slice(1) : grid;
+    const headerColumn =
+      body.length > 0 && body.every((cells) => cells[0] && tagOf(cells[0]) === "th");
+    const width = Math.max(0, ...grid.map((cells) => cells.length));
+    const columnAlign = Array.from({ length: width }, (_, index) =>
+      alignOf(grid.find((cells) => cells[index])?.[index]),
+    );
     return [
       blockOf(
         "table",
-        rows.map((row) =>
+        grid.map((cells, rowIndex) =>
           blockOf(
             "tr",
-            Array.from(row.children)
-              .filter((cell) => ["td", "th"].includes(tagOf(cell)))
-              .map((cell) => {
-                const content = blocks(cell.childNodes);
-                return blockOf(
-                  tagOf(cell),
-                  content.length ? content : [paragraph([])],
-                  cell.getAttribute("data-id"),
-                );
-              }),
-            row.getAttribute("data-id"),
+            cells.map((cell) => {
+              const content = blocks(cell.childNodes);
+              const tag = tagOf(cell);
+              const align = alignOf(cell);
+              return blockOf(
+                tag,
+                content.length ? content : [paragraph([])],
+                cell.getAttribute("data-id"),
+                {
+                  ...(tag === "th"
+                    ? { scope: cell.getAttribute("scope") === "row" ? "row" : "col" }
+                    : {}),
+                  ...(align !== "left" ? { align } : {}),
+                },
+              );
+            }),
+            rows[rowIndex]?.getAttribute("data-id") ?? null,
           ),
         ),
         id,
+        { headerRow, headerColumn, columnAlign },
       ),
     ];
+  };
+
+  const dataSettings = (type: string, element: Element): Record<string, SettingValue> => {
+    const found: Record<string, SettingValue> = {};
+    for (const def of settingDefs(type)) {
+      const raw = element.getAttribute(`data-${def.key}`);
+      if (raw === null || def.kind === "number") continue;
+      const value = coerceSetting(def, def.kind === "toggle" ? raw === "true" : raw);
+      if (value !== undefined) found[def.key] = value;
+    }
+    return found;
+  };
+
+  const unnest = (content: EditorNode[]): EditorNode[] =>
+    content.flatMap((node) =>
+      node.type === "columns"
+        ? node.children.flatMap((column) =>
+            isText(column)
+              ? []
+              : unnest(column.children.filter((n): n is EditorNode => !isText(n))),
+          )
+        : [node],
+    );
+
+  const columnsBlock = (element: Element, id: string | null): EditorNode => {
+    const groups = Array.from(element.children)
+      .filter((child) => child.getAttribute("data-slot") === "column")
+      .map((column) => ({
+        id: column.getAttribute("data-id"),
+        content: unnest(blocks(column.childNodes)),
+      }));
+    const kept = groups.slice(0, COLUMN_LIMIT);
+    const last = kept[kept.length - 1];
+    if (last) last.content = groups.slice(kept.length - 1).flatMap((group) => group.content);
+    const columns = (kept.length ? kept : [{ id: null, content: [] as EditorNode[] }]).map(
+      (group) =>
+        blockOf("column", group.content.length ? group.content : [paragraph([])], group.id),
+    );
+    return blockOf("columns", columns, id, dataSettings("columns", element));
+  };
+
+  const pageBlock = (
+    slot: string,
+    element: Element,
+    id: string | null,
+  ): EditorNode[] | undefined => {
+    if (slot === "text") {
+      const inner = blocks(element.childNodes);
+      return allows("text") ? [blockOf("text", inner.length ? inner : [paragraph([])], id)] : inner;
+    }
+    if (!allows(slot) || !["columns", "spacer", "button", "gallery", "file"].includes(slot)) {
+      return undefined;
+    }
+    const voidBlock = (extra: Record<string, unknown>) => [
+      blockOf(slot, [{ text: "" }], id, extra),
+    ];
+    const link = element.querySelector("a");
+    if (slot === "columns") return [columnsBlock(element, id)];
+    if (slot === "spacer") return voidBlock(dataSettings("spacer", element));
+    if (slot === "button") {
+      return voidBlock({
+        label: link?.textContent?.trim() ?? "",
+        href: safeHref(link?.getAttribute("href")) ?? "",
+        ...(link ? dataSettings("button", link) : {}),
+      });
+    }
+    if (slot === "gallery") {
+      const images = Array.from(element.querySelectorAll("img")).flatMap((img) => {
+        const src = safeSrc(img.getAttribute("src"));
+        return src ? [{ src, alt: img.getAttribute("alt") ?? "" }] : [];
+      });
+      return voidBlock({ images });
+    }
+    const src = safeHref(link?.getAttribute("href"));
+    const size = Number(element.getAttribute("data-size"));
+    return src
+      ? voidBlock({ src, name: link?.textContent?.trim() ?? "", ...(size > 0 ? { size } : {}) })
+      : [];
   };
 
   const blocks = (nodes: Iterable<Node>): EditorNode[] => {
@@ -267,6 +369,9 @@ export const fromHtml = (html: string, { schema, locale }: FromHtmlOptions): Edi
 
   const block = (element: Element, tag: string): EditorNode[] => {
     const id = element.getAttribute("data-id");
+    const slot = element.getAttribute("data-slot");
+    const page = slot ? pageBlock(slot, element, id) : undefined;
+    if (page) return page;
     const handler = byTag[tag];
     if (handler) return handler(element, id);
     if (tag === "figure" && element.querySelector("img, iframe")) return media(element, id);

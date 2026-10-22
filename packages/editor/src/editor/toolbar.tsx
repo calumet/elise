@@ -20,7 +20,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@calumet/elise-ui/dropdown-menu";
-import { Popover, PopoverAnchor, PopoverContent } from "@calumet/elise-ui/popover";
 import { Toolbar, ToolbarButton, ToolbarSeparator } from "@calumet/elise-ui/toolbar";
 import { useEditorRef, useEditorSelector } from "platejs/react";
 import * as React from "react";
@@ -36,12 +35,14 @@ import {
   useMarkActive,
 } from "./commands";
 import { useServices } from "./context";
-import { useEditorFocused } from "./focus";
+import { Float, useDismiss } from "./float";
+import { focusMovedOn, useEditorFocused } from "./focus";
 import { LinkForm } from "./link-form";
 
 export const BAR = "flex-nowrap gap-0.5 rounded-none border-0 bg-transparent p-0";
 export const BAR_BUTTON = "size-8 shrink-0 bg-transparent p-0 [&_svg]:size-icon-md";
-const FLOATING = `w-auto border-0 p-1 ${INVERSE_SURFACE}`;
+const FLOATING = `w-auto rounded-xl p-1 shadow-lg ${INVERSE_SURFACE}`;
+const PANEL = "w-72 rounded-xl border border-border bg-popover p-4 text-foreground shadow-lg";
 
 export const keepFocus = (event: React.MouseEvent): void => event.preventDefault();
 
@@ -112,6 +113,62 @@ export const LinkButton = ({
   );
 };
 
+export const FormatRow = ({ className }: { className?: string }): React.JSX.Element => {
+  const t = useLabels();
+  const editor = useEditorRef();
+  const { schema } = useServices();
+  const [linking, setLinking] = React.useState(false);
+  const button = React.useRef<HTMLButtonElement>(null);
+  const floatRef = React.useRef<HTMLDivElement>(null);
+  const anchor = React.useMemo(
+    () => ({
+      getBoundingClientRect: () => button.current?.getBoundingClientRect() ?? new DOMRect(),
+    }),
+    [],
+  );
+  const close = () => {
+    setLinking(false);
+    editor.tf.focus();
+  };
+  useDismiss(floatRef, linking, () => setLinking(false));
+
+  return (
+    <Toolbar aria-label={t.formatting} className={className ? `${BAR} ${className}` : BAR}>
+      {schema.marks.map((mark) => (
+        <MarkButton key={mark} mark={mark} />
+      ))}
+      {schema.links ? (
+        <>
+          <LinkButton ref={button} expanded={linking} onClick={() => setLinking(true)} />
+          {linking ? (
+            <Float
+              anchor={anchor}
+              side="top"
+              floatRef={floatRef}
+              focusOnOpen
+              className={PANEL}
+              onKeyDown={(event) => {
+                if (event.key !== "Escape") return;
+                event.preventDefault();
+                close();
+              }}
+            >
+              <LinkForm onClose={close} />
+            </Float>
+          ) : null}
+        </>
+      ) : null}
+      {schema.blocks.includes("list") ? (
+        <>
+          <ToolbarSeparator />
+          <ListButton style="disc" />
+          <ListButton style="decimal" />
+        </>
+      ) : null}
+    </Toolbar>
+  );
+};
+
 type BlockKind = "p" | "h2" | "h3" | "blockquote" | "disc" | "decimal";
 
 const BLOCKS: { kind: BlockKind; needs: string; label: keyof Labels; Icon: typeof Bold }[] = [
@@ -154,6 +211,7 @@ const BlockTypeMenu = (): React.JSX.Element => {
 
   return (
     <DropdownMenu
+      modal={false}
       onOpenChange={(open) => {
         if (open) chosen.current = false;
       }}
@@ -170,7 +228,7 @@ const BlockTypeMenu = (): React.JSX.Element => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         onCloseAutoFocus={(event) => {
-          if (chosen.current) event.preventDefault();
+          if (chosen.current || focusMovedOn(event)) event.preventDefault();
         }}
       >
         {options.map(({ kind, label: key, Icon }) => (
@@ -196,6 +254,7 @@ const TableMenu = (): React.JSX.Element => {
 
   return (
     <DropdownMenu
+      modal={false}
       onOpenChange={(open) => {
         if (open) chosen.current = false;
       }}
@@ -213,7 +272,8 @@ const TableMenu = (): React.JSX.Element => {
       <DropdownMenuContent
         align="end"
         onCloseAutoFocus={(event) => {
-          if (!chosen.current) return;
+          if (focusMovedOn(event)) event.preventDefault();
+          if (!chosen.current || focusMovedOn(event)) return;
           event.preventDefault();
           editor.tf.focus();
         }}
@@ -248,8 +308,6 @@ const usePointerDown = (): boolean => {
   return down;
 };
 
-const preventFocus = (event: Event): void => event.preventDefault();
-
 const useLatched = (
   ready: string | null,
 ): [string | null, React.Dispatch<React.SetStateAction<string | null>>] => {
@@ -260,16 +318,6 @@ const useLatched = (
     if (ready) setShown(ready);
   }
   return [shown, setShown];
-};
-
-const useStayForEditor = (): ((event: Event) => void) => {
-  const editor = useEditorRef();
-  return (event) => {
-    const root = editor.api.toDOMNode(editor);
-    if (root && event.target instanceof Node && root.contains(event.target)) {
-      event.preventDefault();
-    }
-  };
 };
 
 const FormatBar = ({
@@ -303,18 +351,21 @@ const FormatBar = ({
   );
 };
 
-const SelectionBar = ({ className }: { className?: string }): React.JSX.Element => {
+const SelectionBar = ({ className }: { className?: string }): React.JSX.Element | null => {
   const editor = useEditorRef();
   const { schema } = useServices();
   const focused = useEditorFocused();
   const pressing = usePointerDown();
-  const stayForEditor = useStayForEditor();
   const barRef = React.useRef<HTMLDivElement>(null);
   const selection = useEditorSelector(
     (ed) =>
       ed.selection && !ed.api.isCollapsed() && ed.api.string(ed.selection).trim() !== ""
         ? JSON.stringify(ed.selection)
         : null,
+    [],
+  );
+  const inText = useEditorSelector(
+    (ed) => Boolean(ed.selection && ed.api.above({ at: ed.selection, match: { type: "text" } })),
     [],
   );
   const [shownFor, setShownFor] = useLatched(focused && !pressing ? selection : null);
@@ -325,7 +376,8 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
     if (!root) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.altKey && event.key === "F10") {
-        const first = barRef.current?.querySelector<HTMLElement>("button:not([disabled])");
+        const bar = barRef.current ?? root.querySelector("[data-slot=text-toolbar]");
+        const first = bar?.querySelector<HTMLElement>("button:not([disabled])");
         if (first) {
           event.preventDefault();
           first.focus();
@@ -339,67 +391,78 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
         event.preventDefault();
         setShownFor(selection);
         setLinking(true);
+      } else if (event.key === "Escape" && selection && shownFor === selection) {
+        setShownFor(null);
       }
     };
     root.addEventListener("keydown", onKeyDown);
     return () => root.removeEventListener("keydown", onKeyDown);
-  }, [editor, schema.links, selection, setShownFor]);
+  }, [editor, schema.links, selection, shownFor, setShownFor]);
 
   const anchor = React.useMemo(
     () => (selection ? rangeAnchor(editor, JSON.parse(selection)) : undefined),
     [editor, selection],
   );
-  const open = selection !== null && shownFor === selection;
+  const open = selection !== null && shownFor === selection && (linking || !inText);
+  const formatting = open && !linking;
+
+  React.useEffect(() => {
+    const root = editor.api.toDOMNode(editor);
+    if (!root || !formatting) return;
+    root.dataset.formatting = "";
+    return () => {
+      delete root.dataset.formatting;
+    };
+  }, [editor, formatting]);
   const closeLink = () => {
     setLinking(false);
     editor.tf.focus();
   };
+  const floatRef = React.useRef<HTMLDivElement>(null);
+  useDismiss(floatRef, open, () => {
+    setShownFor(null);
+    setLinking(false);
+  });
 
-  return (
-    <Popover
-      open={open}
-      onOpenChange={(next) => {
-        if (next) return;
-        setShownFor(null);
-        setLinking(false);
+  if (!open) return null;
+  return linking ? (
+    <Float
+      key="link"
+      anchor={anchor}
+      side="bottom"
+      refresh={selection}
+      floatRef={floatRef}
+      focusOnOpen
+      className={PANEL}
+      onKeyDown={(event) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        closeLink();
       }}
     >
-      <PopoverAnchor virtualRef={anchor ? { current: anchor } : undefined} />
-      {open && linking ? (
-        <PopoverContent
-          side="bottom"
-          align="start"
-          collisionPadding={16}
-          onCloseAutoFocus={preventFocus}
-          onEscapeKeyDown={(event) => {
-            event.preventDefault();
-            closeLink();
-          }}
-        >
-          <LinkForm onClose={closeLink} />
-        </PopoverContent>
-      ) : (
-        <PopoverContent
-          side="top"
-          collisionPadding={16}
-          className={className ? `${FLOATING} ${className}` : FLOATING}
-          onOpenAutoFocus={preventFocus}
-          onCloseAutoFocus={preventFocus}
-          onInteractOutside={stayForEditor}
-          onEscapeKeyDown={() => editor.tf.focus()}
-        >
-          <FormatBar barRef={barRef} onLink={() => setLinking(true)} />
-        </PopoverContent>
-      )}
-    </Popover>
+      <LinkForm onClose={closeLink} />
+    </Float>
+  ) : (
+    <Float
+      key="bar"
+      anchor={anchor}
+      side="top"
+      refresh={selection}
+      floatRef={floatRef}
+      className={className ? `${FLOATING} ${className}` : FLOATING}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") editor.tf.focus();
+      }}
+    >
+      <FormatBar barRef={barRef} onLink={() => setLinking(true)} />
+    </Float>
   );
 };
 
-const TableBar = (): React.JSX.Element => {
+const TableBar = (): React.JSX.Element | null => {
   const t = useLabels();
   const editor = useEditorRef();
   const focused = useEditorFocused();
-  const stayForEditor = useStayForEditor();
   const table = useEditorSelector((ed) => {
     if (!ed.selection || !ed.api.isCollapsed()) return null;
     const entry = ed.api.above({ match: { type: "table" } });
@@ -410,30 +473,25 @@ const TableBar = (): React.JSX.Element => {
     () => (table ? blockAnchor(editor, table.split(".").map(Number)) : undefined),
     [editor, table],
   );
+  const open = table !== null && tableFor === table;
+  const floatRef = React.useRef<HTMLDivElement>(null);
+  useDismiss(floatRef, open, () => setTableFor(null));
 
+  if (!open) return null;
   return (
-    <Popover
-      open={table !== null && tableFor === table}
-      onOpenChange={(next) => {
-        if (!next) setTableFor(null);
-      }}
+    <Float
+      anchor={anchor}
+      side="top"
+      align="end"
+      offset={4}
+      refresh={table}
+      floatRef={floatRef}
+      className={FLOATING}
     >
-      <PopoverAnchor virtualRef={anchor ? { current: anchor } : undefined} />
-      <PopoverContent
-        side="top"
-        align="end"
-        sideOffset={4}
-        collisionPadding={16}
-        className={FLOATING}
-        onOpenAutoFocus={preventFocus}
-        onCloseAutoFocus={preventFocus}
-        onInteractOutside={stayForEditor}
-      >
-        <Toolbar aria-label={t.tableActions} className={BAR}>
-          <TableMenu />
-        </Toolbar>
-      </PopoverContent>
-    </Popover>
+      <Toolbar aria-label={t.tableActions} className={BAR}>
+        <TableMenu />
+      </Toolbar>
+    </Float>
   );
 };
 

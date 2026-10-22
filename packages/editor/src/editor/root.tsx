@@ -5,7 +5,9 @@ import { newId } from "../ids";
 import type { EditorDocument, EditorNode, EditorSchema } from "../types";
 import { components } from "./components";
 import { ServicesProvider, type EditorServices } from "./context";
+import { BlockDrag } from "./drag";
 import { buildPlugins } from "./plugins";
+import { PreviewProvider } from "./preview";
 
 export type EditorRootProps = Omit<EditorServices, "schema"> & {
   schema: EditorSchema;
@@ -27,6 +29,7 @@ export const EditorRoot = ({
   onChange,
   locales,
   onUploadImage,
+  onUploadFile,
   searchLinks,
   className,
   children,
@@ -55,8 +58,14 @@ export const EditorRoot = ({
   }, [value.content, editor]);
 
   const services = React.useMemo(
-    () => ({ schema, locales, onUploadImage, searchLinks }),
-    [schema, locales, onUploadImage, searchLinks],
+    () => ({ schema, locales, onUploadImage, onUploadFile, searchLinks }),
+    [schema, locales, onUploadImage, onUploadFile, searchLinks],
+  );
+
+  const body = (
+    <div data-slot="editor" className={className}>
+      {children}
+    </div>
   );
 
   return (
@@ -68,9 +77,9 @@ export const EditorRoot = ({
           onChange({ ...latest.current, content: emitted.current });
         }}
       >
-        <div data-slot="editor" className={className}>
-          {children}
-        </div>
+        <PreviewProvider locale={value.locale}>
+          {schema.blocks.includes("columns") ? <BlockDrag>{body}</BlockDrag> : body}
+        </PreviewProvider>
       </Plate>
     </ServicesProvider>
   );

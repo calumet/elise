@@ -3,6 +3,7 @@ import * as React from "react";
 
 import type { EditorNode } from "../types";
 import { markView, views } from "../views";
+import { TableElement } from "./table-chrome";
 
 const element =
   (type: string) =>
@@ -29,6 +30,6 @@ const mark =
   };
 
 export const components: Record<string, (props: never) => React.ReactNode> = Object.fromEntries([
-  ...Object.keys(views).map((type) => [type, element(type)]),
+  ...Object.keys(views).map((type) => [type, type === "table" ? TableElement : element(type)]),
   ...(["bold", "italic", "code"] as const).map((name) => [name, mark(name)]),
 ]);

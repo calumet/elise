@@ -21,3 +21,9 @@ export const useEditorFocused = (): boolean => {
 
   return focused;
 };
+
+export const focusMovedOn = (event: Event): boolean => {
+  const active = document.activeElement;
+  const menu = active?.closest("[role=menu]");
+  return Boolean(menu && event.target instanceof Node && !event.target.contains(menu));
+};

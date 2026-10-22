@@ -22,6 +22,18 @@ según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
 `Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
 y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
+**El editor de páginas.** `pageSchema`, con bloques de texto, columnas (de 1 a 4, un solo nivel), espacio, botón, galería y archivo. `onUploadFile` es la prop nueva para subir archivos. Un bloque de texto (`text`) reúne párrafos y listas con su fila de formato a la vista, como el editor de mensajes; en la estructura y al arrastrar es una sola fila. Título, subtítulo y cita siguen siendo bloques propios. `messageSchema` y `documentSchema` no cambian. La imagen se elige con `ImageUpload` y el esquema es el `SortableTree` de `@calumet/elise-blocks`, que entra como peer nuevo (`>=0.2.0 <1.0.0`, con su `tailwind.css` en la hoja de la aplicación); el peer `@calumet/elise-ui` pasa a `>=0.45.0`, el mismo que pide `elise-blocks`.
+
+**Ajustes por bloque.** Cada tipo declara sus ajustes (`select`, `toggle`, `number`, `text`, `url`, `video`, `images`). `useSelectedBlock` los entrega listos para pintar y `useBlockCommands` selecciona, cambia, duplica, elimina y mueve bloques.
+
+**Esquema de la página.** `useOutline` devuelve el documento como árbol. El arrastre en la página usa `@dnd-kit/core`: cada bloque lleva un asa y las columnas rechazan anidarse.
+
+**La interfaz del editor de páginas.** `Editor.Outline` es la estructura en un `SortableTree`, que reordena con el puntero y con el teclado, deja las columnas fijas en su bloque y no anida unas columnas dentro de otras, `Editor.BlockPanel` el panel del bloque elegido, con sus ajustes, `Editor.PreviewButton` y `useEditorPreview` la vista previa de solo lectura con la salida del render (Escape vuelve a editar con la selección que había), y `device`/`setDevice` en `useEditorPreview` la vista de escritorio o de móvil, que con `"mobile"` apila las columnas; con `"desktop"` se apilan por debajo de 20rem de área y `Editor.Catalog` el catálogo de bloques y plantillas con buscador. El bloque apuntado o elegido muestra al margen el asa y, debajo, el `+`, y el elegido su contorno con el tipo. Al arrastrar, el bloque mismo se mueve dentro de la página bajo el puntero, también entre columnas y con su tamaño de siempre, los de alrededor se apartan para abrirle sitio, y al soltar se asienta en su lugar con el ancho de su destino o vuelve al suyo con Escape o fuera de la página. Lo recién insertado queda elegido. Las columnas se eligen pulsando su hueco, y con ellas elegidas un clic en un bloque de dentro elige ese bloque. Elegidas o apuntadas en su hueco, el asa del margen es la de las columnas, y arrastra el bloque entero. Las tablas tienen un menú por fila y por columna, a la vista al apuntarlas o con el cursor en una celda, y guardan fila y columna de encabezado y la alineación de cada columna (`scope` y `data-align` en el HTML). `useBlockCommands` suma `deselect`. Todo arrastre tiene su alternativa con teclado en el panel: subir, bajar y mover a una columna o fuera de ella. El menú `/` funciona también dentro de una columna, y elegir Archivo en él abre su diálogo.
+
+**Plantillas** (texto con imagen, equipo, preguntas, llamada a la acción) que se insertan como bloques ordinarios, y `insertFile`, `uploadImage` e `insertTemplate` en `useEditorCommands`.
+
+**Render.** `EditorContent`, `toHtml` y `fromHtml` cubren los bloques nuevos. El diseño de las columnas sale de atributos `data-*` documentados en el README, para que sobreviva a un sanitizador que quite las clases, y se apilan en pantallas angostas.
+
 ## `@calumet/elise-ui` 0.46.0 y `@calumet/elise-themes` 0.1.11
 
 ### Cambia

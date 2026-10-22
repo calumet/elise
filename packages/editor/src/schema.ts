@@ -23,3 +23,10 @@ export const documentSchema: EditorSchema = {
   marks: messageSchema.marks,
   links: true,
 };
+
+export const pageSchema: EditorSchema = {
+  name: "page",
+  blocks: [...documentSchema.blocks, "text", "columns", "spacer", "button", "gallery", "file"],
+  marks: documentSchema.marks,
+  links: true,
+};

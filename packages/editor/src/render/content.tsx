@@ -130,7 +130,7 @@ const renderGroup = (group: ListGroup, key: string): React.ReactNode => (
 
 const STRUCTURAL = new Set(["tr", "td", "th"]);
 
-const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNode[] => {
+export const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNode[] => {
   const allowed = new Set(schema.blocks);
   const output: React.ReactNode[] = [];
   let run: EditorNode[] = [];
@@ -148,7 +148,18 @@ const renderBlocks = (nodes: EditorNode[], schema: EditorSchema): React.ReactNod
       continue;
     }
     flush();
-    if (!allowed.has(node.type) && !STRUCTURAL.has(node.type)) continue;
+    if (node.type === "text" && !allowed.has("text")) {
+      output.push(
+        ...renderBlocks(
+          node.children.filter((child): child is EditorNode => !isText(child)),
+          schema,
+        ),
+      );
+      continue;
+    }
+    const structural =
+      STRUCTURAL.has(node.type) || (node.type === "column" && allowed.has("columns"));
+    if (!allowed.has(node.type) && !structural) continue;
     const View = views[node.type];
     if (!View) continue;
     const attributes = { "data-id": node.id };

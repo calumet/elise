@@ -10,12 +10,17 @@ import {
 import { useEditorRef, useEditorSelector } from "platejs/react";
 
 import { newId } from "../ids";
+import { useLabels } from "../labels";
 import type { EditorMark } from "../types";
 import { parseVideo, safeHref } from "../urls";
 import { useServices } from "./context";
 import {
+  buildButton,
   buildCallout,
+  buildColumns,
   buildDivider,
+  buildGallery,
+  buildSpacer,
   buildTable,
   placeBlock,
   retype,
@@ -24,9 +29,12 @@ import {
   type InsertItem,
   type InsertItemId,
 } from "./items";
+import { templateDefs, useTemplates, type TemplateId, type TemplateItem } from "./templates";
+import { buildText } from "./text";
 
 export type EditorCommands = {
   items: InsertItem[];
+  templates: TemplateItem[];
   toggleMark: (mark: EditorMark) => void;
   toggleList: (style: "disc" | "decimal") => void;
   toggleBlock: (type: "h2" | "h3" | "blockquote") => void;
@@ -35,6 +43,9 @@ export type EditorCommands = {
   insert: (id: InsertItemId, options?: { replace?: boolean }) => void;
   insertImage: (source: File | { src: string; alt?: string }, alt?: string) => Promise<void>;
   insertVideo: (url: string) => boolean;
+  insertFile: (source: File | { src: string; name: string; size?: number }) => Promise<void>;
+  uploadImage: (file: File) => Promise<{ src: string; alt?: string }>;
+  insertTemplate: (id: TemplateId) => boolean;
   addRow: () => void;
   addColumn: () => void;
   deleteRow: () => void;
@@ -47,29 +58,49 @@ export type EditorCommands = {
 
 export const useEditorCommands = (): EditorCommands => {
   const editor = useEditorRef();
-  const { schema, onUploadImage } = useServices();
+  const { schema, onUploadImage, onUploadFile } = useServices();
+  const t = useLabels();
   const items = useInsertItems(schema);
+  const templates = useTemplates(schema);
 
   const toggleBlock: EditorCommands["toggleBlock"] = (type) => {
-    const top = editor.selection?.anchor.path[0];
+    const block = editor.api.block()?.[1];
+    const ref = block ? editor.api.pathRef(block) : undefined;
     editor.tf.toggleBlock(type);
-    if (top !== undefined) editor.tf.select(editor.api.start([top]));
+    const at = ref?.unref();
+    const start = at ? editor.api.start(at) : undefined;
+    if (start) editor.tf.select(start);
     editor.tf.focus();
   };
 
   const insert: EditorCommands["insert"] = (id, options) => {
     const replace = options?.replace ?? false;
-    if (id === "h2" || id === "h3") retype(editor, id);
+    const line = id === "quote" ? "blockquote" : id;
+    if (
+      (line === "h2" || line === "h3" || line === "blockquote") &&
+      schema.blocks.includes("text")
+    ) {
+      placeBlock(editor, { id: newId(), type: line, children: [{ text: "" }] }, replace);
+    } else if (id === "h2" || id === "h3") retype(editor, id);
     else if (id === "quote") toggleBlock("blockquote");
     else if (id === "bulleted") setList(editor, "disc");
     else if (id === "numbered") setList(editor, "decimal");
     else if (id === "table") placeBlock(editor, buildTable(), replace);
     else if (id === "callout") placeBlock(editor, buildCallout(), replace);
     else if (id === "divider") placeBlock(editor, buildDivider(), replace);
+    else if (id === "columns") placeBlock(editor, buildColumns(), replace);
+    else if (id === "spacer") placeBlock(editor, buildSpacer(), replace);
+    else if (id === "button") placeBlock(editor, buildButton(t.buttonBlock), replace);
+    else if (id === "gallery") placeBlock(editor, buildGallery(), replace);
+    else if (id === "text") placeBlock(editor, buildText(), replace);
   };
+
+  const uploadImage: EditorCommands["uploadImage"] = (file) =>
+    (onUploadImage ?? (() => Promise.reject(new Error("onUploadImage is required"))))(file);
 
   return {
     items,
+    templates,
     toggleMark: (mark) => {
       if (!schema.marks.includes(mark)) return;
       editor.tf.toggleMark(mark);
@@ -89,13 +120,9 @@ export const useEditorCommands = (): EditorCommands => {
       unwrapLink(editor);
     },
     insert,
+    uploadImage,
     insertImage: async (source, alt) => {
-      const uploaded =
-        source instanceof File
-          ? await (onUploadImage ?? (() => Promise.reject(new Error("onUploadImage is required"))))(
-              source,
-            )
-          : source;
+      const uploaded = source instanceof File ? await uploadImage(source) : source;
       placeBlock(
         editor,
         {
@@ -115,6 +142,32 @@ export const useEditorCommands = (): EditorCommands => {
         { id: newId(), type: "media_embed", url: url.trim(), children: [{ text: "" }] },
         true,
       );
+      return true;
+    },
+    insertFile: async (source) => {
+      const uploaded =
+        source instanceof File
+          ? await (onUploadFile ?? (() => Promise.reject(new Error("onUploadFile is required"))))(
+              source,
+            )
+          : source;
+      placeBlock(
+        editor,
+        {
+          id: newId(),
+          type: "file",
+          src: uploaded.src,
+          name: uploaded.name,
+          ...(uploaded.size ? { size: uploaded.size } : {}),
+          children: [{ text: "" }],
+        },
+        true,
+      );
+    },
+    insertTemplate: (id) => {
+      const def = templateDefs.find((candidate) => candidate.id === id);
+      if (!def || !templates.some((item) => item.id === id)) return false;
+      placeBlock(editor, def.build(t), true);
       return true;
     },
     addRow: () => insertTableRow(editor),

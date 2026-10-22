@@ -226,6 +226,12 @@ const EditorDemo = () => {
           </Columna>
         </Grid>
       </BlockStack>
+
+      <Text size="sm">
+        <a className="text-link underline underline-offset-2" href="/page-editor.html">
+          El editor de páginas, en su propia página
+        </a>
+      </Text>
     </BlockStack>
   );
 };
