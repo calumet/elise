@@ -1,9 +1,22 @@
+import { Button } from "@calumet/elise-ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@calumet/elise-ui/context-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@calumet/elise-ui/dropdown-menu";
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -137,8 +150,36 @@ const MenusSelectDemo = () => {
             <ContextMenuItem>Accion rapida</ContextMenuItem>
             <ContextMenuItem>Duplicar</ContextMenuItem>
             <ContextMenuItem>Eliminar</ContextMenuItem>
+            <ContextMenuSeparator />
+            <ContextMenuRadioGroup value={radio} onValueChange={setRadio}>
+              {radioItems.map((item) => (
+                <ContextMenuRadioItem key={item} value={item}>
+                  {item}
+                </ContextMenuRadioItem>
+              ))}
+            </ContextMenuRadioGroup>
           </ContextMenuContent>
         </ContextMenu>
+      </div>
+
+      <div className="space-y-2 rounded-sm lg:col-span-2">
+        <p className="text-sm font-semibold text-foreground">Dropdown Menu con opcion excluyente</p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Perfil: {radio}</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuRadioGroup value={radio} onValueChange={setRadio}>
+              {radioItems.map((item) => (
+                <DropdownMenuRadioItem key={item} value={item}>
+                  {item}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Agregar perfil</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

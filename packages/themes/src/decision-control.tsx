@@ -331,11 +331,16 @@ const Color = ({
         <button
           type="button"
           className="flex cursor-pointer items-center gap-2 rounded-full border px-2.5 py-1.5 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-          style={{ background: of(fill), color: of(inkVar), borderColor: `${of(inkVar)}33` }}
+          style={{
+            ...(value as React.CSSProperties),
+            background: `var(${fill})`,
+            color: `var(${inkVar})`,
+            borderColor: `color-mix(in oklab, var(${inkVar}) 20%, transparent)`,
+          }}
         >
           <span
             className="size-2 shrink-0 rounded-full"
-            style={{ background: of(accent) }}
+            style={{ background: `var(${accent})` }}
             aria-hidden="true"
           />
           {label}

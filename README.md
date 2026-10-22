@@ -164,6 +164,7 @@ export default defineConfig({
 @import "@calumet/elise-ui/tailwind/elise.css";
 
 /* Solo los que uses */
+@import "@calumet/elise-blocks/tailwind.css";
 @import "@calumet/elise-tables/tailwind.css";
 @import "@calumet/elise-toasts/tailwind.css";
 @import "@calumet/elise-alerts/tailwind.css";

@@ -53,8 +53,9 @@ export { SURFACE };
  * - `kicker`: va antes de las dos anteriores y con menos peso. Una sola.
  * - `inline`: se acopla al lado de la principal. Pueden ser varias.
  * - `labeled`: sale como par de rótulo y valor. Pueden ser varias.
+ * - `action`: los botones de la fila, al final y sin rótulo. Pueden ser varias.
  */
-export type ListSlot = "primary" | "secondary" | "inline" | "kicker" | "labeled";
+export type ListSlot = "primary" | "secondary" | "inline" | "kicker" | "labeled" | "action";
 
 /**
  * `numeric` y `currency` alinean a la derecha y numeran a ancho fijo. `code`
@@ -76,12 +77,17 @@ const TableCtx = React.createContext<{
   columns: Column[];
   slots: ListSlot[];
   loading: boolean;
+  bare: boolean;
 }>({
   mode: "table",
   columns: [],
   slots: [],
   loading: false,
+  bare: false,
 });
+
+const inset = (bare: boolean) => (bare ? "px-4" : "px-3");
+const edgeInset = (bare: boolean) => (bare ? "first:ps-4 last:pe-4" : "first:ps-3 last:pe-3");
 
 /* Lo que se apaga mientras carga. Una tabla con la que no se puede interactuar
    es contenido inhabilitado, y 0.35 es la opacidad a la que el texto llega al
@@ -147,7 +153,7 @@ const assignSlots = (columns: Column[]): ListSlot[] => {
   const slots: (ListSlot | undefined)[] = columns.map((column) => {
     const slot = column.listSlot;
     if (!slot) return undefined;
-    if (slot === "inline" || slot === "labeled") return slot;
+    if (slot === "inline" || slot === "labeled" || slot === "action") return slot;
     if (taken.has(slot)) return "labeled";
     taken.add(slot);
     return slot;
@@ -166,7 +172,8 @@ export type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   /**
    * Quita el marco propio para meter la tabla dentro de una tarjeta que ya lo
    * pone. Con los dos salen dos bordes concéntricos. El radio lo hereda de esa
-   * tarjeta.
+   * tarjeta, y la sangría también: el texto arranca a 16px, alineado con la
+   * cabecera de la tarjeta, y no a los 12px de la tabla suelta.
    */
   bare?: boolean;
 
@@ -379,8 +386,8 @@ export const Table: React.ForwardRefExoticComponent<
     const columns = React.useMemo(() => collectColumns(children), [children]);
     const slots = React.useMemo(() => assignSlots(columns), [columns]);
     const context = React.useMemo(
-      () => ({ mode, columns, slots, loading: loading }),
-      [mode, columns, slots, loading],
+      () => ({ mode, columns, slots, loading, bare }),
+      [mode, columns, slots, loading, bare],
     );
 
     /* El vacío se declara al lado del cuerpo y sale cuando le toca. Fuera de su
@@ -425,7 +432,7 @@ export const Table: React.ForwardRefExoticComponent<
       <div
         data-slot="table-filters"
         // Con controles de 32px la franja mide 44, como la de un listado de Shopify.
-        className={cn("border-b border-border px-3 py-1.5", loading && DIMMED)}
+        className={cn("border-b border-border py-1.5", inset(bare), loading && DIMMED)}
         inert={loading || undefined}
       >
         {filters}
@@ -567,14 +574,14 @@ export const TableFooter: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableSectionElement>
 > = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => {
-    const { mode } = React.useContext(TableCtx);
+    const { mode, bare } = React.useContext(TableCtx);
     const shared = "border-t border-border font-semibold text-foreground";
 
     if (mode === "list") {
       return (
         <div
           data-slot="table-footer"
-          className={cn(shared, "px-3 py-2", className)}
+          className={cn(shared, "py-2", inset(bare), className)}
           {...(props as React.HTMLAttributes<HTMLDivElement>)}
         />
       );
@@ -592,7 +599,7 @@ const ListRow = React.forwardRef<
   HTMLLIElement,
   React.HTMLAttributes<HTMLLIElement> & { clickDelegate?: string }
 >(({ children, className, clickDelegate, ...props }, ref) => {
-  const { columns, slots } = React.useContext(TableCtx);
+  const { columns, slots, bare } = React.useContext(TableCtx);
 
   const cells = React.Children.toArray(children).filter(
     (n): n is React.ReactElement<{ children?: React.ReactNode }> => React.isValidElement(n),
@@ -625,7 +632,8 @@ const ListRow = React.forwardRef<
       data-slot="table-row"
       ref={ref}
       className={cn(
-        "flex flex-wrap items-start gap-x-4 gap-y-2 px-3 py-2",
+        "flex flex-wrap items-start gap-x-4 gap-y-2 py-2",
+        inset(bare),
         clickDelegate && "cursor-pointer hover:bg-state-hover",
         className,
       )}
@@ -688,6 +696,14 @@ const ListRow = React.forwardRef<
                 {c.value}
               </span>
             </div>
+          ))}
+        </div>
+      ) : null}
+
+      {all("action").length > 0 ? (
+        <div className="ms-auto flex shrink-0 items-center gap-2 self-center">
+          {all("action").map((c) => (
+            <React.Fragment key={c.index}>{c.value}</React.Fragment>
           ))}
         </div>
       ) : null}
@@ -824,21 +840,26 @@ export type TableHeadProps = React.ThHTMLAttributes<HTMLTableCellElement> & {
 export const TableHead: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<TableHeadProps> & React.RefAttributes<HTMLTableCellElement>
 > = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
-  ({ className, listSlot: _listSlot, format, ...props }, ref) => (
-    <th
-      data-slot="table-head"
-      ref={ref}
-      /* Mismo tamaño que una celda del cuerpo: el encabezado se distingue por el
-         peso y el color, no por ser más pequeño. Encogerlo además desalineaba la
-         banda, que salía cuatro píxeles más baja que una fila. */
-      className={cn(
-        "bg-muted px-1.5 py-2 text-left align-middle text-sm font-medium whitespace-nowrap text-muted-foreground first:ps-3 last:pe-3",
-        isNumeric(format) && "text-end",
-        className,
-      )}
-      {...props}
-    />
-  ),
+  ({ className, listSlot: _listSlot, format, ...props }, ref) => {
+    const { bare } = React.useContext(TableCtx);
+
+    return (
+      <th
+        data-slot="table-head"
+        ref={ref}
+        /* Mismo tamaño que una celda del cuerpo: el encabezado se distingue por el
+           peso y el color, no por ser más pequeño. Encogerlo además desalineaba la
+           banda, que salía cuatro píxeles más baja que una fila. */
+        className={cn(
+          "bg-muted px-1.5 py-2 text-left align-middle text-sm font-medium whitespace-nowrap text-muted-foreground",
+          edgeInset(bare),
+          isNumeric(format) && "text-end",
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
 );
 TableHead.displayName = "TableHead";
 
@@ -848,7 +869,7 @@ export const TableCell: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableCellElement>
 > = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
   ({ className, ...props }, ref) => {
-    const { columns } = React.useContext(TableCtx);
+    const { columns, bare } = React.useContext(TableCtx);
     const column = React.useContext(ColumnCtx);
 
     return (
@@ -857,7 +878,8 @@ export const TableCell: React.ForwardRefExoticComponent<
         ref={ref}
         className={cn(
           // 6px y no 8: la fila queda en 33px, como en un listado de Shopify.
-          "px-1.5 py-1.5 align-middle text-sm text-foreground first:ps-3 last:pe-3",
+          "px-1.5 py-1.5 align-middle text-sm text-foreground",
+          edgeInset(bare),
           isNumeric(columns[column]?.format) && "text-end tabular-nums",
           isCode(columns[column]?.format) && "font-mono",
           className,
@@ -875,8 +897,8 @@ export const TableCaption: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLTableCaptionElement>
 > = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HTMLTableCaptionElement>>(
   ({ className, ...props }, ref) => {
-    const { mode } = React.useContext(TableCtx);
-    const shared = "mt-3 mb-2 px-3 text-sm text-muted-foreground";
+    const { mode, bare } = React.useContext(TableCtx);
+    const shared = cn("mt-3 mb-2 text-sm text-muted-foreground", inset(bare));
 
     if (mode === "list") {
       return (

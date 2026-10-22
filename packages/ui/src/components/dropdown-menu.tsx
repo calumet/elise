@@ -161,7 +161,7 @@ export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<
   >
     <span className="absolute left-2 flex size-icon-sm items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <span className="h-2 w-2 rounded-full bg-foreground" />
+        <span className="block size-2 rounded-full bg-foreground" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
