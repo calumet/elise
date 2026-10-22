@@ -25,16 +25,17 @@ import {
   TextApi,
   TrailingBlockPlugin,
   type AnyPluginConfig,
+  type PluginConfig,
   type Descendant,
   type Path,
   type TElement,
 } from "platejs";
-import { createPlatePlugin, type PlateEditor } from "platejs/react";
+import { createPlatePlugin, type PlateEditor, type PlatePlugin } from "platejs/react";
 
 import { newId } from "../ids";
 import { fromHtml } from "../render/from-html";
 import { isAllowedType } from "../settings";
-import type { EditorMark, EditorSchema } from "../types";
+import { isText, type EditorMark, type EditorNode, type EditorSchema } from "../types";
 import { draggable } from "./drag";
 import { BlockSelectionPlugin } from "./selection";
 import { isColumns, lastIndex, normalizeColumnNode } from "./structure";
@@ -73,12 +74,29 @@ const atColumnEdge = (editor: PlateEditor, edge: "start" | "end"): boolean => {
 const EXITABLE = new Set(["blockquote", "callout"]);
 const MARKS: EditorMark[] = ["bold", "italic", "code"];
 
+const emptyImages = (nodes: EditorNode[]): number =>
+  nodes.reduce(
+    (count, node) =>
+      count +
+      (node.type === "img" && !node.url ? 1 : 0) +
+      emptyImages(node.children.filter((child): child is EditorNode => !isText(child))),
+    0,
+  );
+
+export const PasteNoticePlugin: PlatePlugin<PluginConfig<"pasteNotice", { missing: number }>> =
+  createPlatePlugin({ key: "pasteNotice", options: { missing: 0 } });
+
 const schemaPlugin = (schema: EditorSchema) =>
   createPlatePlugin({
     key: "schema",
     parser: {
       format: "text/html",
-      deserialize: ({ data }) => fromHtml(data, { schema }).content as unknown as Descendant[],
+      deserialize: ({ data, editor }) => {
+        const content = fromHtml(data, { schema }).content;
+        const missing = emptyImages(content);
+        if (missing) editor.setOption(PasteNoticePlugin, "missing", missing);
+        return content as unknown as Descendant[];
+      },
     },
     handlers: {
       onKeyDown: ({ editor, event }) => {
@@ -199,6 +217,6 @@ export const buildPlugins = (schema: EditorSchema): AnyPluginConfig[] => {
       createPlatePlugin({ key: "blockDrag", render: { aboveNodes: draggable } }),
     );
   }
-  plugins.push(BlockSelectionPlugin);
+  plugins.push(BlockSelectionPlugin, PasteNoticePlugin);
   return plugins;
 };

@@ -25,8 +25,11 @@ type EditorDocument = {
   locale: string;
   content: EditorNode[];
   translations?: Record<string, Record<string, Translation>>;
+  translatedFrom?: Record<string, Record<string, string>>;
 };
 ```
+
+`translations` guarda, por idioma, el texto de cada bloque bajo su `id`, y los atributos bajo `id#atributo` (`alt`, `caption`, `label`, `name`). `translatedFrom` guarda una huella del texto base del que salió cada traducción: si el original cambia, la traducción queda marcada como desactualizada. Al borrar un bloque se borran sus traducciones, y vuelven si se deshace el borrado.
 
 El esquema decide qué se puede insertar, qué ofrece el menú `/`, qué acepta el pegado y qué HTML sale. Lo que quede fuera se descarta al pegar y en `fromHtml`.
 
@@ -158,7 +161,15 @@ La tabla guarda `headerRow`, `headerColumn` y `columnAlign` (`left`, `center` o 
 
 ### Plantillas
 
-`commands.templates` lista las plantillas que el esquema permite: texto con imagen, equipo, preguntas y respuestas, y llamada a la acción. Al insertarlas son bloques ordinarios, no un nodo especial.
+`commands.templates` lista las plantillas que el esquema permite: texto con imagen, equipo, preguntas y respuestas, y llamada a la acción. Al insertarlas son bloques ordinarios, no un nodo especial, y queda elegido su primer título con el cursor dentro. En `Editor.Catalog` cada una lleva un dibujo de su disposición.
+
+### Modos
+
+`useEditorMode()` devuelve `{ mode, setMode }`, con `mode` de tipo `EditorMode`: `"visual"`, `"code"` o `"translations"`. `Editor.Translations` y `Editor.Code` reciben `title` y `className`; `Editor.ModeSwitch` y `Editor.TranslationsButton`, `className`. Con `title`, el resultado de `Editor.Code` pinta el título como lo ve quien visita la página. La aplicación pinta según el modo: su espacio de edición en `"visual"`, `Editor.Code` en `"code"` y `Editor.Translations` en `"translations"`. `Editor.ModeSwitch` es el control Visual/Código para la barra. Para que no cambie de sitio entre modos, la barra sigue a la vista en todos ellos (`Editor.Code` y `Editor.Translations` van debajo) y lo que se esconde según el modo conserva su hueco; `Editor.PreviewButton` mide lo mismo con «Vista previa» y con «Volver a editar». Este y `Editor.TranslationsButton` marcan su rótulo con `data-slot="label"`, para que una barra angosta los deje solo con el icono (`[&_[data-slot=label]]:sr-only`) sin perder el nombre accesible. En traducir no marca ninguna opción, y elegir un modo desde la vista previa la cierra. `Editor.TranslationsButton` es la entrada a las traducciones, con un contador de los idiomas que tienen textos pendientes.
+
+**Código.** `Editor.Code` muestra a la izquierda el HTML de la página (`toHtml` del idioma base, sin clases) para editarlo, y a la derecha cómo queda con las pestañas de escritorio y móvil. Un divisor entre los dos reparte el ancho: se arrastra, o se enfoca y se mueve con las flechas (Inicio y Fin van a los extremos, Enter o doble clic vuelven a la mitad). El código no baja de 16rem ni el resultado de 20rem, y el reparto se conserva mientras el editor siga abierto. En pantallas angostas los dos lados se apilan sin divisor. Si el HTML trae elementos o atributos que el esquema no admite (un `<font>`, un `onclick`), una franja los enumera y «Ver qué cambia» lleva a cada línea. Al volver a Visual el HTML pasa por `fromHtml` y entra como un solo cambio que se deshace de una vez.
+
+**Traducciones.** `Editor.Translations` es la pantalla de traducir: a la izquierda el idioma base y cada idioma de destino con su avance, y al centro una fila por texto con el bloque y su ruta, el original y el campo de la traducción. Los idiomas salen de la prop `locales` de `Editor.Root` o, si no está, de los del `I18nProvider`. La traducción conserva negrita, cursiva, código y enlaces, con los mismos atajos. Un campo vacío dice que se mostrará el idioma base, y «Ver en …» abre la vista previa en ese idioma y vuelve a la pantalla al salir. Con `title`, la pantalla muestra el título de la página como fila de solo lectura: se traduce en el menú, no aquí.
 
 ## Render
 
@@ -173,6 +184,12 @@ const copia = fromHtml(html, { schema: documentSchema });
 ```
 
 Una traducción que falte cae al idioma base del documento. `fromHtml` usa `DOMParser`, así que corre en el navegador o con jsdom.
+
+### Direcciones
+
+Un `href` o un `src` vale si es http(s), `mailto:`, `tel:` o relativo. Cualquier otro esquema se descarta, `data:` y `blob:` incluidos, también en las imágenes y la galería: el documento guarda direcciones, no archivos incrustados. Rige al pegar, en `fromHtml`, en el modo código (que avisa de cada dirección que va a quitar) y en lo que devuelve `onUploadImage`. Una imagen pegada o soltada en la página se sube con `onUploadImage` y entra como cualquier otra; sin `onUploadImage`, no se inserta.
+
+Una imagen de HTML pegado (o escrito en el modo código) cuya dirección no vale, o que no la tiene, no desaparece: queda como bloque de imagen vacío en su sitio, con su texto alternativo, para elegir el archivo en los ajustes del bloque. Después de pegar, un aviso dice cuántas quedaron así. En el HTML de salida una imagen vacía es un `figure` con `data-empty` (y `data-alt` si tiene texto alternativo), que `fromHtml` vuelve a leer como bloque vacío.
 
 ### HTML de la página y sanitizado
 

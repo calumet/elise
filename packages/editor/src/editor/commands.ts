@@ -7,12 +7,13 @@ import {
   insertTableColumn,
   insertTableRow,
 } from "@platejs/table";
+import { ElementApi, type TElement } from "platejs";
 import { useEditorRef, useEditorSelector } from "platejs/react";
 
 import { newId } from "../ids";
 import { useLabels } from "../labels";
 import type { EditorMark } from "../types";
-import { parseVideo, safeHref } from "../urls";
+import { parseVideo, safeHref, safeSrc } from "../urls";
 import { useServices } from "./context";
 import {
   buildButton,
@@ -29,6 +30,7 @@ import {
   type InsertItem,
   type InsertItemId,
 } from "./items";
+import { selectBlockById } from "./selection";
 import { templateDefs, useTemplates, type TemplateId, type TemplateItem } from "./templates";
 import { buildText } from "./text";
 
@@ -54,6 +56,15 @@ export type EditorCommands = {
   undo: () => void;
   redo: () => void;
   focus: () => void;
+};
+
+const firstEditable = (nodes: TElement[]): string | undefined => {
+  for (const node of nodes) {
+    if (["h2", "h3", "p"].includes(String(node.type))) return String(node.id);
+    const inner = firstEditable(node.children.filter(ElementApi.isElement));
+    if (inner) return inner;
+  }
+  return undefined;
 };
 
 export const useEditorCommands = (): EditorCommands => {
@@ -123,12 +134,14 @@ export const useEditorCommands = (): EditorCommands => {
     uploadImage,
     insertImage: async (source, alt) => {
       const uploaded = source instanceof File ? await uploadImage(source) : source;
+      const url = safeSrc(uploaded.src);
+      if (!url) return;
       placeBlock(
         editor,
         {
           id: newId(),
           type: "img",
-          url: uploaded.src,
+          url,
           alt: alt ?? uploaded.alt ?? "",
           children: [{ text: "" }],
         },
@@ -167,7 +180,10 @@ export const useEditorCommands = (): EditorCommands => {
     insertTemplate: (id) => {
       const def = templateDefs.find((candidate) => candidate.id === id);
       if (!def || !templates.some((item) => item.id === id)) return false;
-      placeBlock(editor, def.build(t), true);
+      const nodes = def.build(t);
+      placeBlock(editor, nodes, true);
+      const first = firstEditable(nodes);
+      if (first && selectBlockById(editor, first)) editor.tf.focus();
       return true;
     },
     addRow: () => insertTableRow(editor),

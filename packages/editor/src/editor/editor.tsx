@@ -4,11 +4,13 @@ import * as React from "react";
 
 import { EditorBlockPanel, type EditorBlockPanelProps } from "./block-panel";
 import { EditorCatalog, type EditorCatalogProps } from "./catalog";
+import { EditorCode, EditorModeSwitch } from "./code";
 import { EditorContentArea, type EditorContentAreaProps } from "./content";
 import { EditorOutline, type EditorOutlineProps } from "./outline";
 import { EditorPreviewButton, usePreviewing } from "./preview";
 import { EditorRoot, type EditorRootProps } from "./root";
 import { EditorToolbar, FormatRow, type EditorToolbarProps } from "./toolbar";
+import { EditorTranslations, EditorTranslationsButton } from "./translations";
 
 export type EditorProps = Omit<EditorRootProps, "children"> &
   Omit<EditorContentAreaProps, "className" | "renderSlashMenu" | "onSlashPick">;
@@ -79,7 +81,15 @@ export const Editor: ((props: EditorProps) => React.JSX.Element) & {
   BlockPanel: typeof BlockPanel;
   Catalog: typeof Catalog;
   PreviewButton: typeof EditorPreviewButton;
+  ModeSwitch: typeof EditorModeSwitch;
+  Code: typeof EditorCode;
+  TranslationsButton: typeof EditorTranslationsButton;
+  Translations: typeof EditorTranslations;
 } = Object.assign(EditorComposed, {
+  ModeSwitch: EditorModeSwitch,
+  Code: EditorCode,
+  TranslationsButton: EditorTranslationsButton,
+  Translations: EditorTranslations,
   Root: EditorRoot,
   Content: EditorContentArea,
   Toolbar,

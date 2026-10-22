@@ -30,7 +30,11 @@ y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
 **La interfaz del editor de páginas.** `Editor.Outline` es la estructura en un `SortableTree`, que reordena con el puntero y con el teclado, deja las columnas fijas en su bloque y no anida unas columnas dentro de otras, `Editor.BlockPanel` el panel del bloque elegido, con sus ajustes, `Editor.PreviewButton` y `useEditorPreview` la vista previa de solo lectura con la salida del render (Escape vuelve a editar con la selección que había), y `device`/`setDevice` en `useEditorPreview` la vista de escritorio o de móvil, que con `"mobile"` apila las columnas; con `"desktop"` se apilan por debajo de 20rem de área y `Editor.Catalog` el catálogo de bloques y plantillas con buscador. El bloque apuntado o elegido muestra al margen el asa y, debajo, el `+`, y el elegido su contorno con el tipo. Al arrastrar, el bloque mismo se mueve dentro de la página bajo el puntero, también entre columnas y con su tamaño de siempre, los de alrededor se apartan para abrirle sitio, y al soltar se asienta en su lugar con el ancho de su destino o vuelve al suyo con Escape o fuera de la página. Lo recién insertado queda elegido. Las columnas se eligen pulsando su hueco, y con ellas elegidas un clic en un bloque de dentro elige ese bloque. Elegidas o apuntadas en su hueco, el asa del margen es la de las columnas, y arrastra el bloque entero. Las tablas tienen un menú por fila y por columna, a la vista al apuntarlas o con el cursor en una celda, y guardan fila y columna de encabezado y la alineación de cada columna (`scope` y `data-align` en el HTML). `useBlockCommands` suma `deselect`. Todo arrastre tiene su alternativa con teclado en el panel: subir, bajar y mover a una columna o fuera de ella. El menú `/` funciona también dentro de una columna, y elegir Archivo en él abre su diálogo.
 
-**Plantillas** (texto con imagen, equipo, preguntas, llamada a la acción) que se insertan como bloques ordinarios, y `insertFile`, `uploadImage` e `insertTemplate` en `useEditorCommands`.
+**Plantillas** (texto con imagen, equipo, preguntas, llamada a la acción) que se insertan como bloques ordinarios, con su primer título elegido y un dibujo de cada una en el catálogo, y `insertFile`, `uploadImage` e `insertTemplate` en `useEditorCommands`.
+
+**Sin imágenes `data:`.** Imagen, galería y cualquier `src` aceptan solo direcciones http(s) o relativas, al pegar, en `fromHtml` y en el modo código, que avisa de las que va a quitar. Una imagen pegada o soltada se sube con `onUploadImage`; sin él no se inserta. Las imágenes de HTML pegado sin una dirección válida quedan como bloques vacíos con su texto alternativo, y un aviso dice cuántas faltan.
+
+**Traducciones y modo código.** `useEditorMode` con los modos visual, código y traducciones. `Editor.Translations` traduce los textos y atributos de la página a los idiomas de la prop `locales` de `Editor.Root` o, sin ella, a los del `I18nProvider`, conservando el formato en línea, y `Editor.TranslationsButton` cuenta los idiomas pendientes. `translatedFrom` en el documento marca las traducciones cuyo original cambió, y las de un bloque borrado se van con él. `Editor.Code` y `Editor.ModeSwitch` editan el HTML de la página junto a su resultado, con el título como lo ve quien la visita y un divisor que se arrastra o se mueve con el teclado, avisan de lo que se perderá y lo aplican como un solo cambio.
 
 **Render.** `EditorContent`, `toHtml` y `fromHtml` cubren los bloques nuevos. El diseño de las columnas sale de atributos `data-*` documentados en el README, para que sobreviva a un sanitizador que quite las clases, y se apilan en pantallas angostas.
 
@@ -51,6 +55,12 @@ pone en lugar de `--accent` y `--accent-foreground`. Sin ellos, lo elegido
 dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
+
+### Corrige
+
+**`heading`, `file-field`, `save-bar` y `value-field` en JSR.** Estaban en las
+exportaciones de npm pero no en las de `deno.json`, así que un paquete de JSR
+que los importaba los resolvía contra `dist` y no se podía publicar.
 
 ## `@calumet/elise-themes` 0.1.10
 

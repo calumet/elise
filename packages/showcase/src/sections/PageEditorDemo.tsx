@@ -3,6 +3,7 @@ import {
   pageSchema,
   useBlockCommands,
   useEditorCommands,
+  useEditorMode,
   useEditorPreview,
   useSelectedBlock,
   type EditorDocument,
@@ -10,6 +11,7 @@ import {
 } from "@calumet/elise-editor";
 import { useTranslation } from "@calumet/elise-i18n";
 import {
+  Ellipsis,
   ListTree,
   Lock,
   Monitor,
@@ -36,11 +38,27 @@ import { Badge } from "@calumet/elise-ui/badge";
 import { Box } from "@calumet/elise-ui/box";
 import { Button } from "@calumet/elise-ui/button";
 import { Container } from "@calumet/elise-ui/container";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@calumet/elise-ui/dropdown-menu";
 import { Heading } from "@calumet/elise-ui/heading";
 import { SegmentedControl, SegmentedControlItem } from "@calumet/elise-ui/segmented-control";
 import { Separator } from "@calumet/elise-ui/separator";
 import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle } from "@calumet/elise-ui/sheet";
 import { Text } from "@calumet/elise-ui/text";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@calumet/elise-ui/tooltip";
 import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 
@@ -89,34 +107,25 @@ const row = (id: string, kind: "th" | "td", cells: string[]): EditorNode => ({
   })),
 });
 
-const photo = (): string => {
-  const canvas = document.createElement("canvas");
-  canvas.width = 640;
-  canvas.height = 420;
-  const brush = canvas.getContext("2d");
-  if (brush) {
-    brush.fillStyle = "#0f766e";
-    brush.fillRect(0, 0, 640, 420);
-    brush.fillStyle = "#ffffff";
-    brush.font = "28px sans-serif";
-    brush.textAlign = "center";
-    brush.fillText("Laboratorio", 320, 220);
-  }
-  return canvas.toDataURL("image/png");
-};
+const SAMPLES = ["/editor/laboratorio.svg", "/editor/aula.svg"];
+
+const photo = (): string => SAMPLES[0] as string;
 
 const createPage = (): EditorDocument => ({
   version: 1,
   locale: "es-CO",
   content: [
-    lines(
-      "intro",
-      text(
-        "intro-p",
-        "p",
-        "La escuela recibe aspirantes dos veces al año. Aquí están las fechas, los requisitos y a quién escribir si tienes dudas.",
-      ),
-    ),
+    lines("intro", {
+      id: "intro-p",
+      type: "p",
+      children: [
+        { text: "La escuela recibe aspirantes " },
+        { text: "dos veces al año", bold: true },
+        {
+          text: ". Aquí están las fechas, los requisitos y a quién escribir si tienes dudas.",
+        },
+      ],
+    }),
     {
       id: "cols",
       type: "columns",
@@ -188,7 +197,20 @@ const createPage = (): EditorDocument => ({
       type: "callout",
       tone: "info",
       children: [
-        text("aviso-p", "p", "¿Dudas sobre el proceso? Escribe a admisiones@calumet.edu.co."),
+        {
+          id: "aviso-p",
+          type: "p",
+          children: [
+            { text: "¿Dudas sobre el proceso? Escribe a " },
+            {
+              id: "aviso-a",
+              type: "a",
+              url: "mailto:admisiones@calumet.edu.co",
+              children: [{ text: "admisiones@calumet.edu.co" }],
+            },
+            { text: "." },
+          ],
+        },
       ],
     },
     solid("guia", "file", {
@@ -197,7 +219,27 @@ const createPage = (): EditorDocument => ({
       size: 204800,
     }),
   ],
+  translations: {
+    "en-US": {
+      "intro-p": [
+        { text: "The school admits applicants " },
+        { text: "twice a year", bold: true },
+        {
+          text: ". Here are the dates, the requirements and who to write to if you have questions.",
+        },
+      ],
+      "foto#alt": "Students in the lab",
+      "req-h": "Requirements",
+      r1: "Saber 11 test results",
+      r2: "ID document",
+      "inscribirse#label": "Apply",
+      "calendario-p": "Dates may change.",
+    },
+  },
+  translatedFrom: { "en-US": { "calendario-p": "outdated" } },
 });
+
+const LOCALES = ["es-CO", "en-US", "pt-BR"];
 
 const column = (id: string, ...children: EditorNode[]): EditorNode => ({
   id,
@@ -313,7 +355,29 @@ const createWorstPage = (): EditorDocument => ({
     },
     solid("w-spacer", "spacer", { size: "large" }),
   ],
+  translations: {
+    "en-US": {
+      "w-intro-p":
+        "Aleksandra Wiśniewska-Kowalczyk, international admissions coordinator, answers external transfer requests within fifteen business days of the complete filing of the documents.",
+      "w-c2p":
+        "https://admissions.universidad-industrial-de-santander.edu.co/calls/2027/second-semester/international-applicant-requirements.pdf",
+    },
+    "ar-EG": { "w-h2": "جدول القبول للفصل الدراسي الثاني من العام الأكاديمي 2027" },
+    "zh-Hant-TW": { "w-c1h": "國際申請者的要求" },
+  },
 });
+
+const WORST_LOCALES = [
+  "es-CO",
+  "en-US",
+  "pt-BR",
+  "fr-CA",
+  "de-CH",
+  "zh-Hant-TW",
+  "sr-Latn-RS",
+  "ar-EG",
+  "x-klingon",
+];
 
 const createColumnsPage = (): EditorDocument => {
   const image = photo();
@@ -326,7 +390,7 @@ const createColumnsPage = (): EditorDocument => {
     solid("k-gallery", "gallery", {
       images: [
         { src: image, alt: "Uno" },
-        { src: image, alt: "Dos" },
+        { src: SAMPLES[1] as string, alt: "Dos" },
       ],
     }),
     solid("k-video", "media_embed", { url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }),
@@ -397,13 +461,15 @@ const createLongPage = (): EditorDocument => ({
   ]).flat(),
 });
 
-const uploadImage = (file: File): Promise<{ src: string; alt?: string }> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve({ src: String(reader.result) });
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
+let uploads = 0;
+
+const uploadImage = (file: File): Promise<{ src: string; alt?: string }> => {
+  uploads += 1;
+  return Promise.resolve({
+    src: SAMPLES[uploads % SAMPLES.length] as string,
+    alt: file.name.replace(/\.[^.]+$/, ""),
   });
+};
 
 const uploadFile = (file: File): Promise<{ src: string; name: string; size?: number }> =>
   Promise.resolve({
@@ -442,17 +508,19 @@ const IconButton = ({
   className?: string;
   children: ReactNode;
 }) => (
-  <Button
-    type="button"
-    variant="ghost"
-    size="icon-sm"
-    aria-label={label}
-    aria-pressed={pressed}
-    className={`text-muted-foreground aria-pressed:bg-accent aria-pressed:text-accent-foreground ${className ?? ""}`}
-    onClick={onClick}
-  >
-    {children}
-  </Button>
+  <Hint label={label}>
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-sm"
+      aria-label={label}
+      aria-pressed={pressed}
+      className={`text-muted-foreground aria-pressed:bg-accent aria-pressed:text-accent-foreground ${className ?? ""}`}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  </Hint>
 );
 
 const PageBar = ({
@@ -481,19 +549,27 @@ const PageBar = ({
   const { t } = useTranslation("pageEditor");
   const commands = useEditorCommands();
   const { previewing } = useEditorPreview();
+  const { mode } = useEditorMode();
+  const editing = !previewing && mode === "visual";
+  const wide = useMinWidth("(min-width: 80rem)");
   return (
     <div className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-card px-4 py-2">
-      {outlineDocked && !previewing ? (
-        <IconButton
-          label={t("structure", { fallback: "Page structure" })}
-          pressed={treeShown}
-          className="-me-2"
-          onClick={onOutline}
-        >
-          {treeShown ? <PanelLeftClose aria-hidden="true" /> : <PanelLeftOpen aria-hidden="true" />}
-        </IconButton>
+      {outlineDocked ? (
+        <Slot shown={editing} className="-me-2">
+          <IconButton
+            label={t("structure", { fallback: "Page structure" })}
+            pressed={treeShown}
+            onClick={onOutline}
+          >
+            {treeShown ? (
+              <PanelLeftClose aria-hidden="true" />
+            ) : (
+              <PanelLeftOpen aria-hidden="true" />
+            )}
+          </IconButton>
+        </Slot>
       ) : null}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-40 flex-1 flex-col max-sm:basis-full">
         <div className="flex min-w-0 items-center gap-2">
           <Text as="p" size="base" weight="semibold" truncate title={title}>
             {title}
@@ -506,26 +582,45 @@ const PageBar = ({
           {t("saved", { fallback: "Saved just now" })}
         </Text>
       </div>
-      <SegmentedControl
-        aria-label={t("view", { fallback: "View" })}
-        value={view}
-        onValueChange={(next) => onView(next as View)}
-        className="max-md:hidden"
-      >
-        <SegmentedControlItem value="desktop" aria-label={t("desktop", { fallback: "Desktop" })}>
-          <Monitor aria-hidden="true" className="size-icon-md" />
-        </SegmentedControlItem>
-        <SegmentedControlItem value="mobile" aria-label={t("mobile", { fallback: "Mobile" })}>
-          <Smartphone aria-hidden="true" className="size-icon-md" />
-        </SegmentedControlItem>
-      </SegmentedControl>
-      <div className={previewing ? "hidden" : "flex items-center gap-1"}>
+      {sideDocked ? (
+        <Slot shown={mode === "visual"}>
+          <SegmentedControl
+            aria-label={t("view", { fallback: "View" })}
+            value={view}
+            onValueChange={(next) => onView(next as View)}
+          >
+            <SegmentedControlItem
+              value="desktop"
+              aria-label={t("desktop", { fallback: "Desktop" })}
+            >
+              <Monitor aria-hidden="true" className="size-icon-md" />
+            </SegmentedControlItem>
+            <SegmentedControlItem value="mobile" aria-label={t("mobile", { fallback: "Mobile" })}>
+              <Smartphone aria-hidden="true" className="size-icon-md" />
+            </SegmentedControlItem>
+          </SegmentedControl>
+        </Slot>
+      ) : (
+        <Slot shown={mode === "visual"}>
+          <MoreMenu view={view} onView={onView} editing={editing} />
+        </Slot>
+      )}
+      <Slot shown={editing} className="flex items-center gap-1">
         {outlineDocked ? null : (
           <IconButton label={t("structure", { fallback: "Page structure" })} onClick={onOutline}>
             <ListTree aria-hidden="true" />
           </IconButton>
         )}
-        {sideDocked ? null : (
+        {sideDocked ? (
+          <>
+            <IconButton label={t("undo", { fallback: "Undo" })} onClick={commands.undo}>
+              <Undo2 aria-hidden="true" />
+            </IconButton>
+            <IconButton label={t("redo", { fallback: "Redo" })} onClick={commands.redo}>
+              <Redo2 aria-hidden="true" />
+            </IconButton>
+          </>
+        ) : (
           <IconButton
             label={t("blockSettings", { fallback: "Block settings" })}
             onClick={() => onSide("settings")}
@@ -533,35 +628,38 @@ const PageBar = ({
             <SlidersHorizontal aria-hidden="true" />
           </IconButton>
         )}
-        <IconButton
-          label={t("undo", { fallback: "Undo" })}
-          className="max-sm:hidden"
-          onClick={commands.undo}
-        >
-          <Undo2 aria-hidden="true" />
-        </IconButton>
-        <IconButton
-          label={t("redo", { fallback: "Redo" })}
-          className="max-sm:hidden"
-          onClick={commands.redo}
-        >
-          <Redo2 aria-hidden="true" />
-        </IconButton>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          aria-pressed={sideDocked ? catalogShown : undefined}
-          className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-sm:size-8 max-sm:px-0"
-          onClick={() => onSide(sideDocked && side === "catalog" ? "settings" : "catalog")}
-        >
-          <Plus aria-hidden="true" />
-          <span className="max-sm:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
-        </Button>
-      </div>
-      <Separator orientation="vertical" className={previewing ? "hidden" : "h-6 max-sm:hidden"} />
+        <Hint label={t("addBlock", { fallback: "Add block" })} when={!wide}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            aria-pressed={sideDocked ? catalogShown : undefined}
+            className="ms-2 aria-pressed:bg-accent aria-pressed:text-accent-foreground max-xl:size-8 max-xl:px-0"
+            onClick={() => onSide(sideDocked && side === "catalog" ? "settings" : "catalog")}
+          >
+            <Plus aria-hidden="true" />
+            <span className="max-xl:sr-only">{t("addBlock", { fallback: "Add block" })}</span>
+          </Button>
+        </Hint>
+      </Slot>
+      <Editor.ModeSwitch />
+      <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 max-sm:hidden" />
       <div className="flex items-center gap-2">
-        <Editor.PreviewButton className={previewing ? undefined : "max-sm:hidden"} />
+        <Slot shown={!previewing}>
+          <Hint label={t("translations", { fallback: "Translations" })} when={!wide}>
+            <Editor.TranslationsButton className="max-xl:[&_[data-slot=label]]:sr-only" />
+          </Hint>
+        </Slot>
+        <Hint
+          label={
+            previewing
+              ? t("backToEditing", { fallback: "Back to editing" })
+              : t("preview", { fallback: "Preview" })
+          }
+          when={!wide}
+        >
+          <Editor.PreviewButton className="max-xl:size-8 max-xl:px-0 max-xl:[&_[data-slot=label]]:sr-only" />
+        </Hint>
         <Button type="button" size="sm">
           {t("publish", { fallback: "Publish" })}
         </Button>
@@ -570,10 +668,106 @@ const PageBar = ({
   );
 };
 
-const DATASETS: Record<Dataset, { create: () => EditorDocument; title?: string }> = {
+const RADIO_DOT = "[&_[data-state=checked]>span]:block";
+
+const MoreMenu = ({
+  view,
+  onView,
+  editing,
+}: {
+  view: View;
+  onView: (view: View) => void;
+  editing: boolean;
+}) => {
+  const { t } = useTranslation("pageEditor");
+  const commands = useEditorCommands();
+  return (
+    <DropdownMenu modal={false}>
+      <Hint label={t("more", { fallback: "More options" })}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={t("more", { fallback: "More options" })}
+            className="text-muted-foreground"
+          >
+            <Ellipsis aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+      </Hint>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>{t("view", { fallback: "View" })}</DropdownMenuLabel>
+        <DropdownMenuRadioGroup value={view} onValueChange={(next) => onView(next as View)}>
+          <DropdownMenuRadioItem value="desktop" className={RADIO_DOT}>
+            <Monitor aria-hidden="true" />
+            {t("desktop", { fallback: "Desktop" })}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="mobile" className={RADIO_DOT}>
+            <Smartphone aria-hidden="true" />
+            {t("mobile", { fallback: "Mobile" })}
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem disabled={!editing} onSelect={commands.undo}>
+          <Undo2 aria-hidden="true" />
+          {t("undo", { fallback: "Undo" })}
+        </DropdownMenuItem>
+        <DropdownMenuItem disabled={!editing} onSelect={commands.redo}>
+          <Redo2 aria-hidden="true" />
+          {t("redo", { fallback: "Redo" })}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const Hint = ({
+  label,
+  when = true,
+  children,
+}: {
+  label: string;
+  when?: boolean;
+  children: ReactNode;
+}) =>
+  when ? (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-flex">{children}</span>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
+  ) : (
+    children
+  );
+
+const Slot = ({
+  shown,
+  className,
+  children,
+}: {
+  shown: boolean;
+  className?: string;
+  children: ReactNode;
+}) => (
+  <div
+    inert={!shown}
+    data-hidden={shown ? undefined : ""}
+    className={`transition-opacity duration-(--duration-base) ease-out data-hidden:opacity-0 ${className ?? ""}`}
+  >
+    {children}
+  </div>
+);
+
+const DATASETS: Record<
+  Dataset,
+  { create: () => EditorDocument; title?: string; locales?: string[] }
+> = {
   demo: { create: createPage },
   worst: {
     create: createWorstPage,
+    locales: WORST_LOCALES,
     title:
       "Admisiones de pregrado, posgrado y educación continua para aspirantes nacionales e internacionales",
   },
@@ -619,6 +813,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
   const selected = useSelectedBlock();
   const blocks = useBlockCommands();
   const { previewing, device: view, setDevice: setView } = useEditorPreview();
+  const { mode } = useEditorMode();
   const outlineDocked = useMinWidth("(min-width: 48rem)");
   const sideDocked = useMinWidth("(min-width: 64rem)");
   const [treeShown, setTreeShown] = useState(true);
@@ -642,19 +837,23 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
 
   return (
     <>
-      <PageBar
-        title={title}
-        view={view}
-        onView={switchView}
-        side={side}
-        catalogShown={catalogShown}
-        onSide={openSide}
-        onOutline={() => (outlineDocked ? setTreeShown(!treeShown) : setSheet("outline"))}
-        outlineDocked={outlineDocked}
-        treeShown={treeShown}
-        sideDocked={sideDocked}
-      />
-      <div className="flex min-h-0 flex-1">
+      <TooltipProvider>
+        <PageBar
+          title={title}
+          view={view}
+          onView={switchView}
+          side={side}
+          catalogShown={catalogShown}
+          onSide={openSide}
+          onOutline={() => (outlineDocked ? setTreeShown(!treeShown) : setSheet("outline"))}
+          outlineDocked={outlineDocked}
+          treeShown={treeShown}
+          sideDocked={sideDocked}
+        />
+      </TooltipProvider>
+      {mode === "code" ? <Editor.Code title={title} /> : null}
+      {mode === "translations" ? <Editor.Translations title={title} /> : null}
+      <div className={mode === "visual" ? "flex min-h-0 flex-1" : "hidden"}>
         {outlineDocked && !previewing ? (
           <aside
             aria-label={t("structure", { fallback: "Page structure" })}
@@ -669,7 +868,7 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
           </aside>
         ) : null}
         <div
-          className="@container/pane min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
+          className="@container/pane min-w-0 flex-1 overflow-y-auto bg-background px-4 py-6 sm:px-6 sm:py-8"
           onPointerDown={(event) => {
             const target = event.target as Element;
             if (!event.currentTarget.contains(target)) return;
@@ -686,9 +885,9 @@ const Workspace = ({ title, side, setSide, sheet, setSheet }: Panels & { title: 
             }
           >
             <Box
-              background="card"
-              border
-              radius="xl"
+              background={view === "mobile" ? "card" : undefined}
+              border={view === "mobile"}
+              radius={view === "mobile" ? "xl" : undefined}
               paddingX={4}
               paddingY={6}
               className={
@@ -813,6 +1012,7 @@ const PageEditorDemo = () => {
             setSide("settings");
             if (sheet === "catalog") setSheet(null);
           }}
+          locales={DATASETS[dataset].locales ?? LOCALES}
           onUploadImage={uploadImage}
           onUploadFile={uploadFile}
           className="flex min-h-0 flex-1 flex-col"

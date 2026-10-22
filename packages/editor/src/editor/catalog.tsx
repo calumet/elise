@@ -1,4 +1,4 @@
-import { Columns2, Megaphone, MessageCircleQuestion, Search, Users, X } from "@calumet/elise-icons";
+import { Search, X } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
 import { Clickable } from "@calumet/elise-ui/clickable";
 import {
@@ -36,11 +36,60 @@ const GROUPS: { label: keyof Labels; ids: InsertItemId[] }[] = [
 const RETYPE = new Set<InsertItemId>(["h2", "h3", "bulleted", "numbered", "quote"]);
 const LISTS = new Set<InsertItemId>(["bulleted", "numbered"]);
 
-const TEMPLATE_ICONS: Record<TemplateId, typeof Columns2> = {
-  "text-image": Columns2,
-  team: Users,
-  faq: MessageCircleQuestion,
-  "call-to-action": Megaphone,
+const HEAD = "h-1.5 w-3/4 rounded-full bg-muted-foreground";
+const LINE = "h-1 w-full rounded-full bg-border-strong";
+
+const Lines = ({ head = true }: { head?: boolean }): React.JSX.Element => (
+  <span className="flex min-w-0 flex-1 flex-col gap-1">
+    {head ? <span className={HEAD} /> : null}
+    <span className={LINE} />
+    <span className={`${LINE} w-2/3`} />
+  </span>
+);
+
+const TEMPLATE_PREVIEWS: Record<TemplateId, () => React.JSX.Element> = {
+  "text-image": () => (
+    <>
+      <Lines />
+      <span className="flex-1 rounded-xs bg-muted" />
+    </>
+  ),
+  team: () => (
+    <>
+      {[0, 1, 2].map((index) => (
+        <span key={index} className="flex flex-1 flex-col items-center gap-1">
+          <span className="size-3 rounded-full bg-muted" />
+          <span className={LINE} />
+        </span>
+      ))}
+    </>
+  ),
+  faq: () => (
+    <span className="flex flex-1 flex-col gap-1">
+      <span className={HEAD} />
+      <span className={`${LINE} w-1/2 bg-muted-foreground`} />
+      <span className={LINE} />
+      <span className={`${LINE} w-1/2 bg-muted-foreground`} />
+    </span>
+  ),
+  "call-to-action": () => (
+    <span className="flex flex-1 flex-col items-start gap-1 rounded-xs bg-accent p-1">
+      <span className={HEAD} />
+      <span className="h-2 w-5 rounded-xs bg-primary" />
+    </span>
+  ),
+};
+
+const TemplatePreview = ({ id }: { id: TemplateId }): React.JSX.Element => {
+  const Preview = TEMPLATE_PREVIEWS[id];
+  return (
+    <span
+      aria-hidden="true"
+      className="flex h-12 w-16 shrink-0 items-stretch gap-1 rounded-md border border-border bg-card p-1.5"
+    >
+      <Preview />
+    </span>
+  );
 };
 
 const matches = (query: string, ...parts: string[]): boolean =>
@@ -48,11 +97,13 @@ const matches = (query: string, ...parts: string[]): boolean =>
 
 const Entry = ({
   Icon,
+  media,
   label,
   description,
   onPick,
 }: {
-  Icon: typeof Columns2;
+  Icon?: typeof Search;
+  media?: React.ReactNode;
   label: string;
   description: string;
   onPick: () => void;
@@ -60,9 +111,11 @@ const Entry = ({
   <li>
     <Clickable radius="sm" paddingX={2} paddingY={1} onClick={onPick}>
       <span className="flex items-center gap-3">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground">
-          <Icon aria-hidden="true" className="size-icon-md" />
-        </span>
+        {media ?? (
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground">
+            {Icon ? <Icon aria-hidden="true" className="size-icon-md" /> : null}
+          </span>
+        )}
         <span className="flex min-w-0 flex-col">
           <span className="truncate text-base font-medium text-foreground">{label}</span>
           <span className="truncate text-xs text-muted-foreground">{description}</span>
@@ -206,7 +259,7 @@ export const EditorCatalog = ({ className, onClose }: EditorCatalogProps): React
               {templates.map((template) => (
                 <Entry
                   key={template.id}
-                  Icon={TEMPLATE_ICONS[template.id]}
+                  media={<TemplatePreview id={template.id} />}
                   label={template.label}
                   description={template.description}
                   onPick={() => pickTemplate(template.id)}

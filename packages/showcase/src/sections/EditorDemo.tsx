@@ -19,12 +19,7 @@ const buscarPaginas = async (consulta: string) =>
   PAGINAS.filter((pagina) => pagina.label.toLowerCase().includes(consulta.trim().toLowerCase()));
 
 const subirImagen = (archivo: File) =>
-  new Promise<{ src: string; alt?: string }>((resolve, reject) => {
-    const lector = new FileReader();
-    lector.onload = () => resolve({ src: String(lector.result) });
-    lector.onerror = () => reject(lector.error);
-    lector.readAsDataURL(archivo);
-  });
+  Promise.resolve({ src: "/editor/aula.svg", alt: archivo.name.replace(/\.[^.]+$/, "") });
 
 const texto = (id: string, type: string, contenido: string, extra = {}): EditorNode => ({
   id,
@@ -43,21 +38,7 @@ const fila = (id: string, tipo: "th" | "td", celdas: string[]): EditorNode => ({
   })),
 });
 
-const pintarFoto = () => {
-  const lienzo = document.createElement("canvas");
-  lienzo.width = 640;
-  lienzo.height = 300;
-  const pincel = lienzo.getContext("2d");
-  if (pincel) {
-    pincel.fillStyle = "#0f766e";
-    pincel.fillRect(0, 0, 640, 300);
-    pincel.fillStyle = "#ffffff";
-    pincel.font = "28px sans-serif";
-    pincel.textAlign = "center";
-    pincel.fillText("Laboratorio de la escuela", 320, 160);
-  }
-  return lienzo.toDataURL("image/png");
-};
+const pintarFoto = () => "/editor/laboratorio.svg";
 
 const crearPagina = (): EditorDocument => ({
   version: 1,

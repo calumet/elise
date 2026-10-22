@@ -38,9 +38,11 @@
     "./dropdown-menu": "./jsr/components/dropdown-menu.js",
     "./empty-state": "./jsr/components/empty-state.js",
     "./field": "./jsr/components/field.js",
+    "./file-field": "./jsr/components/file-field.js",
     "./file-upload": "./jsr/components/file-upload.js",
     "./form": "./jsr/components/form.js",
     "./grid": "./jsr/components/grid.js",
+    "./heading": "./jsr/components/heading.js",
     "./hover-card": "./jsr/components/hover-card.js",
     "./image": "./jsr/components/image.js",
     "./inline-error": "./jsr/components/inline-error.js",
@@ -59,6 +61,7 @@
     "./progress": "./jsr/components/progress.js",
     "./radio-group": "./jsr/components/radio-group.js",
     "./rating": "./jsr/components/rating.js",
+    "./save-bar": "./jsr/components/save-bar.js",
     "./scroll-area": "./jsr/components/scroll-area.js",
     "./search-field": "./jsr/components/search-field.js",
     "./section": "./jsr/components/section.js",
@@ -89,7 +92,8 @@
     "./toolbar": "./jsr/components/toolbar.js",
     "./tooltip": "./jsr/components/tooltip.js",
     "./tree": "./jsr/components/tree.js",
-    "./user-menu": "./jsr/components/user-menu.js"
+    "./user-menu": "./jsr/components/user-menu.js",
+    "./value-field": "./jsr/components/value-field.js"
   },
   "imports": {
     "@/": "./jsr/"
