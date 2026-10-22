@@ -204,14 +204,18 @@ mismo divergen a la primera corrección que solo toca a una.
 
 ## Fase 3: `packages/blocks`
 
-La tercera capa. El paquete está reservado en `arquitectura.md` y no existe en
-disco.
+La tercera capa. El paquete existe: `@calumet/elise-blocks`.
 
 `AppShell` vive por ahora en `elise-ui`, no aquí: es un componente con estado y
-partes componibles, no una pantalla armada. Cuando exista el paquete, los
-patrones que lo usan son los que se mudan.
+partes componibles, no una pantalla armada. Cuando existan patrones que lo
+usan, son los que se mudan.
 
-- [ ] Crear el paquete
+- [x] Crear el paquete, con el criterio de qué es un bloque escrito en
+      [Bloques](bloques.md): compone primitivos, trae un flujo cerrado, no
+      conoce dominio ni hace fetch, y resuelve una tarea general
+- [x] `SortableTree` se muda desde `elise-ui` (corte limpio en `elise-ui`
+      0.44.0, sin re-export; `SortableList` se queda como primitiva) y
+      `ChecklistPicker` entra como primer bloque nuevo
 - [ ] PageHeader, página de tabla, wizard, ajustes, autenticación, estados de
       error
 

@@ -34,7 +34,7 @@ y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
 
 **Render.** `EditorContent`, `toHtml` y `fromHtml` cubren los bloques nuevos. El diseño de las columnas sale de atributos `data-*` documentados en el README, para que sobreviva a un sanitizador que quite las clases, y se apilan en pantallas angostas.
 
-## `@calumet/elise-ui` 0.44.0 y `@calumet/elise-themes` 0.1.8
+## `@calumet/elise-ui` 0.46.0 y `@calumet/elise-themes` 0.1.11
 
 ### Cambia
 
@@ -52,9 +52,143 @@ dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
 
-## `elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6 y `elise-toasts` 0.4.26
+## `@calumet/elise-themes` 0.1.10
 
-Se republican para que JSR los publique contra `elise-ui` 0.44.0. No cambian.
+### Corrige
+
+**Cambiar un color de alerta en el editor cambia también el fondo y el texto
+del badge y del alert, no solo el punto.** Los tonos suaves de cada estado los
+escribía solo el color de la página, así que sin tocarlo se quedaban en los de
+la hoja. Ahora los escribe también cada color de alerta, y resetear uno de los
+dos no borra lo que el otro sigue usando. La ficha de cada alerta en el editor
+se pinta con esas mismas variables, así que también cambia entera.
+
+## `@calumet/elise-ui` 0.45.0, `@calumet/elise-blocks` 0.2.0 y `@calumet/elise-i18n` 0.4.1
+
+### Corrige
+
+**Una `Table` con `bare` alinea su texto con la cabecera de la tarjeta.** La
+cabecera arranca a 16px y la tabla arrancaba a 12px, así que el título y la
+primera columna no coincidían. Con `bare` la tabla toma los 16px de la tarjeta:
+celdas, filtros y, en modo lista, filas, pie y leyenda. La tabla suelta sigue
+en 12px. Una `bare` a la que se le vuelve a poner borde con `frameClassName`
+también pasa a 16px dentro de él.
+
+**`elise-blocks` trae su hoja de Tailwind, y las clases que solo usan los
+bloques ya se generan.** Hasta ahora ninguna hoja leía el código de los
+bloques, así que una clase que no usara también `elise-ui` no existía: al
+arrastrar en `SortableTree` faltaba el cursor `grabbing`. Con Tailwind, la app
+suma una línea junto a la de `elise-ui`:
+
+```css
+@import "@calumet/elise-blocks/tailwind.css";
+```
+
+El `styles.css` ya compilado de `elise-ui` incluye los bloques, así que sin
+Tailwind no hay que cambiar nada.
+
+### Añade
+
+**`listSlot="action"` en `TableHead`, para la columna de botones de la fila.**
+En modo lista va al final de la fila, a la derecha y centrada en vertical con
+el resto, sin rótulo. Antes lo único disponible era `inline`, que la pegaba al
+nombre. En modo tabla no cambia nada.
+
+**`ChecklistPicker` con `layout="groups"`, para cuando los filtros no caben en
+una fila.** En lugar de pestañas, todas las opciones bajo un encabezado por
+filtro, en el orden de `filters`, que queda fijo arriba al desplazar. La
+búsqueda mira también el nombre del grupo, y el grupo que se queda sin opciones
+no se pinta. Sin `layout`, todo sigue igual.
+
+**`ChecklistDialog`, en `@calumet/elise-blocks/checklist-dialog`: `ChecklistPicker`
+dentro de un diálogo con Aplicar y Cancelar.** Lleva el borrador por dentro:
+cada apertura parte de `selected`, cancelar lo descarta y `onApply` recibe el
+conjunto entero. Ya no hace falta remontar el diálogo con un `key` por apertura.
+
+**`ChecklistField`, en `@calumet/elise-blocks/checklist-field`: lo elegido,
+fuera del diálogo.** Los elegidos van como `Chip` con su quitar, los `locked`
+como `Badge`, `empty` cuando no hay ninguno y un botón que llama a `onEdit`,
+que normalmente abre un `ChecklistDialog`.
+
+**`ChecklistTable`, en `@calumet/elise-blocks/checklist-table`: lo elegido como
+tabla, para cuando no cabe en fichas.** Recibe las mismas `options` y `filters`
+que el picker y pinta la tarjeta entera: título, descripción y botón de editar
+en la cabecera, una fila por opción con su grupo y «Retirar», paginada de 10
+en 10. Sin nada aplicado, un vacío con el botón de editar.
+
+### Cambia
+
+**`useTranslation` sin `I18nProvider` sustituye los marcadores con
+`interpolate`, la misma función que usa el Provider.** El resultado no cambia.
+
+`elise-blocks` pide ahora `elise-ui` 0.45.0 o superior, por `listSlot="action"`.
+
+`elise-alerts` 0.3.26, `elise-forms` 0.3.6, `elise-tables` 0.9.7,
+`elise-themes` 0.1.9 y `elise-toasts` 0.4.27 se republican para que JSR los
+publique contra `elise-ui` 0.45.0. No cambian.
+
+## `@calumet/elise-blocks` 0.1.1 y `@calumet/elise-ui` 0.44.1
+
+### Corrige
+
+**Plegar o desplegar una rama de `SortableTree` ya no deja filas fuera de su
+contenedor.** La tarjeta encogía al instante y las filas de debajo se deslizaban
+desde su posición vieja, con el texto fuera del borde. Ahora la rama y lo que
+hay debajo encogen juntos. Arrastrar no cambia: al levantar una rama, sus hijas
+se ocultan al instante.
+
+### Cambia
+
+**`Tree` anima el plegado de una rama, como `SortableTree`.** La altura
+transiciona con `--duration-fast`, y con `prefers-reduced-motion` es instantáneo.
+Las ramas cerradas siguen montadas, pero `inert`: ni se tabulan ni las lee un
+lector de pantalla.
+
+## `@calumet/elise-blocks` 0.1.0 y `@calumet/elise-ui` 0.44.0
+
+### Añade
+
+**`@calumet/elise-blocks`, el paquete de bloques compuestos.** Piezas que
+arman una tarea reutilizable sobre los primitivos de `elise-ui`, sin conocer
+el dominio de ninguna app. El criterio de qué va aquí y qué se queda en
+`elise-ui` o en la app está en `docs/bloques.md`.
+
+**`ChecklistPicker`, en `@calumet/elise-blocks/checklist-picker`: elegir con
+casillas entre muchas opciones, filtradas por pestañas y por nombre.** Va
+dentro de un `Dialog` o un `Sheet`: buscador y pestañas en cápsula fijos, y
+solo las casillas desplazan. La búsqueda ignora mayúsculas y tildes y ordena
+con `Intl.Collator(locale)`. `selected` y `onToggle` son de quien lo usa.
+
+### Rompe
+
+**`SortableTree` sale de `@calumet/elise-ui/sortable` y pasa a
+`@calumet/elise-blocks/sortable-tree`, sin re-export en `elise-ui`.** Es un bloque
+(el árbol entero con su re-anidado, anuncios y teclado ya armados), no un
+primitivo. La API no cambia; solo el import. `SortableList` y sus partes se
+quedan en `elise-ui`: se componen y entran en una tabla con `asChild`.
+
+`elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6,
+`elise-themes` 0.1.8 y `elise-toasts` 0.4.26 se republican para que JSR los
+publique contra `elise-ui` 0.44.0. No cambian.
+
+## `@calumet/elise-ui` 0.43.3
+
+### Corrige
+
+**La opción elegida de `DropdownMenuRadioItem` y `ContextMenuRadioItem` vuelve a
+mostrar su punto.** El punto era un `span` en línea, y un elemento en línea y
+vacío no toma alto ni ancho, así que medía 0x0. Ahora es un bloque de 8 px.
+`MenubarRadioItem` y `SelectItem` no estaban afectados.
+
+## `@calumet/elise-ui` 0.43.2
+
+### Corrige
+
+**Una pantalla dentro de `AppShellMain` ya no suma dos rellenos horizontales.**
+El área pone los 20 px y el `Container` que lleva dentro no añade los suyos, así
+que a 390 px el contenido queda a 20 px de cada lado y no a 36. Ya no hace falta
+`gutter={false}` en cada pantalla. Con `fill` el área no rellena, y un
+`Container` dentro conserva su gutter. Fuera del área, `Container` no cambia.
 
 ## `@calumet/elise-ui` 0.43.1
 

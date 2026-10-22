@@ -1014,14 +1014,15 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 
 ### Datos
 
-| Componente                                                                | Import                               | Radix |
-| ------------------------------------------------------------------------- | ------------------------------------ | ----- |
-| Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableEmpty | `@calumet/elise-ui/table`            | —     |
-| Stat, StatLabel, StatValue, StatChange                                    | `@calumet/elise-ui/stat`             | —     |
-| DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list` | —     |
-| Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`         | —     |
-| Tree, TreeItem                                                            | `@calumet/elise-ui/tree`             | —     |
-| SortableList, SortableItem, SortableHandle, SortableTree                  | `@calumet/elise-ui/sortable`         | —     |
+| Componente                                                                | Import                                | Radix |
+| ------------------------------------------------------------------------- | ------------------------------------- | ----- |
+| Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableEmpty | `@calumet/elise-ui/table`             | —     |
+| Stat, StatLabel, StatValue, StatChange                                    | `@calumet/elise-ui/stat`              | —     |
+| DescriptionList, DescriptionListItem                                      | `@calumet/elise-ui/description-list`  | —     |
+| Timeline, TimelineItem                                                    | `@calumet/elise-ui/timeline`          | —     |
+| Tree, TreeItem                                                            | `@calumet/elise-ui/tree`              | —     |
+| SortableList, SortableItem, SortableHandle                                | `@calumet/elise-ui/sortable`          | —     |
+| SortableTree                                                              | `@calumet/elise-blocks/sortable-tree` | —     |
 
 `DescriptionList` es un `<dl>` de verdad, con sus `<dt>` y `<dd>`, así que la
 relación entre el rótulo y su valor está en el marcado y un lector de pantalla
@@ -1036,6 +1037,10 @@ espera de un árbol (arriba y abajo recorren lo que se ve, derecha abre o entra,
 izquierda cierra o sube al padre). El foco entra una sola vez y desde ahí se mueve
 con las flechas, porque con un `tabIndex` por nodo, tabular por un árbol de
 cincuenta hojas serían cincuenta paradas.
+
+`SortableTree` y `ChecklistPicker` son bloques y viven en
+`@calumet/elise-blocks`; `SortableList` se compone por partes y se queda como
+primitiva. El criterio y el catálogo de bloques están en [Bloques](bloques.md).
 
 `SortableList` reordena en vertical arrastrando desde `SortableHandle`, el
 único sitio que inicia el arrastre, así que el resto de la fila sigue siendo un
@@ -1071,8 +1076,9 @@ columna propia: en la vista de lista esa celda es la que encabeza la fila.
 Shopify: arrastrar desde el asa reordena entre hermanas, y desplazar en
 horizontal mientras se arrastra mete el nodo dentro de la hermana de arriba o lo
 saca al padre. Con teclado, las flechas izquierda y derecha cambian el nivel. Una
-rama plegada se mueve entera. A diferencia de `SortableList`, recibe los datos y
-no los hijos, porque necesita conocer el árbol entero para calcular dónde cae
+rama plegada se mueve entera. Plegar y desplegar una rama anima la altura, igual
+que en `Tree`, y con `prefers-reduced-motion` es instantáneo. A diferencia de
+`SortableList`, recibe los datos y no los hijos, porque necesita conocer el árbol entero para calcular dónde cae
 cada nodo.
 
 `maxDepth` es el número de niveles que caben. Un movimiento que lo supere, o que
@@ -1092,6 +1098,24 @@ raíz, e `index` entre las nuevas hermanas) y el árbol ya con él aplicado.
     guardarMovimiento(movimiento);
   }}
 />
+```
+
+`ChecklistPicker` elige con casillas entre muchas opciones dentro de un
+`Dialog` o un `Sheet`: buscador y pestañas en cápsula fijos arriba, casillas
+debajo. La búsqueda ignora mayúsculas y tildes, mira nombre y descripción y
+ordena con `Intl.Collator(locale)`. `selected` y `onToggle` son de quien lo
+usa; aplicar o cancelar es cosa del diálogo.
+
+```tsx
+import { ChecklistPicker } from "@calumet/elise-blocks/checklist-picker";
+
+<ChecklistPicker
+  locale="es"
+  options={opciones}
+  filters={filtros}
+  selected={elegidas}
+  onToggle={alternar}
+/>;
 ```
 
 > Para tablas con funcionalidad avanzada (filtros, paginación, ordenamiento, exportación), usa el componente `DataTable` de `@calumet/elise-tables`. Ver [Utilidades](utilidades.md#tables---datatable).
@@ -1116,7 +1140,9 @@ contorno, su encabezado fijo y su pie de paginación. `DataTable` de
 propio hueco y no la ventana, porque la misma tabla puede ir a lo ancho de una
 página o dentro de una tarjeta estrecha. El corte está en 490px. En modo lista
 cada fila deja de ser una rejilla de celdas y pasa a ser un bloque, y `listSlot`
-dice qué papel juega cada columna ahí.
+dice qué papel juega cada columna ahí. La columna de botones de la fila va con
+`listSlot="action"`, que la lleva al final y a la derecha; con `inline` se
+pegaría al nombre, que es para un estado como un `Badge`.
 
 **`format`.** Se declara una vez en el `TableHead` y cae sobre toda la columna,
 también en modo lista. `numeric` y `currency` alinean a la derecha y numeran a
