@@ -56,6 +56,12 @@ dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
 En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
 que sale de ella.
 
+### Corrige
+
+**`heading`, `file-field`, `save-bar` y `value-field` en JSR.** Estaban en las
+exportaciones de npm pero no en las de `deno.json`, así que un paquete de JSR
+que los importaba los resolvía contra `dist` y no se podía publicar.
+
 ## `elise-alerts` 0.3.25, `elise-forms` 0.3.5, `elise-tables` 0.9.6 y `elise-toasts` 0.4.26
 
 Se republican para que JSR los publique contra `elise-ui` 0.44.0. No cambian.
