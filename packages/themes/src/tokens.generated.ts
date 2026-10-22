@@ -15,6 +15,8 @@ export type EliseVar =
   | "--inverse-success"
   | "--inverse-warning"
   | "--inverse-danger"
+  | "--inverse-accent"
+  | "--inverse-accent-foreground"
   | "--inverse-border-subtle"
   | "--inverse-border"
   | "--inverse-input"
@@ -131,6 +133,8 @@ export const lightTheme: Record<EliseVar, string> = {
   "--inverse-success": "oklch(0.86 0.095 155)",
   "--inverse-warning": "oklch(0.86 0.085 62)",
   "--inverse-danger": "oklch(0.85 0.09 27)",
+  "--inverse-accent": "oklch(0.3 0.085 265)",
+  "--inverse-accent-foreground": "oklch(0.88 0.06 262)",
   "--inverse-border-subtle": "oklch(0.282 0.013 265)",
   "--inverse-border": "oklch(0.3 0.013 265)",
   "--inverse-input": "oklch(0.344 0.013 265)",
@@ -255,6 +259,8 @@ export const darkTheme: Record<EliseVar, string> = {
   "--inverse-success": "oklch(0.86 0.095 155)",
   "--inverse-warning": "oklch(0.86 0.085 62)",
   "--inverse-danger": "oklch(0.85 0.09 27)",
+  "--inverse-accent": "oklch(0.3 0.085 265)",
+  "--inverse-accent-foreground": "oklch(0.88 0.06 262)",
   "--inverse-border-subtle": "oklch(0.282 0.013 265)",
   "--inverse-border": "oklch(0.3 0.013 265)",
   "--inverse-input": "oklch(0.344 0.013 265)",
@@ -373,6 +379,8 @@ export const tokenKinds: Record<EliseVar, TokenKind> = {
   "--inverse-success": "color",
   "--inverse-warning": "color",
   "--inverse-danger": "color",
+  "--inverse-accent": "color",
+  "--inverse-accent-foreground": "color",
   "--inverse-border-subtle": "color",
   "--inverse-border": "color",
   "--inverse-input": "color",

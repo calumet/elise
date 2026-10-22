@@ -78,6 +78,7 @@ const SortableDemo = React.lazy(() => import("./sections/SortableDemo"));
 const ChecklistPickerDemo = React.lazy(() => import("./sections/ChecklistPickerDemo"));
 const TableDemo = React.lazy(() => import("./sections/TableDemo"));
 const ToastDemo = React.lazy(() => import("./sections/ToastDemo"));
+const EditorDemo = React.lazy(() => import("./sections/EditorDemo"));
 const VaciosDemo = React.lazy(() => import("./sections/VaciosDemo"));
 
 const ThemeToggle = () => {
@@ -170,6 +171,7 @@ const SECCIONES: { title: string; Demo: React.ComponentType }[] = [
   { title: "Carousel", Demo: CarouselDemo },
   { title: "Scroll & Toolbar", Demo: ScrollToolbarDemo },
   { title: "Toast", Demo: ToastDemo },
+  { title: "Editor de texto y de bloques", Demo: EditorDemo },
 ];
 
 const App = () => (

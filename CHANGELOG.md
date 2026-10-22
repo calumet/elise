@@ -3,6 +3,43 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-editor` 0.1.0
+
+Paquete nuevo: editor de texto y de bloques sobre Plate.
+
+### Añade
+
+**El núcleo sin interfaz.** `EditorDocument` con ids estables, `messageSchema` y
+`documentSchema`, `Editor.Root` y `Editor.Content`, y los comandos que usará la
+interfaz (`useEditorCommands`). El esquema decide qué se inserta, qué acepta el
+pegado y qué HTML sale.
+
+**`@calumet/elise-editor/render`**, con `EditorContent`, `toHtml` y `fromHtml`.
+No importa el runtime de edición y el viaje de ida y vuelta es estable.
+
+**La interfaz.** `Editor` compone la caja de mensaje o la hoja de documento
+según el esquema. `Editor.Toolbar` es la barra flotante sobre la selección,
+`Editor.Content` trae el menú `/`, el botón `+` y los diálogos de enlace, imagen
+y video. Los bloques se ven igual editando y leyendo, con los tokens de Elise.
+
+## `@calumet/elise-ui` 0.46.0 y `@calumet/elise-themes` 0.1.11
+
+### Cambia
+
+**El `ToolbarButton` activo lleva el tinte de acento y no el relleno de
+primario.** Fondo `--accent` y glifo `--accent-foreground`, el mismo par de
+`Text tone="primary"`. En una barra de formato la negrita sigue encendida
+mientras el cursor esté sobre texto en negrita, y un cuadro sólido del color de
+marca se leía como la acción principal de la pantalla.
+
+### Añade
+
+**`--inverse-accent` y `--inverse-accent-foreground`**, que la franja invertida
+pone en lugar de `--accent` y `--accent-foreground`. Sin ellos, lo elegido
+dentro de una barra oscura tomaba el azul claro pensado para la página blanca.
+En `elise-themes` los recalcula la decisión de marca, igual que el resto de lo
+que sale de ella.
+
 ## `@calumet/elise-themes` 0.1.10
 
 ### Corrige
