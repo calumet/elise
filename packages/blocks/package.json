@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-blocks",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "Bloques compuestos de Elise: piezas que arman una tarea reutilizable sobre los primitivos de elise-ui, sin conocer el dominio de ninguna app.",
   "repository": {
