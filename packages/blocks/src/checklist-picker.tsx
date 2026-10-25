@@ -42,7 +42,7 @@ export type ChecklistPickerFilter = {
 export type ChecklistPickerProps = {
   options: ChecklistPickerOption[];
 
-  /** Las pestañas, en orden, después de la que lo muestra todo. */
+  /** Las pestañas, en orden, después de la que lo muestra todo. Sin filtros no hay pestañas. */
   filters: ChecklistPickerFilter[];
 
   /**
@@ -159,7 +159,7 @@ export function ChecklistPicker({
             value={query}
             onValueChange={setQuery}
           />
-          {!grouped && (
+          {!grouped && filters.length > 0 && (
             <Tabs value={filter} onValueChange={setFilter}>
               <TabsList variant="capsule" aria-label={filtersLabel}>
                 <TabsTrigger value={ALL}>{allLabel}</TabsTrigger>

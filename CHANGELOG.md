@@ -3,6 +3,12 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.2.1
+
+### Corrige
+
+`ChecklistPicker` y `ChecklistDialog` ya no pintan la pestaña «Todas» sola cuando `filters` está vacío.
+
 ## `@calumet/elise-editor` 0.1.0
 
 Paquete nuevo: editor de texto y de bloques sobre Plate.
