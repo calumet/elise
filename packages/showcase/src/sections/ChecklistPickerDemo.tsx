@@ -81,7 +81,12 @@ const PickerField = ({
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(new Set());
 
   const items = [
-    ...locked.map(({ id, label }) => ({ id, label, locked: true })),
+    ...locked.map(({ id, label }) => ({
+      id,
+      label,
+      locked: true,
+      lockedHint: "Viene de los registros de la universidad",
+    })),
     ...options.filter(({ id }) => applied.has(id)).map(({ id, label }) => ({ id, label })),
   ];
 

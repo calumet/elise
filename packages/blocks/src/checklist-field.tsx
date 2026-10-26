@@ -26,8 +26,11 @@ export type ChecklistFieldItem = {
   id: string;
   label: string;
 
-  /** Lo afirma el sistema y no se quita: va como `Badge`, sin botón de quitar. */
+  /** Lo afirma el sistema y no se quita: va como `Badge` informativo, sin botón de quitar. */
   locked?: boolean;
+
+  /** El título emergente de un `locked`: por qué no se quita. */
+  lockedHint?: string;
 };
 
 /** Props de {@link ChecklistField}. */
@@ -62,7 +65,7 @@ export type ChecklistFieldProps = {
 /**
  * Mostrar y editar lo elegido con `ChecklistPicker`.
  *
- * Los elegidos van como `Chip` con su quitar y los `locked` como `Badge`;
+ * Los elegidos van como `Chip` con su quitar y los `locked` como `Badge` informativo, con `lockedHint` de título emergente;
  * `note` sale debajo. Con `title` es una tarjeta con el botón de editar en la
  * cabecera; sin él, un campo en línea. El diálogo es de quien lo usa, igual que
  * en `ChecklistPicker`.
@@ -85,7 +88,9 @@ export function ChecklistField({
   );
   const chips = items.map((item) =>
     item.locked ? (
-      <Badge key={item.id}>{item.label}</Badge>
+      <Badge key={item.id} tone="info" title={item.lockedHint}>
+        {item.label}
+      </Badge>
     ) : (
       <Chip key={item.id} onRemove={() => onRemove(item.id)}>
         {item.label}
