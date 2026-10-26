@@ -30,6 +30,12 @@ export type ChecklistPickerOption = {
 
   /** El `value` del {@link ChecklistPickerFilter} bajo el que aparece. */
   filter: string;
+
+  /** La afirma el sistema: sale marcada y sin editar, no entra ni sale de lo que se aplica. */
+  locked?: boolean;
+
+  /** Por qué es `locked`: va bajo el nombre y también se busca. */
+  lockedHint?: string;
 };
 
 /** Una pestaña de {@link ChecklistPicker}, o un grupo con `layout="groups"`. */
@@ -108,7 +114,7 @@ export function ChecklistPicker({
         (option) =>
           !term ||
           matches(
-            `${option.label}\n${option.description ?? ""}\n${groupLabels.get(option.filter) ?? ""}`,
+            `${option.label}\n${option.description ?? ""}\n${option.lockedHint ?? ""}\n${groupLabels.get(option.filter) ?? ""}`,
             term,
             locale,
           ),
@@ -134,8 +140,12 @@ export function ChecklistPicker({
         <Checkbox
           key={option.id}
           label={option.label}
-          description={option.description}
-          checked={selected.has(option.id)}
+          description={
+            [option.description, option.locked && option.lockedHint].filter(Boolean).join(" · ") ||
+            undefined
+          }
+          checked={option.locked || selected.has(option.id)}
+          disabled={option.locked}
           onCheckedChange={(checked) => onToggle(option.id, checked === true)}
         />
       ))}

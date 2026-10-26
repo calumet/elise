@@ -158,17 +158,34 @@ export default function ChecklistPickerDemo() {
   );
 }
 
+const includes: Record<string, string> = {
+  "Agenda.Editar": "Agenda.Ver",
+  "Agenda.Borrar": "Agenda.Ver",
+};
+
 const PermissionsTable = () => {
   const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(
-    new Set(permissions.slice(0, 14).map(({ id }) => id)),
+    new Set(["Agenda.Editar", "Finanzas.Crear"]),
   );
+
+  const options = React.useMemo(() => {
+    const labels = new Map(permissions.map((p) => [p.id, p.label]));
+    const holders = new Map<string, string>();
+    for (const [holder, target] of Object.entries(includes)) {
+      if (applied.has(holder)) holders.set(target, holder);
+    }
+    return permissions.map((p) => {
+      const holder = holders.get(p.id);
+      return holder ? { ...p, locked: true, lockedHint: `Incluido en «${labels.get(holder)}»` } : p;
+    });
+  }, [applied]);
 
   return (
     <>
       <ChecklistTable
         locale="es"
-        options={permissions}
+        options={options}
         filters={moduleFilters}
         selected={applied}
         title="Permisos del perfil"
@@ -191,7 +208,7 @@ const PermissionsTable = () => {
         description="Busca por permiso o por módulo."
         locale="es"
         layout="groups"
-        options={permissions}
+        options={options}
         filters={moduleFilters}
         selected={applied}
         onApply={setApplied}

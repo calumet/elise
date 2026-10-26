@@ -80,6 +80,11 @@ usa. Aplicar o cancelar es cosa del diálogo que lo contiene, y por eso no
 trae pie ni botones. Con `layout="groups"` cambia las pestañas por un
 encabezado fijo por filtro, para cuando los filtros no caben en una fila.
 
+Una opción con `locked` (y `lockedHint`, el porqué) es algo que el sistema
+afirma, como un permiso incluido en otro: sale marcada, sin editar y con su
+nota bajo el nombre, y `onApply` no la recibe. `ChecklistTable` la pinta
+siempre, sin botón de retirar.
+
 `ChecklistDialog` lo mete en un diálogo con Aplicar y Cancelar y lleva el
 borrador: cada apertura parte de lo aplicado. `ChecklistField` muestra lo
 aplicado fuera del diálogo, los elegidos como `Chip` que se quitan, los `locked`

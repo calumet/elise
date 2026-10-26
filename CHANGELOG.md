@@ -3,6 +3,18 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.5.0
+
+### Añade
+
+**Opciones `locked` en `ChecklistPicker`, `ChecklistDialog` y `ChecklistTable`.**
+`ChecklistPickerOption.locked` y `lockedHint` (el vocabulario de
+`ChecklistField`) marcan una opción que el sistema afirma, por ejemplo un
+permiso incluido en otro. En el picker sale marcada, deshabilitada y con
+`lockedHint` bajo el nombre; `ChecklistDialog` la quita de lo que entrega
+`onApply`; `ChecklistTable` la pinta siempre, con la nota y sin botón de
+retirar.
+
 ## `@calumet/elise-blocks` 0.4.0
 
 ### Añade

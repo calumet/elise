@@ -22,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@calumet/elise-ui/table";
+import { Text } from "@calumet/elise-ui/text";
 import * as React from "react";
 
 import type { ChecklistPickerFilter, ChecklistPickerOption } from "./checklist-picker";
@@ -29,7 +30,7 @@ import { useElLabel } from "./lib/i18n";
 
 /** Props de {@link ChecklistTable}. */
 export type ChecklistTableProps = {
-  /** Las mismas que recibe el `ChecklistPicker`. */
+  /** Las mismas que recibe el `ChecklistPicker`; las `locked` salen siempre, sin quitar. */
   options: ChecklistPickerOption[];
 
   /** Las mismas que recibe el `ChecklistPicker`; dan el nombre del grupo de cada fila. */
@@ -94,7 +95,7 @@ export function ChecklistTable({
     const collator = new Intl.Collator(locale);
     const order = new Map(filters.map((f, index) => [f.value, index]));
     return options
-      .filter((option) => selected.has(option.id))
+      .filter((option) => option.locked || selected.has(option.id))
       .sort(
         (a, b) =>
           (order.get(a.filter) ?? filters.length) - (order.get(b.filter) ?? filters.length) ||
@@ -150,19 +151,28 @@ export function ChecklistTable({
         <TableBody>
           {visible.map((option) => (
             <TableRow key={option.id}>
-              <TableCell>{option.label}</TableCell>
+              <TableCell>
+                {option.label}
+                {option.locked && option.lockedHint && (
+                  <Text size="sm" tone="muted">
+                    {option.lockedHint}
+                  </Text>
+                )}
+              </TableCell>
               <TableCell className="text-muted-foreground">
                 {groupLabels.get(option.filter)}
               </TableCell>
               <TableCell className="text-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  aria-label={`${remove}: ${option.label}`}
-                  onClick={() => onRemove(option.id)}
-                >
-                  {remove}
-                </Button>
+                {!option.locked && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    aria-label={`${remove}: ${option.label}`}
+                    onClick={() => onRemove(option.id)}
+                  >
+                    {remove}
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
