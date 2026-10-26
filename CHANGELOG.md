@@ -3,6 +3,21 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.5.0
+
+### Añade
+
+**`ChecklistPickerOption.includedBy` en `ChecklistPicker`, `ChecklistDialog` y
+`ChecklistTable`.** Una opción dice qué otras la incluyen (por ejemplo, un
+permiso incluido en otro). Mientras alguna esté marcada, la incluida sale marcada,
+sin editar y con la nota «Incluido en «…»» (texto `checklistIncludedIn` del
+namespace `ui`); al desmarcar la que la incluye vuelve a su propio estado. Lo
+incluido no se escribe en la selección, así que `onApply` solo entrega lo marcado
+por sí mismo. En `ChecklistTable` la fila sale con la nota y sin retirar.
+`includedBy` lleva todas las que la incluyen, directas e indirectas, porque no
+se recorren cadenas: si «Administrar» incluye «Editar» y «Editar» incluye «Ver»,
+el de «Ver» es `["Administrar", "Editar"]`.
+
 ## `@calumet/elise-blocks` 0.4.0
 
 ### Añade

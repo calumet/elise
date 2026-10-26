@@ -46,13 +46,22 @@ const modules = [
 
 const actions = ["Ver", "Crear", "Editar", "Borrar"];
 
-const permissions: ChecklistPickerOption[] = modules.flatMap((module) =>
+const allPermissions: ChecklistPickerOption[] = modules.flatMap((module) =>
   actions.map((action) => ({
     id: `${module}.${action}`,
     label: `${action} en ${module}`,
     filter: module,
   })),
 );
+
+const includedBy: Record<string, string[]> = {
+  "Agenda.Ver": ["Agenda.Editar", "Agenda.Borrar"],
+};
+
+const permissions: ChecklistPickerOption[] = allPermissions.map((p) => ({
+  ...p,
+  includedBy: includedBy[p.id],
+}));
 
 const moduleFilters = modules.map((module) => ({ value: module, label: module }));
 
@@ -161,7 +170,7 @@ export default function ChecklistPickerDemo() {
 const PermissionsTable = () => {
   const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(
-    new Set(permissions.slice(0, 14).map(({ id }) => id)),
+    new Set(["Agenda.Editar", "Finanzas.Crear"]),
   );
 
   return (

@@ -80,6 +80,14 @@ usa. Aplicar o cancelar es cosa del diálogo que lo contiene, y por eso no
 trae pie ni botones. Con `layout="groups"` cambia las pestañas por un
 encabezado fijo por filtro, para cuando los filtros no caben en una fila.
 
+Una opción con `includedBy` (ids de las que la incluyen) sale marcada, sin
+editar y con «Incluido en «…»» mientras alguna esté marcada, y vuelve a su
+estado al desmarcarla; `onApply` no recibe lo incluido. `ChecklistTable` la pinta
+con la nota y sin botón de retirar. `includedBy` lleva todas las que la
+incluyen, directas e indirectas: no se recorren cadenas, así que si
+«Administrar» incluye «Editar» y «Editar» incluye «Ver», el de «Ver» es
+`["Administrar", "Editar"]`.
+
 `ChecklistDialog` lo mete en un diálogo con Aplicar y Cancelar y lleva el
 borrador: cada apertura parte de lo aplicado. `ChecklistField` muestra lo
 aplicado fuera del diálogo, los elegidos como `Chip` que se quitan, los `locked`

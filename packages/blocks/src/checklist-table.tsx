@@ -22,14 +22,19 @@ import {
   TableHeader,
   TableRow,
 } from "@calumet/elise-ui/table";
+import { Text } from "@calumet/elise-ui/text";
 import * as React from "react";
 
-import type { ChecklistPickerFilter, ChecklistPickerOption } from "./checklist-picker";
+import {
+  type ChecklistPickerFilter,
+  type ChecklistPickerOption,
+  includedLabels,
+} from "./checklist-picker";
 import { useElLabel } from "./lib/i18n";
 
 /** Props de {@link ChecklistTable}. */
 export type ChecklistTableProps = {
-  /** Las mismas que recibe el `ChecklistPicker`. */
+  /** Las mismas que recibe el `ChecklistPicker`; las incluidas por una aplicada salen con su nota y sin quitar. */
   options: ChecklistPickerOption[];
 
   /** Las mismas que recibe el `ChecklistPicker`; dan el nombre del grupo de cada fila. */
@@ -87,20 +92,22 @@ export function ChecklistTable({
 }: ChecklistTableProps): React.JSX.Element {
   const defaultRemove = useElLabel("ui", "checklistTableRemove", "Retirar");
   const rangeTemplate = useElLabel("ui", "checklistTableRange", "{from}-{to} de {total}");
+  const includedTemplate = useElLabel("ui", "checklistIncludedIn", "Incluido en «{label}»");
   const titleId = `${React.useId()}-title`;
   const [page, setPage] = React.useState(0);
 
+  const included = React.useMemo(() => includedLabels(options, selected), [options, selected]);
   const rows = React.useMemo(() => {
     const collator = new Intl.Collator(locale);
     const order = new Map(filters.map((f, index) => [f.value, index]));
     return options
-      .filter((option) => selected.has(option.id))
+      .filter((option) => selected.has(option.id) || included.has(option.id))
       .sort(
         (a, b) =>
           (order.get(a.filter) ?? filters.length) - (order.get(b.filter) ?? filters.length) ||
           collator.compare(a.label, b.label),
       );
-  }, [options, filters, selected, locale]);
+  }, [options, filters, selected, included, locale]);
 
   const groupLabels = new Map(filters.map((f) => [f.value, f.label]));
   const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
@@ -150,19 +157,28 @@ export function ChecklistTable({
         <TableBody>
           {visible.map((option) => (
             <TableRow key={option.id}>
-              <TableCell>{option.label}</TableCell>
+              <TableCell>
+                {option.label}
+                {included.has(option.id) && (
+                  <Text size="sm" tone="muted">
+                    {includedTemplate.replace("{label}", included.get(option.id) ?? "")}
+                  </Text>
+                )}
+              </TableCell>
               <TableCell className="text-muted-foreground">
                 {groupLabels.get(option.filter)}
               </TableCell>
               <TableCell className="text-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  aria-label={`${remove}: ${option.label}`}
-                  onClick={() => onRemove(option.id)}
-                >
-                  {remove}
-                </Button>
+                {!included.has(option.id) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    aria-label={`${remove}: ${option.label}`}
+                    onClick={() => onRemove(option.id)}
+                  >
+                    {remove}
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
