@@ -54,13 +54,13 @@ Dos consecuencias deliberadas:
 
 ## Catálogo inicial
 
-| Bloque            | Import                                   | Qué arma                                                                           |
-| ----------------- | ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| `SortableTree`    | `@calumet/elise-blocks/sortable-tree`    | Reordenar una jerarquía arrastrando: reordenar y re-anidar                         |
-| `ChecklistPicker` | `@calumet/elise-blocks/checklist-picker` | Elegir con casillas entre muchas opciones, con buscador y pestañas                 |
-| `ChecklistDialog` | `@calumet/elise-blocks/checklist-dialog` | `ChecklistPicker` en un diálogo que aplica o cancela                               |
-| `ChecklistField`  | `@calumet/elise-blocks/checklist-field`  | Mostrar lo elegido como fichas que se quitan, en su sección con el botón de editar |
-| `ChecklistTable`  | `@calumet/elise-blocks/checklist-table`  | Mostrar lo elegido como tabla paginada, con su grupo y su quitar                   |
+| Bloque            | Import                                   | Qué arma                                                                                       |
+| ----------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `SortableTree`    | `@calumet/elise-blocks/sortable-tree`    | Reordenar una jerarquía arrastrando: reordenar y re-anidar                                     |
+| `ChecklistPicker` | `@calumet/elise-blocks/checklist-picker` | Elegir con casillas entre muchas opciones, con buscador y pestañas                             |
+| `ChecklistDialog` | `@calumet/elise-blocks/checklist-dialog` | `ChecklistPicker` en un diálogo que aplica o cancela                                           |
+| `ChecklistField`  | `@calumet/elise-blocks/checklist-field`  | Mostrar lo elegido como fichas que se quitan, en su sección o en línea, con el botón de editar |
+| `ChecklistTable`  | `@calumet/elise-blocks/checklist-table`  | Mostrar lo elegido como tabla paginada, con su grupo y su quitar                               |
 
 `SortableTree` vivía en `@calumet/elise-ui/sortable` hasta `elise-ui` 0.43.x.
 En 0.44.0 sale de `elise-ui` sin re-export: el import nuevo es
@@ -82,9 +82,11 @@ encabezado fijo por filtro, para cuando los filtros no caben en una fila.
 
 `ChecklistDialog` lo mete en un diálogo con Aplicar y Cancelar y lleva el
 borrador: cada apertura parte de lo aplicado. `ChecklistField` muestra lo
-aplicado fuera del diálogo, en su `Section`: el botón que abre el diálogo en la
-cabecera, los elegidos como `Chip` que se quitan, los `locked` como `Badge` y,
-si hace falta, una `note` en gris debajo. `ChecklistTable` es
+aplicado fuera del diálogo, los elegidos como `Chip` que se quitan, los `locked`
+como `Badge` y, si hace falta, una `note` en gris debajo. Con `title` es la
+tarjeta entera, con el botón que abre el diálogo en la cabecera (y `description`
+bajo el título); sin él, un campo en línea con el botón al final de las fichas,
+para meterlo en otra sección o formulario. `ChecklistTable` es
 lo mismo para una lista larga: la tarjeta con una fila por opción, su grupo y
 su quitar, paginada. El diálogo va aparte porque sirve igual a las dos.
 
