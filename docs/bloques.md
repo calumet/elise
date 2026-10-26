@@ -83,7 +83,7 @@ encabezado fijo por filtro, para cuando los filtros no caben en una fila.
 `ChecklistDialog` lo mete en un diálogo con Aplicar y Cancelar y lleva el
 borrador: cada apertura parte de lo aplicado. `ChecklistField` muestra lo
 aplicado fuera del diálogo, los elegidos como `Chip` que se quitan, los `locked`
-como `Badge` y, si hace falta, una `note` en gris debajo. Con `title` es la
+como `Badge` informativo (azul, con `lockedHint` de título emergente) y, si hace falta, una `note` en gris debajo. Con `title` es la
 tarjeta entera, con el botón que abre el diálogo en la cabecera (y `description`
 bajo el título); sin él, un campo en línea con el botón al final de las fichas,
 para meterlo en otra sección o formulario. `ChecklistTable` es

@@ -3,6 +3,16 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.4.0
+
+### Añade
+
+**`ChecklistField`: los `locked` en tono informativo y con `lockedHint`.** Los
+elegidos `locked` salían en gris, igual que los demás, y la nota «las de color…»
+no tenía a qué referirse. Ahora son un `Badge` `info` (azul) y
+`ChecklistFieldItem.lockedHint` pone el título emergente que explica por qué no
+se quitan. Sin `lockedHint` no hay título.
+
 ## `@calumet/elise-blocks` 0.3.0
 
 ### Añade
