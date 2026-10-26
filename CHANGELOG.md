@@ -14,6 +14,9 @@ sin editar y con la nota «Incluido en «…»» (texto `checklistIncludedIn` de
 namespace `ui`); al desmarcar la que la incluye vuelve a su propio estado. Lo
 incluido no se escribe en la selección, así que `onApply` solo entrega lo marcado
 por sí mismo. En `ChecklistTable` la fila sale con la nota y sin retirar.
+`includedBy` lleva todas las que la incluyen, directas e indirectas, porque no
+se recorren cadenas: si «Administrar» incluye «Editar» y «Editar» incluye «Ver»,
+el de «Ver» es `["Administrar", "Editar"]`.
 
 ## `@calumet/elise-blocks` 0.4.0
 

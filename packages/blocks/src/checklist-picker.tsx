@@ -31,7 +31,11 @@ export type ChecklistPickerOption = {
   /** El `value` del {@link ChecklistPickerFilter} bajo el que aparece. */
   filter: string;
 
-  /** Los `id` de las opciones que la incluyen: marcada alguna, esta sale marcada y sin editar. */
+  /**
+   * Los `id` de todas las opciones que la incluyen, directas e indirectas: no se recorren cadenas.
+   * Si «Administrar» incluye «Editar» y «Editar» incluye «Ver», el de «Ver» es ambas.
+   * Marcada alguna, esta sale marcada y sin editar.
+   */
   includedBy?: string[];
 };
 
