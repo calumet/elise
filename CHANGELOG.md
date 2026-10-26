@@ -3,6 +3,17 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.3.0
+
+### Cambia
+
+**`ChecklistField` pinta la sección entera, como `ChecklistTable`.** Recibe
+`title` (obligatorio) y `note` (opcional), y el botón de editar pasa del final
+de las fichas a la cabecera de la sección. `note` sale en gris bajo las fichas,
+por ejemplo para decir por qué las `locked` no se quitan. `items`, `onRemove`,
+`empty`, `onEdit` y `editLabel` siguen igual. Quien lo envolvía en su propia
+`Section` deja de hacerlo y pasa el rótulo en `title`.
+
 ## `@calumet/elise-blocks` 0.2.1
 
 ### Corrige

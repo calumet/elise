@@ -62,9 +62,10 @@ type PickerFieldProps = {
   filters: ChecklistPickerFilter[];
   locked?: ChecklistPickerOption[];
   empty: string;
+  note?: string;
 };
 
-const PickerField = ({ title, options, filters, locked = [], empty }: PickerFieldProps) => {
+const PickerField = ({ title, options, filters, locked = [], empty, note }: PickerFieldProps) => {
   const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(new Set());
 
@@ -76,9 +77,11 @@ const PickerField = ({ title, options, filters, locked = [], empty }: PickerFiel
   return (
     <>
       <ChecklistField
+        title={title}
+        note={note}
         items={items}
         empty={<Text tone="muted">{empty}</Text>}
-        editLabel="Elegir"
+        editLabel="Asignar"
         onEdit={() => setOpen(true)}
         onRemove={(id) =>
           setApplied((prev) => new Set([...prev].filter((applied) => applied !== id)))
@@ -112,6 +115,7 @@ export default function ChecklistPickerDemo() {
           filters={faculties}
           locked={[{ id: "sistemas", label: "Ingeniería de Sistemas", filter: "ing" }]}
           empty="Ninguna escuela elegida."
+          note="Las de color vienen de los registros de la universidad y no se retiran aquí."
         />
       </BlockStack>
       <BlockStack gap={2}>
