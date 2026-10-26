@@ -25,12 +25,16 @@ import {
 import { Text } from "@calumet/elise-ui/text";
 import * as React from "react";
 
-import type { ChecklistPickerFilter, ChecklistPickerOption } from "./checklist-picker";
+import {
+  type ChecklistPickerFilter,
+  type ChecklistPickerOption,
+  includedLabels,
+} from "./checklist-picker";
 import { useElLabel } from "./lib/i18n";
 
 /** Props de {@link ChecklistTable}. */
 export type ChecklistTableProps = {
-  /** Las mismas que recibe el `ChecklistPicker`; las `locked` salen siempre, sin quitar. */
+  /** Las mismas que recibe el `ChecklistPicker`; las incluidas por una aplicada salen con su nota y sin quitar. */
   options: ChecklistPickerOption[];
 
   /** Las mismas que recibe el `ChecklistPicker`; dan el nombre del grupo de cada fila. */
@@ -88,20 +92,22 @@ export function ChecklistTable({
 }: ChecklistTableProps): React.JSX.Element {
   const defaultRemove = useElLabel("ui", "checklistTableRemove", "Retirar");
   const rangeTemplate = useElLabel("ui", "checklistTableRange", "{from}-{to} de {total}");
+  const includedTemplate = useElLabel("ui", "checklistIncludedIn", "Incluido en «{label}»");
   const titleId = `${React.useId()}-title`;
   const [page, setPage] = React.useState(0);
 
+  const included = React.useMemo(() => includedLabels(options, selected), [options, selected]);
   const rows = React.useMemo(() => {
     const collator = new Intl.Collator(locale);
     const order = new Map(filters.map((f, index) => [f.value, index]));
     return options
-      .filter((option) => option.locked || selected.has(option.id))
+      .filter((option) => selected.has(option.id) || included.has(option.id))
       .sort(
         (a, b) =>
           (order.get(a.filter) ?? filters.length) - (order.get(b.filter) ?? filters.length) ||
           collator.compare(a.label, b.label),
       );
-  }, [options, filters, selected, locale]);
+  }, [options, filters, selected, included, locale]);
 
   const groupLabels = new Map(filters.map((f) => [f.value, f.label]));
   const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
@@ -153,9 +159,9 @@ export function ChecklistTable({
             <TableRow key={option.id}>
               <TableCell>
                 {option.label}
-                {option.locked && option.lockedHint && (
+                {included.has(option.id) && (
                   <Text size="sm" tone="muted">
-                    {option.lockedHint}
+                    {includedTemplate.replace("{label}", included.get(option.id) ?? "")}
                   </Text>
                 )}
               </TableCell>
@@ -163,7 +169,7 @@ export function ChecklistTable({
                 {groupLabels.get(option.filter)}
               </TableCell>
               <TableCell className="text-end">
-                {!option.locked && (
+                {!included.has(option.id) && (
                   <Button
                     variant="outline"
                     size="sm"

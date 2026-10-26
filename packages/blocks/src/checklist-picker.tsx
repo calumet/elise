@@ -31,11 +31,8 @@ export type ChecklistPickerOption = {
   /** El `value` del {@link ChecklistPickerFilter} bajo el que aparece. */
   filter: string;
 
-  /** La afirma el sistema: sale marcada y sin editar, no entra ni sale de lo que se aplica. */
-  locked?: boolean;
-
-  /** Por qué es `locked`: va bajo el nombre y también se busca. */
-  lockedHint?: string;
+  /** Los `id` de las opciones que la incluyen: marcada alguna, esta sale marcada y sin editar. */
+  includedBy?: string[];
 };
 
 /** Una pestaña de {@link ChecklistPicker}, o un grupo con `layout="groups"`. */
@@ -66,6 +63,23 @@ export type ChecklistPickerProps = {
 
   /** El locale con el que se ordena y se busca. Por defecto, el del navegador. */
   locale?: string;
+};
+
+/** De cada opción incluida por alguna marcada, el nombre de la primera marcada que la incluye. */
+export const includedLabels = (
+  options: ChecklistPickerOption[],
+  marked: ReadonlySet<string>,
+): Map<string, string> => {
+  const result = new Map<string, string>();
+  for (const holder of options) {
+    if (!marked.has(holder.id)) continue;
+    for (const target of options) {
+      if (target.includedBy?.includes(holder.id) && !result.has(target.id)) {
+        result.set(target.id, holder.label);
+      }
+    }
+  }
+  return result;
 };
 
 const fold = (text: string, locale?: string): string =>
@@ -100,6 +114,9 @@ export function ChecklistPicker({
     "Nada coincide con «{query}».",
   );
 
+  const includedTemplate = useElLabel("ui", "checklistIncludedIn", "Incluido en «{label}»");
+  const included = React.useMemo(() => includedLabels(options, selected), [options, selected]);
+
   const [query, setQuery] = React.useState("");
   const [filter, setFilter] = React.useState(ALL);
 
@@ -114,7 +131,7 @@ export function ChecklistPicker({
         (option) =>
           !term ||
           matches(
-            `${option.label}\n${option.description ?? ""}\n${option.lockedHint ?? ""}\n${groupLabels.get(option.filter) ?? ""}`,
+            `${option.label}\n${option.description ?? ""}\n${groupLabels.get(option.filter) ?? ""}`,
             term,
             locale,
           ),
@@ -136,19 +153,28 @@ export function ChecklistPicker({
 
   const renderOptions = (list: ChecklistPickerOption[]) => (
     <BlockStack gap={3}>
-      {list.map((option) => (
-        <Checkbox
-          key={option.id}
-          label={option.label}
-          description={
-            [option.description, option.locked && option.lockedHint].filter(Boolean).join(" · ") ||
-            undefined
-          }
-          checked={option.locked || selected.has(option.id)}
-          disabled={option.locked}
-          onCheckedChange={(checked) => onToggle(option.id, checked === true)}
-        />
-      ))}
+      {list.map((option) => {
+        const holder = included.get(option.id);
+        return (
+          <Checkbox
+            key={option.id}
+            label={option.label}
+            description={
+              holder ? (
+                <>
+                  {option.description}
+                  <span className="block">{includedTemplate.replace("{label}", holder)}</span>
+                </>
+              ) : (
+                option.description
+              )
+            }
+            checked={holder !== undefined || selected.has(option.id)}
+            disabled={holder !== undefined}
+            onCheckedChange={(checked) => onToggle(option.id, checked === true)}
+          />
+        );
+      })}
     </BlockStack>
   );
 

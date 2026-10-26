@@ -69,7 +69,6 @@ function ChecklistDialogBody({
   const defaultApply = useElLabel("ui", "checklistDialogApply", "Aplicar");
   const defaultCancel = useElLabel("ui", "checklistDialogCancel", "Cancelar");
   const [draft, setDraft] = React.useState(selected);
-  const lockedIds = new Set(picker.options.filter((o) => o.locked).map((o) => o.id));
 
   return (
     <>
@@ -94,9 +93,7 @@ function ChecklistDialogBody({
           <Button variant="outline">{cancelLabel ?? defaultCancel}</Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button onClick={() => onApply(new Set([...draft].filter((id) => !lockedIds.has(id))))}>
-            {applyLabel ?? defaultApply}
-          </Button>
+          <Button onClick={() => onApply(draft)}>{applyLabel ?? defaultApply}</Button>
         </DialogClose>
       </DialogFooter>
     </>

@@ -46,13 +46,22 @@ const modules = [
 
 const actions = ["Ver", "Crear", "Editar", "Borrar"];
 
-const permissions: ChecklistPickerOption[] = modules.flatMap((module) =>
+const allPermissions: ChecklistPickerOption[] = modules.flatMap((module) =>
   actions.map((action) => ({
     id: `${module}.${action}`,
     label: `${action} en ${module}`,
     filter: module,
   })),
 );
+
+const includedBy: Record<string, string[]> = {
+  "Agenda.Ver": ["Agenda.Editar", "Agenda.Borrar"],
+};
+
+const permissions: ChecklistPickerOption[] = allPermissions.map((p) => ({
+  ...p,
+  includedBy: includedBy[p.id],
+}));
 
 const moduleFilters = modules.map((module) => ({ value: module, label: module }));
 
@@ -158,34 +167,17 @@ export default function ChecklistPickerDemo() {
   );
 }
 
-const includes: Record<string, string> = {
-  "Agenda.Editar": "Agenda.Ver",
-  "Agenda.Borrar": "Agenda.Ver",
-};
-
 const PermissionsTable = () => {
   const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(
     new Set(["Agenda.Editar", "Finanzas.Crear"]),
   );
 
-  const options = React.useMemo(() => {
-    const labels = new Map(permissions.map((p) => [p.id, p.label]));
-    const holders = new Map<string, string>();
-    for (const [holder, target] of Object.entries(includes)) {
-      if (applied.has(holder)) holders.set(target, holder);
-    }
-    return permissions.map((p) => {
-      const holder = holders.get(p.id);
-      return holder ? { ...p, locked: true, lockedHint: `Incluido en «${labels.get(holder)}»` } : p;
-    });
-  }, [applied]);
-
   return (
     <>
       <ChecklistTable
         locale="es"
-        options={options}
+        options={permissions}
         filters={moduleFilters}
         selected={applied}
         title="Permisos del perfil"
@@ -208,7 +200,7 @@ const PermissionsTable = () => {
         description="Busca por permiso o por módulo."
         locale="es"
         layout="groups"
-        options={options}
+        options={permissions}
         filters={moduleFilters}
         selected={applied}
         onApply={setApplied}

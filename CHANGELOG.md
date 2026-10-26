@@ -7,13 +7,13 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Añade
 
-**Opciones `locked` en `ChecklistPicker`, `ChecklistDialog` y `ChecklistTable`.**
-`ChecklistPickerOption.locked` y `lockedHint` (el vocabulario de
-`ChecklistField`) marcan una opción que el sistema afirma, por ejemplo un
-permiso incluido en otro. En el picker sale marcada, deshabilitada y con
-`lockedHint` bajo el nombre; `ChecklistDialog` la quita de lo que entrega
-`onApply`; `ChecklistTable` la pinta siempre, con la nota y sin botón de
-retirar.
+**`ChecklistPickerOption.includedBy` en `ChecklistPicker`, `ChecklistDialog` y
+`ChecklistTable`.** Una opción dice qué otras la incluyen (por ejemplo, un
+permiso incluido en otro). Mientras alguna esté marcada, la incluida sale marcada,
+sin editar y con la nota «Incluido en «…»» (texto `checklistIncludedIn` del
+namespace `ui`); al desmarcar la que la incluye vuelve a su propio estado. Lo
+incluido no se escribe en la selección, así que `onApply` solo entrega lo marcado
+por sí mismo. En `ChecklistTable` la fila sale con la nota y sin retirar.
 
 ## `@calumet/elise-blocks` 0.4.0
 
