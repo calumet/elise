@@ -62,9 +62,21 @@ type PickerFieldProps = {
   filters: ChecklistPickerFilter[];
   locked?: ChecklistPickerOption[];
   empty: string;
+  note?: string;
+  description?: string;
+  inline?: boolean;
 };
 
-const PickerField = ({ title, options, filters, locked = [], empty }: PickerFieldProps) => {
+const PickerField = ({
+  title,
+  options,
+  filters,
+  locked = [],
+  empty,
+  note,
+  description,
+  inline,
+}: PickerFieldProps) => {
   const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(new Set());
 
@@ -76,9 +88,12 @@ const PickerField = ({ title, options, filters, locked = [], empty }: PickerFiel
   return (
     <>
       <ChecklistField
+        title={inline ? undefined : title}
+        description={description}
+        note={note}
         items={items}
         empty={<Text tone="muted">{empty}</Text>}
-        editLabel="Elegir"
+        editLabel="Asignar"
         onEdit={() => setOpen(true)}
         onRemove={(id) =>
           setApplied((prev) => new Set([...prev].filter((applied) => applied !== id)))
@@ -104,13 +119,27 @@ export default function ChecklistPickerDemo() {
     <BlockStack gap={6}>
       <BlockStack gap={2}>
         <Text size="sm" weight="medium">
-          Con pestañas
+          Sección, con pestañas
         </Text>
         <PickerField
           title="Difundir a otras escuelas"
           options={schools}
           filters={faculties}
           locked={[{ id: "sistemas", label: "Ingeniería de Sistemas", filter: "ing" }]}
+          empty="Ninguna escuela elegida."
+          description="Las que reciben lo que se publique aquí."
+          note="Las de color vienen de los registros de la universidad y no se retiran aquí."
+        />
+      </BlockStack>
+      <BlockStack gap={2}>
+        <Text size="sm" weight="medium">
+          En línea, para meter en otra sección
+        </Text>
+        <PickerField
+          inline
+          title="Escuelas"
+          options={schools}
+          filters={faculties}
           empty="Ninguna escuela elegida."
         />
       </BlockStack>
