@@ -61,7 +61,7 @@ const marca = DECISIONS.find((decision) => decision.id === "brand");
 const css = themeToCss(set(marca, {}, color)) + themeToCss(set(marca, darkTheme, color), ".dark");
 ```
 
-Sobre un papel oscuro el enlace y el anillo de foco se aclaran hasta leerse.
+Sobre un papel oscuro el enlace y el anillo de foco se aclaran hasta leerse, también con la marca de la hoja, y el menú lateral toma el color del papel salvo que vaya en el de la marca.
 
 ## El editor
 

@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-themes` 0.1.13
+
+### Corrige
+
+**Un papel oscuro también aclara la marca de la hoja.** Con el primario por
+defecto, `set(paper, {}, "#16181d")` dejaba el enlace en 1.71:1. Ahora el enlace
+llega a 4.62:1 y el anillo de foco a 3.03:1, igual que con una marca propia.
+
+**El menú lateral sigue al papel.** Con «Like the page», que es la opción por
+defecto, el menú lateral se quedaba claro sobre un papel oscuro. Ahora toma la
+superficie y la tinta del papel. «In colour» sigue mandando, en el orden que se
+elija.
+
 ## `@calumet/elise-themes` 0.1.12
 
 ### Corrige

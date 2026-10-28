@@ -88,7 +88,10 @@ assert.deepEqual(written, { "--primary": "red" });
 const brand = DECISIONS.find((decision) => decision.id === "brand");
 const paper = DECISIONS.find((decision) => decision.id === "paper");
 const linkContrast = (theme) =>
-  contrast(parse(theme["--link"]), parse(theme["--background"] ?? lightTheme["--background"]));
+  contrast(
+    parse(theme["--link"] ?? lightTheme["--link"]),
+    parse(theme["--background"] ?? lightTheme["--background"]),
+  );
 const onLight = set(brand, {}, "#7b1fa2");
 const darkFirst = set(brand, set(paper, {}, "#16181d"), "#7b1fa2");
 const brandFirst = set(paper, onLight, "#16181d");
@@ -97,6 +100,35 @@ assert.ok(linkContrast(set(brand, { ...darkTheme }, "#7b1fa2")) >= 4.5);
 assert.ok(linkContrast(darkFirst) >= 4.5);
 assert.deepEqual(brandFirst, darkFirst, "el papel no vuelve a derivar la marca");
 assert.deepEqual(clear(paper, brandFirst), onLight, "quitar el papel deja la marca del oscuro");
+
+/* La marca de la hoja también se lee sobre papel oscuro. */
+const ringContrast = (theme) =>
+  contrast(parse(theme["--ring"] ?? lightTheme["--ring"]), parse(theme["--background"]));
+const darkPaper = set(paper, {}, "#16181d");
+assert.ok(linkContrast(darkPaper) >= 4.5, "el enlace de la hoja no se lee sobre papel oscuro");
+assert.ok(ringContrast(darkPaper) >= 3, "el anillo de la hoja no se ve sobre papel oscuro");
+assert.ok(
+  linkContrast(clear(brand, darkFirst)) >= 4.5,
+  "volver a la marca de la hoja la deja ilegible",
+);
+assert.deepEqual(clear(paper, darkPaper), {});
+
+/* El menú lateral sigue al papel, salvo que vaya en el color de la marca. */
+const sidebar = DECISIONS.find((decision) => decision.id === "sidebar");
+const railOn = (theme) => parse(theme["--sidebar"] ?? lightTheme["--sidebar"]);
+assert.ok(railOn(darkPaper).l < 0.5, "el menú lateral se queda claro sobre papel oscuro");
+assert.ok(
+  contrast(
+    parse(darkPaper["--sidebar-foreground"] ?? lightTheme["--sidebar-foreground"]),
+    railOn(darkPaper),
+  ) >= 4.5,
+);
+assert.equal(sidebar.read(darkPaper), "paper");
+const railOnBrand = set(sidebar, darkPaper, "brand");
+assert.equal(railOnBrand["--sidebar"], "var(--primary)");
+assert.deepEqual(set(paper, set(sidebar, {}, "brand"), "#16181d"), railOnBrand);
+assert.deepEqual(clear(sidebar, railOnBrand), darkPaper);
+assert.deepEqual(clear(paper, railOnBrand), set(sidebar, {}, "brand"));
 
 /* Una decisión propia escribe y deshace su variable propia como las de Elise. */
 const secondary = {

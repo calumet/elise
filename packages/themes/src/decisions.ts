@@ -212,6 +212,44 @@ const statusVars = (prefix: string, base: Oklch): Vars =>
     ...subtleVars(prefix),
   }) as Vars;
 
+const RAIL_SURFACES = [
+  "--sidebar",
+  "--sidebar-hover",
+  "--sidebar-accent",
+  "--sidebar-border",
+  "--sidebar-guide",
+  "--sidebar-guide-hover",
+] as const satisfies readonly EliseVar[];
+
+const RAIL_INKS = [
+  "--sidebar-foreground",
+  "--sidebar-muted-foreground",
+  "--sidebar-accent-foreground",
+] as const satisfies readonly EliseVar[];
+
+const RAIL_STEPS = {
+  light: offsets(lightTheme, "--background", RAIL_SURFACES),
+  dark: offsets(darkTheme, "--background", RAIL_SURFACES),
+};
+
+const RAIL_INK_STEPS = {
+  light: offsets(lightTheme, "--foreground", RAIL_INKS),
+  dark: offsets(darkTheme, "--foreground", RAIL_INKS),
+};
+
+const railOnPaper = (theme: EliseTheme): Vars => {
+  const paper = parse(theme["--background"] ?? "");
+  const text = parse(theme["--foreground"] ?? "");
+  if (!paper || !text) return {};
+  const side = paper.l < 0.5 ? "dark" : "light";
+  const sheet = side === "dark" ? darkTheme : lightTheme;
+  const vars: Vars = {};
+  for (const name of RAIL_INKS) vars[name] = sheet[name];
+  for (const [name, offset] of RAIL_STEPS[side]) vars[name] = format(lighten(paper, offset));
+  for (const [name, offset] of RAIL_INK_STEPS[side]) vars[name] = format(lighten(text, offset));
+  return vars;
+};
+
 const SIDEBAR_ON_BRAND: Vars = {
   "--sidebar": "var(--primary)",
   "--sidebar-foreground": "var(--primary-foreground)",
@@ -264,19 +302,28 @@ const fontOptions = (name: EliseVar) =>
 const choice = (
   common: Omit<Common, "writes" | "apply" | "read"> & {
     columns?: number;
-    options: readonly (ChoiceOption & { vars: Vars })[];
+    options: readonly (ChoiceOption & { vars: Vars | ((theme: EliseTheme) => Vars) })[];
   },
 ): ChoiceDecision => {
   const { options, ...rest } = common;
-  const fragments = new Map(options.map((option) => [option.id, onlyChanges(option.vars)]));
-  const writes = [...new Set(options.flatMap((option) => Object.keys(option.vars)))];
+  const varsOn = (vars: Vars | ((theme: EliseTheme) => Vars), theme: EliseTheme) =>
+    typeof vars === "function" ? vars(theme) : vars;
+  const fragments = new Map(
+    options.map((option) => [option.id, onlyChanges(varsOn(option.vars, {}))]),
+  );
+  const writes = [
+    ...new Set(options.flatMap((option) => Object.keys(varsOn(option.vars, lightTheme)))),
+  ];
 
   return {
     ...rest,
     kind: "choice",
     options: options.map(({ id, label }) => ({ id, label })),
     writes: writes as EliseVar[],
-    apply: (value) => fragments.get(value) ?? {},
+    apply: (value, theme) => {
+      const option = options.find((candidate) => candidate.id === value);
+      return option ? onlyChanges(varsOn(option.vars, theme)) : {};
+    },
     /* La que no escribe nada es la de la hoja, y esa es la respuesta si ninguna otra encaja. */
     read: (theme) => {
       for (const option of options) {
@@ -311,9 +358,15 @@ const color = (
     apply: (value, theme) => {
       const base = parse(value);
       if (!base) return {};
-      /* Volver al color de la hoja no escribe nada: la hoja manda sobre la derivación. */
-      if (format(base) === lightTheme[source]) return {};
-      return onlyChanges(derive(base, theme));
+      const derived = derive(base, theme);
+      /* El color de la hoja solo escribe lo que el papel cambia: lo demás lo pone la hoja. */
+      if (format(base) === lightTheme[source]) {
+        const onSheet = derive(base, {});
+        for (const name of Object.keys(derived) as EliseVar[]) {
+          if (derived[name] === onSheet[name]) delete derived[name];
+        }
+      }
+      return onlyChanges(derived);
     },
     read: (theme) => theme[source] ?? lightTheme[source],
   };
@@ -374,7 +427,7 @@ export const DECISIONS: readonly Decision[] = [
     card: "sidebar",
     shape: "rail",
     options: [
-      { id: "paper", label: "Like the page", vars: {} },
+      { id: "paper", label: "Like the page", vars: railOnPaper },
       { id: "brand", label: "In colour", vars: SIDEBAR_ON_BRAND },
     ],
   }),
@@ -523,18 +576,26 @@ const drop = (decision: Decision, theme: EliseTheme): EliseTheme => {
   return next;
 };
 
-const rederive = (changed: Decision, theme: EliseTheme): EliseTheme => {
+const FOLLOW_PAPER = new Set(
+  DECISIONS.filter((decision) => decision.id === "brand" || decision.id === "sidebar"),
+);
+
+const rederive = (changed: Decision | null, theme: EliseTheme): EliseTheme => {
   let next = theme;
   for (const other of DECISIONS) {
-    if (other === changed || other.kind !== "color" || !isChanged(other, next)) continue;
-    next = { ...drop(other, next), ...other.apply(other.read(next), next) };
+    if (other === changed) continue;
+    const derived = other.apply(other.read(next), next);
+    const follows =
+      FOLLOW_PAPER.has(other) && (isChanged(other, next) || Object.keys(derived).length > 0);
+    if (!follows && (other.kind !== "color" || !isChanged(other, next))) continue;
+    next = { ...drop(other, next), ...derived };
   }
   return next;
 };
 
 /** Saca la decisión del tema, en vez de escribirle el valor de la hoja. */
 export const clear = (decision: Decision, theme: EliseTheme): EliseTheme =>
-  rederive(decision, drop(decision, theme));
+  rederive(null, drop(decision, theme));
 
 /**
  * Cambia una decisión: borra lo que tenía escrito y escribe lo nuevo.
