@@ -9,7 +9,7 @@ pnpm add jsr:@calumet/elise-themes    # JSR
 pnpm add @calumet/elise-themes        # GitHub Packages
 ```
 
-No necesita React. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
+Necesita React 19 y `@calumet/elise-ui`, también para usar solo `set` o `themeToCss`: la entrada es una sola y trae los editores. La configuración del registro de GitHub está en el [README del repositorio](../../README.md#consumir-los-paquetes).
 
 ## Uso
 
@@ -33,6 +33,35 @@ En el servidor se serializa y viaja dentro del HTML, que es lo que evita el parp
 ```tsx
 <style dangerouslySetInnerHTML={{ __html: themeToCss(tema) }} />
 ```
+
+## Claro y oscuro
+
+`ThemeProvider` alterna los dos temas de la hoja: pone la clase `dark` en el `<html>` y guarda la preferencia en `localStorage`. Monta un script que la lee antes del primer pintado, así que va lo más alto posible del árbol. `useTheme` da el tema activo y `setTheme`.
+
+```tsx
+import { ThemeProvider, useTheme } from "@calumet/elise-themes";
+
+<ThemeProvider storageKey="portal-tema">{app}</ThemeProvider>;
+
+const { theme, setTheme } = useTheme();
+```
+
+| Prop           | Para qué                                                            |
+| -------------- | ------------------------------------------------------------------- |
+| `attribute`    | `class` (por defecto) o `data-theme`, que marca `data-theme="dark"` |
+| `storageKey`   | La clave en `localStorage`. Por defecto, `elise-theme`              |
+| `defaultTheme` | El tema sin preferencia guardada. Por defecto, `light`              |
+| `forcedTheme`  | Fija el tema desde fuera, sin leer ni guardar la preferencia        |
+| `nonce`        | Para una política de contenido que exige firmar los scripts         |
+
+Un tema escrito con `applyTheme` pesa más que `.dark`, así que el oscuro heredaría los colores del claro. Una marca que tiene que ir en los dos se deriva dos veces, una sobre cada hoja, y se sirve con su selector, `.dark` o `[data-theme="dark"]` según `attribute`:
+
+```ts
+const marca = DECISIONS.find((decision) => decision.id === "brand");
+const css = themeToCss(set(marca, {}, color)) + themeToCss(set(marca, darkTheme, color), ".dark");
+```
+
+Sobre un papel oscuro el enlace y el anillo de foco se aclaran hasta leerse.
 
 ## El editor
 

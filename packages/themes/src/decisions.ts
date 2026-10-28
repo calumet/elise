@@ -12,7 +12,7 @@
  * @module
  */
 
-import { at, format, lighten, parse, readableOn, step, type Oklch } from "./color";
+import { at, contrast, format, lighten, parse, readableOn, step, type Oklch } from "./color";
 import type { EliseTheme } from "./theme";
 import { darkTheme, FONT_FAMILIES, lightTheme, type EliseVar } from "./tokens.generated";
 
@@ -39,7 +39,7 @@ type Common = {
   /** Con qué se dibuja la muestra. */
   shape?: "swatch" | "page" | "rail" | "corner" | "rows" | "card" | "type" | "lines";
   /** Las variables que toca, para saber si está cambiada y para deshacerla. */
-  writes: readonly EliseVar[];
+  writes: readonly (keyof EliseTheme)[];
   apply: (value: string, theme: EliseTheme) => EliseTheme;
   read: (theme: EliseTheme) => string;
 };
@@ -48,9 +48,9 @@ type Common = {
 export type ColorDecision = Common & {
   kind: "color";
   /** Las variables con las que el control se dibuja: el relleno, la tinta de encima y el acento. */
-  preview: readonly [EliseVar, EliseVar, EliseVar];
+  preview: readonly [keyof EliseTheme, keyof EliseTheme, keyof EliseTheme];
   /** Lo que sale del color elegido, para enseñarlo al lado de la muestra. */
-  ramp: readonly EliseVar[];
+  ramp: readonly (keyof EliseTheme)[];
 };
 
 /** Una decisión de escoger entre opciones dibujadas. */
@@ -168,27 +168,40 @@ const paperVars = (paper: Oklch): Vars => {
   return vars;
 };
 
-const brandVars = (base: Oklch): Vars => ({
-  "--primary": format(base),
-  "--primary-hover": format(step(base, 0.048)),
-  "--primary-active": format(step(base, 0.088)),
-  "--primary-foreground": format(readableOn(base)),
-  "--ring": format(base),
+const SHEET_PAPER = parse(lightTheme["--background"]) as Oklch;
+
+const liftUntil = (color: Oklch, paper: Oklch, ratio: number): Oklch => {
+  let lifted = color;
+  while (lifted.l < 0.98 && contrast(lifted, paper) < ratio) lifted = lighten(lifted, 0.01);
+  return lifted;
+};
+
+const brandVars = (base: Oklch, paper: Oklch): Vars => {
+  const dark = paper.l < 0.5;
   /* El enlace es texto sobre el papel, así que necesita su propia luminosidad. */
-  "--link": format(step(base, 0.128)),
-  "--link-hover": format(step(base, 0.068)),
-  "--link-active": format(step(base, 0.028)),
-  "--sidebar-primary": format(base),
-  "--sidebar-primary-foreground": format(readableOn(base)),
-  "--sidebar-ring": format(base),
-  "--inverse-accent": format(at(base, 0.3, 0.085)),
-  "--inverse-accent-foreground": format(at(base, 0.88, 0.06)),
-  "--chart-1": format(at(base, 0.62, 0.14)),
-  "--chart-2": format(at(base, 0.52, 0.15)),
-  "--chart-3": format(at(base, 0.42, 0.155)),
-  "--chart-4": format(at(base, 0.34, 0.15)),
-  "--chart-5": format(at(base, 0.252, 0.156)),
-});
+  const link = dark ? liftUntil(base, paper, 4.5) : step(base, 0.128);
+  const ring = dark ? liftUntil(base, paper, 3) : base;
+  return {
+    "--primary": format(base),
+    "--primary-hover": format(step(base, 0.048)),
+    "--primary-active": format(step(base, 0.088)),
+    "--primary-foreground": format(readableOn(base)),
+    "--ring": format(ring),
+    "--link": format(link),
+    "--link-hover": format(dark ? lighten(link, 0.06) : step(base, 0.068)),
+    "--link-active": format(dark ? lighten(link, 0.11) : step(base, 0.028)),
+    "--sidebar-primary": format(base),
+    "--sidebar-primary-foreground": format(readableOn(base)),
+    "--sidebar-ring": format(ring),
+    "--inverse-accent": format(at(base, 0.3, 0.085)),
+    "--inverse-accent-foreground": format(at(base, 0.88, 0.06)),
+    "--chart-1": format(at(base, 0.62, 0.14)),
+    "--chart-2": format(at(base, 0.52, 0.15)),
+    "--chart-3": format(at(base, 0.42, 0.155)),
+    "--chart-4": format(at(base, 0.34, 0.15)),
+    "--chart-5": format(at(base, 0.252, 0.156)),
+  };
+};
 
 const statusVars = (prefix: string, base: Oklch): Vars =>
   ({
@@ -338,7 +351,7 @@ export const DECISIONS: readonly Decision[] = [
     source: "--primary",
     preview: ["--primary", "--primary-foreground", "--link"],
     ramp: ["--primary", "--primary-hover", "--primary-active", "--primary-foreground", "--link"],
-    derive: (base) => brandVars(base),
+    derive: (base, theme) => brandVars(base, parse(theme["--background"] ?? "") ?? SHEET_PAPER),
   }),
 
   color({
@@ -498,8 +511,7 @@ const SHARED = new Set(
 export const isChanged = (decision: Decision, theme: EliseTheme): boolean =>
   decision.writes.some((name) => !SHARED.has(name) && theme[name] !== undefined);
 
-/** Saca la decisión del tema, en vez de escribirle el valor de la hoja. */
-export const clear = (decision: Decision, theme: EliseTheme): EliseTheme => {
+const drop = (decision: Decision, theme: EliseTheme): EliseTheme => {
   const next = { ...theme };
   for (const name of decision.writes) delete next[name];
   for (const other of DECISIONS) {
@@ -511,6 +523,19 @@ export const clear = (decision: Decision, theme: EliseTheme): EliseTheme => {
   return next;
 };
 
+const rederive = (changed: Decision, theme: EliseTheme): EliseTheme => {
+  let next = theme;
+  for (const other of DECISIONS) {
+    if (other === changed || other.kind !== "color" || !isChanged(other, next)) continue;
+    next = { ...drop(other, next), ...other.apply(other.read(next), next) };
+  }
+  return next;
+};
+
+/** Saca la decisión del tema, en vez de escribirle el valor de la hoja. */
+export const clear = (decision: Decision, theme: EliseTheme): EliseTheme =>
+  rederive(decision, drop(decision, theme));
+
 /**
  * Cambia una decisión: borra lo que tenía escrito y escribe lo nuevo.
  *
@@ -518,7 +543,5 @@ export const clear = (decision: Decision, theme: EliseTheme): EliseTheme => {
  * cuando se vuelve al valor de la hoja, y entonces lo anterior tiene que salir
  * igual.
  */
-export const set = (decision: Decision, theme: EliseTheme, value: string): EliseTheme => ({
-  ...clear(decision, theme),
-  ...decision.apply(value, theme),
-});
+export const set = (decision: Decision, theme: EliseTheme, value: string): EliseTheme =>
+  rederive(decision, { ...drop(decision, theme), ...decision.apply(value, theme) });

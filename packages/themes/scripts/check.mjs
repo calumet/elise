@@ -14,8 +14,21 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const { applyTheme, themeToCss, lightTheme, darkTheme, tokenKinds, ThemeProvider, FONT_FAMILIES } =
-  await import(join(here, "../dist/index.mjs"));
+const {
+  applyTheme,
+  themeToCss,
+  lightTheme,
+  darkTheme,
+  tokenKinds,
+  ThemeProvider,
+  FONT_FAMILIES,
+  DECISIONS,
+  set,
+  clear,
+  isChanged,
+  contrast,
+  parse,
+} = await import(join(here, "../dist/index.mjs"));
 const { createElement } = await import("react");
 const { renderToStaticMarkup } = await import("react-dom/server");
 
@@ -70,6 +83,33 @@ applyTheme(
   { style: { setProperty: (name, value) => (written[name] = value) } },
 );
 assert.deepEqual(written, { "--primary": "red" });
+
+/* El enlace de marca se lee sobre el papel, sea cual sea el orden en que se eligieron. */
+const brand = DECISIONS.find((decision) => decision.id === "brand");
+const paper = DECISIONS.find((decision) => decision.id === "paper");
+const linkContrast = (theme) =>
+  contrast(parse(theme["--link"]), parse(theme["--background"] ?? lightTheme["--background"]));
+const onLight = set(brand, {}, "#7b1fa2");
+const darkFirst = set(brand, set(paper, {}, "#16181d"), "#7b1fa2");
+const brandFirst = set(paper, onLight, "#16181d");
+assert.ok(linkContrast(onLight) >= 4.5);
+assert.ok(linkContrast(set(brand, { ...darkTheme }, "#7b1fa2")) >= 4.5);
+assert.ok(linkContrast(darkFirst) >= 4.5);
+assert.deepEqual(brandFirst, darkFirst, "el papel no vuelve a derivar la marca");
+assert.deepEqual(clear(paper, brandFirst), onLight, "quitar el papel deja la marca del oscuro");
+
+/* Una decisión propia escribe y deshace su variable propia como las de Elise. */
+const secondary = {
+  ...brand,
+  id: "secondary",
+  writes: ["--tinte-dos"],
+  apply: (value) => ({ "--tinte-dos": value }),
+  read: (theme) => theme["--tinte-dos"] ?? "",
+};
+const withSecondary = set(secondary, onLight, "#00897b");
+assert.equal(withSecondary["--tinte-dos"], "#00897b");
+assert.ok(isChanged(secondary, withSecondary));
+assert.deepEqual(clear(secondary, withSecondary), onLight);
 
 /* El script sale con la clave y el tema por defecto que le pasaron al provider. */
 const render = (props) => renderToStaticMarkup(createElement(ThemeProvider, props, "contenido"));
