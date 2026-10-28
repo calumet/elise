@@ -7,14 +7,23 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Corrige
 
-**Un papel oscuro también aclara la marca de la hoja.** Con el primario por
-defecto, `set(paper, {}, "#16181d")` dejaba el enlace en 1.71:1. Ahora el enlace
-llega a 4.62:1 y el anillo de foco a 3.03:1, igual que con una marca propia.
+**Un papel oscuro da el tema oscuro de Elise.** La decisión `paper` solo
+reescribía las superficies y la tinta, así que con un fondo oscuro 47 variables
+se quedaban con el valor de la hoja clara: bordes, estados, sombras, menú
+lateral, primario, enlaces, gráficas y los estados de color. El enlace de la
+marca por defecto quedaba en 1.71:1. Ahora el papel pone debajo la hoja de su
+lado, la clara o la oscura, movida lo que el fondo se aparta del de esa hoja. Con
+el fondo de `darkTheme` el resultado es `darkTheme`, variable por variable, y
+con el de la hoja clara no escribe nada.
 
-**El menú lateral sigue al papel.** Con «Like the page», que es la opción por
-defecto, el menú lateral se quedaba claro sobre un papel oscuro. Ahora toma la
-superficie y la tinta del papel. «In colour» sigue mandando, en el orden que se
-elija.
+**Sobre papel oscuro, los estados de un color propio aclaran.** La marca y los
+colores de aviso calculan `-hover` y `-active` hacia más claro, con los mismos
+pasos que la hoja oscura, y las gráficas toman la luminosidad de la hoja de su
+lado. La marca escribe además `--accent` y `--accent-foreground`, que antes
+escribía el papel.
+
+**`isChanged` ya no cuenta lo que pone el papel.** Con un papel oscuro, la marca
+o el menú lateral sin tocar siguen sin estar cambiados.
 
 ## `@calumet/elise-themes` 0.1.12
 

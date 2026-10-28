@@ -82,17 +82,6 @@ const tint = (over: EliseVar, amount: number, on: EliseVar = "--background") =>
 const ink = (over: EliseVar, amount: number) =>
   `color-mix(in oklab, var(${over}) ${amount}%, var(--foreground))`;
 
-/** Los planos de la página, medidos desde su fondo en los dos temas de la hoja. */
-const SURFACES = [
-  "--card",
-  "--canvas",
-  "--popover",
-  "--secondary",
-  "--muted",
-  "--fill-tertiary",
-  "--track",
-] as const satisfies readonly EliseVar[];
-
 /* El 12% es el compromiso entre el 8% que usa la hoja en claro y el 16% en oscuro. */
 const borderVars = (scale: number): Vars => ({
   "--border-subtle": tint("--foreground", 9 * scale),
@@ -108,64 +97,49 @@ const HARD_BORDERS: Vars = {
   "--input": "var(--foreground)",
 };
 
-/** La tinta y sus grados, medidos desde el texto general. */
-const INKS = [
-  "--card-foreground",
-  "--popover-foreground",
-  "--secondary-foreground",
-  "--muted-foreground",
-] as const satisfies readonly EliseVar[];
-
-/* Los escalones salen de los dos temas de la hoja: por eso un papel oscuro da un tema oscuro. */
-const offsets = (theme: Record<EliseVar, string>, from: EliseVar, names: readonly EliseVar[]) => {
-  const anchor = parse(theme[from]);
-  const table = new Map<EliseVar, number>();
-  if (!anchor) return table;
-  for (const name of names) {
-    const value = parse(theme[name]);
-    if (value) table.set(name, value.l - anchor.l);
-  }
-  return table;
-};
-
-const SURFACE_STEPS = {
-  light: offsets(lightTheme, "--background", SURFACES),
-  dark: offsets(darkTheme, "--background", SURFACES),
-};
-
-const INK_STEPS = {
-  light: offsets(lightTheme, "--foreground", INKS),
-  dark: offsets(darkTheme, "--foreground", INKS),
-};
-
 const subtleVars = (prefix: string): Vars =>
   ({
     [`--${prefix}-subtle`]: tint(`--${prefix}` as EliseVar, 14),
     [`--${prefix}-subtle-foreground`]: ink(`--${prefix}` as EliseVar, 65),
   }) as Vars;
 
-/* Los suaves de estado los escribe también su color: los dos los necesitan, y `clear` no borra lo que la otra sigue usando. */
-const LINKED: Vars = {
-  "--accent": tint("--primary", 18),
-  "--accent-foreground": ink("--primary", 70),
-  ...subtleVars("success"),
-  ...subtleVars("warning"),
-  ...subtleVars("destructive"),
-  ...subtleVars("info"),
+const SIDE_VARS = (Object.keys(darkTheme) as EliseVar[]).filter(
+  (name) => darkTheme[name] !== lightTheme[name],
+);
+
+const NEUTRAL_CHROMA = 0.02;
+const OKLCH_IN_VALUE = /oklch\(([\d.]+) ([\d.]+) ([\d.]+)([^)]*)\)/g;
+
+/* La hoja de su lado movida lo que el papel se aparta de su fondo; los grises toman además su tono. */
+const sideSheet = (paper: Oklch): Record<EliseVar, string> => {
+  const sheet = paper.l < 0.5 ? darkTheme : lightTheme;
+  const from = parse(sheet["--background"]) as Oklch;
+  const moved = { ...sheet };
+  if (format(paper) === sheet["--background"]) return moved;
+  for (const name of SIDE_VARS) {
+    moved[name] = sheet[name].replace(OKLCH_IN_VALUE, (whole, l, c, h, alpha: string) => {
+      const value: Oklch = { l: Number(l), c: Number(c), h: Number(h) };
+      if (value.c === 0 && (value.l === 0 || value.l === 1)) return whole;
+      const neutral = value.c <= NEUTRAL_CHROMA;
+      const text = format({
+        l: lighten(value, paper.l - from.l).l,
+        c: neutral ? Math.max(0, value.c + paper.c - from.c) : value.c,
+        h: neutral ? (value.h + paper.h - from.h + 360) % 360 : value.h,
+      });
+      return alpha ? `${text.slice(0, -1)}${alpha})` : text;
+    });
+  }
+  moved["--background"] = format(paper);
+  return moved;
 };
 
-const paperVars = (paper: Oklch): Vars => {
-  const side = paper.l < 0.5 ? "dark" : "light";
-  const text = readableOn(paper);
-  const vars: Vars = { ...LINKED, "--background": format(paper), "--foreground": format(text) };
+const paperOf = (theme: EliseTheme): Oklch | null => parse(theme["--background"] ?? "");
 
-  for (const [name, offset] of SURFACE_STEPS[side]) {
-    vars[name] = format(lighten(paper, offset));
-  }
-  for (const [name, offset] of INK_STEPS[side]) {
-    vars[name] = format(lighten(text, offset));
-  }
-  return vars;
+const underlay = (theme: EliseTheme): EliseTheme => {
+  const paper = paperOf(theme);
+  if (!paper) return {};
+  const { "--background": _paper, ...under } = onlyChanges(sideSheet(paper));
+  return under;
 };
 
 const SHEET_PAPER = parse(lightTheme["--background"]) as Oklch;
@@ -176,15 +150,30 @@ const liftUntil = (color: Oklch, paper: Oklch, ratio: number): Oklch => {
   return lifted;
 };
 
+const stateStep = (sheet: Record<EliseVar, string>, base: Oklch, state: EliseVar, from: EliseVar) =>
+  lighten(base, (parse(sheet[state]) as Oklch).l - (parse(sheet[from]) as Oklch).l);
+
+const chart = (sheet: Record<EliseVar, string>, base: Oklch, name: EliseVar) => {
+  const { l, c } = parse(sheet[name]) as Oklch;
+  return format(at(base, l, c));
+};
+
 const brandVars = (base: Oklch, paper: Oklch): Vars => {
   const dark = paper.l < 0.5;
+  const sheet = sideSheet(paper);
   /* El enlace es texto sobre el papel, así que necesita su propia luminosidad. */
   const link = dark ? liftUntil(base, paper, 4.5) : step(base, 0.128);
   const ring = dark ? liftUntil(base, paper, 3) : base;
   return {
     "--primary": format(base),
-    "--primary-hover": format(step(base, 0.048)),
-    "--primary-active": format(step(base, 0.088)),
+    "--primary-hover": format(
+      dark ? stateStep(sheet, base, "--primary-hover", "--primary") : step(base, 0.048),
+    ),
+    "--primary-active": format(
+      dark ? stateStep(sheet, base, "--primary-active", "--primary") : step(base, 0.088),
+    ),
+    "--accent": tint("--primary", 18),
+    "--accent-foreground": ink("--primary", 70),
     "--primary-foreground": format(readableOn(base)),
     "--ring": format(ring),
     "--link": format(link),
@@ -195,59 +184,29 @@ const brandVars = (base: Oklch, paper: Oklch): Vars => {
     "--sidebar-ring": format(ring),
     "--inverse-accent": format(at(base, 0.3, 0.085)),
     "--inverse-accent-foreground": format(at(base, 0.88, 0.06)),
-    "--chart-1": format(at(base, 0.62, 0.14)),
-    "--chart-2": format(at(base, 0.52, 0.15)),
-    "--chart-3": format(at(base, 0.42, 0.155)),
-    "--chart-4": format(at(base, 0.34, 0.15)),
-    "--chart-5": format(at(base, 0.252, 0.156)),
+    "--chart-1": chart(sheet, base, "--chart-1"),
+    "--chart-2": chart(sheet, base, "--chart-2"),
+    "--chart-3": chart(sheet, base, "--chart-3"),
+    "--chart-4": chart(sheet, base, "--chart-4"),
+    "--chart-5": chart(sheet, base, "--chart-5"),
   };
 };
 
-const statusVars = (prefix: string, base: Oklch): Vars =>
-  ({
-    [`--${prefix}`]: format(base),
-    [`--${prefix}-foreground`]: format(readableOn(base)),
-    [`--${prefix}-hover`]: format(step(base, 0.045)),
-    [`--${prefix}-active`]: format(step(base, 0.085)),
+const statusVars = (prefix: string, base: Oklch, paper: Oklch): Vars => {
+  const dark = paper.l < 0.5;
+  const sheet = sideSheet(paper);
+  const name = (suffix: string) => `--${prefix}${suffix}` as EliseVar;
+  return {
+    [name("")]: format(base),
+    [name("-foreground")]: format(readableOn(base)),
+    [name("-hover")]: format(
+      dark ? stateStep(sheet, base, name("-hover"), name("")) : step(base, 0.045),
+    ),
+    [name("-active")]: format(
+      dark ? stateStep(sheet, base, name("-active"), name("")) : step(base, 0.085),
+    ),
     ...subtleVars(prefix),
-  }) as Vars;
-
-const RAIL_SURFACES = [
-  "--sidebar",
-  "--sidebar-hover",
-  "--sidebar-accent",
-  "--sidebar-border",
-  "--sidebar-guide",
-  "--sidebar-guide-hover",
-] as const satisfies readonly EliseVar[];
-
-const RAIL_INKS = [
-  "--sidebar-foreground",
-  "--sidebar-muted-foreground",
-  "--sidebar-accent-foreground",
-] as const satisfies readonly EliseVar[];
-
-const RAIL_STEPS = {
-  light: offsets(lightTheme, "--background", RAIL_SURFACES),
-  dark: offsets(darkTheme, "--background", RAIL_SURFACES),
-};
-
-const RAIL_INK_STEPS = {
-  light: offsets(lightTheme, "--foreground", RAIL_INKS),
-  dark: offsets(darkTheme, "--foreground", RAIL_INKS),
-};
-
-const railOnPaper = (theme: EliseTheme): Vars => {
-  const paper = parse(theme["--background"] ?? "");
-  const text = parse(theme["--foreground"] ?? "");
-  if (!paper || !text) return {};
-  const side = paper.l < 0.5 ? "dark" : "light";
-  const sheet = side === "dark" ? darkTheme : lightTheme;
-  const vars: Vars = {};
-  for (const name of RAIL_INKS) vars[name] = sheet[name];
-  for (const [name, offset] of RAIL_STEPS[side]) vars[name] = format(lighten(paper, offset));
-  for (const [name, offset] of RAIL_INK_STEPS[side]) vars[name] = format(lighten(text, offset));
-  return vars;
+  } as Vars;
 };
 
 const SIDEBAR_ON_BRAND: Vars = {
@@ -302,28 +261,19 @@ const fontOptions = (name: EliseVar) =>
 const choice = (
   common: Omit<Common, "writes" | "apply" | "read"> & {
     columns?: number;
-    options: readonly (ChoiceOption & { vars: Vars | ((theme: EliseTheme) => Vars) })[];
+    options: readonly (ChoiceOption & { vars: Vars })[];
   },
 ): ChoiceDecision => {
   const { options, ...rest } = common;
-  const varsOn = (vars: Vars | ((theme: EliseTheme) => Vars), theme: EliseTheme) =>
-    typeof vars === "function" ? vars(theme) : vars;
-  const fragments = new Map(
-    options.map((option) => [option.id, onlyChanges(varsOn(option.vars, {}))]),
-  );
-  const writes = [
-    ...new Set(options.flatMap((option) => Object.keys(varsOn(option.vars, lightTheme)))),
-  ];
+  const fragments = new Map(options.map((option) => [option.id, onlyChanges(option.vars)]));
+  const writes = [...new Set(options.flatMap((option) => Object.keys(option.vars)))];
 
   return {
     ...rest,
     kind: "choice",
     options: options.map(({ id, label }) => ({ id, label })),
     writes: writes as EliseVar[],
-    apply: (value, theme) => {
-      const option = options.find((candidate) => candidate.id === value);
-      return option ? onlyChanges(varsOn(option.vars, theme)) : {};
-    },
+    apply: (value) => fragments.get(value) ?? {},
     /* La que no escribe nada es la de la hoja, y esa es la respuesta si ninguna otra encaja. */
     read: (theme) => {
       for (const option of options) {
@@ -358,17 +308,14 @@ const color = (
     apply: (value, theme) => {
       const base = parse(value);
       if (!base) return {};
-      const derived = derive(base, theme);
-      /* El color de la hoja solo escribe lo que el papel cambia: lo demás lo pone la hoja. */
-      if (format(base) === lightTheme[source]) {
-        const onSheet = derive(base, {});
-        for (const name of Object.keys(derived) as EliseVar[]) {
-          if (derived[name] === onSheet[name]) delete derived[name];
-        }
-      }
-      return onlyChanges(derived);
+      /* Volver al color de la hoja no escribe nada: lo pone el papel, o la hoja si no hay papel. */
+      if (format(base) === lightTheme[source]) return {};
+      return onlyChanges(derive(base, theme));
     },
-    read: (theme) => theme[source] ?? lightTheme[source],
+    read: (theme) => {
+      const value = theme[source];
+      return value === undefined || value === underlay(theme)[source] ? lightTheme[source] : value;
+    },
   };
 };
 
@@ -390,7 +337,7 @@ const status = (
     source,
     preview,
     ramp,
-    derive: (base) => statusVars(prefix, base),
+    derive: (base, theme) => statusVars(prefix, base, paperOf(theme) ?? SHEET_PAPER),
   });
 
 /** Las decisiones que Elise considera de diseño. El consumidor recorta. */
@@ -404,7 +351,7 @@ export const DECISIONS: readonly Decision[] = [
     source: "--primary",
     preview: ["--primary", "--primary-foreground", "--link"],
     ramp: ["--primary", "--primary-hover", "--primary-active", "--primary-foreground", "--link"],
-    derive: (base, theme) => brandVars(base, parse(theme["--background"] ?? "") ?? SHEET_PAPER),
+    derive: (base, theme) => brandVars(base, paperOf(theme) ?? SHEET_PAPER),
   }),
 
   color({
@@ -416,7 +363,10 @@ export const DECISIONS: readonly Decision[] = [
     source: "--background",
     preview: ["--background", "--foreground", "--card"],
     ramp: ["--background", "--canvas", "--card", "--border", "--muted-foreground", "--foreground"],
-    derive: (base) => paperVars(base),
+    derive: (base) => {
+      const sheet = sideSheet(base);
+      return Object.fromEntries(SIDE_VARS.map((name) => [name, sheet[name]]));
+    },
   }),
 
   choice({
@@ -427,7 +377,7 @@ export const DECISIONS: readonly Decision[] = [
     card: "sidebar",
     shape: "rail",
     options: [
-      { id: "paper", label: "Like the page", vars: railOnPaper },
+      { id: "paper", label: "Like the page", vars: {} },
       { id: "brand", label: "In colour", vars: SIDEBAR_ON_BRAND },
     ],
   }),
@@ -554,48 +504,47 @@ export const DECISIONS: readonly Decision[] = [
   }),
 ];
 
-const SHARED = new Set(
-  DECISIONS.flatMap((decision) => decision.writes).filter(
-    (name, index, all) => all.indexOf(name) !== index,
-  ),
-);
+const PAPER = DECISIONS.find((decision) => decision.id === "paper") as Decision;
 
-/** Si la decisión está escrita en el tema, aunque sea a medias. */
-export const isChanged = (decision: Decision, theme: EliseTheme): boolean =>
-  decision.writes.some((name) => !SHARED.has(name) && theme[name] !== undefined);
+const OWNED = new Set(DECISIONS.flatMap((decision) => decision.writes));
 
-const drop = (decision: Decision, theme: EliseTheme): EliseTheme => {
-  const next = { ...theme };
-  for (const name of decision.writes) delete next[name];
-  for (const other of DECISIONS) {
-    if (other === decision || !isChanged(other, next)) continue;
-    for (const name of other.writes) {
-      if (SHARED.has(name) && theme[name] !== undefined) next[name] = theme[name];
-    }
-  }
-  return next;
+/** Si la decisión está escrita en el tema, aunque sea a medias. Lo que pone el papel no cuenta. */
+export const isChanged = (decision: Decision, theme: EliseTheme): boolean => {
+  if (decision === PAPER) return theme["--background"] !== undefined;
+  const under = underlay(theme);
+  return decision.writes.some((name) => theme[name] !== undefined && theme[name] !== under[name]);
 };
 
-const FOLLOW_PAPER = new Set(
-  DECISIONS.filter((decision) => decision.id === "brand" || decision.id === "sidebar"),
-);
+const compose = (theme: EliseTheme, target: Decision, value?: string): EliseTheme => {
+  let next: EliseTheme = {};
+  for (const [name, written] of Object.entries(theme) as [keyof EliseTheme, string][]) {
+    if (!OWNED.has(name as EliseVar) && !target.writes.includes(name)) next[name] = written;
+  }
+  const paper = target === PAPER ? value : theme["--background"];
+  if (paper !== undefined) next = { ...next, ...PAPER.apply(paper, next) };
 
-const rederive = (changed: Decision | null, theme: EliseTheme): EliseTheme => {
-  let next = theme;
-  for (const other of DECISIONS) {
-    if (other === changed) continue;
-    const derived = other.apply(other.read(next), next);
-    const follows =
-      FOLLOW_PAPER.has(other) && (isChanged(other, next) || Object.keys(derived).length > 0);
-    if (!follows && (other.kind !== "color" || !isChanged(other, next))) continue;
-    next = { ...drop(other, next), ...derived };
+  const under = underlay(theme);
+  const layers = DECISIONS.includes(target) ? DECISIONS : [...DECISIONS, target];
+  for (const decision of layers) {
+    if (decision === PAPER) continue;
+    if (decision === target) {
+      if (value !== undefined) next = { ...next, ...decision.apply(value, next) };
+    } else if (!isChanged(decision, theme)) {
+      continue;
+    } else if (decision.kind === "color" && decision.read(theme) !== decision.read({})) {
+      next = { ...next, ...decision.apply(decision.read(theme), next) };
+    } else {
+      for (const name of decision.writes) {
+        if (theme[name] !== undefined && theme[name] !== under[name]) next[name] = theme[name];
+      }
+    }
   }
   return next;
 };
 
 /** Saca la decisión del tema, en vez de escribirle el valor de la hoja. */
 export const clear = (decision: Decision, theme: EliseTheme): EliseTheme =>
-  rederive(null, drop(decision, theme));
+  compose(theme, decision);
 
 /**
  * Cambia una decisión: borra lo que tenía escrito y escribe lo nuevo.
@@ -605,4 +554,4 @@ export const clear = (decision: Decision, theme: EliseTheme): EliseTheme =>
  * igual.
  */
 export const set = (decision: Decision, theme: EliseTheme, value: string): EliseTheme =>
-  rederive(decision, { ...drop(decision, theme), ...decision.apply(value, theme) });
+  compose(theme, decision, value);

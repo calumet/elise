@@ -113,6 +113,43 @@ assert.ok(
 );
 assert.deepEqual(clear(paper, darkPaper), {});
 
+/* El papel de cada hoja da esa hoja, variable por variable. */
+assert.deepEqual({ ...lightTheme, ...set(paper, {}, darkTheme["--background"]) }, darkTheme);
+assert.deepEqual(set(paper, {}, lightTheme["--background"]), {});
+assert.deepEqual(set(paper, set(paper, {}, "#16181d"), lightTheme["--background"]), {});
+
+/* Otro papel guarda con cada variable la relación que tiene la hoja de su lado. */
+const sideVars = Object.keys(darkTheme).filter((name) => darkTheme[name] !== lightTheme[name]);
+const lightnesses = (value) =>
+  [...value.matchAll(/oklch\(([\d.]+)/g)].map((match) => Number(match[1]));
+for (const [hex, sheet] of [
+  ["#16181d", darkTheme],
+  ["#f6f1e7", lightTheme],
+]) {
+  const moved = { ...lightTheme, ...set(paper, {}, hex) };
+  const shift = parse(moved["--background"]).l - parse(sheet["--background"]).l;
+  for (const name of sideVars) {
+    const before = lightnesses(sheet[name]);
+    const after = lightnesses(moved[name]);
+    assert.equal(after.length, before.length, `${name} cambia de forma sobre ${hex}`);
+    before.forEach((l, index) => {
+      const expected = l === 0 || l === 1 ? l : Math.min(1, Math.max(0, l + shift));
+      assert.ok(Math.abs(after[index] - expected) < 0.002, `${name} no sigue al papel ${hex}`);
+    });
+  }
+}
+
+/* Sobre papel oscuro, los estados de un color propio aclaran como en la hoja oscura. */
+const danger = DECISIONS.find((decision) => decision.id === "status-danger");
+for (const [decision, prefix] of [
+  [brand, "--primary"],
+  [danger, "--destructive"],
+]) {
+  const custom = set(decision, set(paper, {}, "#16181d"), "#c62828");
+  const at = (suffix) => parse(custom[`${prefix}${suffix}`]).l;
+  assert.ok(at("-hover") > at("") && at("-active") > at("-hover"), `${prefix} oscurece en oscuro`);
+}
+
 /* El menú lateral sigue al papel, salvo que vaya en el color de la marca. */
 const sidebar = DECISIONS.find((decision) => decision.id === "sidebar");
 const railOn = (theme) => parse(theme["--sidebar"] ?? lightTheme["--sidebar"]);
