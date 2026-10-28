@@ -246,6 +246,24 @@ const STRONG_SHADOWS = [
   `0 18px 36px -8px ${SHADOW_INK} / 0.22), 0 52px 92px -20px ${SHADOW_INK} / 0.3)`,
 ];
 
+const alphas = (shadow: string) =>
+  [...shadow.matchAll(/\/ ([\d.]+)\)/g)].map((match) => Number(match[1]));
+
+/* Cada nivel guarda con la sombra de su lado la proporción que tiene con la clara. */
+const strongShadows = (theme: EliseTheme): string[] => {
+  const paper = paperOf(theme);
+  const sheet = paper ? sideSheet(paper) : lightTheme;
+  return ELEVATION.map((name, index) => {
+    const factor = Math.max(...alphas(sheet[name])) / Math.max(...alphas(lightTheme[name]));
+    const shadowInk = (/oklch\([^/]+/.exec(sheet[name])?.[0] ?? SHADOW_INK).trimEnd();
+    return STRONG_SHADOWS[index].replace(
+      /oklch\([^/]+\/ ([\d.]+)\)/g,
+      (_shadow, alpha: string) =>
+        `${shadowInk} / ${Number(Math.min(1, Number(alpha) * factor).toFixed(3))})`,
+    );
+  });
+};
+
 const depthVars = (shadows: readonly string[] | null): Vars => {
   const vars: Vars = {};
   ELEVATION.forEach((name, index) => {
@@ -261,30 +279,36 @@ const fontOptions = (name: EliseVar) =>
 const choice = (
   common: Omit<Common, "writes" | "apply" | "read"> & {
     columns?: number;
-    options: readonly (ChoiceOption & { vars: Vars })[];
+    options: readonly (ChoiceOption & { vars: Vars | ((theme: EliseTheme) => Vars) })[];
+    /** La opción que hace de hoja cuando ninguna escribe lo mismo que ella. */
+    sheet?: string;
   },
 ): ChoiceDecision => {
-  const { options, ...rest } = common;
-  const fragments = new Map(options.map((option) => [option.id, onlyChanges(option.vars)]));
-  const writes = [...new Set(options.flatMap((option) => Object.keys(option.vars)))];
+  const { options, sheet, ...rest } = common;
+  const fragment = (id: string, theme: EliseTheme): EliseTheme => {
+    const vars = options.find((option) => option.id === id)?.vars ?? {};
+    return onlyChanges(typeof vars === "function" ? vars(theme) : vars);
+  };
+  const writes = [...new Set(options.flatMap((option) => Object.keys(fragment(option.id, {}))))];
 
   return {
     ...rest,
     kind: "choice",
     options: options.map(({ id, label }) => ({ id, label })),
     writes: writes as EliseVar[],
-    apply: (value) => fragments.get(value) ?? {},
+    apply: fragment,
     /* La que no escribe nada es la de la hoja, y esa es la respuesta si ninguna otra encaja. */
     read: (theme) => {
       for (const option of options) {
-        const fragment = fragments.get(option.id) ?? {};
-        const names = Object.keys(fragment) as EliseVar[];
-        if (names.length > 0 && names.every((name) => theme[name] === fragment[name])) {
+        const written = fragment(option.id, theme);
+        const names = Object.keys(written) as (keyof EliseTheme)[];
+        if (names.length > 0 && names.every((name) => theme[name] === written[name])) {
           return option.id;
         }
       }
       return (
-        options.find((option) => Object.keys(fragments.get(option.id) ?? {}).length === 0)?.id ??
+        options.find((option) => Object.keys(fragment(option.id, {})).length === 0)?.id ??
+        sheet ??
         options[0].id
       );
     },
@@ -426,6 +450,7 @@ export const DECISIONS: readonly Decision[] = [
     group: "shape",
     card: "borders",
     shape: "lines",
+    sheet: "normal",
     options: [
       { id: "faint", label: "Faint", vars: borderVars(0.5) },
       { id: "normal", label: "Normal", vars: borderVars(1) },
@@ -473,7 +498,7 @@ export const DECISIONS: readonly Decision[] = [
     options: [
       { id: "flat", label: "Flat", vars: depthVars(null) },
       { id: "soft", label: "Soft", vars: {} },
-      { id: "strong", label: "Strong", vars: depthVars(STRONG_SHADOWS) },
+      { id: "strong", label: "Strong", vars: (theme) => depthVars(strongShadows(theme)) },
     ],
   }),
 
@@ -515,29 +540,39 @@ export const isChanged = (decision: Decision, theme: EliseTheme): boolean => {
   return decision.writes.some((name) => theme[name] !== undefined && theme[name] !== under[name]);
 };
 
-const compose = (theme: EliseTheme, target: Decision, value?: string): EliseTheme => {
-  let next: EliseTheme = {};
-  for (const [name, written] of Object.entries(theme) as [keyof EliseTheme, string][]) {
-    if (!OWNED.has(name as EliseVar) && !target.writes.includes(name)) next[name] = written;
+const matches = (decision: Decision, theme: EliseTheme): boolean => {
+  const written = decision.apply(decision.read(theme), theme);
+  const names = Object.keys(written) as (keyof EliseTheme)[];
+  return names.length > 0 && names.every((name) => theme[name] === written[name]);
+};
+
+const relayer = (decision: Decision, theme: EliseTheme, next: EliseTheme): EliseTheme => {
+  if (!isChanged(decision, theme)) return {};
+  const value = decision.read(theme);
+  if (decision.kind === "color" ? value !== decision.read({}) : matches(decision, theme)) {
+    return decision.apply(value, next);
   }
+  const under = underlay(theme);
+  const kept: EliseTheme = {};
+  for (const name of decision.writes) {
+    if (theme[name] !== undefined && theme[name] !== under[name]) kept[name] = theme[name];
+  }
+  return kept;
+};
+
+const compose = (theme: EliseTheme, target: Decision, value?: string): EliseTheme => {
+  const replaced = new Set<keyof EliseTheme>([...OWNED, ...target.writes]);
+  let next = Object.fromEntries(
+    Object.entries(theme).filter(([name]) => !replaced.has(name as keyof EliseTheme)),
+  ) as EliseTheme;
   const paper = target === PAPER ? value : theme["--background"];
   if (paper !== undefined) next = { ...next, ...PAPER.apply(paper, next) };
 
-  const under = underlay(theme);
   const layers = DECISIONS.includes(target) ? DECISIONS : [...DECISIONS, target];
   for (const decision of layers) {
     if (decision === PAPER) continue;
-    if (decision === target) {
-      if (value !== undefined) next = { ...next, ...decision.apply(value, next) };
-    } else if (!isChanged(decision, theme)) {
-      continue;
-    } else if (decision.kind === "color" && decision.read(theme) !== decision.read({})) {
-      next = { ...next, ...decision.apply(decision.read(theme), next) };
-    } else {
-      for (const name of decision.writes) {
-        if (theme[name] !== undefined && theme[name] !== under[name]) next[name] = theme[name];
-      }
-    }
+    const own = decision === target && value !== undefined ? decision.apply(value, next) : {};
+    next = { ...next, ...(decision === target ? own : relayer(decision, theme, next)) };
   }
   return next;
 };

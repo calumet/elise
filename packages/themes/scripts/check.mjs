@@ -150,6 +150,25 @@ for (const [decision, prefix] of [
   assert.ok(at("-hover") > at("") && at("-active") > at("-hover"), `${prefix} oscurece en oscuro`);
 }
 
+/* Las sombras fuertes también se pasan al lado del papel, y siguen leyéndose como fuertes. */
+const depth = DECISIONS.find((decision) => decision.id === "depth");
+const strongOnLight = set(depth, {}, "strong");
+const strongOnDark = set(depth, darkPaper, "strong");
+assert.equal(
+  strongOnDark["--shadow-lg"].includes("0.21 0.02 265"),
+  false,
+  "sombra clara en oscuro",
+);
+assert.equal(depth.read(strongOnDark), "strong");
+assert.deepEqual(set(paper, strongOnLight, "#16181d"), strongOnDark);
+assert.deepEqual(clear(paper, strongOnDark), strongOnLight);
+
+/* Los bordes sin tocar son los normales, no los tenues. */
+const borders = DECISIONS.find((decision) => decision.id === "borders");
+assert.equal(borders.read({}), "normal");
+assert.equal(borders.read(darkPaper), "normal");
+assert.equal(borders.read(set(borders, {}, "faint")), "faint");
+
 /* El menú lateral sigue al papel, salvo que vaya en el color de la marca. */
 const sidebar = DECISIONS.find((decision) => decision.id === "sidebar");
 const railOn = (theme) => parse(theme["--sidebar"] ?? lightTheme["--sidebar"]);

@@ -22,6 +22,14 @@ pasos que la hoja oscura, y las gráficas toman la luminosidad de la hoja de su
 lado. La marca escribe además `--accent` y `--accent-foreground`, que antes
 escribía el papel.
 
+**«Strong» en `depth` sigue al papel.** Sobre un papel oscuro, las sombras
+fuertes usan la tinta de la hoja oscura, y cada nivel guarda con la sombra
+oscura la proporción que tiene con la clara. Antes quedaban con la tinta clara.
+
+**Los bordes sin tocar se leen como «Normal».** `read` de `borders` daba
+«Faint» porque ninguna opción escribe lo mismo que la hoja, y el editor marcaba
+la opción equivocada.
+
 **`isChanged` ya no cuenta lo que pone el papel.** Con un papel oscuro, la marca
 o el menú lateral sin tocar siguen sin estar cambiados.
 
