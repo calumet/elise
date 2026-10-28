@@ -132,7 +132,7 @@ export const noteOf = (name: EliseVar): string | undefined => NOTES[name];
 
 /** Las variables que alguna decisión escribe, que el avanzado marca como derivadas. */
 export const OWNED: ReadonlySet<EliseVar> = new Set(
-  DECISIONS.flatMap((decision) => decision.writes),
+  DECISIONS.flatMap((decision) => decision.writes) as EliseVar[],
 );
 
 /** Todas las variables agrupadas, en el orden en que se editan. Manda la primera que encaja. */

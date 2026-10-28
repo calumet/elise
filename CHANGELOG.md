@@ -3,6 +3,26 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-themes` 0.1.12
+
+### Corrige
+
+**El color de marca se lee sobre un papel oscuro.** La decisión `brand` derivaba
+el enlace oscureciendo siempre, así que sobre un papel oscuro quedaba ilegible:
+un `#7b1fa2` daba 1.41:1. Ahora se deriva contra el papel del tema y, si es
+oscuro, el enlace se aclara hasta 4.5:1 y el anillo de foco hasta 3:1. Cambiar o
+quitar el papel vuelve a derivar la marca ya elegida, en el orden que sea. Sobre
+papel claro sale lo mismo que antes.
+
+**Una decisión propia puede declarar una variable propia.** `writes`, `preview` y
+`ramp` aceptan cualquier nombre con forma `--…`, como `EliseTheme`, sin perder el
+autocompletado de las de Elise. Antes solo admitían las 110 de la hoja y había
+que forzar el tipo. Si el tema no trae la variable, la muestra del editor usa la
+de la app con `var()`.
+
+**El README** ya no dice que el paquete no necesita React, y documenta
+`ThemeProvider` y `useTheme`, con cómo servir la marca en claro y en oscuro.
+
 ## `@calumet/elise-linter` 0.9.3
 
 ### Corrige

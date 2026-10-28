@@ -317,7 +317,8 @@ const Color = ({
   onChange,
 }: DecisionControlProps & { decision: ColorDecision }) => {
   const [fill, inkVar, accent] = decision.preview;
-  const of = (name: EliseVar) => value[name] ?? lightTheme[name];
+  const of = (name: keyof EliseTheme) =>
+    value[name] ?? lightTheme[name as EliseVar] ?? `var(${name})`;
   const label = useLabel(`${decision.id}.label`, decision.label);
   const change = useLabel("change", "Change");
   const hex = React.useMemo(() => {
