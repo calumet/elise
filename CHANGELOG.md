@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-linter` 0.9.3
+
+### Corrige
+
+**`no-raw-colors` reconoce la paleta de Elise instalada como paquete.** Con un
+bloque `@theme` propio en la hoja del proyecto, la regla daba por no declarado
+cada `text-foreground` o `border-border`, porque `@shadcn/lint` descartaba los
+tokens de las hojas bajo `node_modules`. `designSystem()` declara ahora
+`themeImports` para las hojas de `@calumet/elise-*`, importadas por subpath o por
+ruta relativa. El peer `@shadcn/lint` pasa a `>=0.2.3`, la primera versión que
+lo admite. Quien apuntó su `components.json` a la hoja de Elise o añadió sus
+tokens a `allow` para rodearlo ya puede quitarlo.
+
 ## `@calumet/elise-blocks` 0.5.0
 
 ### Añade
