@@ -222,6 +222,11 @@ for (const id of ["sidebar", "borders", "depth", "density", "corners"]) {
     }
   }
 }
+assert.equal(
+  /<span class="contents" style="[^"]*--(spacing|radius):/.test(previews("density", darkPage)),
+  false,
+  "la densidad mueve la rejilla de la miniatura",
+);
 assert.ok(
   previews("borders", darkPage).includes(`border-color:${darkPage["--foreground"]}`),
   "las líneas sólidas no llevan la tinta del papel oscuro",

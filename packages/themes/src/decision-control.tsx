@@ -156,11 +156,15 @@ const Shape = ({ shape, theme }: { shape: string; theme: EliseTheme }): React.JS
   );
 };
 
-const Preview = ({ shape, theme }: { shape: string; theme: EliseTheme }): React.JSX.Element => (
-  <span className="contents" style={theme as React.CSSProperties}>
-    <Shape shape={shape} theme={theme} />
-  </span>
-);
+/* La rejilla y el radio de la miniatura no siguen a la opción: la densidad la dejaría en medios píxeles. */
+const Preview = ({ shape, theme }: { shape: string; theme: EliseTheme }): React.JSX.Element => {
+  const { "--spacing": _spacing, "--radius": _radius, ...scope } = theme;
+  return (
+    <span className="contents" style={scope as React.CSSProperties}>
+      <Shape shape={shape} theme={theme} />
+    </span>
+  );
+};
 
 const Head = ({ decision }: { decision: Decision }) => {
   const label = useLabel(`${decision.id}.label`, decision.label);
