@@ -88,7 +88,10 @@ assert.deepEqual(written, { "--primary": "red" });
 const brand = DECISIONS.find((decision) => decision.id === "brand");
 const paper = DECISIONS.find((decision) => decision.id === "paper");
 const linkContrast = (theme) =>
-  contrast(parse(theme["--link"]), parse(theme["--background"] ?? lightTheme["--background"]));
+  contrast(
+    parse(theme["--link"] ?? lightTheme["--link"]),
+    parse(theme["--background"] ?? lightTheme["--background"]),
+  );
 const onLight = set(brand, {}, "#7b1fa2");
 const darkFirst = set(brand, set(paper, {}, "#16181d"), "#7b1fa2");
 const brandFirst = set(paper, onLight, "#16181d");
@@ -97,6 +100,91 @@ assert.ok(linkContrast(set(brand, { ...darkTheme }, "#7b1fa2")) >= 4.5);
 assert.ok(linkContrast(darkFirst) >= 4.5);
 assert.deepEqual(brandFirst, darkFirst, "el papel no vuelve a derivar la marca");
 assert.deepEqual(clear(paper, brandFirst), onLight, "quitar el papel deja la marca del oscuro");
+
+/* La marca de la hoja también se lee sobre papel oscuro. */
+const ringContrast = (theme) =>
+  contrast(parse(theme["--ring"] ?? lightTheme["--ring"]), parse(theme["--background"]));
+const darkPaper = set(paper, {}, "#16181d");
+assert.ok(linkContrast(darkPaper) >= 4.5, "el enlace de la hoja no se lee sobre papel oscuro");
+assert.ok(ringContrast(darkPaper) >= 3, "el anillo de la hoja no se ve sobre papel oscuro");
+assert.ok(
+  linkContrast(clear(brand, darkFirst)) >= 4.5,
+  "volver a la marca de la hoja la deja ilegible",
+);
+assert.deepEqual(clear(paper, darkPaper), {});
+
+/* El papel de cada hoja da esa hoja, variable por variable. */
+assert.deepEqual({ ...lightTheme, ...set(paper, {}, darkTheme["--background"]) }, darkTheme);
+assert.deepEqual(set(paper, {}, lightTheme["--background"]), {});
+assert.deepEqual(set(paper, set(paper, {}, "#16181d"), lightTheme["--background"]), {});
+
+/* Otro papel guarda con cada variable la relación que tiene la hoja de su lado. */
+const sideVars = Object.keys(darkTheme).filter((name) => darkTheme[name] !== lightTheme[name]);
+const lightnesses = (value) =>
+  [...value.matchAll(/oklch\(([\d.]+)/g)].map((match) => Number(match[1]));
+for (const [hex, sheet] of [
+  ["#16181d", darkTheme],
+  ["#f6f1e7", lightTheme],
+]) {
+  const moved = { ...lightTheme, ...set(paper, {}, hex) };
+  const shift = parse(moved["--background"]).l - parse(sheet["--background"]).l;
+  for (const name of sideVars) {
+    const before = lightnesses(sheet[name]);
+    const after = lightnesses(moved[name]);
+    assert.equal(after.length, before.length, `${name} cambia de forma sobre ${hex}`);
+    before.forEach((l, index) => {
+      const expected = l === 0 || l === 1 ? l : Math.min(1, Math.max(0, l + shift));
+      assert.ok(Math.abs(after[index] - expected) < 0.002, `${name} no sigue al papel ${hex}`);
+    });
+  }
+}
+
+/* Sobre papel oscuro, los estados de un color propio aclaran como en la hoja oscura. */
+const danger = DECISIONS.find((decision) => decision.id === "status-danger");
+for (const [decision, prefix] of [
+  [brand, "--primary"],
+  [danger, "--destructive"],
+]) {
+  const custom = set(decision, set(paper, {}, "#16181d"), "#c62828");
+  const at = (suffix) => parse(custom[`${prefix}${suffix}`]).l;
+  assert.ok(at("-hover") > at("") && at("-active") > at("-hover"), `${prefix} oscurece en oscuro`);
+}
+
+/* Las sombras fuertes también se pasan al lado del papel, y siguen leyéndose como fuertes. */
+const depth = DECISIONS.find((decision) => decision.id === "depth");
+const strongOnLight = set(depth, {}, "strong");
+const strongOnDark = set(depth, darkPaper, "strong");
+assert.equal(
+  strongOnDark["--shadow-lg"].includes("0.21 0.02 265"),
+  false,
+  "sombra clara en oscuro",
+);
+assert.equal(depth.read(strongOnDark), "strong");
+assert.deepEqual(set(paper, strongOnLight, "#16181d"), strongOnDark);
+assert.deepEqual(clear(paper, strongOnDark), strongOnLight);
+
+/* Los bordes sin tocar son los normales, no los tenues. */
+const borders = DECISIONS.find((decision) => decision.id === "borders");
+assert.equal(borders.read({}), "normal");
+assert.equal(borders.read(darkPaper), "normal");
+assert.equal(borders.read(set(borders, {}, "faint")), "faint");
+
+/* El menú lateral sigue al papel, salvo que vaya en el color de la marca. */
+const sidebar = DECISIONS.find((decision) => decision.id === "sidebar");
+const railOn = (theme) => parse(theme["--sidebar"] ?? lightTheme["--sidebar"]);
+assert.ok(railOn(darkPaper).l < 0.5, "el menú lateral se queda claro sobre papel oscuro");
+assert.ok(
+  contrast(
+    parse(darkPaper["--sidebar-foreground"] ?? lightTheme["--sidebar-foreground"]),
+    railOn(darkPaper),
+  ) >= 4.5,
+);
+assert.equal(sidebar.read(darkPaper), "paper");
+const railOnBrand = set(sidebar, darkPaper, "brand");
+assert.equal(railOnBrand["--sidebar"], "var(--primary)");
+assert.deepEqual(set(paper, set(sidebar, {}, "brand"), "#16181d"), railOnBrand);
+assert.deepEqual(clear(sidebar, railOnBrand), darkPaper);
+assert.deepEqual(clear(paper, railOnBrand), set(sidebar, {}, "brand"));
 
 /* Una decisión propia escribe y deshace su variable propia como las de Elise. */
 const secondary = {
