@@ -199,6 +199,34 @@ assert.equal(withSecondary["--tinte-dos"], "#00897b");
 assert.ok(isChanged(secondary, withSecondary));
 assert.deepEqual(clear(secondary, withSecondary), onLight);
 
+/* Las miniaturas se dibujan con el tema que la opción deja, no con la hoja clara. */
+const { DecisionControl } = await import(join(here, "../dist/index.mjs"));
+const previews = (id, theme) =>
+  renderToStaticMarkup(
+    createElement(DecisionControl, {
+      decision: DECISIONS.find((decision) => decision.id === id),
+      value: theme,
+      onChange() {},
+    }),
+  );
+const darkPage = set(paper, set(brand, {}, "#2244a1"), "#16181d");
+for (const id of ["sidebar", "borders", "depth", "density", "corners"]) {
+  const html = previews(id, darkPage);
+  for (const name of ["--canvas", "--sidebar", "--border"]) {
+    for (const prefix of [`${name}:`, "background:", "border-color:"]) {
+      assert.equal(
+        html.includes(`${prefix}${lightTheme[name]}`),
+        false,
+        `${id} pinta ${name} de la hoja clara`,
+      );
+    }
+  }
+}
+assert.ok(
+  previews("borders", darkPage).includes(`border-color:${darkPage["--foreground"]}`),
+  "las líneas sólidas no llevan la tinta del papel oscuro",
+);
+
 /* El script sale con la clave y el tema por defecto que le pasaron al provider. */
 const render = (props) => renderToStaticMarkup(createElement(ThemeProvider, props, "contenido"));
 

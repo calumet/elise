@@ -3,6 +3,18 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-themes` 0.1.14
+
+### Corrige
+
+**Las miniaturas de las decisiones siguen el tema que se edita.** Las opciones
+de `DecisionControl` se dibujaban con la hoja clara donde la opción no escribía
+una variable, así que sobre un papel oscuro el menú lateral, las líneas y el
+resto se veían claros. Ahora cada miniatura lleva el tema que deja la opción
+aplicada sobre `value`, con la hoja del lado del papel por debajo. Lo mismo vale
+para las fichas de color y para el aviso de legibilidad de `ThemeTokenEditor`.
+Sobre un papel claro se ven igual que antes.
+
 ## `@calumet/elise-themes` 0.1.13
 
 ### Corrige

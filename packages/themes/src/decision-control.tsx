@@ -27,6 +27,7 @@ import * as React from "react";
 import { format, parse, toHex } from "./color";
 import { set, type ChoiceDecision, type ColorDecision, type Decision } from "./decisions";
 import { useLabel } from "./i18n";
+import { sheetOf } from "./sheet";
 import type { EliseTheme } from "./theme";
 import { lightTheme, type EliseVar } from "./tokens.generated";
 
@@ -43,25 +44,15 @@ const HELP = "text-xs leading-snug text-muted-foreground";
 
 const REFERENCE = /^var\((--[a-z0-9-]+)\)$/;
 
-/* De la opción, y si no de la hoja: del tema en curso no, o «redondas» saldría con el radio ya puesto. */
-const varOf = (fragment: EliseTheme, theme: EliseTheme, name: EliseVar): string => {
-  const value = fragment[name] ?? lightTheme[name];
+/* Las referencias se resuelven en el tema que la opción deja, no en el que hay. */
+const varOf = (theme: EliseTheme, name: EliseVar): string => {
+  const value = theme[name] ?? lightTheme[name];
   const reference = REFERENCE.exec(value);
-  if (!reference) return value;
-  const target = reference[1] as EliseVar;
-  return theme[target] ?? lightTheme[target] ?? value;
+  return reference ? (theme[reference[1] as EliseVar] ?? value) : value;
 };
 
-const Preview = ({
-  shape,
-  vars,
-  theme,
-}: {
-  shape: string;
-  vars: EliseTheme;
-  theme: EliseTheme;
-}): React.JSX.Element => {
-  const of = (name: EliseVar) => varOf(vars, theme, name);
+const Shape = ({ shape, theme }: { shape: string; theme: EliseTheme }): React.JSX.Element => {
+  const of = (name: EliseVar) => varOf(theme, name);
 
   if (shape === "corner") {
     return (
@@ -155,7 +146,7 @@ const Preview = ({
     );
   }
 
-  const family = vars["--font-display"] ?? vars["--font-sans"] ?? of("--font-sans");
+  const family = of("--font-display");
   return (
     <span className="flex h-11 items-center justify-center rounded-md bg-muted">
       <span className="text-xl font-semibold text-foreground" style={{ fontFamily: family }}>
@@ -164,6 +155,12 @@ const Preview = ({
     </span>
   );
 };
+
+const Preview = ({ shape, theme }: { shape: string; theme: EliseTheme }): React.JSX.Element => (
+  <span className="contents" style={theme as React.CSSProperties}>
+    <Shape shape={shape} theme={theme} />
+  </span>
+);
 
 const Head = ({ decision }: { decision: Decision }) => {
   const label = useLabel(`${decision.id}.label`, decision.label);
@@ -271,8 +268,7 @@ const Choice = ({
             >
               <Preview
                 shape={decision.shape ?? "card"}
-                vars={decision.apply(option.id, value)}
-                theme={value}
+                theme={{ ...sheetOf(value), ...set(decision, value, option.id) }}
               />
               <OptionLabel decision={decision} option={option} selected={selected} />
             </button>
@@ -317,8 +313,8 @@ const Color = ({
   onChange,
 }: DecisionControlProps & { decision: ColorDecision }) => {
   const [fill, inkVar, accent] = decision.preview;
-  const of = (name: keyof EliseTheme) =>
-    value[name] ?? lightTheme[name as EliseVar] ?? `var(${name})`;
+  const sheet = sheetOf(value);
+  const of = (name: keyof EliseTheme) => value[name] ?? sheet[name as EliseVar] ?? `var(${name})`;
   const label = useLabel(`${decision.id}.label`, decision.label);
   const change = useLabel("change", "Change");
   const hex = React.useMemo(() => {
@@ -333,6 +329,7 @@ const Color = ({
           type="button"
           className="flex cursor-pointer items-center gap-2 rounded-full border px-2.5 py-1.5 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
           style={{
+            ...(sheet as React.CSSProperties),
             ...(value as React.CSSProperties),
             background: `var(${fill})`,
             color: `var(${inkVar})`,

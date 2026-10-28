@@ -29,6 +29,7 @@ import * as React from "react";
 import { nameOf, noteOf, OWNED, TOKEN_GROUPS } from "./catalog";
 import { contrast, parse, toHex } from "./color";
 import { useLabel } from "./i18n";
+import { sheetOf } from "./sheet";
 import type { EliseTheme } from "./theme";
 import {
   FONT_FAMILIES,
@@ -68,8 +69,9 @@ const Legibility = ({ name, theme }: { name: EliseVar; theme: EliseTheme }) => {
   const backdrop = backdropOf(name);
   if (!backdrop) return null;
 
-  const ink = parse(theme[name] ?? lightTheme[name]);
-  const under = parse(theme[backdrop] ?? lightTheme[backdrop]);
+  const sheet = sheetOf(theme);
+  const ink = parse(theme[name] ?? sheet[name]);
+  const under = parse(theme[backdrop] ?? sheet[backdrop]);
   if (!ink || !under) return null;
 
   const ratio = contrast(ink, under);
