@@ -164,6 +164,7 @@ export const designSystem = ({ severity = "error", contracts = [], rules, settin
   settings: {
     shadcn: {
       componentImports: ["^@calumet/elise-(ui|tables|alerts|toasts)(/|$)"],
+      themeImports: ["@calumet/elise-[a-z]+/"],
       ...settings,
     },
   },
