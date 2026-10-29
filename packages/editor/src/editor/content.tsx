@@ -116,6 +116,7 @@ export const EditorContentArea = ({
           {...aria}
           placeholder={hint}
           renderPlaceholder={renderPlaceholder}
+          style={{ minHeight: undefined }}
           aria-controls={menu.open ? menu.id : undefined}
           aria-activedescendant={
             menu.open && menu.matches.length ? menu.optionId(menu.active) : undefined

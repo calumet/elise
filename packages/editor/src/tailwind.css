@@ -66,6 +66,13 @@
   margin-top: 0.25rem;
 }
 
+[data-slate-editor] [data-slate-node="element"]:has([data-slate-placeholder]) {
+  position: relative;
+}
+[data-slate-editor] code br {
+  display: none;
+}
+
 [data-slate-editor] td,
 [data-slate-editor] th {
   min-width: 4rem;

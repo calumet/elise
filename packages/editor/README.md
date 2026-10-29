@@ -67,6 +67,16 @@ Para otra disposición están las piezas: `Editor.Root`, `Editor.Toolbar` y `Edi
 </Editor.Root>
 ```
 
+`Editor.FormatRow` es la fila de iconos del compositor, para armarlo sin su caja, por ejemplo dentro de una tarjeta de correo. La altura y el relleno del cuerpo van en el `className` de `Editor.Content`.
+
+```tsx
+<Editor.Root schema={messageSchema} value={mensaje} onChange={setMensaje}>
+  <Editor.Content aria-label="Mensaje" className="min-h-64 px-4 py-3" />
+  <Separator />
+  <Editor.FormatRow className="p-1" />
+</Editor.Root>
+```
+
 Con el teclado: Alt+F10 lleva a la barra, Mod+K abre el enlace sobre la selección, y en el menú `/` las flechas recorren, Intro inserta y Esc cierra. El diálogo de enlace busca páginas con `searchLinks` o acepta una dirección, y puede abrirla en otra pestaña.
 
 Los comandos viven en `useEditorCommands()`, que se usa desde cualquier hijo de `Editor.Root`: `toggleMark`, `toggleList`, `toggleBlock`, `setLink`, `removeLink`, `insert`, `insertImage`, `insertVideo`, las acciones de tabla, `undo` y `redo`. `setLink(url, texto, otraPestaña)` guarda `target="_blank"` en el enlace. `items` es la lista de bloques que el esquema permite insertar. Para el estado de los botones hay `useMarkActive`, `useBlockActive`, `useListActive`, `useInTable` y `useLinkUrl`.

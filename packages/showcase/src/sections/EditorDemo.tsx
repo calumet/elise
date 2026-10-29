@@ -1,8 +1,9 @@
-import { documentSchema, Editor, messageSchema } from "@calumet/elise-editor";
+import { createDocument, documentSchema, Editor, messageSchema } from "@calumet/elise-editor";
 import type { EditorDocument, EditorNode } from "@calumet/elise-editor";
 import { EditorContent } from "@calumet/elise-editor/render";
 import { Box } from "@calumet/elise-ui/box";
 import { Grid } from "@calumet/elise-ui/grid";
+import { Separator } from "@calumet/elise-ui/separator";
 import { BlockStack } from "@calumet/elise-ui/stack";
 import { Text } from "@calumet/elise-ui/text";
 import { useState, type ReactNode } from "react";
@@ -140,6 +141,7 @@ const Columna = ({ titulo, children }: { titulo: string; children: ReactNode }) 
 
 const EditorDemo = () => {
   const [mensaje, setMensaje] = useState(MENSAJE);
+  const [tarjeta, setTarjeta] = useState(() => createDocument("es-CO"));
   const [pagina, setPagina] = useState(crearPagina);
 
   return (
@@ -170,6 +172,22 @@ const EditorDemo = () => {
             </Box>
           </Columna>
         </Grid>
+        <Columna titulo="Dentro de una tarjeta, con las piezas">
+          <Box background="card" border radius="xl" className="overflow-hidden">
+            <Text size="sm" className="px-4 py-3">
+              <Text as="span" size="sm" tone="muted">
+                Asunto:{" "}
+              </Text>
+              Documentos pendientes
+            </Text>
+            <Separator />
+            <Editor.Root schema={messageSchema} value={tarjeta} onChange={setTarjeta}>
+              <Editor.Content aria-label="Cuerpo del mensaje" className="min-h-64 px-4 py-3" />
+              <Separator />
+              <Editor.FormatRow className="p-1" />
+            </Editor.Root>
+          </Box>
+        </Columna>
       </BlockStack>
 
       <BlockStack gap={3}>
