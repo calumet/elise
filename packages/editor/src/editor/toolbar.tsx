@@ -113,7 +113,9 @@ export const LinkButton = ({
   );
 };
 
-export const FormatRow = ({ className }: { className?: string }): React.JSX.Element => {
+export type EditorFormatRowProps = { className?: string };
+
+export const FormatRow = ({ className }: EditorFormatRowProps): React.JSX.Element => {
   const t = useLabels();
   const editor = useEditorRef();
   const { schema } = useServices();

@@ -3,6 +3,18 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-editor` 0.1.1
+
+### Corrige
+
+**El compositor de mensajes, vacío.** El texto de ejemplo sale a la altura del
+cursor y ya no abre un scroll horizontal. Activar el código en una línea vacía
+la deja en una sola línea, y un `min-h-*` en `Editor.Content` vale también con
+el editor vacío.
+
+**`Editor.FormatRow`.** La fila de iconos del compositor, para armarlo sin su
+caja, por ejemplo dentro de una tarjeta.
+
 ## `@calumet/elise-themes` 0.1.14
 
 ### Corrige

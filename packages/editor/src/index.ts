@@ -1,5 +1,5 @@
 export { Editor, type EditorProps } from "./editor/editor";
-export type { EditorToolbarProps } from "./editor/toolbar";
+export type { EditorFormatRowProps, EditorToolbarProps } from "./editor/toolbar";
 export type { EditorOutlineProps } from "./editor/outline";
 export type { EditorBlockPanelProps } from "./editor/block-panel";
 export type { EditorCatalogProps } from "./editor/catalog";

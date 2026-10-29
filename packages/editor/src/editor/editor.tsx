@@ -9,7 +9,12 @@ import { EditorContentArea, type EditorContentAreaProps } from "./content";
 import { EditorOutline, type EditorOutlineProps } from "./outline";
 import { EditorPreviewButton, usePreviewing } from "./preview";
 import { EditorRoot, type EditorRootProps } from "./root";
-import { EditorToolbar, FormatRow, type EditorToolbarProps } from "./toolbar";
+import {
+  EditorToolbar,
+  FormatRow as EditorFormatRow,
+  type EditorFormatRowProps,
+  type EditorToolbarProps,
+} from "./toolbar";
 import { EditorTranslations, EditorTranslationsButton } from "./translations";
 
 export type EditorProps = Omit<EditorRootProps, "children"> &
@@ -29,6 +34,7 @@ const whileEditing = <P extends object>(
 };
 
 const Toolbar: EditingOnly<EditorToolbarProps> = whileEditing(EditorToolbar);
+const FormatRow: EditingOnly<EditorFormatRowProps> = whileEditing(EditorFormatRow);
 const Outline: EditingOnly<EditorOutlineProps> = whileEditing(EditorOutline);
 const BlockPanel: EditingOnly<EditorBlockPanelProps> = whileEditing(EditorBlockPanel);
 const Catalog: EditingOnly<EditorCatalogProps> = whileEditing(EditorCatalog);
@@ -77,6 +83,7 @@ export const Editor: ((props: EditorProps) => React.JSX.Element) & {
   Root: typeof EditorRoot;
   Content: typeof EditorContentArea;
   Toolbar: typeof Toolbar;
+  FormatRow: typeof FormatRow;
   Outline: typeof Outline;
   BlockPanel: typeof BlockPanel;
   Catalog: typeof Catalog;
@@ -93,6 +100,7 @@ export const Editor: ((props: EditorProps) => React.JSX.Element) & {
   Root: EditorRoot,
   Content: EditorContentArea,
   Toolbar,
+  FormatRow,
   Outline,
   BlockPanel,
   Catalog,
