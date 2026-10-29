@@ -254,7 +254,7 @@ function ComboboxTrigger({
   return (
     /* El botón de limpiar va como hermano del disparador, porque un <button>
        dentro de otro <button> es HTML inválido. */
-    <div className="relative w-full">
+    <div className="relative w-full min-w-0">
       <PopoverTrigger asChild>
         <button
           type="button"
@@ -801,7 +801,10 @@ function MultiComboboxField({
         {selected.length === 0 ? (
           <ComboboxValue placeholder={placeholder} />
         ) : (
-          <span ref={rowRef} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
+          <span
+            ref={rowRef}
+            className="relative flex min-w-0 flex-1 items-center gap-1 overflow-hidden"
+          >
             {/* `removeAs="span"` porque el disparador ya es un `<button>` y
                 anidar otro sería HTML inválido. */}
             {visible.map((o) => (
@@ -809,6 +812,7 @@ function MultiComboboxField({
                 key={o.value}
                 accessibilityLabel={o.label}
                 removeAs="span"
+                className="min-w-0 shrink"
                 onRemove={() => change(values.filter((v) => v !== o.value))}
               >
                 {o.label}
