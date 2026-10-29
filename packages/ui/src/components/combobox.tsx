@@ -698,18 +698,24 @@ export type MultiComboboxFieldProps = Omit<
 
 /**
  * Cuántos de los anchos dados entran en `disponible`, dejando sitio para el
- * contador cuando de verdad sobra alguno.
+ * contador cuando de verdad sobra alguno. El primero que no entra entero se
+ * cuenta igual si le quedan al menos `MIN_TRUNCATED_CHIP` px, y se trunca.
  *
  * Los anchos se miden sobre una fila aparte que siempre lleva todos los chips,
  * de modo que el cálculo no dependa de su propio resultado.
  */
+const MIN_TRUNCATED_CHIP = 96;
+
 const howManyFit = (widths: number[], counterWidth: number, available: number, gap: number) => {
   let used = 0;
   for (let i = 0; i < widths.length; i++) {
-    const overflowChip = widths[i] + (i > 0 ? gap : 0);
+    const before = i > 0 ? gap : 0;
+    const overflowChip = widths[i] + before;
     const extraAfter = widths.length - i - 1;
     const reserve = extraAfter > 0 ? gap + counterWidth : 0;
-    if (used + overflowChip + reserve > available) return i;
+    if (used + overflowChip + reserve > available) {
+      return available - used - before - reserve >= MIN_TRUNCATED_CHIP ? i + 1 : i;
+    }
     used += overflowChip;
   }
   return widths.length;
@@ -807,12 +813,12 @@ function MultiComboboxField({
           >
             {/* `removeAs="span"` porque el disparador ya es un `<button>` y
                 anidar otro sería HTML inválido. */}
-            {visible.map((o) => (
+            {visible.map((o, i) => (
               <Chip
                 key={o.value}
                 accessibilityLabel={o.label}
                 removeAs="span"
-                className="min-w-0 shrink"
+                className={i === visible.length - 1 ? "min-w-0 shrink" : undefined}
                 onRemove={() => change(values.filter((v) => v !== o.value))}
               >
                 {o.label}

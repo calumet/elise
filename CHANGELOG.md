@@ -15,8 +15,9 @@ abierto. Por defecto sigue centrado.
 
 **`MultiComboboxField` ya no ensancha el contenedor.** Dentro de un
 `DialogBody` sacaba un scroll horizontal en cuanto las fichas no cabían. El
-campo, y también `ComboboxField`, encoge en una fila flex, y con una ficha más
-ancha que el campo el «+N» sigue a la vista.
+campo, y también `ComboboxField`, encoge en una fila flex. Si sobra sitio para
+media ficha, la siguiente entra truncada en vez de dejar el hueco, y el «+N»
+siempre queda a la vista.
 
 `elise-toasts`, `elise-alerts`, `elise-tables` y `elise-themes` suben un parche
 para seguir a esta versión en JSR.
