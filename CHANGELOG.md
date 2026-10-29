@@ -3,6 +3,25 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.47.0
+
+### Añade
+
+**`align="top"` en `DialogContent`.** Deja el panel a una distancia fija del
+borde de arriba, para un diálogo cuyo contenido crece o encoge mientras está
+abierto. Por defecto sigue centrado.
+
+### Corrige
+
+**`MultiComboboxField` ya no ensancha el contenedor.** Dentro de un
+`DialogBody` sacaba un scroll horizontal en cuanto las fichas no cabían. El
+campo, y también `ComboboxField`, encoge en una fila flex. Si sobra sitio para
+media ficha, la siguiente entra truncada en vez de dejar el hueco, y el «+N»
+siempre queda a la vista.
+
+`elise-toasts`, `elise-alerts`, `elise-tables` y `elise-themes` suben un parche
+para seguir a esta versión en JSR.
+
 ## `@calumet/elise-editor` 0.1.1
 
 ### Corrige

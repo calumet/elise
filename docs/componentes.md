@@ -934,6 +934,16 @@ entera y el mensaje se lee como un subtítulo.
 </SheetContent>
 ```
 
+#### Contenido que crece
+
+`DialogContent` va centrado. Si su contenido cambia de alto mientras está
+abierto (filas que se agregan o se quitan), `align="top"` lo deja a una
+distancia fija del borde de arriba y crece solo hacia abajo.
+
+```tsx
+<DialogContent align="top">…</DialogContent>
+```
+
 Las clases salen de `DIALOG_HEADER`, `DIALOG_BODY` y `DIALOG_FOOTER`, que
 `dialog` exporta sueltas para que las tres superficies usen exactamente las
 mismas. Un panel o un diálogo sin su zona de cuerpo pierde el desplazamiento y
