@@ -68,6 +68,11 @@ export const DIALOG_WIDTHS = {
   lg: "w-[min(90vw,980px)]",
 } as const;
 
+const DIALOG_ALIGN = {
+  center: undefined,
+  top: "top-[min(10vh,6rem)] translate-y-0 max-h-[min(85vh,40rem)]",
+} as const;
+
 /** El velo que tapa la página detrás del modal. */
 export const DialogOverlay: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>> &
@@ -89,12 +94,13 @@ export const DialogOverlay: React.ForwardRefExoticComponent<
 });
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-/** El panel del modal, con su cabecera, su cuerpo y su pie. `size` elige el ancho. */
+/** El panel del modal, con su cabecera, su cuerpo y su pie. `size` elige el ancho, y `align="top"` lo deja a una distancia fija del borde de arriba, para que un contenido que crece o encoge no lo mueva. */
 export const DialogContent: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
       showCloseButton?: boolean;
       size?: keyof typeof DIALOG_WIDTHS;
+      align?: keyof typeof DIALOG_ALIGN;
     }
   > &
     React.RefAttributes<React.ComponentRef<typeof DialogPrimitive.Content>>
@@ -103,32 +109,44 @@ export const DialogContent: React.ForwardRefExoticComponent<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
     size?: keyof typeof DIALOG_WIDTHS;
+    align?: keyof typeof DIALOG_ALIGN;
   }
->(({ className, style, children, showCloseButton = true, size = "md", ...props }, ref) => {
-  const theme = useThemeScope();
+>(
+  (
+    { className, style, children, showCloseButton = true, size = "md", align = "center", ...props },
+    ref,
+  ) => {
+    const theme = useThemeScope();
 
-  const closeLabel = useElLabel("ui", "close", "Cerrar");
-  return (
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Content
-        data-slot="dialog-content"
-        style={{ ...theme.variables, ...style }}
-        ref={ref}
-        className={cn(theme.classes, DIALOG_PANEL, DIALOG_WIDTHS[size], className)}
-        {...props}
-      >
-        {showCloseButton ? (
-          <DialogClose className="absolute top-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none">
-            <X className="size-icon-md" aria-hidden />
-            <span className="sr-only">{closeLabel}</span>
-          </DialogClose>
-        ) : null}
-        {children}
-      </DialogPrimitive.Content>
-    </DialogPortal>
-  );
-});
+    const closeLabel = useElLabel("ui", "close", "Cerrar");
+    return (
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogPrimitive.Content
+          data-slot="dialog-content"
+          style={{ ...theme.variables, ...style }}
+          ref={ref}
+          className={cn(
+            theme.classes,
+            DIALOG_PANEL,
+            DIALOG_WIDTHS[size],
+            DIALOG_ALIGN[align],
+            className,
+          )}
+          {...props}
+        >
+          {showCloseButton ? (
+            <DialogClose className="absolute top-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-(--duration-fast) ease-out hover:bg-state-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none">
+              <X className="size-icon-md" aria-hidden />
+              <span className="sr-only">{closeLabel}</span>
+            </DialogClose>
+          ) : null}
+          {children}
+        </DialogPrimitive.Content>
+      </DialogPortal>
+    );
+  },
+);
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 /* Cabecera y pie van sobre una banda tenue y el cuerpo en blanco. Es lo que
