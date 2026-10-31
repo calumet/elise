@@ -13,7 +13,7 @@ import { Spinner } from "./spinner";
 
 /** Props de {@link Button}. */
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "solid" | "outline" | "ghost" | "surface" | "overlay";
+  variant?: "solid" | "outline" | "ghost" | "surface" | "overlay" | "inverted";
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "icon" | "icon-sm";
   tone?: "success" | "warning" | "danger";
 
@@ -90,6 +90,7 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   surface:
     "border border-border-strong bg-card/85 text-foreground backdrop-blur-[2px] hover:bg-card active:bg-state-active active:shadow-bevel-inset data-[state=open]:bg-card data-[state=open]:shadow-bevel-inset disabled:bg-muted disabled:border-border",
   overlay: `bg-inverse-foreground/10 text-inverse-foreground border-0 shadow-surface-bevel backdrop-blur-sm backdrop-brightness-70 ${OUTLINE_STATES} hover:bg-inverse-foreground/20 active:shadow-bevel-inset data-[state=open]:shadow-bevel-inset disabled:bg-inverse-foreground/5 disabled:text-inverse-foreground/50`,
+  inverted: `bg-primary-foreground text-primary ${SOLID_RELIEF} ${RELIEF_EDGE} hover:bg-[color-mix(in_oklab,var(--primary)_8%,var(--primary-foreground))] active:bg-[color-mix(in_oklab,var(--primary)_14%,var(--primary-foreground))] active:shadow-bevel-inset data-[state=open]:bg-[color-mix(in_oklab,var(--primary)_14%,var(--primary-foreground))] data-[state=open]:shadow-bevel-inset disabled:bg-muted`,
 };
 
 const toneOverrides: Record<
@@ -106,6 +107,7 @@ const toneOverrides: Record<
     surface:
       "border-success bg-card/85 text-success-subtle-foreground hover:bg-success-subtle active:bg-success-subtle",
     overlay: "text-inverse-success",
+    inverted: "",
   },
   warning: {
     solid:
@@ -117,6 +119,7 @@ const toneOverrides: Record<
     surface:
       "border-warning bg-card/85 text-warning-subtle-foreground hover:bg-warning-subtle active:bg-warning-subtle",
     overlay: "text-inverse-warning",
+    inverted: "",
   },
   danger: {
     solid:
@@ -128,6 +131,7 @@ const toneOverrides: Record<
     surface:
       "border-destructive bg-card/85 text-destructive-subtle-foreground hover:bg-destructive-subtle active:bg-destructive-subtle",
     overlay: "text-inverse-danger",
+    inverted: "",
   },
 };
 
@@ -172,7 +176,7 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   "icon-sm": "size-8",
 };
 
-/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una textura, y `overlay` el cristal claro para ir sobre una foto. */
+/** El botón del sistema. `variant` elige el peso, `tone` el color de la acción, y `loading` la deshabilita y tapa el rótulo con un indicador sin cambiarle el ancho. `surface` es el peso de `outline` con la superficie de tarjeta detrás, para ir sobre una textura, y `overlay` el cristal claro para ir sobre una foto. `inverted` es `solid` al revés, fondo claro y rótulo en el primario, para un llamado a la acción sobre una superficie oscura o del primario; no admite `tone`. */
 export const Button: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<ButtonProps> & React.RefAttributes<HTMLButtonElement>
 > = React.forwardRef<HTMLButtonElement, ButtonProps>(

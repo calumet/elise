@@ -35,6 +35,14 @@ const HelloWorld = () => (
         Surface
       </Button>
     </div>
+    <div className="flex items-center gap-3 rounded-lg bg-primary p-4">
+      <Button variant="inverted" data-testid="inverted">
+        Inverted
+      </Button>
+      <Button variant="inverted" disabled>
+        Inverted disabled
+      </Button>
+    </div>
   </div>
 );
 
