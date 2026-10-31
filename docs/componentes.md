@@ -1417,6 +1417,7 @@ import { Button } from "@calumet/elise-ui/button";
 <Button variant="ghost">Fantasma</Button>   // Sin fondo ni borde
 <Button variant="surface">Encima</Button>   // Borde y superficie de tarjeta
 <Button variant="overlay">Sobre foto</Button> // Cristal claro
+<Button variant="inverted">Ingresar</Button>  // Solid al revés
 ```
 
 `surface` es `outline` con la superficie de tarjeta detrás, traslúcida y con
@@ -1428,6 +1429,11 @@ claro, igual en los dos temas. Es para ir encima de una foto, donde una caja
 blanca se lee como lo más llamativo de la imagen. Oscurece un poco lo que tiene
 detrás, así que el rótulo se lee también sobre una foto clara sin velo, y sobre
 el velo de `scrim` casi no cambia.
+
+`inverted` es `solid` al revés: fondo `primary-foreground` y rótulo `primary`,
+con el mismo relieve. Es para el llamado a la acción sobre una superficie oscura
+o del color primario, como el degradado de una portada. Al apuntarlo y al
+presionarlo toma un tinte leve del primario. No admite `tone`.
 
 ### Tamaños
 
@@ -1449,12 +1455,12 @@ el velo de `scrim` casi no cambia.
 
 ### Props
 
-| Prop      | Tipo                                                          | Default   | Descripción                                    |
-| --------- | ------------------------------------------------------------- | --------- | ---------------------------------------------- |
-| `variant` | `"solid" \| "outline" \| "ghost" \| "surface" \| "overlay"`   | `"solid"` | Estilo visual                                  |
-| `size`    | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "icon" \| "icon-sm"` | `"md"`    | Tamaño. `xs` es para ir dentro de otro control |
-| `tone`    | `"success" \| "warning" \| "danger"`                          | —         | Color semántico (sobreescribe el variant)      |
-| `asChild` | `boolean`                                                     | `false`   | Renderiza el hijo en lugar de `<button>`       |
+| Prop      | Tipo                                                                      | Default   | Descripción                                    |
+| --------- | ------------------------------------------------------------------------- | --------- | ---------------------------------------------- |
+| `variant` | `"solid" \| "outline" \| "ghost" \| "surface" \| "overlay" \| "inverted"` | `"solid"` | Estilo visual                                  |
+| `size`    | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "icon" \| "icon-sm"`             | `"md"`    | Tamaño. `xs` es para ir dentro de otro control |
+| `tone`    | `"success" \| "warning" \| "danger"`                                      | —         | Color semántico (sobreescribe el variant)      |
+| `asChild` | `boolean`                                                                 | `false`   | Renderiza el hijo en lugar de `<button>`       |
 
 Además, acepta todas las props nativas de `<button>` (onClick, disabled, type, etc.).
 
