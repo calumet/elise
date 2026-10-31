@@ -3,6 +3,18 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.48.0
+
+### Añade
+
+**`variant="inverted"` en `Button`.** El `solid` al revés: fondo claro y rótulo
+en el primario, con el mismo relieve. Es para un llamado a la acción sobre una
+superficie oscura o del primario, como el degradado de una portada. No admite
+`tone`.
+
+`elise-toasts`, `elise-alerts`, `elise-tables` y `elise-themes` suben un parche
+para seguir a esta versión en JSR.
+
 ## `@calumet/elise-ui` 0.47.0
 
 ### Añade
