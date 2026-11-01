@@ -131,6 +131,15 @@ usa el primitive de Radix. Una implementación propia solo se justifica para
 casos simples, y debe documentar explícitamente qué partes de la API de
 Radix no soporta (modo controlado, `asChild`, atributos `data-state`, etc.).
 
+### La hoja y `elise-themes`
+
+`elise.css` es la fuente de verdad, y cada decisión de `elise-themes` se deriva
+de ella. Una decisión de color alimentada con el valor de la hoja tiene que
+devolver la hoja, en claro y en oscuro: si la fórmula y la hoja se separan,
+elegir un color a una milésima del de la hoja cambia todo lo que deriva de él.
+Lo comprueba `packages/themes/scripts/check.mjs` en cada build. Quien cambie un
+valor de la hoja o una fórmula de `decisions.ts` mueve los dos a la vez.
+
 ### Formateo automático
 
 ```bash

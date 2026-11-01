@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-themes` 0.1.18
+
+### Corrige
+
+**Un color propio ya no oscurece los fondos suaves.** El acento de la marca y
+los fondos suaves de los estados se mezclaban con el papel, así que con
+cualquier color distinto del de la hoja salían diez puntos más oscuros que
+ella, y con una marca oscura y poco saturada el acento quedaba gris. Ahora
+toman la luminosidad de la hoja y el tono del color elegido, con su croma en
+proporción, y sus tintas igual. En oscuro, el enlace, el anillo y la tinta de
+los rellenos parten también de la hoja y solo suben si les falta contraste.
+Con el color de la hoja, todo queda como en la hoja.
+
 ## `@calumet/elise-ui` 0.49.0
 
 ### Añade
