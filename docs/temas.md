@@ -88,7 +88,7 @@ Los temas se implementan vía CSS custom properties definidas en `@calumet/elise
 ### Superficies con escala propia
 
 `--muted-foreground` está calibrado contra las superficies de la raíz: encima de
-`--background`, `--card`, `--popover`, `--secondary` y `--muted` se lee entre 5.0
+`--background`, `--card`, `--popover`, `--secondary` y `--muted` se lee entre 4.8
 y 6.7 en los dos temas. Dos superficies caen fuera de esa escala y llevan la
 suya, así que el texto secundario no se resuelve con opacidades a ojo.
 
@@ -155,10 +155,8 @@ Las variantes `outline` y `ghost` no usan estos tokens, dado que sobre fondo
 transparente el hover se resuelve con `bg-muted` o con la superficie sutil del
 estado.
 
-> **Excepción:** en el tema oscuro `destructive` también oscurece. Lleva texto
-> blanco y aclararlo lo baja de 4.5:1. Igual queda muy separado del fondo
-> (`0.577` contra `0.172`), y de paso el hover sube el contraste del texto.
-> Todos los pares de color del tema cumplen WCAG AA (>=4.5:1) en ambos temas.
+Todos los pares de relleno y texto del tema cumplen WCAG AA (>=4.5:1) en ambos
+temas.
 
 ### Superficies sutiles de estado
 
@@ -181,18 +179,18 @@ resaltadas), en lugar de derivarla con opacidad sobre el color sólido. Un
 
 `--success`, `--warning`, `--destructive` e `--info` están calibrados para
 llevar texto encima, y no para ser el texto. Puestos con `text-*` sobre las
-superficies normales del tema, tres de los cuatro caen por debajo del 4.5:1 que
-pide WCAG AA:
+superficies normales del tema, los cuatro caen por debajo del 4.5:1 que pide
+WCAG AA en al menos uno de los dos temas:
 
 | Sólido como texto      | Sobre `--background` | Sobre `--card` |
 | ---------------------- | -------------------- | -------------- |
-| `warning` (claro)      | 2.18:1               | 2.28:1         |
-| `info` (claro)         | 4.48:1               | 4.68:1         |
-| `destructive` (oscuro) | 3.93:1               | 3.60:1         |
-| `success` (claro)      | 4.85:1               | 5.06:1         |
+| `success` (oscuro)     | 3.66:1               | 3.36:1         |
+| `warning` (oscuro)     | 3.51:1               | 3.22:1         |
+| `destructive` (oscuro) | 3.60:1               | 3.31:1         |
+| `info` (claro)         | 4.45:1               | 4.66:1         |
 
-Solo `success` pasa en los dos temas. Los `-subtle-foreground` pasan siempre y
-con margen, ya que el peor de todos da 7.30:1.
+Ninguno pasa en los dos temas. Los `-subtle-foreground` pasan siempre y con
+margen, ya que el peor de todos da 7.00:1 sobre su fondo suave.
 
 La regla práctica queda así. El sólido pinta fondos y bordes; el
 `-subtle-foreground` pinta cualquier cosa que se lea.
@@ -437,38 +435,37 @@ apenas perceptible se lee como elegido.
 | card-foreground               | `oklch(0.21 0.012 265)`  |
 | popover                       | `oklch(1 0 0)`           |
 | popover-foreground            | `oklch(0.21 0.012 265)`  |
-| primary                       | `oklch(0.55 0.19 262)`   |
+| primary                       | `oklch(0.252 0.156 265)` |
 | primary-foreground            | `oklch(1 0 0)`           |
-| secondary                     | `oklch(0.968 0.004 265)` |
+| secondary                     | `oklch(0.958 0.002 265)` |
 | secondary-foreground          | `oklch(0.37 0.02 265)`   |
-| muted                         | `oklch(0.965 0.004 265)` |
-| muted-foreground              | `oklch(0.548 0.016 265)` |
-| accent                        | `oklch(0.955 0.025 250)` |
-| accent-foreground             | `oklch(0.38 0.14 262)`   |
-| destructive                   | `oklch(0.577 0.225 27)`  |
+| muted                         | `oklch(0.976 0.004 265)` |
+| muted-foreground              | `oklch(0.525 0.016 265)` |
+| accent                        | `oklch(0.95 0.024 265)`  |
+| accent-foreground             | `oklch(0.3 0.14 265)`    |
+| destructive                   | `oklch(0.479 0.175 27)`  |
 | destructive-foreground        | `oklch(1 0 0)`           |
 | border                        | `oklch(0.922 0.005 265)` |
 | border-strong                 | `oklch(0.865 0.008 265)` |
-| input                         | `oklch(0.878 0.007 265)` |
-| ring                          | `oklch(0.55 0.19 262)`   |
-| success                       | `oklch(0.52 0.15 152)`   |
-| warning                       | `oklch(0.75 0.15 75)`    |
+| input                         | `oklch(0.77 0.007 265)`  |
+| ring                          | `oklch(0.252 0.156 265)` |
+| success                       | `oklch(0.52 0.115 155)`  |
+| warning                       | `oklch(0.532 0.112 56)`  |
 | info                          | `oklch(0.55 0.15 240)`   |
-| success-subtle                | `oklch(0.962 0.032 152)` |
-| success-subtle-foreground     | `oklch(0.40 0.11 152)`   |
-| warning-subtle                | `oklch(0.965 0.045 85)`  |
-| warning-subtle-foreground     | `oklch(0.45 0.10 70)`    |
-| destructive-subtle            | `oklch(0.962 0.03 25)`   |
-| destructive-subtle-foreground | `oklch(0.45 0.17 27)`    |
+| success-subtle                | `oklch(0.962 0.026 155)` |
+| success-subtle-foreground     | `oklch(0.4 0.09 155)`    |
+| warning-subtle                | `oklch(0.958 0.035 62)`  |
+| warning-subtle-foreground     | `oklch(0.44 0.095 56)`   |
+| destructive-subtle            | `oklch(0.962 0.028 27)`  |
+| destructive-subtle-foreground | `oklch(0.43 0.145 27)`   |
 | info-subtle                   | `oklch(0.962 0.028 240)` |
 | info-subtle-foreground        | `oklch(0.42 0.12 245)`   |
 
 ### Tema oscuro (`.dark` / `[data-theme="dark"]`)
 
-El primario se aclara de `0.55` a `0.655`, ya que el mismo valor del modo claro
-queda apagado sobre el fondo oscuro. Al aclararlo, su `-foreground` pasa a ser
-oscuro para mantener el contraste AA. `popover` se eleva por encima de `card` en
-vez de compartir su valor.
+El primario se aclara de `0.252` a `0.42`, ya que el mismo valor del modo claro
+se pierde sobre el fondo oscuro, y su `-foreground` sigue siendo blanco.
+`popover` se eleva por encima de `card` en vez de compartir su valor.
 
 | Token                         | Valor oklch              |
 | ----------------------------- | ------------------------ |
@@ -478,31 +475,31 @@ vez de compartir su valor.
 | card-foreground               | `oklch(0.962 0.003 265)` |
 | popover                       | `oklch(0.235 0.012 265)` |
 | popover-foreground            | `oklch(0.962 0.003 265)` |
-| primary                       | `oklch(0.655 0.17 262)`  |
-| primary-foreground            | `oklch(0.17 0.03 262)`   |
-| secondary                     | `oklch(0.262 0.012 265)` |
+| primary                       | `oklch(0.42 0.156 265)`  |
+| primary-foreground            | `oklch(1 0 0)`           |
+| secondary                     | `oklch(0.206 0.011 265)` |
 | secondary-foreground          | `oklch(0.93 0.005 265)`  |
 | muted                         | `oklch(0.262 0.012 265)` |
 | muted-foreground              | `oklch(0.685 0.014 265)` |
-| accent                        | `oklch(0.33 0.09 262)`   |
-| accent-foreground             | `oklch(0.89 0.06 255)`   |
-| destructive                   | `oklch(0.62 0.21 27)`    |
+| accent                        | `oklch(0.3 0.085 265)`   |
+| accent-foreground             | `oklch(0.88 0.06 262)`   |
+| destructive                   | `oklch(0.55 0.172 27)`   |
 | destructive-foreground        | `oklch(1 0 0)`           |
 | border                        | `oklch(0.302 0.013 265)` |
 | border-strong                 | `oklch(0.38 0.016 265)`  |
 | input                         | `oklch(0.36 0.015 265)`  |
-| ring                          | `oklch(0.655 0.17 262)`  |
-| success                       | `oklch(0.68 0.15 152)`   |
-| warning                       | `oklch(0.80 0.14 75)`    |
+| ring                          | `oklch(0.65 0.15 265)`   |
+| success                       | `oklch(0.52 0.115 155)`  |
+| warning                       | `oklch(0.532 0.112 56)`  |
 | info                          | `oklch(0.68 0.14 240)`   |
-| success-subtle                | `oklch(0.28 0.05 152)`   |
-| success-subtle-foreground     | `oklch(0.86 0.12 152)`   |
-| warning-subtle                | `oklch(0.30 0.05 75)`    |
-| warning-subtle-foreground     | `oklch(0.88 0.11 82)`    |
-| destructive-subtle            | `oklch(0.285 0.06 27)`   |
-| destructive-subtle-foreground | `oklch(0.85 0.11 27)`    |
+| success-subtle                | `oklch(0.28 0.04 155)`   |
+| success-subtle-foreground     | `oklch(0.86 0.095 155)`  |
+| warning-subtle                | `oklch(0.3 0.042 56)`    |
+| warning-subtle-foreground     | `oklch(0.86 0.085 62)`   |
+| destructive-subtle            | `oklch(0.285 0.05 27)`   |
+| destructive-subtle-foreground | `oklch(0.85 0.09 27)`    |
 | info-subtle                   | `oklch(0.285 0.055 240)` |
-| info-subtle-foreground        | `oklch(0.85 0.10 240)`   |
+| info-subtle-foreground        | `oklch(0.85 0.1 240)`    |
 
 ## Sobrescribir el tema con CSS
 

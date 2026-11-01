@@ -1,6 +1,6 @@
 {
   "name": "@calumet/elise-themes",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "license": "MIT",
   "exports": "./jsr/index.js",
   "publish": {

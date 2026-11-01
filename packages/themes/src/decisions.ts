@@ -75,12 +75,9 @@ const onlyChanges = (vars: Vars): EliseTheme => {
   return changed;
 };
 
-/* Referencia y no valor: el tinte sigue vivo cuando cambian la marca o el papel. */
+/* Referencia y no valor: la línea sigue viva cuando cambia el papel. */
 const tint = (over: EliseVar, amount: number, on: EliseVar = "--background") =>
   `color-mix(in oklab, var(${over}) ${amount}%, var(${on}))`;
-
-const ink = (over: EliseVar, amount: number) =>
-  `color-mix(in oklab, var(${over}) ${amount}%, var(--foreground))`;
 
 /* El 12% es el compromiso entre el 8% que usa la hoja en claro y el 16% en oscuro. */
 const borderVars = (scale: number): Vars => ({
@@ -96,12 +93,6 @@ const HARD_BORDERS: Vars = {
   "--border-strong": "var(--foreground)",
   "--input": "var(--foreground)",
 };
-
-const subtleVars = (prefix: string): Vars =>
-  ({
-    [`--${prefix}-subtle`]: tint(`--${prefix}` as EliseVar, 14),
-    [`--${prefix}-subtle-foreground`]: ink(`--${prefix}` as EliseVar, 65),
-  }) as Vars;
 
 const SIDE_VARS = (Object.keys(darkTheme) as EliseVar[]).filter(
   (name) => darkTheme[name] !== lightTheme[name],
@@ -158,12 +149,38 @@ const chart = (sheet: Record<EliseVar, string>, base: Oklch, name: EliseVar) => 
   return format(at(base, l, c));
 };
 
+/* La luminosidad de la hoja, su giro de tono y su croma en proporción: con el color de la hoja da la hoja. */
+const follow = (
+  sheet: Record<EliseVar, string>,
+  base: Oklch,
+  name: EliseVar,
+  from: EliseVar,
+): Oklch => {
+  const own = parse(sheet[name]) as Oklch;
+  const anchor = parse(sheet[from]) as Oklch;
+  return {
+    l: own.l,
+    c: anchor.c > 0 ? (own.c * base.c) / anchor.c : own.c,
+    h: (own.h + base.h - anchor.h + 360) % 360,
+  };
+};
+
+/* La tinta oscura de la hoja es más oscura que la de `readableOn`, así que seguirla no pierde contraste. */
+const inkOn = (sheet: Record<EliseVar, string>, base: Oklch, name: EliseVar, from: EliseVar) => {
+  const ink = readableOn(base);
+  const sheetInk = parse(sheet[name]) as Oklch;
+  return ink.l < 0.5 && sheetInk.l < 0.5 ? follow(sheet, base, name, from) : ink;
+};
+
 const brandVars = (base: Oklch, paper: Oklch): Vars => {
   const dark = paper.l < 0.5;
   const sheet = sideSheet(paper);
   /* El enlace es texto sobre el papel, así que necesita su propia luminosidad. */
-  const link = dark ? liftUntil(base, paper, 4.5) : step(base, 0.128);
-  const ring = dark ? liftUntil(base, paper, 3) : base;
+  const sheetLink = follow(sheet, base, "--link", "--primary");
+  const link = dark ? liftUntil(sheetLink, paper, 4.5) : step(base, 0.128);
+  const linkState = (state: EliseVar) =>
+    lighten(follow(sheet, base, state, "--primary"), link.l - sheetLink.l);
+  const ring = dark ? liftUntil(follow(sheet, base, "--ring", "--primary"), paper, 3) : base;
   return {
     "--primary": format(base),
     "--primary-hover": format(
@@ -172,13 +189,13 @@ const brandVars = (base: Oklch, paper: Oklch): Vars => {
     "--primary-active": format(
       dark ? stateStep(sheet, base, "--primary-active", "--primary") : step(base, 0.088),
     ),
-    "--accent": tint("--primary", 18),
-    "--accent-foreground": ink("--primary", 70),
+    "--accent": format(follow(sheet, base, "--accent", "--primary")),
+    "--accent-foreground": format(follow(sheet, base, "--accent-foreground", "--primary")),
     "--primary-foreground": format(readableOn(base)),
     "--ring": format(ring),
     "--link": format(link),
-    "--link-hover": format(dark ? lighten(link, 0.06) : step(base, 0.068)),
-    "--link-active": format(dark ? lighten(link, 0.11) : step(base, 0.028)),
+    "--link-hover": format(dark ? linkState("--link-hover") : step(base, 0.068)),
+    "--link-active": format(dark ? linkState("--link-active") : step(base, 0.028)),
     "--sidebar-primary": format(base),
     "--sidebar-primary-foreground": format(readableOn(base)),
     "--sidebar-ring": format(ring),
@@ -198,14 +215,15 @@ const statusVars = (prefix: string, base: Oklch, paper: Oklch): Vars => {
   const name = (suffix: string) => `--${prefix}${suffix}` as EliseVar;
   return {
     [name("")]: format(base),
-    [name("-foreground")]: format(readableOn(base)),
+    [name("-foreground")]: format(inkOn(sheet, base, name("-foreground"), name(""))),
     [name("-hover")]: format(
       dark ? stateStep(sheet, base, name("-hover"), name("")) : step(base, 0.045),
     ),
     [name("-active")]: format(
       dark ? stateStep(sheet, base, name("-active"), name("")) : step(base, 0.085),
     ),
-    ...subtleVars(prefix),
+    [name("-subtle")]: format(follow(sheet, base, name("-subtle"), name(""))),
+    [name("-subtle-foreground")]: format(follow(sheet, base, name("-subtle-foreground"), name(""))),
   } as Vars;
 };
 
@@ -330,8 +348,10 @@ const color = (
     kind: "color",
     writes: Object.keys(derive({ l: 0.5, c: 0.1, h: 0 }, {})) as EliseVar[],
     apply: (value, theme) => {
-      const base = parse(value);
-      if (!base) return {};
+      const parsed = parse(value);
+      if (!parsed) return {};
+      /* Se deriva del valor tal como se guarda, para que volver a derivar dé lo mismo. */
+      const base = parse(format(parsed)) as Oklch;
       /* Volver al color de la hoja no escribe nada: lo pone el papel, o la hoja si no hay papel. */
       if (format(base) === lightTheme[source]) return {};
       return onlyChanges(derive(base, theme));

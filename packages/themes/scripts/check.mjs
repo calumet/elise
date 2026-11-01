@@ -39,6 +39,43 @@ for (const name of ["--primary", "--background", "--radius", "--canvas"]) {
   assert.equal(lightTheme[name], declared, `${name} no coincide con la hoja`);
 }
 
+/* La tabla de valores de docs/temas.md es una copia escrita a mano: tiene que decir lo que dice la hoja. */
+const docs = readFileSync(join(here, "../../../docs/temas.md"), "utf8");
+for (const [heading, sheet] of [
+  ["### Tema claro", lightTheme],
+  ["### Tema oscuro", darkTheme],
+]) {
+  const section = docs.slice(docs.indexOf(heading)).split(/\n#{2,3} /)[0];
+  const rows = [...section.matchAll(/^\| ([\w-]+) +\| `(.+)` +\|$/gm)];
+  assert.ok(rows.length > 0, `${heading} no tiene filas en docs/temas.md`);
+  for (const [, token, value] of rows) {
+    assert.equal(
+      value,
+      sheet[`--${token}`],
+      `docs/temas.md, ${heading}: ${token} no es el de la hoja`,
+    );
+  }
+}
+
+/* Y los contrastes que cita la de los sólidos como texto. */
+const solids = docs
+  .slice(docs.indexOf("#### Los sólidos son relleno, no texto"))
+  .split(/\n#{2,4} /)[0];
+const solidRows = [
+  ...solids.matchAll(/^\| `(\w+)` \((claro|oscuro)\) +\| ([\d.]+):1 +\| ([\d.]+):1 +\|$/gm),
+];
+assert.equal(solidRows.length, 4, "la tabla de los sólidos como texto no tiene sus cuatro filas");
+for (const [, token, side, onBackground, onCard] of solidRows) {
+  const sheet = side === "claro" ? lightTheme : darkTheme;
+  for (const [surface, quoted] of [
+    ["--background", onBackground],
+    ["--card", onCard],
+  ]) {
+    const ratio = contrast(parse(sheet[`--${token}`]), parse(sheet[surface])).toFixed(2);
+    assert.equal(quoted, ratio, `docs/temas.md: ${token} (${side}) sobre ${surface} da ${ratio}:1`);
+  }
+}
+
 /* `--spacing` se declara en `@theme` y solo entra por redefinirlo la densidad. */
 assert.equal(lightTheme["--spacing"], "0.25rem");
 assert.equal(Object.keys(darkTheme).length, Object.keys(lightTheme).length);
@@ -117,6 +154,31 @@ assert.deepEqual(clear(paper, darkPaper), {});
 assert.deepEqual({ ...lightTheme, ...set(paper, {}, darkTheme["--background"]) }, darkTheme);
 assert.deepEqual(set(paper, {}, lightTheme["--background"]), {});
 assert.deepEqual(set(paper, set(paper, {}, "#16181d"), lightTheme["--background"]), {});
+
+/* Cada color, elegido a una milésima del de la hoja, da la hoja: si no, la decisión salta al tocarla. */
+const oklab = ({ l, c, h }) => [
+  l,
+  c * Math.cos((h * Math.PI) / 180),
+  c * Math.sin((h * Math.PI) / 180),
+];
+for (const sheet of [lightTheme, darkTheme]) {
+  const side = sheet === lightTheme ? {} : set(paper, {}, darkTheme["--background"]);
+  for (const decision of DECISIONS.filter((d) => d.kind === "color" && d !== paper)) {
+    const source = decision.ramp[0];
+    const { l, c, h } = parse(sheet[source]);
+    const written = set(decision, side, `oklch(${l + 0.001} ${c} ${h})`);
+    for (const name of decision.writes) {
+      const got = parse(written[name] ?? sheet[name]);
+      const want = parse(sheet[name]);
+      if (!got || !want) continue;
+      const gap = Math.hypot(...oklab(got).map((v, i) => v - oklab(want)[i]));
+      assert.ok(
+        gap < 0.02,
+        `${decision.id} cerca de la hoja aparta ${name} (ΔE ${gap.toFixed(3)})`,
+      );
+    }
+  }
+}
 
 /* Otro papel guarda con cada variable la relación que tiene la hoja de su lado. */
 const sideVars = Object.keys(darkTheme).filter((name) => darkTheme[name] !== lightTheme[name]);
