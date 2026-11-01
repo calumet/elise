@@ -1,4 +1,4 @@
-import { FolderOpen } from "@calumet/elise-icons";
+import { BellOff, FolderOpen } from "@calumet/elise-icons";
 import { Alert, AlertDescription, AlertTitle } from "@calumet/elise-ui/alert";
 import { Badge } from "@calumet/elise-ui/badge";
 import { Box } from "@calumet/elise-ui/box";
@@ -114,6 +114,22 @@ const FeedbackDemo = () => {
               <Button size="sm">Crear proyecto</Button>
               <Button size="sm" variant="outline">
                 Importar
+              </Button>
+            </EmptyStateActions>
+          </EmptyState>
+        </Box>
+        <Box background="card" border radius="xl">
+          <EmptyState size="lg">
+            <EmptyStateMedia tone="accent">
+              <BellOff />
+            </EmptyStateMedia>
+            <EmptyStateTitle>No tienes notificaciones</EmptyStateTitle>
+            <EmptyStateDescription>
+              Cuando haya avisos de tus trámites y tus cursos, aparecerán aquí.
+            </EmptyStateDescription>
+            <EmptyStateActions>
+              <Button size="sm" variant="outline">
+                Ajustar avisos
               </Button>
             </EmptyStateActions>
           </EmptyState>

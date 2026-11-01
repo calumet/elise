@@ -50,7 +50,15 @@ const INVERSE_TOKENS: string = [
 /** La franja invertida: la capa que va encima de todo, como un toast. */
 export const INVERSE_SURFACE: string = `bg-inverse [--muted-foreground:var(--inverse-muted-foreground)] ${INVERSE_TOKENS}`;
 
-export const SCRIM_SURFACE: string = `bg-linear-to-t from-[oklch(0_0_0/0.78)] via-[oklch(0_0_0/0.45)] via-38% to-transparent to-72% [--muted-foreground:oklch(0.9_0.01_265)] ${INVERSE_TOKENS}`;
+export const SCRIM_SURFACE: string = `from-[oklch(0_0_0/0.78)] via-[oklch(0_0_0/0.45)] via-38% to-transparent to-72% [--muted-foreground:oklch(0.9_0.01_265)] ${INVERSE_TOKENS}`;
+
+/** Hacia dónde se concentra el velo: el lado donde va el texto. */
+export const SCRIM_SIDE: Record<"top" | "bottom" | "start" | "end", string> = {
+  bottom: "bg-linear-to-t",
+  top: "bg-linear-to-b",
+  start: "bg-linear-to-r rtl:bg-linear-to-l",
+  end: "bg-linear-to-l rtl:bg-linear-to-r",
+};
 
 /** El riel de la navegación. */
 export const SIDEBAR_SURFACE: string = [

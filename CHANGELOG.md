@@ -3,6 +3,28 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.49.0
+
+### Añade
+
+**`scrimSide` en `Box`.** Con `background="scrim"`, lleva el velo al lado donde
+va el texto: `bottom`, que sigue siendo el de siempre, `top`, `start` o `end`.
+Es el mismo velo con el mismo par de texto, para un banner con el texto al
+costado de la foto.
+
+**`size="lg"` en `EmptyState` y `tone="accent"` en `EmptyStateMedia`.** `lg` es
+para una pantalla entera vacía: el título sube a 20px y el icono a 24px.
+`accent` pinta la media con el acento del tema, que con un color de marca es su
+tinte.
+
+**`NavigationMenuArea`.** Marca el sitio contra el que la fila cuenta lo que
+cabe, para meter `NavigationMenuList` en una caja de la aplicación, como un
+riel que se ciñe a las secciones. Sin ella la fila mide contra su padre, como
+hasta ahora.
+
+`elise-toasts`, `elise-alerts`, `elise-tables` y `elise-themes` suben un parche
+para seguir a esta versión en JSR.
+
 ## `@calumet/elise-ui` 0.48.0
 
 ### Añade

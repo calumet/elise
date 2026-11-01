@@ -15,12 +15,14 @@ import { cn } from "@/lib/cn";
 
 /** Props de {@link EmptyState}. */
 export type EmptyStateProps = React.ComponentProps<"div"> & {
-  size?: "sm" | "md";
+  /** `lg` es para cuando toda la pantalla está vacía: el título y el icono crecen. */
+  size?: "sm" | "md" | "lg";
 };
 
 const sizeClasses: Record<NonNullable<EmptyStateProps["size"]>, string> = {
   sm: "gap-3 px-6 py-8",
   md: "gap-4 px-6 py-14",
+  lg: "gap-4 px-6 py-16",
 };
 
 /**
@@ -35,8 +37,9 @@ function EmptyState({ className, size = "md", ...props }: EmptyStateProps): Reac
   return (
     <div
       data-slot="empty-state"
+      data-size={size}
       className={cn(
-        "flex flex-col items-center justify-center text-center",
+        "group/empty-state flex flex-col items-center justify-center text-center",
         sizeClasses[size],
         className,
       )}
@@ -45,14 +48,30 @@ function EmptyState({ className, size = "md", ...props }: EmptyStateProps): Reac
   );
 }
 
+/** Props de {@link EmptyStateMedia}. */
+export type EmptyStateMediaProps = React.ComponentProps<"div"> & {
+  /** `accent` lo tiñe con el acento del tema, que con un color de marca es su tinte. */
+  tone?: "muted" | "accent";
+};
+
+const mediaToneClasses: Record<NonNullable<EmptyStateMediaProps["tone"]>, string> = {
+  muted: "bg-muted text-muted-foreground",
+  accent: "bg-accent text-accent-foreground",
+};
+
 /** El icono o la ilustración del estado vacío. */
-function EmptyStateMedia({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element {
+function EmptyStateMedia({
+  className,
+  tone = "muted",
+  ...props
+}: EmptyStateMediaProps): React.JSX.Element {
   return (
     <div
       data-slot="empty-state-media"
       aria-hidden="true"
       className={cn(
-        "flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground [&>svg]:size-icon-lg",
+        "flex size-11 items-center justify-center rounded-full group-data-[size=lg]/empty-state:size-14 [&>svg]:size-icon-lg group-data-[size=lg]/empty-state:[&>svg]:size-icon-xl",
+        mediaToneClasses[tone],
         className,
       )}
       {...props}
@@ -65,7 +84,10 @@ function EmptyStateTitle({ className, ...props }: React.ComponentProps<"p">): Re
   return (
     <p
       data-slot="empty-state-title"
-      className={cn("text-lg font-semibold text-balance text-foreground", className)}
+      className={cn(
+        "text-lg font-semibold text-balance text-foreground group-data-[size=lg]/empty-state:text-xl",
+        className,
+      )}
       {...props}
     />
   );

@@ -3,6 +3,7 @@ import { Button } from "@calumet/elise-ui/button";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@calumet/elise-ui/dropdown-menu";
 import {
   NavigationMenu,
+  NavigationMenuArea,
   NavigationMenuContent,
   NavigationMenuDrawerFooter,
   NavigationMenuDrawerHeader,
@@ -78,13 +79,67 @@ const SECCIONES: Seccion[] = [
   { nombre: "Comunicación", columnas: [{ entradas: ["Noticias", "Eventos", "Contacto"] }] },
 ];
 
+const secciones = SECCIONES.map((seccion) => (
+  <NavigationMenuItem key={seccion.nombre}>
+    <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
+    <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
+      {seccion.columnas.map((columna) => (
+        <NavigationMenuGroup
+          key={columna.titulo ?? columna.entradas.map(rotuloDe).join("|")}
+          label={columna.titulo}
+        >
+          {columna.entradas.map((entrada) => {
+            const suelta = typeof entrada === "string";
+            return (
+              <NavigationMenuLink
+                key={suelta ? entrada : entrada.rotulo}
+                href="#portal"
+                description={suelta ? undefined : entrada.detalle}
+              >
+                {suelta ? entrada : entrada.rotulo}
+              </NavigationMenuLink>
+            );
+          })}
+        </NavigationMenuGroup>
+      ))}
+    </NavigationMenuContent>
+  </NavigationMenuItem>
+));
+
 /**
  * El header del portal de escuelas: nueve secciones, unas con megamenú y otras
  * con un menú corriente, y la marca y la cuenta en la misma línea. Es el caso
  * que obliga a la fila a agrupar, y el que necesita el `UserMenu` sin montar un
  * `AppShell` y sobre una franja clara.
+ *
+ * Debajo, la misma fila dentro de un riel de la aplicación: el riel se ciñe a lo
+ * que cabe y `NavigationMenuArea` es el sitio contra el que se cuenta.
  */
 const PortalHeaderDemo = (): React.JSX.Element => (
+  <div className="flex w-full flex-col gap-6">
+    <PortalHeader />
+    <div className="w-full overflow-hidden rounded-xl border border-border bg-muted">
+      <NavigationMenu variant="plain">
+        <div className="flex flex-wrap items-center gap-3 px-4 py-3">
+          <Text weight="bold" size="lg" className="flex-1 basis-0">
+            EISI
+          </Text>
+          <NavigationMenuArea className="grow-4 basis-0 max-md:contents md:flex md:justify-center">
+            <div className="max-md:contents md:rounded-full md:bg-card md:p-1 md:shadow-xs md:ring-1 md:ring-border md:has-data-unmeasured:invisible">
+              <NavigationMenuList className="md:mx-0">{secciones}</NavigationMenuList>
+            </div>
+          </NavigationMenuArea>
+          <div className="flex flex-1 basis-0 justify-end">
+            <NavigationMenuToggle />
+          </div>
+        </div>
+      </NavigationMenu>
+      <div className="h-[30rem]" />
+    </div>
+  </div>
+);
+
+const PortalHeader = (): React.JSX.Element => (
   <div className="w-full overflow-hidden rounded-xl border border-border bg-card">
     <NavigationMenu variant="plain">
       <div className="flex flex-wrap items-center gap-3 px-4 py-3">
@@ -107,32 +162,7 @@ const PortalHeaderDemo = (): React.JSX.Element => (
             </div>
           </NavigationMenuDrawerHeader>
 
-          {SECCIONES.map((seccion) => (
-            <NavigationMenuItem key={seccion.nombre}>
-              <NavigationMenuTrigger>{seccion.nombre}</NavigationMenuTrigger>
-              <NavigationMenuContent align={seccion.ancha ? "full" : "start"}>
-                {seccion.columnas.map((columna) => (
-                  <NavigationMenuGroup
-                    key={columna.titulo ?? columna.entradas.map(rotuloDe).join("|")}
-                    label={columna.titulo}
-                  >
-                    {columna.entradas.map((entrada) => {
-                      const suelta = typeof entrada === "string";
-                      return (
-                        <NavigationMenuLink
-                          key={suelta ? entrada : entrada.rotulo}
-                          href="#portal"
-                          description={suelta ? undefined : entrada.detalle}
-                        >
-                          {suelta ? entrada : entrada.rotulo}
-                        </NavigationMenuLink>
-                      );
-                    })}
-                  </NavigationMenuGroup>
-                ))}
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          ))}
+          {secciones}
 
           <NavigationMenuDrawerFooter>
             <Text size="xs" tone="muted">

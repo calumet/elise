@@ -10,7 +10,7 @@ import {
 import { Heading } from "@calumet/elise-ui/heading";
 import { Text } from "@calumet/elise-ui/text";
 
-const banners = [
+const banners: { title: string; detail: string; photo: string; side?: "start" }[] = [
   {
     title: "Legado EISI",
     detail: "Cincuenta años formando ingenieros de sistemas.",
@@ -20,6 +20,7 @@ const banners = [
     title: "Admisiones 2027",
     detail: "Inscripciones abiertas hasta el 30 de noviembre.",
     photo: "bg-[linear-gradient(160deg,#fdfdfd,#c9d6df_50%,#e8dccb)]",
+    side: "start",
   },
   { title: "", detail: "", photo: "bg-[linear-gradient(200deg,#e9f0f5,#b7c9a8_55%,#f2e6d0)]" },
 ];
@@ -43,8 +44,11 @@ export default function CarouselDemo() {
                 {banner.title && (
                   <Box
                     background="scrim"
+                    scrimSide={banner.side}
                     padding={8}
-                    className="absolute inset-0 flex flex-col justify-end gap-2"
+                    className={`absolute inset-0 flex flex-col gap-2 ${
+                      banner.side === "start" ? "justify-center pe-64" : "justify-end"
+                    }`}
                   >
                     <Heading level={2}>{banner.title}</Heading>
                     <Text tone="muted">{banner.detail}</Text>
