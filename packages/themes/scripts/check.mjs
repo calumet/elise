@@ -57,6 +57,25 @@ for (const [heading, sheet] of [
   }
 }
 
+/* Y los contrastes que cita la de los sólidos como texto. */
+const solids = docs
+  .slice(docs.indexOf("#### Los sólidos son relleno, no texto"))
+  .split(/\n#{2,4} /)[0];
+const solidRows = [
+  ...solids.matchAll(/^\| `(\w+)` \((claro|oscuro)\) +\| ([\d.]+):1 +\| ([\d.]+):1 +\|$/gm),
+];
+assert.equal(solidRows.length, 4, "la tabla de los sólidos como texto no tiene sus cuatro filas");
+for (const [, token, side, onBackground, onCard] of solidRows) {
+  const sheet = side === "claro" ? lightTheme : darkTheme;
+  for (const [surface, quoted] of [
+    ["--background", onBackground],
+    ["--card", onCard],
+  ]) {
+    const ratio = contrast(parse(sheet[`--${token}`]), parse(sheet[surface])).toFixed(2);
+    assert.equal(quoted, ratio, `docs/temas.md: ${token} (${side}) sobre ${surface} da ${ratio}:1`);
+  }
+}
+
 /* `--spacing` se declara en `@theme` y solo entra por redefinirlo la densidad. */
 assert.equal(lightTheme["--spacing"], "0.25rem");
 assert.equal(Object.keys(darkTheme).length, Object.keys(lightTheme).length);

@@ -88,7 +88,7 @@ Los temas se implementan vía CSS custom properties definidas en `@calumet/elise
 ### Superficies con escala propia
 
 `--muted-foreground` está calibrado contra las superficies de la raíz: encima de
-`--background`, `--card`, `--popover`, `--secondary` y `--muted` se lee entre 5.0
+`--background`, `--card`, `--popover`, `--secondary` y `--muted` se lee entre 4.8
 y 6.7 en los dos temas. Dos superficies caen fuera de esa escala y llevan la
 suya, así que el texto secundario no se resuelve con opacidades a ojo.
 
@@ -155,10 +155,8 @@ Las variantes `outline` y `ghost` no usan estos tokens, dado que sobre fondo
 transparente el hover se resuelve con `bg-muted` o con la superficie sutil del
 estado.
 
-> **Excepción:** en el tema oscuro `destructive` también oscurece. Lleva texto
-> blanco y aclararlo lo baja de 4.5:1. Igual queda muy separado del fondo
-> (`0.577` contra `0.172`), y de paso el hover sube el contraste del texto.
-> Todos los pares de color del tema cumplen WCAG AA (>=4.5:1) en ambos temas.
+Todos los pares de relleno y texto del tema cumplen WCAG AA (>=4.5:1) en ambos
+temas.
 
 ### Superficies sutiles de estado
 
@@ -181,18 +179,18 @@ resaltadas), en lugar de derivarla con opacidad sobre el color sólido. Un
 
 `--success`, `--warning`, `--destructive` e `--info` están calibrados para
 llevar texto encima, y no para ser el texto. Puestos con `text-*` sobre las
-superficies normales del tema, tres de los cuatro caen por debajo del 4.5:1 que
-pide WCAG AA:
+superficies normales del tema, los cuatro caen por debajo del 4.5:1 que pide
+WCAG AA en al menos uno de los dos temas:
 
 | Sólido como texto      | Sobre `--background` | Sobre `--card` |
 | ---------------------- | -------------------- | -------------- |
-| `warning` (claro)      | 2.18:1               | 2.28:1         |
-| `info` (claro)         | 4.48:1               | 4.68:1         |
-| `destructive` (oscuro) | 3.93:1               | 3.60:1         |
-| `success` (claro)      | 4.85:1               | 5.06:1         |
+| `success` (oscuro)     | 3.66:1               | 3.36:1         |
+| `warning` (oscuro)     | 3.51:1               | 3.22:1         |
+| `destructive` (oscuro) | 3.60:1               | 3.31:1         |
+| `info` (claro)         | 4.45:1               | 4.66:1         |
 
-Solo `success` pasa en los dos temas. Los `-subtle-foreground` pasan siempre y
-con margen, ya que el peor de todos da 7.30:1.
+Ninguno pasa en los dos temas. Los `-subtle-foreground` pasan siempre y con
+margen, ya que el peor de todos da 7.00:1 sobre su fondo suave.
 
 La regla práctica queda así. El sólido pinta fondos y bordes; el
 `-subtle-foreground` pinta cualquier cosa que se lea.
