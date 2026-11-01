@@ -9,7 +9,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
-import { INVERSE_SURFACE, SCRIM_SURFACE, SIDEBAR_SURFACE } from "@/lib/surface";
+import { INVERSE_SURFACE, SCRIM_SIDE, SCRIM_SURFACE, SIDEBAR_SURFACE } from "@/lib/surface";
 
 /** Escala de espaciado compartida por Box, los Stack y Grid. */
 export type SpaceScale = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
@@ -32,6 +32,8 @@ export type BoxProps = React.ComponentProps<"div"> & {
     | "sidebar"
     | "inverse"
     | "scrim";
+  /** Con `background="scrim"`, el lado donde se concentra el velo. Por defecto `bottom`. */
+  scrimSide?: keyof typeof SCRIM_SIDE;
   border?: boolean | "strong";
   borderSide?: "all" | "top" | "bottom" | "start" | "end";
   radius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
@@ -133,6 +135,7 @@ export type BoxStyleProps = Pick<
   | "paddingX"
   | "paddingY"
   | "background"
+  | "scrimSide"
   | "border"
   | "borderSide"
   | "radius"
@@ -150,6 +153,7 @@ export const boxClasses = ({
   paddingX,
   paddingY,
   background = "none",
+  scrimSide = "bottom",
   border,
   borderSide = "all",
   radius,
@@ -161,6 +165,7 @@ export const boxClasses = ({
     paddingX !== undefined && paddingXClasses[paddingX],
     paddingY !== undefined && paddingYClasses[paddingY],
     backgroundClasses[background],
+    background === "scrim" && SCRIM_SIDE[scrimSide],
     border && borderSideClasses[borderSide],
     border && (border === "strong" ? "border-border-strong" : "border-border"),
     radius && radiusClasses[radius],
@@ -180,6 +185,7 @@ function Box({
   paddingX,
   paddingY,
   background,
+  scrimSide,
   border,
   borderSide,
   radius,
@@ -196,6 +202,7 @@ function Box({
           paddingX,
           paddingY,
           background,
+          scrimSide,
           border,
           borderSide,
           radius,

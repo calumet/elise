@@ -101,15 +101,16 @@ import { Box } from "@calumet/elise-ui/box";
 </Box>;
 ```
 
-| Prop                                | Tipo                                                                                                       | Default  |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------- |
-| `padding` / `paddingX` / `paddingY` | escala de espaciado                                                                                        | —        |
-| `background`                        | `"none" \| "card" \| "popover" \| "muted" \| "secondary" \| "accent" \| "sidebar" \| "inverse" \| "scrim"` | `"none"` |
-| `border`                            | `boolean \| "strong"`                                                                                      | —        |
-| `borderSide`                        | `"all" \| "top" \| "bottom" \| "start" \| "end"`                                                           | `"all"`  |
-| `radius`                            | `"none" \| "sm" \| "md" \| "lg" \| "xl" \| "full"`                                                         | —        |
-| `shadow`                            | `"none" \| "xs" \| "sm" \| "md" \| "lg" \| "xl"`                                                           | —        |
-| `overflowHidden`                    | `boolean`                                                                                                  | —        |
+| Prop                                | Tipo                                                                                                       | Default    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------- |
+| `padding` / `paddingX` / `paddingY` | escala de espaciado                                                                                        | —          |
+| `background`                        | `"none" \| "card" \| "popover" \| "muted" \| "secondary" \| "accent" \| "sidebar" \| "inverse" \| "scrim"` | `"none"`   |
+| `scrimSide`                         | `"bottom" \| "top" \| "start" \| "end"`                                                                    | `"bottom"` |
+| `border`                            | `boolean \| "strong"`                                                                                      | —          |
+| `borderSide`                        | `"all" \| "top" \| "bottom" \| "start" \| "end"`                                                           | `"all"`    |
+| `radius`                            | `"none" \| "sm" \| "md" \| "lg" \| "xl" \| "full"`                                                         | —          |
+| `shadow`                            | `"none" \| "xs" \| "sm" \| "md" \| "lg" \| "xl"`                                                           | —          |
+| `overflowHidden`                    | `boolean`                                                                                                  | —          |
 
 `background` setea también el color de texto que le corresponde (`card` trae
 `text-card-foreground`), así que los pares nunca se desemparejan.
@@ -127,6 +128,15 @@ concentra abajo, donde va el texto, y llega a transparente pasados dos tercios d
 la altura, y declara su par de texto claro, así que `tone="muted"` resuelve contra
 él. Es igual en los dos temas, porque la foto también lo es. Ver
 [Reglas de interfaz](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve).
+
+`scrimSide` lleva el velo al lado donde va el texto, como `borderSide` lleva el
+borde. Un banner con el texto abajo en móvil y a la izquierda en escritorio son
+dos cajas:
+
+```tsx
+<Box background="scrim" className="absolute inset-0 md:hidden">…</Box>
+<Box background="scrim" scrimSide="start" className="absolute inset-0 max-md:hidden">…</Box>
+```
 
 #### Grid
 
@@ -756,6 +766,26 @@ Los dos son `div` y aceptan `className`, así que el contenido y su reparto son
 de quien los escribe. La banda trae la sangría de los items del cajón, para que
 lo de adentro arranque en la misma vertical que las secciones.
 
+#### La fila dentro de una caja propia
+
+La fila cuenta lo que cabe contra su padre. Si la app la mete en una caja suya,
+como un riel que se ciñe a las secciones, el padre es esa caja y la cuenta sale
+mal. `NavigationMenuArea` marca el sitio contra el que se cuenta, y el aspecto
+del riel queda en un elemento de la app:
+
+```tsx
+<NavigationMenuArea className="grow-4 basis-0 max-md:contents md:flex md:justify-center">
+  <div className="max-md:contents md:rounded-full md:bg-card md:p-1 md:ring-1 md:ring-border">
+    <NavigationMenuList className="md:mx-0">…</NavigationMenuList>
+  </div>
+</NavigationMenuArea>
+```
+
+El relleno y el borde de lo que haya en medio se descuentan, y sus márgenes no:
+uno `auto` vale lo que sobra. Por eso el riel se centra con `flex` en el área.
+Con `max-md:contents` en los dos, el cajón de móvil sigue cayendo en su propia
+línea.
+
 ### Feedback
 
 | Componente                                                                             | Import                           | Radix                                                                           |
@@ -885,6 +915,20 @@ import { FolderOpen } from "@calumet/elise-icons";
 
 Para el caso "no hay resultados" de una búsqueda, el título debería nombrar el
 término buscado en vez de decir solo "Sin resultados".
+
+`size` va en `sm`, `md` y `lg`. `lg` es para cuando la pantalla entera está
+vacía: el título sube a `text-xl` y el icono a 24px. `EmptyStateMedia` con
+`tone="accent"` se pinta con el acento del tema, que con un color de marca es
+su tinte:
+
+```tsx
+<EmptyState size="lg">
+  <EmptyStateMedia tone="accent">
+    <BellOff />
+  </EmptyStateMedia>
+  <EmptyStateTitle>No tienes notificaciones</EmptyStateTitle>
+</EmptyState>
+```
 
 ### Overlay
 
