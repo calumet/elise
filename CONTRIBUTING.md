@@ -140,6 +140,10 @@ elegir un color a una milésima del de la hoja cambia todo lo que deriva de él.
 Lo comprueba `packages/themes/scripts/check.mjs` en cada build. Quien cambie un
 valor de la hoja o una fórmula de `decisions.ts` mueve los dos a la vez.
 
+La tabla de valores por defecto de `docs/temas.md` es otra copia de la hoja, y
+quien cambie un valor de `elise.css` la actualiza en el mismo cambio. La misma
+comprobación la lee y falla con la fila que no coincide.
+
 ### Formateo automático
 
 ```bash

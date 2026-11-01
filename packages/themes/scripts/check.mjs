@@ -39,6 +39,24 @@ for (const name of ["--primary", "--background", "--radius", "--canvas"]) {
   assert.equal(lightTheme[name], declared, `${name} no coincide con la hoja`);
 }
 
+/* La tabla de valores de docs/temas.md es una copia escrita a mano: tiene que decir lo que dice la hoja. */
+const docs = readFileSync(join(here, "../../../docs/temas.md"), "utf8");
+for (const [heading, sheet] of [
+  ["### Tema claro", lightTheme],
+  ["### Tema oscuro", darkTheme],
+]) {
+  const section = docs.slice(docs.indexOf(heading)).split(/\n#{2,3} /)[0];
+  const rows = [...section.matchAll(/^\| ([\w-]+) +\| `(.+)` +\|$/gm)];
+  assert.ok(rows.length > 0, `${heading} no tiene filas en docs/temas.md`);
+  for (const [, token, value] of rows) {
+    assert.equal(
+      value,
+      sheet[`--${token}`],
+      `docs/temas.md, ${heading}: ${token} no es el de la hoja`,
+    );
+  }
+}
+
 /* `--spacing` se declara en `@theme` y solo entra por redefinirlo la densidad. */
 assert.equal(lightTheme["--spacing"], "0.25rem");
 assert.equal(Object.keys(darkTheme).length, Object.keys(lightTheme).length);
