@@ -18,6 +18,10 @@
 export const SURFACE =
   "relative rounded-xl bg-card shadow-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-surface-bevel";
 
+/** El panel de `Popover`, sin su capa ni su animación. */
+export const POPOVER_PANEL =
+  "w-72 rounded-xl border border-border bg-popover p-4 text-foreground shadow-lg";
+
 /**
  * El panel de los menús: `DropdownMenu`, `ContextMenu` y `Menubar`. Cada uno le
  * suma su ancho mínimo y su animación.

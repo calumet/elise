@@ -1,6 +1,6 @@
 import { TriangleAlert, Info, CircleX, X, CircleCheck } from "@calumet/elise-icons";
 import { INVERSE_SURFACE } from "@calumet/elise-ui/box";
-import { Button } from "@calumet/elise-ui/button";
+import { Link } from "@calumet/elise-ui/link";
 import {
   Toast,
   ToastClose,
@@ -86,15 +86,16 @@ export const Toaster = ({ position = "top-right" }: ToasterProps): React.JSX.Ele
                 {toastItem.description}
               </ToastDescription>
               {toastItem.actionLabel && toastItem.action ? (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="px-0 text-foreground underline-offset-2 hover:bg-transparent hover:underline"
-                  onClick={toastItem.action}
+                <Link
+                  asChild
+                  tone="neutral"
+                  underline="hover"
+                  className="inline-flex min-h-8 items-center text-sm font-medium"
                 >
-                  {toastItem.actionLabel}
-                </Button>
+                  <button type="button" onClick={toastItem.action}>
+                    {toastItem.actionLabel}
+                  </button>
+                </Link>
               ) : null}
             </div>
             <ToastClose

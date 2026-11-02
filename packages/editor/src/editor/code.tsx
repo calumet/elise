@@ -1,7 +1,12 @@
 import { Monitor, Smartphone, TriangleAlert } from "@calumet/elise-icons";
-import { Button } from "@calumet/elise-ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@calumet/elise-ui/dropdown-menu";
 import { Heading } from "@calumet/elise-ui/heading";
-import { Popover, PopoverContent, PopoverTrigger } from "@calumet/elise-ui/popover";
+import { Link } from "@calumet/elise-ui/link";
 import { SegmentedControl, SegmentedControlItem } from "@calumet/elise-ui/segmented-control";
 import { Text } from "@calumet/elise-ui/text";
 import * as React from "react";
@@ -135,7 +140,6 @@ const Dropped = ({
   onLine: (line: number) => void;
 }): React.JSX.Element => {
   const t = useLabels();
-  const [open, setOpen] = React.useState(false);
   return (
     <div
       role="status"
@@ -145,43 +149,31 @@ const Dropped = ({
       <span className="min-w-0 flex-1 basis-60">
         {t.droppedIntro} <span className="font-mono">{summarize(t, items)}</span>
       </span>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="text-warning-subtle-foreground underline underline-offset-2"
-          >
-            {t.seeChanges}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="end" className="w-72 p-1">
-          <ul className="m-0 flex max-h-72 list-none flex-col overflow-y-auto p-0">
-            {items.map((item) => (
-              <li key={`${item.kind}-${item.at}`}>
-                <button
-                  type="button"
-                  className="flex w-full items-baseline gap-3 rounded-sm px-2 py-1.5 text-start text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                  onClick={() => {
-                    setOpen(false);
-                    onLine(item.line);
-                  }}
-                >
-                  <span className="shrink-0 text-xs text-muted-foreground">
-                    {fill(t.lineNumber, { line: item.line })}
-                  </span>
-                  <span className="min-w-0 font-mono break-all">
-                    {fill(DROPPED_LABELS[item.kind](t), {
-                      name: item.name,
-                    })}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </PopoverContent>
-      </Popover>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Link asChild tone="neutral">
+            <button type="button">{t.seeChanges}</button>
+          </Link>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="max-h-72 w-72 overflow-y-auto">
+          {items.map((item) => (
+            <DropdownMenuItem
+              key={`${item.kind}-${item.at}`}
+              className="items-baseline"
+              onSelect={() => onLine(item.line)}
+            >
+              <Text as="span" size="xs" tone="muted" className="shrink-0">
+                {fill(t.lineNumber, { line: item.line })}
+              </Text>
+              <Text as="span" size="sm" family="mono" className="min-w-0 break-all">
+                {fill(DROPPED_LABELS[item.kind](t), {
+                  name: item.name,
+                })}
+              </Text>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

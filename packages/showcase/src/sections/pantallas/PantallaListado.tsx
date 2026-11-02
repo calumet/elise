@@ -12,6 +12,7 @@ import {
   EmptyStateTitle,
 } from "@calumet/elise-ui/empty-state";
 import { Image } from "@calumet/elise-ui/image";
+import { Link } from "@calumet/elise-ui/link";
 import { SearchField } from "@calumet/elise-ui/search-field";
 import { Section } from "@calumet/elise-ui/section";
 import {
@@ -154,13 +155,15 @@ const PantallaListado = () => {
                         />
                       </Clickable>
                       {/* La fila ya es el destino: el nombre no se subraya hasta apuntarlo. */}
-                      <a
+                      <Link
                         id={`producto-${producto.id}`}
                         href="#pantallas"
-                        className="rounded-xs font-medium underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                        tone="neutral"
+                        underline="hover"
+                        className="font-medium"
                       >
                         {producto.nombre}
-                      </a>
+                      </Link>
                     </div>
                   </TableCell>
                   <TableCell>{producto.stock}</TableCell>

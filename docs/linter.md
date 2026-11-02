@@ -110,7 +110,7 @@ De [Quién es dueño de cada medida](reglas-ui.md#2-quién-es-dueño-de-cada-med
 
 - el ancho de una pantalla es de `Container`, así que `max-w-*` no va en otro
 - `Card`, `Table` y `DataTable` no ponen borde, radio ni sombra: salen de `SURFACE`
-- la tipografía es de `Text` y los suyos; en los demás no pasa
+- la tipografía es de `Text` y los suyos, entre ellos `Link`, que es texto; en los demás no pasa
 
 De [Lo que el sistema ya resuelve](reglas-ui.md#3-lo-que-el-sistema-ya-resuelve):
 

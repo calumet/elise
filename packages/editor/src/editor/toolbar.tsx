@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@calumet/elise-ui/dropdown-menu";
+import { POPOVER_PANEL } from "@calumet/elise-ui/popover";
 import { Toolbar, ToolbarButton, ToolbarSeparator } from "@calumet/elise-ui/toolbar";
 import { useEditorRef, useEditorSelector } from "platejs/react";
 import * as React from "react";
@@ -42,7 +43,6 @@ import { LinkForm } from "./link-form";
 export const BAR = "flex-nowrap gap-0.5 rounded-none border-0 bg-transparent p-0";
 export const BAR_BUTTON = "size-8 shrink-0 bg-transparent p-0 [&_svg]:size-icon-md";
 const FLOATING = `w-auto rounded-xl p-1 shadow-lg ${INVERSE_SURFACE}`;
-const PANEL = "w-72 rounded-xl border border-border bg-popover p-4 text-foreground shadow-lg";
 
 export const keepFocus = (event: React.MouseEvent): void => event.preventDefault();
 
@@ -148,7 +148,7 @@ export const FormatRow = ({ className }: EditorFormatRowProps): React.JSX.Elemen
               side="top"
               floatRef={floatRef}
               focusOnOpen
-              className={PANEL}
+              className={POPOVER_PANEL}
               onKeyDown={(event) => {
                 if (event.key !== "Escape") return;
                 event.preventDefault();
@@ -435,7 +435,7 @@ const SelectionBar = ({ className }: { className?: string }): React.JSX.Element 
       refresh={selection}
       floatRef={floatRef}
       focusOnOpen
-      className={PANEL}
+      className={POPOVER_PANEL}
       onKeyDown={(event) => {
         if (event.key !== "Escape") return;
         event.preventDefault();

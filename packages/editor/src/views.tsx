@@ -7,6 +7,7 @@ import {
   XCircle,
 } from "@calumet/elise-icons";
 import { buttonVariants } from "@calumet/elise-ui/button";
+import { Link } from "@calumet/elise-ui/link";
 import * as React from "react";
 
 import { useLabels, type Labels } from "./labels";
@@ -406,14 +407,13 @@ const FileCard = ({
         <FileText aria-hidden="true" className="size-icon-md" />
       </span>
       <span className="min-w-0 flex-1 wrap-anywhere" {...frozen(editing)}>
-        <a
+        <Link
           href={src}
           download={name || undefined}
-          className="text-link underline underline-offset-2 hover:text-link-hover"
           {...(editing ? { onClick: (event: React.MouseEvent) => event.preventDefault() } : {})}
         >
           {name}
-        </a>
+        </Link>
         {size ? (
           <span
             data-slot="file-size"
@@ -431,15 +431,13 @@ const FileCard = ({
 export const AnchorView = ({ element, attributes, children }: ViewProps): React.JSX.Element => {
   const blank = element.target === "_blank";
   return (
-    <a
+    <Link
       href={safeHref(String(element.url ?? ""))}
       target={blank ? "_blank" : undefined}
-      rel={blank ? "noreferrer noopener" : undefined}
-      className="rounded-xs text-link underline underline-offset-2 transition-[color] duration-(--duration-fast) ease-out hover:text-link-hover active:text-link-active"
       {...attributes}
     >
       {children}
-    </a>
+    </Link>
   );
 };
 
