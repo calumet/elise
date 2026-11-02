@@ -11,7 +11,12 @@ const ToastDemo = () => {
             description: "Cambios sincronizados.",
             variant: "info",
             actionLabel: "Deshacer",
-            action: () => toast({ title: "Cambios deshechos", variant: "info" }),
+            action: () =>
+              toast({
+                title: "Cambios deshechos",
+                description: "Volvió la versión anterior.",
+                variant: "info",
+              }),
           })
         }
       >
