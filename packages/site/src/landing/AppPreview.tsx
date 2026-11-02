@@ -33,6 +33,7 @@ import {
 import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
 import { DropdownMenuItem } from "@calumet/elise-ui/dropdown-menu";
+import { Link } from "@calumet/elise-ui/link";
 import * as React from "react";
 
 import { LocaleSelect } from "../components/LocaleSelect";
@@ -188,13 +189,10 @@ export function AppPreview() {
           </h2>
           <p className="mt-3 max-w-150 text-lg text-pretty text-muted-foreground">{t("lede")}</p>
         </div>
-        <a
-          href={DOCS_URL}
-          className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
-        >
+        <Link href={DOCS_URL} underline="hover" className="inline-flex items-center font-medium">
           {t("catalogLink")}
-          <ArrowRight className="size-4" />
-        </a>
+          <ArrowRight className="ms-1.5 size-4" />
+        </Link>
       </div>
 
       <div className="mt-8 h-160 overflow-hidden rounded-xl border border-border shadow-lg">

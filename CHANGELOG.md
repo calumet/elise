@@ -3,6 +3,60 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.50.0
+
+### Añade
+
+**`underline="hover"` y `tone="muted"` en `Link`.** El enlace de una lista
+donde todo es enlace ya tiene pieza: va sin subrayar hasta apuntarlo, y en el
+tono que toque. `muted` es el apagado de su superficie y pasa al principal al
+apuntarlo; `neutral` conserva el color del texto, para el nombre de una fila.
+Antes cada uno escribía las clases en un `<a>`, y casi siempre se quedaba sin
+anillo de foco.
+
+```tsx
+<Link href="/escuelas/sistemas" tone="muted" underline="hover">
+  Ingeniería de Sistemas
+</Link>
+```
+
+**`MENU_PANEL`, `MENU_ITEM` y `POPOVER_PANEL`.** El aspecto del panel y de la
+opción de menú, desde `@calumet/elise-ui/dropdown-menu`, y el del panel de
+`Popover`, desde `@calumet/elise-ui/popover`. Son para un menú o un panel que
+no abre Radix, como los que flotan junto al cursor de un editor. La opción se
+resalta con `data-highlighted`.
+
+`elise-alerts`, `elise-tables` y `elise-themes` suben un parche para seguir a
+esta versión en JSR.
+
+## `@calumet/elise-toasts` 0.4.31
+
+### Corrige
+
+**La acción del aviso es un enlace.** Era un `Button` al que se le tapaban el
+fondo y el relleno desde fuera; ahora es un `Link` que se subraya al apuntarlo,
+con el mismo alto de 32px.
+
+## `@calumet/elise-editor` 0.1.2
+
+### Corrige
+
+**Los enlaces del contenido son `Link`.** El de un enlace en el texto y el de un
+archivo adjunto tenían las clases de `Link` copiadas; el del adjunto, además,
+sin anillo de foco. Ahora siguen a `Link`.
+
+**Los menús usan las piezas de elise-ui.** El menú de insertar bloques y los
+paneles de la barra toman `MENU_PANEL`, `MENU_ITEM` y `POPOVER_PANEL` en vez de
+copiarlos. La lista de cambios del código pasa a `DropdownMenu`, con su teclado,
+y la lista de traducciones a `Clickable`.
+
+## `@calumet/elise-linter` 0.9.4
+
+### Corrige
+
+**`Link` acepta tipografía.** Es texto, como `Text` y `Heading`, así que un
+`font-medium` en el nombre de una fila ya no se reporta.
+
 ## `@calumet/elise-themes` 0.1.18
 
 ### Corrige

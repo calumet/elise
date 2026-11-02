@@ -10,6 +10,8 @@ const ToastDemo = () => {
             title: "Guardado",
             description: "Cambios sincronizados.",
             variant: "info",
+            actionLabel: "Deshacer",
+            action: () => toast({ title: "Cambios deshechos", variant: "info" }),
           })
         }
       >

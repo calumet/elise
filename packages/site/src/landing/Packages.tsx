@@ -1,6 +1,7 @@
 import { useTranslation } from "@calumet/elise-i18n";
 import { ArrowRight } from "@calumet/elise-icons";
 import { Card } from "@calumet/elise-ui/card";
+import { Link } from "@calumet/elise-ui/link";
 
 import { Dither } from "../components/Dither";
 import { RichText } from "../components/RichText";
@@ -24,13 +25,10 @@ export function Packages() {
           </h2>
           <p className="mt-2.5 max-w-140 text-lg text-muted-foreground">{t("lede")}</p>
         </div>
-        <a
-          href={DOCS_URL}
-          className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
-        >
+        <Link href={DOCS_URL} underline="hover" className="inline-flex items-center font-medium">
           {t("docsLink")}
-          <ArrowRight className="size-4" />
-        </a>
+          <ArrowRight className="ms-1.5 size-4" />
+        </Link>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -8,8 +8,12 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
 
 import { cn } from "@/lib/cn";
+import { POPOVER_PANEL } from "@/lib/surface";
 
 import { useThemeScope } from "./theme-scope";
+
+/** El aspecto del panel, para lo que flota con su propio posicionador, como las barras de un editor. */
+export { POPOVER_PANEL };
 
 /** Raíz del popover. Guarda si está abierto. */
 export const Popover: typeof PopoverPrimitive.Root = PopoverPrimitive.Root;
@@ -41,7 +45,8 @@ export const PopoverContent: React.ForwardRefExoticComponent<
         sideOffset={sideOffset}
         className={cn(
           theme.classes,
-          "z-popover w-72 rounded-xl border border-border bg-popover p-4 text-foreground shadow-lg outline-none data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:fade-in",
+          POPOVER_PANEL,
+          "z-popover outline-none data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:fade-in",
           className,
         )}
         {...props}

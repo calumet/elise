@@ -59,6 +59,18 @@ nada para quien no lo separa del texto de alrededor, y dentro de un párrafo no
 hay forma de saber dónde acaba lo pulsable. Con `target="_blank"` se pone su
 `rel` solo.
 
+Donde la fila o la lista ya dicen qué es pulsable, `underline="hover"` lo deja
+sin subrayar hasta apuntarlo. Va con el tono que toque: `muted` en un pie o una
+lista, que pasa al principal al apuntarlo; `neutral` para el nombre de una
+fila; el de siempre para un llamado suelto. Ver
+[Reglas de interfaz](reglas-ui.md#11-algo-que-se-pulsa).
+
+```tsx
+<Link href="/escuelas/sistemas" tone="muted" underline="hover">Ingeniería de Sistemas</Link>
+<Link href={`/productos/${id}`} tone="neutral" underline="hover">{nombre}</Link>
+<Link href="/docs" underline="hover">Ver el catálogo <ArrowRight /></Link>
+```
+
 > **Por que los valores son un conjunto cerrado.** Las props no aceptan valores
 > arbitrarios (`padding={4}`, no `padding="17px"`). Además de mantener la
 > escala, es un requisito técnico de Tailwind, que escanea el código fuente en

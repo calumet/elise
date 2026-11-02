@@ -12,14 +12,14 @@ con ellos, en [Patrones de pantalla](patrones-pantalla.md) y
 
 ### 1.1. Algo que se pulsa
 
-| Trabajo                                     | Componente    | Elemento                |
-| ------------------------------------------- | ------------- | ----------------------- |
-| Una acción con rótulo propio                | `Button`      | `<button>`              |
-| Ir a otra pantalla desde dentro de un texto | `Link`        | `<a>`                   |
-| Un enlace de una lista donde todo es enlace | `<a>` suelto  | `<a>`                   |
-| Una caja entera que lleva a otra pantalla   | `Clickable`   | `<a>` (lleva `href`)    |
-| Una caja entera que ejecuta algo            | `Clickable`   | `<button>` (sin `href`) |
-| Varias acciones en fila                     | `ButtonGroup` | `<div role="group">`    |
+| Trabajo                                     | Componente                     | Elemento                |
+| ------------------------------------------- | ------------------------------ | ----------------------- |
+| Una acción con rótulo propio                | `Button`                       | `<button>`              |
+| Ir a otra pantalla desde dentro de un texto | `Link`                         | `<a>`                   |
+| Un enlace de una lista donde todo es enlace | `Link` con `underline="hover"` | `<a>`                   |
+| Una caja entera que lleva a otra pantalla   | `Clickable`                    | `<a>` (lleva `href`)    |
+| Una caja entera que ejecuta algo            | `Clickable`                    | `<button>` (sin `href`) |
+| Varias acciones en fila                     | `ButtonGroup`                  | `<div role="group">`    |
 
 `Clickable` decide su elemento por la presencia de `href`. La diferencia se ve
 en el comportamiento del navegador, ya que un enlace se abre en otra pestaña
@@ -29,18 +29,19 @@ con el botón central y un botón no.
 lo pulsable. En una lista o una franja donde todo es enlace (el pie con los
 teléfonos y los correos, la lista de escuelas, el selector de idioma) eso ya lo
 dice la fila, y subrayar cada renglón solo llena la columna de ruido. Ahí va un
-`<a>` suelto que se subraya al apuntarlo, con el tono de su superficie:
+`Link` con `underline="hover"`, que se subraya al apuntarlo, y en el tono que
+toque: `muted` en un pie o una lista, que pasa al principal al apuntarlo, y
+`neutral` para el nombre de una fila, que conserva el color del texto.
 
 ```tsx
-<a
-  href="/escuelas/sistemas"
-  className="text-muted-foreground hover:text-foreground hover:underline"
->
+<Link href="/escuelas/sistemas" tone="muted" underline="hover">
   Ingeniería de Sistemas
-</a>
+</Link>
 ```
 
-Es el mismo `<a>` que usa la [lista de recursos](patrones-bloque.md#3-lista-de-recursos).
+Es el mismo que lleva el nombre en la [tabla de índice](patrones-bloque.md#2-tabla-de-índice).
+Escribir las clases a mano en un `<a>` pierde el anillo de foco y el `rel` de
+`target="_blank"`, que `Link` pone solo.
 Un logo o un icono que lleva a otra pantalla es un `Clickable` con
 `highlight="text"`: no pinta el velo, y el contenido pasa del tono apagado al
 principal al apuntarlo.

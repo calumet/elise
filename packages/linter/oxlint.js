@@ -143,7 +143,7 @@ const CONTRACTS = [
     },
   },
   {
-    pattern: "^(Text|Heading|CardTitle|CardDescription|DialogTitle|DialogDescription)$",
+    pattern: "^(Text|Heading|Link|CardTitle|CardDescription|DialogTitle|DialogDescription)$",
     allow: ["layout", "typography"],
   },
   { pattern: "^(Avatar|Thumbnail|Spinner|Skeleton)$", allow: ["layout", "size-*"] },

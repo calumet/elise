@@ -12,6 +12,13 @@ import { MENU_ITEM, MENU_PANEL } from "@/lib/surface";
 
 import { useThemeScope } from "./theme-scope";
 
+/**
+ * El aspecto del panel y de la opción de menú, para un menú que no abre Radix,
+ * como uno que flota junto al cursor de un editor. La opción se resalta con
+ * `data-highlighted`.
+ */
+export { MENU_ITEM, MENU_PANEL };
+
 /* Los iconos se miden aquí y no en cada sitio que los pase: sin esto, un icono
    suelto en una fila salía a su tamaño natural, que en la mayoría de los juegos
    son 24px, y estiraba la fila. El `:not([class*=size-])` deja pasar al que sí

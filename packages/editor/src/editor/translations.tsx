@@ -1,6 +1,7 @@
 import { ArrowLeft, Check, Eye, Languages } from "@calumet/elise-icons";
 import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
+import { Clickable } from "@calumet/elise-ui/clickable";
 import {
   EmptyState,
   EmptyStateDescription,
@@ -91,11 +92,12 @@ const LocaleList = ({
       <ul className="m-0 flex list-none flex-col gap-1 p-0">
         {locales.map((locale) => (
           <li key={locale.locale}>
-            <button
-              type="button"
+            <Clickable
+              radius="md"
+              padding={2}
               aria-current={locale.locale === current || undefined}
               onClick={() => onPick(locale.locale)}
-              className="flex w-full flex-col gap-2 rounded-md p-2 text-start text-base transition-[background-color,box-shadow] duration-(--duration-fast) ease-out hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none aria-current:bg-background aria-current:shadow-sm"
+              className="flex flex-col gap-2 text-base aria-current:bg-background aria-current:shadow-sm"
             >
               <span className="flex items-baseline justify-between gap-2">
                 <span className="min-w-0 truncate font-medium">
@@ -110,7 +112,7 @@ const LocaleList = ({
                 value={locale.total ? (locale.translated / locale.total) * 100 : 0}
                 className="h-1"
               />
-            </button>
+            </Clickable>
           </li>
         ))}
       </ul>

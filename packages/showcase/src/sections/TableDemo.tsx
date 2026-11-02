@@ -1,6 +1,7 @@
 import { Badge } from "@calumet/elise-ui/badge";
 import { Button } from "@calumet/elise-ui/button";
 import { Input } from "@calumet/elise-ui/input";
+import { Link } from "@calumet/elise-ui/link";
 import {
   Table,
   TableBody,
@@ -151,14 +152,15 @@ const TableDemo = () => {
               <TableRow key={cliente.id} clickDelegate={`abrir-${cliente.id.slice(1)}`}>
                 <TableCell>{cliente.id}</TableCell>
                 <TableCell>
-                  <button
-                    type="button"
-                    id={`abrir-${cliente.id.slice(1)}`}
-                    className="cursor-pointer rounded-xs underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                    onClick={() => setPulsaciones((p) => [...p, cliente.nombre])}
-                  >
-                    {cliente.nombre}
-                  </button>
+                  <Link asChild tone="neutral" underline="hover">
+                    <button
+                      type="button"
+                      id={`abrir-${cliente.id.slice(1)}`}
+                      onClick={() => setPulsaciones((p) => [...p, cliente.nombre])}
+                    >
+                      {cliente.nombre}
+                    </button>
+                  </Link>
                 </TableCell>
                 <TableCell>{cliente.correo}</TableCell>
                 <TableCell>

@@ -18,6 +18,7 @@ import {
   Type,
 } from "@calumet/elise-icons";
 import { Button } from "@calumet/elise-ui/button";
+import { MENU_ITEM, MENU_PANEL } from "@calumet/elise-ui/dropdown-menu";
 import { Separator } from "@calumet/elise-ui/separator";
 import { KEYS, NodeApi } from "platejs";
 import { useEditorRef, useEditorSelector } from "platejs/react";
@@ -49,7 +50,7 @@ export const ITEMS: Record<InsertItemId, { Icon: typeof Plus; description: keyof
   text: { Icon: Type, description: "textBlockDescription" },
 };
 
-const MENU = "w-72 rounded-xl border border-border bg-popover p-1 text-foreground shadow-lg";
+const MENU = `w-72 text-foreground ${MENU_PANEL}`;
 
 export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Element | null => {
   const t = useLabels();
@@ -96,8 +97,8 @@ export const InsertMenu = ({ menu }: { menu: SlashMenuState }): React.JSX.Elemen
                 role="option"
                 tabIndex={-1}
                 aria-selected={active}
-                data-selected={active || undefined}
-                className="flex cursor-pointer items-center gap-3 rounded-sm px-3 py-1.5 select-none data-selected:bg-state-hover"
+                data-highlighted={active || undefined}
+                className={MENU_ITEM}
                 onMouseDown={(event) => event.preventDefault()}
                 onMouseMove={() => {
                   if (!active) menu.setActive(index);

@@ -29,9 +29,18 @@ export type LinkProps = React.ComponentProps<"a"> & {
    * - `neutral`: hereda el color de lo que lo rodea. Para cuando el enlace es
    *   toda una fila o un bloque y teñirlo lo rompería; el subrayado sigue
    *   diciendo que se puede pulsar.
+   * - `muted`: el tono apagado de su superficie, que pasa al principal al
+   *   apuntarlo. Para una lista o un pie donde todo es enlace.
    * - `critical`: lleva a algo que destruye o que ya falló.
    */
-  tone?: "auto" | "neutral" | "critical";
+  tone?: "auto" | "neutral" | "muted" | "critical";
+
+  /**
+   * Cuándo va subrayado. `always` dentro de un texto, que es donde el subrayado
+   * dice dónde acaba lo pulsable. `hover` cuando la fila o la lista ya lo dice:
+   * el nombre de una fila de tabla, un renglón de un pie, un llamado suelto.
+   */
+  underline?: "always" | "hover";
 
   /**
    * Cede el marcado al hijo. Es lo que permite envolver el enlace del router de
@@ -43,6 +52,7 @@ export type LinkProps = React.ComponentProps<"a"> & {
 const tones: Record<NonNullable<LinkProps["tone"]>, string> = {
   auto: "text-link hover:text-link-hover active:text-link-active",
   neutral: "text-inherit",
+  muted: "text-muted-foreground hover:text-foreground",
   critical:
     "text-destructive-subtle-foreground hover:text-destructive-hover active:text-destructive-active",
 };
@@ -64,7 +74,10 @@ const tones: Record<NonNullable<LinkProps["tone"]>, string> = {
 export const Link: React.ForwardRefExoticComponent<
   React.PropsWithoutRef<LinkProps> & React.RefAttributes<HTMLAnchorElement>
 > = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ className, tone = "auto", asChild = false, target, rel, ...props }, ref) => {
+  (
+    { className, tone = "auto", underline = "always", asChild = false, target, rel, ...props },
+    ref,
+  ) => {
     const Component = asChild ? Slot : "a";
 
     return (
@@ -74,7 +87,8 @@ export const Link: React.ForwardRefExoticComponent<
         target={target}
         rel={rel ?? (target === "_blank" ? "noreferrer noopener" : undefined)}
         className={cn(
-          "inline cursor-pointer rounded-xs underline underline-offset-2 transition-[color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
+          "inline cursor-pointer rounded-xs underline-offset-2 transition-[color] duration-(--duration-fast) ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none",
+          underline === "always" ? "underline" : "hover:underline",
           tones[tone],
           className,
         )}
