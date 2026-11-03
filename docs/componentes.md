@@ -1074,6 +1074,24 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 | Toolbar, ToolbarButton, ToolbarSeparator, ToolbarToggleGroup, ToolbarToggleItem, ToolbarLink  | `@calumet/elise-ui/toolbar`      | [Toolbar](https://www.radix-ui.com/primitives/docs/components/toolbar)           |
 | Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator | `@calumet/elise-ui/command`      | [cmdk](https://cmdk.paco.me/)                                                    |
 
+`CommandInput` es por defecto la fila de arriba de un panel, con su raya
+debajo. Cuando el campo está fuera del panel y los resultados caen debajo, como
+el buscador grande de una portada, `variant="field"` lo convierte en una caja
+de campo, con `size` de la misma escala que `Input`. `end` pone algo al final
+de la fila o de la caja, como un botón de cancelar o de buscar.
+
+```tsx
+<Command shouldFilter={false}>
+  <CommandInput
+    variant="field"
+    size="xl"
+    value={consulta}
+    onValueChange={setConsulta}
+    end={<Button>Buscar</Button>}
+  />
+</Command>
+```
+
 `Toggle` sirve suelto, con `pressed` y `onPressedChange`, y también dentro de un
 `ToggleGroup`, donde el valor lo lleva el grupo y la opción se identifica con
 `value`. `ToggleGroupItem` es el nombre explícito para ese segundo caso.

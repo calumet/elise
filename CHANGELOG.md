@@ -3,6 +3,23 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.51.0
+
+### Añade
+
+**`variant="field"`, `size` y `end` en `CommandInput`.** El campo ya no tiene
+que ser la fila de arriba de un panel: con `variant="field"` es una caja de
+campo, de la escala de `Input`, para un buscador cuyos resultados caen debajo.
+`end` pone un botón al final de la fila o de la caja. Antes había que quitarle
+el borde y el relleno por fuera, y el linter lo marcaba.
+
+```tsx
+<CommandInput variant="field" size="xl" end={<Button>Buscar</Button>} />
+```
+
+`elise-toasts`, `elise-alerts`, `elise-tables` y `elise-themes` suben un parche
+para seguir a esta versión en JSR.
+
 ## `@calumet/elise-ui` 0.50.0
 
 ### Añade
