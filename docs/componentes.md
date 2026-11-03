@@ -1077,8 +1077,10 @@ Un carrusel de tarjetas o de logos sobre fondo liso deja los controles en
 `CommandInput` es por defecto la fila de arriba de un panel, con su raya
 debajo. Cuando el campo está fuera del panel y los resultados caen debajo, como
 el buscador grande de una portada, `variant="field"` lo convierte en una caja
-de campo, con `size` de la misma escala que `Input`. `end` pone algo al final
-de la fila o de la caja, como un botón de cancelar o de buscar.
+de campo, con `size` de la misma escala que `Input`. Con `variant="bare"` no
+pinta caja, relleno ni tamaño de letra: la caja es de la app, como el buscador
+de una portada con su propio diseño, y el campo hereda su letra. `end` pone algo
+al final de la fila o de la caja, como un botón de cancelar o de buscar.
 
 ```tsx
 <Command shouldFilter={false}>

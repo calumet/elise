@@ -77,8 +77,8 @@ export type CommandInputProps = Omit<
   /** Lo que va al final de la fila, como un botón. */
   end?: React.ReactNode;
 
-  /** `row` es la fila de arriba de un panel; `field` es una caja de campo, para cuando los resultados caen debajo. */
-  variant?: "row" | "field";
+  /** `row` es la fila de arriba de un panel; `field` es una caja de campo, para cuando los resultados caen debajo; `bare` no pinta nada y hereda la letra, para una caja que dibuja la app. */
+  variant?: "row" | "field" | "bare";
 
   /** Alto con `variant="field"`. */
   size?: FieldSize;
@@ -99,9 +99,11 @@ function CommandInput({
       data-slot="command-input-wrapper"
       data-variant={variant}
       className={cn(
-        variant === "field"
-          ? [FIELD_BOX_COMPOSITE, FIELD_SIZES[size], "py-0 ps-3 pe-1"]
-          : "flex h-11 items-center gap-2 border-b border-border px-3",
+        {
+          row: "flex h-11 items-center gap-2 border-b border-border px-3",
+          field: [FIELD_BOX_COMPOSITE, FIELD_SIZES[size], "py-0 ps-3 pe-1"],
+          bare: "flex min-w-0 items-center gap-2",
+        }[variant],
         wrapperClassName,
       )}
     >

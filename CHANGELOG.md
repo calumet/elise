@@ -7,10 +7,11 @@ Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 
 ### Añade
 
-**`variant="field"`, `size` y `end` en `CommandInput`.** El campo ya no tiene
-que ser la fila de arriba de un panel: con `variant="field"` es una caja de
-campo, de la escala de `Input`, para un buscador cuyos resultados caen debajo.
-`end` pone un botón al final de la fila o de la caja. Antes había que quitarle
+**`variant`, `size` y `end` en `CommandInput`.** El campo ya no tiene que ser
+la fila de arriba de un panel: con `variant="field"` es una caja de campo, de la
+escala de `Input`, para un buscador cuyos resultados caen debajo, y con
+`variant="bare"` no pinta nada y hereda la letra, para una caja que dibuja la
+app. `end` pone un botón al final de la fila o de la caja. Antes había que quitarle
 el borde y el relleno por fuera, y el linter lo marcaba.
 
 ```tsx
