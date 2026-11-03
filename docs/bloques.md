@@ -79,6 +79,9 @@ la dirección contraria a la del grafo. La API no cambia.
 usa. Aplicar o cancelar es cosa del diálogo que lo contiene, y por eso no
 trae pie ni botones. Con `layout="groups"` cambia las pestañas por un
 encabezado fijo por filtro, para cuando los filtros no caben en una fila.
+Con `max` limita cuántas se marcan: al llegar, las que quedan sin marcar se
+apagan y la cabecera cuenta «3 de 5 marcadas» (texto `checklistPickerCount`).
+Las incluidas no cuentan, y si lo aplicado ya pasa del tope solo se desmarca.
 
 Una opción con `includedBy` (ids de las que la incluyen) sale marcada, sin
 editar y con «Incluido en «…»» mientras alguna esté marcada, y vuelve a su

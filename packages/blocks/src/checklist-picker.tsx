@@ -65,6 +65,9 @@ export type ChecklistPickerProps = {
   /** Se llama al marcar o desmarcar una casilla. Aplicar o cancelar es cosa del diálogo. */
   onToggle: (id: string, checked: boolean) => void;
 
+  /** Cuántas se pueden marcar como mucho. Al llegar, las demás se apagan y la cabecera cuenta las marcadas. */
+  max?: number;
+
   /** El locale con el que se ordena y se busca. Por defecto, el del navegador. */
   locale?: string;
 };
@@ -105,6 +108,7 @@ export function ChecklistPicker({
   layout = "tabs",
   selected,
   onToggle,
+  max,
   locale,
 }: ChecklistPickerProps): React.JSX.Element {
   const groupId = React.useId();
@@ -120,6 +124,8 @@ export function ChecklistPicker({
 
   const includedTemplate = useElLabel("ui", "checklistIncludedIn", "Incluido en «{label}»");
   const included = React.useMemo(() => includedLabels(options, selected), [options, selected]);
+  const countTemplate = useElLabel("ui", "checklistPickerCount", "{count} de {max} marcadas");
+  const full = max !== undefined && selected.size >= max;
 
   const [query, setQuery] = React.useState("");
   const [filter, setFilter] = React.useState(ALL);
@@ -174,7 +180,7 @@ export function ChecklistPicker({
               )
             }
             checked={holder !== undefined || selected.has(option.id)}
-            disabled={holder !== undefined}
+            disabled={holder !== undefined || (full && !selected.has(option.id))}
             onCheckedChange={(checked) => onToggle(option.id, checked === true)}
           />
         );
@@ -210,6 +216,13 @@ export function ChecklistPicker({
                 ))}
               </TabsList>
             </Tabs>
+          )}
+          {max !== undefined && (
+            <Text size="sm" tone="muted" aria-live="polite">
+              {countTemplate
+                .replace("{count}", String(selected.size))
+                .replace("{max}", String(max))}
+            </Text>
           )}
         </BlockStack>
       </Box>

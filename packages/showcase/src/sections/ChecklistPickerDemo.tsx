@@ -74,6 +74,7 @@ type PickerFieldProps = {
   note?: string;
   description?: string;
   inline?: boolean;
+  max?: number;
 };
 
 const PickerField = ({
@@ -85,6 +86,7 @@ const PickerField = ({
   note,
   description,
   inline,
+  max,
 }: PickerFieldProps) => {
   const [open, setOpen] = React.useState(false);
   const [applied, setApplied] = React.useState<ReadonlySet<string>>(new Set());
@@ -123,6 +125,7 @@ const PickerField = ({
         filters={filters}
         selected={applied}
         onApply={setApplied}
+        max={max}
       />
     </>
   );
@@ -147,7 +150,7 @@ export default function ChecklistPickerDemo() {
       </BlockStack>
       <BlockStack gap={2}>
         <Text size="sm" weight="medium">
-          En línea, para meter en otra sección
+          En línea, para meter en otra sección, con tope de 3
         </Text>
         <PickerField
           inline
@@ -155,6 +158,7 @@ export default function ChecklistPickerDemo() {
           options={schools}
           filters={faculties}
           empty="Ninguna escuela elegida."
+          max={3}
         />
       </BlockStack>
       <BlockStack gap={2}>
