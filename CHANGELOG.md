@@ -3,6 +3,19 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-blocks` 0.6.0
+
+### Añade
+
+**`max` en `ChecklistPicker` y `ChecklistDialog`.** Limita cuántas opciones se
+marcan. Al llegar al tope, las que quedan sin marcar se apagan y la cabecera
+cuenta las marcadas, así que el límite se ve mientras se elige y no al aplicar.
+El texto del contador es `checklistPickerCount`.
+
+```tsx
+<ChecklistDialog max={5} options={paginas} filters={secciones} … />
+```
+
 ## `@calumet/elise-ui` 0.51.0
 
 ### Añade
