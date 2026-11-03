@@ -11,6 +11,7 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "./dialog";
+import { FIELD_BOX_COMPOSITE, FIELD_SIZES, type FieldSize } from "./input";
 
 /** Raíz de la paleta de comandos. Filtra y recorre con el teclado. */
 function Command({
@@ -63,12 +64,24 @@ function CommandDialog({
 }
 
 /** Props de {@link CommandInput}. */
-export type CommandInputProps = React.ComponentProps<typeof CommandPrimitive.Input> & {
+export type CommandInputProps = Omit<
+  React.ComponentProps<typeof CommandPrimitive.Input>,
+  "size"
+> & {
   /** Clases del envoltorio. `className` va al `input`, no al contenedor. */
   wrapperClassName?: string;
 
   /** Sustituye el icono de búsqueda. `null` lo quita. */
   icon?: React.ReactNode;
+
+  /** Lo que va al final de la fila, como un botón. */
+  end?: React.ReactNode;
+
+  /** `row` es la fila de arriba de un panel; `field` es una caja de campo, para cuando los resultados caen debajo; `bare` no pinta nada y hereda la letra, para una caja que dibuja la app. */
+  variant?: "row" | "field" | "bare";
+
+  /** Alto con `variant="field"`. */
+  size?: FieldSize;
 };
 
 /** El campo de búsqueda. */
@@ -76,12 +89,23 @@ function CommandInput({
   className,
   wrapperClassName,
   icon,
+  end,
+  variant = "row",
+  size = "md",
   ...props
 }: CommandInputProps): React.JSX.Element {
   return (
     <div
       data-slot="command-input-wrapper"
-      className={cn("flex h-11 items-center gap-2 border-b border-border px-3", wrapperClassName)}
+      data-variant={variant}
+      className={cn(
+        {
+          row: "flex h-11 items-center gap-2 border-b border-border px-3",
+          field: [FIELD_BOX_COMPOSITE, FIELD_SIZES[size], "py-0 ps-3 pe-1"],
+          bare: "flex min-w-0 items-center gap-2",
+        }[variant],
+        wrapperClassName,
+      )}
     >
       {icon === null
         ? null
@@ -89,11 +113,13 @@ function CommandInput({
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          "flex h-full w-full bg-transparent text-base outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-full w-0 min-w-0 flex-1 bg-transparent outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+          variant === "row" && "text-base",
           className,
         )}
         {...props}
       />
+      {end}
     </div>
   );
 }

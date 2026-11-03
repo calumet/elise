@@ -14,11 +14,23 @@ import { useState } from "react";
 
 const CommandDemo = () => {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">Palette ligera para acciones rápidas.</p>
       <Button onClick={() => setOpen(true)}>Abrir palette</Button>
+
+      <Command shouldFilter={false} className="max-w-120 overflow-visible bg-transparent">
+        <CommandInput
+          variant="field"
+          size="xl"
+          value={query}
+          onValueChange={setQuery}
+          placeholder="Buscar en el portal…"
+          end={<Button size="sm">Buscar</Button>}
+        />
+      </Command>
 
       <CommandDialog
         open={open}
