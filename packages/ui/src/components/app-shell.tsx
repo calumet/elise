@@ -36,7 +36,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { Kbd } from "./kbd";
-import { SaveBar, type SaveBarProps } from "./save-bar";
+import { SaveBarFrame, type SaveBarProps } from "./save-bar-frame";
 import { UserMenu, type UserMenuProps } from "./user-menu";
 
 /* Los iconos propios de la barra se dibujan aquí y no se toman del catálogo,
@@ -261,7 +261,7 @@ function AppShellHeader({ className, children, ...props }: AppShellHeaderProps):
   );
 }
 
-/** Props de {@link AppShellSaveBar}. Las mismas de `SaveBar`. */
+/** Props de {@link AppShellSaveBar}. Las mismas de `SaveBar`, que flota fuera del marco. */
 export type AppShellSaveBarProps = SaveBarProps;
 
 /**
@@ -287,10 +287,13 @@ export type AppShellSaveBarProps = SaveBarProps;
  */
 function AppShellSaveBar({ className, ...props }: AppShellSaveBarProps): React.JSX.Element {
   return (
-    <SaveBar
+    <SaveBarFrame
       data-slot="app-shell-save-bar"
-      // La colocación del buscador, que es la banda cuyo sitio toma.
-      className={cn("w-full min-w-0 flex-1 md:col-start-2 md:flex-none", className)}
+      // La caja y la colocación del buscador, que es la banda cuyo sitio toma.
+      className={cn(
+        "w-full min-w-0 flex-1 bg-fill-tertiary shadow-surface-bevel md:col-start-2 md:flex-none",
+        className,
+      )}
       {...props}
     />
   );

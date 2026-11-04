@@ -3,6 +3,24 @@
 Cambios que afectan a quien consume los paquetes. Empieza en la 0.3.0 de
 `@calumet/elise-ui`; lo anterior está solo en el historial de git.
 
+## `@calumet/elise-ui` 0.52.0
+
+### Cambia
+
+**`SaveBar` flota por sí misma.** Fuera del marco queda abajo y centrada, sobre
+la superficie invertida y con sombra, así que aparecer no desplaza la pantalla
+y sigue a la vista al bajar. Lleva botones `md` y, en estrecho, dos filas para
+que el rótulo no se recorte. Quien la envolvía en un `fixed` propio ya puede
+quitarlo. `AppShellSaveBar` no cambia.
+
+### Corrige
+
+**El icono de `SaveBar` se ve sobre una página clara.** Heredaba el color de la
+página en vez del de la barra.
+
+`elise-toasts`, `elise-alerts`, `elise-tables` y `elise-themes` suben un parche
+para seguir a esta versión en JSR.
+
 ## `@calumet/elise-blocks` 0.6.0
 
 ### Añade

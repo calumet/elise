@@ -155,7 +155,7 @@ El usuario viene a cambiar algo que ya estaba configurado.
 | Controles             | `Field`, `Switch`, `CheckboxGroup`, `Select`                      |
 | Ir a un subajuste     | [Menú de subpantallas](patrones-bloque.md#4-menú-de-subpantallas) |
 | Acciones destructivas | Su propia sección, al final (borrar la cuenta o el espacio)       |
-| Cambios sin guardar   | `SaveBar`, fijada arriba mientras haya sin guardar                |
+| Cambios sin guardar   | `SaveBar`, flotando abajo mientras haya sin guardar               |
 
 **El ancho baja a `sm`.** Una pantalla de ajustes es una columna de
 formularios, y a los 1152px de `lg` los campos quedan más anchos que cualquier
@@ -169,8 +169,9 @@ y el botón vive al pie de la pantalla, no dentro de cada grupo.
 pantallas por debajo del primer campo, así que quien cambia algo arriba pierde
 de vista el único control que lo aplica y nada le dice que sigue sin guardarse.
 Ahí entra `SaveBar`, que aparece mientras haya cambios y se lleva el guardar y
-el descartar a una franja fija arriba. El botón del pie se queda: la barra
-avisa, no lo sustituye.
+el descartar a una capa que flota abajo, sin mover lo que se está editando.
+Dentro del marco va `AppShellSaveBar`, en la cabecera. El botón del pie se
+queda: la barra avisa, no lo sustituye.
 
 **Lo que destruye va al final y aparte.** Restablecer o borrar la cuenta en la
 misma sección que el nombre de la tienda invita a pulsarlo mientras se edita
